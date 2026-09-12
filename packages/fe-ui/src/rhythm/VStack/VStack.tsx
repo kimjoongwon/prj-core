@@ -1,6 +1,7 @@
 import { cn } from "@heroui/react";
 import { cva } from "class-variance-authority";
 import { Children, type ReactNode } from "react";
+import { stackGapClasses, type StackGap } from "../stack-gap";
 
 export type VStackProps = {
 	/** 자식 요소들 */
@@ -11,12 +12,15 @@ export type VStackProps = {
 	alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
 	/** 세로 정렬 (justify-content) */
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
+	/** 세로 간격. 시맨틱 값은 DESIGN.md의 Rhythm Primitives 표를 따름 (기본: section=16px) */
+	gap?: StackGap;
 	/** 전체 너비 사용 여부 */
 	fullWidth?: boolean;
 };
 
-const vStackVariants = cva("flex flex-col gap-4", {
+const vStackVariants = cva("flex flex-col", {
 	variants: {
+		gap: stackGapClasses,
 		alignItems: {
 			start: "items-start",
 			center: "items-center",
@@ -38,6 +42,7 @@ const vStackVariants = cva("flex flex-col gap-4", {
 		},
 	},
 	defaultVariants: {
+		gap: "section",
 		fullWidth: false,
 	},
 });
@@ -63,7 +68,8 @@ const vStackVariants = cva("flex flex-col gap-4", {
  * ```
  */
 export const VStack = (props: VStackProps) => {
-	const { children, className, alignItems, justifyContent, fullWidth } = props;
+	const { children, className, alignItems, justifyContent, gap, fullWidth } =
+		props;
 
 	return (
 		<div
@@ -71,6 +77,7 @@ export const VStack = (props: VStackProps) => {
 				vStackVariants({
 					alignItems,
 					justifyContent,
+					gap,
 					fullWidth,
 				}),
 				className,

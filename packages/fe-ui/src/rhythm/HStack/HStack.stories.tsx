@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { VStack } from "../VStack/VStack";
 import { HStack } from "./HStack";
 
 const meta = {
@@ -24,6 +25,21 @@ const meta = {
 			control: "select",
 			options: ["start", "center", "end", "between", "around", "evenly"],
 			description: "아이템들의 가로 배치",
+		},
+		gap: {
+			control: "select",
+			options: [
+				"flush",
+				"dense",
+				"inline",
+				"block",
+				"section",
+				"page",
+				"roomy",
+			],
+			description:
+				"가로 간격 (flush=0, dense=4, inline=8, block=12, section=16, page=24, roomy=32px)",
+			defaultValue: "inline",
 		},
 		fullWidth: {
 			control: "boolean",
@@ -66,6 +82,40 @@ export const 기본: Story = {
 		docs: {
 			description: {
 				story: "기본 수평 스택입니다.",
+			},
+		},
+	},
+};
+
+export const 간격_스케일: Story = {
+	args: {},
+	render: () => (
+		<VStack gap="page" className="w-full max-w-md">
+			{(
+				[
+					["flush", "flush — 붙어야 하는 조합 (0px)"],
+					["dense", "dense — metadata·보조 label 묶음 (4px)"],
+					["inline", "inline — 버튼 행·chip (8px)"],
+					["block", "block — 제목-본문 짧은 묶음 (12px)"],
+					["section", "section — 섹션 내부 기본 흐름 (16px)"],
+					["page", "page — 페이지 주요 블록 사이 (24px)"],
+					["roomy", "roomy — empty·auth·intro 여유 (32px)"],
+				] as const
+			).map(([gap, label]) => (
+				<div key={gap}>
+					<h4 className="mb-2 font-semibold text-sm">{label}</h4>
+					<HStack gap={gap} className="border border-gray-300 p-2">
+						<샘플아이템>항목 A</샘플아이템>
+						<샘플아이템>항목 B</샘플아이템>
+					</HStack>
+				</div>
+			))}
+		</VStack>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: "시맨틱 간격 체계. 규칙은 DESIGN.md를 참고하세요.",
 			},
 		},
 	},

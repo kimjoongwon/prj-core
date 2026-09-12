@@ -38,4 +38,14 @@ describe("VStack", () => {
 		expect(stack.props.className).toContain("gap-4");
 		expect(stack.props.className).toContain("px-4");
 	});
+
+	it("시맨틱 gap preset이 DESIGN.md 체계의 className으로 반영되어야 한다", () => {
+		const stack = renderVStack({
+			children: "content",
+			gap: "page",
+		});
+
+		expect(stack.props.className).toContain("gap-6");
+		expect(stack.props.className).not.toContain("gap-4");
+	});
 });

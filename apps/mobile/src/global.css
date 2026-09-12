@@ -5,18 +5,24 @@
 @source "../node_modules/heroui-native/lib";
 @source "../../../packages/fe-mo-ui/src";
 
+/*
+ * 시맨틱 색 램프 — 계층은 OKLCH 명도(L) 기준 등간격(3%p)으로 유지합니다.
+ * light: surface 0.99 > background 0.96 > secondary 0.93 > tertiary 0.90 > border 0.88 > separator 0.84
+ * dark:  background 0.18 < surface 0.21 < secondary 0.24 < tertiary 0.27 < border 0.30 < separator 0.36
+ * 값 추가·조정 시 저장소 루트의 DESIGN.md를 갱신해야 합니다.
+ */
 @layer theme {
   :root {
     @variant light {
-      --background: oklch(0.976 0.004 260);
+      --background: oklch(0.96 0.004 260);
       --foreground: oklch(0.205 0.014 260);
-      --surface: oklch(0.992 0.002 260);
+      --surface: oklch(0.99 0.002 260);
       --surface-foreground: var(--foreground);
-      --surface-secondary: oklch(0.946 0.007 260);
+      --surface-secondary: oklch(0.93 0.006 260);
       --surface-secondary-foreground: var(--foreground);
-      --surface-tertiary: oklch(0.905 0.009 260);
+      --surface-tertiary: oklch(0.9 0.008 260);
       --surface-tertiary-foreground: var(--foreground);
-      --overlay: oklch(0.992 0.002 260);
+      --overlay: oklch(0.99 0.002 260);
       --overlay-foreground: var(--foreground);
       --muted: oklch(0.49 0.018 260);
       --default: oklch(0.93 0.006 260);
@@ -29,8 +35,8 @@
       --warning-foreground: var(--eclipse);
       --danger: oklch(0.58 0.18 28);
       --danger-foreground: var(--snow);
-      --border: oklch(0.855 0.01 260);
-      --separator: oklch(0.78 0.012 260);
+      --border: oklch(0.88 0.008 260);
+      --separator: oklch(0.84 0.01 260);
       --field-background: var(--surface);
       --field-border: var(--border);
       --field-border-width: 1px;
@@ -43,16 +49,16 @@
     @variant dark {
       --background: oklch(0.18 0.008 270);
       --foreground: oklch(0.955 0.004 260);
-      --surface: oklch(0.188 0.009 270);
+      --surface: oklch(0.21 0.009 270);
       --surface-foreground: var(--foreground);
-      --surface-secondary: oklch(0.235 0.01 270);
+      --surface-secondary: oklch(0.24 0.01 270);
       --surface-secondary-foreground: var(--foreground);
-      --surface-tertiary: oklch(0.285 0.011 270);
+      --surface-tertiary: oklch(0.27 0.011 270);
       --surface-tertiary-foreground: var(--foreground);
-      --overlay: oklch(0.205 0.01 270);
+      --overlay: oklch(0.21 0.009 270);
       --overlay-foreground: var(--foreground);
       --muted: oklch(0.72 0.016 270);
-      --default: oklch(0.255 0.01 270);
+      --default: oklch(0.24 0.01 270);
       --default-foreground: var(--foreground);
       --accent: oklch(0.64 0.17 254);
       --accent-foreground: var(--snow);
@@ -62,8 +68,8 @@
       --warning-foreground: var(--eclipse);
       --danger: oklch(0.62 0.18 28);
       --danger-foreground: var(--snow);
-      --border: oklch(0.335 0.012 270);
-      --separator: oklch(0.44 0.014 270);
+      --border: oklch(0.3 0.012 270);
+      --separator: oklch(0.36 0.014 270);
       --field-background: var(--surface);
       --field-border: var(--border);
       --field-border-width: 1px;

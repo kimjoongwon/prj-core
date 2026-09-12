@@ -2,17 +2,20 @@ import { forwardRef, type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { joinClassNames } from "../class-name";
+import { stackGapRootClasses, type StackGap } from "../stack-gap";
 
 export interface HStackProps extends Omit<ViewProps, "children"> {
 	alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
 	children?: ReactNode;
+	/** 가로 간격. 시맨틱 값은 DESIGN.md의 Rhythm Primitives 표를 따름 (기본: inline=8px) */
+	gap?: StackGap;
 	fullWidth?: boolean;
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 }
 
 const hStackClassNames = tv({
 	slots: {
-		root: "flex-row gap-2",
+		root: "flex-row",
 	},
 	variants: {
 		alignItems: {
@@ -58,6 +61,10 @@ const hStackClassNames = tv({
 				root: "justify-start",
 			},
 		},
+		gap: stackGapRootClasses,
+	},
+	defaultVariants: {
+		gap: "inline",
 	},
 });
 
@@ -67,6 +74,7 @@ export const HStack = forwardRef<View, HStackProps>(
 			alignItems,
 			children,
 			className,
+			gap,
 			fullWidth = false,
 			justifyContent,
 			...rest
@@ -75,6 +83,7 @@ export const HStack = forwardRef<View, HStackProps>(
 	) => {
 		const classNames = hStackClassNames({
 			alignItems,
+			gap,
 			fullWidth,
 			justifyContent,
 		});

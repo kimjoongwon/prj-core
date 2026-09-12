@@ -1,6 +1,7 @@
 import { cn } from "@heroui/react";
 import { cva } from "class-variance-authority";
 import { Children, type ReactNode } from "react";
+import { stackGapClasses, type StackGap } from "../stack-gap";
 
 export interface HStackProps {
 	/** 자식 요소들 */
@@ -11,12 +12,15 @@ export interface HStackProps {
 	alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
 	/** 가로 정렬 (justify-content) */
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
+	/** 가로 간격. 시맨틱 값은 DESIGN.md의 Rhythm Primitives 표를 따름 (기본: inline=8px) */
+	gap?: StackGap;
 	/** 전체 너비 사용 여부 */
 	fullWidth?: boolean;
 }
 
-const hStackVariants = cva("flex gap-2", {
+const hStackVariants = cva("flex", {
 	variants: {
+		gap: stackGapClasses,
 		alignItems: {
 			start: "items-start",
 			center: "items-center",
@@ -38,6 +42,7 @@ const hStackVariants = cva("flex gap-2", {
 		},
 	},
 	defaultVariants: {
+		gap: "inline",
 		fullWidth: false,
 	},
 });
@@ -67,6 +72,7 @@ export const HStack = (props: HStackProps) => {
 		className,
 		alignItems,
 		justifyContent,
+		gap,
 		fullWidth,
 		...rest
 	} = props;
@@ -77,6 +83,7 @@ export const HStack = (props: HStackProps) => {
 				hStackVariants({
 					alignItems,
 					justifyContent,
+					gap,
 					fullWidth,
 				}),
 				className,

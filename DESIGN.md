@@ -68,6 +68,22 @@ Admin web은 운영자가 예약, 결제, 공간, 사용자, 권한, 템플릿�
 - gradient, blur background, decorative orb는 기본 디자인 언어가 아닙니다.
 - dark theme에서도 역할은 동일해야 합니다. 단, 대비와 surface 단계는 theme token이 담당합니다.
 
+### Surface Ladder (mobile theme token 값)
+
+계층 색은 OKLCH 명도(L) 기준 **등간격 3%p 램프**입니다. 인접 계층이 지각적으로 구분되어야 위계가 명확해지며, 선 토큰도 램프 바로 아래에 정렬합니다. 값의 canonical owner는 `apps/mobile/src/global.css`입니다(웹은 HeroUI 기본 테마 + accent 오버라이드).
+
+| 토큰 | light (hue 260) | dark (hue 270) | 역할 |
+|------|-----------------|----------------|------|
+| `--surface` | L 0.99 | L 0.21 | 최상위 카드·콘텐츠 표면 |
+| `--background` | L 0.96 | L 0.18 | 화면 배경 |
+| `--surface-secondary` | L 0.93 | L 0.24 | 중첩 표면(섹션 배경, 묶음) |
+| `--surface-tertiary` | L 0.90 | L 0.27 | 가장 깊은 우물(코드 블록, 인셋) |
+| `--border` | L 0.88 | L 0.30 | 표면 윤곽선 |
+| `--separator` | L 0.84 | L 0.36 | 리스트·섹션 구분선 (border보다 강함) |
+
+- 램프 밖의 무채색을 새로 만들지 않습니다. 브랜드·의미색(`accent`, `success`, `warning`, `danger`)은 기존 값을 재사용합니다.
+- 램프 값을 바꾸면 이 표와 `global.css` 상단 주석을 함께 갱신합니다.
+
 ## Typography
 
 기본 서체는 **Pretendard**를 유지합니다.
@@ -116,17 +132,19 @@ Mobile은 편안한 확인과 다음 행동 안내가 중요합니다.
 
 ### Rhythm Primitives
 
-리듬은 단순 CSS gap이 아니라 화면 구조를 설명하는 컴포넌트 계약입니다.
+리듬은 단순 CSS gap이 아니라 화면 구조를 설명하는 컴포넌트 계약입니다. `VStack`/`HStack`의 `gap` prop은 아래 시맨틱 값만 받으며, `section`(VStack)과 `inline`(HStack)이 기본값입니다.
 
-| 리듬 | 기본 사용처 | 권장 primitive |
-|------|-------------|----------------|
-| `page` | 페이지 주요 블록 사이 | `VStack gap="page"` |
-| `section` | 섹션 내부 기본 수직 흐름 | `VStack gap="section"` |
-| `block` | 제목-본문, 카드 내부 짧은 묶음 | `VStack gap="block"` |
-| `inline` | 버튼 행, badge/chip, 짧은 수평 액션 | `HStack gap="inline"` |
-| `dense` | metadata, 보조 label, 작은 상태 묶음 | `VStack`/`HStack gap="dense"` |
-| `roomy` | empty, auth, loading, intro 영역 | `VStack gap="roomy"` |
-| `flush` | 붙어야 하는 composite | `VStack`/`HStack gap="flush"` |
+| 리듬 | 크기 | 기본 사용처 | 권장 primitive |
+|------|------|-------------|----------------|
+| `flush` | 0px | 붙어야 하는 composite | `VStack`/`HStack gap="flush"` |
+| `dense` | 4px | metadata, 보조 label, 작은 상태 묶음 | `VStack`/`HStack gap="dense"` |
+| `inline` | 8px | 버튼 행, badge/chip, 짧은 수평 액션 | `HStack gap="inline"` |
+| `block` | 12px | 제목-본문, 카드 내부 짧은 묶음 | `VStack gap="block"` |
+| `section` | 16px | 섹션 내부 기본 수직 흐름 | `VStack gap="section"` |
+| `page` | 24px | 페이지 주요 블록 사이 | `VStack gap="page"` |
+| `roomy` | 32px | empty, auth, loading, intro 영역 | `VStack gap="roomy"` |
+
+- 값 체계의 canonical owner는 `packages/fe-ui/src/rhythm/stack-gap.ts`와 `packages/fe-mo-ui/src/rhythm/stack-gap.ts`입니다. 두 파일의 값 목록과 크기는 항상 일치해야 하며, 이 표를 함께 갱신합니다.
 
 - Web/PC 조합은 `@cocrepo/ui`의 `VStack`, `HStack`, `Spacer`를 우선 사용합니다.
 - Mobile 조합은 `@cocrepo/mo-ui`의 `VStack`, `HStack`을 우선 사용합니다.
@@ -333,7 +351,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 ## Known Gaps
 
-- 이 문서는 디자인 언어 v1입니다. 실제 theme token 값과 component API를 변경하지 않습니다.
-- 구체적인 typography size, spacing token, component prop 이름은 현재 구현을 기준으로 별도 작업에서 맞춥니다.
+- 이 문서는 디자인 언어 v1입니다. 2026-09-11 갱신: mobile surface 램프를 등간격(3%p)으로 재설계하고(Surface Ladder 참조), rhythm preset을 `VStack`/`HStack`의 `gap` prop으로 구현했습니다.
+- 구체적인 typography size 규칙은 현재 구현을 기준으로 별도 작업에서 맞춥니다.
 - 개별 화면 리디자인은 sidecar spec 단위로 진행합니다.
 - 디자인 원칙을 `AGENTS.md`와 `orch-delivery`에 연결하는 작업은 후속 변경으로 다룹니다.

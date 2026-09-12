@@ -38,4 +38,14 @@ describe("HStack", () => {
 		expect(stack.props.className).toContain("gap-2");
 		expect(stack.props.className).toContain("px-3");
 	});
+
+	it("시맨틱 gap preset이 DESIGN.md 체계의 className으로 반영되어야 한다", () => {
+		const stack = renderHStack({
+			children: "content",
+			gap: "roomy",
+		});
+
+		expect(stack.props.className).toContain("gap-8");
+		expect(stack.props.className).not.toContain("gap-2");
+	});
 });

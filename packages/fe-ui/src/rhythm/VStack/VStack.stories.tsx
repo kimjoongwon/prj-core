@@ -25,6 +25,21 @@ const meta = {
 			options: ["start", "center", "end", "between", "around", "evenly"],
 			description: "Vertical distribution of items",
 		},
+		gap: {
+			control: "select",
+			options: [
+				"flush",
+				"dense",
+				"inline",
+				"block",
+				"section",
+				"page",
+				"roomy",
+			],
+			description:
+				"세로 간격 (flush=0, dense=4, inline=8, block=12, section=16, page=24, roomy=32px)",
+			defaultValue: "section",
+		},
 		fullWidth: {
 			control: "boolean",
 			description: "Whether the stack should take full width",
@@ -66,6 +81,40 @@ export const Default: Story = {
 		docs: {
 			description: {
 				story: "Default vertical stack using the built-in gap.",
+			},
+		},
+	},
+};
+
+export const GapScale: Story = {
+	args: {},
+	render: () => (
+		<VStack gap="page" className="w-full max-w-md">
+			{(
+				[
+					["flush", "flush — 붙어야 하는 조합 (0px)"],
+					["dense", "dense — metadata·보조 label 묶음 (4px)"],
+					["inline", "inline — 버튼 행·chip (8px)"],
+					["block", "block — 제목-본문 짧은 묶음 (12px)"],
+					["section", "section — 섹션 내부 기본 흐름 (16px)"],
+					["page", "page — 페이지 주요 블록 사이 (24px)"],
+					["roomy", "roomy — empty·auth·intro 여유 (32px)"],
+				] as const
+			).map(([gap, label]) => (
+				<div key={gap}>
+					<h4 className="mb-2 font-semibold text-sm">{label}</h4>
+					<VStack gap={gap} className="w-full border border-gray-300 p-2">
+						<SampleItem>항목 A</SampleItem>
+						<SampleItem>항목 B</SampleItem>
+					</VStack>
+				</div>
+			))}
+		</VStack>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: "시맨틱 간격 체계. 규칙은 DESIGN.md를 참고하세요.",
 			},
 		},
 	},
