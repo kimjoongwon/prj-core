@@ -1,12 +1,17 @@
 import LottieView, { type AnimationObject } from "lottie-react-native";
 import { useEffect, useRef, useState } from "react";
-import { AccessibilityInfo, Animated, View } from "react-native";
+import {
+	AccessibilityInfo,
+	Animated,
+	type ColorValue,
+	View,
+} from "react-native";
 import { Icon, type IconProps, type MobileIconName } from "../Icon";
 import { type AnimatedTabIconName, animatedTabIconAnimations } from "./lottie";
 
 export interface AnimatedTabIconProps {
 	animationKey?: number;
-	color: string;
+	color: ColorValue;
 	focused: boolean;
 	name: MobileIconName;
 	size: IconProps["size"];
@@ -28,16 +33,19 @@ const getAnimation = (name: MobileIconName) =>
 		| AnimationObject
 		| undefined;
 
-const getLottieColorFilters = (color: string) => [
-	{
-		color,
-		keypath: "primary.**",
-	},
-	{
-		color,
-		keypath: "accent.**",
-	},
-];
+const getLottieColorFilters = (color: ColorValue) =>
+	typeof color === "string"
+		? [
+				{
+					color,
+					keypath: "primary.**",
+				},
+				{
+					color,
+					keypath: "accent.**",
+				},
+			]
+		: undefined;
 
 export const AnimatedTabIcon = ({
 	animationKey = 0,

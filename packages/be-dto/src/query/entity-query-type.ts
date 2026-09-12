@@ -3,9 +3,7 @@ import {
 	inheritTransformationMetadata,
 	inheritValidationMetadata,
 } from "@nestjs/mapped-types";
-import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
-import { ModelPropertiesAccessor } from "@nestjs/swagger/dist/services/model-properties-accessor";
+import { ApiProperty, DECORATORS, PartialType, PickType } from "@nestjs/swagger";
 import { QueryDto } from "./query.dto";
 
 /**
@@ -29,10 +27,13 @@ export function EntityQueryType<
 	inheritValidationMetadata(mappedEntityType, EntityQuery);
 	inheritTransformationMetadata(mappedEntityType, EntityQuery);
 
-	const modelPropertiesAccessor = new ModelPropertiesAccessor();
-	for (const propertyKey of modelPropertiesAccessor.getModelProperties(
+	const modelPropertyKeys = (Reflect.getMetadata(
+		DECORATORS.API_MODEL_PROPERTIES_ARRAY,
 		mappedEntityType.prototype,
-	)) {
+	) ?? []) as string[];
+	for (const propertyKey of modelPropertyKeys
+		.filter((key) => key.startsWith(":"))
+		.map((key) => key.slice(1))) {
 		const metadata = Reflect.getMetadata(
 			DECORATORS.API_MODEL_PROPERTIES,
 			mappedEntityType.prototype,

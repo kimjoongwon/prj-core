@@ -1,10 +1,6 @@
 import type { ReactElement, ReactNode } from "react";
 import { ScreenFrame, type ScreenFrameProps } from "./index";
 
-jest.mock("react-native", () => ({
-	View: "View",
-}));
-
 jest.mock("react-native-safe-area-context", () => ({
 	useSafeAreaInsets: () => ({
 		bottom: 30,

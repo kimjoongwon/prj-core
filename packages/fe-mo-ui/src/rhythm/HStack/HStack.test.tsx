@@ -1,10 +1,6 @@
 import type { ReactElement } from "react";
 import { HStack, type HStackProps } from "./index";
 
-jest.mock("react-native", () => ({
-	View: "View",
-}));
-
 describe("HStack", () => {
 	const renderHStack = (props: HStackProps): ReactElement<HStackProps> =>
 		(

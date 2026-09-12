@@ -2,15 +2,15 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { InquiriesController } from "@cocrepo/controller";
-import { DECIMAL_ID_PATTERN_SOURCE } from "@cocrepo/type/database-id";
+import { DECIMAL_ID_PATTERN_SOURCE } from "@cocrepo/type";
 import type { INestApplication } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
 	DocumentBuilder,
 	type OpenAPIObject,
+	type SchemaObject,
 	SwaggerModule,
 } from "@nestjs/swagger";
-import type { SchemaObject } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
 import { Test } from "@nestjs/testing";
 import ts from "typescript";
 import { applyBigIntIdOpenApiContract } from "./bigint-id.openapi";

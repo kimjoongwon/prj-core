@@ -1,9 +1,7 @@
 import "reflect-metadata";
 import { OidcClient } from "@cocrepo/entity";
 import type { Type } from "@nestjs/common";
-import { ModelPropertiesAccessor } from "@nestjs/swagger/dist/services/model-properties-accessor";
-import { SchemaObjectFactory } from "@nestjs/swagger/dist/services/schema-object-factory";
-import { SwaggerTypesMapper } from "@nestjs/swagger/dist/services/swagger-types-mapper";
+import { generateSchema, type SchemaObject } from "@nestjs/swagger";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
 import { describe, expect, it } from "vitest";
@@ -28,14 +26,7 @@ function serializeAccessResponse<T>(responseClass: Type<T>, snapshot: object) {
 }
 
 function accessResponseSchemas() {
-	const schemas: Record<
-		string,
-		{ properties: Record<string, Record<string, unknown>>; required?: string[] }
-	> = {};
-	const schemaFactory = new SchemaObjectFactory(
-		new ModelPropertiesAccessor(),
-		new SwaggerTypesMapper(),
-	);
+	let schemas: Record<string, SchemaObject> = {};
 	for (const responseClass of [
 		PolicyResponseDto,
 		PolicyEntryResponseDto,
@@ -49,7 +40,7 @@ function accessResponseSchemas() {
 		IdpAccountDetailDto,
 		TenantAccessRequestDto,
 	]) {
-		schemaFactory.exploreModelSchema(responseClass, schemas);
+		schemas = generateSchema(responseClass as Type<object>, schemas).schemas;
 	}
 	return schemas;
 }

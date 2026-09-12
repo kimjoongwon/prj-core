@@ -1,9 +1,7 @@
 import "reflect-metadata";
 import { ClassField, StringField } from "@cocrepo/decorator/field";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
-import { ModelPropertiesAccessor } from "@nestjs/swagger/dist/services/model-properties-accessor";
-import { SchemaObjectFactory } from "@nestjs/swagger/dist/services/schema-object-factory";
-import { SwaggerTypesMapper } from "@nestjs/swagger/dist/services/swagger-types-mapper";
+import { DECORATORS } from "@nestjs/swagger";
+import { generateSchema } from "@nestjs/swagger";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
 import { describe, expect, it, vi } from "vitest";
@@ -101,11 +99,7 @@ describe("EntityResponseType", () => {
 		expect(ownerSwagger).not.toHaveProperty("required");
 		expect(ownerSwagger).not.toHaveProperty("nullable");
 		const schemas = {};
-		const schemaFactory = new SchemaObjectFactory(
-			new ModelPropertiesAccessor(),
-			new SwaggerTypesMapper(),
-		);
-		schemaFactory.exploreModelSchema(RoleResponse, schemas);
+		Object.assign(schemas, generateSchema(RoleResponse, schemas).schemas);
 		expect(schemas).toHaveProperty(
 			"RoleResponse.properties.assignments.items.$ref",
 			"#/components/schemas/AssignmentResponse",

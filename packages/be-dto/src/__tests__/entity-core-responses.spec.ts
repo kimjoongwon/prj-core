@@ -1,9 +1,7 @@
 import "reflect-metadata";
 import { hydrateEntity, User } from "@cocrepo/entity";
-import type { SchemaObject } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
-import { ModelPropertiesAccessor } from "@nestjs/swagger/dist/services/model-properties-accessor";
-import { SchemaObjectFactory } from "@nestjs/swagger/dist/services/schema-object-factory";
-import { SwaggerTypesMapper } from "@nestjs/swagger/dist/services/swagger-types-mapper";
+import type { Type } from "@nestjs/common";
+import { generateSchema, type SchemaObject } from "@nestjs/swagger";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { describe, expect, it } from "vitest";
 import { AbilityDto } from "../ability/ability.dto";
@@ -824,16 +822,11 @@ describe("Entity 기반 핵심 응답 계약", () => {
 		fields,
 		required,
 	}) => {
-		const schemas: Record<string, SchemaObject> = {};
-		const factory = new SchemaObjectFactory(
-			new ModelPropertiesAccessor(),
-			new SwaggerTypesMapper(),
-		);
-		factory.exploreModelSchema(dto, schemas);
-		expect(Object.keys(schemas[dto.name].properties ?? {}).sort()).toEqual(
+		const { schema } = generateSchema(dto as Type<object>);
+		expect(Object.keys(schema.properties ?? {}).sort()).toEqual(
 			[...fields].sort(),
 		);
-		expect([...(schemas[dto.name].required ?? [])].sort()).toEqual(
+		expect([...(schema.required ?? [])].sort()).toEqual(
 			[...required].sort(),
 		);
 	});
@@ -961,14 +954,10 @@ describe("Entity 기반 핵심 응답 계약", () => {
 		expect(abilityResponse.action).not.toHaveProperty("abilities");
 	});
 	it("상호 참조 스키마에서 배열·nullable·설명과 API 전용 nullable 차이를 유지한다", () => {
-		const schemas: Record<string, SchemaObject> = {};
-		const factory = new SchemaObjectFactory(
-			new ModelPropertiesAccessor(),
-			new SwaggerTypesMapper(),
-		);
-		factory.exploreModelSchema(UserDto, schemas);
-		factory.exploreModelSchema(AbilityDto, schemas);
-		factory.exploreModelSchema(SpaceDto, schemas);
+		let schemas: Record<string, SchemaObject> = {};
+		schemas = generateSchema(UserDto, schemas).schemas;
+		schemas = generateSchema(AbilityDto, schemas).schemas;
+		schemas = generateSchema(SpaceDto, schemas).schemas;
 		expect(schemas.UserDto.properties?.profiles).toEqual({
 			description: "프로필 목록",
 			type: "array",

@@ -1,10 +1,6 @@
 import type { ReactElement } from "react";
 import { getTextContent, Text, type TextProps, wrapTextContent } from "./index";
 
-jest.mock("react-native", () => ({
-	Text: "Text",
-}));
-
 describe("Text", () => {
 	const renderText = (props: TextProps): ReactElement<TextProps> =>
 		(

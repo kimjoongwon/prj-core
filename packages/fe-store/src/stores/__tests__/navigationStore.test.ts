@@ -244,10 +244,10 @@ describe("NavigationStore", () => {
 	];
 
 	let navigation: NavigationStore;
-	let mockNavigate: ReturnType<typeof vi.fn>;
+	let mockNavigate: ReturnType<typeof vi.fn<(path: string) => void>>;
 
 	beforeEach(() => {
-		mockNavigate = vi.fn();
+		mockNavigate = vi.fn<(path: string) => void>();
 		navigation = new NavigationStore(createNavItemConfigs(), {
 			onNavigate: mockNavigate,
 		});

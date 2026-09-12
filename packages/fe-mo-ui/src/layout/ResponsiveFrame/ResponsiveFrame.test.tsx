@@ -1,10 +1,6 @@
 import type { ReactElement } from "react";
 import { ResponsiveFrame, type ResponsiveFrameProps } from "./index";
 
-jest.mock("react-native", () => ({
-	View: "View",
-}));
-
 describe("ResponsiveFrame", () => {
 	const renderResponsiveFrame = (
 		props: ResponsiveFrameProps,

@@ -1,9 +1,6 @@
 import "reflect-metadata";
 import { ValidationPipe } from "@nestjs/common";
-import type { SchemaObject } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
-import { ModelPropertiesAccessor } from "@nestjs/swagger/dist/services/model-properties-accessor";
-import { SchemaObjectFactory } from "@nestjs/swagger/dist/services/schema-object-factory";
-import { SwaggerTypesMapper } from "@nestjs/swagger/dist/services/swagger-types-mapper";
+import { generateSchema, type SchemaObject } from "@nestjs/swagger";
 import { describe, expect, it } from "vitest";
 import { CreateRoutineActivityItemDto } from "../create/create-routine-activity-item.dto";
 import { CreateRoutineDto } from "../create/create-routine/create-routine.dto";
@@ -28,14 +25,8 @@ describe.each([
 
 	it("선택적인 생성 항목 배열을 OpenAPI에 명시한다", () => {
 		const schemas: Record<string, SchemaObject> = {};
-		const schemaFactory = new SchemaObjectFactory(
-			new ModelPropertiesAccessor(),
-			new SwaggerTypesMapper(),
-		);
-		const schemaName = schemaFactory.exploreModelSchema(
-			RoutineRequestDto,
-			schemas,
-		);
+		const schemaName = RoutineRequestDto.name;
+		Object.assign(schemas, generateSchema(RoutineRequestDto, schemas).schemas);
 
 		expect(schemas[schemaName]?.properties?.activities).toMatchObject({
 			type: "array",

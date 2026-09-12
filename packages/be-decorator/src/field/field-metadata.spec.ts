@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { StringValidation } from "@cocrepo/schema";
-import { PickType } from "@nestjs/swagger";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
+import { DECORATORS, PickType } from "@nestjs/swagger";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { getMetadataStorage, validateSync } from "class-validator";
 import { describe, expect, it } from "vitest";

@@ -1,6 +1,6 @@
 import type { Type } from "@nestjs/common";
 import type { ApiPropertyOptions } from "@nestjs/swagger";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
+import { DECORATORS } from "@nestjs/swagger";
 import { Exclude, Expose } from "class-transformer";
 import {
 	ENTITY_RESPONSE_TYPE_METADATA,

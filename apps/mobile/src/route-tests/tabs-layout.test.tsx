@@ -107,7 +107,7 @@ jest.mock("@/auth/auth-config", () => ({
   getCoreApiBaseUrl: () => "http://localhost:3207",
 }));
 
-jest.mock("expo-router", () => {
+jest.mock("expo-router/js-tabs", () => {
   const React = jest.requireActual<typeof import("react")>("react");
   const { Pressable, Text, View } =
     jest.requireActual<typeof import("react-native")>("react-native");

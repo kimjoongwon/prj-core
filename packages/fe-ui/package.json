@@ -57,15 +57,15 @@
     "@heroui/react": "catalog:",
     "@heroui/styles": "catalog:",
     "@internationalized/date": "3.12.0",
-    "@storybook/react": "^9.0.18",
+    "@storybook/react": "10.6.0",
     "@storybook/react-vite": "catalog:",
     "@tailwindcss/postcss": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@tanstack/react-query": "catalog:",
-    "@tanstack/react-router": "^1.130.2",
+    "@tanstack/react-router": "^1.170.35",
     "@tanstack/react-table": "^8.21.3",
-    "@tanstack/router-cli": "^1.130.2",
-    "@tanstack/router-devtools": "^1.130.2",
+    "@tanstack/router-cli": "^1.167.35",
+    "@tanstack/router-devtools": "^1.167.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/react": "catalog:",
@@ -109,7 +109,7 @@
     "@react-aria/ssr": "^3.9.10",
     "ckeditor5": "^48.0.1",
     "frappe-gantt": "^1.2.2",
-    "mermaid": "^11.12.3",
+    "mermaid": "^11.16.1",
     "next-themes": "catalog:"
   }
 }

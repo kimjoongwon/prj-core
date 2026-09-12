@@ -7,7 +7,7 @@ import { AssetQueryDto } from "../asset/asset-query.dto";
 import { QueryTimelineDto } from "./query-timeline.dto";
 import { QueryUsersDto } from "../users/query-users.dto";
 import { QuerySpaceDto } from "./query-space.dto";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
+import { DECORATORS } from "@nestjs/swagger";
 import { StringField, BooleanField } from "@cocrepo/decorator/field";
 import { EntityQueryType } from "./entity-query-type";
 import { QueryDto } from "./query.dto";

@@ -6,6 +6,7 @@ import type {
 	BaseFieldOptions,
 	FieldDecoratorOptions,
 } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 import {
 	createOptionalField,
 	createOptionalFieldMetadata,
@@ -26,7 +27,7 @@ export function BooleanField(
 	options: FieldDecoratorOptions<BaseFieldOptions> = {},
 ): PropertyDecorator {
 	return applyDecorators(
-		BooleanValidation(options),
+		BooleanValidation(normalizeFieldOptionsForValidation(options)),
 		BooleanFieldMetadata(options),
 	);
 }

@@ -55,7 +55,7 @@ describe("mobile auth utils", () => {
 	});
 
 	it("native 로그인 요청은 JSON body로 credential을 전달해야 한다", async () => {
-		const originalFetch = global.fetch;
+		const originalFetch = globalThis.fetch;
 		const session = {
 			accessToken: "native-access-token",
 			refreshToken: "native-refresh-token",
@@ -72,7 +72,7 @@ describe("mobile auth utils", () => {
 			ok: true,
 			status: 200,
 		});
-		global.fetch = fetchMock as unknown as typeof fetch;
+		globalThis.fetch = fetchMock as unknown as typeof fetch;
 
 		try {
 			const result = await requestNativeLogin({
@@ -93,12 +93,12 @@ describe("mobile auth utils", () => {
 			);
 			expect(result).toEqual(session);
 		} finally {
-			global.fetch = originalFetch;
+			globalThis.fetch = originalFetch;
 		}
 	});
 
 	it("native refresh 요청은 sessionId와 refreshToken을 전달해야 한다", async () => {
-		const originalFetch = global.fetch;
+		const originalFetch = globalThis.fetch;
 		const session = {
 			accessToken: "new-native-access-token",
 			refreshToken: "new-native-refresh-token",
@@ -113,7 +113,7 @@ describe("mobile auth utils", () => {
 			ok: true,
 			status: 200,
 		});
-		global.fetch = fetchMock as unknown as typeof fetch;
+		globalThis.fetch = fetchMock as unknown as typeof fetch;
 
 		try {
 			const result = await requestNativeTokenRefresh({
@@ -134,7 +134,7 @@ describe("mobile auth utils", () => {
 			);
 			expect(result).toEqual(session);
 		} finally {
-			global.fetch = originalFetch;
+			globalThis.fetch = originalFetch;
 		}
 	});
 

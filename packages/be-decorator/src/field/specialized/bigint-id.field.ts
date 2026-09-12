@@ -8,6 +8,7 @@ import {
 	ToArray,
 } from "../../transform.decorators";
 import type { BaseFieldOptions } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 import {
 	createOptionalField,
 	createOptionalFieldMetadata,
@@ -34,7 +35,7 @@ export function BigIntIdField(
 		BaseFieldOptions = {},
 ): PropertyDecorator {
 	return applyDecorators(
-		BigIntIdValidation(options),
+		BigIntIdValidation(normalizeFieldOptionsForValidation(options)),
 		BigIntIdFieldMetadata(options),
 	);
 }

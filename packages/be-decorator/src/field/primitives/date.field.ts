@@ -6,6 +6,7 @@ import type {
 	BaseFieldOptions,
 	FieldDecoratorOptions,
 } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 import {
 	createOptionalField,
 	createOptionalFieldMetadata,
@@ -25,7 +26,10 @@ export function DateFieldMetadata(
 export function DateField(
 	options: FieldDecoratorOptions<BaseFieldOptions> = {},
 ): PropertyDecorator {
-	return applyDecorators(DateValidation(options), DateFieldMetadata(options));
+	return applyDecorators(
+		DateValidation(normalizeFieldOptionsForValidation(options)),
+		DateFieldMetadata(options),
+	);
 }
 
 export const DateFieldOptional =

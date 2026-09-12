@@ -1,10 +1,6 @@
 import type { ReactElement } from "react";
 import { VStack, type VStackProps } from "./index";
 
-jest.mock("react-native", () => ({
-	View: "View",
-}));
-
 describe("VStack", () => {
 	const renderVStack = (props: VStackProps): ReactElement<VStackProps> =>
 		(

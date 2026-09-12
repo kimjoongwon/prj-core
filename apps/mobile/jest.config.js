@@ -8,7 +8,7 @@ module.exports = {
   },
   setupFilesAfterEnv: ["<rootDir>/test/jestExpoRuntimeSetup.js"],
   transformIgnorePatterns: [
-    "node_modules/(?!.*((jest-)?react-native|@react-native|expo|@expo|heroui-native|react-native-reanimated|react-native-worklets|react-native-svg|uniwind))",
+    "node_modules/(?!.*((jest-)?react-native|@react-native|decode-uri-component|expo|@expo|heroui-native|react-native-reanimated|react-native-worklets|react-native-svg|uniwind))",
   ],
   collectCoverageFrom: [
     "src/**/*.ts",

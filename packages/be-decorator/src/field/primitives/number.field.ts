@@ -7,6 +7,7 @@ import type {
 	FieldDecoratorOptions,
 	NumberFieldOptions,
 } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 import {
 	createOptionalField,
 	createOptionalFieldMetadata,
@@ -41,7 +42,7 @@ export function NumberField(
 	options: FieldDecoratorOptions<NumberFieldOptions> = {},
 ): PropertyDecorator {
 	return applyDecorators(
-		NumberValidation(options),
+		NumberValidation(normalizeFieldOptionsForValidation(options)),
 		NumberFieldMetadata(options),
 	);
 }

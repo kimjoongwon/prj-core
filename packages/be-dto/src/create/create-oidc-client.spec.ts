@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { ValidationPipe } from "@nestjs/common";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
+import { DECORATORS } from "@nestjs/swagger";
 import { describe, expect, it } from "vitest";
 import { CreateOidcClientDto } from "./create-oidc-client.dto";
 

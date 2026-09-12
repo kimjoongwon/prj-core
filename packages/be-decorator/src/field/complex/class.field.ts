@@ -5,6 +5,7 @@ import { Type } from "class-transformer";
 import { ToArray } from "../../transform.decorators";
 import type { Constructor } from "@cocrepo/type";
 import type { BaseFieldOptions } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 
 /** ClassField에 전달할 검증·변환·Swagger 옵션입니다. */
 export type ClassFieldOptions = Omit<ApiPropertyOptions, "type"> &
@@ -99,7 +100,7 @@ export function ClassField<TClass extends Constructor>(
 	options: ClassFieldOptions = {},
 ): PropertyDecorator {
 	return applyDecorators(
-		ClassValidation(options),
+		ClassValidation(normalizeFieldOptionsForValidation(options)),
 		ClassFieldMetadata(getClass, options),
 	);
 }

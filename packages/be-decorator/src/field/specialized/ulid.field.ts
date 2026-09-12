@@ -5,6 +5,7 @@ import { Type } from "class-transformer";
 import { ApiULIDProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
 import type { BaseFieldOptions } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 import {
 	createOptionalField,
 	createOptionalFieldMetadata,
@@ -28,7 +29,10 @@ export function ULIDField(
 	options: Omit<ApiPropertyOptions, "type" | "format" | "isArray"> &
 		BaseFieldOptions = {},
 ): PropertyDecorator {
-	return applyDecorators(ULIDValidation(options), ULIDFieldMetadata(options));
+	return applyDecorators(
+		ULIDValidation(normalizeFieldOptionsForValidation(options)),
+		ULIDFieldMetadata(options),
+	);
 }
 
 export const ULIDFieldOptional =

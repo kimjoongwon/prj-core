@@ -1,5 +1,4 @@
-import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import { Stack } from "expo-router";
+import { Stack, type NativeStackHeaderProps } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { setApiBaseUrl, setLoginRedirectUrl } from "@cocrepo/api/core/client";

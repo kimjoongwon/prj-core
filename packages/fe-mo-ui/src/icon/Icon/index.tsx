@@ -1,4 +1,5 @@
 import { type ThemeColor, useThemeColor } from "heroui-native";
+import type { ColorValue } from "react-native";
 import { type IconGlyphProps, mobileIcons } from "./glyphs";
 
 export { mobileIcons };
@@ -19,7 +20,7 @@ export interface IconProps
 		IconGlyphProps,
 		"color" | "height" | "size" | "strokeWidth" | "width"
 	> {
-	color?: string;
+	color?: ColorValue;
 	name: MobileIconName;
 	size?: IconSize | number;
 	strokeWidth?: number;

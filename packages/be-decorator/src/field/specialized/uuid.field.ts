@@ -5,6 +5,7 @@ import { Type } from "class-transformer";
 import { ApiUUIDProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
 import type { BaseFieldOptions } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 import {
 	createOptionalField,
 	createOptionalFieldMetadata,
@@ -28,7 +29,10 @@ export function UUIDField(
 	options: Omit<ApiPropertyOptions, "type" | "format" | "isArray"> &
 		BaseFieldOptions = {},
 ): PropertyDecorator {
-	return applyDecorators(UUIDValidation(options), UUIDFieldMetadata(options));
+	return applyDecorators(
+		UUIDValidation(normalizeFieldOptionsForValidation(options)),
+		UUIDFieldMetadata(options),
+	);
 }
 
 export const UUIDFieldOptional =

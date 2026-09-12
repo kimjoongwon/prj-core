@@ -6,6 +6,7 @@ import type {
 	BaseFieldOptions,
 	FieldDecoratorOptions,
 } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 import {
 	createOptionalField,
 	createOptionalFieldMetadata,
@@ -25,7 +26,10 @@ export function PhoneFieldMetadata(
 export function PhoneField(
 	options: FieldDecoratorOptions<BaseFieldOptions> = {},
 ): PropertyDecorator {
-	return applyDecorators(PhoneValidation(options), PhoneFieldMetadata(options));
+	return applyDecorators(
+		PhoneValidation(normalizeFieldOptionsForValidation(options)),
+		PhoneFieldMetadata(options),
+	);
 }
 
 export const PhoneFieldOptional =

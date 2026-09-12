@@ -49,6 +49,7 @@ export default defineConfig({
 	},
 	test: {
 		environment: "node",
+		include: ["src/**/*.spec.ts"],
 		server: {
 			deps: {
 				inline: [/@cocrepo\//],

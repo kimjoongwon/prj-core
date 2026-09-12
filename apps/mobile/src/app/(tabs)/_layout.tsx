@@ -1,8 +1,8 @@
-import { Tabs } from "expo-router";
-import type {
-	BottomTabBarButtonProps,
-	BottomTabHeaderProps,
-} from "@react-navigation/bottom-tabs";
+import {
+	Tabs,
+	type BottomTabBarButtonProps,
+	type BottomTabHeaderProps,
+} from "expo-router/js-tabs";
 import {
 	AnimatedTabIcon,
 	CustomHeader,
@@ -16,6 +16,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
+	type ColorValue,
 	Pressable,
 	type GestureResponderEvent,
 	type PressableProps,
@@ -32,7 +33,7 @@ import {
 } from "@/auth/mobile-space-options";
 
 interface TabBarIconProps {
-	color: string;
+	color: ColorValue;
 	focused: boolean;
 	size: number;
 }

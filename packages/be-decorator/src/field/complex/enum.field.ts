@@ -5,6 +5,7 @@ import { ApiEnumProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
 import { IsUndefinable } from "../../validator.decorators";
 import type { BaseFieldOptions } from "../base/field-options.types";
+import { normalizeFieldOptionsForValidation } from "../base/normalize-field-validation-options";
 
 export const EnumFieldKey = "field:enum";
 
@@ -61,7 +62,7 @@ export function EnumField<TEnum extends object>(
 		BaseFieldOptions = {},
 ): PropertyDecorator {
 	return applyDecorators(
-		EnumValidation(getEnum, options),
+		EnumValidation(getEnum, normalizeFieldOptionsForValidation(options)),
 		EnumFieldMetadata(getEnum, options),
 	);
 }
