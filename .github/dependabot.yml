@@ -1,0 +1,31 @@
+# pnpm workspace 루트 lockfile 기준 주간 의존성 업데이트.
+# minor/patch는 하나의 PR로 묶고 major는 개별 PR로 분리합니다.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "Asia/Seoul"
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "Asia/Seoul"
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
