@@ -8,13 +8,7 @@ export function AbstractEntityFields(): ClassDecorator {
 	return (entityClass) => {
 		BigIntIdFieldMetadata()(entityClass.prototype, "id");
 		DateFieldMetadata()(entityClass.prototype, "createdAt");
-		DateFieldMetadata({ nullable: true })(
-			entityClass.prototype,
-			"updatedAt",
-		);
-		DateFieldMetadata({ nullable: true })(
-			entityClass.prototype,
-			"removedAt",
-		);
+		DateFieldMetadata({ nullable: true })(entityClass.prototype, "updatedAt");
+		DateFieldMetadata({ nullable: true })(entityClass.prototype, "removedAt");
 	};
 }
