@@ -18,6 +18,34 @@ test.describe("로그인 페이지 테스트 @real", () => {
 		await expect(page.getByRole("button", { name: "로그인" })).toBeVisible();
 	});
 
+	test("로그인 페이지에서 인증 부트스트랩 API가 호출되지 않아야 한다", async ({
+		page,
+	}) => {
+		const authenticatedApiRequests: string[] = [];
+		page.on("request", (request) => {
+			const url = request.url();
+			if (
+				url.endsWith("/api/v1/auth/my-spaces") ||
+				url.endsWith("/api/v1/auth/current-space") ||
+				url.endsWith("/api/v1/auth/verify-token") ||
+				url.endsWith("/api/v1/abilities/my")
+			) {
+				authenticatedApiRequests.push(url);
+			}
+		});
+
+		await page.goto("auth/login");
+
+		await expect(
+			page.getByRole("heading", { name: "관리자 로그인", exact: true }),
+		).toBeVisible({ timeout: 30000 });
+		// 부트스트랩이 hydration 직후 바로 발사되던 이전 동작을 잡기 위해
+		// 렌더 확인 후에도 잠시 관찰한다.
+		await page.waitForTimeout(1500);
+
+		expect(authenticatedApiRequests).toEqual([]);
+	});
+
 	test("로컬 개발 기본 관리자 계정으로 로그인에 성공해야 한다", async ({
 		page,
 	}) => {

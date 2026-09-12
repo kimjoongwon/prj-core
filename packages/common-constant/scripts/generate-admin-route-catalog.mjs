@@ -10,7 +10,7 @@ export const packageDir = path.resolve(scriptDir, "..");
 export const repoRoot = path.resolve(packageDir, "../..");
 export const adminAppDir = path.join(
 	repoRoot,
-	"apps/admin/web/src/app/(admin)",
+	"apps/admin/web/src/app/(authenticated)/(admin)",
 );
 export const outputFile = path.join(
 	packageDir,
