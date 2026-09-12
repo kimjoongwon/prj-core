@@ -62,18 +62,112 @@ describe("removeTenantHeaderParameters", () => {
 				"/records": {
 					post: {
 						operationId: "createRecord",
-						requestBody: { content: { "application/json": { schema: { $ref: "#/components/schemas/Record" } } } },
-						responses: { 201: { content: { "application/json": { schema: { $ref: "#/components/schemas/Record" } } } } },
+						requestBody: {
+							content: {
+								"application/json": {
+									schema: { $ref: "#/components/schemas/Record" },
+								},
+							},
+						},
+						responses: {
+							201: {
+								content: {
+									"application/json": {
+										schema: { $ref: "#/components/schemas/Record" },
+									},
+								},
+							},
+						},
 					},
 				},
 			},
-			components: { schemas: { Record: { type: "object", properties: { id: { type: "string", "x-runtime-type": "bigint" }, label: { type: "string" } } } } },
+			components: {
+				schemas: {
+					Record: {
+						type: "object",
+						properties: {
+							id: { type: "string", "x-runtime-type": "bigint" },
+							label: { type: "string" },
+						},
+					},
+				},
+			},
 		};
 		const result = transformSpecForCodegen(spec, { writeManifest: false });
 		const manifest = transformSpecForCodegen.createRuntimeManifest(result);
 
-		expect(result.components.schemas.Record.properties.id).toMatchObject({ type: "integer", format: "int64", "x-runtime-type": "bigint" });
+		expect(result.components.schemas.Record.properties.id).toMatchObject({
+			type: "integer",
+			format: "int64",
+			"x-runtime-type": "bigint",
+		});
 		expect(spec.components.schemas.Record.properties.id.type).toBe("string");
-		expect(manifest.operations[0]).toMatchObject({ operationId: "createRecord", method: "POST", path: "/records" });
+		expect(manifest.operations[0]).toMatchObject({
+			operationId: "createRecord",
+			method: "POST",
+			path: "/records",
+		});
+	});
+
+	it("공용 validation 옵션을 표준 OpenAPI schema로 정규화한다", () => {
+		const schema = {
+			type: "object",
+			properties: {
+				count: {
+					type: "number",
+					int: true,
+					min: 1,
+					max: 10,
+					minimum: 1,
+					maximum: 10,
+				},
+				email: { type: "string", toLowerCase: true, message: "invalid email" },
+				value: { oneOf: [{ type: "string" }, { type: "null" }] },
+			},
+		};
+
+		transformSpecForCodegen.normalizeSchemaForOpenApi(schema);
+
+		expect(schema.properties.count).toEqual({
+			type: "integer",
+			minimum: 1,
+			maximum: 10,
+		});
+		expect(schema.properties.email).toEqual({ type: "string" });
+		expect(schema.properties.value).toEqual({
+			oneOf: [{ type: "string" }],
+			nullable: true,
+		});
+	});
+
+	it("parameter wrapper의 비표준 옵션을 제거하되 문자열 query 계약은 유지한다", () => {
+		const spec = {
+			openapi: "3.0.0",
+			info: { title: "test", version: "1.0.0" },
+			paths: {
+				"/records": {
+					get: {
+						parameters: [
+							{
+								name: "recordId",
+								in: "query",
+								int: true,
+								"x-runtime-type": "bigint",
+								schema: { type: "string" },
+							},
+						],
+					},
+				},
+			},
+		};
+
+		const result = transformSpecForCodegen(spec, { writeManifest: false });
+
+		expect(result.paths["/records"].get.parameters[0]).toEqual({
+			name: "recordId",
+			in: "query",
+			"x-runtime-type": "bigint",
+			schema: { type: "string" },
+		});
 	});
 });

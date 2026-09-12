@@ -1,13 +1,10 @@
-export type { ApproveTenantAccessRequest200AllOf } from "../model/approveTenantAccessRequest200AllOf";
-export type { GetTenantAccessRequest200AllOf } from "../model/getTenantAccessRequest200AllOf";
-export type { GetTenantAccessRequests200AllOf } from "../model/getTenantAccessRequests200AllOf";
+export type { ApproveTenantAccessRequest200 } from "../model/approveTenantAccessRequest200";
+export type { GetTenantAccessRequest200 } from "../model/getTenantAccessRequest200";
+export type { GetTenantAccessRequests200 } from "../model/getTenantAccessRequests200";
 export type { GetTenantAccessRequestsParams } from "../model/getTenantAccessRequestsParams";
-export type { RejectTenantAccessRequest200AllOf } from "../model/rejectTenantAccessRequest200AllOf";
+export type { RejectTenantAccessRequest200 } from "../model/rejectTenantAccessRequest200";
 export type { ReviewTenantAccessRequestDto } from "../model/reviewTenantAccessRequestDto";
 export type { TenantAccessRequestDto } from "../model/tenantAccessRequestDto";
-export type { TenantAccessRequestDtoAppliedTenant } from "../model/tenantAccessRequestDtoAppliedTenant";
-export type { TenantAccessRequestDtoPreviousRole } from "../model/tenantAccessRequestDtoPreviousRole";
-export type { TenantAccessRequestDtoReviewer } from "../model/tenantAccessRequestDtoReviewer";
 export type { TenantAccessRequestPaginationMetaDto } from "../model/tenantAccessRequestPaginationMetaDto";
 export type { TenantAccessRequestStatus } from "../model/tenantAccessRequestStatus";
 export * from "./tenant-access-requests";

@@ -3,7 +3,7 @@
 > 현대적인 풀스택 예약 플랫폼을 위한 모노레포 아키텍처
 
 [![타입스크립트](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-22.18+-green.svg)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.16-orange.svg)](https://pnpm.io/)
 [![Turborepo](https://img.shields.io/badge/Turborepo-latest-red.svg)](https://turbo.build/)
 [![NestJS](https://img.shields.io/badge/NestJS-11-E0234E.svg)](https://nestjs.com/)
@@ -90,7 +90,7 @@
 | 카테고리             | 기술            | 버전 | 설명                |
 | -------------------- | --------------- | ---- | ------------------- |
 | **Framework**        | NestJS          | 11.x | Node.js 프레임워크  |
-| **Runtime**          | Node.js         | 20+  | JavaScript 런타임   |
+| **Runtime**          | Node.js         | 22.18+ | JavaScript 런타임 |
 | **Language**         | TypeScript      | 5.8  | 타입스크립트        |
 | **ORM**              | Prisma          | 6.x  | 데이터베이스 ORM    |
 | **Database**         | PostgreSQL      | 14+  | 관계형 데이터베이스 |
@@ -310,7 +310,7 @@ graph TD
 
 ### 사전 요구사항
 
-- **Node.js**: 20.x 이상
+- **Node.js**: 22.18.0 이상
 - **pnpm**: 10.16.0 이상
 - **PostgreSQL**: 14.x 이상
 

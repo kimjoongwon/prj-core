@@ -36,13 +36,126 @@ const withoutTenantHeaderParameters = (parameters) => {
  * Orval generated clients already receive x-tenant-id from custom Axios
  * interceptors, so the Swagger-only header parameter is stripped for codegen.
  */
-const normalizeBigIntSchemas = (node) => {
-	if (!node || typeof node !== "object") return;
-	if (node["x-runtime-type"] === "bigint") {
-		node.type = "integer";
-		node.format = "int64";
+const CUSTOM_VALIDATION_KEYS = [
+	"each",
+	"int",
+	"max",
+	"message",
+	"min",
+	"toLowerCase",
+];
+const UNION_SCHEMA_KEYS = ["allOf", "anyOf", "oneOf"];
+
+/**
+ * 공용 validation decorator의 실행 옵션이 Swagger schema에 섞여 나오는 부분을
+ * 표준 OpenAPI 3.0 키워드로 정규화한다.
+ */
+const normalizeSchemaForOpenApi = (schema) => {
+	if (!schema || typeof schema !== "object" || Array.isArray(schema)) return;
+
+	if (schema["x-runtime-type"] === "bigint") {
+		schema.type = "integer";
+		schema.format = "int64";
 	}
-	for (const child of Object.values(node)) normalizeBigIntSchemas(child);
+	if (schema.int === true && schema.type === "number") schema.type = "integer";
+	if (schema.min !== undefined && schema.minimum === undefined) {
+		schema.minimum = schema.min;
+	}
+	if (schema.max !== undefined && schema.maximum === undefined) {
+		schema.maximum = schema.max;
+	}
+
+	for (const validationKey of CUSTOM_VALIDATION_KEYS)
+		delete schema[validationKey];
+
+	for (const unionKey of UNION_SCHEMA_KEYS) {
+		if (!Array.isArray(schema[unionKey])) continue;
+		const hasNullVariant = schema[unionKey].some(
+			(unionSchema) => unionSchema?.type === "null",
+		);
+		if (hasNullVariant) {
+			schema[unionKey] = schema[unionKey].filter(
+				(unionSchema) => unionSchema?.type !== "null",
+			);
+			schema.nullable = true;
+		}
+		for (const unionSchema of schema[unionKey]) {
+			normalizeSchemaForOpenApi(unionSchema);
+		}
+	}
+
+	for (const propertySchema of Object.values(schema.properties ?? {})) {
+		normalizeSchemaForOpenApi(propertySchema);
+	}
+	for (const nestedSchemaKey of [
+		"additionalProperties",
+		"contains",
+		"items",
+		"not",
+		"propertyNames",
+	]) {
+		normalizeSchemaForOpenApi(schema[nestedSchemaKey]);
+	}
+};
+
+const normalizeContentSchemas = (content = {}) => {
+	for (const mediaType of Object.values(content)) {
+		normalizeSchemaForOpenApi(mediaType?.schema);
+	}
+};
+
+const normalizeParameterSchema = (parameter) => {
+	if (!parameter || typeof parameter !== "object" || "$ref" in parameter)
+		return;
+	for (const validationKey of CUSTOM_VALIDATION_KEYS)
+		delete parameter[validationKey];
+	// Parameter에 붙은 x-runtime-type은 프론트의 문자열 query 계약을 유지한다.
+	delete parameter.type;
+	delete parameter.format;
+	normalizeSchemaForOpenApi(parameter.schema);
+};
+
+const normalizeOperationSchemas = (operation) => {
+	for (const parameter of operation.parameters ?? []) {
+		normalizeParameterSchema(parameter);
+	}
+	normalizeContentSchemas(operation.requestBody?.content);
+	for (const response of Object.values(operation.responses ?? {})) {
+		normalizeContentSchemas(response?.content);
+	}
+};
+
+const normalizeSpecSchemas = (spec) => {
+	for (const schema of Object.values(spec.components?.schemas ?? {})) {
+		normalizeSchemaForOpenApi(schema);
+	}
+	for (const parameter of Object.values(spec.components?.parameters ?? {})) {
+		normalizeParameterSchema(parameter);
+	}
+	for (const requestBody of Object.values(
+		spec.components?.requestBodies ?? {},
+	)) {
+		normalizeContentSchemas(requestBody?.content);
+	}
+	for (const response of Object.values(spec.components?.responses ?? {})) {
+		normalizeContentSchemas(response?.content);
+	}
+
+	for (const pathItem of Object.values(spec.paths ?? {})) {
+		if (!pathItem || typeof pathItem !== "object") continue;
+		for (const parameter of pathItem.parameters ?? []) {
+			normalizeParameterSchema(parameter);
+		}
+		for (const [method, operation] of Object.entries(pathItem)) {
+			if (
+				OPERATION_METHODS.has(method) &&
+				operation &&
+				typeof operation === "object"
+			) {
+				normalizeOperationSchemas(operation);
+			}
+		}
+	}
 };
 
 const responseSchemasByStatus = (responses = {}) =>
@@ -58,20 +171,30 @@ const createRuntimeManifest = (spec) => {
 	for (const [operationPath, pathItem] of Object.entries(spec.paths ?? {})) {
 		if (!pathItem || typeof pathItem !== "object") continue;
 		for (const [method, operation] of Object.entries(pathItem)) {
-			if (!OPERATION_METHODS.has(method) || !operation || typeof operation !== "object") continue;
-			const parameters = [...(pathItem.parameters ?? []), ...(operation.parameters ?? [])];
+			if (
+				!OPERATION_METHODS.has(method) ||
+				!operation ||
+				typeof operation !== "object"
+			)
+				continue;
+			const parameters = [
+				...(pathItem.parameters ?? []),
+				...(operation.parameters ?? []),
+			];
 			const parameterSchemas = Object.fromEntries(
 				parameters.flatMap((parameter) =>
 					parameter && !("$ref" in parameter) && parameter.schema
 						? [[`${parameter.in}:${parameter.name}`, parameter.schema]]
 						: [],
-			),
+				),
 			);
 			operations.push({
-				operationId: operation.operationId ?? `${method.toUpperCase()} ${operationPath}`,
+				operationId:
+					operation.operationId ?? `${method.toUpperCase()} ${operationPath}`,
 				method: method.toUpperCase(),
 				path: operationPath,
-				requestSchema: operation.requestBody?.content?.["application/json"]?.schema,
+				requestSchema:
+					operation.requestBody?.content?.["application/json"]?.schema,
 				parameterSchemas,
 				responseSchemas: responseSchemasByStatus(operation.responses),
 			});
@@ -124,7 +247,7 @@ function transformSpecForCodegen(spec, { writeManifest = true } = {}) {
 			}
 		}
 	}
-	normalizeBigIntSchemas(nextSpec);
+	normalizeSpecSchemas(nextSpec);
 	if (writeManifest) writeRuntimeManifest(createRuntimeManifest(nextSpec));
 
 	return nextSpec;
@@ -133,3 +256,4 @@ function transformSpecForCodegen(spec, { writeManifest = true } = {}) {
 module.exports = transformSpecForCodegen;
 module.exports.withoutTenantHeaderParameters = withoutTenantHeaderParameters;
 module.exports.createRuntimeManifest = createRuntimeManifest;
+module.exports.normalizeSchemaForOpenApi = normalizeSchemaForOpenApi;

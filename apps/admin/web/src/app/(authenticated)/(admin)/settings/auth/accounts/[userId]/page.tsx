@@ -198,7 +198,7 @@ function mapAccountDetail(
 }
 
 function mapOptions(
-	bootstrap: IdpAccountAccessGrantFormBootstrapDto | undefined,
+	bootstrap: IdpAccountAccessGrantFormBootstrapDto | null | undefined,
 	path: "spaceId" | "roleId",
 ): AccountDetailScreenOption[] {
 	return (bootstrap?.options[path] ?? []).map(

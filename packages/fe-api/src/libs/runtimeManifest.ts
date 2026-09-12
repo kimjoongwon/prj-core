@@ -6240,7 +6240,6 @@ export const runtimeManifest: RuntimeManifest = {
 					$ref: "#/components/schemas/CategoryDto",
 				},
 				children: {
-					each: true,
 					type: "array",
 					items: {
 						$ref: "#/components/schemas/CategoryDto",
@@ -6355,7 +6354,6 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 				},
 				fitnessCenters: {
-					each: true,
 					type: "array",
 					items: {
 						$ref: "#/components/schemas/FitnessCenterDto",
@@ -6530,7 +6528,6 @@ export const runtimeManifest: RuntimeManifest = {
 					$ref: "#/components/schemas/SpaceClassificationDto",
 				},
 				spaceAssociations: {
-					each: true,
 					type: "array",
 					items: {
 						$ref: "#/components/schemas/SpaceAssociationDto",
@@ -7261,8 +7258,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "역할 식별자",
 					maxLength: 50,
 					pattern: "^[A-Z][A-Z0-9_]*$",
-					message:
-						"역할 식별자는 영문 대문자로 시작하며, 영문 대문자, 숫자, 언더스코어만 사용 가능합니다",
 				},
 				displayName: {
 					type: "string",
@@ -7506,7 +7501,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				email: {
 					type: "string",
-					toLowerCase: true,
 					description: "이메일 주소",
 				},
 				phone: {
@@ -7759,7 +7753,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				email: {
 					type: "string",
-					toLowerCase: true,
 					description: "이메일 주소",
 				},
 				phone: {
@@ -8089,9 +8082,8 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "전체 경로 (예: /images/2024)",
 				},
 				sortOrder: {
-					type: "number",
+					type: "integer",
 					description: "정렬 순서",
-					int: true,
 				},
 				createdById: {
 					type: "integer",
@@ -8204,22 +8196,19 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "MIME 타입",
 				},
 				width: {
-					type: "number",
+					type: "integer",
 					nullable: true,
 					description: "너비 (이미지/비디오)",
-					int: true,
 				},
 				height: {
-					type: "number",
+					type: "integer",
 					nullable: true,
 					description: "높이 (이미지/비디오)",
-					int: true,
 				},
 				durationMs: {
-					type: "number",
+					type: "integer",
 					nullable: true,
 					description: "재생 시간 (밀리초, 비디오)",
-					int: true,
 				},
 				id: {
 					type: "integer",
@@ -8243,9 +8232,8 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 				},
 				sizeBytes: {
-					type: "number",
+					type: "integer",
 					description: "파일 크기 (바이트)",
-					int: true,
 				},
 			},
 			required: [
@@ -8370,9 +8358,8 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 				},
 				sizeBytes: {
-					type: "number",
+					type: "integer",
 					description: "파일 크기 (바이트)",
-					int: true,
 				},
 				publicUrl: {
 					type: "string",
@@ -8596,8 +8583,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "역할 식별자",
 					maxLength: 50,
 					pattern: "^[A-Z][A-Z0-9_]*$",
-					message:
-						"역할 식별자는 영문 대문자로 시작하며, 영문 대문자, 숫자, 언더스코어만 사용 가능합니다",
 				},
 				displayName: {
 					type: "string",
@@ -8828,7 +8813,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "폴더명",
 					maxLength: 100,
 					pattern: '^[^\\\\/:*?"<>|]+$',
-					message: "폴더명에 특수문자를 사용할 수 없습니다",
 				},
 			},
 			required: ["name"],
@@ -8850,7 +8834,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "폴더명",
 					maxLength: 100,
 					pattern: '^[^\\\\/:*?"<>|]+$',
-					message: "폴더명에 특수문자를 사용할 수 없습니다",
 				},
 			},
 		},
@@ -8986,7 +8969,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "설명",
 				},
 				variables: {
-					each: true,
 					description: "템플릿 변수 목록",
 					type: "array",
 					items: {
@@ -9018,7 +9000,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "설명",
 				},
 				variables: {
-					each: true,
 					description: "템플릿 변수 목록",
 					type: "array",
 					items: {
@@ -9152,8 +9133,7 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "필수 동의 여부",
 				},
 				displayOrder: {
-					type: "number",
-					int: true,
+					type: "integer",
 					description: "정렬 순서",
 				},
 				effectiveAt: {
@@ -9255,8 +9235,7 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "필수 동의 여부",
 				},
 				displayOrder: {
-					type: "number",
-					int: true,
+					type: "integer",
 					description: "정렬 순서",
 				},
 				summary: {
@@ -9295,8 +9274,7 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "필수 동의 여부",
 				},
 				displayOrder: {
-					type: "number",
-					int: true,
+					type: "integer",
 					description: "정렬 순서",
 				},
 				summary: {
@@ -9873,20 +9851,16 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 				},
 				activityCount: {
-					type: "number",
-					int: true,
-					min: 0,
+					type: "integer",
 					minimum: 0,
 				},
 				previewExerciseNames: {
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
 					},
 				},
 				executionPlan: {
-					each: true,
 					type: "array",
 					items: {
 						$ref: "#/components/schemas/ProgramActivityDto",
@@ -10382,7 +10356,6 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 				},
 				activities: {
-					each: true,
 					type: "array",
 					items: {
 						$ref: "#/components/schemas/CreateRoutineActivityItemDto",
@@ -10401,7 +10374,6 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 				},
 				activities: {
-					each: true,
 					type: "array",
 					items: {
 						$ref: "#/components/schemas/CreateRoutineActivityItemDto",
@@ -10425,10 +10397,8 @@ export const runtimeManifest: RuntimeManifest = {
 						{
 							type: "boolean",
 						},
-						{
-							type: "null",
-						},
 					],
+					nullable: true,
 				},
 				label: {
 					type: "string",
@@ -12090,27 +12060,23 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 				},
 				capacity: {
-					type: "number",
+					type: "integer",
 					description: "정원",
-					int: true,
 					minimum: 0,
 				},
 				confirmedCount: {
-					type: "number",
+					type: "integer",
 					description: "확정 예약 수",
-					int: true,
 					minimum: 0,
 				},
 				availableSeatCount: {
-					type: "number",
+					type: "integer",
 					description: "예약 가능 좌석 수",
-					int: true,
 					minimum: 0,
 				},
 				waitlistCount: {
-					type: "number",
+					type: "integer",
 					description: "대기 예약 수",
-					int: true,
 					minimum: 0,
 				},
 				availabilityStatus: {
@@ -12152,7 +12118,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				previewExerciseNames: {
 					description: "운동 미리보기",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -12254,10 +12219,9 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "멱등성 키",
 				},
 				waitlistPosition: {
-					type: "number",
+					type: "integer",
 					description: "대기 순번",
 					nullable: true,
-					int: true,
 					minimum: 1,
 				},
 				confirmedAt: {
@@ -12556,7 +12520,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				email: {
 					type: "string",
-					toLowerCase: true,
 					example: "user@example.com",
 					description: "이메일",
 				},
@@ -12770,7 +12733,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "클라이언트 식별자",
 					maxLength: 64,
 					pattern: "^[a-z0-9-]+$",
-					message: "Client ID는 영소문자, 숫자, 하이픈만 사용 가능합니다",
 				},
 				clientSecret: {
 					type: "string",
@@ -12784,7 +12746,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				redirectUris: {
 					description: "리다이렉트 URI 목록",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -12802,7 +12763,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				grantTypes: {
 					description: "허용된 Grant 타입",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -12810,7 +12770,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				responseTypes: {
 					description: "응답 타입",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -12905,7 +12864,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "클라이언트 식별자",
 					maxLength: 64,
 					pattern: "^[a-z0-9-]+$",
-					message: "Client ID는 영소문자, 숫자, 하이픈만 사용 가능합니다",
 				},
 				clientSecret: {
 					type: "string",
@@ -12919,7 +12877,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				redirectUris: {
 					description: "리다이렉트 URI 목록",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -12937,7 +12894,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				grantTypes: {
 					description: "허용된 Grant 타입",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -12945,7 +12901,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				responseTypes: {
 					description: "응답 타입",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -13016,7 +12971,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				redirectUris: {
 					description: "리다이렉트 URI 목록",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -13034,7 +12988,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				grantTypes: {
 					description: "허용된 Grant 타입",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -13042,7 +12995,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				responseTypes: {
 					description: "응답 타입",
-					each: true,
 					type: "array",
 					items: {
 						type: "string",
@@ -13456,8 +13408,6 @@ export const runtimeManifest: RuntimeManifest = {
 				passwordMinLength: {
 					type: "number",
 					description: "최소 비밀번호 길이",
-					min: 4,
-					max: 128,
 					minimum: 4,
 					maximum: 128,
 				},
@@ -13480,49 +13430,41 @@ export const runtimeManifest: RuntimeManifest = {
 				passwordExpirationDays: {
 					type: "number",
 					description: "비밀번호 만료 일수 (0=무제한)",
-					min: 0,
 					minimum: 0,
 				},
 				passwordReuseLimit: {
 					type: "number",
 					description: "비밀번호 재사용 제한 횟수",
-					min: 0,
 					minimum: 0,
 				},
 				temporaryLockThreshold: {
 					type: "number",
 					description: "일시 잠금 임계값",
-					min: 1,
 					minimum: 1,
 				},
 				temporaryLockDurationMin: {
 					type: "number",
 					description: "일시 잠금 시간 (분)",
-					min: 1,
 					minimum: 1,
 				},
 				permanentLockThreshold: {
 					type: "number",
 					description: "영구 잠금 임계값",
-					min: 1,
 					minimum: 1,
 				},
 				accessTokenTtlSec: {
 					type: "number",
 					description: "Access Token TTL (초)",
-					min: 60,
 					minimum: 60,
 				},
 				refreshTokenTtlSec: {
 					type: "number",
 					description: "Refresh Token TTL (초)",
-					min: 60,
 					minimum: 60,
 				},
 				sessionTtlSec: {
 					type: "number",
 					description: "세션 TTL (초)",
-					min: 60,
 					minimum: 60,
 				},
 				ipWhitelistEnabled: {
@@ -13566,8 +13508,6 @@ export const runtimeManifest: RuntimeManifest = {
 				passwordMinLength: {
 					type: "number",
 					description: "최소 비밀번호 길이",
-					min: 4,
-					max: 128,
 					minimum: 4,
 					maximum: 128,
 				},
@@ -13590,49 +13530,41 @@ export const runtimeManifest: RuntimeManifest = {
 				passwordExpirationDays: {
 					type: "number",
 					description: "비밀번호 만료 일수 (0=무제한)",
-					min: 0,
 					minimum: 0,
 				},
 				passwordReuseLimit: {
 					type: "number",
 					description: "비밀번호 재사용 제한 횟수",
-					min: 0,
 					minimum: 0,
 				},
 				temporaryLockThreshold: {
 					type: "number",
 					description: "일시 잠금 임계값",
-					min: 1,
 					minimum: 1,
 				},
 				temporaryLockDurationMin: {
 					type: "number",
 					description: "일시 잠금 시간 (분)",
-					min: 1,
 					minimum: 1,
 				},
 				permanentLockThreshold: {
 					type: "number",
 					description: "영구 잠금 임계값",
-					min: 1,
 					minimum: 1,
 				},
 				accessTokenTtlSec: {
 					type: "number",
 					description: "Access Token TTL (초)",
-					min: 60,
 					minimum: 60,
 				},
 				refreshTokenTtlSec: {
 					type: "number",
 					description: "Refresh Token TTL (초)",
-					min: 60,
 					minimum: 60,
 				},
 				sessionTtlSec: {
 					type: "number",
 					description: "세션 TTL (초)",
-					min: 60,
 					minimum: 60,
 				},
 				ipWhitelistEnabled: {
@@ -13896,7 +13828,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "마지막 로그인 IP",
 				},
 				accessGrants: {
-					each: true,
 					description: "계정에 부여된 Space/Role 접근 권한 목록",
 					type: "array",
 					items: {
@@ -14079,7 +14010,6 @@ export const runtimeManifest: RuntimeManifest = {
 				sendCount: {
 					type: "number",
 					description: "발송 횟수",
-					min: 0,
 					minimum: 0,
 				},
 				lastSendStatus: {

@@ -27,12 +27,13 @@
     "README.md"
   ],
   "scripts": {
-    "codegen": "orval --config orval.config.js",
-    "codegen:server": "orval --config orval.config.js --project store",
-    "codegen:idp": "orval --config orval.config.js",
-    "codegen:local": "ORVAL_ENV=local orval --config orval.config.js",
-    "codegen:stg": "ORVAL_ENV=stg orval --config orval.config.js",
-    "codegen:prod": "ORVAL_ENV=prod orval --config orval.config.js",
+    "codegen:clean": "node clean-orval-generated-files.mjs",
+    "codegen": "pnpm run codegen:clean && orval --config orval.config.mjs",
+    "codegen:server": "pnpm run codegen:clean && orval --config orval.config.mjs --project store",
+    "codegen:idp": "pnpm run codegen:clean && orval --config orval.config.mjs",
+    "codegen:local": "pnpm run codegen:clean && ORVAL_ENV=local orval --config orval.config.mjs",
+    "codegen:stg": "pnpm run codegen:clean && ORVAL_ENV=stg orval --config orval.config.mjs",
+    "codegen:prod": "pnpm run codegen:clean && ORVAL_ENV=prod orval --config orval.config.mjs",
     "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
     "format": "biome check --write .",
     "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
@@ -52,7 +53,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "orval": "7.21.0",
+    "orval": "8.31.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
