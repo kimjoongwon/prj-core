@@ -1,0 +1,30 @@
+# .zcode/agents — ZCode subagent 정의
+
+ZCode가 workspace 스코프 subagent를 자동 발견하는 디렉터리입니다. 이 디렉터리의 `.md`/`.markdown` 파일을 재귀적으로 스캔하므로, 정의 추가·수정은 커밋만으로 팀 전체에 공유됩니다. (개인 전용은 `~/.zcode/agents/`)
+
+## 파일 형식
+
+YAML frontmatter + Markdown body(system prompt).
+
+```markdown
+---
+name: be-command-builder
+description: "CQRS Command와 Query 메시지 클래스를 만듭니다."
+---
+(여기에 agent 지시문 — 원본 developer_instructions)
+```
+
+- `name`, `description` 필수. 나머지는 선택.
+- 선택 필드: `model`, `thoughtLevel`, `tools`, `disallowedTools`, `skills`, `permissionMode`, `maxTurns`, `background`, `injectAgentsMd`, `mcpServers`, `color`
+- `model`을 생략하면 세션 기본 모델(builtin GLM coding plan)을 상속합니다. 이 repo의 agent는 전부 생략 두고 기본 모델로 구동합니다.
+- 비활성화 등 상태는 사용자별 `~/.zcode/v2/agents-state.json`에 저장됩니다.
+
+## 운영
+
+- ZCode는 시작 시(및 파일 감시) 이 디렉터리를 읽습니다. 추가·변경 후 바로 안 보이면 ZCode를 재시작하세요.
+- 원본 `.codex/agents/*.toml`과 동일하게 유지하려면 양쪽을 함께 고쳐 커밋합니다. Codex 사용을 종료하면 `.codex/agents/`는 삭제합니다.
+- 원본 TOML의 `model`, `model_reasoning_effort`는 이관하지 않았습니다. 필요하면 frontmatter의 `model`, `thoughtLevel`로 지정할 수 있습니다.
+
+## 주의
+
+plugin(`.zcode-plugin/plugin.json`)의 `agents` 컴포넌트는 ZCode가 기록만 하고 실행하지 않으므로(공식 zcode-guide 문서 명시), subagent 정의는 반드시 이 디렉터리로 관리합니다.
