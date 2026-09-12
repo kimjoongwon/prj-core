@@ -1,12 +1,12 @@
 # ============================================================================
 # 🏗️ BASE STAGE: 기본 환경 설정
 # ============================================================================
-# Node.js 24 Alpine Linux 기반 이미지 사용 (경량화된 리눅스 배포판)
-FROM node:24-alpine AS base
+# Node.js 24.21.0 / Alpine 3.24 multi-arch 이미지를 digest로 고정
+FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS base
 
 # 📦 PNPM 버전을 인자로 받아서 설정
-ARG PNPM_VERSION=10.16.0
-ARG TURBO_VERSION=2.8.14
+ARG PNPM_VERSION=10.34.5
+ARG TURBO_VERSION=2.9.14
 
 # 🔧 PNPM 홈 디렉토리를 전역 bin 경로로 설정
 ENV PNPM_HOME=/usr/local/bin
@@ -68,7 +68,7 @@ RUN --mount=type=cache,id=turbo,target=/app/.turbo \
 # ============================================================================
 # 🚀 PRODUCTION STAGE: Next.js 서버 실행
 # ============================================================================
-FROM node:24-alpine AS runner
+FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS runner
 
 # 📂 작업 디렉토리 설정
 WORKDIR /app

@@ -6,24 +6,24 @@
     "access": "public"
   },
   "files": [
-    "src",
-    "index.ts",
+    "dist",
     "README.md"
   ],
-  "main": "./index.ts",
-  "module": "./index.ts",
-  "types": "./index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./index.ts",
-      "import": "./index.ts",
-      "default": "./index.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./package.json": "./package.json"
   },
   "scripts": {
     "start:dev": "tsc --build --watch",
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --build",
     "format": "biome check --write .",
     "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
     "type-check:prod": "tsc --noEmit",

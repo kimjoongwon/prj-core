@@ -26,13 +26,16 @@ import {
 	type OnModuleInit,
 } from "@nestjs/common";
 import { APP_GUARD, RouterModule } from "@nestjs/core";
-import { DevtoolsModule } from "@nestjs/devtools-integration";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./abilities";
 import { ActionsModule } from "./actions";
 import { AssetsModule } from "./assets";
 import { AuthModule } from "./auth";
 import { CommunityModule } from "./community";
+import {
+	isNestDevtoolsEnabled,
+	loadNestDevtoolsModule,
+} from "./devtools.module";
 import { EmailVerificationsModule } from "./email-verification";
 // Global modules
 import { FoldersModule } from "./folders";
@@ -64,22 +67,8 @@ import { TimelinesModule } from "./timelines";
 import { TranslationsModule } from "./translations";
 import { UsersModule } from "./users";
 
-const enableNestDevtools =
-	process.env.ENABLE_NEST_DEVTOOLS === "true" &&
-	process.env.NODE_ENV !== "production" &&
-	process.env.NODE_ENV !== "test";
-
-const devtoolsImports = enableNestDevtools
-	? [
-			DevtoolsModule.register({
-				http: true,
-				port:
-					Number.parseInt(
-						process.env.CORE_API_NEST_DEVTOOLS_PORT ?? "8000",
-						10,
-					) || 8000,
-			}),
-		]
+const devtoolsImports = isNestDevtoolsEnabled()
+	? [loadNestDevtoolsModule()]
 	: [];
 
 @Module({

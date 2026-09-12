@@ -13,6 +13,7 @@ import { AppModule } from "./module/app.module";
 import { AssetsModule } from "./module/assets";
 import { AuthModule } from "./module/auth";
 import { CommunityModule } from "./module/community";
+import { isNestDevtoolsEnabled } from "./module/devtools.module";
 import { EmailVerificationsModule } from "./module/email-verification";
 import { FoldersModule } from "./module/folders";
 import { I18nCatalogModule } from "./module/i18n";
@@ -320,9 +321,7 @@ interface HotModule {
 declare const module: HotModule;
 
 async function bootstrap() {
-	const enableNestDevtools =
-		process.env.ENABLE_NEST_DEVTOOLS === "true" &&
-		process.env.NODE_ENV !== "production";
+	const enableNestDevtools = isNestDevtoolsEnabled();
 
 	// =================================================================
 	// 1. 애플리케이션 생성 및 기본 설정

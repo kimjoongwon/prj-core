@@ -4,7 +4,6 @@ import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/core/auth";
 import { isScopeKindAccessible } from "@cocrepo/constant";
 import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
 import { useApp } from "@cocrepo/store";
-import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect } from "react";

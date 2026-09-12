@@ -23,6 +23,15 @@
       }
     ],
     "paths": {
+      "@cocrepo/store": [
+        "../../../packages/fe-store/index.ts"
+      ],
+      "@cocrepo/ui": [
+        "../../../packages/fe-ui/index.ts"
+      ],
+      "@cocrepo/ui/*": [
+        "../../../packages/fe-ui/src/*"
+      ],
       "@/*": [
         "./src/*"
       ]

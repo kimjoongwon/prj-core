@@ -16,7 +16,8 @@ module.exports = {
 		"^@cocrepo/constant$": "<rootDir>/../common-constant/src",
 		"^@cocrepo/service$": "<rootDir>/__tests__/mocks/service.ts",
 		"^@cocrepo/toolkit$": "<rootDir>/../common-toolkit/index.ts",
-		"^@cocrepo/type$": "<rootDir>/../common-type/src",
+		"^@cocrepo/type$": "<rootDir>/../common-type/dist",
+		"^@cocrepo/type/(.*)$": "<rootDir>/../common-type/dist/src/$1.js",
 		"^@cocrepo/vo$": "<rootDir>/../be-vo/src",
 	},
 	transform: {
@@ -25,6 +26,12 @@ module.exports = {
 			{
 				tsconfig: {
 					module: "commonjs",
+					baseUrl: ".",
+					paths: {
+						"@cocrepo/type/bigint-json": [
+							"../common-type/dist/src/bigint-json.d.ts",
+						],
+					},
 					target: "es2022",
 					esModuleInterop: true,
 					allowSyntheticDefaultImports: true,

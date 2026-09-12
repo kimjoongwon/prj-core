@@ -81,6 +81,13 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 			message = await this.translationService.translate(
 				"데이터베이스 스키마 불일치 오류",
 			);
+		} else if (
+			exception instanceof Error &&
+			"code" in exception &&
+			exception.code === "LIMIT_FIELD_ARRAY_INDEX"
+		) {
+			status = HttpStatus.BAD_REQUEST;
+			message = exception.message;
 		} else if (exception instanceof Error) {
 			message = exception.message;
 		}

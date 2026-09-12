@@ -31,9 +31,10 @@
     "@cocrepo/dto": "workspace:*",
     "@cocrepo/entity": "workspace:*",
     "@cocrepo/enum": "workspace:*",
-    "@cocrepo/prisma": "workspace:*",
-    "@cocrepo/service": "workspace:*"
-  },
+		"@cocrepo/prisma": "workspace:*",
+		"@cocrepo/service": "workspace:*",
+		"@cocrepo/type": "workspace:*"
+	},
   "peerDependencies": {
     "@nestjs/common": "^11.2.3",
     "@nestjs/cqrs": "^11.0.3",

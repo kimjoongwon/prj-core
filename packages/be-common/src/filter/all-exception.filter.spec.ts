@@ -183,6 +183,38 @@ describe("AllExceptionsFilter", () => {
 			);
 		});
 
+		it("Multer 배열 인덱스 제한 오류를 400 상태로 변환해야 한다", async () => {
+			const exception = Object.assign(
+				new Error("Field name array index too large"),
+				{
+					name: "MulterError",
+					code: "LIMIT_FIELD_ARRAY_INDEX",
+				},
+			);
+			const host = createMockArgumentsHost({
+				url: "/api/assets/upload",
+				method: "POST",
+			});
+
+			await filter.catch(exception, host);
+
+			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+			expect(wrappedException.getStatus()).toBe(HttpStatus.BAD_REQUEST);
+			expect(wrappedException.getResponse()).toMatchObject({
+				httpStatus: HttpStatus.BAD_REQUEST,
+				message: "Field name array index too large",
+				data: null,
+			});
+			expect(loggerErrorSpy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					message: "Field name array index too large",
+					status: HttpStatus.BAD_REQUEST,
+					path: "/api/assets/upload",
+					method: "POST",
+				}),
+			);
+		});
+
 		it("에러 정보를 Logger를 통해 로깅해야 한다", () => {
 			// Given
 			const exception = new HttpException("Not Found", HttpStatus.NOT_FOUND);

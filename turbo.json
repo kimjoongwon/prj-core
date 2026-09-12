@@ -66,18 +66,22 @@
       "cache": true
     },
     "@cocrepo/e2e#build": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "@cocrepo/hook#build": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "@cocrepo/store#build": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "@cocrepo/type#build": {
-      "outputs": []
+      "outputs": ["dist/**"]
     },
     "@cocrepo/ui#build": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
 

@@ -74,7 +74,7 @@
     "@nestjs/platform-express": "^11.2.3",
     "@nestjs/swagger": "^11.4.7",
     "@prisma/client": "catalog:",
-    "@prisma/internals": "^7.2.0",
+    "@prisma/internals": "7.10.0",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "catalog:",
     "@types/pg": "^8.11.10",

@@ -13,7 +13,7 @@ import {
 import { ForbiddenException, RequestMethod } from "@nestjs/common";
 import { METHOD_METADATA, PATH_METADATA } from "@nestjs/common/constants";
 import type { CommandBus, QueryBus } from "@nestjs/cqrs";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
+import { DECORATORS } from "@nestjs/swagger";
 import { SpacesController } from "./spaces.controller";
 
 describe("SpacesController", () => {

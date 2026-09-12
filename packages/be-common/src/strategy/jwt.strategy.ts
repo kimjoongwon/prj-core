@@ -1,5 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { hydrateEntity, User } from "@cocrepo/entity";
+import { hydrateEntity, User as UserEntity } from "@cocrepo/entity";
+import type { User } from "@cocrepo/entity";
 import { AuthCacheService, UserService } from "@cocrepo/service";
 import type { AuthConfig } from "@cocrepo/type";
 import {
@@ -112,7 +113,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		});
 	}
 
-	async validate(payload: { sub: string; iat: number; exp: number }) {
+	async validate(payload: {
+		sub: string;
+		iat: number;
+		exp: number;
+	}): Promise<User> {
 		const userId = payload.sub;
 
 		// 1. Redis 캐시 조회 (실패 시 null → DB fallback)
@@ -120,7 +125,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		if (cached) {
 			this.logger.debug(`JWT 검증 - 캐시 히트: ${userId}`);
 			// 내부 캐시는 API 필드 변환 없이 원본 값과 User 동작을 복원합니다.
-			return hydrateEntity(User, parseBigIntJson<Partial<User>>(cached));
+			return hydrateEntity(
+				UserEntity,
+				parseBigIntJson<Partial<User>>(cached),
+			);
 		}
 
 		// 2. 캐시 미스 → DB 조회

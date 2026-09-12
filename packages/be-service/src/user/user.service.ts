@@ -1,5 +1,6 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
+import type { Tenant, User } from "@cocrepo/entity";
 import type { GetUsersInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
 import {
@@ -27,12 +28,12 @@ export class UserService {
 	/**
 	 * 공개 사용자 식별자로 사용자 조회 (Tenant 정보 포함)
 	 */
-	findByUserIdWithTenants(userId: string) {
+	findByUserIdWithTenants(userId: string): Promise<User | null> {
 		return this.repository.findByUserIdWithTenantsAndProfiles(userId);
 	}
 
 	/** 내부 숫자 ID로 사용자와 Tenant/Profile 권한 그래프를 조회합니다. */
-	getByIdWithTenants(userId: bigint) {
+	getByIdWithTenants(userId: bigint): Promise<User | null> {
 		return this.repository.findByIdWithTenantsAndProfiles(userId);
 	}
 
@@ -43,7 +44,7 @@ export class UserService {
 		userId: bigint,
 		tenantId: bigint,
 		_spaceId: bigint,
-	) {
+	): Promise<Tenant> {
 		const [user, tenantSnapshot] = await Promise.all([
 			this.repository.findById(userId),
 			this.tenantsRepository.findById(tenantId),
@@ -157,7 +158,10 @@ export class UserService {
 	 * @param spaceId 현재 선택된 Space ULID
 	 * @returns 접근 범위 안의 사용자 상세
 	 */
-	async getUserDetailForSpace(userId: bigint, spaceId: bigint) {
+	async getUserDetailForSpace(
+		userId: bigint,
+		spaceId: bigint,
+	): Promise<User> {
 		const scopedSpaceIds = this.spaceCtx.spaceIds;
 		this.logger.debug(
 			`Space 내 사용자 상세 조회: userId=${userId.toString()}, selectedSpaceId=${spaceId.toString()}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,
@@ -289,7 +293,7 @@ export class UserService {
 		spaceId: bigint;
 		roleId: bigint;
 		nickname?: string;
-	}) {
+	}): Promise<User> {
 		const email = Email.create(params.email);
 		const phone = Phone.create(params.phone);
 

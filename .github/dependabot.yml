@@ -29,3 +29,19 @@ updates:
         update-types:
           - "minor"
           - "patch"
+
+  # Dockerfile의 tag/digest 조합을 주간 확인해 고정된 베이스 이미지를 갱신합니다.
+  - package-ecosystem: "docker"
+    directory: "/devops"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "Asia/Seoul"
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "chore"

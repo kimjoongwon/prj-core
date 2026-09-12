@@ -7,32 +7,33 @@
   },
   "exports": {
     ".": {
-      "types": "./index.ts",
-      "import": "./index.ts",
-      "default": "./index.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./database-id": {
-      "types": "./src/database-id.ts",
-      "import": "./src/database-id.ts",
-      "default": "./src/database-id.ts"
+      "types": "./dist/src/database-id.d.ts",
+      "require": "./dist/src/database-id.js",
+      "import": "./dist/src/database-id.js",
+      "default": "./dist/src/database-id.js"
     },
     "./bigint-json": {
-      "types": "./src/bigint-json.ts",
-      "import": "./src/bigint-json.ts",
-      "default": "./src/bigint-json.ts"
+      "types": "./dist/src/bigint-json.d.ts",
+      "require": "./dist/src/bigint-json.js",
+      "import": "./dist/src/bigint-json.js",
+      "default": "./dist/src/bigint-json.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "./index.ts",
-  "module": "./index.ts",
-  "types": "./index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
-    "src",
-    "index.ts",
+    "dist",
     "README.md"
   ],
   "scripts": {
-    "build": "echo 'Build not needed - using source files directly'",
+    "build": "rm -rf dist && tsc --build",
     "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
     "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "format": "biome check --write .",

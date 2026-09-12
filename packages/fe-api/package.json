@@ -22,10 +22,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "files": [
-    "dist",
-    "README.md"
-  ],
+	"files": [
+		"dist",
+		"src",
+		"README.md"
+	],
   "scripts": {
     "codegen:clean": "node clean-orval-generated-files.mjs",
     "codegen": "pnpm run codegen:clean && orval --config orval.config.mjs",

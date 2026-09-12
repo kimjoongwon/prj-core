@@ -35,6 +35,7 @@ module.exports = {
 			},
 		],
 	},
+	transformIgnorePatterns: ["node_modules/(?!.*@cocrepo)"],
 	setupFilesAfterEnv: ["<rootDir>/shared/test/setup.ts"],
 	collectCoverageFrom: [
 		"**/*.ts",

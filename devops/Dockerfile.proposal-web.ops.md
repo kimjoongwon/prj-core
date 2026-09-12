@@ -15,6 +15,8 @@
 | 항목 | 설명 |
 |------|------|
 | 기본 구성 | `base -> setup -> builder -> runner` |
+| 베이스 이미지 | Node `24.21.0-alpine3.24` multi-arch manifest를 tag와 digest로 고정하고 builder/runner에서 동일하게 사용 |
+| 빌드 도구 | `pnpm 10.34.5`, `turbo 2.9.14` |
 | setup 단계 | `COPY . .` 후 `turbo prune --scope=proposal-web --docker` |
 | builder 단계 | `out/json`을 먼저 복사한 뒤 prune된 워크스페이스 기준으로 `pnpm install --no-frozen-lockfile --prefer-offline` 실행, `out/full` 복원 후 로컬 `turbo`로 `type-check:prod` 후 `proposal-web` 의존 그래프만 빌드하고, `.next/static` 및 optional `public`을 standalone 트리에 동봉 |
 | 러너 단계 | `CMD ["node", "apps/proposal/web/server.js"]` |
@@ -30,3 +32,5 @@
 - [x] Next.js standalone 런타임이 `.next/static`과 optional `public`을 직접 서빙할 수 있도록 builder 단계에서 함께 패키징
 - [x] 앱 내부 `*.e2e.ts(x)` 제외는 Dockerfile 삭제 대신 앱 tsconfig 계약으로 처리
 - [x] 빌드 캐시 경로(`PNPM_STORE_DIR`, `/app/.turbo`, `--mount=type=cache`)를 유지
+- [x] Node 베이스 이미지를 안전 버전과 검증된 multi-arch digest로 고정
+- [x] Dependabot의 `/devops` Docker 감시가 `FROM` 리터럴을 인식할 수 있도록 유지

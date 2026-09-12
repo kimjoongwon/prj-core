@@ -1,5 +1,6 @@
 import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
 import type { ListInquiriesQueryInput } from "@cocrepo/input";
+import type { CreateUpdateFormBootstrap } from "@cocrepo/type";
 import {
 	InquiryCategory,
 	InquiryChannel,
@@ -120,7 +121,20 @@ export class InquiryAggregate {
 		};
 	}
 
-	async getUpdateFormBootstrap(inquiryId: bigint, spaceIds?: bigint[]) {
+	async getUpdateFormBootstrap(
+		inquiryId: bigint,
+		spaceIds?: bigint[],
+	): Promise<
+		CreateUpdateFormBootstrap<{
+			title: string;
+			category: InquiryCategory;
+			priority: InquiryPriority;
+			content: string;
+			channel: InquiryChannel;
+			source: InquirySource;
+			status: InquiryStatus;
+		}>
+	> {
 		const inquiry = await this.findByIdWithDetails(inquiryId, spaceIds);
 
 		return {
@@ -359,7 +373,15 @@ export class InquiryAggregate {
 	/**
 	 * 상태별/카테고리별 통계
 	 */
-	async getStats(spaceIds?: bigint[]) {
+	async getStats(spaceIds?: bigint[]): Promise<{
+		byStatus: Array<{ status: InquiryStatus; count: number }>;
+		byCategory: Array<{ category: InquiryCategory; count: number }>;
+		overdue: {
+			responseOverdue: number;
+			resolveOverdue: number;
+			total: number;
+		};
+	}> {
 		this.logger.debug(
 			`문의 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
 		);

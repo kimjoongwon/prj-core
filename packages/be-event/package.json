@@ -11,7 +11,7 @@
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "scripts": {
+	"scripts": {
     "type-check": "tsc --noEmit",
     "type-check:prod": "tsc --noEmit",
     "build": "rm -rf dist && tsc --build",
@@ -21,9 +21,12 @@
     "format": "biome check --write .",
     "test": "jest --passWithNoTests",
     "clean": "rm -rf dist && rm -rf node_modules",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "devDependencies": {
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"dependencies": {
+		"@cocrepo/type": "workspace:*"
+	},
+	"devDependencies": {
     "@cocrepo/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:"

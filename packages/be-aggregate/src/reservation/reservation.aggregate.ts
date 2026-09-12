@@ -27,6 +27,7 @@ import { DEFAULT_FEED_WINDOW_DAYS } from "./default-feed-window-days";
 import { DEFAULT_SESSION_DURATION_MINUTES } from "./default-session-duration-minutes";
 import { FEW_LEFT_THRESHOLD } from "./few-left-threshold";
 import { RESERVATION_AVAILABILITY } from "./reservation-availability";
+import type { ReservationAvailabilityStatus } from "./reservation-availability-status";
 
 @Injectable()
 export class ReservationAggregate {
@@ -37,7 +38,33 @@ export class ReservationAggregate {
 		private readonly tenantsRepository: TenantsRepository,
 	) {}
 
-	async getBookingFeed(input: BookingFeedInput) {
+	async getBookingFeed(input: BookingFeedInput): Promise<{
+		items: Array<{
+			feedItemId: string;
+			date: string;
+			startsAt: Date;
+			endsAt: Date;
+			timelineId: bigint;
+			sessionId: bigint;
+			programId: bigint;
+			timelineName: string;
+			sessionName: string;
+			programName: string;
+			coachName: string | null;
+			capacity: number;
+			confirmedCount: number;
+			availableSeatCount: number;
+			waitlistCount: number;
+			availabilityStatus: ReservationAvailabilityStatus;
+			myReservationStatus: ReservationStatus | null;
+			ctaLabel: string;
+			cancelableUntilAt: Date | null;
+			level: string | null;
+			routineLabelSnapshot: string | null;
+			previewExerciseNames: string[];
+		}>;
+		totalCount: number;
+	}> {
 		const feedWindow = this.resolveFeedWindow(input.from, input.to);
 		const programs = await this.repository.findBookingPrograms({
 			spaceId: input.spaceId,

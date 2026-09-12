@@ -11,3 +11,4 @@ export const IdpI18nCatalogUseCaseProviders = [...IdpI18nCatalogQueryHandlers];
 
 export * from "./get-i18n-catalog.usecase";
 export * from "./get-idp-i18n-catalog.usecase";
+export type { I18nCatalogResult } from "./i18n-catalog.result";

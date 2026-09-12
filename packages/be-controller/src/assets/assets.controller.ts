@@ -50,6 +50,7 @@ import {
 	ApiTags,
 } from "@nestjs/swagger";
 import type { Response } from "express";
+import { ASSET_UPLOAD_OPTIONS } from "./asset-upload.options";
 
 @ApiTags("ASSETS")
 @Controller()
@@ -163,7 +164,7 @@ export class AssetsController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RolesGuard)
-	@UseInterceptors(FileInterceptor("file"))
+	@UseInterceptors(FileInterceptor("file", ASSET_UPLOAD_OPTIONS))
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "uploadAsset",

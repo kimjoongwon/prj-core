@@ -13,7 +13,9 @@ import {
 	type LanguageCode,
 	type RecurringDayOfWeek,
 	type RepeatCycleTypes,
+	type Session,
 	SessionTypes,
+	type Timeline,
 } from "@cocrepo/prisma";
 import { RoutinesRepository, TimelinesRepository } from "@cocrepo/repository";
 import {
@@ -165,7 +167,15 @@ export class TimelineAggregate {
 	async findSessionsInTimeline(
 		timelineId: bigint,
 		params: { skip: number; take: number; search?: string | null },
-	) {
+	): Promise<{
+		sessions: Array<
+			Session & {
+				timeline: Pick<Timeline, "id">;
+				_count: { programs: number };
+			}
+		>;
+		total: number;
+	}> {
 		this.logger.debug(`세션 목록 조회: timelineId=${timelineId}`);
 
 		const [sessions, total] = await this.repository.findManySessions(
@@ -179,7 +189,15 @@ export class TimelineAggregate {
 	 * 타임라인 내 세션 단건 조회
 	 * - 없으면 NotFoundException 발생
 	 */
-	async findSessionInTimeline(timelineId: bigint, sessionId: bigint) {
+	async findSessionInTimeline(
+		timelineId: bigint,
+		sessionId: bigint,
+	): Promise<
+		Session & {
+			timeline: Pick<Timeline, "id" | "name">;
+			_count: { programs: number };
+		}
+	> {
 		this.logger.debug(`세션 상세 조회: ${sessionId}`);
 
 		const session = await this.repository.findSessionById(
@@ -196,7 +214,10 @@ export class TimelineAggregate {
 	 * 타임라인에 세션 생성
 	 * - 세션 유형별 필드 유효성 검증
 	 */
-	async createSessionInTimeline(timelineId: bigint, input: CreateSessionInput) {
+	async createSessionInTimeline(
+		timelineId: bigint,
+		input: CreateSessionInput,
+	): Promise<Session & { timeline: Pick<Timeline, "id"> }> {
 		this.logger.debug(
 			`세션 생성: timelineId=${timelineId}, type=${input.type}`,
 		);
@@ -226,7 +247,7 @@ export class TimelineAggregate {
 		timelineId: bigint,
 		sessionId: bigint,
 		input: UpdateSessionInput,
-	) {
+	): Promise<Session & { timeline: Pick<Timeline, "id"> }> {
 		this.logger.debug(`세션 수정: ${sessionId}`);
 
 		const existing = await this.findSessionInTimeline(timelineId, sessionId);

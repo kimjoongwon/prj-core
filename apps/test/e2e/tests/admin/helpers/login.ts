@@ -118,8 +118,13 @@ export async function readAdminPersist(
 	}
 
 	const document = parseAdminPersistStorageDocument(raw);
-	return document.account?.tenantId === expectedSelection.tenantId &&
-		document.account.spaceId === expectedSelection.spaceId
+	const account = document.account;
+	if (!account) {
+		return null;
+	}
+
+	return account.tenantId === expectedSelection.tenantId &&
+		account.spaceId === expectedSelection.spaceId
 		? document
 		: null;
 }
