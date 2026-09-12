@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "orval": "7.17.2",
+    "orval": "7.21.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
