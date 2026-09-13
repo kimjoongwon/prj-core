@@ -5083,7 +5083,28 @@ export const runtimeManifest: RuntimeManifest = {
 			method: "POST",
 			path: "/api/v1/auth/logout",
 			parameterSchemas: {},
-			responseSchemas: {},
+			responseSchemas: {
+				"200": {
+					allOf: [
+						{
+							properties: {
+								httpStatus: {
+									type: "number",
+									nullable: false,
+									example: 200,
+								},
+								message: {
+									type: "string",
+									nullable: false,
+								},
+								data: {
+									type: "boolean",
+								},
+							},
+						},
+					],
+				},
+			},
 		},
 		{
 			operationId: "getAuthAuditLogs",
@@ -6454,6 +6475,7 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				company: {
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/CompanyDto",
@@ -6462,6 +6484,7 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				space: {
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/FitnessCenterSpaceDto",
@@ -6647,6 +6670,7 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				space: {
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/FitnessCenterSpaceDto",
@@ -6916,6 +6940,7 @@ export const runtimeManifest: RuntimeManifest = {
 				config: {
 					description: "Action 설정 (마스킹, 포맷팅 등)",
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/ActionConfigDto",
@@ -7273,6 +7298,7 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				classification: {
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/RoleClassificationDto",
@@ -11134,12 +11160,18 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "문의 제목",
 				},
 				category: {
-					description: "문의 카테리",
-					allOf: [
-						{
-							$ref: "#/components/schemas/InquiryCategory",
-						},
+					type: "string",
+					enum: [
+						"GENERAL",
+						"DELIVERY",
+						"REFUND",
+						"PRODUCT",
+						"ACCOUNT",
+						"TECHNICAL",
+						"COMPLAINT",
+						"OTHER",
 					],
+					description: "문의 카테리",
 				},
 				channel: {
 					description: "문의 채널",
@@ -11281,6 +11313,7 @@ export const runtimeManifest: RuntimeManifest = {
 				sentiment: {
 					nullable: true,
 					description: "감정 분석 결과",
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/SentimentResultDto",
@@ -11885,6 +11918,7 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				reviewer: {
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/UserDto",
@@ -11899,6 +11933,7 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				previousRole: {
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/RoleDto",
@@ -11907,6 +11942,7 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				appliedTenant: {
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/TenantDto",
@@ -13078,6 +13114,7 @@ export const runtimeManifest: RuntimeManifest = {
 				client: {
 					description: "클라이언트 정보",
 					nullable: true,
+					type: "object",
 					allOf: [
 						{
 							$ref: "#/components/schemas/InteractionClientDto",

@@ -53,6 +53,7 @@ import type {
 	GetSignUpSpaces200,
 	InvalidateUserSessions200,
 	LoginParams,
+	Logout200,
 	NativeLogin200,
 	NativeLoginPayloadDto,
 	NativeLogout200,
@@ -3825,7 +3826,7 @@ export const logout = (
 	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customInstance<void>(
+	return customInstance<Logout200>(
 		{ url: `/api/v1/auth/logout`, method: "POST", signal },
 		options,
 	);

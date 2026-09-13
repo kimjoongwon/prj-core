@@ -29,6 +29,7 @@ export interface CreateSpaceWithFitnessCenterDto {
 	 * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
 	 */
 	imageFileId?: string | null;
+	/** @nullable */
 	space?: FitnessCenterSpaceDto | null;
 	/** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
 	contentLanguageCode: LanguageCode;

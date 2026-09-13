@@ -39,6 +39,9 @@ export interface ActionResponseDto {
 	 * @nullable
 	 */
 	group: string | null;
-	/** Action 설정 (마스킹, 포맷팅 등) */
+	/**
+	 * Action 설정 (마스킹, 포맷팅 등)
+	 * @nullable
+	 */
 	config: ActionConfigDto | null;
 }

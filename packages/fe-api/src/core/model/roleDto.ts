@@ -37,6 +37,7 @@ export interface RoleDto {
 	 * @nullable
 	 */
 	description?: string | null;
+	/** @nullable */
 	classification: RoleClassificationDto | null;
 	/** @nullable */
 	associations: RoleAssociationDto[] | null;

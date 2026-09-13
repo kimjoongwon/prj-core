@@ -14,27 +14,20 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { InteractionClientDto } from "./interactionClientDto";
-import type { InteractionDataDtoParams } from "./interactionDataDtoParams";
-import type { InteractionDataDtoPrompt } from "./interactionDataDtoPrompt";
-import type { InteractionDataDtoSession } from "./interactionDataDtoSession";
 
-export interface InteractionDataDto {
-	/** 인터랙션 유형 (login | consent) */
-	type: string;
-	/** 인터랙션 UID */
-	uid: string;
-	/**
-	 * 클라이언트 정보
-	 * @nullable
-	 */
-	client?: InteractionClientDto | null;
-	/** 프롬프트 정보 */
-	prompt: InteractionDataDtoPrompt;
-	/** 파라미터 */
-	params: InteractionDataDtoParams;
-	/** 세션 정보 */
-	session?: InteractionDataDtoSession;
-	/** 개발 모드 여부 */
-	isDev: boolean;
-}
+/**
+ * 문의 카테리
+ */
+export type InquiryDetailDtoCategory =
+	(typeof InquiryDetailDtoCategory)[keyof typeof InquiryDetailDtoCategory];
+
+export const InquiryDetailDtoCategory = {
+	GENERAL: "GENERAL",
+	DELIVERY: "DELIVERY",
+	REFUND: "REFUND",
+	PRODUCT: "PRODUCT",
+	ACCOUNT: "ACCOUNT",
+	TECHNICAL: "TECHNICAL",
+	COMPLAINT: "COMPLAINT",
+	OTHER: "OTHER",
+} as const;
