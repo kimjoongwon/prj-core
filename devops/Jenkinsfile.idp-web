@@ -1,7 +1,4 @@
 podTemplate(
-    hostAliases: [
-        hostAlias(hostName: "harbor.onjitda.com", ip: "192.168.0.20")
-    ],
     volumes: [
         persistentVolumeClaim(
             claimName: 'container-builder-pvc',
