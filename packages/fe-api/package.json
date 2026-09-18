@@ -16,6 +16,8 @@
     "./assets": "./src/assets/index.ts",
     "./core/*": "./src/core/*/index.ts",
     "./core/client": "./src/core/client.ts",
+    "./idp/*": "./src/idp/*/index.ts",
+    "./idp/client": "./src/idp/client.ts",
     "./server": "./src/server/index.ts"
   },
   "sideEffects": false,

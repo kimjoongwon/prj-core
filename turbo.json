@@ -131,6 +131,18 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "cache": true
     },
+    "idp-web#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "cache": true
+    },
+    "idp-api#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "tsconfig.build.json", "package.json", "nest-cli.json"],
+      "outputs": ["dist/**"],
+      "cache": true
+    },
     "core-api#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "tsconfig.build.json", "package.json", "nest-cli.json"],

@@ -91,7 +91,14 @@
 		"lint:repo": "biome lint scripts --no-errors-on-unmatched --files-ignore-unknown=true",
 		"lint:repo:fix": "biome lint scripts --write --unsafe --no-errors-on-unmatched --files-ignore-unknown=true",
 		"lint:repo:prod": "echo 'No production root lint targets'",
-		"lint:prod": "pnpm run lint:repo:prod && turbo lint:prod"
+		"lint:prod": "pnpm run lint:repo:prod && turbo lint:prod",
+		"build:idp-api": "turbo build --filter=idp-api",
+		"build:idp-web": "turbo build --filter=idp-web",
+		"start:idp-api": "turbo start:dev --filter=idp-api --concurrency=20",
+		"start:idp-web": "turbo start:dev --filter=idp-web --concurrency=20",
+		"rancher:idp-api": "pnpm rancher:build -- idp-api",
+		"rancher:idp-web": "pnpm rancher:build -- idp-web",
+		"test:e2e:idp:local": "bash scripts/e2e-idp-local.sh"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.29.6",
