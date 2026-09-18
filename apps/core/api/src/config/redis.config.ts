@@ -21,6 +21,14 @@ export default registerAs<RedisConfig>("redis", () => {
 	ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
 
 	const isDevelopment = process.env.NODE_ENV !== "production";
+	if (
+		!isDevelopment &&
+		(!process.env.REDIS_HOST?.trim() || !process.env.REDIS_PORT?.trim())
+	) {
+		throw new Error(
+			"REDIS_HOST and REDIS_PORT must be explicitly configured in production.",
+		);
+	}
 
 	const password = process.env.REDIS_PASSWORD || undefined;
 	const config: RedisConfig = {

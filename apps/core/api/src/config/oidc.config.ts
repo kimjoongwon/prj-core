@@ -14,6 +14,7 @@ export interface OidcConfig {
 }
 
 export const oidcConfig = registerAs("oidc", (): OidcConfig => {
+	const isProduction = process.env.NODE_ENV === "production";
 	let jwks: JwksKeys | undefined;
 
 	if (process.env.OIDC_JWKS_KEYS) {
@@ -30,6 +31,9 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 	const cookieSecret =
 		process.env.OIDC_COOKIE_SECRET ||
 		"default-cookie-secret-change-in-production";
+	if (isProduction && !process.env.OIDC_COOKIE_SECRET?.trim()) {
+		throw new Error("OIDC_COOKIE_SECRET must be defined in production.");
+	}
 
 	return {
 		issuer,

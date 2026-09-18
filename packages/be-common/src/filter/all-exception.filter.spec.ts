@@ -28,7 +28,7 @@ describe("AllExceptionsFilter", () => {
 	let baseFilterCatchSpy: jest.SpyInstance;
 
 	const createMockArgumentsHost = (
-		request: Partial<{ url: string; method: string }> = {},
+		request: Partial<{ url: string; method: string; id: unknown }> = {},
 		response: unknown = {},
 	): ArgumentsHost => {
 		return {
@@ -36,6 +36,7 @@ describe("AllExceptionsFilter", () => {
 				getRequest: () => ({
 					url: request.url || "/api/test",
 					method: request.method || "GET",
+					id: request.id,
 				}),
 				getResponse: () => response,
 				getNext: () => jest.fn(),
@@ -119,7 +120,7 @@ describe("AllExceptionsFilter", () => {
 						code: "P2022",
 						meta: {
 							column: "fitness_centers.space_id",
-							query: "SELECT secret",
+							query: "[REDACTED]",
 						},
 					}),
 				}),
@@ -180,6 +181,55 @@ describe("AllExceptionsFilter", () => {
 			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
 			expect(wrappedException.getStatus()).toBe(
 				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+			expect(wrappedException.getResponse()).toMatchObject({
+				message: "Internal server error",
+				data: { correlationId: expect.any(String) },
+			});
+		});
+
+		it("예상하지 못한 500 응답에서 내부 정보 대신 correlation ID만 반환해야 한다", async () => {
+			const sensitiveMessage =
+				"postgresql://admin:db-password@db.internal/core failed at /Users/admin/private/config.ts secret=jwt-secret";
+			const host = createMockArgumentsHost({
+				url: "/api/test",
+				id: "req-safe_123",
+			});
+
+			await filter.catch(new Error(sensitiveMessage), host);
+
+			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+			const response = wrappedException.getResponse();
+			expect(response).toEqual({
+				httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+				message: "Internal server error",
+				data: { correlationId: "req-safe_123" },
+			});
+			const serializedResponse = JSON.stringify(response);
+			expect(serializedResponse).not.toContain("postgresql://");
+			expect(serializedResponse).not.toContain("/Users/admin");
+			expect(serializedResponse).not.toContain("jwt-secret");
+			expect(loggerErrorSpy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					correlationId: "req-safe_123",
+					cause: {
+						name: "Error",
+						message: expect.not.stringContaining("db-password"),
+					},
+				}),
+			);
+		});
+
+		it("안전하지 않은 요청 ID는 응답에 반사하지 않아야 한다", async () => {
+			await filter.catch(
+				new Error("unexpected"),
+				createMockArgumentsHost({ id: "<script>alert(1)</script>" }),
+			);
+
+			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+			const correlationId = wrappedException.getResponse().data.correlationId;
+			expect(correlationId).toMatch(
+				/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
 			);
 		});
 

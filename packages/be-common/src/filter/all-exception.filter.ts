@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { ResponseEntity } from "@cocrepo/entity";
 import { Prisma } from "@cocrepo/prisma";
 import { I18nTranslationService } from "@cocrepo/service";
@@ -12,6 +13,49 @@ import {
 } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import type { Request } from "express";
+
+const INTERNAL_SERVER_ERROR_MESSAGE = "Internal server error";
+const REDACTED_VALUE = "[REDACTED]";
+const SAFE_CORRELATION_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
+const SENSITIVE_LOG_KEY_PATTERN =
+	/(authorization|cookie|password|secret|token|credential|private.?key|query)/i;
+
+type RequestWithId = Request & {
+	id?: unknown;
+};
+
+const redactSensitiveText = (value: string): string =>
+	value
+		.replace(
+			/\b([a-z][a-z0-9+.-]*:\/\/)([^\s/@]+(?::[^\s/@]*)?@)/gi,
+			`$1${REDACTED_VALUE}@`,
+		)
+		.replace(
+			/\b(password|secret|token|authorization|credential|private[_-]?key)\s*[:=]\s*([^\s,;]+)/gi,
+			`$1=${REDACTED_VALUE}`,
+		)
+		.replace(/(?:\/[A-Za-z0-9._-]+){2,}/g, REDACTED_VALUE)
+		.replace(/[A-Za-z]:\\(?:[^\\\s]+\\)+[^\\\s]+/g, REDACTED_VALUE);
+
+const redactInternalLogValue = (value: unknown): unknown => {
+	if (typeof value === "string") {
+		return redactSensitiveText(value);
+	}
+	if (Array.isArray(value)) {
+		return value.map(redactInternalLogValue);
+	}
+	if (value && typeof value === "object") {
+		return Object.fromEntries(
+			Object.entries(value).map(([key, nestedValue]) => [
+				key,
+				SENSITIVE_LOG_KEY_PATTERN.test(key)
+					? REDACTED_VALUE
+					: redactInternalLogValue(nestedValue),
+			]),
+		);
+	}
+	return value;
+};
 
 const PRISMA_ERROR_CONFIG = {
 	P2002: {
@@ -51,13 +95,15 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 
 	async catch(exception: unknown, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
-		const request = ctx.getRequest<Request>();
+		const request = ctx.getRequest<RequestWithId>();
+		const correlationId = this.resolveCorrelationId(request.id);
 
 		// 에러 타입에 따른 상태 코드 및 메시지 결정
 		let status = HttpStatus.INTERNAL_SERVER_ERROR;
-		let message = "Internal server error";
+		let message = INTERNAL_SERVER_ERROR_MESSAGE;
 		let errorData: object | null = null;
 		let prismaLogData: object | undefined;
+		let isSafeServerError = false;
 
 		if (exception instanceof HttpException) {
 			status = exception.getStatus();
@@ -70,6 +116,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 			status = config?.status ?? status;
 			message = config?.message ?? `데이터베이스 오류 (${exception.code})`;
 			errorData = this.toSafeDatabaseError(exception);
+			isSafeServerError = config !== undefined;
 			prismaLogData = {
 				code: exception.code,
 				meta: exception.meta,
@@ -88,30 +135,74 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
 		) {
 			status = HttpStatus.BAD_REQUEST;
 			message = exception.message;
-		} else if (exception instanceof Error) {
-			message = exception.message;
 		}
+
+		const isUnexpectedServerError =
+			status >= HttpStatus.INTERNAL_SERVER_ERROR && !isSafeServerError;
+		const responseMessage = isUnexpectedServerError
+			? INTERNAL_SERVER_ERROR_MESSAGE
+			: message;
+		const responseData: object | null = isUnexpectedServerError
+			? { correlationId }
+			: errorData;
 
 		// 에러 로깅
 		this.logger.error({
-			message,
+			message: isUnexpectedServerError
+				? INTERNAL_SERVER_ERROR_MESSAGE
+				: redactSensitiveText(message),
 			status,
+			correlationId,
 			path: request.url,
 			method: request.method,
 			timestamp: new Date().toISOString(),
-			...(process.env.NODE_ENV !== "production" && {
-				stack: exception instanceof Error ? exception.stack : undefined,
+			...(isUnexpectedServerError && {
+				cause: this.toRedactedErrorCause(exception),
 			}),
-			...(prismaLogData ? { prisma: prismaLogData } : {}),
+			...(process.env.NODE_ENV !== "production" && {
+				stack:
+					exception instanceof Error && exception.stack
+						? redactSensitiveText(exception.stack)
+						: undefined,
+			}),
+			...(prismaLogData
+				? { prisma: redactInternalLogValue(prismaLogData) }
+				: {}),
 		});
 
 		super.catch(
 			new HttpException(
-				ResponseEntity.WITH_ERROR<object | string>(status, message, errorData),
+				ResponseEntity.WITH_ERROR<object | string>(
+					status,
+					responseMessage,
+					responseData,
+				),
 				status,
 			),
 			host,
 		);
+	}
+
+	private resolveCorrelationId(requestId: unknown): string {
+		const requestIdValue =
+			typeof requestId === "string" || typeof requestId === "number"
+				? String(requestId)
+				: "";
+
+		return SAFE_CORRELATION_ID_PATTERN.test(requestIdValue)
+			? requestIdValue
+			: randomUUID();
+	}
+
+	private toRedactedErrorCause(exception: unknown): object {
+		if (exception instanceof Error) {
+			return {
+				name: exception.name,
+				message: redactSensitiveText(exception.message),
+			};
+		}
+
+		return { value: redactInternalLogValue(exception) };
 	}
 
 	private toSafeDatabaseError(

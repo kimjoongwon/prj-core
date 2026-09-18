@@ -1,4 +1,7 @@
+import { timingSafeEqual } from "node:crypto";
 import { Token } from "@cocrepo/constant";
+import { PrismaService, RedisService } from "@cocrepo/service";
+import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import {
@@ -6,7 +9,9 @@ import {
 	type SwaggerDocumentOptions,
 	SwaggerModule,
 } from "@nestjs/swagger";
+import type { NextFunction, Request, Response } from "express";
 import { Logger } from "nestjs-pino";
+import type { OidcConfig, RuntimeSecurityConfig } from "./config";
 import { AbilitiesModule } from "./module/abilities";
 import { ActionsModule } from "./module/actions";
 import { AppModule } from "./module/app.module";
@@ -40,6 +45,7 @@ import { TenantAccessRequestsModule } from "./module/tenant-access-requests";
 import { TimelinesModule } from "./module/timelines";
 import { TranslationsModule } from "./module/translations";
 import { UsersModule } from "./module/users";
+import { createCookieCsrfProtection } from "./security/cookie-csrf-protection.middleware";
 import { setNestApp } from "./setNestApp";
 import { applyBigIntIdOpenApiContract } from "./swagger/bigint-id.openapi";
 
@@ -320,6 +326,173 @@ interface HotModule {
 
 declare const module: HotModule;
 
+const SECURITY_RESPONSE_HEADERS: Readonly<Record<string, string>> = {
+	"Cross-Origin-Opener-Policy": "same-origin",
+	"Cross-Origin-Resource-Policy": "same-origin",
+	"Referrer-Policy": "strict-origin-when-cross-origin",
+	"X-Content-Type-Options": "nosniff",
+	"X-Frame-Options": "DENY",
+	"X-Permitted-Cross-Domain-Policies": "none",
+};
+
+const CORS_ALLOWED_HEADERS = [
+	"Authorization",
+	"Content-Type",
+	"X-Language",
+	"X-Refresh-Token",
+	"X-Custom-Lang",
+	"X-Request-Id",
+	"X-Tenant-Id",
+];
+
+const normalizeRemoteAddress = (remoteAddress: string): string =>
+	remoteAddress.startsWith("::ffff:")
+		? remoteAddress.slice("::ffff:".length)
+		: remoteAddress;
+
+const hasExpectedBasicAuthorization = (
+	authorizationHeader: string | undefined,
+	expectedUsername: string,
+	expectedPassword: string,
+): boolean => {
+	const expectedAuthorization = `Basic ${Buffer.from(
+		`${expectedUsername}:${expectedPassword}`,
+	).toString("base64")}`;
+	if (!authorizationHeader) {
+		return false;
+	}
+
+	const actualBuffer = Buffer.from(authorizationHeader);
+	const expectedBuffer = Buffer.from(expectedAuthorization);
+	return (
+		actualBuffer.length === expectedBuffer.length &&
+		timingSafeEqual(actualBuffer, expectedBuffer)
+	);
+};
+
+const configureSecurityHeaders = (
+	app: NestExpressApplication,
+	isProduction: boolean,
+): void => {
+	app.use((_request: Request, response: Response, next: NextFunction) => {
+		for (const [headerName, headerValue] of Object.entries(
+			SECURITY_RESPONSE_HEADERS,
+		)) {
+			response.setHeader(headerName, headerValue);
+		}
+		if (isProduction) {
+			response.setHeader(
+				"Strict-Transport-Security",
+				"max-age=31536000; includeSubDomains",
+			);
+		}
+		next();
+	});
+};
+
+const configureCors = (
+	app: NestExpressApplication,
+	runtimeSecurity: RuntimeSecurityConfig,
+): void => {
+	if (!runtimeSecurity.cors.enabled) {
+		return;
+	}
+
+	app.enableCors({
+		origin: (requestOrigin, callback) => {
+			if (!requestOrigin) {
+				callback(null, true);
+				return;
+			}
+			const isDevelopmentWithoutAllowlist =
+				!runtimeSecurity.isProduction &&
+				runtimeSecurity.cors.allowedOrigins.length === 0;
+			const isAllowed =
+				isDevelopmentWithoutAllowlist ||
+				runtimeSecurity.cors.allowedOrigins.includes(requestOrigin);
+			callback(
+				isAllowed ? null : new Error("CORS origin is not allowed."),
+				isAllowed,
+			);
+		},
+		credentials: true,
+		methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+		allowedHeaders: CORS_ALLOWED_HEADERS,
+	});
+};
+
+const configureOperationalEndpoints = (app: NestExpressApplication): void => {
+	const expressHttpAdapter = app.getHttpAdapter() as unknown as {
+		get(
+			path: string,
+			handler: (request: Request, response: Response) => void | Promise<void>,
+		): void;
+	};
+	expressHttpAdapter.get("/healthz", (_request, response) => {
+		response.status(200).json({ status: "ok" });
+	});
+	expressHttpAdapter.get(
+		"/readyz",
+		async (_request, response): Promise<void> => {
+			try {
+				const prismaService = app.get(PrismaService);
+				const redisService = app.get(RedisService);
+				await Promise.all([
+					prismaService.$queryRawUnsafe("SELECT 1"),
+					redisService.getClient().ping(),
+				]);
+				response.status(200).json({ status: "ready" });
+			} catch {
+				response.status(503).json({ status: "not_ready" });
+			}
+		},
+	);
+};
+
+const configureSwaggerAccessProtection = (
+	app: NestExpressApplication,
+	runtimeSecurity: RuntimeSecurityConfig,
+): void => {
+	if (!runtimeSecurity.isProduction || !runtimeSecurity.swagger.enabled) {
+		return;
+	}
+
+	const swaggerBasicAuth = runtimeSecurity.swagger.basicAuth;
+	if (!swaggerBasicAuth) {
+		throw new Error("Production Swagger access protection is not configured.");
+	}
+
+	app.use(
+		["/api", "/api-json"],
+		(request: Request, response: Response, next: NextFunction) => {
+			const requestIp = normalizeRemoteAddress(request.ip ?? "");
+			if (!runtimeSecurity.swagger.allowedIps.includes(requestIp)) {
+				response
+					.status(403)
+					.json({ message: "Swagger access is not allowed." });
+				return;
+			}
+			if (
+				!hasExpectedBasicAuthorization(
+					request.headers.authorization,
+					swaggerBasicAuth.username,
+					swaggerBasicAuth.password,
+				)
+			) {
+				response.setHeader(
+					"WWW-Authenticate",
+					'Basic realm="Core API Swagger"',
+				);
+				response
+					.status(401)
+					.json({ message: "Swagger authentication is required." });
+				return;
+			}
+			next();
+		},
+	);
+};
+
 async function bootstrap() {
 	const enableNestDevtools = isNestDevtoolsEnabled();
 
@@ -333,119 +506,130 @@ async function bootstrap() {
 
 	// 로거 설정 (가장 먼저 설정하여 모든 로그 캐치)
 	app.useLogger(app.get(Logger));
+	const configService = app.get(ConfigService);
+	const runtimeSecurity =
+		configService.getOrThrow<RuntimeSecurityConfig>("runtimeSecurity");
+	const oidcRuntimeConfig = configService.getOrThrow<OidcConfig>("oidc");
 
 	// =================================================================
 	// 2. Express 미들웨어 설정 (HTTP 레벨 - 가장 먼저 실행)
 	// =================================================================
 	// Express 쿼리 파서 설정 - 복잡한 쿼리 객체 파싱 지원
 	app.set("query parser", "extended");
+	app.set("trust proxy", runtimeSecurity.trustProxyHops);
+	(
+		app.getHttpAdapter().getInstance() as { disable(setting: string): void }
+	).disable("x-powered-by");
+	configureSecurityHeaders(app, runtimeSecurity.isProduction);
+	configureOperationalEndpoints(app);
+	app.enableShutdownHooks();
 
 	// =================================================================
 	// 3. CORS 설정 (브라우저 보안 정책 - HTTP 레벨에서 처리)
 	// =================================================================
-	app.enableCors({
-		origin: true, // 모든 도메인 허용 (개발환경용, 프로덕션에서는 특정 도메인 지정 권장)
-		credentials: true, // 쿠키, 인증 헤더 포함 허용
-		methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
-		allowedHeaders: "*", // 모든 헤더 허용
-	});
+	configureCors(app, runtimeSecurity);
 
 	// =================================================================
 	// 4. Global 설정 (Guards, Pipes, Filters, Interceptors)
 	// =================================================================
 	setNestApp(app);
+	app.use(createCookieCsrfProtection(runtimeSecurity));
 
 	// =================================================================
 	// 5. API 문서 설정 (Swagger)
 	// =================================================================
-	const oidcIssuer = process.env.OIDC_ISSUER || "http://localhost:3000";
+	const port = process.env.APP_PORT || 3006;
+	const oidcIssuer = oidcRuntimeConfig.issuer;
+	if (runtimeSecurity.swagger.enabled) {
+		configureSwaggerAccessProtection(app, runtimeSecurity);
 
-	const swaggerConfig = new DocumentBuilder()
-		.setTitle(process.env.APP_NAME || "Onora")
-		.setVersion("1.0.0")
-		.setDescription(
-			"API 문서입니다. Core API와 IDP 관리 API를 함께 제공합니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
-				"**인증 방법:**\n" +
-				"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
-				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송\n\n" +
-				"**Tenant Scope:**\n" +
-				"- 보호 API는 `x-tenant-id` header로 현재 Tenant를 선택합니다.\n" +
-				"- 서버는 Tenant에서 Space를 파생하고, 기본적으로 현재 Space와 모든 하위 Space category 리소스를 조회합니다.\n" +
-				"- `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.",
-		)
-		.addCookieAuth(Token.ACCESS, {
-			type: "apiKey",
-			in: "cookie",
-			name: Token.ACCESS,
-			description: "JWT Access Token (HttpOnly 쿠키로 자동 전송)",
-		})
-		.addOAuth2({
-			type: "oauth2",
-			description: "OIDC Authorization Code + PKCE 인증",
-			flows: {
-				authorizationCode: {
-					authorizationUrl: `${oidcIssuer}/oidc/auth`,
-					tokenUrl: `${oidcIssuer}/oidc/token`,
-					scopes: {
-						openid: "OpenID Connect 기본 인증",
-						profile: "프로필 정보 (이름)",
-						email: "이메일 주소",
-						roles: "역할 및 Tenant/Space 정보",
+		const swaggerConfig = new DocumentBuilder()
+			.setTitle(process.env.APP_NAME || "Onora")
+			.setVersion("1.0.0")
+			.setDescription(
+				"API 문서입니다. Core API와 IDP 관리 API를 함께 제공합니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
+					"**인증 방법:**\n" +
+					"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
+					"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송\n\n" +
+					"**Tenant Scope:**\n" +
+					"- 보호 API는 `x-tenant-id` header로 현재 Tenant를 선택합니다.\n" +
+					"- 서버는 Tenant에서 Space를 파생하고, 기본적으로 현재 Space와 모든 하위 Space category 리소스를 조회합니다.\n" +
+					"- `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.",
+			)
+			.addCookieAuth(Token.ACCESS, {
+				type: "apiKey",
+				in: "cookie",
+				name: Token.ACCESS,
+				description: "JWT Access Token (HttpOnly 쿠키로 자동 전송)",
+			})
+			.addOAuth2({
+				type: "oauth2",
+				description: "OIDC Authorization Code + PKCE 인증",
+				flows: {
+					authorizationCode: {
+						authorizationUrl: `${oidcIssuer}/oidc/auth`,
+						tokenUrl: `${oidcIssuer}/oidc/token`,
+						scopes: {
+							openid: "OpenID Connect 기본 인증",
+							profile: "프로필 정보 (이름)",
+							email: "이메일 주소",
+							roles: "역할 및 Tenant/Space 정보",
+						},
 					},
 				},
-			},
-		})
-		.build();
+			})
+			.build();
 
-	const options: SwaggerDocumentOptions = {
-		operationIdFactory: (_controllerKey: string, methodKey: string) =>
-			methodKey, // API 작업 ID를 메소드명으로 설정
-	};
+		const options: SwaggerDocumentOptions = {
+			operationIdFactory: (_controllerKey: string, methodKey: string) =>
+				methodKey, // API 작업 ID를 메소드명으로 설정
+		};
 
-	const document = SwaggerModule.createDocument(app, swaggerConfig, {
-		...options,
-		include: SWAGGER_MODULES,
-	});
-	applyBigIntIdOpenApiContract(document);
+		const document = SwaggerModule.createDocument(app, swaggerConfig, {
+			...options,
+			include: SWAGGER_MODULES,
+		});
+		applyBigIntIdOpenApiContract(document);
 
-	const port = process.env.APP_PORT || 3006;
-
-	SwaggerModule.setup("api", app, document, {
-		swaggerOptions: {
-			persistAuthorization: true,
-			oauth2RedirectUrl: `http://localhost:${port}/api/oauth2-redirect.html`,
-			initOAuth: {
-				clientId: "swagger-web",
-				scopes: ["openid", "profile", "email", "roles"],
-				usePkceWithAuthorizationCodeGrant: true,
-			},
-			requestInterceptor: (request: {
-				url?: string;
-				headers?: Record<string, string>;
-			}) => {
-				const browserGlobal = globalThis as {
-					localStorage?: { getItem(key: string): string | null };
-				};
-				const tenantId = browserGlobal.localStorage?.getItem(
-					"swagger:x-tenant-id",
-				);
-
-				if (tenantId && request.url?.includes("/api/v1/")) {
-					request.headers = request.headers ?? {};
-
-					const hasTenantHeader = Object.keys(request.headers).some(
-						(headerName) => headerName.toLowerCase() === "x-tenant-id",
+		SwaggerModule.setup("api", app, document, {
+			swaggerOptions: {
+				persistAuthorization: true,
+				oauth2RedirectUrl:
+					runtimeSecurity.swagger.oauthRedirectUri ??
+					`http://localhost:${port}/api/oauth2-redirect.html`,
+				initOAuth: {
+					clientId: "swagger-web",
+					scopes: ["openid", "profile", "email", "roles"],
+					usePkceWithAuthorizationCodeGrant: true,
+				},
+				requestInterceptor: (request: {
+					url?: string;
+					headers?: Record<string, string>;
+				}) => {
+					const browserGlobal = globalThis as {
+						localStorage?: { getItem(key: string): string | null };
+					};
+					const tenantId = browserGlobal.localStorage?.getItem(
+						"swagger:x-tenant-id",
 					);
-					if (!hasTenantHeader) {
-						request.headers["x-tenant-id"] = tenantId;
-					}
-				}
 
-				return request;
+					if (tenantId && request.url?.includes("/api/v1/")) {
+						request.headers = request.headers ?? {};
+
+						const hasTenantHeader = Object.keys(request.headers).some(
+							(headerName) => headerName.toLowerCase() === "x-tenant-id",
+						);
+						if (!hasTenantHeader) {
+							request.headers["x-tenant-id"] = tenantId;
+						}
+					}
+
+					return request;
+				},
 			},
-		},
-		customJsStr: `window.__IDP_SERVER_URL = '${oidcIssuer}';\n${SWAGGER_TENANT_SELECTOR_JS}`,
-	});
+			customJsStr: `window.__IDP_SERVER_URL = '${oidcIssuer}';\n${SWAGGER_TENANT_SELECTOR_JS}`,
+		});
+	}
 
 	// =================================================================
 	// 6. 서버 시작 및 로깅
@@ -456,8 +640,10 @@ async function bootstrap() {
 	logger.log(`🚀 서버가 ${port} 포트에서 시작되었습니다`);
 	logger.log(`📱 환경: ${process.env.NODE_ENV}`);
 	logger.log(`🐳 Docker: ${process.env.DOCKER_ENV === "true" ? "Yes" : "No"}`);
-	logger.log(`📊 API 문서: http://localhost:${port}/api`);
-	logger.log(`📊 API Spec: http://localhost:${port}/api-json`);
+	if (runtimeSecurity.swagger.enabled) {
+		logger.log(`📊 API 문서: http://localhost:${port}/api`);
+		logger.log(`📊 API Spec: http://localhost:${port}/api-json`);
+	}
 	logger.log(
 		`🔑 OIDC Discovery: http://localhost:${port}/oidc/.well-known/openid-configuration`,
 	);

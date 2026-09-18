@@ -1,6 +1,3 @@
-export type UploadedAssetFile = {
-	originalname: string;
-	mimetype: string;
-	size: number;
-	buffer: Buffer;
-};
+import type { UploadedAssetFileInput } from "@cocrepo/input";
+
+export type UploadedAssetFile = UploadedAssetFileInput;

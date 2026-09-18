@@ -1,4 +1,8 @@
 import { createHash } from "node:crypto";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { Readable } from "node:stream";
 import { SpaceContext } from "@cocrepo/context";
 import { AssetKind, AssetStatus } from "@cocrepo/prisma";
 import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
@@ -174,6 +178,79 @@ describe("AssetAggregate", () => {
 				sizeBytes: 11,
 			}),
 		);
+	});
+
+	it("임시 디스크 업로드는 파일 내용을 메모리에 적재하지 않고 object storage로 스트리밍해야 한다", async () => {
+		const temporaryDirectoryPath = await mkdtemp(
+			join(tmpdir(), "cocrepo-asset-aggregate-"),
+		);
+		const temporaryFilePath = join(temporaryDirectoryPath, "photo.png");
+		const uploadedFileContent = Buffer.from("streamed-file-content");
+		const expectedChecksum = createHash("sha256")
+			.update(uploadedFileContent)
+			.digest("hex");
+		let uploadedAssetBody: unknown;
+
+		try {
+			await writeFile(temporaryFilePath, uploadedFileContent);
+			mockFoldersRepository.findById.mockResolvedValue({
+				id: folderId,
+				spaceId,
+				removedAt: null,
+			} as never);
+			mockObjectStorageService.putObject.mockImplementation(async (input) => {
+				uploadedAssetBody = input.body;
+				if (input.body instanceof Readable) {
+					for await (const _uploadedFileChunk of input.body) {
+						// 스트림을 끝까지 소비해 실제 전송 경계를 검증한다.
+					}
+				}
+
+				return { key: input.key, publicUrl: null };
+			});
+			mockAssetsRepository.create.mockImplementation(
+				async (data) =>
+					({
+						id: assetId,
+						createdAt: new Date(),
+						updatedAt: new Date(),
+						removedAt: null,
+						spaceId: data.spaceId,
+						folderId: data.folderId,
+						kind: data.kind,
+						status: data.status,
+						originalName: data.originalName,
+						storageKey: data.storageKey,
+						mimeType: data.mimeType,
+						sizeBytes: data.sizeBytes as bigint,
+						extension: data.extension as string | null,
+						checksum: data.checksum as string | null,
+						metadata: data.metadata ?? null,
+						createdById:
+							data.createdById == null ? null : BigInt(data.createdById),
+						space: { id: spaceId },
+					}) as never,
+			);
+
+			await service.uploadAsset(
+				{ folderId },
+				{
+					originalname: "photo.png",
+					mimetype: "image/png",
+					size: uploadedFileContent.length,
+					path: temporaryFilePath,
+				},
+				userId,
+			);
+
+			expect(uploadedAssetBody).toBeInstanceOf(Readable);
+			expect(uploadedAssetBody).not.toBeInstanceOf(Buffer);
+			expect(mockAssetsRepository.create).toHaveBeenCalledWith(
+				expect.objectContaining({ checksum: expectedChecksum }),
+			);
+		} finally {
+			await rm(temporaryDirectoryPath, { recursive: true, force: true });
+		}
 	});
 
 	it("업로드 파일명이 latin1 모지바케면 UTF-8 파일명으로 복원해야 한다", async () => {

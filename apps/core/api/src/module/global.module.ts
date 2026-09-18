@@ -2,20 +2,20 @@ import { createGlobalModules } from "@cocrepo/be-common";
 import {
 	appConfig,
 	authConfig,
-	corsConfig,
 	objectStorageConfig,
 	oidcConfig,
 	redisConfig,
+	runtimeSecurityConfig,
 	smtpConfig,
 } from "../config";
 
 export const globalModules = createGlobalModules({
 	envFilePath: ".env",
 	configLoaders: [
+		runtimeSecurityConfig,
 		oidcConfig,
 		authConfig,
 		appConfig,
-		corsConfig,
 		smtpConfig,
 		objectStorageConfig,
 		redisConfig,

@@ -8,12 +8,17 @@ import {
 	ConfigService,
 } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
-import { ThrottlerModule } from "@nestjs/throttler";
+import {
+	ThrottlerModule,
+	type ThrottlerModuleOptions,
+} from "@nestjs/throttler";
 import { ClsPluginTransactional } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import type { SignOptions } from "jsonwebtoken";
 import { ClsModule } from "nestjs-cls";
 import { LoggerModule } from "nestjs-pino";
+import { RedisThrottlerStorage } from "./redis-throttler-storage";
+import { redisThrottlerStorageModule } from "./redis-throttler-storage.module";
 
 export type GlobalModuleConfigLoader = ConfigFactory;
 
@@ -77,15 +82,11 @@ const serializeResponse = (res: ServerResponse) => ({
 	statusCode: res.statusCode,
 });
 
-export const createGlobalModules = (
-	options: CreateGlobalModulesOptions,
-): (DynamicModule | Promise<DynamicModule>)[] => [
-	ConfigModule.forRoot({
-		isGlobal: true,
-		envFilePath: options.envFilePath,
-		load: options.configLoaders,
-	}),
-	ThrottlerModule.forRoot(
+const createThrottlerOptions = (
+	storage: RedisThrottlerStorage,
+): ThrottlerModuleOptions => ({
+	storage,
+	throttlers:
 		process.env.NODE_ENV === "production"
 			? [
 					{ name: "short", ttl: 1000, limit: 10 },
@@ -97,7 +98,22 @@ export const createGlobalModules = (
 					{ name: "medium", ttl: 60000, limit: 10000 },
 					{ name: "long", ttl: 900000, limit: 100000 },
 				],
-	),
+});
+
+export const createGlobalModules = (
+	options: CreateGlobalModulesOptions,
+): (DynamicModule | Promise<DynamicModule>)[] => [
+	ConfigModule.forRoot({
+		isGlobal: true,
+		envFilePath: options.envFilePath,
+		load: options.configLoaders,
+	}),
+	redisThrottlerStorageModule,
+	ThrottlerModule.forRootAsync({
+		imports: [redisThrottlerStorageModule],
+		inject: [RedisThrottlerStorage],
+		useFactory: createThrottlerOptions,
+	}),
 	ClsModule.forRoot({
 		global: true,
 		middleware: {

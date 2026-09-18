@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import { createReadStream } from "node:fs";
 import { extname } from "node:path";
 import { SpaceContext } from "@cocrepo/context";
 import { Asset } from "@cocrepo/entity";
@@ -147,14 +148,28 @@ export class AssetAggregate {
 		const extension = this.extractExtension(normalizedOriginalName);
 		const kind = this.resolveAssetKind(file.mimetype);
 		const storageKey = this.buildStorageKey(spaceId, kind, extension);
-		const checksum = Checksum.sha256(
-			createHash("sha256").update(file.buffer).digest("hex"),
-		);
+		let uploadedAssetContent: Buffer | ReturnType<typeof createReadStream>;
+		let uploadedAssetChecksum: string;
+		if (file.path) {
+			uploadedAssetContent = createReadStream(file.path);
+			uploadedAssetChecksum = await this.calculateStoredAssetFileChecksum(
+				file.path,
+			);
+		} else if (file.buffer) {
+			uploadedAssetContent = file.buffer;
+			uploadedAssetChecksum = createHash("sha256")
+				.update(file.buffer)
+				.digest("hex");
+		} else {
+			throw new BadRequestException("업로드 파일 내용을 찾을 수 없습니다");
+		}
+
+		const checksum = Checksum.sha256(uploadedAssetChecksum);
 		const fileSize = FileSize.fromBytes(file.size);
 
 		await this.objectStorageService.putObject({
 			key: storageKey.value,
-			body: file.buffer,
+			body: uploadedAssetContent,
 			contentType: file.mimetype,
 			contentLength: Number(fileSize.bytes),
 			checksum: checksum.value,
@@ -191,6 +206,23 @@ export class AssetAggregate {
 		}
 
 		return spaceId;
+	}
+
+	private async calculateStoredAssetFileChecksum(
+		filePath: string,
+	): Promise<string> {
+		return new Promise((resolveChecksum, rejectChecksum) => {
+			const checksumHasher = createHash("sha256");
+			const storedAssetFileStream = createReadStream(filePath);
+
+			storedAssetFileStream.on("data", (fileChunk: Buffer) => {
+				checksumHasher.update(fileChunk);
+			});
+			storedAssetFileStream.on("error", rejectChecksum);
+			storedAssetFileStream.on("end", () => {
+				resolveChecksum(checksumHasher.digest("hex"));
+			});
+		});
 	}
 
 	private async getCurrentSpaceAsset(assetId: bigint): Promise<Asset> {

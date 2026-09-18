@@ -51,6 +51,8 @@ import {
 } from "@nestjs/swagger";
 import type { Response } from "express";
 import { ASSET_UPLOAD_OPTIONS } from "./asset-upload.options";
+import { removeUploadedAssetTemporaryFile } from "./remove-uploaded-asset-temporary-file";
+import { validateUploadedAssetFile } from "./validate-uploaded-asset-file";
 
 @ApiTags("ASSETS")
 @Controller()
@@ -198,12 +200,20 @@ export class AssetsController {
 		@Body() dto: UploadAssetDto,
 		@UploadedFile() file: Express.Multer.File | undefined,
 	) {
-		const userId = this.authContext.user?.id;
-		if (!userId) {
-			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
-		}
+		try {
+			await validateUploadedAssetFile(file);
 
-		return this.commandBus.execute(new UploadAssetCommand(dto, file, userId));
+			const userId = this.authContext.user?.id;
+			if (!userId) {
+				throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
+			}
+
+			return await this.commandBus.execute(
+				new UploadAssetCommand(dto, file, userId),
+			);
+		} finally {
+			await removeUploadedAssetTemporaryFile(file);
+		}
 	}
 
 	@Patch(":assetId/move")

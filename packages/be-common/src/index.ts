@@ -81,6 +81,10 @@ export {
 } from "./pipe";
 // Providers
 export { GeneratorProvider } from "./provider";
+export {
+	type RedisThrottlerClient,
+	RedisThrottlerStorage,
+} from "./redis-throttler-storage";
 // Strategies
 export { JwtStrategy } from "./strategy";
 export type {
