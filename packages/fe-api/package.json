@@ -22,11 +22,17 @@
   "publishConfig": {
     "access": "public"
   },
-	"files": [
-		"dist",
-		"src",
-		"README.md"
-	],
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "!dist/**/*.map",
+    "!dist/**/*.tsbuildinfo",
+    "!src/**/test/**",
+    "!src/**/tests/**",
+    "!src/**/*.test.*",
+    "!src/**/*.spec.*"
+  ],
   "scripts": {
     "codegen:clean": "node clean-orval-generated-files.mjs",
     "codegen": "pnpm run codegen:clean && orval --config orval.config.mjs",
@@ -66,11 +72,12 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-org/prj-core.git",
+    "url": "git+https://github.com/kimjoongwon/prj-core.git",
     "directory": "packages/fe-api"
   },
   "bugs": {
-    "url": "https://github.com/your-org/prj-core/issues"
+    "url": "https://github.com/kimjoongwon/prj-core/issues"
   },
-  "homepage": "https://github.com/your-org/prj-core/tree/main/packages/api#readme"
+  "homepage": "https://github.com/kimjoongwon/prj-core/tree/main/packages/fe-api#readme",
+  "private": false
 }

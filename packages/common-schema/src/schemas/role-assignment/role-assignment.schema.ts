@@ -1,21 +1,19 @@
-import type { RoleAssignment as PrismaRoleAssignment } from "@cocrepo/prisma";
 import { BigIntIdValidation } from "../../decorators/model-validation";
 import { AbstractSchema } from "../abstract.schema";
 
 /** RoleAssignment의 DB 필드 타입과 공통 검증입니다. */
 export class RoleAssignmentSchema
 	extends AbstractSchema
-	implements PrismaRoleAssignment
 {
-	roleAssignmentId!: PrismaRoleAssignment["roleAssignmentId"];
+	roleAssignmentId!: string;
 
 	@BigIntIdValidation({ description: "Role ID" })
-	roleId!: PrismaRoleAssignment["roleId"];
+	roleId!: bigint;
 
 	@BigIntIdValidation({ description: "Policy ID" })
-	policyId!: PrismaRoleAssignment["policyId"];
+	policyId!: bigint;
 
-	isActive!: PrismaRoleAssignment["isActive"];
+	isActive!: boolean;
 
-	priority!: PrismaRoleAssignment["priority"];
+	priority!: number;
 }

@@ -1,23 +1,22 @@
-import type { Video as PrismaVideo } from "@cocrepo/prisma";
 import { AbstractSchema } from "../abstract.schema";
 
 /** Video의 DB 필드 타입과 공통 검증입니다. */
-export class VideoSchema extends AbstractSchema implements PrismaVideo {
-	videoId!: PrismaVideo["videoId"];
+export class VideoSchema extends AbstractSchema {
+	videoId!: string;
 
-	width!: PrismaVideo["width"];
+	width!: number;
 
-	height!: PrismaVideo["height"];
+	height!: number;
 
-	durationMs!: PrismaVideo["durationMs"];
+	durationMs!: number;
 
-	frameRate!: PrismaVideo["frameRate"];
+	frameRate!: number | null;
 
-	codec!: PrismaVideo["codec"];
+	codec!: string | null;
 
-	bitrate!: PrismaVideo["bitrate"];
+	bitrate!: number | null;
 
-	hasAudio!: PrismaVideo["hasAudio"];
+	hasAudio!: boolean;
 
-	assetId!: PrismaVideo["assetId"];
+	assetId!: bigint;
 }

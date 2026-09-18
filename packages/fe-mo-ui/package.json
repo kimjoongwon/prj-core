@@ -19,7 +19,13 @@
   "files": [
     "src",
     "index.ts",
-    "README.md"
+    "README.md",
+    "!dist/**/*.map",
+    "!dist/**/*.tsbuildinfo",
+    "!src/**/test/**",
+    "!src/**/tests/**",
+    "!src/**/*.test.*",
+    "!src/**/*.spec.*"
   ],
   "scripts": {
     "build": "echo 'Build not needed - using source files directly'",
@@ -46,18 +52,19 @@
     "@gorhom/bottom-sheet": ">=5.2.9",
     "heroui-native": "^1.0.4",
     "lottie-react-native": ">=7.3.8",
-    "react-native-svg": ">=15.15.0",
     "react-native-safe-area-context": ">=5.6.0",
+    "react-native-svg": ">=15.15.0",
     "uniwind": ">=1.6.0"
   },
   "devDependencies": {
-    "@gorhom/bottom-sheet": "catalog:",
     "@expo/dom-webview": "~57.0.1",
-		"@expo/metro-runtime": "~57.0.15",
-		"@react-native/jest-preset": "0.86.3",
-		"@storybook/react-native": "10.4.0",
+    "@expo/metro-runtime": "~57.0.15",
+    "@gorhom/bottom-sheet": "catalog:",
+    "@react-native/jest-preset": "0.86.3",
+    "@storybook/react-native": "10.4.0",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
+    "@types/react": "catalog:",
     "expo": "~57.0.22",
     "expo-constants": "~57.0.18",
     "expo-linking": "~57.0.10",
@@ -66,7 +73,6 @@
     "jest": "^29.7.0",
     "jest-expo": "~57.0.5",
     "lottie-react-native": "~7.3.8",
-    "@types/react": "catalog:",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
@@ -76,7 +82,13 @@
     "react-native-worklets": "0.10.1",
     "react-test-renderer": "19.2.3",
     "storybook": "10.4.0",
-    "uniwind": "^1.6.3",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "uniwind": "^1.6.3"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimjoongwon/prj-core.git",
+    "directory": "packages/fe-mo-ui"
   }
 }

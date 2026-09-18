@@ -3,7 +3,6 @@ import {
 	RepeatCycleTypes,
 	SessionTypes,
 } from "@cocrepo/enum";
-import type { Session as PrismaSession } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	DateValidationOptional,
@@ -15,30 +14,30 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Session의 DB 필드 타입과 공통 검증입니다. */
-export class SessionSchema extends AbstractSchema implements PrismaSession {
-	sessionId!: PrismaSession["sessionId"];
+export class SessionSchema extends AbstractSchema {
+	sessionId!: string;
 
 	@EnumValidation(() => SessionTypes)
-	type!: PrismaSession["type"];
+	type!: SessionTypes;
 
 	@EnumValidationOptional(() => RepeatCycleTypes, { nullable: true })
-	repeatCycleType!: PrismaSession["repeatCycleType"];
+	repeatCycleType!: RepeatCycleTypes | null;
 
 	@DateValidationOptional({ nullable: true })
-	startDateTime!: PrismaSession["startDateTime"];
+	startDateTime!: Date | null;
 
 	@DateValidationOptional({ nullable: true })
-	endDateTime!: PrismaSession["endDateTime"];
+	endDateTime!: Date | null;
 
 	@EnumValidationOptional(() => RecurringDayOfWeek, { nullable: true })
-	recurringDayOfWeek!: PrismaSession["recurringDayOfWeek"];
+	recurringDayOfWeek!: RecurringDayOfWeek | null;
 
 	@BigIntIdValidation()
-	timelineId!: PrismaSession["timelineId"];
+	timelineId!: bigint;
 
 	@StringValidation()
-	name!: PrismaSession["name"];
+	name!: string;
 
 	@StringValidationOptional({ nullable: true })
-	description!: PrismaSession["description"];
+	description!: string | null;
 }

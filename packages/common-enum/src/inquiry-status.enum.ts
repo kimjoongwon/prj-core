@@ -1,4 +1,4 @@
-import { InquiryStatus } from "@cocrepo/prisma/enums";
+import { InquiryStatus } from "./generated/prisma-enums";
 
 /**
  * 문의 처리 상태 라벨

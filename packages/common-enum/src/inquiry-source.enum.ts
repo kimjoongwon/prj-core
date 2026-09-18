@@ -1,4 +1,4 @@
-import { InquirySource } from "@cocrepo/prisma/enums";
+import { InquirySource } from "./generated/prisma-enums";
 
 /**
  * 문의 접수 유형 라벨

@@ -1,0 +1,7 @@
+dist/.tsbuildinfo
+dist/**/*.map
+**/*.spec.*
+dist/decorators/decimal-id.decorator.spec.d.ts
+dist/decorators/decimal-id.decorator.spec.js
+dist/esm/decorators/decimal-id.decorator.spec.js
+__tests__

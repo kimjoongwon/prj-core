@@ -1,5 +1,4 @@
 import { ThreadStatus } from "@cocrepo/enum";
-import type { InquiryThread as PrismaInquiryThread } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	DateValidation,
@@ -17,36 +16,35 @@ export class InquiryThreadSchema
 		"createdAt",
 		"updatedAt",
 	] as const)
-	implements PrismaInquiryThread
 {
-	inquiryThreadId!: PrismaInquiryThread["inquiryThreadId"];
+	inquiryThreadId!: string;
 
-	declare id: PrismaInquiryThread["id"];
+	declare id: bigint;
 
-	declare createdAt: PrismaInquiryThread["createdAt"];
+	declare createdAt: Date;
 
-	declare updatedAt: PrismaInquiryThread["updatedAt"];
+	declare updatedAt: Date | null;
 
-	closedAt!: PrismaInquiryThread["closedAt"];
+	closedAt!: Date | null;
 
 	@BigIntIdValidation({ description: "소속 문의 ID" })
-	inquiryId!: PrismaInquiryThread["inquiryId"];
+	inquiryId!: bigint;
 
 	@StringValidation({ nullable: true, description: "스레드 제목" })
-	title!: PrismaInquiryThread["title"];
+	title!: string | null;
 
 	@EnumValidation(() => ThreadStatus, { description: "스레드 상태" })
-	status!: PrismaInquiryThread["status"];
+	status!: ThreadStatus;
 
 	@BigIntIdValidation({ description: "생성자 ID" })
-	createdById!: PrismaInquiryThread["createdById"];
+	createdById!: bigint;
 
 	@DateValidation({ nullable: true, description: "마지막 메시지 일시" })
-	lastMessageAt!: PrismaInquiryThread["lastMessageAt"];
+	lastMessageAt!: Date | null;
 
 	@StringValidation({ nullable: true, description: "마지막 메시지 미리보기" })
-	lastMessagePreview!: PrismaInquiryThread["lastMessagePreview"];
+	lastMessagePreview!: string | null;
 
 	@NumberValidation({ description: "메시지 수" })
-	messageCount!: PrismaInquiryThread["messageCount"];
+	messageCount!: number;
 }

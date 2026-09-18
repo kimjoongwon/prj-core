@@ -1,4 +1,3 @@
-import type { User as PrismaUser } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BooleanValidation,
@@ -12,49 +11,49 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** User의 DB 필드 타입과 공통 검증입니다. */
-export class UserSchema extends AbstractSchema implements PrismaUser {
+export class UserSchema extends AbstractSchema {
 	@ULIDValidation()
-	userId!: PrismaUser["userId"];
+	userId!: string;
 
 	@StringValidation({ description: "연락처" })
-	phone!: PrismaUser["phone"];
+	phone!: string;
 
 	@StringValidation({ description: "사용자 이름" })
-	name!: PrismaUser["name"];
+	name!: string;
 
 	@EmailValidation({ description: "이메일 주소" })
-	email!: PrismaUser["email"];
+	email!: string;
 
 	@StoredStringValidation()
-	password!: PrismaUser["password"];
+	password!: string;
 
 	@NumberValidation({ description: "로그인 실패 횟수" })
-	failedLoginAttempts!: PrismaUser["failedLoginAttempts"];
+	failedLoginAttempts!: number;
 
 	@DateValidation({ nullable: true, description: "잠금 해제 시각" })
-	lockedUntil!: PrismaUser["lockedUntil"];
+	lockedUntil!: Date | null;
 
 	@BooleanValidation({ description: "영구 잠금 여부" })
-	isPermanentlyLocked!: PrismaUser["isPermanentlyLocked"];
+	isPermanentlyLocked!: boolean;
 
 	@BooleanValidation({ description: "비밀번호 변경 필요" })
-	mustChangePassword!: PrismaUser["mustChangePassword"];
+	mustChangePassword!: boolean;
 
 	@DateValidation({ nullable: true, description: "비밀번호 변경일" })
-	passwordChangedAt!: PrismaUser["passwordChangedAt"];
+	passwordChangedAt!: Date | null;
 
 	@DateValidation({ nullable: true, description: "마지막 로그인 시각" })
-	lastLoginAt!: PrismaUser["lastLoginAt"];
+	lastLoginAt!: Date | null;
 
 	@StringValidation({ nullable: true, description: "마지막 로그인 IP" })
-	lastLoginIp!: PrismaUser["lastLoginIp"];
+	lastLoginIp!: string | null;
 
 	@BooleanValidation({ description: "활성 상태" })
-	isActive!: PrismaUser["isActive"];
+	isActive!: boolean;
 
 	@BigIntIdValidation({
 		nullable: true,
 		description: "현재 선택된 Tenant membership ID",
 	})
-	currentTenantId!: PrismaUser["currentTenantId"];
+	currentTenantId!: bigint | null;
 }

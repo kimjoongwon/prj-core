@@ -3,6 +3,10 @@ import { getMetadataStorage, IsOptional } from "class-validator";
 /** 생성자나 기본값을 복사하지 않는 검증 전용 Schema 생성자입니다. */
 export type SchemaConstructor<T extends object> = new () => T;
 
+/** Schema 생성자에서 검증 대상 인스턴스 타입을 추론합니다. */
+export type InferSchema<TSchema extends SchemaConstructor<object>> =
+	InstanceType<TSchema>;
+
 /** 선택한 필드의 검증 메타데이터만 재사용합니다. 원본 Schema의 메서드와 초기값은 상속하지 않습니다. */
 export function PickSchemaType<T extends object, K extends keyof T>(
 	schema: SchemaConstructor<T>,

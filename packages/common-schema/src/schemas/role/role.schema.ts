@@ -1,4 +1,3 @@
-import type { Role as PrismaRole } from "@cocrepo/prisma";
 import {
 	StringValidation,
 	StringValidationOptional,
@@ -7,9 +6,9 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Role의 DB 필드 타입과 공통 검증입니다. */
-export class RoleSchema extends AbstractSchema implements PrismaRole {
+export class RoleSchema extends AbstractSchema {
 	@ULIDValidation()
-	roleId!: PrismaRole["roleId"];
+	roleId!: string;
 
 	@StringValidation({
 		description: "역할 식별자",
@@ -18,19 +17,19 @@ export class RoleSchema extends AbstractSchema implements PrismaRole {
 		message:
 			"역할 식별자는 영문 대문자로 시작하며, 영문 대문자, 숫자, 언더스코어만 사용 가능합니다",
 	})
-	name!: PrismaRole["name"];
+	name!: string;
 
 	@StringValidationOptional({
 		nullable: true,
 		description: "표시명",
 		maxLength: 50,
 	})
-	displayName!: PrismaRole["displayName"];
+	displayName!: string | null;
 
 	@StringValidationOptional({
 		nullable: true,
 		description: "설명",
 		maxLength: 200,
 	})
-	description!: PrismaRole["description"];
+	description!: string | null;
 }

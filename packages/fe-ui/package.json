@@ -27,7 +27,13 @@
   "files": [
     "src",
     "index.ts",
-    "README.md"
+    "README.md",
+    "!dist/**/*.map",
+    "!dist/**/*.tsbuildinfo",
+    "!src/**/test/**",
+    "!src/**/tests/**",
+    "!src/**/*.test.*",
+    "!src/**/*.spec.*"
   ],
   "scripts": {
     "build": "echo 'Build not needed - using source files directly'",
@@ -102,14 +108,18 @@
   },
   "dependencies": {
     "@cocrepo/api": "workspace:*",
-    "@ckeditor/ckeditor5-react": "^11.1.2",
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/schema": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@react-aria/ssr": "^3.9.10",
-    "ckeditor5": "^48.0.1",
     "frappe-gantt": "^1.2.2",
     "mermaid": "^11.16.1",
     "next-themes": "catalog:"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimjoongwon/prj-core.git",
+    "directory": "packages/fe-ui"
   }
 }

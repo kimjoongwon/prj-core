@@ -18,6 +18,8 @@
     "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
     "type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
     "generate": "prisma generate && node ./scripts/fix-generated-client-module-format.mjs",
+    "public:enums": "tsx ./scripts/generate-public-enums.ts",
+    "public:enums:check": "tsx ./scripts/check-public-enums.ts",
     "schema:check": "tsx ./scripts/validate-schema-conventions.ts",
     "build": "rm -rf dist && pnpm run schema:check && tsc --build",
     "start:dev": "tsc --build --watch",
@@ -103,5 +105,6 @@
       "require": "./dist/src/generated/client/enums.js",
       "default": "./src/generated/client/enums.ts"
     }
-  }
+  },
+  "private": true
 }

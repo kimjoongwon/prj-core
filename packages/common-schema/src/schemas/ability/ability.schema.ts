@@ -1,4 +1,4 @@
-import type { Ability as PrismaAbility } from "@cocrepo/prisma";
+import type { JsonValue } from "@cocrepo/type";
 import {
 	BigIntIdValidation,
 	BooleanValidation,
@@ -9,30 +9,30 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Ability의 DB 필드 타입과 공통 검증입니다. */
-export class AbilitySchema extends AbstractSchema implements PrismaAbility {
-	abilityId!: PrismaAbility["abilityId"];
+export class AbilitySchema extends AbstractSchema {
+	abilityId!: string;
 
 	@StringValidation()
-	name!: PrismaAbility["name"];
+	name!: string;
 
 	@StringValidationOptional({ nullable: true })
-	description!: PrismaAbility["description"];
+	description!: string | null;
 
 	@StringValidation({ each: true })
-	fields!: PrismaAbility["fields"];
+	fields!: string[];
 
 	@ClassValidation({ required: false, nullable: true })
-	conditions!: PrismaAbility["conditions"];
+	conditions!: JsonValue;
 
 	@BooleanValidation()
-	inverted!: PrismaAbility["inverted"];
+	inverted!: boolean;
 
 	@StringValidationOptional({ nullable: true })
-	reason!: PrismaAbility["reason"];
+	reason!: string | null;
 
 	@BigIntIdValidation()
-	subjectId!: PrismaAbility["subjectId"];
+	subjectId!: bigint;
 
 	@BigIntIdValidation()
-	actionId!: PrismaAbility["actionId"];
+	actionId!: bigint;
 }

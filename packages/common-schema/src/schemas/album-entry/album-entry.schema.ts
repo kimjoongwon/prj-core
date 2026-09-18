@@ -1,4 +1,3 @@
-import type { AlbumEntry as PrismaAlbumEntry } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -10,25 +9,24 @@ import { AbstractSchema } from "../abstract.schema";
 /** AlbumEntry의 DB 필드 타입과 공통 검증입니다. */
 export class AlbumEntrySchema
 	extends AbstractSchema
-	implements PrismaAlbumEntry
 {
-	albumEntryId!: PrismaAlbumEntry["albumEntryId"];
+	albumEntryId!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceId!: PrismaAlbumEntry["spaceId"];
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: PrismaAlbumEntry["createdById"];
+	createdById!: bigint | null;
 
 	@BigIntIdValidation({ description: "앨범 ID" })
-	albumId!: PrismaAlbumEntry["albumId"];
+	albumId!: bigint;
 
 	@BigIntIdValidation({ description: "에셋 ID" })
-	assetId!: PrismaAlbumEntry["assetId"];
+	assetId!: bigint;
 
 	@NumberValidation({ description: "표시 순서", int: true })
-	position!: PrismaAlbumEntry["position"];
+	position!: number;
 
 	@StringValidationOptional({ nullable: true, description: "캡션" })
-	caption!: PrismaAlbumEntry["caption"];
+	caption!: string | null;
 }

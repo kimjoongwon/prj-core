@@ -1,4 +1,4 @@
-import { InquiryCategory } from "@cocrepo/prisma/enums";
+import { InquiryCategory } from "./generated/prisma-enums";
 
 /**
  * 문의 카테고리 라벨

@@ -1,5 +1,4 @@
 import { ReservationStatus } from "@cocrepo/enum";
-import type { Reservation as PrismaReservation } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -14,39 +13,38 @@ import { AbstractSchema } from "../abstract.schema";
 /** Reservation의 DB 필드 타입과 공통 검증입니다. */
 export class ReservationSchema
 	extends AbstractSchema
-	implements PrismaReservation
 {
-	reservationId!: PrismaReservation["reservationId"];
+	reservationId!: string;
 
 	@BigIntIdValidation({ description: "Space ID" })
-	spaceId!: PrismaReservation["spaceId"];
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: PrismaReservation["createdById"];
+	createdById!: bigint | null;
 
 	@BigIntIdValidation({ description: "예약 사용자 ID" })
-	userId!: PrismaReservation["userId"];
+	userId!: bigint;
 
 	@BigIntIdValidation({ description: "타임라인 ID" })
-	timelineId!: PrismaReservation["timelineId"];
+	timelineId!: bigint;
 
 	@BigIntIdValidation({ description: "세션 ID" })
-	sessionId!: PrismaReservation["sessionId"];
+	sessionId!: bigint;
 
 	@BigIntIdValidation({ description: "프로그램 ID" })
-	programId!: PrismaReservation["programId"];
+	programId!: bigint;
 
 	@DateValidation({ description: "예약 발생 회차 시작 시각" })
-	occurrenceStartAt!: PrismaReservation["occurrenceStartAt"];
+	occurrenceStartAt!: Date;
 
 	@EnumValidation(() => ReservationStatus, { description: "예약 상태" })
-	status!: PrismaReservation["status"];
+	status!: ReservationStatus;
 
 	@StringValidationOptional({ description: "예약 메모", nullable: true })
-	memo!: PrismaReservation["memo"];
+	memo!: string | null;
 
 	@StringValidation({ description: "멱등성 키" })
-	idempotencyKey!: PrismaReservation["idempotencyKey"];
+	idempotencyKey!: string;
 
 	@NumberValidationOptional({
 		description: "대기 순번",
@@ -54,14 +52,14 @@ export class ReservationSchema
 		int: true,
 		minimum: 1,
 	})
-	waitlistPosition!: PrismaReservation["waitlistPosition"];
+	waitlistPosition!: number | null;
 
 	@DateValidation({ description: "확정 시각", nullable: true })
-	confirmedAt!: PrismaReservation["confirmedAt"];
+	confirmedAt!: Date | null;
 
 	@DateValidation({ description: "취소 시각", nullable: true })
-	canceledAt!: PrismaReservation["canceledAt"];
+	canceledAt!: Date | null;
 
 	@StringValidationOptional({ description: "취소 사유", nullable: true })
-	cancelReason!: PrismaReservation["cancelReason"];
+	cancelReason!: string | null;
 }

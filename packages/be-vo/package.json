@@ -32,7 +32,6 @@
     "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
-  "dependencies": {},
   "peerDependencies": {
     "bcrypt": "^6.0.0",
     "libphonenumber-js": "^1.11.17"
@@ -47,5 +46,6 @@
     "libphonenumber-js": "^1.11.17",
     "ts-jest": "^29.4.12",
     "typescript": "catalog:"
-  }
+  },
+  "private": true
 }

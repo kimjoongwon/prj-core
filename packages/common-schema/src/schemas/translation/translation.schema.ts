@@ -1,5 +1,4 @@
 import { LanguageCode } from "@cocrepo/enum";
-import type { Translation as PrismaTranslation } from "@cocrepo/prisma";
 import {
 	BooleanValidation,
 	EnumValidation,
@@ -15,28 +14,27 @@ export class TranslationSchema
 		"createdAt",
 		"updatedAt",
 	] as const)
-	implements PrismaTranslation
 {
-	translationId!: PrismaTranslation["translationId"];
+	translationId!: string;
 
-	declare id: PrismaTranslation["id"];
+	declare id: bigint;
 
 	@EnumValidation(() => LanguageCode)
-	languageCode!: PrismaTranslation["languageCode"];
+	languageCode!: LanguageCode;
 
 	@StringValidation()
-	key!: PrismaTranslation["key"];
+	key!: string;
 
 	@StringValidation()
-	text!: PrismaTranslation["text"];
+	text!: string;
 
 	@StringValidation()
-	category!: PrismaTranslation["category"];
+	category!: string;
 
 	@BooleanValidation()
-	isTranslated!: PrismaTranslation["isTranslated"];
+	isTranslated!: boolean;
 
-	declare createdAt: PrismaTranslation["createdAt"];
+	declare createdAt: Date;
 
-	declare updatedAt: PrismaTranslation["updatedAt"];
+	declare updatedAt: Date | null;
 }

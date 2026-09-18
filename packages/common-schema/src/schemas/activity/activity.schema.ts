@@ -1,4 +1,3 @@
-import type { Activity as PrismaActivity } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	NumberValidation,
@@ -7,24 +6,24 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Activity의 DB 필드 타입과 공통 검증입니다. */
-export class ActivitySchema extends AbstractSchema implements PrismaActivity {
-	activityId!: PrismaActivity["activityId"];
+export class ActivitySchema extends AbstractSchema {
+	activityId!: string;
 
 	@BigIntIdValidation()
-	routineId!: PrismaActivity["routineId"];
+	routineId!: bigint;
 
 	@BigIntIdValidation()
-	taskId!: PrismaActivity["taskId"];
+	taskId!: bigint;
 
 	@NumberValidation()
-	order!: PrismaActivity["order"];
+	order!: number;
 
 	@NumberValidation()
-	repetitions!: PrismaActivity["repetitions"];
+	repetitions!: number;
 
 	@NumberValidation()
-	restTime!: PrismaActivity["restTime"];
+	restTime!: number;
 
 	@StringValidationOptional({ nullable: true })
-	notes!: PrismaActivity["notes"];
+	notes!: string | null;
 }

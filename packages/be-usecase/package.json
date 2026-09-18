@@ -70,5 +70,6 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     }
-  }
+  },
+  "private": true
 }

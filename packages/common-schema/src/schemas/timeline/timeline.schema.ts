@@ -1,4 +1,3 @@
-import type { Timeline as PrismaTimeline } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -8,18 +7,18 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Timeline의 DB 필드 타입과 공통 검증입니다. */
-export class TimelineSchema extends AbstractSchema implements PrismaTimeline {
-	timelineId!: PrismaTimeline["timelineId"];
+export class TimelineSchema extends AbstractSchema {
+	timelineId!: string;
 
 	@BigIntIdValidation()
-	spaceId!: PrismaTimeline["spaceId"];
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true })
-	createdById!: PrismaTimeline["createdById"];
+	createdById!: bigint | null;
 
 	@StringValidation()
-	name!: PrismaTimeline["name"];
+	name!: string;
 
 	@StringValidationOptional({ nullable: true })
-	description!: PrismaTimeline["description"];
+	description!: string | null;
 }

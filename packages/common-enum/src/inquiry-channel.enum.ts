@@ -1,4 +1,4 @@
-import { InquiryChannel } from "@cocrepo/prisma/enums";
+import { InquiryChannel } from "./generated/prisma-enums";
 
 /**
  * 문의 접수 채널 라벨

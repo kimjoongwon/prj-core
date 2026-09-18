@@ -1,5 +1,4 @@
 import { TenantAccessRequestStatus } from "@cocrepo/enum";
-import type { TenantAccessRequest as PrismaTenantAccessRequest } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -12,43 +11,42 @@ import { AbstractSchema } from "../abstract.schema";
 /** TenantAccessRequest의 DB 필드 타입과 공통 검증입니다. */
 export class TenantAccessRequestSchema
 	extends AbstractSchema
-	implements PrismaTenantAccessRequest
 {
-	tenantAccessRequestId!: PrismaTenantAccessRequest["tenantAccessRequestId"];
+	tenantAccessRequestId!: string;
 
 	@BigIntIdValidation({ description: "신청자 ID" })
-	requesterId!: PrismaTenantAccessRequest["requesterId"];
+	requesterId!: bigint;
 
 	@BigIntIdValidation({ description: "신청 대상 Space ID" })
-	spaceId!: PrismaTenantAccessRequest["spaceId"];
+	spaceId!: bigint;
 
 	@BigIntIdValidation({ description: "희망 Role ID" })
-	requestedRoleId!: PrismaTenantAccessRequest["requestedRoleId"];
+	requestedRoleId!: bigint;
 
 	@BigIntIdValidationOptional({
 		description: "신청 시점 기존 Role ID",
 		nullable: true,
 	})
-	previousRoleId!: PrismaTenantAccessRequest["previousRoleId"];
+	previousRoleId!: bigint | null;
 
 	@StringValidationOptional({ description: "신청 사유", nullable: true })
-	reason!: PrismaTenantAccessRequest["reason"];
+	reason!: string | null;
 
 	@EnumValidation(() => TenantAccessRequestStatus, { description: "신청 상태" })
-	status!: PrismaTenantAccessRequest["status"];
+	status!: TenantAccessRequestStatus;
 
 	@BigIntIdValidationOptional({ description: "검토자 ID", nullable: true })
-	reviewerId!: PrismaTenantAccessRequest["reviewerId"];
+	reviewerId!: bigint | null;
 
 	@StringValidationOptional({ description: "검토 코멘트", nullable: true })
-	reviewComment!: PrismaTenantAccessRequest["reviewComment"];
+	reviewComment!: string | null;
 
 	@DateValidation({ description: "검토 시각", nullable: true })
-	reviewedAt!: PrismaTenantAccessRequest["reviewedAt"];
+	reviewedAt!: Date | null;
 
 	@BigIntIdValidationOptional({
 		description: "승인 적용 Tenant ID",
 		nullable: true,
 	})
-	appliedTenantId!: PrismaTenantAccessRequest["appliedTenantId"];
+	appliedTenantId!: bigint | null;
 }

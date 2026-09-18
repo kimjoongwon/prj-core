@@ -1,7 +1,7 @@
 {
   "name": "@cocrepo/decorator",
   "version": "0.1.11",
-  "private": false,
+  "private": true,
   "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"

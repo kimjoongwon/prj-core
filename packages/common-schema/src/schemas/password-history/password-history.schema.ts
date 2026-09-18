@@ -1,4 +1,3 @@
-import type { PasswordHistory as PrismaPasswordHistory } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	DateValidation,
@@ -9,18 +8,17 @@ import { AbstractSchema } from "../abstract.schema";
 /** PasswordHistory의 DB 필드 타입과 공통 검증입니다. */
 export class PasswordHistorySchema
 	extends PickSchemaType(AbstractSchema, ["id", "createdAt"] as const)
-	implements PrismaPasswordHistory
 {
-	passwordHistoryId!: PrismaPasswordHistory["passwordHistoryId"];
+	passwordHistoryId!: string;
 
 	@BigIntIdValidation({ description: "ID" })
-	declare id: PrismaPasswordHistory["id"];
+	declare id: bigint;
 
 	@DateValidation({ description: "생성일" })
-	declare createdAt: PrismaPasswordHistory["createdAt"];
+	declare createdAt: Date;
 
 	@BigIntIdValidation({ description: "사용자 ID" })
-	userId!: PrismaPasswordHistory["userId"];
+	userId!: bigint;
 
-	passwordHash!: PrismaPasswordHistory["passwordHash"];
+	passwordHash!: string;
 }

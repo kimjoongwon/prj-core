@@ -4,7 +4,7 @@ export {
 	SpaceCategoryName,
 	SpaceGroupName,
 } from "@cocrepo/constant";
-export * from "@cocrepo/prisma/enums";
+export * from "./generated/prisma-enums";
 export * from "./asset-kind.enum";
 export * from "./asset-status.enum";
 export * from "./category-names.enum";

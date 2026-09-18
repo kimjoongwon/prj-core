@@ -109,6 +109,10 @@ function releaseSingle(pkgName) {
   console.log("=".repeat(60));
 
   try {
+    execSync(`node scripts/public-packages.mjs assert-name ${pkgName}`, {
+      stdio: "inherit",
+    });
+
     // 1. 버전 업데이트
     console.log("\n1️⃣  버전 업데이트");
     console.log("-".repeat(60));

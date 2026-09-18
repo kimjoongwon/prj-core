@@ -1,5 +1,4 @@
 import { EmailVerificationStatus } from "@cocrepo/enum";
-import type { EmailVerification as PrismaEmailVerification } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -15,55 +14,54 @@ import { AbstractSchema } from "../abstract.schema";
 /** EmailVerification의 DB 필드 타입과 공통 검증입니다. */
 export class EmailVerificationSchema
 	extends AbstractSchema
-	implements PrismaEmailVerification
 {
-	emailVerificationId!: PrismaEmailVerification["emailVerificationId"];
+	emailVerificationId!: string;
 
 	@StringValidation({ description: "이메일" })
-	email!: PrismaEmailVerification["email"];
+	email!: string;
 
 	@StringValidation({ description: "이름" })
-	name!: PrismaEmailVerification["name"];
+	name!: string;
 
-	nickname!: PrismaEmailVerification["nickname"];
+	nickname!: string;
 
 	@StringValidation({ description: "전화번호" })
-	phone!: PrismaEmailVerification["phone"];
+	phone!: string;
 
 	@StringValidation({ description: "주소" })
-	address!: PrismaEmailVerification["address"];
+	address!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceId!: PrismaEmailVerification["spaceId"];
+	spaceId!: bigint;
 
-	passwordHash!: PrismaEmailVerification["passwordHash"];
+	passwordHash!: string;
 
-	tokenHash!: PrismaEmailVerification["tokenHash"];
+	tokenHash!: string;
 
 	@EnumValidation(() => EmailVerificationStatus, { description: "상태" })
-	status!: PrismaEmailVerification["status"];
+	status!: EmailVerificationStatus;
 
 	@DateValidation({ description: "만료 시각" })
-	expiresAt!: PrismaEmailVerification["expiresAt"];
+	expiresAt!: Date;
 
 	@DateValidationOptional({ nullable: true, description: "인증 시각" })
-	verifiedAt!: PrismaEmailVerification["verifiedAt"];
+	verifiedAt!: Date | null;
 
 	@DateValidationOptional({ nullable: true, description: "마지막 발송 시각" })
-	lastSentAt!: PrismaEmailVerification["lastSentAt"];
+	lastSentAt!: Date | null;
 
 	@NumberValidation({ description: "발송 횟수", min: 0 })
-	sendCount!: PrismaEmailVerification["sendCount"];
+	sendCount!: number;
 
 	@StringValidationOptional({ nullable: true, description: "마지막 발송 상태" })
-	lastSendStatus!: PrismaEmailVerification["lastSendStatus"];
+	lastSendStatus!: string | null;
 
 	@StringValidationOptional({ nullable: true, description: "마지막 발송 오류" })
-	lastSendError!: PrismaEmailVerification["lastSendError"];
+	lastSendError!: string | null;
 
 	@BigIntIdValidationOptional({
 		nullable: true,
 		description: "인증 완료 사용자 ID",
 	})
-	verifiedUserId!: PrismaEmailVerification["verifiedUserId"];
+	verifiedUserId!: bigint | null;
 }

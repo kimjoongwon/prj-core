@@ -1,4 +1,3 @@
-import type { FitnessCenter as PrismaFitnessCenter } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	StringValidation,
@@ -10,31 +9,30 @@ import { AbstractSchema } from "../abstract.schema";
 /** FitnessCenter의 DB 필드 타입과 공통 검증입니다. */
 export class FitnessCenterSchema
 	extends AbstractSchema
-	implements PrismaFitnessCenter
 {
-	fitnessCenterId!: PrismaFitnessCenter["fitnessCenterId"];
+	fitnessCenterId!: string;
 
 	@StringValidation()
-	name!: PrismaFitnessCenter["name"];
+	name!: string;
 
 	@StringValidationOptional({ nullable: true })
-	label!: PrismaFitnessCenter["label"];
+	label!: string | null;
 
 	@StringValidation()
-	address!: PrismaFitnessCenter["address"];
+	address!: string;
 
 	@StringValidation()
-	phone!: PrismaFitnessCenter["phone"];
+	phone!: string;
 
 	@StringValidation()
-	email!: PrismaFitnessCenter["email"];
+	email!: string;
 
 	@BigIntIdValidation()
-	companyId!: PrismaFitnessCenter["companyId"];
+	companyId!: bigint;
 
 	@BigIntIdValidation()
-	spaceId!: PrismaFitnessCenter["spaceId"];
+	spaceId!: bigint;
 
 	@UUIDValidationOptional({ nullable: true })
-	imageFileId!: PrismaFitnessCenter["imageFileId"];
+	imageFileId!: string | null;
 }

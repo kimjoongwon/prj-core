@@ -25,14 +25,14 @@
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
-    "@cocrepo/prisma": "workspace:*",
     "@cocrepo/decorator": "workspace:*",
     "@cocrepo/entity": "workspace:*",
     "@cocrepo/enum": "workspace:*",
-		"@cocrepo/schema": "workspace:*",
-		"@cocrepo/toolkit": "workspace:*",
-		"@cocrepo/type": "workspace:*",
-		"@nestjs/mapped-types": "^2.1.0"
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/schema": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "@nestjs/mapped-types": "^2.1.0"
   },
   "peerDependencies": {
     "@nestjs/common": "^11.2.3",
@@ -44,9 +44,9 @@
     "@cocrepo/tsconfig": "workspace:*",
     "@nestjs/common": "^11.2.3",
     "@nestjs/swagger": "^11.4.7",
+    "@types/node": "catalog:",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
-    "@types/node": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
@@ -56,5 +56,6 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     }
-  }
+  },
+  "private": true
 }

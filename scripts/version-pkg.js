@@ -13,6 +13,15 @@ if (!packageName) {
   process.exit(1);
 }
 
+try {
+  execSync(`node scripts/public-packages.mjs assert-name ${packageName}`, {
+    cwd: path.join(__dirname, ".."),
+    stdio: "inherit",
+  });
+} catch (_error) {
+  process.exit(1);
+}
+
 // 유효한 버전 타입 확인
 const validVersionTypes = ["patch", "minor", "major"];
 if (!validVersionTypes.includes(versionType)) {

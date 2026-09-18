@@ -1,4 +1,3 @@
-import type { Profile as PrismaProfile } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	StringValidation,
@@ -7,21 +6,21 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Profile의 DB 필드 타입과 공통 검증입니다. */
-export class ProfileSchema extends AbstractSchema implements PrismaProfile {
-	profileId!: PrismaProfile["profileId"];
+export class ProfileSchema extends AbstractSchema {
+	profileId!: string;
 
 	@StringValidation()
-	name!: PrismaProfile["name"];
+	name!: string;
 
 	@StringValidation()
-	nickname!: PrismaProfile["nickname"];
+	nickname!: string;
 
 	@StringValidation()
-	address!: PrismaProfile["address"];
+	address!: string;
 
 	@BigIntIdValidation()
-	userId!: PrismaProfile["userId"];
+	userId!: bigint;
 
 	@UUIDValidation({ nullable: true })
-	avatarFileId!: PrismaProfile["avatarFileId"];
+	avatarFileId!: string | null;
 }

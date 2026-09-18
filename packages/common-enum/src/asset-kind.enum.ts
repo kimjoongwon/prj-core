@@ -1,4 +1,4 @@
-import type { AssetKind } from "@cocrepo/prisma/enums";
+import type { AssetKind } from "./generated/prisma-enums";
 
 export const AssetKindLabel: Record<AssetKind, string> = {
 	IMAGE: "이미지",

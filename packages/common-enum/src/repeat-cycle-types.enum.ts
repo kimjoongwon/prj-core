@@ -1,4 +1,4 @@
-import type { RepeatCycleTypes } from "@cocrepo/prisma/enums";
+import type { RepeatCycleTypes } from "./generated/prisma-enums";
 
 export const RepeatCycleTypesLabel: Record<RepeatCycleTypes, string> = {
 	WEEKLY: "Weekly",

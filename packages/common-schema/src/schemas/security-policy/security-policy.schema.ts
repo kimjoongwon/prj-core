@@ -1,4 +1,3 @@
-import type { SecurityPolicy as PrismaSecurityPolicy } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BooleanValidation,
@@ -17,67 +16,66 @@ export class SecurityPolicySchema
 		"createdAt",
 		"updatedAt",
 	] as const)
-	implements PrismaSecurityPolicy
 {
-	securityPolicyId!: PrismaSecurityPolicy["securityPolicyId"];
+	securityPolicyId!: string;
 
 	@BigIntIdValidation({ description: "ID" })
-	declare id: PrismaSecurityPolicy["id"];
+	declare id: bigint;
 
 	@DateValidation({ description: "생성일" })
-	declare createdAt: PrismaSecurityPolicy["createdAt"];
+	declare createdAt: Date;
 
 	@DateValidationOptional({ nullable: true, description: "수정일" })
-	declare updatedAt: PrismaSecurityPolicy["updatedAt"];
+	declare updatedAt: Date | null;
 
 	@StringValidation({ description: "정책 키" })
-	key!: PrismaSecurityPolicy["key"];
+	key!: string;
 
 	@NumberValidation({ description: "최소 비밀번호 길이", min: 4, max: 128 })
-	passwordMinLength!: PrismaSecurityPolicy["passwordMinLength"];
+	passwordMinLength!: number;
 
 	@BooleanValidation({ description: "대문자 필수" })
-	passwordRequireUppercase!: PrismaSecurityPolicy["passwordRequireUppercase"];
+	passwordRequireUppercase!: boolean;
 
 	@BooleanValidation({ description: "소문자 필수" })
-	passwordRequireLowercase!: PrismaSecurityPolicy["passwordRequireLowercase"];
+	passwordRequireLowercase!: boolean;
 
 	@BooleanValidation({ description: "숫자 필수" })
-	passwordRequireNumber!: PrismaSecurityPolicy["passwordRequireNumber"];
+	passwordRequireNumber!: boolean;
 
 	@BooleanValidation({ description: "특수문자 필수" })
-	passwordRequireSpecial!: PrismaSecurityPolicy["passwordRequireSpecial"];
+	passwordRequireSpecial!: boolean;
 
 	@NumberValidation({ description: "비밀번호 만료 일수 (0=무제한)", min: 0 })
-	passwordExpirationDays!: PrismaSecurityPolicy["passwordExpirationDays"];
+	passwordExpirationDays!: number;
 
 	@NumberValidation({ description: "비밀번호 재사용 제한 횟수", min: 0 })
-	passwordReuseLimit!: PrismaSecurityPolicy["passwordReuseLimit"];
+	passwordReuseLimit!: number;
 
 	@NumberValidation({ description: "일시 잠금 임계값", min: 1 })
-	temporaryLockThreshold!: PrismaSecurityPolicy["temporaryLockThreshold"];
+	temporaryLockThreshold!: number;
 
 	@NumberValidation({ description: "일시 잠금 시간 (분)", min: 1 })
-	temporaryLockDurationMin!: PrismaSecurityPolicy["temporaryLockDurationMin"];
+	temporaryLockDurationMin!: number;
 
 	@NumberValidation({ description: "영구 잠금 임계값", min: 1 })
-	permanentLockThreshold!: PrismaSecurityPolicy["permanentLockThreshold"];
+	permanentLockThreshold!: number;
 
 	@NumberValidation({ description: "Access Token TTL (초)", min: 60 })
-	accessTokenTtlSec!: PrismaSecurityPolicy["accessTokenTtlSec"];
+	accessTokenTtlSec!: number;
 
 	@NumberValidation({ description: "Refresh Token TTL (초)", min: 60 })
-	refreshTokenTtlSec!: PrismaSecurityPolicy["refreshTokenTtlSec"];
+	refreshTokenTtlSec!: number;
 
 	@NumberValidation({ description: "세션 TTL (초)", min: 60 })
-	sessionTtlSec!: PrismaSecurityPolicy["sessionTtlSec"];
+	sessionTtlSec!: number;
 
 	@BooleanValidation({ description: "IP 화이트리스트 활성화" })
-	ipWhitelistEnabled!: PrismaSecurityPolicy["ipWhitelistEnabled"];
+	ipWhitelistEnabled!: boolean;
 
 	@BooleanValidation({ description: "이메일 도메인 화이트리스트 활성화" })
-	emailDomainWhitelistEnabled!: PrismaSecurityPolicy["emailDomainWhitelistEnabled"];
+	emailDomainWhitelistEnabled!: boolean;
 
 	@BooleanValidation({ description: "CORS Origin 화이트리스트 활성화" })
-	corsOriginWhitelistEnabled!: PrismaSecurityPolicy["corsOriginWhitelistEnabled"];
+	corsOriginWhitelistEnabled!: boolean;
 }

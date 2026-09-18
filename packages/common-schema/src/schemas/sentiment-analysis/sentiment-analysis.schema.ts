@@ -1,5 +1,5 @@
+import type { JsonValue } from "@cocrepo/type";
 import { SentimentType } from "@cocrepo/enum";
-import type { SentimentAnalysis as PrismaSentimentAnalysis } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -17,38 +17,37 @@ export class SentimentAnalysisSchema
 		"createdAt",
 		"updatedAt",
 	] as const)
-	implements PrismaSentimentAnalysis
 {
-	sentimentAnalysisId!: PrismaSentimentAnalysis["sentimentAnalysisId"];
+	sentimentAnalysisId!: string;
 
-	declare id: PrismaSentimentAnalysis["id"];
+	declare id: bigint;
 
-	declare createdAt: PrismaSentimentAnalysis["createdAt"];
+	declare createdAt: Date;
 
-	declare updatedAt: PrismaSentimentAnalysis["updatedAt"];
+	declare updatedAt: Date | null;
 
 	@BigIntIdValidation({ description: "소속 문의 ID" })
-	inquiryId!: PrismaSentimentAnalysis["inquiryId"];
+	inquiryId!: bigint;
 
 	@BigIntIdValidationOptional({ description: "분석 대상 메시지 ID" })
-	messageId!: PrismaSentimentAnalysis["messageId"];
+	messageId!: bigint | null;
 
 	@EnumValidation(() => SentimentType, { description: "감정 유형" })
-	sentiment!: PrismaSentimentAnalysis["sentiment"];
+	sentiment!: SentimentType;
 
 	@NumberValidation({ description: "감정 점수 (-1.0 ~ 1.0)" })
-	score!: PrismaSentimentAnalysis["score"];
+	score!: number;
 
 	@NumberValidation({ description: "분석 신뢰도 (0.0 ~ 1.0)" })
-	confidence!: PrismaSentimentAnalysis["confidence"];
+	confidence!: number;
 
-	emotions!: PrismaSentimentAnalysis["emotions"];
+	emotions!: JsonValue;
 
-	keywords!: PrismaSentimentAnalysis["keywords"];
+	keywords!: JsonValue;
 
 	@NumberValidation({ nullable: true, description: "긴급도 점수 (0.0 ~ 1.0)" })
-	urgency!: PrismaSentimentAnalysis["urgency"];
+	urgency!: number | null;
 
 	@DateValidation({ description: "분석 일시" })
-	analyzedAt!: PrismaSentimentAnalysis["analyzedAt"];
+	analyzedAt!: Date;
 }

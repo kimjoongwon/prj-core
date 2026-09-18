@@ -1,4 +1,3 @@
-import type { Exercise as PrismaExercise } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	NumberValidation,
@@ -9,27 +8,27 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Exercise의 DB 필드 타입과 공통 검증입니다. */
-export class ExerciseSchema extends AbstractSchema implements PrismaExercise {
-	exerciseId!: PrismaExercise["exerciseId"];
+export class ExerciseSchema extends AbstractSchema {
+	exerciseId!: string;
 
 	@NumberValidation()
-	duration!: PrismaExercise["duration"];
+	duration!: number;
 
 	@NumberValidation()
-	count!: PrismaExercise["count"];
+	count!: number;
 
 	@BigIntIdValidation()
-	taskId!: PrismaExercise["taskId"];
+	taskId!: bigint;
 
 	@StringValidationOptional({ nullable: true })
-	description!: PrismaExercise["description"];
+	description!: string | null;
 
 	@UUIDValidationOptional({ nullable: true })
-	imageFileId!: PrismaExercise["imageFileId"];
+	imageFileId!: string | null;
 
 	@UUIDValidationOptional({ nullable: true })
-	videoFileId!: PrismaExercise["videoFileId"];
+	videoFileId!: string | null;
 
 	@StringValidation()
-	name!: PrismaExercise["name"];
+	name!: string;
 }

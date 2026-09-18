@@ -1,5 +1,4 @@
 import { InquiryParticipantRole } from "@cocrepo/enum";
-import type { InquiryParticipant as PrismaInquiryParticipant } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -14,42 +13,41 @@ import { AbstractSchema } from "../abstract.schema";
 /** InquiryParticipant의 DB 필드 타입과 공통 검증입니다. */
 export class InquiryParticipantSchema
 	extends PickSchemaType(AbstractSchema, ["id"] as const)
-	implements PrismaInquiryParticipant
 {
-	inquiryParticipantId!: PrismaInquiryParticipant["inquiryParticipantId"];
+	inquiryParticipantId!: string;
 
-	declare id: PrismaInquiryParticipant["id"];
+	declare id: bigint;
 
 	@DateValidation({ description: "참여 일시" })
-	joinedAt!: PrismaInquiryParticipant["joinedAt"];
+	joinedAt!: Date;
 
 	@DateValidation({ nullable: true, description: "나간 일시" })
-	leftAt!: PrismaInquiryParticipant["leftAt"];
+	leftAt!: Date | null;
 
 	@BigIntIdValidation({ description: "소속 문의 ID" })
-	inquiryId!: PrismaInquiryParticipant["inquiryId"];
+	inquiryId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "소속 스레드 ID" })
-	threadId!: PrismaInquiryParticipant["threadId"];
+	threadId!: bigint | null;
 
 	@BigIntIdValidation({ description: "참여자 ID" })
-	userId!: PrismaInquiryParticipant["userId"];
+	userId!: bigint;
 
 	@EnumValidation(() => InquiryParticipantRole, { description: "참여자 역할" })
-	role!: PrismaInquiryParticipant["role"];
+	role!: InquiryParticipantRole;
 
 	@BooleanValidation({ description: "온라인 여부" })
-	isOnline!: PrismaInquiryParticipant["isOnline"];
+	isOnline!: boolean;
 
 	@BooleanValidation({ description: "타이핑 중 여부" })
-	isTyping!: PrismaInquiryParticipant["isTyping"];
+	isTyping!: boolean;
 
 	@DateValidation({ nullable: true, description: "마지막 접속 시간" })
-	lastSeenAt!: PrismaInquiryParticipant["lastSeenAt"];
+	lastSeenAt!: Date | null;
 
 	@DateValidation({ nullable: true, description: "마지막 읽은 시간" })
-	lastReadAt!: PrismaInquiryParticipant["lastReadAt"];
+	lastReadAt!: Date | null;
 
 	@NumberValidation({ description: "읽지 않은 메시지 수" })
-	unreadCount!: PrismaInquiryParticipant["unreadCount"];
+	unreadCount!: number;
 }

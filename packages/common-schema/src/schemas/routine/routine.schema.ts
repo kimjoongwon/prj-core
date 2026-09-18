@@ -1,4 +1,3 @@
-import type { Routine as PrismaRoutine } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -7,18 +6,18 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Routine의 DB 필드 타입과 공통 검증입니다. */
-export class RoutineSchema extends AbstractSchema implements PrismaRoutine {
-	routineId!: PrismaRoutine["routineId"];
+export class RoutineSchema extends AbstractSchema {
+	routineId!: string;
 
 	@BigIntIdValidation()
-	spaceId!: PrismaRoutine["spaceId"];
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true })
-	createdById!: PrismaRoutine["createdById"];
+	createdById!: bigint | null;
 
 	@StringValidation()
-	name!: PrismaRoutine["name"];
+	name!: string;
 
 	@StringValidation()
-	label!: PrismaRoutine["label"];
+	label!: string;
 }

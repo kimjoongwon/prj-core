@@ -1,4 +1,4 @@
-import { InquiryPriority } from "@cocrepo/prisma/enums";
+import { InquiryPriority } from "./generated/prisma-enums";
 
 /**
  * 문의 우선순위 라벨

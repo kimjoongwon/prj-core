@@ -1,5 +1,4 @@
 import { DerivativeKind } from "@cocrepo/enum";
-import type { Derivative as PrismaDerivative } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -13,56 +12,55 @@ import { AbstractSchema } from "../abstract.schema";
 /** Derivative의 DB 필드 타입과 공통 검증입니다. */
 export class DerivativeSchema
 	extends AbstractSchema
-	implements PrismaDerivative
 {
-	derivativeId!: PrismaDerivative["derivativeId"];
+	derivativeId!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceId!: PrismaDerivative["spaceId"];
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: PrismaDerivative["createdById"];
+	createdById!: bigint | null;
 
 	@BigIntIdValidation({ description: "원본 에셋 ID" })
-	assetId!: PrismaDerivative["assetId"];
+	assetId!: bigint;
 
 	@EnumValidation(() => DerivativeKind, {
 		description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",
 	})
-	kind!: PrismaDerivative["kind"];
+	kind!: DerivativeKind;
 
 	@StringValidation({
 		description: "프로필명 (예: thumbnail-256, preview-1080p)",
 	})
-	profile!: PrismaDerivative["profile"];
+	profile!: string;
 
 	@StringValidation({ description: "스토리지 저장 키" })
-	storageKey!: PrismaDerivative["storageKey"];
+	storageKey!: string;
 
 	@StringValidation({ description: "MIME 타입" })
-	mimeType!: PrismaDerivative["mimeType"];
+	mimeType!: string;
 
 	@NumberValidation({ description: "파일 크기 (바이트)", int: true })
-	sizeBytes!: PrismaDerivative["sizeBytes"];
+	sizeBytes!: bigint;
 
 	@NumberValidationOptional({
 		nullable: true,
 		description: "너비 (이미지/비디오)",
 		int: true,
 	})
-	width!: PrismaDerivative["width"];
+	width!: number | null;
 
 	@NumberValidationOptional({
 		nullable: true,
 		description: "높이 (이미지/비디오)",
 		int: true,
 	})
-	height!: PrismaDerivative["height"];
+	height!: number | null;
 
 	@NumberValidationOptional({
 		nullable: true,
 		description: "재생 시간 (밀리초, 비디오)",
 		int: true,
 	})
-	durationMs!: PrismaDerivative["durationMs"];
+	durationMs!: number | null;
 }

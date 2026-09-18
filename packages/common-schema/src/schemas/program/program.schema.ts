@@ -1,4 +1,3 @@
-import type { Program as PrismaProgram } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	NumberValidation,
@@ -8,30 +7,30 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Program의 DB 필드 타입과 공통 검증입니다. */
-export class ProgramSchema extends AbstractSchema implements PrismaProgram {
-	programId!: PrismaProgram["programId"];
+export class ProgramSchema extends AbstractSchema {
+	programId!: string;
 
 	@BigIntIdValidation()
-	routineId!: PrismaProgram["routineId"];
+	routineId!: bigint;
 
 	@BigIntIdValidation()
-	sessionId!: PrismaProgram["sessionId"];
+	sessionId!: bigint;
 
 	@BigIntIdValidation()
-	instructorId!: PrismaProgram["instructorId"];
+	instructorId!: bigint;
 
 	@NumberValidation()
-	capacity!: PrismaProgram["capacity"];
+	capacity!: number;
 
 	@StringValidation()
-	name!: PrismaProgram["name"];
+	name!: string;
 
 	@StringValidationOptional({ nullable: true })
-	level!: PrismaProgram["level"];
+	level!: string | null;
 
 	@StringValidationOptional({ nullable: true })
-	routineNameSnapshot!: PrismaProgram["routineNameSnapshot"];
+	routineNameSnapshot!: string | null;
 
 	@StringValidationOptional({ nullable: true })
-	routineLabelSnapshot!: PrismaProgram["routineLabelSnapshot"];
+	routineLabelSnapshot!: string | null;
 }

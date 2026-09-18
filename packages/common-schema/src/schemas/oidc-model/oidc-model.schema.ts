@@ -1,4 +1,4 @@
-import type { OidcModel as PrismaOidcModel } from "@cocrepo/prisma";
+import type { JsonValue } from "@cocrepo/type";
 import {
 	DateValidationOptional,
 	StringValidation,
@@ -14,33 +14,32 @@ export class OidcModelSchema
 		"createdAt",
 		"updatedAt",
 	] as const)
-	implements PrismaOidcModel
 {
-	oidcModelId!: PrismaOidcModel["oidcModelId"];
+	oidcModelId!: string;
 
-	declare id: PrismaOidcModel["id"];
+	declare id: bigint;
 
-	declare createdAt: PrismaOidcModel["createdAt"];
+	declare createdAt: Date;
 
-	declare updatedAt: PrismaOidcModel["updatedAt"];
+	declare updatedAt: Date | null;
 
 	@StringValidation({ description: "모델 키" })
-	key!: PrismaOidcModel["key"];
+	key!: string;
 
 	@StringValidation({ description: "모델 유형" })
-	modelType!: PrismaOidcModel["modelType"];
+	modelType!: string;
 
-	payload!: PrismaOidcModel["payload"];
+	payload!: JsonValue;
 
 	@DateValidationOptional({ nullable: true, description: "만료 시각" })
-	expiresAt!: PrismaOidcModel["expiresAt"];
+	expiresAt!: Date | null;
 
 	@StringValidationOptional({ nullable: true, description: "사용자 코드" })
-	userCode!: PrismaOidcModel["userCode"];
+	userCode!: string | null;
 
 	@StringValidationOptional({ nullable: true, description: "Grant ID" })
-	grantId!: PrismaOidcModel["grantId"];
+	grantId!: string | null;
 
 	@StringValidationOptional({ nullable: true, description: "UID" })
-	uid!: PrismaOidcModel["uid"];
+	uid!: string | null;
 }

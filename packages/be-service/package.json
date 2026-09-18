@@ -30,9 +30,9 @@
     "@cocrepo/context": "workspace:*",
     "@cocrepo/decorator": "workspace:*",
     "@cocrepo/entity": "workspace:*",
-		"@cocrepo/enum": "workspace:*",
-		"@cocrepo/input": "workspace:*",
-		"@cocrepo/prisma": "workspace:*",
+    "@cocrepo/enum": "workspace:*",
+    "@cocrepo/input": "workspace:*",
+    "@cocrepo/prisma": "workspace:*",
     "@cocrepo/repository": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",
@@ -57,8 +57,8 @@
     "pg": "^8.16.0"
   },
   "devDependencies": {
-    "@cocrepo/tsconfig": "workspace:*",
     "@aws-sdk/client-s3": "^3.1131.0",
+    "@cocrepo/tsconfig": "workspace:*",
     "@nestjs/common": "^11.2.3",
     "@nestjs/config": "^4.0.2",
     "@nestjs/jwt": "^11.0.0",
@@ -89,5 +89,6 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     }
-  }
+  },
+  "private": true
 }

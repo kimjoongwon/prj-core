@@ -4,7 +4,6 @@ import {
 	ServiceDocumentPlatform,
 	ServiceDocumentStatus,
 } from "@cocrepo/enum";
-import type { ServiceDocument as PrismaServiceDocument } from "@cocrepo/prisma";
 import {
 	BooleanValidation,
 	DateValidationOptional,
@@ -18,46 +17,45 @@ import { AbstractSchema } from "../abstract.schema";
 /** ServiceDocument의 DB 필드 타입과 공통 검증입니다. */
 export class ServiceDocumentSchema
 	extends AbstractSchema
-	implements PrismaServiceDocument
 {
-	serviceDocumentId!: PrismaServiceDocument["serviceDocumentId"];
+	serviceDocumentId!: string;
 
 	@EnumValidation(() => ServiceDocumentKind, { description: "문서 종류" })
-	kind!: PrismaServiceDocument["kind"];
+	kind!: ServiceDocumentKind;
 
 	@EnumValidation(() => ServiceDocumentPlatform, { description: "노출 플랫폼" })
-	platform!: PrismaServiceDocument["platform"];
+	platform!: ServiceDocumentPlatform;
 
 	@StringValidation({ description: "로케일" })
-	locale!: PrismaServiceDocument["locale"];
+	locale!: string;
 
 	@StringValidation({ description: "제목" })
-	title!: PrismaServiceDocument["title"];
+	title!: string;
 
 	@StringValidationOptional({ nullable: true, description: "요약" })
-	summary!: PrismaServiceDocument["summary"];
+	summary!: string | null;
 
 	@StringValidation({ description: "본문" })
-	content!: PrismaServiceDocument["content"];
+	content!: string;
 
 	@EnumValidation(() => ServiceDocumentFormat, { description: "본문 형식" })
-	format!: PrismaServiceDocument["format"];
+	format!: ServiceDocumentFormat;
 
 	@StringValidation({ description: "버전" })
-	version!: PrismaServiceDocument["version"];
+	version!: string;
 
 	@EnumValidation(() => ServiceDocumentStatus, { description: "상태" })
-	status!: PrismaServiceDocument["status"];
+	status!: ServiceDocumentStatus;
 
 	@BooleanValidation({ description: "필수 동의 여부" })
-	isRequired!: PrismaServiceDocument["isRequired"];
+	isRequired!: boolean;
 
 	@NumberValidation({ int: true, description: "정렬 순서" })
-	displayOrder!: PrismaServiceDocument["displayOrder"];
+	displayOrder!: number;
 
 	@DateValidationOptional({ nullable: true, description: "효력 시작 시각" })
-	effectiveAt!: PrismaServiceDocument["effectiveAt"];
+	effectiveAt!: Date | null;
 
 	@DateValidationOptional({ nullable: true, description: "게시 시각" })
-	publishedAt!: PrismaServiceDocument["publishedAt"];
+	publishedAt!: Date | null;
 }

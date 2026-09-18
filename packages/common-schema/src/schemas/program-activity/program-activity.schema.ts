@@ -1,4 +1,3 @@
-import type { ProgramActivity as PrismaProgramActivity } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	NumberValidation,
@@ -11,43 +10,42 @@ import { AbstractSchema } from "../abstract.schema";
 /** ProgramActivity의 DB 필드 타입과 공통 검증입니다. */
 export class ProgramActivitySchema
 	extends AbstractSchema
-	implements PrismaProgramActivity
 {
-	programActivityId!: PrismaProgramActivity["programActivityId"];
+	programActivityId!: string;
 
 	@BigIntIdValidation()
-	programId!: PrismaProgramActivity["programId"];
+	programId!: bigint;
 
 	@BigIntIdValidation()
-	taskId!: PrismaProgramActivity["taskId"];
+	taskId!: bigint;
 
 	@NumberValidation()
-	order!: PrismaProgramActivity["order"];
+	order!: number;
 
 	@NumberValidation()
-	repetitions!: PrismaProgramActivity["repetitions"];
+	repetitions!: number;
 
 	@NumberValidation()
-	restTime!: PrismaProgramActivity["restTime"];
+	restTime!: number;
 
 	@StringValidationOptional({ nullable: true })
-	notes!: PrismaProgramActivity["notes"];
+	notes!: string | null;
 
 	@StringValidation()
-	exerciseName!: PrismaProgramActivity["exerciseName"];
+	exerciseName!: string;
 
 	@StringValidationOptional({ nullable: true })
-	exerciseDescription!: PrismaProgramActivity["exerciseDescription"];
+	exerciseDescription!: string | null;
 
 	@NumberValidation()
-	exerciseDuration!: PrismaProgramActivity["exerciseDuration"];
+	exerciseDuration!: number;
 
 	@NumberValidation()
-	exerciseCount!: PrismaProgramActivity["exerciseCount"];
+	exerciseCount!: number;
 
 	@UUIDValidationOptional({ nullable: true })
-	imageFileId!: PrismaProgramActivity["imageFileId"];
+	imageFileId!: string | null;
 
 	@UUIDValidationOptional({ nullable: true })
-	videoFileId!: PrismaProgramActivity["videoFileId"];
+	videoFileId!: string | null;
 }

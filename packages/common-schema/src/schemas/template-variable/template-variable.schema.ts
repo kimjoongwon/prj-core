@@ -1,4 +1,3 @@
-import type { TemplateVariable as PrismaTemplateVariable } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BooleanValidation,
@@ -17,31 +16,30 @@ export class TemplateVariableSchema
 		"createdAt",
 		"updatedAt",
 	] as const)
-	implements PrismaTemplateVariable
 {
-	templateVariableId!: PrismaTemplateVariable["templateVariableId"];
+	templateVariableId!: string;
 
 	@BigIntIdValidation({ description: "ID" })
-	declare id: PrismaTemplateVariable["id"];
+	declare id: bigint;
 
 	@DateValidation({ description: "생성일" })
-	declare createdAt: PrismaTemplateVariable["createdAt"];
+	declare createdAt: Date;
 
 	@DateValidationOptional({ nullable: true, description: "수정일" })
-	declare updatedAt: PrismaTemplateVariable["updatedAt"];
+	declare updatedAt: Date | null;
 
 	@StringValidation({ description: "변수명" })
-	name!: PrismaTemplateVariable["name"];
+	name!: string;
 
 	@StringValidationOptional({ nullable: true, description: "변수 설명" })
-	description!: PrismaTemplateVariable["description"];
+	description!: string | null;
 
 	@StringValidationOptional({ nullable: true, description: "기본값" })
-	defaultValue!: PrismaTemplateVariable["defaultValue"];
+	defaultValue!: string | null;
 
 	@BooleanValidation({ description: "필수 여부" })
-	isRequired!: PrismaTemplateVariable["isRequired"];
+	isRequired!: boolean;
 
 	@BigIntIdValidation({ description: "템플릿 ID" })
-	templateId!: PrismaTemplateVariable["templateId"];
+	templateId!: bigint;
 }

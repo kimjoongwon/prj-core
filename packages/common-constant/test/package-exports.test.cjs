@@ -1,47 +1,98 @@
 const assert = require("node:assert/strict");
+const { execFileSync } = require("node:child_process");
+const { existsSync, mkdtempSync, rmSync, writeFileSync } = require("node:fs");
+const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
 
-test("CommonJS root export resolves to the built package entry", () => {
+const packageDirectory = path.resolve(__dirname, "..");
+const repositoryDirectory = path.resolve(packageDirectory, "..", "..");
+const commonTypeDirectory = path.join(repositoryDirectory, "packages", "common-type");
+
+function packWorkspacePackage(workspacePackageDirectory, destinationDirectory) {
+	const packOutput = execFileSync(
+		"pnpm",
+		["pack", "--pack-destination", destinationDirectory, "--json"],
+		{ cwd: workspacePackageDirectory, encoding: "utf8" },
+	);
+	const { filename } = JSON.parse(packOutput);
+	return path.isAbsolute(filename)
+		? filename
+		: path.join(destinationDirectory, filename);
+}
+
+test("CommonJS와 ESM export는 각각의 dist 산출물을 가리킨다", () => {
 	const packageExports = require("../package.json").exports;
-	const rootConstant = require("@cocrepo/constant");
-	const authPasswordRules = require("@cocrepo/constant/auth/password-rules");
 
 	assert.deepEqual(packageExports["."], {
-		types: "./src/index.ts",
-		import: "./src/index.ts",
+		types: "./dist/index.d.ts",
 		require: "./dist/index.js",
-		default: "./src/index.ts",
+		import: "./dist/esm/index.js",
+		default: "./dist/esm/index.js",
 	});
 	assert.deepEqual(packageExports["./auth/password-rules"], {
-		types: "./src/auth/password-rules.ts",
-		import: "./src/auth/password-rules.ts",
+		types: "./dist/auth/password-rules.d.ts",
 		require: "./dist/auth/password-rules.js",
-		default: "./src/auth/password-rules.ts",
+		import: "./dist/esm/auth/password-rules.js",
+		default: "./dist/esm/auth/password-rules.js",
 	});
+	assert.equal(existsSync(path.join(packageDirectory, "dist", "index.js")), true);
 	assert.equal(
-		require.resolve("@cocrepo/constant"),
-		path.resolve(__dirname, "..", "dist", "index.js"),
+		existsSync(path.join(packageDirectory, "dist", "esm", "package.json")),
+		true,
 	);
-	assert.equal(rootConstant.PASSWORD_RULES, authPasswordRules.PASSWORD_RULES);
 });
 
-test("ESM 비밀번호 규칙 진입점은 브라우저가 처리할 소스 모듈을 제공한다", () => {
-	const { execFileSync } = require("node:child_process");
-	const exportedPasswordRules = JSON.parse(
+test("packed package는 CommonJS와 Node ESM 소비자에서 root와 브라우저 서브패스를 제공한다", () => {
+	const temporaryDirectory = mkdtempSync(
+		path.join(os.tmpdir(), "cocrepo-constant-package-"),
+	);
+	try {
+		const commonTypeTarball = packWorkspacePackage(
+			commonTypeDirectory,
+			temporaryDirectory,
+		);
+		const constantTarball = packWorkspacePackage(
+			packageDirectory,
+			temporaryDirectory,
+		);
+		writeFileSync(
+			path.join(temporaryDirectory, "package.json"),
+			JSON.stringify({ private: true }),
+		);
 		execFileSync(
-			process.execPath,
+			"npm",
 			[
-				"--input-type=module",
-				"--eval",
-				'import { DEFAULT_PASSWORD_MIN_LENGTH, DEFAULT_PASSWORD_MAX_LENGTH } from "@cocrepo/constant/auth/password-rules"; console.log(JSON.stringify({minimum: DEFAULT_PASSWORD_MIN_LENGTH, maximum: DEFAULT_PASSWORD_MAX_LENGTH, entry: import.meta.resolve("@cocrepo/constant/auth/password-rules")}));',
+				"install",
+				"--ignore-scripts",
+				"--no-audit",
+				"--no-fund",
+				"--no-package-lock",
+				commonTypeTarball,
+				constantTarball,
 			],
-			{ cwd: path.resolve(__dirname, ".."), encoding: "utf8" },
-		),
-	);
-	assert.equal(exportedPasswordRules.minimum, 10);
-	assert.equal(exportedPasswordRules.maximum, 72);
-	assert.ok(
-		exportedPasswordRules.entry.endsWith("/src/auth/password-rules.ts"),
-	);
+			{ cwd: temporaryDirectory, stdio: "pipe" },
+		);
+		writeFileSync(path.join(temporaryDirectory, "consumer.cjs"), `
+			const constant = require("@cocrepo/constant");
+			const passwordRules = require("@cocrepo/constant/auth/password-rules");
+			if (constant.PASSWORD_RULES !== passwordRules.PASSWORD_RULES) process.exit(1);
+		`);
+		writeFileSync(path.join(temporaryDirectory, "consumer.mjs"), `
+			import { PASSWORD_RULES } from "@cocrepo/constant";
+			import { DEFAULT_PASSWORD_MIN_LENGTH } from "@cocrepo/constant/auth/password-rules";
+			if (!PASSWORD_RULES.some(({ rule, label }) => rule === "minLength" && label.startsWith(String(DEFAULT_PASSWORD_MIN_LENGTH)))) process.exit(1);
+		`);
+
+		execFileSync(process.execPath, ["consumer.cjs"], {
+			cwd: temporaryDirectory,
+			stdio: "pipe",
+		});
+		execFileSync(process.execPath, ["consumer.mjs"], {
+			cwd: temporaryDirectory,
+			stdio: "pipe",
+		});
+	} finally {
+		rmSync(temporaryDirectory, { recursive: true, force: true });
+	}
 });

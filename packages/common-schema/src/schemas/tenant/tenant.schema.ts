@@ -1,17 +1,16 @@
-import type { Tenant as PrismaTenant } from "@cocrepo/prisma";
 import { BigIntIdValidation } from "../../decorators/model-validation";
 import { AbstractSchema } from "../abstract.schema";
 
 /** Tenant의 DB 필드 타입과 공통 검증입니다. */
-export class TenantSchema extends AbstractSchema implements PrismaTenant {
-	tenantId!: PrismaTenant["tenantId"];
+export class TenantSchema extends AbstractSchema {
+	tenantId!: string;
 
 	@BigIntIdValidation()
-	userId!: PrismaTenant["userId"];
+	userId!: bigint;
 
 	@BigIntIdValidation()
-	spaceId!: PrismaTenant["spaceId"];
+	spaceId!: bigint;
 
 	@BigIntIdValidation()
-	roleId!: PrismaTenant["roleId"];
+	roleId!: bigint;
 }

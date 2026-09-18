@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "@heroui/styles";
-@import "ckeditor5/ckeditor5.css";
 @source "../../../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}";
 @custom-variant dark (&:is(.dark *));
 
@@ -33,15 +32,44 @@ body {
   background: #ffffff;
 }
 
-.service-document-html-editor .ck.ck-editor {
-  color: #1f2937;
+.service-document-html-editor__toolbar {
+	display: flex;
+	gap: 0.25rem;
+	padding: 0.5rem;
+	border-bottom: 1px solid var(--border);
+	background: #f8fafc;
+	color: #1f2937;
 }
 
-.service-document-html-editor .ck.ck-toolbar {
-  border-width: 0 0 1px;
+.service-document-html-editor__toolbar button {
+	border-radius: 0.25rem;
+	padding: 0.25rem 0.5rem;
+	font-size: 0.75rem;
 }
 
-.service-document-html-editor .ck.ck-editor__main > .ck-editor__editable {
-  min-height: var(--html-editor-min-height);
-  border-width: 0;
+.service-document-html-editor__toolbar button:hover:not(:disabled) {
+	background: #e2e8f0;
+}
+
+.service-document-html-editor__toolbar button:disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
+.service-document-html-editor__editable {
+	min-height: var(--html-editor-min-height);
+	padding: 1rem;
+	color: #1f2937;
+	outline: none;
+	white-space: pre-wrap;
+}
+
+.service-document-html-editor__editable:empty::before {
+	content: attr(data-placeholder);
+	color: #94a3b8;
+	pointer-events: none;
+}
+
+.service-document-html-editor[data-invalid="true"] .service-document-html-editor__surface {
+	border-color: var(--danger);
 }

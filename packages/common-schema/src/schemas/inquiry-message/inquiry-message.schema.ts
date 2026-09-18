@@ -1,5 +1,5 @@
+import type { JsonValue } from "@cocrepo/type";
 import { MessageContentType, SenderType } from "@cocrepo/enum";
-import type { InquiryMessage as PrismaInquiryMessage } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BigIntIdValidationOptional,
@@ -15,52 +15,51 @@ import { AbstractSchema } from "../abstract.schema";
 /** InquiryMessage의 DB 필드 타입과 공통 검증입니다. */
 export class InquiryMessageSchema
 	extends PickSchemaType(AbstractSchema, ["id", "createdAt"] as const)
-	implements PrismaInquiryMessage
 {
-	inquiryMessageId!: PrismaInquiryMessage["inquiryMessageId"];
+	inquiryMessageId!: string;
 
-	declare id: PrismaInquiryMessage["id"];
+	declare id: bigint;
 
-	declare createdAt: PrismaInquiryMessage["createdAt"];
+	declare createdAt: Date;
 
 	@BigIntIdValidation({ description: "소속 스레드 ID" })
-	threadId!: PrismaInquiryMessage["threadId"];
+	threadId!: bigint;
 
 	@BigIntIdValidation({ description: "소속 문의 ID" })
-	inquiryId!: PrismaInquiryMessage["inquiryId"];
+	inquiryId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "발신자 ID" })
-	senderId!: PrismaInquiryMessage["senderId"];
+	senderId!: bigint | null;
 
 	@EnumValidation(() => SenderType, { description: "발신자 유형" })
-	senderType!: PrismaInquiryMessage["senderType"];
+	senderType!: SenderType;
 
 	@UUIDValidationOptional({
 		nullable: true,
 		description: "클라이언트 메시지 ID",
 	})
-	clientMessageId!: PrismaInquiryMessage["clientMessageId"];
+	clientMessageId!: string | null;
 
 	@StringValidation({ description: "메시지 내용" })
-	content!: PrismaInquiryMessage["content"];
+	content!: string;
 
 	@EnumValidation(() => MessageContentType, { description: "콘텐츠 유형" })
-	contentType!: PrismaInquiryMessage["contentType"];
+	contentType!: MessageContentType;
 
 	@DateValidation({ nullable: true, description: "전달 완료 시간" })
-	deliveredAt!: PrismaInquiryMessage["deliveredAt"];
+	deliveredAt!: Date | null;
 
 	@DateValidation({ nullable: true, description: "읽음 확인 시간" })
-	readAt!: PrismaInquiryMessage["readAt"];
+	readAt!: Date | null;
 
 	@DateValidation({ nullable: true, description: "수정 일시" })
-	editedAt!: PrismaInquiryMessage["editedAt"];
+	editedAt!: Date | null;
 
 	@BooleanValidation({ description: "수정 여부" })
-	isEdited!: PrismaInquiryMessage["isEdited"];
+	isEdited!: boolean;
 
 	@BooleanValidation({ description: "삭제 여부" })
-	isDeleted!: PrismaInquiryMessage["isDeleted"];
+	isDeleted!: boolean;
 
-	metadata!: PrismaInquiryMessage["metadata"];
+	metadata!: JsonValue;
 }

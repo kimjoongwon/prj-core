@@ -1,4 +1,3 @@
-import type { Company as PrismaCompany } from "@cocrepo/prisma";
 import {
 	StringValidation,
 	StringValidationOptional,
@@ -7,27 +6,27 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Company의 DB 필드 타입과 공통 검증입니다. */
-export class CompanySchema extends AbstractSchema implements PrismaCompany {
-	companyId!: PrismaCompany["companyId"];
+export class CompanySchema extends AbstractSchema {
+	companyId!: string;
 
 	@StringValidation()
-	name!: PrismaCompany["name"];
+	name!: string;
 
 	@StringValidationOptional({ nullable: true })
-	label!: PrismaCompany["label"];
+	label!: string | null;
 
 	@StringValidation()
-	address!: PrismaCompany["address"];
+	address!: string;
 
 	@StringValidation()
-	phone!: PrismaCompany["phone"];
+	phone!: string;
 
 	@StringValidation()
-	email!: PrismaCompany["email"];
+	email!: string;
 
 	@StringValidation()
-	businessNo!: PrismaCompany["businessNo"];
+	businessNo!: string;
 
 	@UUIDValidationOptional({ nullable: true })
-	logoImageFileId!: PrismaCompany["logoImageFileId"];
+	logoImageFileId!: string | null;
 }

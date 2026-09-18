@@ -1,4 +1,4 @@
-import type { SessionTypes } from "@cocrepo/prisma/enums";
+import type { SessionTypes } from "./generated/prisma-enums";
 
 export const SessionTypesLabel: Record<SessionTypes, string> = {
 	ONE_TIME: "일회성",

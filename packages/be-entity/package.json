@@ -13,8 +13,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
-		"type-check:prod": "tsc --noEmit",
-		"test": "vitest run",
+    "type-check:prod": "tsc --noEmit",
+    "test": "vitest run",
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
     "format": "biome check --write .",
@@ -24,11 +24,11 @@
     "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
-    "@cocrepo/prisma": "workspace:*",
     "@cocrepo/decorator": "workspace:*",
-    "@cocrepo/type": "workspace:*",
     "@cocrepo/enum": "workspace:*",
-		"class-transformer": "^0.5.1"
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "class-transformer": "^0.5.1"
   },
   "peerDependencies": {
     "@nestjs/common": "^11.2.3",
@@ -38,9 +38,9 @@
     "@cocrepo/tsconfig": "workspace:*",
     "@nestjs/common": "^11.2.3",
     "@nestjs/swagger": "^11.4.7",
-		"@types/node": "catalog:",
-		"vitest": "catalog:",
-    "typescript": "catalog:"
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "exports": {
     ".": {
@@ -48,5 +48,6 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     }
-  }
+  },
+  "private": true
 }

@@ -1,21 +1,20 @@
-import type { Document as PrismaDocument } from "@cocrepo/prisma";
 import { AbstractSchema } from "../abstract.schema";
 
 /** Document의 DB 필드 타입과 공통 검증입니다. */
-export class DocumentSchema extends AbstractSchema implements PrismaDocument {
-	documentId!: PrismaDocument["documentId"];
+export class DocumentSchema extends AbstractSchema {
+	documentId!: string;
 
-	pageCount!: PrismaDocument["pageCount"];
+	pageCount!: number | null;
 
-	wordCount!: PrismaDocument["wordCount"];
+	wordCount!: number | null;
 
-	author!: PrismaDocument["author"];
+	author!: string | null;
 
-	title!: PrismaDocument["title"];
+	title!: string | null;
 
-	subject!: PrismaDocument["subject"];
+	subject!: string | null;
 
-	keywords!: PrismaDocument["keywords"];
+	keywords!: string | null;
 
-	assetId!: PrismaDocument["assetId"];
+	assetId!: bigint;
 }

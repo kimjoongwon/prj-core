@@ -1,5 +1,4 @@
 import { AttachmentFileType } from "@cocrepo/enum";
-import type { InquiryAttachment as PrismaInquiryAttachment } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BooleanValidation,
@@ -13,44 +12,43 @@ import { AbstractSchema } from "../abstract.schema";
 /** InquiryAttachment의 DB 필드 타입과 공통 검증입니다. */
 export class InquiryAttachmentSchema
 	extends PickSchemaType(AbstractSchema, ["id", "createdAt"] as const)
-	implements PrismaInquiryAttachment
 {
-	inquiryAttachmentId!: PrismaInquiryAttachment["inquiryAttachmentId"];
+	inquiryAttachmentId!: string;
 
-	declare id: PrismaInquiryAttachment["id"];
+	declare id: bigint;
 
-	declare createdAt: PrismaInquiryAttachment["createdAt"];
+	declare createdAt: Date;
 
 	@BigIntIdValidation({ description: "소속 메시지 ID" })
-	messageId!: PrismaInquiryAttachment["messageId"];
+	messageId!: bigint;
 
 	@StringValidation({ description: "원본 파일명" })
-	fileName!: PrismaInquiryAttachment["fileName"];
+	fileName!: string;
 
 	@NumberValidation({ description: "파일 크기" })
-	fileSize!: PrismaInquiryAttachment["fileSize"];
+	fileSize!: bigint;
 
 	@StringValidation({ description: "MIME 타입" })
-	mimeType!: PrismaInquiryAttachment["mimeType"];
+	mimeType!: string;
 
 	@EnumValidation(() => AttachmentFileType, { description: "파일 유형" })
-	fileType!: PrismaInquiryAttachment["fileType"];
+	fileType!: AttachmentFileType;
 
 	@StringValidation({ description: "파일 URL" })
-	url!: PrismaInquiryAttachment["url"];
+	url!: string;
 
 	@StringValidation({ nullable: true, description: "썸네일 URL" })
-	thumbnailUrl!: PrismaInquiryAttachment["thumbnailUrl"];
+	thumbnailUrl!: string | null;
 
 	@NumberValidation({ nullable: true, description: "이미지 너비" })
-	width!: PrismaInquiryAttachment["width"];
+	width!: number | null;
 
 	@NumberValidation({ nullable: true, description: "이미지 높이" })
-	height!: PrismaInquiryAttachment["height"];
+	height!: number | null;
 
 	@NumberValidation({ nullable: true, description: "재생 시간 (초)" })
-	duration!: PrismaInquiryAttachment["duration"];
+	duration!: number | null;
 
 	@BooleanValidation({ description: "삭제 여부" })
-	isDeleted!: PrismaInquiryAttachment["isDeleted"];
+	isDeleted!: boolean;
 }

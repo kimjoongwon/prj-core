@@ -1,5 +1,4 @@
 import { WhitelistType } from "@cocrepo/enum";
-import type { WhitelistEntry as PrismaWhitelistEntry } from "@cocrepo/prisma";
 import {
 	BigIntIdValidation,
 	BooleanValidation,
@@ -19,28 +18,27 @@ export class WhitelistEntrySchema
 		"createdAt",
 		"updatedAt",
 	] as const)
-	implements PrismaWhitelistEntry
 {
-	whitelistEntryId!: PrismaWhitelistEntry["whitelistEntryId"];
+	whitelistEntryId!: string;
 
 	@BigIntIdValidation({ description: "ID" })
-	declare id: PrismaWhitelistEntry["id"];
+	declare id: bigint;
 
 	@DateValidation({ description: "생성일" })
-	declare createdAt: PrismaWhitelistEntry["createdAt"];
+	declare createdAt: Date;
 
 	@DateValidationOptional({ nullable: true, description: "수정일" })
-	declare updatedAt: PrismaWhitelistEntry["updatedAt"];
+	declare updatedAt: Date | null;
 
 	@EnumValidation(() => WhitelistType, { description: "유형" })
-	type!: PrismaWhitelistEntry["type"];
+	type!: WhitelistType;
 
 	@StringValidation({ description: "값" })
-	value!: PrismaWhitelistEntry["value"];
+	value!: string;
 
 	@StringValidationOptional({ nullable: true, description: "설명" })
-	description!: PrismaWhitelistEntry["description"];
+	description!: string | null;
 
 	@BooleanValidation({ description: "활성 여부" })
-	isActive!: PrismaWhitelistEntry["isActive"];
+	isActive!: boolean;
 }

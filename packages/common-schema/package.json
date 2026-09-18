@@ -10,6 +10,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "node": "./dist/index.js",
       "import": "./dist/esm/index.js",
       "require": "./dist/index.js",
       "default": "./dist/esm/index.js"
@@ -17,12 +18,20 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "!dist/**/*.map",
+    "!dist/**/*.tsbuildinfo",
+    "!dist/**/*.spec.*",
+    "!dist/**/*.test.*",
+    "!src/**/test/**",
+    "!src/**/tests/**",
+    "!src/**/*.test.*",
+    "!src/**/*.spec.*"
   ],
   "scripts": {
-    "build": "tsc --build && tsc -p tsconfig.esm.json && node scripts/write-esm-package-json.mjs",
+    "build": "rm -rf dist && tsc --build && tsc -p tsconfig.esm.json && node scripts/write-esm-package-json.mjs",
     "start:dev": "tsc --build --watch",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run --passWithNoTests --exclude 'dist/**'",
     "type-check": "tsc --noEmit",
     "type-check:prod": "tsc --noEmit",
     "format": "biome check --write .",
@@ -33,15 +42,14 @@
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
+    "@cocrepo/enum": "workspace:*",
     "@cocrepo/type": "workspace:*",
-    "class-validator": "^0.14.2",
-    "@cocrepo/enum": "workspace:*"
+    "class-validator": "^0.14.2"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:",
-    "@cocrepo/prisma": "workspace:*"
+    "vitest": "catalog:"
   },
   "keywords": [
     "validation",
@@ -50,5 +58,11 @@
     "dto"
   ],
   "author": "cocrepo",
-  "license": "ISC"
+  "license": "ISC",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimjoongwon/prj-core.git",
+    "directory": "packages/common-schema"
+  }
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
+import { DECORATORS } from "@nestjs/swagger";
 import { Policy } from "../src/policy.entity";
 import { PolicyEntry } from "../src/policy-entry.entity";
 import { Role } from "../src/role.entity";

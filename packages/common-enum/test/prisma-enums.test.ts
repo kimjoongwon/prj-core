@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import * as generatedEnums from "@cocrepo/prisma/enums";
+import * as generatedEnums from "../src/generated/prisma-enums";
 import * as sharedEnums from "../src/index";
 
 test("모든 Prisma enum은 생성 모듈의 객체를 그대로 공개한다", () => {

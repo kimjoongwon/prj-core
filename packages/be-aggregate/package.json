@@ -26,11 +26,11 @@
     "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
-		"@cocrepo/constant": "workspace:*",
-		"@cocrepo/context": "workspace:*",
-		"@cocrepo/entity": "workspace:*",
-		"@cocrepo/input": "workspace:*",
-		"@cocrepo/prisma": "workspace:*",
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/context": "workspace:*",
+    "@cocrepo/entity": "workspace:*",
+    "@cocrepo/input": "workspace:*",
+    "@cocrepo/prisma": "workspace:*",
     "@cocrepo/repository": "workspace:*",
     "@cocrepo/service": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
@@ -38,15 +38,15 @@
     "@cocrepo/vo": "workspace:*"
   },
   "peerDependencies": {
-    "@nestjs/common": "^11.2.3",
     "@nestjs-cls/transactional": "^3.1.1",
-    "@nestjs-cls/transactional-adapter-prisma": "^1.3.2"
+    "@nestjs-cls/transactional-adapter-prisma": "^1.3.2",
+    "@nestjs/common": "^11.2.3"
   },
   "devDependencies": {
     "@cocrepo/tsconfig": "workspace:*",
-    "@nestjs/common": "^11.2.3",
     "@nestjs-cls/transactional": "^3.1.1",
     "@nestjs-cls/transactional-adapter-prisma": "^1.3.2",
+    "@nestjs/common": "^11.2.3",
     "@nestjs/testing": "^11.2.3",
     "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
@@ -61,5 +61,6 @@
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     }
-  }
+  },
+  "private": true
 }

@@ -1,39 +1,39 @@
-import type { AIAgentLog as PrismaAIAgentLog } from "@cocrepo/prisma";
+import type { AIAgentAction } from "@cocrepo/enum";
+import type { JsonValue } from "@cocrepo/type";
 import { PickSchemaType } from "../../utils/mapped-schema";
 import { AbstractSchema } from "../abstract.schema";
 
 /** AIAgentLog의 DB 필드 타입과 공통 검증입니다. */
 export class AIAgentLogSchema
 	extends PickSchemaType(AbstractSchema, ["id", "createdAt"] as const)
-	implements PrismaAIAgentLog
 {
-	aiAgentLogId!: PrismaAIAgentLog["aiAgentLogId"];
+	aiAgentLogId!: string;
 
-	declare id: PrismaAIAgentLog["id"];
+	declare id: bigint;
 
-	declare createdAt: PrismaAIAgentLog["createdAt"];
+	declare createdAt: Date;
 
-	inquiryId!: PrismaAIAgentLog["inquiryId"];
+	inquiryId!: bigint;
 
-	messageId!: PrismaAIAgentLog["messageId"];
+	messageId!: bigint | null;
 
-	action!: PrismaAIAgentLog["action"];
+	action!: AIAgentAction;
 
-	input!: PrismaAIAgentLog["input"];
+	input!: JsonValue;
 
-	output!: PrismaAIAgentLog["output"];
+	output!: JsonValue;
 
-	confidence!: PrismaAIAgentLog["confidence"];
+	confidence!: number | null;
 
-	wasAccepted!: PrismaAIAgentLog["wasAccepted"];
+	wasAccepted!: boolean | null;
 
-	wasModified!: PrismaAIAgentLog["wasModified"];
+	wasModified!: boolean | null;
 
-	responseTimeMs!: PrismaAIAgentLog["responseTimeMs"];
+	responseTimeMs!: number | null;
 
-	model!: PrismaAIAgentLog["model"];
+	model!: string | null;
 
-	tokenCount!: PrismaAIAgentLog["tokenCount"];
+	tokenCount!: number | null;
 
-	errorMessage!: PrismaAIAgentLog["errorMessage"];
+	errorMessage!: string | null;
 }

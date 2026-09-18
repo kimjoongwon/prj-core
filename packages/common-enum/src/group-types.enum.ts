@@ -1,4 +1,4 @@
-import type { GroupTypes } from "@cocrepo/prisma/enums";
+import type { GroupTypes } from "./generated/prisma-enums";
 
 export const GroupTypesLabel: Record<GroupTypes, string> = {
 	Role: "역할",

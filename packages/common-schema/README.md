@@ -1,15 +1,16 @@
 # @cocrepo/schema
 
-Prisma 모델 타입과 공통 값 검증을 연결하는 브라우저 호환 패키지입니다. 검증은 `class-validator`만 사용하며 입력값을 변환하지 않습니다.
+프론트엔드와 백엔드가 함께 사용하는 타입과 값 검증을 소유하는 브라우저 호환 패키지입니다. 검증은 `class-validator`만 사용하며 입력값을 변환하지 않습니다.
 
 ## 원천과 소비 경계
 
-- 모델별 `RoleSchema`, `UserSchema` 등은 Prisma 생성 모델 전체를 `implements`하고 각 필드를 `PrismaRole["name"]`처럼 참조합니다. Prisma import는 타입 전용이며 런타임 enum은 `@cocrepo/enum`에서 가져옵니다.
+- 모델별 `RoleSchema`, `UserSchema` 등이 필드 타입과 공통 검증을 함께 소유합니다. 소비자는 Schema 클래스 또는 `InferSchema<typeof UserSchema>`로 입력 타입을 추론하며 Prisma Client나 생성 타입을 필요로 하지 않습니다.
 - `AbstractSchema`는 공통 `id`, `createdAt`, `updatedAt`, `removedAt` 필드를 소유합니다. 조회 옵션에 따라 포함되는 관계 객체는 Schema에 넣지 않습니다.
 - 공통 검증의 원천은 모델 Schema입니다. Entity는 해당 Schema를 상속해 Swagger·Transform·관계·도메인 동작만 추가합니다. DTO는 Entity에서 필요한 필드를 선택합니다.
-- 기존 Entity에 검증이 없던 DB 필드는 타입만 선언합니다. DB 타입을 연결하는 작업 때문에 기존 API에 새로운 필수값·형식 규칙을 추가하지 않습니다.
+- 기존 Entity에 검증이 없던 필드는 Schema에 타입만 선언합니다. persistence adapter는 Prisma 값을 Schema/Entity 계약에 맞춰 전달하며, DB 변경 때문에 기존 API에 새로운 필수값·형식 규칙을 추가하지 않습니다.
 - `StringValidation`, `NumberValidation` 등은 기존 백엔드 Field의 값 검증 계약입니다. `String`, `Phone`, `Password` 등은 기존 입력 전용 메시지와 제약을 제공합니다. 둘 다 변환·Swagger 메타데이터를 등록하지 않습니다.
-- `class-transformer`, `reflect-metadata`, Nest 및 Prisma Client 런타임은 사용하지 않습니다. Schema 소비에 `emitDecoratorMetadata`가 필요하지 않습니다.
+- DB enum 타입과 런타임 값은 브라우저 안전한 `@cocrepo/enum`, JSON 값 타입은 `@cocrepo/type`에서 가져옵니다.
+- `class-transformer`, `reflect-metadata`, Nest 및 Prisma Client 런타임·타입은 사용하지 않습니다. Schema 소비에 `emitDecoratorMetadata`가 필요하지 않습니다.
 
 ## 입력 Schema 파생
 
@@ -23,6 +24,12 @@ class CreateRoleSchema extends PickSchemaType(RoleSchema, [
 class UpdateRoleSchema extends PartialSchemaType(
   PickSchemaType(RoleSchema, ["displayName", "description"] as const),
 ) {}
+```
+
+```ts
+import { type InferSchema, UserSchema } from "@cocrepo/schema";
+
+type UserInput = InferSchema<typeof UserSchema>;
 ```
 
 `PickSchemaType`은 선택한 필드의 class-validator 메타데이터만 복사합니다. 원본 생성자, 기본값, 도메인 메서드를 실행하거나 상속하지 않습니다. 검증 데코레이터가 없는 필드는 타입으로만 선택됩니다. 이 helper는 일반 객체 변환 또는 응답 직렬화 도구가 아닙니다.
@@ -50,4 +57,4 @@ const validation = validateSchemaSync(LoginSchema, {
 
 ## 검증
 
-`pnpm --filter @cocrepo/schema type-check`, `build`, `lint`, `test`로 전체 Prisma 모델 구현 타입과 파생 검증, 선택·null 계약, 초기값 비유입, 평문/저장 비밀번호 분리 및 변환 없는 입력 검증을 확인합니다.
+`pnpm --filter @cocrepo/schema type-check`, `build`, `lint`, `test`로 Schema 추론 타입과 파생 검증, 선택·null 계약, 초기값 비유입, 평문/저장 비밀번호 분리, 변환 없는 입력 검증 및 private Prisma package 비참조 경계를 확인합니다.

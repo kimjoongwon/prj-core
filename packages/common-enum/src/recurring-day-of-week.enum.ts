@@ -1,4 +1,4 @@
-import type { RecurringDayOfWeek } from "@cocrepo/prisma/enums";
+import type { RecurringDayOfWeek } from "./generated/prisma-enums";
 
 export const RecurringDayOfWeekLabel: Record<RecurringDayOfWeek, string> = {
 	SUNDAY: "Sunday",

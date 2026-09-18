@@ -9,7 +9,13 @@
   "files": [
     "src",
     "dist",
-    "README.md"
+    "README.md",
+    "!dist/**/*.map",
+    "!dist/**/*.tsbuildinfo",
+    "!src/**/test/**",
+    "!src/**/tests/**",
+    "!src/**/*.test.*",
+    "!src/**/*.spec.*"
   ],
   "main": "./src/index.ts",
   "module": "./src/index.ts",
@@ -37,10 +43,15 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
-    "@cocrepo/prisma": "workspace:*",
     "@cocrepo/constant": "workspace:*"
   },
   "devDependencies": {
     "tsx": "catalog:"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimjoongwon/prj-core.git",
+    "directory": "packages/common-enum"
   }
 }

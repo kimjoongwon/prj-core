@@ -1,4 +1,3 @@
-import type { Subject as PrismaSubject } from "@cocrepo/prisma";
 import {
 	NumberValidation,
 	StringValidation,
@@ -7,21 +6,21 @@ import {
 import { AbstractSchema } from "../abstract.schema";
 
 /** Subject의 DB 필드 타입과 공통 검증입니다. */
-export class SubjectSchema extends AbstractSchema implements PrismaSubject {
-	subjectId!: PrismaSubject["subjectId"];
+export class SubjectSchema extends AbstractSchema {
+	subjectId!: string;
 
 	@StringValidation()
-	name!: PrismaSubject["name"];
+	name!: string;
 
 	@StringValidationOptional({ nullable: true })
-	displayName!: PrismaSubject["displayName"];
+	displayName!: string | null;
 
 	@StringValidationOptional({ nullable: true })
-	icon!: PrismaSubject["icon"];
+	icon!: string | null;
 
 	@NumberValidation()
-	order!: PrismaSubject["order"];
+	order!: number;
 
 	@StringValidationOptional({ nullable: true })
-	group!: PrismaSubject["group"];
+	group!: string | null;
 }
