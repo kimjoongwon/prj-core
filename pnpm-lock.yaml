@@ -506,6 +506,9 @@ importers:
       dayjs:
         specifier: 'catalog:'
         version: 1.11.18
+      es-toolkit:
+        specifier: ^1.26.1
+        version: 1.52.0
       express:
         specifier: ^5.1.0
         version: 5.2.1
