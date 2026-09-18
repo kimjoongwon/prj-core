@@ -34,7 +34,7 @@ export default registerAs<RedisConfig>("redis", () => {
 	const config: RedisConfig = {
 		host:
 			process.env.REDIS_HOST ||
-			(isDevelopment ? "localhost" : "redis.cocdev.co.kr"),
+			(isDevelopment ? "localhost" : "redis.onjitda.com"),
 		port: Number(process.env.REDIS_PORT) || 6379,
 		...(password ? { password } : {}),
 	};

@@ -42,8 +42,8 @@ pnpm codegen:prod       # 프로덕션 환경
 | ---------------------- | -------------------- | ----------------------------------- |
 | `development` (기본값) | `pnpm codegen`       | `http://localhost:3006/api-json`    |
 | `local`                | `pnpm codegen:local` | `http://localhost:3006/api-json`    |
-| `staging`              | `pnpm codegen:stg`   | `https://stg.cocdev.co.kr/api-json` |
-| `production`           | `pnpm codegen:prod`  | `https://cocdev.co.kr/api-json`     |
+| `staging`              | `pnpm codegen:stg`   | `https://stg.onjitda.com/api-json` |
+| `production`           | `pnpm codegen:prod`  | `https://onjitda.com/api-json`     |
 
 ### 생성된 API 사용 예시
 

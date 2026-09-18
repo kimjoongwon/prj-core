@@ -230,8 +230,8 @@ Values can change based on environment:
 import { API_BASE_URL } from "@cocrepo/constant";
 
 // Development: http://localhost:3006
-// Staging: https://stg.cocdev.co.kr
-// Production: https://cocdev.co.kr
+// Staging: https://stg.onjitda.com
+// Production: https://onjitda.com
 console.log(API_BASE_URL);
 ```
 

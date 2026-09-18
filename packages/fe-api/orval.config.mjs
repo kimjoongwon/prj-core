@@ -6,10 +6,10 @@ import * as http from "node:http";
 const apiSpecEnvironments = {
 	development: "http://localhost:3006/api-json",
 	local: "http://localhost:3006/api-json",
-	stg: "https://stg.cocdev.co.kr/api-json",
-	staging: "https://stg.cocdev.co.kr/api-json",
-	prod: "https://cocdev.co.kr/api-json",
-	production: "https://cocdev.co.kr/api-json",
+	stg: "https://stg.onjitda.com/api-json",
+	staging: "https://stg.onjitda.com/api-json",
+	prod: "https://onjitda.com/api-json",
+	production: "https://onjitda.com/api-json",
 };
 
 /**

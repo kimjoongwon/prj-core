@@ -121,7 +121,7 @@ bash scripts/rancher-build.sh 1 2
 
 - `ENV_NAME`: 기본 `stg`
 - `TAG` 또는 `IMAGE_TAG`: 기본 `local-<timestamp>`
-- `REGISTRY` 또는 `IMAGE_REGISTRY` 또는 `HARBOR_REGISTRY`: 기본 `harbor.cocdev.co.kr`
+- `REGISTRY` 또는 `IMAGE_REGISTRY` 또는 `HARBOR_REGISTRY`: 기본 `harbor.onjitda.com`
 - `CACHE_TAG`: 기본 `buildcache`
 - `CONTAINER_CLI`: 기본 `docker`, 미설치 시 `nerdctl`, 둘 다 없으면 Rancher Desktop 번들 CLI 자동 선택
 - `RUN_CHECK`: 기본 `true` (실행 검증)

@@ -8,7 +8,7 @@ REPO_URL="https://github.com/kimjoongwon/prj-devops.git"
 WORKDIR=""
 TARGET_BRANCH="main"
 GIT_USER_NAME="jenkins-bot"
-GIT_USER_EMAIL="jenkins-bot@cocdev.co.kr"
+GIT_USER_EMAIL="jenkins-bot@onjitda.com"
 PUSH_RETRIES=3
 
 fail() {

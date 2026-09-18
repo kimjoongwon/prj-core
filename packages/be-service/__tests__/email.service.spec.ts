@@ -109,7 +109,7 @@ describe("SmtpEmailProvider", () => {
 				secure: true,
 				username: "resend",
 				password: "secret",
-				sender: "support@cocdev.co.kr",
+				sender: "support@onjitda.com",
 			}),
 		} as unknown as jest.Mocked<ConfigService>;
 
@@ -131,7 +131,7 @@ describe("SmtpEmailProvider", () => {
 			},
 		});
 		expect(sendMail).toHaveBeenCalledWith({
-			from: "support@cocdev.co.kr",
+			from: "support@onjitda.com",
 			to: "user@example.com",
 			subject: "테스트 제목",
 			html: "<p>테스트</p>",
@@ -144,7 +144,7 @@ describe("SmtpEmailProvider", () => {
 		process.env.SMTP_SECURE = "   ";
 		process.env.SMTP_USERNAME = "resend";
 		process.env.SMTP_PASSWORD = "secret";
-		process.env.SMTP_SENDER = "support@cocdev.co.kr";
+		process.env.SMTP_SENDER = "support@onjitda.com";
 
 		const mockConfigService = {
 			get: jest.fn().mockReturnValue(undefined),

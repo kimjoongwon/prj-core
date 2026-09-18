@@ -2002,7 +2002,7 @@ function writeAppEnvFiles({ worktreePath, values }) {
     SMTP_SECURE: "true",
     SMTP_USERNAME: "resend",
     SMTP_PASSWORD: "re_xxxxxxxxx",
-    SMTP_SENDER: "noreply@cocdev.co.kr",
+    SMTP_SENDER: "noreply@onjitda.com",
     OBJECT_STORAGE_PROVIDER: "cloudflare-r2",
     OBJECT_STORAGE_ACCESS_KEY: "dev-access-key",
     OBJECT_STORAGE_SECRET_KEY: "dev-secret-key",

@@ -130,7 +130,7 @@ const validateProductionRedisConfiguration = (): void => {
 	const redisPort = requireProductionEnvironmentVariable("REDIS_PORT");
 	const parsedRedisPort = Number(redisPort);
 	if (
-		["localhost", "127.0.0.1", "::1", "redis.cocdev.co.kr"].includes(
+		["localhost", "127.0.0.1", "::1", "redis.onjitda.com"].includes(
 			redisHost,
 		) ||
 		!Number.isInteger(parsedRedisPort) ||

@@ -76,7 +76,7 @@ fi
 
 DEFAULT_TAG="local-$(date +%Y%m%d%H%M%S)"
 ENV_NAME="${ENV_NAME:-stg}"
-REGISTRY="${REGISTRY:-${IMAGE_REGISTRY:-${HARBOR_REGISTRY:-harbor.cocdev.co.kr}}}"
+REGISTRY="${REGISTRY:-${IMAGE_REGISTRY:-${HARBOR_REGISTRY:-harbor.onjitda.com}}}"
 TAG="${TAG:-${IMAGE_TAG:-$DEFAULT_TAG}}"
 CACHE_TAG="${CACHE_TAG:-buildcache}"
 

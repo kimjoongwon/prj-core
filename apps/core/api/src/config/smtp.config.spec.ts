@@ -16,7 +16,7 @@ describe("smtpConfig", () => {
 			SMTP_PASSWORD: "secret",
 			SMTP_PORT: "587",
 			SMTP_HOST: "smtp.resend.com",
-			SMTP_SENDER: "support@cocdev.co.kr",
+			SMTP_SENDER: "support@onjitda.com",
 		};
 		delete process.env.SMTP_SECURE;
 	});
