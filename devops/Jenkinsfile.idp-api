@@ -19,7 +19,7 @@ podTemplate(
         def ENV_NAME = env.BRANCH_NAME == 'main' ? 'prod' : 'stg'
         def IMAGE_TAG = env.BUILD_NUMBER
         def PUSH_LATEST = ENV_NAME != 'prod'
-        def IMAGE_PATH = "harbor.cocdev.co.kr/${ENV_NAME}/idp-api"
+        def IMAGE_PATH = "harbor.onjitda.com/${ENV_NAME}/idp-api"
         def IMAGE_TAG_ARGS = ["-t ${IMAGE_PATH}:${IMAGE_TAG}"]
         if (PUSH_LATEST) {
             IMAGE_TAG_ARGS << "-t ${IMAGE_PATH}:latest"
@@ -52,7 +52,7 @@ podTemplate(
                                 -u \$HARBOR_USERNAME \\
                                 --password-stdin \\
                                 --tls-verify=true \\
-                                harbor.cocdev.co.kr
+                                harbor.onjitda.com
                         """
 
                         sh """

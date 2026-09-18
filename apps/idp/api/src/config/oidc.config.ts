@@ -11,6 +11,8 @@ export interface OidcConfig {
 	cookieKeys: string[];
 	jwks?: JwksKeys;
 	jwksUri: string;
+	// 로그인 인터랙션 UI(idp-web)의 공개 base URL
+	interactionBaseUrl: string;
 }
 
 export const oidcConfig = registerAs("oidc", (): OidcConfig => {
@@ -37,5 +39,7 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 		],
 		jwks,
 		jwksUri: process.env.OIDC_JWKS_URI || `${issuer}/oidc/jwks`,
+		interactionBaseUrl:
+			process.env.OIDC_INTERACTION_BASE_URL || "http://localhost:3008",
 	};
 });
