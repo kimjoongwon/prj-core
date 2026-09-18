@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
@@ -362,6 +362,14 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 }
 
 export function generateAdminRouteCatalog() {
+	// turbo prune 등으로 admin-web 앱이 워크스페이스에 없는 빌드 컨텍스트에서는
+	// 재생성을 건너뛰고 커밋된 생성물을 그대로 사용한다.
+	if (!existsSync(adminAppDir)) {
+		console.warn(
+			`[generate-admin-route-catalog] ${adminAppDir} 가 없어 재생성을 건너뜁니다 (기존 생성물 유지)`,
+		);
+		return null;
+	}
 	const routeMetaFiles = collectRouteMetaFiles(adminAppDir);
 	const pageFiles = collectPageFiles(adminAppDir);
 	validateRouteMetaCoverage(routeMetaFiles, pageFiles);

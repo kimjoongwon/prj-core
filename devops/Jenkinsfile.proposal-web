@@ -1,12 +1,12 @@
 def DEPLOYMENT_BRANCHES = ['main', 'stg']
 if (env.CHANGE_ID || !DEPLOYMENT_BRANCHES.contains(env.BRANCH_NAME) || env.TRUSTED_DEPLOYMENT != 'true') {
-    throw new IllegalStateException('배포는 보호 브랜치의 승인된 내부 job에서만 실행할 수 있습니다.')
+    error('배포는 보호 브랜치의 승인된 내부 job에서만 실행할 수 있습니다.')
 }
 def HARBOR_REGISTRY = env.HARBOR_REGISTRY
 def HARBOR_CREDENTIAL_ID = env.HARBOR_CREDENTIAL_ID
 def CONFIGURED_GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB
 if (!HARBOR_REGISTRY || !HARBOR_CREDENTIAL_ID || !CONFIGURED_GITOPS_UPDATE_JOB) {
-    throw new IllegalStateException('내부 배포 설정(HARBOR_REGISTRY, HARBOR_CREDENTIAL_ID, GITOPS_UPDATE_JOB)이 필요합니다.')
+    error('내부 배포 설정(HARBOR_REGISTRY, HARBOR_CREDENTIAL_ID, GITOPS_UPDATE_JOB)이 필요합니다.')
 }
 
 podTemplate(
