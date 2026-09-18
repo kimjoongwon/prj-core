@@ -4,7 +4,7 @@ import {
 	SYSTEM_SPACE_ULID,
 	SYSTEM_TENANT_ULID,
 } from "../reference-data/constants";
-import { systemAdminSeedData } from "./data/system-users";
+import { resolveSystemAdminSeedData } from "./data/system-users";
 
 type SystemAdminDbClient = PrismaClient | Prisma.TransactionClient;
 
@@ -12,8 +12,9 @@ type DbId = bigint;
 
 function resolveSystemAdminSeeds(targetEmails?: readonly string[]) {
 	if (!targetEmails || targetEmails.length === 0) {
-		return systemAdminSeedData;
+		return resolveSystemAdminSeedData();
 	}
+	const systemAdminSeedData = resolveSystemAdminSeedData();
 
 	const emailSet = new Set(targetEmails);
 	const matchedSeeds = systemAdminSeedData.filter((seed) =>
@@ -75,42 +76,9 @@ export async function ensureSystemAdminUsers(
 		});
 
 		if (!systemAdminUser) {
-			const legacySystemAdminUser =
-				userData.legacyEmails && userData.legacyEmails.length > 0
-					? await db.user.findFirst({
-							where: {
-								email: {
-									in: userData.legacyEmails,
-								},
-							},
-						})
-					: null;
 			const hashedPassword = await hash(userData.password, 10);
 
-			if (legacySystemAdminUser) {
-				systemAdminUser = await db.user.update({
-					where: { id: legacySystemAdminUser.id },
-					data: {
-						name: userData.profile.name,
-						phone: userData.phone,
-						email: userData.email,
-						password: hashedPassword,
-						failedLoginAttempts: 0,
-						lockedUntil: null,
-						isPermanentlyLocked: false,
-						mustChangePassword: false,
-					},
-				});
-				console.log(
-					`System admin user migrated: ${legacySystemAdminUser.email} -> ${userData.email}`,
-				);
-				await ensureSystemAdminProfile(
-					db,
-					systemAdminUser.id,
-					userData.profile.name,
-					userData.profile.nickname,
-				);
-			} else {
+			{
 				systemAdminUser = await db.user.create({
 					data: {
 						name: userData.profile.name,
@@ -150,9 +118,7 @@ export async function ensureSystemAdminUsers(
 		if (!existingTenant) {
 			await db.tenant.create({
 				data: {
-					...(userData.email === "admin@plate.com"
-						? { tenantId: SYSTEM_TENANT_ULID }
-						: {}),
+					tenantId: SYSTEM_TENANT_ULID,
 					user: { connect: { id: systemAdminUser.id } },
 					space: { connect: { spaceId: SYSTEM_SPACE_ULID } },
 					role: { connect: { id: platformAdminRoleId } },

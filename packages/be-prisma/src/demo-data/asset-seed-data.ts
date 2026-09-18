@@ -1,4 +1,4 @@
-// ============================================================================
+import { resolveSystemAdminSeedData } from "../bootstrap/data/system-users";
 // Asset Domain Seed Data - 에셋 도메인 시드 데이터
 // ============================================================================
 //
@@ -169,7 +169,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		sizeBytes: 245780,
 		folderPath: "/에셋 라이브러리/이미지/로고",
 		checksum: "sha256:a1b2c3d4e5f6...",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "f45-logo-white.png",
@@ -180,7 +180,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		sizeBytes: 198450,
 		folderPath: "/에셋 라이브러리/이미지/로고",
 		checksum: "sha256:b2c3d4e5f6g7...",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "onora-logo-full.svg",
@@ -190,7 +190,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "svg",
 		sizeBytes: 15420,
 		folderPath: "/에셋 라이브러리/이미지/로고",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "crossfit-logo-official.png",
@@ -200,7 +200,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "png",
 		sizeBytes: 312000,
 		folderPath: "/에셋 라이브러리/이미지/로고",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 
 	// 배경 이미지
@@ -212,7 +212,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "jpg",
 		sizeBytes: 1250000,
 		folderPath: "/에셋 라이브러리/이미지/배경",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "workout-class-action.jpg",
@@ -222,7 +222,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "jpg",
 		sizeBytes: 980000,
 		folderPath: "/에셋 라이브러리/이미지/배경",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "fitness-equipment-banner.jpg",
@@ -232,7 +232,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "jpg",
 		sizeBytes: 1450000,
 		folderPath: "/에셋 라이브러리/이미지/배경",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 
 	// 프로필 이미지
@@ -244,7 +244,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "png",
 		sizeBytes: 45000,
 		folderPath: "/에셋 라이브러리/이미지/프로필",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "profile-default-female.png",
@@ -254,7 +254,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "png",
 		sizeBytes: 42000,
 		folderPath: "/에셋 라이브러리/이미지/프로필",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "trainer-avatar-sample.jpg",
@@ -264,7 +264,7 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		extension: "jpg",
 		sizeBytes: 89000,
 		folderPath: "/에셋 라이브러리/이미지/프로필",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 ];
 
@@ -281,7 +281,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 125000000,
 		folderPath: "/에셋 라이브러리/동영상/클래스영상",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "hiit-workout-30min.mp4",
@@ -291,7 +291,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 89000000,
 		folderPath: "/에셋 라이브러리/동영상/클래스영상",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "strength-training-basics.mp4",
@@ -301,7 +301,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 156000000,
 		folderPath: "/에셋 라이브러리/동영상/클래스영상",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 
 	// 홍보 영상
@@ -313,7 +313,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 45000000,
 		folderPath: "/에셋 라이브러리/동영상/홍보영상",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "member-testimonial-compilation.mp4",
@@ -323,7 +323,7 @@ export const videoAssetSeedData: AssetSeedData[] = [
 		extension: "mp4",
 		sizeBytes: 78000000,
 		folderPath: "/에셋 라이브러리/동영상/홍보영상",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 ];
 
@@ -340,7 +340,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "pdf",
 		sizeBytes: 1250000,
 		folderPath: "/에셋 라이브러리/문서/가이드",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "시설 이용 규정.pdf",
@@ -350,7 +350,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "pdf",
 		sizeBytes: 890000,
 		folderPath: "/에셋 라이브러리/문서/가이드",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "운동 프로그램 가이드.docx",
@@ -361,7 +361,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "docx",
 		sizeBytes: 2450000,
 		folderPath: "/에셋 라이브러리/문서/가이드",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 
 	// 계약서 문서
@@ -373,7 +373,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "pdf",
 		sizeBytes: 156000,
 		folderPath: "/에셋 라이브러리/문서/계약서",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		originalName: "회원권 계약서 양식.pdf",
@@ -383,7 +383,7 @@ export const documentAssetSeedData: AssetSeedData[] = [
 		extension: "pdf",
 		sizeBytes: 234000,
 		folderPath: "/에셋 라이브러리/문서/계약서",
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 ];
 
@@ -827,21 +827,21 @@ export const albumSeedData: AlbumSeedData[] = [
 		description: "오노라 및 파트너 브랜드 로고, 아이덴티티 에셋 모음",
 		coverStorageKey: "assets/images/logo/f45-logo-primary-2024.png",
 		sortOrder: 0,
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		name: "웹사이트 배너",
 		description: "웹사이트 메인 및 서브 배너용 이미지 모음",
 		coverStorageKey: "assets/images/background/hero-gym-interior-2024.jpg",
 		sortOrder: 1,
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
 		name: "클래스 홍보 영상",
 		description: "클래스 소개 및 홍보용 영상 모음",
 		coverStorageKey: "assets/videos/promo/brand-promo-2024.mp4",
 		sortOrder: 2,
-		createdByEmail: "admin@plate.com",
+		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 ];
 

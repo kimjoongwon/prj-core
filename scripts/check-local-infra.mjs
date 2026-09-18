@@ -19,6 +19,8 @@ const SERVICE_CONFIG = {
     label: "core-api",
     envPath: "apps/core/api/.env",
   },
+  "admin-web": { label: "admin-web", envPath: "apps/core/api/.env" },
+  "proposal-web": { label: "proposal-web", envPath: "apps/core/api/.env" },
 };
 
 function isTruthy(value) {
@@ -131,7 +133,7 @@ function probeTcp(host, port, timeoutMs = DEFAULT_TIMEOUT_MS) {
 
 function printUsageAndExit() {
   console.error(
-    "Usage: node scripts/check-local-infra.mjs [core-api]",
+    "Usage: node scripts/check-local-infra.mjs [core-api] [admin-web] [proposal-web]",
   );
   process.exit(1);
 }

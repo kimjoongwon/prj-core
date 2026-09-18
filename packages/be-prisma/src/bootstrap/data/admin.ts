@@ -100,7 +100,7 @@ export interface UserAgreementMappingData {
 	agreements: AgreementType[];
 }
 
-// PLATFORM_ADMIN(admin@plate.com)은 시스템 관리자이므로 일반 회원 약관 흐름에서 제외합니다.
+// PLATFORM_ADMIN(configured system administrator)은 시스템 관리자이므로 일반 회원 약관 흐름에서 제외합니다.
 export const userAgreementMapping: UserAgreementMappingData[] = [
 	// COMPANY_MANAGER 계정 - 필수 + 마케팅 동의
 	{

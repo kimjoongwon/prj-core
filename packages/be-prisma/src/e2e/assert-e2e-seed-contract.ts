@@ -1,3 +1,4 @@
+import { resolveSystemAdminSeedData } from "../bootstrap/data/system-users";
 import type { PrismaClient } from "../generated/client/client";
 import { SYSTEM_SPACE_ULID } from "../reference-data/constants";
 
@@ -9,7 +10,7 @@ export async function assertE2eSeedContract(
 			where: { spaceId: SYSTEM_SPACE_ULID },
 		}),
 		prisma.user.findFirst({
-			where: { email: "admin@plate.com" },
+			where: { email: resolveSystemAdminSeedData()[0].email },
 			include: {
 				tenants: true,
 			},
@@ -36,11 +37,11 @@ export async function assertE2eSeedContract(
 	}
 
 	if (!adminUser) {
-		missingContracts.push("admin user (admin@plate.com)");
+		missingContracts.push("admin user (${resolveSystemAdminSeedData()[0].email})");
 	}
 
 	if (adminUser && adminUser.tenants.length === 0) {
-		missingContracts.push("admin tenant (admin@plate.com)");
+		missingContracts.push("admin tenant (${resolveSystemAdminSeedData()[0].email})");
 	}
 
 	if (!adminClient) {

@@ -308,6 +308,23 @@ graph TD
 
 ## 🚀 시작하기
 
+### 로컬 핵심 서비스 한 번에 실행
+
+Docker Desktop과 Node.js 22+, pnpm 10+를 준비한 뒤 clean clone에서 실행합니다.
+
+```bash
+pnpm install --frozen-lockfile
+cp apps/core/api/.env.example apps/core/api/.env
+cp apps/admin/web/.env.example apps/admin/web/.env.local
+cp apps/proposal/web/.env.example apps/proposal/web/.env.local
+cp packages/be-prisma/.env.example packages/be-prisma/.env
+pnpm start -- core-api admin-web proposal-web
+```
+
+위 명령은 로컬 PostgreSQL/Redis 컨테이너를 readiness까지 기동하고 migration과 멱등 bootstrap을 실행합니다. API는 `http://localhost:3006`, Admin은 `http://localhost:3000`, Proposal은 `http://localhost:3011`에서 확인합니다. Docker를 직접 관리하거나 원격 인프라를 사용할 때만 `START_SKIP_INFRA_START=1`과 `START_SKIP_INFRA_CHECK=1`을 명시합니다.
+
+기동 실패 시 출력된 PostgreSQL/Redis 주소와 서비스명을 먼저 확인합니다. Docker daemon이 꺼져 있으면 Docker Desktop을 시작하고, 포트가 사용 중이면 해당 프로세스를 종료한 뒤 같은 명령을 다시 실행합니다.
+
 ### 사전 요구사항
 
 - **Node.js**: 22.18.0 이상
@@ -319,7 +336,7 @@ graph TD
 1. **저장소 클론**
 
 ```bash
-git clone https://github.com/your-org/prj-core.git
+git clone https://github.com/kimjoongwon/prj-core.git
 cd prj-core
 ```
 

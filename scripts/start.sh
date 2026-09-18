@@ -61,6 +61,20 @@ ensure_shared_local_env() {
   export AUTH_JWT_TOKEN_REFRESH_IN="${AUTH_JWT_TOKEN_REFRESH_IN:-7d}"
   export AUTH_JWT_SALT_ROUNDS="${AUTH_JWT_SALT_ROUNDS:-10}"
 
+  # Bootstrap credentials are intentionally synthetic and local-only. They
+  # must be supplied by the deployment secret manager in production.
+  if [[ "$NODE_ENV" == "production" ]]; then
+    if [[ -n "${LOCAL_BOOTSTRAP_ADMIN_EMAIL:-}" || -n "${LOCAL_BOOTSTRAP_ADMIN_PASSWORD:-}" ]]; then
+      echo "❌ LOCAL_BOOTSTRAP_ADMIN_*는 production에서 사용할 수 없습니다." >&2
+      exit 1
+    fi
+  else
+    export LOCAL_BOOTSTRAP_ADMIN_EMAIL="${LOCAL_BOOTSTRAP_ADMIN_EMAIL:-local-admin@example.com}"
+    export LOCAL_BOOTSTRAP_ADMIN_PASSWORD="${LOCAL_BOOTSTRAP_ADMIN_PASSWORD:-local-admin-password-change-me}"
+    export LOCAL_BOOTSTRAP_ADMIN_NAME="${LOCAL_BOOTSTRAP_ADMIN_NAME:-Local Administrator}"
+    export LOCAL_BOOTSTRAP_ADMIN_NICKNAME="${LOCAL_BOOTSTRAP_ADMIN_NICKNAME:-local-admin}"
+  fi
+
   export ADMIN_WEB_URL="${ADMIN_WEB_URL:-http://localhost:${ADMIN_WEB_PORT:-3000}}"
   export CORE_API_URL="${CORE_API_URL:-http://localhost:${CORE_API_PORT:-3006}}"
   export STORYBOOK_URL="${STORYBOOK_URL:-http://localhost:${STORYBOOK_PORT:-6006}}"
@@ -75,6 +89,22 @@ ensure_shared_local_env() {
 }
 
 ensure_shared_local_env
+
+start_local_infrastructure() {
+  if [[ "${START_SKIP_INFRA_START:-}" =~ ^(y|yes|true|1|on)$ ]]; then
+    return
+  fi
+  if ! command -v docker >/dev/null 2>&1; then
+    echo -e "${YELLOW}❌ Docker가 필요합니다. Docker Desktop을 실행하거나 START_SKIP_INFRA_START=1로 자동 기동을 건너뛰세요.${RESET}" >&2
+    exit 1
+  fi
+  if ! docker info >/dev/null 2>&1; then
+    echo -e "${YELLOW}❌ Docker daemon에 연결할 수 없습니다. Docker Desktop을 실행하세요.${RESET}" >&2
+    exit 1
+  fi
+  echo -e "${YELLOW}🐳 로컬 PostgreSQL/Redis 기동 중...${RESET}"
+  docker compose -f docker-compose.local.yml up -d --wait
+}
 
 # -- 인자 제거 (pnpm이 -- 를 전달할 수 있음)
 ARGS=()
@@ -611,7 +641,19 @@ pre_cleanup_ports() {
   fi
 }
 
+if [[ "$HAS_BACKEND" == "true" ]]; then
+  start_local_infrastructure
+fi
 run_local_infra_preflight
+if [[ "$HAS_BACKEND" == "true" ]]; then
+  echo -e "${YELLOW}🗃️  데이터베이스 migration/bootstrap 실행 중...${RESET}"
+  pnpm --filter=@cocrepo/prisma db:migrate:deploy
+  LOCAL_BOOTSTRAP_ADMIN_EMAIL="$LOCAL_BOOTSTRAP_ADMIN_EMAIL" \
+    LOCAL_BOOTSTRAP_ADMIN_PASSWORD="$LOCAL_BOOTSTRAP_ADMIN_PASSWORD" \
+    LOCAL_BOOTSTRAP_ADMIN_NAME="${LOCAL_BOOTSTRAP_ADMIN_NAME:-Local Administrator}" \
+    LOCAL_BOOTSTRAP_ADMIN_NICKNAME="${LOCAL_BOOTSTRAP_ADMIN_NICKNAME:-local-admin}" \
+    pnpm --filter=@cocrepo/prisma db:bootstrap
+fi
 pre_cleanup_service_processes
 pre_cleanup_ports
 

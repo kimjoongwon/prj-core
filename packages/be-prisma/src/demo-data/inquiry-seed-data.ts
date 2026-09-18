@@ -8,6 +8,7 @@
 //
 // ============================================================================
 
+import { resolveSystemAdminSeedData } from "../bootstrap/data/system-users";
 import type {
 	InquiryCategory,
 	InquiryChannel,
@@ -879,7 +880,7 @@ export const inquiryParticipantSeedData: InquiryParticipantSeedData[] = [
 	},
 	{
 		inquiryNumber: "INQ-2026-0010",
-		userEmail: "admin@plate.com",
+		userEmail: resolveSystemAdminSeedData()[0].email,
 		role: "SUPERVISOR",
 		isOnline: false,
 	},

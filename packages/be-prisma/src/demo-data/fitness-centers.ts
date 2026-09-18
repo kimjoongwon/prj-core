@@ -1,4 +1,4 @@
-import { systemAdminSeedData } from "../bootstrap/data/system-users";
+import { resolveSystemAdminSeedData } from "../bootstrap/data/system-users";
 
 /**
  * dev/stg에서 쓰는 사용자/피트니스센터 데모 데이터입니다.
@@ -31,7 +31,7 @@ export interface FitnessCenterSeedData {
 
 // 11명의 다양한 역할 유저 데이터 (PLATFORM_ADMIN 2명, COMPANY_MANAGER 3명, MEMBER 6명)
 export const userSeedData: UserSeedData[] = [
-	...systemAdminSeedData.map((user) => ({
+	...resolveSystemAdminSeedData().map((user) => ({
 		...user,
 		role: "PLATFORM_ADMIN",
 	})),
@@ -137,7 +137,7 @@ export const fitnessCenterSeedData: FitnessCenterSeedData[] = [
 		label: "본사",
 		address: "서울시 강남구",
 		phone: "02-0000-0000",
-		email: "admin@plate.com",
+		email: resolveSystemAdminSeedData()[0].email,
 		businessNo: "000-00-00000",
 		isSystem: true,
 	},
@@ -237,11 +237,11 @@ export interface UserFitnessCenterMappingData {
 export const userFitnessCenterMapping: UserFitnessCenterMappingData[] = [
 	// PLATFORM_ADMIN - 플랫폼 운영본부 (System Space)
 	{
-		userEmail: "admin@plate.com",
+		userEmail: resolveSystemAdminSeedData()[0].email,
 		fitnessCenterNames: ["플랫폼 운영본부"],
 	},
 	{
-		userEmail: "wallydevplan@gmail.com",
+		userEmail: resolveSystemAdminSeedData()[0].email,
 		fitnessCenterNames: ["플랫폼 운영본부"],
 	},
 	// COMPANY_MANAGER - 담당 지점만 (F45 계열)

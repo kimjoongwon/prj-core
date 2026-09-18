@@ -10,6 +10,7 @@ import {
 } from "../demo-data";
 import type { PrismaClient } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
+import { resolveSystemAdminSeedData } from "./data/system-users";
 
 type DbId = bigint;
 
@@ -40,7 +41,7 @@ export async function createAssetDomainData(
 	}
 
 	const adminUser = await prisma.user.findFirst({
-		where: { email: "admin@plate.com" },
+		where: { email: resolveSystemAdminSeedData()[0]?.email },
 	});
 	const createdByEmails = [
 		...new Set(

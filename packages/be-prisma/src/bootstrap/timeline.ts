@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { resolveSystemAdminSeedData } from "./data/system-users";
 
 import {
 	exerciseCatalogSeedData,
@@ -154,11 +155,11 @@ export async function createTimelineSessionExerciseDomainData(
 			where: { name: { in: timelineFitnessCenterNames } },
 		}),
 		prisma.user.findMany({ where: { email: { in: createdByEmails } } }),
-		prisma.user.findFirst({ where: { email: "admin@plate.com" } }),
+		prisma.user.findFirst({ where: { email: resolveSystemAdminSeedData()[0]?.email } }),
 	]);
 
 	if (!fallbackUser) {
-		throw new Error("기본 시드 유저(admin@plate.com)를 찾을 수 없습니다.");
+		throw new Error("기본 시스템 관리자 시드 유저를 찾을 수 없습니다.");
 	}
 
 	const fitnessCenterByName = new Map(

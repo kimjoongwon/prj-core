@@ -13,7 +13,7 @@ import type {
 } from "../generated/client/client";
 import { SYSTEM_SPACE_ULID } from "../reference-data/constants";
 import { syncReferenceData } from "../reference-data/sync-reference-data";
-import { systemAdminSeedData } from "./data/system-users";
+import { resolveSystemAdminSeedData } from "./data/system-users";
 import { ensureSystemAdminUsers } from "./system-admins";
 
 type DbId = bigint;
@@ -506,7 +506,7 @@ export async function createHierarchicalTenants(
 			removedAt: null,
 			user: {
 				email: {
-					in: systemAdminSeedData.map((user) => user.email),
+					in: resolveSystemAdminSeedData().map((user) => user.email),
 				},
 			},
 		},

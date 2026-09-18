@@ -155,6 +155,16 @@ function runPrismaCommand(
 			DIRECT_URL: directUrl,
 			NODE_ENV: "test",
 			PRISMA_SEED_PROFILE: "e2e",
+			// E2E uses a deterministic synthetic identity at this process boundary;
+			// normal bootstrap still requires caller-provided credentials.
+			LOCAL_BOOTSTRAP_ADMIN_EMAIL:
+				process.env.LOCAL_BOOTSTRAP_ADMIN_EMAIL ?? "e2e-admin@example.invalid",
+			LOCAL_BOOTSTRAP_ADMIN_PASSWORD:
+				process.env.LOCAL_BOOTSTRAP_ADMIN_PASSWORD ?? "e2e-only-password",
+			LOCAL_BOOTSTRAP_ADMIN_NAME:
+				process.env.LOCAL_BOOTSTRAP_ADMIN_NAME ?? "E2E Administrator",
+			LOCAL_BOOTSTRAP_ADMIN_NICKNAME:
+				process.env.LOCAL_BOOTSTRAP_ADMIN_NICKNAME ?? "e2e-admin",
 		},
 		stdio: "inherit",
 	});
