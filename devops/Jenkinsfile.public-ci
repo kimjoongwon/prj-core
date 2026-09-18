@@ -1,0 +1,55 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: node
+      image: node:22.18.0-bookworm-slim
+      command: ["sleep"]
+      args: ["infinity"]
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+'''
+        }
+    }
+
+    options {
+        skipDefaultCheckout(true)
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                container('node') {
+                    checkout scm
+                }
+            }
+        }
+        stage('Install and Validate') {
+            steps {
+                container('node') {
+                    sh '''#!/usr/bin/env bash
+                        set -euo pipefail
+                        corepack enable
+                        pnpm install --frozen-lockfile
+                        pnpm public-packages:check
+                        pnpm type-check
+                        pnpm lint
+                        pnpm test
+                    '''
+                }
+            }
+        }
+    }
+}

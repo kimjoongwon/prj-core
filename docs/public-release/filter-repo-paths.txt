@@ -1,0 +1,14 @@
+# git filter-repo --invert-paths --paths-from-file 입력
+apps/admin/.env.development
+apps/admin/.env.production
+apps/admin_back/.env.development
+apps/admin_back/.env.production
+apps/mobile/android/app/debug.keystore
+apps/server/.env
+apps/server/.env.prod
+apps/server/.env.test
+out/full/apps/server/.env
+out/full/packages/shared-backend/.env
+packages/database/.env
+packages/schema/.env
+packages/shared-backend/.env

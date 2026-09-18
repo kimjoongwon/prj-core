@@ -1,3 +1,13 @@
+if (env.CHANGE_ID || env.BRANCH_NAME != 'main' || env.TRUSTED_DEPLOYMENT != 'true') {
+    throw new IllegalStateException('배포는 main 보호 브랜치의 승인된 내부 job에서만 실행할 수 있습니다.')
+}
+def HARBOR_REGISTRY = env.HARBOR_REGISTRY
+def HARBOR_CREDENTIAL_ID = env.HARBOR_CREDENTIAL_ID
+def CONFIGURED_GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB
+if (!HARBOR_REGISTRY || !HARBOR_CREDENTIAL_ID || !CONFIGURED_GITOPS_UPDATE_JOB) {
+    throw new IllegalStateException('내부 배포 설정(HARBOR_REGISTRY, HARBOR_CREDENTIAL_ID, GITOPS_UPDATE_JOB)이 필요합니다.')
+}
+
 def PODMAN_EPHEMERAL_REQUEST = '8Gi'
 def PODMAN_EPHEMERAL_LIMIT = '20Gi'
 
@@ -24,13 +34,13 @@ podTemplate(
     node(POD_LABEL) {
         def ENV_NAME = 'prod'
         def IMAGE_TAG = env.BUILD_NUMBER
-        def IMAGE_PATH = "harbor.cocdev.co.kr/${ENV_NAME}/tool-storybook"
+        def IMAGE_PATH = "${HARBOR_REGISTRY}/${ENV_NAME}/tool-storybook"
         def STORYBOOK_DISABLE_CHROMATIC = 'true'
         def STORYBOOK_BUILD_NOFILE = '65536'
         def IMAGE_TAG_ARGS = ["-t ${IMAGE_PATH}:${IMAGE_TAG}"]
         def CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
         def GITOPS_APP = 'tool-storybook'
-        def GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB ?: '/gitops-prod-image-bump'
+        def GITOPS_UPDATE_JOB = CONFIGURED_GITOPS_UPDATE_JOB
         def PODMAN_BASE_DIR = '/var/lib/containers/tsb'
         def BUILD_KEY = "b${env.BUILD_NUMBER ?: '0'}"
         def BUILD_ROOT = "${PODMAN_BASE_DIR}/${BUILD_KEY}"
@@ -71,7 +81,7 @@ podTemplate(
 
                         withCredentials([
                             usernamePassword(
-                                credentialsId: 'harbor',
+                                credentialsId: HARBOR_CREDENTIAL_ID,
                                 usernameVariable: 'HARBOR_USERNAME',
                                 passwordVariable: 'HARBOR_PASSWORD'
                             )
@@ -85,7 +95,7 @@ podTemplate(
                                     -u \$HARBOR_USERNAME \\
                                     --password-stdin \\
                                     --tls-verify=true \\
-                                    harbor.cocdev.co.kr
+                                    ${HARBOR_REGISTRY}
                             """
 
                             sh """

@@ -14,7 +14,7 @@
 | 항목 | 설명 |
 |------|------|
 | 빌드 대상 | `tool-storybook` |
-| 이미지 경로 | `harbor.cocdev.co.kr/prod/tool-storybook` |
+| 이미지 경로 | `HARBOR_REGISTRY/prod/tool-storybook` |
 | 브랜치 정책 | `main` 브랜치만 허용, 그 외 브랜치는 즉시 실패 |
 | Podman 실행 이미지 | `quay.io/podman/stable:v5.8.4` multi-arch manifest를 digest로 고정 |
 | pull 정책 | agent 시작 시 `alwaysPullImage: true`, 이미지 빌드 시 `podman build --pull=always` |
@@ -26,7 +26,7 @@
 | 임시 디렉터리 | `TMPDIR`, `XDG_RUNTIME_DIR`, `HOME`을 `/var/lib/containers/*` 아래로 고정해 Podman 임시 파일을 PVC로 유도 |
 | 빌드별 경로 | workspace/Podman storage를 `/var/lib/containers/tsb/b<build>/{ws,root,run,tmp,home}`로 단순화 |
 | Ephemeral Storage | `podman` 컨테이너에 `request=8Gi`, `limit=20Gi`를 요청 |
-| GitOps 트리거 | `GITOPS_UPDATE_JOB` 환경변수(기본 `/gitops-prod-image-bump`) |
+| GitOps 트리거 | 보호된 내부 job이 주입하는 `GITOPS_UPDATE_JOB` 환경변수 |
 | 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
 | 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
 
@@ -48,5 +48,5 @@
 
 ## 잔여 위험
 
-`privileged: true`는 현재 Jenkins Podman 스토리지 드라이버와 PVC 운영 계약을 실제 환경에서 검증하기 전까지 유지합니다.
+`privileged: true`는 현재 Jenkins Podman 스토리지 드라이버와 PVC 운영 계약을 실제 환경에서 검증하기 전까지 배포 전용 job에서만 유지합니다. 외부 PR은 `Jenkinsfile.public-ci`의 비특권 컨테이너만 사용합니다.
 build별 storage 경로는 작업 간 오염을 줄이지만 privileged 컨테이너의 노드 탈출 영향을 제거하지 않으므로, 전용 namespace와 격리된 builder node pool에서 운용하고 rootless Podman 전환 검증 후 권한을 제거해야 합니다.

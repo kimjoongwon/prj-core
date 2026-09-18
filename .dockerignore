@@ -10,6 +10,25 @@ out
 **/.turbo
 **/coverage
 **/*.tsbuildinfo
+# 환경 파일은 Docker build context에 포함하지 않음
+.env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+# 인증서, 개인 키와 브라우저 산출물 제외
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.jks
+**/*.keystore
+playwright-report
+**/playwright-report
+test-results
+**/test-results
+**/screenshots
+**/*.snap.png
 # 로컬 임시 파일/로그 제외
 .tmp
 .tmp-java

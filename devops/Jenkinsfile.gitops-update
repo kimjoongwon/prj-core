@@ -34,7 +34,7 @@ pipeline {
     }
 
     environment {
-        GITOPS_REPO = 'https://github.com/kimjoongwon/prj-devops.git'
+        GITOPS_REPO = "${env.GITOPS_REPOSITORY_URL}"
         GITOPS_BRANCH = 'main'
         GITOPS_DIR = 'prj-devops-gitops'
     }
@@ -43,6 +43,12 @@ pipeline {
         stage('Update GitOps Tag') {
             steps {
                 script {
+                    if (env.CHANGE_ID || env.TRUSTED_DEPLOYMENT != 'true') {
+                        error('GitOps 변경은 승인된 내부 배포 job에서만 실행할 수 있습니다.')
+                    }
+                    if (!env.GITOPS_REPOSITORY_URL?.trim() || !env.GITOPS_CREDENTIAL_ID?.trim()) {
+                        error('GITOPS_REPOSITORY_URL과 GITOPS_CREDENTIAL_ID 내부 설정이 필요합니다.')
+                    }
                     if (!params.IMAGE_TAG?.trim()) {
                         error('IMAGE_TAG parameter is required.')
                     }
@@ -50,7 +56,7 @@ pipeline {
 
                 withCredentials([
                     usernamePassword(
-                        credentialsId: 'github-app-credential',
+                        credentialsId: env.GITOPS_CREDENTIAL_ID,
                         usernameVariable: 'GITHUB_USERNAME',
                         passwordVariable: 'GITHUB_TOKEN'
                     )
@@ -59,7 +65,8 @@ pipeline {
                         set -euo pipefail
                         set +x
 
-                        REPO_URL="https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/kimjoongwon/prj-devops.git"
+                        REPO_URL="${GITOPS_REPO}"
+                        REPO_URL="${REPO_URL/https:\/\//https:\/\/${GITHUB_USERNAME}:${GITHUB_TOKEN}@}"
                         rm -rf "${GITOPS_DIR}"
                         git clone --branch "${GITOPS_BRANCH}" "${REPO_URL}" "${GITOPS_DIR}"
 
