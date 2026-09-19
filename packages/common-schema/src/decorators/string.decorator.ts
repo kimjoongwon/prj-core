@@ -52,19 +52,26 @@ export function String(
 	}
 
 	// 길이 검증
+	const minMessage = `${VALIDATION_MESSAGES.MIN_LENGTH}`.replaceAll(
+		"{{min}}",
+		`${minLength}`,
+	);
 	decorators.push(
 		MinLength(minLength, {
 			each,
-			message: VALIDATION_MESSAGES.MIN_LENGTH,
-			context: { min: minLength },
+			message: minMessage,
 		}),
 	);
 
 	if (maxLength) {
+		const maxMessage = `${VALIDATION_MESSAGES.MAX_LENGTH}`.replaceAll(
+			"{{max}}",
+			`${maxLength}`,
+		);
 		decorators.push(
 			MaxLength(maxLength, {
 				each,
-				message: VALIDATION_MESSAGES.MAX_LENGTH,
+				message: maxMessage,
 			}),
 		);
 	}

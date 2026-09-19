@@ -51,16 +51,19 @@ export function Password(
 		strong = false,
 	} = options;
 
+	const minMessage = `${VALIDATION_MESSAGES.PASSWORD_MIN_LENGTH}`.replaceAll(
+		"{{min}}",
+		String(minLength),
+	);
+	const maxMessage = `${VALIDATION_MESSAGES.MAX_LENGTH}`.replaceAll(
+		"{{max}}",
+		String(maxLength),
+	);
 	const decorators: PropertyDecorator[] = [
 		IsNotEmpty({ message: VALIDATION_MESSAGES.REQUIRED }),
 		IsString({ message: VALIDATION_MESSAGES.STRING_TYPE }),
-		MinLength(minLength, {
-			message: VALIDATION_MESSAGES.PASSWORD_MIN_LENGTH,
-			context: { min: minLength },
-		}),
-		MaxLength(maxLength, {
-			message: VALIDATION_MESSAGES.MAX_LENGTH,
-		}),
+		MinLength(minLength, { message: minMessage }),
+		MaxLength(maxLength, { message: maxMessage }),
 	];
 
 	if (strong) {
