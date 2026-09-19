@@ -15,12 +15,25 @@ export interface OidcConfig {
 	interactionBaseUrl: string;
 }
 
+/**
+ * 셸(source)은 .env의 이중 인용과 \" 이스케이프를 해석해 내려주지만 dotenv는
+ * 원문 그대로 읽는다. 두 실행 방식에서 같은 JSON 값을 얻도록 정규화한다.
+ */
+export function normalizeJsonEnvironmentValue(rawValue: string): string {
+	return rawValue
+		.trim()
+		.replace(/^"+|"+$/g, "")
+		.replace(/\\"/g, '"');
+}
+
 export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 	let jwks: JwksKeys | undefined;
 
 	if (process.env.OIDC_JWKS_KEYS) {
 		try {
-			jwks = JSON.parse(process.env.OIDC_JWKS_KEYS);
+			jwks = JSON.parse(
+				normalizeJsonEnvironmentValue(process.env.OIDC_JWKS_KEYS),
+			);
 		} catch {
 			throw new Error("OIDC_JWKS_KEYS is not valid JSON");
 		}
