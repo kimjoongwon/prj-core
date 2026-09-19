@@ -1,52 +1,50 @@
 #!/usr/bin/env node
 const fs = require("node:fs");
 const path = require("node:path");
-const readline = require("node:readline");
 
-// 사용 가능한 앱 목록
-const availableApps = ["admin", "server", "storybook"];
+// 인자: [앱 필터 ...] [--dry-run]
+// - 앱 필터 없음: 발견된 모든 앱 대상
+// - 앱 필터: package.json의 name 또는 디렉터리명(예: admin/web, idp-web)과 부분 일치
+// - --dry-run: 변경 예정만 출력하고 파일을 쓰지 않음
+const rawArguments = process.argv.slice(2);
+const isDryRun = rawArguments.includes("--dry-run");
+const appFilters = rawArguments.filter((argument) => argument !== "--dry-run");
 
-// 커맨드 라인 인자에서 앱 목록 가져오기
-const selectedApps = process.argv.slice(2);
+// apps/*/package.json 과 apps/*/*/package.json(core/api, admin/web 등 중첩 구조)을 모두 수집
+function discoverWorkspaceApps() {
+  const appsRoot = path.join(__dirname, "../apps");
+  const discoveredApps = [];
 
-// readline 인터페이스 생성
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+  for (const entry of fs.readdirSync(appsRoot, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
 
-// 프롬프트 함수
-function prompt(question) {
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      resolve(answer.trim().toLowerCase());
-    });
-  });
-}
+    const directManifest = path.join(appsRoot, entry.name, "package.json");
+    if (fs.existsSync(directManifest)) {
+      discoveredApps.push(directManifest);
+      continue;
+    }
 
-// 앱 선택 함수
-async function selectApps() {
-  console.log("\n📱 업데이트할 앱을 선택해주세요:");
-  console.log(`=${"=".repeat(59)}`);
-
-  const appsToUpdate = [];
-
-  for (const app of availableApps) {
-    const answer = await prompt(`  ${app} 업데이트? (y/n) [y]: `);
-    if (answer === "" || answer === "y" || answer === "yes") {
-      appsToUpdate.push(app);
-      console.log(`  ✅ ${app} 선택됨`);
-    } else {
-      console.log(`  ⏭️  ${app} 건너뜀`);
+    for (const nestedEntry of fs.readdirSync(
+      path.join(appsRoot, entry.name),
+      { withFileTypes: true },
+    )) {
+      if (!nestedEntry.isDirectory()) continue;
+      const nestedManifest = path.join(
+        appsRoot,
+        entry.name,
+        nestedEntry.name,
+        "package.json",
+      );
+      if (fs.existsSync(nestedManifest)) {
+        discoveredApps.push(nestedManifest);
+      }
     }
   }
 
-  console.log(`=${"=".repeat(59)}\n`);
-
-  return appsToUpdate;
+  return discoveredApps;
 }
 
-// 패키지 버전 읽기
+// 공개 패키지 버전 수집 (packages/*/package.json)
 function getPackageVersions() {
   const packagesDir = path.join(__dirname, "../packages");
   const packageVersions = {};
@@ -67,96 +65,104 @@ function getPackageVersions() {
   return packageVersions;
 }
 
-// workspace 프로토콜로 버전 범위 생성
+// workspace 프로토콜로 버전 범위 생성 (예: 2.0.0 → workspace:^2.0.0)
 function getWorkspaceVersion(version) {
-  // 버전에서 메이저.마이너 추출 (예: 0.3.6 → ^0.3.0)
   const [major, minor] = version.split(".");
   return `workspace:^${major}.${minor}.0`;
 }
 
+function matchesAppFilter(manifestPath, appFilters) {
+  if (appFilters.length === 0) return true;
+
+  const appName = JSON.parse(fs.readFileSync(manifestPath, "utf8")).name ?? "";
+  const relativeDir = path.relative(
+    path.join(__dirname, "../apps"),
+    path.dirname(manifestPath),
+  );
+
+  return appFilters.some(
+    (filter) => appName === filter || relativeDir.includes(filter),
+  );
+}
+
 // 앱 의존성 업데이트
-function updateAppDependencies(apps, packageVersions) {
+function updateAppDependencies(appManifests, packageVersions) {
   console.log("\n📱 앱 의존성 업데이트 중...\n");
 
-  apps.forEach((appName) => {
-    const appPkgPath = path.join(__dirname, "../apps", appName, "package.json");
-
-    if (!fs.existsSync(appPkgPath)) {
-      console.log(`⚠️  ${appName} 앱을 찾을 수 없습니다.`);
-      return;
-    }
-
+  for (const appPkgPath of appManifests) {
+    const relativeDir = path.relative(
+      path.join(__dirname, "../apps"),
+      path.dirname(appPkgPath),
+    );
     const appPkg = JSON.parse(fs.readFileSync(appPkgPath, "utf8"));
     let updated = false;
 
-    // dependencies와 devDependencies 모두 확인
     ["dependencies", "devDependencies"].forEach((depType) => {
       if (!appPkg[depType]) return;
 
       Object.keys(appPkg[depType]).forEach((depName) => {
-        if (packageVersions[depName]) {
-          const currentVersion = appPkg[depType][depName];
-          const packageVersion = packageVersions[depName];
+        if (!packageVersions[depName]) return;
 
-          // workspace: 프로토콜을 사용하는 경우만 업데이트
-          if (currentVersion.startsWith("workspace:")) {
-            const newVersion = getWorkspaceVersion(packageVersion);
+        const currentVersion = appPkg[depType][depName];
+        if (!currentVersion.startsWith("workspace:")) return;
 
-            if (currentVersion !== newVersion) {
-              appPkg[depType][depName] = newVersion;
-              console.log(
-                `  ✅ ${appName}: ${depName} ${currentVersion} → ${newVersion}`
-              );
-              updated = true;
-            } else {
-              console.log(
-                `  ℹ️  ${appName}: ${depName} 이미 최신 버전 (${currentVersion})`
-              );
-            }
-          }
+        const newVersion = getWorkspaceVersion(packageVersions[depName]);
+        if (currentVersion === newVersion) {
+          console.log(
+            `  ℹ️  ${relativeDir}: ${depName} 이미 최신 버전 (${currentVersion})`,
+          );
+          return;
         }
+
+        appPkg[depType][depName] = newVersion;
+        console.log(
+          `  ✅ ${relativeDir}: ${depName} ${currentVersion} → ${newVersion}`,
+        );
+        updated = true;
       });
     });
 
     if (updated) {
-      fs.writeFileSync(appPkgPath, `${JSON.stringify(appPkg, null, 2)}\n`);
-      console.log(`  💾 ${appName} package.json 업데이트 완료\n`);
+      if (isDryRun) {
+        console.log(`  🔍 ${relativeDir} dry-run — 파일 쓰기 생략\n`);
+      } else {
+        fs.writeFileSync(appPkgPath, `${JSON.stringify(appPkg, null, 2)}\n`);
+        console.log(`  💾 ${relativeDir} package.json 업데이트 완료\n`);
+      }
     } else {
-      console.log(`  ℹ️  ${appName}는 업데이트할 의존성이 없습니다.\n`);
+      console.log(`  ℹ️  ${relativeDir}는 업데이트할 의존성이 없습니다.\n`);
     }
-  });
+  }
 }
 
-// 메인 실행
-async function main() {
-  try {
-    let appsToUpdate;
+function main() {
+  const allManifests = discoverWorkspaceApps();
+  const appManifests = allManifests.filter((manifestPath) =>
+    matchesAppFilter(manifestPath, appFilters),
+  );
 
-    // 커맨드 라인에서 앱이 지정된 경우
-    if (selectedApps.length > 0) {
-      appsToUpdate = selectedApps.filter(app => availableApps.includes(app));
-      console.log(`\n📱 선택된 앱: ${appsToUpdate.join(", ")}\n`);
-    } else {
-      // 대화형 모드
-      appsToUpdate = await selectApps();
-    }
-
-    if (appsToUpdate.length === 0) {
-      console.log("⚠️  업데이트할 앱이 선택되지 않았습니다.");
-      rl.close();
-      return;
-    }
-
-    const packageVersions = getPackageVersions();
-    updateAppDependencies(appsToUpdate, packageVersions);
-
-    console.log("🎉 모든 앱의 의존성 업데이트 완료!");
-    rl.close();
-  } catch (error) {
-    console.error("❌ 오류 발생:", error.message);
-    rl.close();
+  if (appManifests.length === 0) {
+    console.log("⚠️  업데이트할 앱을 찾지 못했습니다.");
+    console.log(
+      `  발견된 앱: ${allManifests
+        .map((manifestPath) =>
+          path.relative(path.join(__dirname, "../apps"), path.dirname(manifestPath)),
+        )
+        .join(", ")}`,
+    );
     process.exit(1);
   }
+
+  console.log(`📱 대상 앱: ${appManifests
+    .map((manifestPath) =>
+      path.relative(path.join(__dirname, "../apps"), path.dirname(manifestPath)),
+    )
+    .join(", ")}${isDryRun ? " (dry-run)" : ""}\n`);
+
+  const packageVersions = getPackageVersions();
+  updateAppDependencies(appManifests, packageVersions);
+
+  console.log("🎉 모든 앱의 의존성 업데이트 완료!");
 }
 
 main();
