@@ -51,6 +51,49 @@ function readSessionIdCookie(): string | null {
 }
 
 /**
+ * current-space가 null이고 사용 가능한 space가 1개 이상이면 첫 번째를 자동 선택한다.
+ * TenantAccessBootstrapper가 권한 확인 중에 무한 대기하는 것을 방지한다.
+ */
+async function autoSelectFirstSpace(accessToken: string): Promise<void> {
+	try {
+		const currentResponse = await fetch("/api/v1/auth/current-space", {
+			headers: { Authorization: `Bearer ${accessToken}` },
+			credentials: "include",
+		});
+		const currentBody = (await currentResponse.json()) as {
+			data?: { id?: string } | null;
+		};
+		if (currentBody?.data?.id) {
+			return;
+		}
+
+		const spacesResponse = await fetch("/api/v1/auth/my-spaces", {
+			headers: { Authorization: `Bearer ${accessToken}` },
+			credentials: "include",
+		});
+		const spacesBody = (await spacesResponse.json()) as {
+			data?: Array<{ tenantId?: string }>;
+		};
+		const firstTenantId = spacesBody?.data?.[0]?.tenantId;
+		if (!firstTenantId) {
+			return;
+		}
+
+		await fetch("/api/v1/auth/current-space", {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+			body: JSON.stringify({ tenantId: firstTenantId }),
+		});
+	} catch {
+		// 자동 선택 실패 시 /select-space 화면이 안내한다.
+	}
+}
+
+/**
  * SessionBootstrap
  * OIDC 콜백은 sessionId 쿠키만 심은 채 프론트 스토어는 비어 있는 상태로 도착한다.
  * 스토어에 세션이 없고 세션 쿠키가 있으면 쿠키 기반 token/refresh로 스토어를
@@ -99,6 +142,9 @@ const SessionBootstrap = observer(function SessionBootstrap({
 						accessTokenExpiresAt: tokens.accessTokenExpiresAt ?? 0,
 						refreshTokenExpiresAt: tokens.refreshTokenExpiresAt ?? 0,
 					});
+
+					// Space 미선택 시 첫 번째 space를 자동 선택한다 (첫 로그인 UX).
+					await autoSelectFirstSpace(tokens.accessToken);
 				}
 			} catch {
 				// 부트스트랩 실패 시 하위 verify-token 흐름이 로그인으로 안내한다.
