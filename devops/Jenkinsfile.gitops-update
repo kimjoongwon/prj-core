@@ -8,7 +8,7 @@ pipeline {
     parameters {
         choice(
             name: 'APP_NAME',
-            choices: ['core-api', 'admin-web', 'proposal-web', 'spring-api', 'tool-storybook'],
+            choices: ['core-api', 'admin-web', 'proposal-web', 'spring-api', 'tool-storybook', 'idp-api', 'idp-web'],
             description: 'GitOps values-prod.yaml image.tag update target app'
         )
         string(
@@ -66,7 +66,7 @@ pipeline {
                         set +x
 
                         REPO_URL="${GITOPS_REPO}"
-                        REPO_URL="${REPO_URL/https:\/\//https:\/\/${GITHUB_USERNAME}:${GITHUB_TOKEN}@}"
+                        REPO_URL="$(printf %s "${GITOPS_REPO}" | sed "s|^https://|https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@|")"
                         rm -rf "${GITOPS_DIR}"
                         git clone --branch "${GITOPS_BRANCH}" "${REPO_URL}" "${GITOPS_DIR}"
 
