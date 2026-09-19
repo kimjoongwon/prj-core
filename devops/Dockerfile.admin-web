@@ -50,20 +50,17 @@ ENV NODE_OPTIONS="--max-old-space-size=2048"
 # 📂 작업 디렉토리 설정
 WORKDIR /app
 
-# 📦 Setup 단계에서 최적화된 파일 구조 복사
-# - /app/out/full/: Turbo prune으로 생성된 최적화된 프로젝트 구조
+# 📦 1단계: package.json + lockfile만 복사해서 의존성 레이어 캐싱
+# (의존성 변경 없으면 이 레이어가 캐시 히트 → pnpm install 스킵)
 COPY --from=setup /app/out/json/ ./
 
-# 🚀 종속성 설치 (캐시 마운트로 성능 최적화)
-# - mount=type=cache: PNPM 스토어를 캐시로 마운트하여 재빌드 시 속도 향상
-# - id=pnpm: 캐시 식별자
-# - target=/pnpm/store: PNPM 캐시 저장소 경로
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
+# 📦 2단계: 소스 복사 (코드 변경 시에도 위 install 레이어는 캐시 유지)
 COPY --from=setup /app/out/full/ ./
-# 🧪 배포용 타입 체크 후 prune된 admin-web 워크스페이스만 빌드 실행
+
+# 🚀 Next.js 빌드 (next build가 TypeScript 타입체크를 포함)
 RUN --mount=type=cache,id=turbo,target=/app/.turbo \
-    pnpm exec turbo type-check:prod --filter=admin-web... && \
     pnpm exec turbo build --concurrency=1 --filter=admin-web...
 
 # ============================================================================
