@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const setApiSessionScopeMock = vi.fn();
 const setApiLocaleMock = vi.fn();
-const setLoginRedirectUrlMock = vi.fn();
+const installCoreSessionRecoveryMock = vi.fn();
 
 vi.mock("@cocrepo/ui", () => ({
 	DesignSystemProvider: ({ children }: PropsWithChildren) => children,
@@ -19,7 +19,8 @@ vi.mock("nuqs/adapters/react", () => ({
 vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
 	setApiLocale: (...args: unknown[]) => setApiLocaleMock(...args),
 	setApiSessionScope: (...args: unknown[]) => setApiSessionScopeMock(...args),
-	setLoginRedirectUrl: (...args: unknown[]) => setLoginRedirectUrlMock(...args),
+	installCoreSessionRecovery: (...args: unknown[]) =>
+		installCoreSessionRecoveryMock(...args),
 }));
 
 async function loadProvider() {
@@ -61,7 +62,7 @@ beforeEach(() => {
 	vi.stubGlobal("sessionStorage", createStorageMock());
 	setApiSessionScopeMock.mockReset();
 	setApiLocaleMock.mockReset();
-	setLoginRedirectUrlMock.mockReset();
+	installCoreSessionRecoveryMock.mockReset();
 	localStorage.clear();
 	sessionStorage.clear();
 });
@@ -105,9 +106,9 @@ describe("StorybookRuntimeProvider", () => {
 			languageCode: "ko_KR",
 			isHydrated: true,
 		});
-		expect(setLoginRedirectUrlMock).toHaveBeenCalledWith(
-			"#storybook-auth-disabled",
-		);
+		// 스토리북은 세션 복구 정책을 설치하지 않는다. API 401이 외부
+		// 로그인 화면으로 리다이렉트되지 않고 스토리 안에 머문다.
+		expect(installCoreSessionRecoveryMock).not.toHaveBeenCalled();
 		expect(screen.getByText("Story content")).toBeTruthy();
 	}, 15000);
 

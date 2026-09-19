@@ -25,11 +25,7 @@ import type {
 	AbilityRule,
 	NavigatorLike,
 } from "../../../../../packages/common-type/src";
-import {
-	setApiLocale,
-	setApiSessionScope,
-	setLoginRedirectUrl,
-} from "../../../../../packages/fe-api/src/core/client";
+import { setApiLocale, setApiSessionScope } from "../../../../../packages/fe-api/src/core/client";
 
 type StorybookRealm = "none" | "admin" | "idp";
 type StoryRender = () => ReactNode;
@@ -53,7 +49,6 @@ interface StorybookRuntimeConfig {
 }
 
 const DEFAULT_STALE_TIME_MS = 60 * 1000;
-const DISABLED_AUTH_REDIRECT_URL = "#storybook-auth-disabled";
 const FALLBACK_ABILITY_RULES: AbilityRule[] = [
 	{ action: "manage", subject: "all" },
 ];
@@ -142,7 +137,6 @@ function createStorybookRootStore(runtime: StorybookRuntimeConfig): RootStore {
 	});
 	root.setCurrentPath(runtime.currentPath);
 	root.app.accessControl.updateRules([...FALLBACK_ABILITY_RULES]);
-	setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
 
 	return root;
 }

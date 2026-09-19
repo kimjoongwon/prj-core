@@ -1,4 +1,3 @@
-import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import type { HeroUINativeConfig } from "@cocrepo/mo-ui";
 import { DesignSystemProvider, PortalHost, ScreenFrame } from "@cocrepo/mo-ui";
 import type { Decorator, Preview } from "@storybook/react-native";
@@ -12,15 +11,12 @@ const STORYBOOK_CANVAS_WIDTH = Dimensions.get("window").width;
 const STORYBOOK_TOAST_CONTENT_CLASS_NAME = "flex-1";
 const STORYBOOK_TOAST_TOP_INSET = 72;
 const STORYBOOK_TOAST_BOTTOM_INSET = 168;
-const DISABLED_AUTH_REDIRECT_URL = "#mobile-storybook-auth-disabled";
 const STORYBOOK_THEME_BACKGROUNDS = {
 	dark: "#09090b",
 	light: "#f8fafc",
 } as const;
 
 type StorybookTheme = keyof typeof STORYBOOK_THEME_BACKGROUNDS;
-
-setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
 
 const GESTURE_ROOT_STYLE = {
 	alignSelf: "stretch",
