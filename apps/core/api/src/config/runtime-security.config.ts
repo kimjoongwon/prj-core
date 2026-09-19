@@ -213,7 +213,6 @@ export const runtimeSecurityConfig = registerAs(
 		validateCorsOrigins(corsAllowedOrigins, isProduction);
 
 		if (isProduction) {
-			validateProductionSecret("AUTH_JWT_SECRET");
 			validateProductionDatabaseUrl();
 			validateProductionRedisConfiguration();
 			validateProductionOidcConfiguration();

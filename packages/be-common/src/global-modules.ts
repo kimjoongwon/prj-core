@@ -1,20 +1,17 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
-import type { AuthConfig } from "@cocrepo/type";
 import type { DynamicModule } from "@nestjs/common";
 import {
 	type ConfigFactory,
 	ConfigModule,
 	ConfigService,
 } from "@nestjs/config";
-import { JwtModule } from "@nestjs/jwt";
 import {
 	ThrottlerModule,
 	type ThrottlerModuleOptions,
 } from "@nestjs/throttler";
 import { ClsPluginTransactional } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import type { SignOptions } from "jsonwebtoken";
 import { ClsModule } from "nestjs-cls";
 import { LoggerModule } from "nestjs-pino";
 import { RedisThrottlerStorage } from "./redis-throttler-storage";
@@ -127,32 +124,6 @@ export const createGlobalModules = (
 				}),
 			}),
 		],
-	}),
-	JwtModule.registerAsync({
-		global: true,
-		useFactory: (config: ConfigService) => {
-			const authConf = config.get<AuthConfig>("auth");
-			if (!authConf) {
-				throw new Error("Auth config is not defined.");
-			}
-			if (!authConf.secret) {
-				throw new Error("JWT secret is not defined in the configuration.");
-			}
-			if (!authConf.expires) {
-				throw new Error(
-					"JWT expiration time is not defined in the configuration.",
-				);
-			}
-
-			return {
-				global: true,
-				secret: authConf.secret,
-				signOptions: {
-					expiresIn: authConf.expires as SignOptions["expiresIn"],
-				},
-			};
-		},
-		inject: [ConfigService],
 	}),
 	LoggerModule.forRootAsync({
 		inject: [ConfigService],

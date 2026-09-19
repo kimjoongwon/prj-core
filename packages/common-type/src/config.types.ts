@@ -43,10 +43,8 @@ export type AppleConfig = {
 };
 
 export type AuthConfig = {
-	secret: string;
 	expires: string | number;
 	refresh: string | number;
-	bcryptSaltOrRound: number;
 };
 
 export type DatabaseConfig = {

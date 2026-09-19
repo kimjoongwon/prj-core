@@ -8,7 +8,6 @@ const loadRuntimeSecurityConfig =
 
 const productionEnvironment = {
 	NODE_ENV: "production",
-	AUTH_JWT_SECRET: "production-jwt-secret-that-is-longer-than-32-characters",
 	DATABASE_URL:
 		"postgresql://core_api:production-password@postgres.internal:5432/core_api?schema=public",
 	REDIS_HOST: "redis.internal",
@@ -68,16 +67,6 @@ describe("runtimeSecurityConfig", () => {
 			"https://admin.example.com",
 			"https://proposal.example.com",
 		]);
-	});
-
-	it("production에서 알려진 JWT 기본값은 기동 전에 거부해야 한다", () => {
-		process.env = {
-			...originalEnvironment,
-			...productionEnvironment,
-			AUTH_JWT_SECRET: "dev-jwt-secret",
-		};
-
-		expect(() => loadRuntimeSecurityConfig()).toThrow("AUTH_JWT_SECRET");
 	});
 
 	it("production은 HTTPS trusted origin과 ingress proxy hop을 요구해야 한다", () => {

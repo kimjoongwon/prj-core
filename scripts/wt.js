@@ -2045,10 +2045,8 @@ function writeAppEnvFiles({ worktreePath, values }) {
     OIDC_STORYBOOK_BASE_URL: values.OIDC_STORYBOOK_BASE_URL,
     OIDC_STORYBOOK_CLIENT_ID: "storybook-web",
     OIDC_STORYBOOK_CLIENT_SECRET: "storybook-secret-change-in-development",
-    AUTH_JWT_SECRET: "dev-jwt-secret",
     AUTH_JWT_TOKEN_EXPIRES_IN: "10d",
     AUTH_JWT_TOKEN_REFRESH_IN: "7d",
-    AUTH_JWT_SALT_ROUNDS: "10",
     ENABLE_NEST_DEVTOOLS: "false",
     CORE_API_NEST_DEVTOOLS_PORT: "8000"
   });
