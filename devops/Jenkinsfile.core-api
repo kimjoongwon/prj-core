@@ -19,7 +19,7 @@ podTemplate(
     containers: [
         containerTemplate(
             name: 'podman',
-            image: 'quay.io/podman/stable:v5.8.4@sha256:c03377868e6cae145b93c3ecca0c1a68e827f6bba8c1e8259345676cf5c1a51f',
+            image: 'quay.io/podman/stable:v4.8.2',
             alwaysPullImage: true,
             privileged: true,
             ttyEnabled: true,
