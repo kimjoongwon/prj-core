@@ -10,10 +10,7 @@ import {
 	GetSignUpSpacesQuery,
 	HandleOidcCallbackCommand,
 	InvalidateUserSessionsCommand,
-	LogoutNativeMobileSessionCommand,
 	LogoutWithCookieCommand,
-	NativeLoginCommand,
-	RefreshNativeMobileSessionCommand,
 	RefreshTokenWithIdpCommand,
 	SetCurrentSpaceCommand,
 	SignUpCommand,
@@ -40,10 +37,6 @@ import {
 	AuditLogStatsDto,
 	AuthAuditLogDto,
 	EmailVerificationRequestedDto,
-	NativeAuthResponseDto,
-	NativeLoginPayloadDto,
-	NativeLogoutPayloadDto,
-	NativeTokenRefreshPayloadDto,
 	PageMetaDto,
 	QueryAuthAuditLogDto,
 	SetCurrentSpaceDto,
@@ -150,62 +143,6 @@ export class AuthController {
 		}
 
 		return res.status(result.statusCode).send(result.body);
-	}
-
-	@Public()
-	@SkipSpaceCheck()
-	@HttpCode(HttpStatus.OK)
-	@Post("login")
-	@ApiOperation({
-		operationId: "nativeLogin",
-		summary: "first-party native 로그인",
-		description:
-			"first-party 앱에서 이메일/비밀번호로 로그인하고 native access/refresh token을 발급합니다. OIDC authorization redirect를 사용하지 않습니다.",
-	})
-	@ApiBody({ type: NativeLoginPayloadDto })
-	@ApiResponseEntity(NativeAuthResponseDto, HttpStatus.OK)
-	@ResponseMessage("native 로그인 성공")
-	async nativeLogin(
-		@Body() loginDto: NativeLoginPayloadDto,
-		@Req() req: Request,
-	) {
-		return this.commandBus.execute(new NativeLoginCommand(loginDto, req));
-	}
-
-	@Public()
-	@SkipSpaceCheck()
-	@HttpCode(HttpStatus.OK)
-	@Post("native/token/refresh")
-	@ApiOperation({
-		operationId: "nativeRefreshToken",
-		summary: "first-party native 토큰 재발급",
-		description:
-			"first-party 앱이 보관한 sessionId/refreshToken으로 native token을 직접 갱신합니다.",
-	})
-	@ApiBody({ type: NativeTokenRefreshPayloadDto })
-	@ApiResponseEntity(NativeAuthResponseDto, HttpStatus.OK)
-	@ResponseMessage("native 토큰 재발급 성공")
-	async nativeRefreshToken(@Body() dto: NativeTokenRefreshPayloadDto) {
-		return this.commandBus.execute(new RefreshNativeMobileSessionCommand(dto));
-	}
-
-	@Public()
-	@SkipSpaceCheck()
-	@HttpCode(HttpStatus.OK)
-	@Post("native/logout")
-	@ApiOperation({
-		operationId: "nativeLogout",
-		summary: "first-party native 로그아웃",
-		description:
-			"first-party native 세션을 삭제하고 전달된 access token을 best-effort로 블랙리스트 처리합니다.",
-	})
-	@ApiBody({ type: NativeLogoutPayloadDto })
-	@ApiResponseEntity(Boolean, HttpStatus.OK)
-	@ResponseMessage("native 로그아웃 성공")
-	async nativeLogout(@Req() req: Request, @Body() dto: NativeLogoutPayloadDto) {
-		return this.commandBus.execute(
-			new LogoutNativeMobileSessionCommand(dto, req.headers.authorization),
-		);
 	}
 
 	@Public()

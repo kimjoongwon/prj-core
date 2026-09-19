@@ -1,6 +1,6 @@
 import {
-	setApiNativeRefreshHandler,
-	setApiSessionScope,
+  installCoreSessionRecovery,
+  setApiSessionScope,
 } from "@cocrepo/api/core/client";
 import type { SpaceDto } from "@cocrepo/api/core/model";
 import {
@@ -195,10 +195,14 @@ class MobileApiScope {
 export const mobileApiScope = new MobileApiScope();
 
 export const configureMobileApiScope = (
-  nativeRefreshHandler?: (() => Promise<void>) | null,
+  sessionRefreshHandler?: (() => Promise<void>) | null,
 ) => {
   setApiSessionScope(mobileApiScope);
-  if (nativeRefreshHandler !== undefined) {
-    setApiNativeRefreshHandler(nativeRefreshHandler);
+  if (sessionRefreshHandler) {
+    // 모바일은 브라우저가 아니므로 onSessionExpired(리다이렉트) 없이
+    // 갱신 실패를 그대로 호출자에게 돌려보낸다.
+    installCoreSessionRecovery({
+      refreshSession: sessionRefreshHandler,
+    });
   }
 };

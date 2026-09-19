@@ -6,6 +6,8 @@ export const Token = {
 	ACCESS: "accessToken",
 	REFRESH: "refreshToken",
 	SESSION_ID: "sessionId",
+	/** 세션 존재 표시용 비민감 쿠키 (클라이언트 읽기 허용) */
+	LOGGED_IN: "loggedIn",
 } as const;
 
 export type TokenValues = (typeof Token)[keyof typeof Token];

@@ -1,7 +1,6 @@
 export * from "./admin-access-token";
 export * from "./admin-persist";
 export * from "./admin-request-headers";
-export * from "./admin-space-bootstrap";
 export * from "./admin-space-request-headers";
 export * from "./admin-storage-state-path";
 export * from "./capture-page-errors";

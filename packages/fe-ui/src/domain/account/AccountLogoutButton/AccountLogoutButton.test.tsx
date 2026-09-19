@@ -7,21 +7,18 @@ import { AccountLogoutButton } from "./AccountLogoutButton";
 
 const mocks = vi.hoisted(() => ({
 	account: {
-		authSession: {
-			sessionId: "session-a" as string | null,
-			refreshToken: "refresh-a" as string | null,
-		},
 		clear: vi.fn(),
 	},
-	nativeLogout: vi.fn(),
+	fetch: vi.fn(),
 	router: {
 		replace: vi.fn(),
 	},
 }));
 
-vi.mock("@cocrepo/api/core/auth", () => ({
-	nativeLogout: mocks.nativeLogout,
-}));
+vi.stubGlobal(
+	"fetch",
+	mocks.fetch.mockResolvedValue({ ok: true } as Response),
+);
 
 vi.mock("@cocrepo/store", () => ({
 	useApp: () => ({ account: mocks.account }),
@@ -57,39 +54,27 @@ function renderAccountLogoutButton() {
 
 describe("AccountLogoutButton", () => {
 	beforeEach(() => {
-		mocks.account.authSession.sessionId = "session-a";
-		mocks.account.authSession.refreshToken = "refresh-a";
 		mocks.account.clear.mockReset();
-		mocks.nativeLogout.mockReset();
-		mocks.nativeLogout.mockResolvedValue({});
+		mocks.fetch.mockReset();
+		mocks.fetch.mockResolvedValue({ ok: true } as Response);
 		mocks.router.replace.mockReset();
 	});
 
-	it("session이 있으면 native logout을 호출한다", async () => {
+	it("쿠키 로그아웃 API를 호출한다", async () => {
 		renderAccountLogoutButton();
 
 		fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
 		fireEvent.click(await screen.findByText("로그아웃"));
 
-		expect(mocks.nativeLogout).toHaveBeenCalledWith({
-			sessionId: "session-a",
-			refreshToken: "refresh-a",
+		await waitFor(() => {
+			expect(mocks.fetch).toHaveBeenCalledWith("/api/v1/auth/logout", {
+				method: "POST",
+				credentials: "include",
+			});
 		});
 	});
 
-	it("session이 없으면 즉시 account를 정리하고 login으로 이동한다", async () => {
-		mocks.account.authSession.sessionId = null;
-		renderAccountLogoutButton();
-
-		fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
-		fireEvent.click(await screen.findByText("로그아웃"));
-
-		expect(mocks.account.clear).toHaveBeenCalledTimes(1);
-		expect(mocks.router.replace).toHaveBeenCalledWith("/auth/login");
-		expect(mocks.nativeLogout).not.toHaveBeenCalled();
-	});
-
-	it("native logout이 끝나면 account를 정리하고 login으로 이동한다", async () => {
+	it("로그아웃 후 account를 정리하고 login으로 이동한다", async () => {
 		renderAccountLogoutButton();
 
 		fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));
@@ -101,8 +86,8 @@ describe("AccountLogoutButton", () => {
 		});
 	});
 
-	it("native logout이 실패해도 account를 정리하고 login으로 이동한다", async () => {
-		mocks.nativeLogout.mockRejectedValueOnce(new Error("logout failed"));
+	it("쿠키 로그아웃이 실패해도 account를 정리하고 login으로 이동한다", async () => {
+		mocks.fetch.mockRejectedValueOnce(new Error("logout failed"));
 		renderAccountLogoutButton();
 
 		fireEvent.click(screen.getByRole("button", { name: "메뉴 열기" }));

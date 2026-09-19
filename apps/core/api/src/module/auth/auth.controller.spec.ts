@@ -6,7 +6,6 @@ import {
 } from "@cocrepo/command";
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { AuthController } from "@cocrepo/controller";
-import { IS_PUBLIC_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import { BadRequestException, RequestMethod } from "@nestjs/common";
 import { METHOD_METADATA, PATH_METADATA } from "@nestjs/common/constants";
 import type { CommandBus, QueryBus } from "@nestjs/cqrs";
@@ -136,21 +135,5 @@ describe("AuthController", () => {
 		const query = queryBus.execute.mock.calls[0]?.[0];
 		expect(query).toBeInstanceOf(GetCurrentSpaceQuery);
 		expect(result).toEqual({ id: "space-test-id" });
-	});
-
-	it("공개 native login endpoint는 public/skip-space metadata를 유지한다", () => {
-		const descriptor = Object.getOwnPropertyDescriptor(
-			AuthController.prototype,
-			"nativeLogin",
-		);
-
-		expect(Reflect.getMetadata(PATH_METADATA, descriptor?.value)).toBe("login");
-		expect(Reflect.getMetadata(METHOD_METADATA, descriptor?.value)).toBe(
-			RequestMethod.POST,
-		);
-		expect(Reflect.getMetadata(IS_PUBLIC_KEY, descriptor?.value)).toBe(true);
-		expect(Reflect.getMetadata(SKIP_SPACE_CHECK_KEY, descriptor?.value)).toBe(
-			true,
-		);
 	});
 });

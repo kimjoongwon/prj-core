@@ -11,7 +11,6 @@ import {
 import {
 	type PrismaService,
 	RedisService,
-	TokenStorageService,
 } from "@cocrepo/service";
 import { HashedPassword, PasswordResetToken, PlainPassword } from "@cocrepo/vo";
 import { INestApplication } from "@nestjs/common";
@@ -23,11 +22,6 @@ import { setNestApp } from "../src/setNestApp";
 const RESET_TOKEN_PREFIX = "password-reset:";
 const RESET_TOKEN_TTL_SECONDS = 30 * 60;
 
-interface CreatedSession {
-	userId: string;
-	sessionId: string;
-}
-
 interface TestUser {
 	id: bigint;
 	userId: string;
@@ -38,13 +32,11 @@ describe("Auth Password Policy API E2E 테스트", () => {
 	let app: INestApplication;
 	let prisma: PrismaService;
 	let redisService: RedisService;
-	let tokenStorageService: TokenStorageService;
 	let originalPolicy: Awaited<
 		ReturnType<PrismaService["securityPolicy"]["findUnique"]>
 	>;
 	let userSequence = 0;
 	const createdUserIds: bigint[] = [];
-	const createdSessionIds: CreatedSession[] = [];
 	const createdResetTokenKeys: string[] = [];
 
 	beforeAll(async () => {
@@ -58,7 +50,6 @@ describe("Auth Password Policy API E2E 테스트", () => {
 
 		prisma = app.get<PrismaService>(PRISMA_SERVICE_TOKEN);
 		redisService = app.get(RedisService);
-		tokenStorageService = app.get(TokenStorageService);
 
 		originalPolicy = await prisma.securityPolicy.findUnique({
 			where: { key: "default" },
@@ -67,17 +58,6 @@ describe("Auth Password Policy API E2E 테스트", () => {
 	}, 60000);
 
 	afterAll(async () => {
-		for (const session of createdSessionIds) {
-			try {
-				await tokenStorageService.deleteSession(
-					session.userId,
-					session.sessionId,
-				);
-			} catch {
-				// 테스트 정리 중 이미 삭제된 세션은 무시
-			}
-		}
-
 		for (const key of createdResetTokenKeys) {
 			await redisService.del(key);
 		}
@@ -240,31 +220,42 @@ describe("Auth Password Policy API E2E 테스트", () => {
 				}),
 			);
 
+			// 새 비밀번호가 실제 자격증명 경로(OIDC interaction 로그인)를 통과하는지 확인한다.
+			const authorizeResponse = await request(app.getHttpServer())
+				.get("/oidc/auth")
+				.query({
+					response_type: "code",
+					client_id: "admin-web",
+					redirect_uri:
+						"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
+					scope: "openid",
+					state: "password-policy-e2e",
+				});
+
+			expect(authorizeResponse.status).toBe(303);
+			const interactionUid = /\/auth\/interaction\/([^/?]+)/.exec(
+				authorizeResponse.headers.location ?? "",
+			)?.[1];
+			expect(interactionUid).toBeDefined();
+
+			const interactionCookies = authorizeResponse.headers["set-cookie"];
+			const cookieHeader = Array.isArray(interactionCookies)
+				? interactionCookies.join("; ")
+				: (interactionCookies ?? "");
+
 			const loginResponse = await request(app.getHttpServer())
-				.post("/api/v1/auth/login")
+				.post(`/api/interaction/${interactionUid}/login`)
 				.set("User-Agent", "core-api-password-policy-e2e")
+				.set("Cookie", cookieHeader)
 				.send({
 					email: user.email,
 					password: newPassword,
 				});
 
 			expect(loginResponse.status).toBe(200);
-			expect(loginResponse.body.data).toEqual(
-				expect.objectContaining({
-					accessToken: expect.any(String),
-					refreshToken: expect.any(String),
-					sessionId: expect.any(String),
-					user: expect.objectContaining({
-						id: user.id.toString(),
-						email: user.email,
-					}),
-				}),
+			expect(loginResponse.body).toEqual(
+				expect.objectContaining({ redirectTo: expect.any(String) }),
 			);
-
-			createdSessionIds.push({
-				userId: user.userId,
-				sessionId: loginResponse.body.data.sessionId,
-			});
 		});
 	});
 

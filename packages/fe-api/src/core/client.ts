@@ -1,9 +1,10 @@
 export {
 	AXIOS_INSTANCE,
 	customInstance,
+	installCoreSessionRecovery,
+	type CoreSessionRecoveryPolicy,
+	refreshSessionTokens,
 	setApiBaseUrl,
 	setApiLocale,
-	setApiNativeRefreshHandler,
 	setApiSessionScope,
-	setLoginRedirectUrl,
 } from "../libs/customAxios";

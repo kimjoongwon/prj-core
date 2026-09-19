@@ -4,15 +4,6 @@ import type { MobileSpaceInfo } from "../mobile-api-scope";
 
 export type AuthQueryValue = string | string[];
 
-interface PrimitiveAuthParams {
-	apiBaseUrl?: string;
-}
-
-export interface MobileAuthLoginParams extends PrimitiveAuthParams {
-	targetReturnTo?: string;
-	clientId?: string;
-}
-
 export interface MobileAuthSession {
 	accessToken?: string | null;
 	accessTokenExpiresAt?: number | null;
@@ -20,22 +11,6 @@ export interface MobileAuthSession {
 	refreshTokenExpiresAt?: number | null;
 	sessionId?: string | null;
 	mustChangePassword?: boolean | null;
-}
-
-export interface NativeLoginInput extends PrimitiveAuthParams {
-	email: string;
-	password: string;
-}
-
-export interface NativeRefreshInput extends PrimitiveAuthParams {
-	sessionId: string;
-	refreshToken: string;
-}
-
-export interface NativeLogoutInput extends PrimitiveAuthParams {
-	accessToken?: string | null;
-	sessionId: string;
-	refreshToken?: string | null;
 }
 
 export interface MobileAuthCallbackTransitionState {
@@ -49,16 +24,7 @@ export interface MobileAuthLoginQuery {
 	clientId?: AuthQueryValue;
 }
 
-interface ApiResponseEnvelope<T> {
-	data?: T;
-	displayMessage?: string;
-	error?: string;
-	message?: string;
-}
-
 const DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO = "/";
-const DEFAULT_AUTH_API_BASE_URL =
-	Platform.OS === "android" ? "http://10.0.2.2:3006" : "http://localhost:3006";
 const NATIVE_SESSION_STORAGE_KEY = "onora.mobile.native.session.v1";
 const NATIVE_SPACE_SELECTION_STORAGE_KEY =
 	"onora.mobile.native.space-selection.v1";
@@ -66,29 +32,6 @@ const NATIVE_SPACE_SELECTION_PERSIST_VERSION = 2 as const;
 
 interface PersistedNativeSpaceSelection extends MobileSpaceInfo {
 	version: typeof NATIVE_SPACE_SELECTION_PERSIST_VERSION;
-}
-
-const API_ENV_KEYS = [
-	"EXPO_PUBLIC_AUTH_API_BASE_URL",
-	"EXPO_PUBLIC_CORE_API_URL",
-	"EXPO_PUBLIC_CORE_API_INTERNAL_URL",
-	"EXPO_PUBLIC_CORE_API_BASE_URL",
-	"EXPO_PUBLIC_API_BASE_URL",
-	"EXPO_PUBLIC_SERVER_BASE_URL",
-	"CORE_API_URL",
-	"CORE_API_INTERNAL_URL",
-	"CORE_API_BASE_URL",
-];
-
-export class NativeAuthRequestError extends Error {
-	constructor(
-		message: string,
-		readonly statusCode: number,
-		readonly response?: ApiResponseEnvelope<unknown>,
-	) {
-		super(message);
-		this.name = "NativeAuthRequestError";
-	}
 }
 
 const toStringArray = (value: AuthQueryValue | undefined): string[] =>
@@ -106,14 +49,6 @@ const firstQueryValue = (
 
 	return undefined;
 };
-
-const trimTrailingSlash = (value: string) =>
-	value.endsWith("/") ? value.replace(/\/+$/, "") : value;
-
-const ensureLeadingSlash = (value: string) =>
-	value.startsWith("/") ? value : `/${value}`;
-
-const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
 
 export const rewriteLocalhostUrlForAndroidEmulator = (
 	value: string,
@@ -136,9 +71,6 @@ export const rewriteLocalhostUrlForAndroidEmulator = (
 	}
 };
 
-const normalizeApiBaseUrl = (value: string) =>
-	trimTrailingSlash(rewriteLocalhostUrlForAndroidEmulator(value.trim()));
-
 const normalizeRoute = (value: string) => {
 	const trimmed = value.trim();
 	if (!trimmed) {
@@ -156,167 +88,6 @@ const normalizeRoute = (value: string) => {
 
 	return `/${withoutQuery}`;
 };
-
-const buildApiBaseUrl = (overrideBaseUrl?: string) => {
-	const configured = [
-		overrideBaseUrl,
-		...API_ENV_KEYS.map((key) => process.env[key]),
-	].find(
-		(candidate) => typeof candidate === "string" && candidate.trim().length > 0,
-	);
-
-	if (configured) {
-		return normalizeApiBaseUrl(configured);
-	}
-
-	if (
-		Platform.OS === "web" &&
-		typeof window !== "undefined" &&
-		window.location?.origin
-	) {
-		return window.location.origin.replace(/\/+$/, "");
-	}
-
-	return normalizeApiBaseUrl(DEFAULT_AUTH_API_BASE_URL);
-};
-
-const buildEndpoint = (path: string, base?: string) => {
-	const normalizedPath = ensureLeadingSlash(path);
-	if (!base) {
-		return normalizedPath;
-	}
-
-	const trimmedBase = trimTrailingSlash(base);
-	if (isHttpUrl(trimmedBase)) {
-		return new URL(normalizedPath, `${trimmedBase}/`).toString();
-	}
-
-	if (trimmedBase.startsWith("/")) {
-		if (trimmedBase === "/") {
-			return normalizedPath;
-		}
-
-		if (normalizedPath.startsWith(`${trimmedBase}/`)) {
-			return normalizedPath;
-		}
-
-		return `${trimmedBase}${normalizedPath}`;
-	}
-
-	return `${trimmedBase}${normalizedPath}`;
-};
-
-const readJsonEnvelope = async <T>(
-	response: Response,
-): Promise<ApiResponseEnvelope<T>> => {
-	const contentType = response.headers.get("content-type") ?? "";
-	if (!contentType.toLowerCase().includes("application/json")) {
-		return {};
-	}
-
-	try {
-		return (await response.json()) as ApiResponseEnvelope<T>;
-	} catch {
-		return {};
-	}
-};
-
-const unwrapData = <T>(payload: ApiResponseEnvelope<T>): T | undefined => {
-	if (payload.data) {
-		return payload.data;
-	}
-
-	return payload as T;
-};
-
-const buildErrorMessage = (payload: ApiResponseEnvelope<unknown>) =>
-	payload.displayMessage ??
-	payload.message ??
-	payload.error ??
-	"인증 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.";
-
-const requestNativeAuth = async <T>(
-	path: string,
-	body: Record<string, unknown>,
-	options: PrimitiveAuthParams = {},
-	headers: Record<string, string> = {},
-): Promise<T> => {
-	const endpoint = buildEndpoint(path, buildApiBaseUrl(options.apiBaseUrl));
-	const response = await fetch(endpoint, {
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-			...headers,
-		},
-		method: "POST",
-		body: JSON.stringify(body),
-	});
-	const payload = await readJsonEnvelope<T>(response);
-
-	if (!response.ok) {
-		throw new NativeAuthRequestError(
-			buildErrorMessage(payload),
-			response.status,
-			payload,
-		);
-	}
-
-	const data = unwrapData(payload);
-	if (!data) {
-		throw new NativeAuthRequestError(
-			"인증 응답이 올바르지 않습니다. 다시 시도해 주세요.",
-			response.status,
-			payload,
-		);
-	}
-
-	return data;
-};
-
-export const buildNativeLoginEndpoint = (
-	options: PrimitiveAuthParams = {},
-): string =>
-	buildEndpoint(
-		"/api/v1/auth/login",
-		buildApiBaseUrl(options.apiBaseUrl),
-	);
-
-export const buildAuthLoginUrl = (
-	options: MobileAuthLoginParams = {},
-): string => buildNativeLoginEndpoint(options);
-
-export const requestNativeLogin = (
-	input: NativeLoginInput,
-): Promise<MobileAuthSession> =>
-	requestNativeAuth<MobileAuthSession>("/api/v1/auth/login", {
-		email: input.email,
-		password: input.password,
-	}, input);
-
-export const requestNativeTokenRefresh = (
-	input: NativeRefreshInput,
-): Promise<MobileAuthSession> =>
-	requestNativeAuth<MobileAuthSession>("/api/v1/auth/native/token/refresh", {
-		sessionId: input.sessionId,
-		refreshToken: input.refreshToken,
-	}, input);
-
-export const requestNativeLogout = (
-	input: NativeLogoutInput,
-): Promise<boolean> =>
-	requestNativeAuth<boolean>(
-		"/api/v1/auth/native/logout",
-		{
-			sessionId: input.sessionId,
-			refreshToken: input.refreshToken,
-		},
-		input,
-		input.accessToken
-			? {
-					Authorization: `Bearer ${input.accessToken}`,
-				}
-			: {},
-	);
 
 export const saveNativeAuthSession = async (session: MobileAuthSession) => {
 	await SecureStore.setItemAsync(

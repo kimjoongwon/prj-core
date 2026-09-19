@@ -4714,101 +4714,6 @@ export const runtimeManifest: RuntimeManifest = {
 			responseSchemas: {},
 		},
 		{
-			operationId: "nativeLogin",
-			method: "POST",
-			path: "/api/v1/auth/login",
-			requestSchema: {
-				$ref: "#/components/schemas/NativeLoginPayloadDto",
-			},
-			parameterSchemas: {},
-			responseSchemas: {
-				"200": {
-					allOf: [
-						{
-							properties: {
-								httpStatus: {
-									type: "number",
-									nullable: false,
-									example: 200,
-								},
-								message: {
-									type: "string",
-									nullable: false,
-								},
-								data: {
-									$ref: "#/components/schemas/NativeAuthResponseDto",
-									nullable: true,
-								},
-							},
-						},
-					],
-				},
-			},
-		},
-		{
-			operationId: "nativeRefreshToken",
-			method: "POST",
-			path: "/api/v1/auth/native/token/refresh",
-			requestSchema: {
-				$ref: "#/components/schemas/NativeTokenRefreshPayloadDto",
-			},
-			parameterSchemas: {},
-			responseSchemas: {
-				"200": {
-					allOf: [
-						{
-							properties: {
-								httpStatus: {
-									type: "number",
-									nullable: false,
-									example: 200,
-								},
-								message: {
-									type: "string",
-									nullable: false,
-								},
-								data: {
-									$ref: "#/components/schemas/NativeAuthResponseDto",
-									nullable: true,
-								},
-							},
-						},
-					],
-				},
-			},
-		},
-		{
-			operationId: "nativeLogout",
-			method: "POST",
-			path: "/api/v1/auth/native/logout",
-			requestSchema: {
-				$ref: "#/components/schemas/NativeLogoutPayloadDto",
-			},
-			parameterSchemas: {},
-			responseSchemas: {
-				"200": {
-					allOf: [
-						{
-							properties: {
-								httpStatus: {
-									type: "number",
-									nullable: false,
-									example: 200,
-								},
-								message: {
-									type: "string",
-									nullable: false,
-								},
-								data: {
-									type: "boolean",
-								},
-							},
-						},
-					],
-				},
-			},
-		},
-		{
 			operationId: "refreshToken",
 			method: "POST",
 			path: "/api/v1/auth/token/refresh",
@@ -12381,105 +12286,6 @@ export const runtimeManifest: RuntimeManifest = {
 				"idempotencyKey",
 			],
 		},
-		NativeAuthResponseDto: {
-			type: "object",
-			properties: {
-				accessToken: {
-					type: "string",
-					description: "first-party native JWT Access Token",
-					example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-				},
-				refreshToken: {
-					type: "string",
-					description: "first-party native Refresh Token",
-					example: "GQ7l_Vg3aBsR03imRRYwR4q9gL53RhTYNqswp7Xp0uc",
-				},
-				sessionId: {
-					type: "string",
-					description: "first-party native 세션 ID",
-					example: "user-mobile.0123456789abcdef0123456789abcdef",
-				},
-				accessTokenExpiresAt: {
-					type: "number",
-					description: "Access Token 만료 시간 (Unix timestamp, milliseconds)",
-					example: 1704067200000,
-				},
-				refreshTokenExpiresAt: {
-					type: "number",
-					description: "Refresh Token 만료 시간 (Unix timestamp, milliseconds)",
-					example: 1704672000000,
-				},
-				user: {
-					description: "인증된 사용자 정보",
-					allOf: [
-						{
-							$ref: "#/components/schemas/UserDto",
-						},
-					],
-				},
-				mustChangePassword: {
-					type: "boolean",
-					description: "비밀번호 변경 필요 여부",
-					example: false,
-				},
-			},
-			required: [
-				"accessToken",
-				"refreshToken",
-				"sessionId",
-				"accessTokenExpiresAt",
-				"refreshTokenExpiresAt",
-				"user",
-			],
-		},
-		NativeLoginPayloadDto: {
-			type: "object",
-			properties: {
-				email: {
-					type: "string",
-					example: "ceo@f45training.co.kr",
-					description: "사용자 이메일",
-				},
-				password: {
-					type: "string",
-					example: "SuperAdmin123!@#",
-					description: "사용자 비밀번호 (8자 이상)",
-				},
-			},
-			required: ["email", "password"],
-		},
-		NativeTokenRefreshPayloadDto: {
-			type: "object",
-			properties: {
-				sessionId: {
-					type: "string",
-					description: "first-party native 세션 ID",
-					example: "user-mobile.0123456789abcdef0123456789abcdef",
-				},
-				refreshToken: {
-					type: "string",
-					description: "first-party native refresh token",
-					example: "GQ7l_Vg3aBsR03imRRYwR4q9gL53RhTYNqswp7Xp0uc",
-				},
-			},
-			required: ["sessionId", "refreshToken"],
-		},
-		NativeLogoutPayloadDto: {
-			type: "object",
-			properties: {
-				sessionId: {
-					type: "string",
-					description: "first-party native 세션 ID",
-					example: "user-mobile.0123456789abcdef0123456789abcdef",
-				},
-				refreshToken: {
-					type: "string",
-					description: "first-party native refresh token",
-					example: "GQ7l_Vg3aBsR03imRRYwR4q9gL53RhTYNqswp7Xp0uc",
-				},
-			},
-			required: ["sessionId"],
-		},
 		TokenRefreshResponseDto: {
 			type: "object",
 			properties: {
@@ -12487,6 +12293,13 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					description: "새로 발급된 JWT Access Token",
 					example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+				},
+				sessionId: {
+					type: "string",
+					nullable: true,
+					description:
+						"갱신된 세션 식별자. HttpOnly sessionId 쿠키를 가진 웹 클라이언트가 스토어를 부트스트랩할 때 사용한다.",
+					example: "admin-web.0123456789abcdef0123456789abcdef",
 				},
 				refreshToken: {
 					type: "string",

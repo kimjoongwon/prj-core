@@ -47,6 +47,25 @@ export class Cookie extends ValueObject<CookieProps> {
 	}
 
 	/**
+	 * 세션 존재 표시용 쿠키. 민감한 값이 없어 클라이언트 스크립트가 읽을 수 있어야
+	 * 하므로 httpOnly를 끈다. 웹 앱이 인증되지 않은 방문자의 토큰 갱신 시도를
+	 * 만들기 전에 로그인 화면으로 보내는 데 사용한다.
+	 */
+	public static forPresence(
+		expiresIn: string | number,
+		isProduction = process.env.NODE_ENV === "production",
+	): Cookie {
+		const maxAge = parseExpiration(expiresIn);
+		return new Cookie({
+			maxAge,
+			httpOnly: false,
+			secure: isProduction,
+			sameSite: "lax",
+			path: "/",
+		});
+	}
+
+	/**
 	 * Express CookieOptions로 변환
 	 */
 	public toExpressOptions(): CookieOptions {

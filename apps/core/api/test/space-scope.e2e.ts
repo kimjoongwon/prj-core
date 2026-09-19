@@ -31,7 +31,6 @@ import {
 	Query,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { Test, TestingModule } from "@nestjs/testing";
@@ -39,8 +38,12 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
+import {
+	getOidcTestIssuer,
+	getOidcTestPublicKeyPem,
+	signOidcTestToken,
+} from "./helpers/test-auth.helper";
 
-const TEST_JWT_SECRET = "test-jwt-secret-e2e";
 const USER_ULID = "01J00000000000000000001001";
 const USER_ID = 1001n;
 const TENANT_A_ID = 2001n;
@@ -91,8 +94,9 @@ class ScopeTestJwtStrategy extends PassportStrategy(Strategy) {
 	constructor() {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-			secretOrKey: TEST_JWT_SECRET,
-			algorithms: ["HS256"],
+			secretOrKey: getOidcTestPublicKeyPem(),
+			issuer: getOidcTestIssuer(),
+			algorithms: ["RS256"],
 		});
 	}
 
@@ -257,8 +261,7 @@ describe("Space Scope API (E2E)", () => {
 	};
 
 	beforeAll(async () => {
-		const jwtService = new JwtService({ secret: TEST_JWT_SECRET });
-		jwtToken = jwtService.sign({
+		jwtToken = signOidcTestToken({
 			sub: USER_ULID,
 		});
 

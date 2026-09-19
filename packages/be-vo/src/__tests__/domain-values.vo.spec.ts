@@ -1,7 +1,6 @@
 import {
 	EmailDomain,
 	EmailVerificationToken,
-	NativeRefreshToken,
 	OidcClientId,
 	PasswordResetToken,
 	RedirectUri,
@@ -10,11 +9,9 @@ import {
 } from "../index";
 
 describe("domain value objects", () => {
-	it("creates native refresh tokens and session ids", () => {
-		const refreshToken = NativeRefreshToken.generate();
+	it("creates session ids", () => {
 		const sessionId = SessionId.create("ADMIN-WEB", SessionId.generateRawId());
 
-		expect(refreshToken.value).toMatch(/^[A-Za-z0-9_-]{43}$/);
 		expect(sessionId.value).toBe(`admin-web.${sessionId.rawId}`);
 		expect(SessionId.fromString(sessionId.value).clientId).toBe("admin-web");
 	});

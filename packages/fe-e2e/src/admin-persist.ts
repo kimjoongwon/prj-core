@@ -69,23 +69,6 @@ export function parseAdminPersistStorageDocument(
 }
 
 /**
- * Admin 저장 문서의 authSession section을 native 로그인 결과로 교체합니다.
- *
- * @param raw 기존 localStorage JSON
- * @param session native 로그인 API가 반환한 session
- * @returns 현재 section 계약으로 정규화된 저장 문서
- */
-export function mergeAdminPersistAuthSession(
-	raw: string | null,
-	session: AdminNativeAuthSession,
-): AdminPersistStorageDocument {
-	return {
-		...parseAdminPersistStorageDocument(raw),
-		authSession: { ...session },
-	};
-}
-
-/**
  * Admin 저장 문서의 account section을 선택한 FitnessCenter 기준으로 갱신합니다.
  *
  * @param raw 기존 localStorage JSON

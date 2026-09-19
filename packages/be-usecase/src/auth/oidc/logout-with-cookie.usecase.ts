@@ -64,6 +64,7 @@ export class LogoutWithCookieUseCase {
 
 		this.tokenService.clearTokenCookies(command.res);
 		command.res.clearCookie(Token.SESSION_ID);
+		command.res.clearCookie(Token.LOGGED_IN);
 		command.res.clearCookie("tenantId");
 		command.res.clearCookie("workspaceId");
 		clearOidcProviderCookies(command.res);

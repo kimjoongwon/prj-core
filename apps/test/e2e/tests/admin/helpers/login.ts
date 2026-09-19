@@ -1,10 +1,8 @@
 import {
-	type AdminNativeAuthSession,
 	type AdminPersistSpaceSelection,
-	bootstrapAdminSpaceSelection,
 	mergeAdminPersistAccountSelection,
-	mergeAdminPersistAuthSession,
 	parseAdminPersistStorageDocument,
+	runOidcLoginFlow,
 } from "@cocrepo/e2e";
 import type { Page } from "@playwright/test";
 
@@ -15,14 +13,8 @@ const ADMIN_LOGIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const ADMIN_PERSIST_KEY = "admin-persist";
 const ADMIN_PERSIST_READY_TIMEOUT = 15_000;
 const ROUTE_PREWARM_TIMEOUT = 10_000;
-const ADMIN_API_BASE_URL =
-	process.env.E2E_CORE_API_BASE_URL ??
-	new URL(process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin/")
-		.origin;
-const NATIVE_LOGIN_URL = new URL(
-	"/api/v1/auth/login",
-	ADMIN_API_BASE_URL,
-).toString();
+const ADMIN_ORIGIN =
+	process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin/";
 
 const ADMIN_PREWARM_PATHS = [
 	ADMIN_DASHBOARD_PATH,
@@ -52,6 +44,56 @@ async function ensureAdminDashboard(page: Page) {
 }
 
 /**
+ * Admin localStorage에서 부트스트랩이 확정한 tenant/space 선택값을 읽습니다.
+ *
+ * @param page Admin E2E page
+ * @returns persist 문서의 account 선택값, 아직 확정되지 않았으면 null
+ */
+export async function readAdminPersistRawSelection(
+	page: Page,
+): Promise<AdminPersistSpaceSelection | null> {
+	const selection = await page.evaluate((storageKey) => {
+		const raw = window.localStorage.getItem(storageKey);
+		if (!raw) {
+			return null;
+		}
+
+		try {
+			const parsed = JSON.parse(raw) as {
+				account?: {
+					tenantId?: unknown;
+					spaceId?: unknown;
+					fitnessCenterName?: unknown;
+					contentLanguageCode?: unknown;
+				};
+			};
+			const account = parsed.account;
+			if (
+				typeof account?.tenantId === "string" &&
+				typeof account.spaceId === "string" &&
+				typeof account.fitnessCenterName === "string"
+			) {
+				return {
+					tenantId: account.tenantId,
+					spaceId: account.spaceId,
+					fitnessCenterName: account.fitnessCenterName,
+					contentLanguageCode:
+						typeof account.contentLanguageCode === "string"
+							? account.contentLanguageCode
+							: null,
+				};
+			}
+		} catch {
+			return null;
+		}
+
+		return null;
+	}, ADMIN_PERSIST_KEY);
+
+	return selection;
+}
+
+/**
  * Admin localStorage의 account section을 선택한 FitnessCenter context로 갱신합니다.
  *
  * @param page Admin E2E page
@@ -77,7 +119,7 @@ export async function seedAdminPersist(
 }
 
 /**
- * Admin localStorage에서 bootstrap 결과와 일치하는 persist 문서를 읽습니다.
+ * Admin localStorage에서 부트스트랩 결과와 일치하는 persist 문서를 읽습니다.
  *
  * @param page Admin E2E page
  * @param expectedSelection 로그인 bootstrap에서 얻은 tenant/space 선택값
@@ -130,81 +172,45 @@ export async function readAdminPersist(
 }
 
 /**
- * Admin 앱에 native 로그인 플로우를 수행합니다.
+ * Admin 앱에 OIDC UI 로그인 플로우를 수행합니다.
  *
- * 1. /admin/auth/login에서 시드 데이터의 PLATFORM_ADMIN 계정으로 로그인
- * 2. native access/refresh token을 admin-persist에 저장
- * 3. my-spaces bootstrap 응답에서 대상 Space를 찾고 current-space로 선택
- * 4. Space 선택 정보를 보정하되 native token은 유지
- * 5. Admin 대시보드로 리다이렉트
+ * 1. /admin/auth/login에서 OIDC interaction 로그인 폼으로 이동
+ * 2. 시드 데이터의 PLATFORM_ADMIN 계정으로 로그인 (필요 시 consent 허용)
+ * 3. /admin/dashboard 도달 후 앱 부트스트랩이 tenant/space를 확정할 때까지 대기
  *
  * @param page Admin E2E page
- * @returns API 응답에서 동적으로 얻은 tenant/space 선택값
+ * @returns 앱 부트스트랩이 확정한 tenant/space 선택값
  */
 export async function loginToAdmin(page: Page) {
-	await page.goto(ADMIN_LOGIN_PATH, { waitUntil: "domcontentloaded" });
-	const session = await requestNativeLogin(page);
-	await writeAdminNativeSession(page, session);
-	const selection = await bootstrapAdminSpaceSelection(page.request, {
-		apiBaseUrl: ADMIN_API_BASE_URL,
-		accessToken: session.accessToken,
+	const adminOrigin = new URL(ADMIN_ORIGIN).origin;
+	await runOidcLoginFlow(page, {
+		startPath: ADMIN_LOGIN_PATH,
+		email: ADMIN_LOGIN_EMAIL,
+		password: ADMIN_LOGIN_PASSWORD,
+		finalUrl: (url: URL) =>
+			url.origin === adminOrigin && url.pathname === ADMIN_DASHBOARD_PATH,
 	});
-	await seedAdminPersist(page, selection);
+
+	const selection = await waitForAdminSpaceSelection(page);
 	await page.goto(ADMIN_DASHBOARD_PATH, { waitUntil: "domcontentloaded" });
 	return selection;
 }
 
-async function requestNativeLogin(page: Page): Promise<AdminNativeAuthSession> {
-	const response = await page.request.post(NATIVE_LOGIN_URL, {
-		data: {
-			email: ADMIN_LOGIN_EMAIL,
-			password: ADMIN_LOGIN_PASSWORD,
-		},
-	});
-	if (!response.ok()) {
-		throw new Error(
-			`native 로그인 API 호출에 실패했습니다: ${response.status()}`,
-		);
-	}
-
-	const payload = (await response.json()) as {
-		data?: Partial<AdminNativeAuthSession>;
-	};
-	const session = payload.data;
-	if (
-		typeof session?.accessToken !== "string" ||
-		typeof session.refreshToken !== "string" ||
-		typeof session.sessionId !== "string" ||
-		typeof session.accessTokenExpiresAt !== "number" ||
-		typeof session.refreshTokenExpiresAt !== "number"
-	) {
-		throw new Error("native 로그인 응답이 올바르지 않습니다.");
-	}
-
-	return {
-		accessToken: session.accessToken,
-		refreshToken: session.refreshToken,
-		sessionId: session.sessionId,
-		accessTokenExpiresAt: session.accessTokenExpiresAt,
-		refreshTokenExpiresAt: session.refreshTokenExpiresAt,
-	};
-}
-
-async function writeAdminNativeSession(
+async function waitForAdminSpaceSelection(
 	page: Page,
-	session: AdminNativeAuthSession,
-) {
-	const raw = await readAdminPersistRaw(page);
-	const document = mergeAdminPersistAuthSession(raw, session);
+): Promise<AdminPersistSpaceSelection> {
+	const deadline = Date.now() + ADMIN_PERSIST_READY_TIMEOUT;
+	while (Date.now() < deadline) {
+		const selection = await readAdminPersistRawSelection(page);
+		if (selection) {
+			return selection;
+		}
 
-	await page.evaluate(
-		({ storageKey, value }) => {
-			window.localStorage.setItem(storageKey, value);
-		},
-		{
-			storageKey: ADMIN_PERSIST_KEY,
-			value: JSON.stringify(document),
-		},
+		await page.waitForTimeout(500);
+	}
+
+	throw new Error(
+		"Admin space selection was not established after OIDC login.",
 	);
 }
 

@@ -22,15 +22,18 @@ jest.mock("@cocrepo/mo-ui", () => {
 	const { Pressable, Text: MockText, View } =
 		jest.requireActual<typeof import("react-native")>("react-native");
 
-	type ButtonProps = {
-		children?: React.ReactNode;
-		onPress?: () => void;
-		isDisabled?: boolean;
-		[key: string]: unknown;
-	};
-
 	return {
-		Button: ({ children, onPress, isDisabled, ...props }: ButtonProps) =>
+		Button: ({
+			children,
+			onPress,
+			isDisabled,
+			...props
+		}: {
+			children?: React.ReactNode;
+			onPress?: () => void;
+			isDisabled?: boolean;
+			[key: string]: unknown;
+		}) =>
 			React.createElement(
 				Pressable,
 				{

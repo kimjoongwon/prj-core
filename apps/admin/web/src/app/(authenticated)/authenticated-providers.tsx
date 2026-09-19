@@ -1,7 +1,10 @@
 "use client";
-import { setApiNativeRefreshHandler } from "@cocrepo/api/core/client";
-import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/core/auth";
-import { isScopeKindAccessible } from "@cocrepo/constant";
+import {
+	installCoreSessionRecovery,
+	refreshSessionTokens,
+} from "@cocrepo/api/core/client";
+import { useVerifyToken } from "@cocrepo/api/core/auth";
+import { isScopeKindAccessible, Token } from "@cocrepo/constant";
 import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
 import { useApp } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
@@ -13,6 +16,34 @@ interface AuthenticatedProvidersProps {
 	children: ReactNode;
 }
 
+// window.location.href는 origin 전체 경로를 쓴다(admin web은 basePath "/admin").
+const ADMIN_WEB_LOGIN_PATH = "/admin/auth/login";
+
+/**
+ * 인증 세션을 소유한 앱만 세션 복구 정책을 설치한다.
+ * 401이 나면 쿠키 기반 token/refresh로 갱신 후 재시도하고, 갱신이 실패하면
+ * 로그인 화면으로 보낸다. 로그인 UI(idp/web)는 이 정책을 설치하지 않는다.
+ */
+function installAdminSessionRecovery() {
+	installCoreSessionRecovery({
+		refreshSession: async () => {
+			// 세션 표시(loggedIn)가 없는 방문자는 인증 쿠키도 없다는 뜻이므로
+			// 갱신 요청을 만들지 않고 만료로 본다.
+			if (!readSessionPresenceMarker()) {
+				throw new Error("No session presence marker cookie.");
+			}
+
+			const refreshed = await refreshSessionTokens();
+			if (!refreshed) {
+				throw new Error("Session token refresh failed.");
+			}
+		},
+		onSessionExpired: () => {
+			window.location.href = ADMIN_WEB_LOGIN_PATH;
+		},
+	});
+}
+
 /**
  * 인증된 라우트 그룹 전용 Provider
  *
@@ -21,34 +52,20 @@ interface AuthenticatedProvidersProps {
  *
  * Provider 계층 구조:
  * SessionBootstrap (OIDC 세션 쿠키 → 스토어 부트스트랩)
- * └── NativeAuthBridge (native refresh 연결)
- *     └── TenantAccessBootstrapper (권한 규칙 + navigation scope)
- *         └── AccountBootstrapper (tenant 선택 부트스트랩과 리다이렉트)
+ * └── TenantAccessBootstrapper (권한 규칙 + navigation scope)
+ *     └── AccountBootstrapper (tenant 선택 부트스트랩과 리다이렉트)
  */
 export const AuthenticatedProviders = observer(
 	function AuthenticatedProviders({ children }: AuthenticatedProvidersProps) {
 		return (
 			<SessionBootstrap>
-				<NativeAuthBridge>
-					<TenantAccessBootstrapper>
-						<AccountBootstrapper>{children}</AccountBootstrapper>
-					</TenantAccessBootstrapper>
-				</NativeAuthBridge>
+				<TenantAccessBootstrapper>
+					<AccountBootstrapper>{children}</AccountBootstrapper>
+				</TenantAccessBootstrapper>
 			</SessionBootstrap>
 		);
 	},
 );
-
-const SESSION_ID_COOKIE_NAME = "sessionId";
-
-function readSessionIdCookie(): string | null {
-	const match = document.cookie
-		.split("; ")
-		.find((entry) => entry.startsWith(`${SESSION_ID_COOKIE_NAME}=`));
-	return match
-		? decodeURIComponent(match.slice(SESSION_ID_COOKIE_NAME.length + 1))
-		: null;
-}
 
 /**
  * current-space가 null이고 사용 가능한 space가 1개 이상이면 첫 번째를 자동 선택한다.
@@ -94,11 +111,24 @@ async function autoSelectFirstSpace(accessToken: string): Promise<void> {
 }
 
 /**
+ * 세션 존재 표시(loggedIn) 쿠키는 민감하지 않아 클라이언트가 읽을 수 있다.
+ * 표시가 없는 방문자는 인증 쿠키도 없다는 뜻이므로 갱신 요청(401)을 만들지
+ * 않고 바로 로그인 화면으로 보낸다.
+ */
+function readSessionPresenceMarker(): boolean {
+	return document.cookie
+		.split("; ")
+		.some((entry) => entry === `${Token.LOGGED_IN}=1`);
+}
+
+/**
  * SessionBootstrap
- * OIDC 콜백은 sessionId 쿠키만 심은 채 프론트 스토어는 비어 있는 상태로 도착한다.
- * 스토어에 세션이 없고 세션 쿠키가 있으면 쿠키 기반 token/refresh로 스토어를
- * 채운다. 완료 전까지 하위 트리 렌더를 지연해 verify-token 401 → 로그인
- * 리다이렉트 루프를 방지한다.
+ * OIDC 콜백은 HttpOnly 세션 쿠키(accessToken/refreshToken/sessionId)만 심은 채
+ * 프론트 스토어는 비어 있는 상태로 도착한다. document.cookie로는 HttpOnly 쿠키를
+ * 읽을 수 없으므로 공용 token/refresh(단일 비행)를 호출해 회전된 토큰과
+ * sessionId로 스토어를 채운다. 세션 표시가 없거나 갱신에 실패하면 로그인 화면으로
+ * 보내고 하위 트리는 렌더하지 않는다(비인증 API 호출이 401 콘솔을 오염시키지
+ * 않도록).
  */
 const SessionBootstrap = observer(function SessionBootstrap({
 	children,
@@ -107,102 +137,50 @@ const SessionBootstrap = observer(function SessionBootstrap({
 }) {
 	const app = useApp();
 	const { authSession } = app.account;
-	const [isReady, setIsReady] = useState(false);
+	const router = useRouter();
+	const [shouldRenderChildren, setShouldRenderChildren] = useState(false);
 
 	useEffect(() => {
 		let cancelled = false;
 
-		const bootstrapFromSessionCookie = async () => {
-			if (authSession.refreshToken && authSession.sessionId) {
-				return;
-			}
-			const sessionId = readSessionIdCookie();
-			if (!sessionId) {
-				return;
-			}
-			try {
-				const response = await fetch("/api/v1/auth/token/refresh", {
-					method: "POST",
-					credentials: "include",
-				});
-				const body = (await response.json()) as {
-					data?: {
-						accessToken?: string;
-						refreshToken?: string;
-						accessTokenExpiresAt?: number;
-						refreshTokenExpiresAt?: number;
-					};
-				};
-				const tokens = body?.data;
-				if (response.ok && tokens?.accessToken) {
-					authSession.setNativeAuthSession({
-						accessToken: tokens.accessToken,
-						refreshToken: tokens.refreshToken ?? "",
-						sessionId,
-						accessTokenExpiresAt: tokens.accessTokenExpiresAt ?? 0,
-						refreshTokenExpiresAt: tokens.refreshTokenExpiresAt ?? 0,
-					});
+		installAdminSessionRecovery();
 
-					// Space 미선택 시 첫 번째 space를 자동 선택한다 (첫 로그인 UX).
-					await autoSelectFirstSpace(tokens.accessToken);
-				}
-			} catch {
-				// 부트스트랩 실패 시 하위 verify-token 흐름이 로그인으로 안내한다.
+		const bootstrapFromSessionCookies = async (): Promise<boolean> => {
+			if (authSession.refreshToken && authSession.sessionId) {
+				return true;
 			}
+			if (!readSessionPresenceMarker()) {
+				router.replace("/auth/login");
+				return false;
+			}
+
+			const refreshed = await refreshSessionTokens();
+			if (!refreshed) {
+				router.replace("/auth/login");
+				return false;
+			}
+
+			// Space 미선택 시 첫 번째 space를 자동 선택한다 (첫 로그인 UX).
+			await autoSelectFirstSpace(authSession.accessToken ?? "");
+			return true;
 		};
 
-		void bootstrapFromSessionCookie().finally(() => {
-			if (!cancelled) {
-				setIsReady(true);
+		void bootstrapFromSessionCookies().then((shouldRender) => {
+			if (!cancelled && shouldRender) {
+				setShouldRenderChildren(true);
 			}
 		});
 
 		return () => {
 			cancelled = true;
 		};
-	}, [authSession]);
+	}, [authSession, router]);
 
-	if (!isReady) {
+	if (!shouldRenderChildren) {
 		return null;
 	}
 
-	return children;
-});
-
-const NativeAuthBridge = observer(function NativeAuthBridge({
-	children,
-}: {
-	children: ReactNode;
-}) {
-	const app = useApp();
-	const { authSession } = app.account;
-
-	useEffect(() => {
-		const refreshNativeSession = async () => {
-			if (!authSession.sessionId || !authSession.refreshToken) {
-				throw new Error("Native auth session is missing.");
-			}
-
-			const response = await nativeRefreshToken({
-				sessionId: authSession.sessionId,
-				refreshToken: authSession.refreshToken,
-			});
-			const nativeAuthSession = response.data;
-			if (!nativeAuthSession) {
-				throw new Error("Native auth refresh response is empty.");
-			}
-
-			authSession.setNativeAuthSession(nativeAuthSession);
-		};
-
-		setApiNativeRefreshHandler(refreshNativeSession);
-
-		return () => {
-			setApiNativeRefreshHandler(null);
-		};
-	}, [authSession]);
-
-	return children;
+	return <>{children}</>;
 });
 
 /**
@@ -221,8 +199,12 @@ const TenantAccessBootstrapper = observer(function TenantAccessBootstrapper({
 	const { authSession } = account;
 	const accessControl = app.accessControl;
 	const navigation = app.navigation;
+	// 로그아웃 시 account.clear()로 스토어가 비며 쿼리 키가 바뀌는데, 세션 토큰이
+	// 없으면 verify-token 재실행이 401/refresh 401 콘솔 노이즈를 만든다. 토큰이
+	// 남아 있는 동안에만 검증을 활성화한다.
 	const shouldVerifyCurrentTenant =
 		authSession.isHydrated &&
+		Boolean(authSession.refreshToken) &&
 		account.isHydrated &&
 		account.isSelectionResolved;
 	const { data: verifyTokenResponse, isPending: isVerifyingToken } =

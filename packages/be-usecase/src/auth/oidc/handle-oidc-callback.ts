@@ -16,6 +16,7 @@ import { decodeOidcStateContext } from "./decode-oidc-state-context";
 import type { OidcCallbackResult } from "./oidc-callback.result";
 import { resolveOidcClient } from "./resolve-oidc-client";
 import { resolveStoredClientId } from "./resolve-stored-client-id";
+import { setLoggedInMarkerCookie } from "./set-logged-in-marker-cookie";
 import { setSessionIdCookie } from "./set-session-id-cookie";
 import { toProtocolClientConfig } from "./to-protocol-client-config";
 
@@ -104,6 +105,7 @@ export async function handleOidcCallback(params: {
 		);
 	}
 	setSessionIdCookie(params.res, sessionId);
+	setLoggedInMarkerCookie(params.res);
 
 	return {
 		returnTo,

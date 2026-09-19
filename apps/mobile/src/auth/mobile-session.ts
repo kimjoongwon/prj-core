@@ -1,17 +1,14 @@
 import { makeAutoObservable } from "mobx";
 import { getCurrentSpace, getMySpaces, verifyToken } from "@cocrepo/api/core/auth";
 import type { SpaceDto } from "@cocrepo/api/core/model";
-import { setApiBaseUrl, setLoginRedirectUrl } from "@cocrepo/api/core/client";
-import { getCoreApiBaseUrl, getLoginPath } from "./auth-config";
+import { setApiBaseUrl } from "@cocrepo/api/core/client";
+import { getCoreApiBaseUrl } from "./auth-config";
 import { loginWithOidcSheet, refreshOidcSession } from "./oidc/oidc-login";
 import {
   clearNativeAuthSession,
   clearNativeSpaceSelection,
   loadNativeAuthSession,
   loadNativeSpaceSelection,
-  requestNativeLogin,
-  requestNativeLogout,
-  requestNativeTokenRefresh,
   saveNativeSpaceSelection,
   saveNativeAuthSession,
   type MobileAuthSession,
@@ -29,10 +26,9 @@ type AuthStatus = "unknown" | "authenticated" | "unauthenticated";
 const UNKNOWN_PATH = "/";
 const DEFAULT_HOME_PATH = "/";
 
-const configureIdpClient = (nativeRefreshHandler?: () => Promise<void>) => {
-  configureMobileApiScope(nativeRefreshHandler);
+const configureIdpClient = (sessionRefreshHandler?: () => Promise<void>) => {
+  configureMobileApiScope(sessionRefreshHandler);
   setApiBaseUrl(getCoreApiBaseUrl());
-  setLoginRedirectUrl(getLoginPath());
 };
 
 class MobileSession {
@@ -83,24 +79,13 @@ class MobileSession {
     this.lastFailure = "";
   }
 
-  async loginWithCredentials(email: string, password: string): Promise<boolean> {
-    configureIdpClient(() => this.refreshNativeSession());
-    const session = await requestNativeLogin({
-      apiBaseUrl: getCoreApiBaseUrl(),
-      email,
-      password,
-    });
-    await this.applySession(session);
-    return this.verifySession();
-  }
-
   /**
    * IDP 시트 로그인 (WebView 없음).
    * 시스템 인증 세션으로 IDP 로그인 화면을 띄우고 스킴 콜백 + PKCE로
    * 발급자 토큰을 교환받아 기존 세션 저장 구조에 그대로 적용한다.
    */
   async loginWithOidc(): Promise<boolean> {
-    configureIdpClient(() => this.refreshNativeSession());
+    configureIdpClient(() => this.refreshSession());
     const session = await loginWithOidcSheet();
     await this.applySession(session);
     return this.verifySession();
@@ -109,16 +94,7 @@ class MobileSession {
   async logout() {
     this.setVerifying(true);
     try {
-      configureIdpClient(() => this.refreshNativeSession());
-      const sessionId = mobileApiScope.sessionId;
-      if (sessionId) {
-        await requestNativeLogout({
-          accessToken: mobileApiScope.accessToken,
-          apiBaseUrl: getCoreApiBaseUrl(),
-          refreshToken: mobileApiScope.refreshToken,
-          sessionId,
-        }).catch(() => false);
-      }
+      configureIdpClient(() => this.refreshSession());
       await this.clearLocalSession();
       this.markUnauthenticated("logout");
     } catch (error) {
@@ -131,26 +107,18 @@ class MobileSession {
     }
   }
 
-  async refreshNativeSession(): Promise<void> {
-    const sessionId = mobileApiScope.sessionId;
+  /**
+   * 저장된 OIDC refresh token으로 발급자 refresh_token 그랜트 갱신을 수행한다.
+   * sessionId 기반 구버전 세션은 갱신할 수 없어 재로그인 대상이 된다.
+   */
+  async refreshSession(): Promise<void> {
     const refreshToken = mobileApiScope.refreshToken;
-    if (!refreshToken) {
-      throw new Error("native_refresh_token_missing");
+    if (!refreshToken || mobileApiScope.sessionId) {
+      throw new Error("refresh_token_missing");
     }
 
-    // OIDC 세션(sessionId 없음)은 발급자 refresh_token 그랜트로 갱신한다.
-    if (!sessionId) {
-      const oidcSession = await refreshOidcSession(refreshToken);
-      await this.applySession(oidcSession);
-      return;
-    }
-
-    const session = await requestNativeTokenRefresh({
-      apiBaseUrl: getCoreApiBaseUrl(),
-      refreshToken,
-      sessionId,
-    });
-    await this.applySession(session);
+    const oidcSession = await refreshOidcSession(refreshToken);
+    await this.applySession(oidcSession);
   }
 
   async verifySession(): Promise<boolean> {
@@ -160,7 +128,7 @@ class MobileSession {
 
     this.setVerifying(true);
     try {
-      configureIdpClient(() => this.refreshNativeSession());
+      configureIdpClient(() => this.refreshSession());
       await this.restorePersistedSession();
       if (!mobileApiScope.accessToken) {
         throw new Error("session_missing");
@@ -169,7 +137,7 @@ class MobileSession {
       try {
         await this.loadAuthenticatedContext();
       } catch {
-        await this.refreshNativeSession();
+        await this.refreshSession();
         await this.loadAuthenticatedContext();
       }
 

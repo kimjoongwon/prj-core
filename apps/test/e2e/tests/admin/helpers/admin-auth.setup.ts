@@ -16,7 +16,7 @@ const ADMIN_PERSIST_KEY = "admin-persist";
 
 setup.setTimeout(120000);
 
-setup("Admin native 로그인", async ({ page }) => {
+setup("Admin OIDC 로그인", async ({ page }) => {
 	const selection = await loginToAdmin(page);
 	await prewarmAdminRoutes(page);
 	const adminPersist = await readAdminPersist(page, selection);

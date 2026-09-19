@@ -6,19 +6,15 @@ import { AccountUserMenu } from "./AccountUserMenu";
 
 const mocks = vi.hoisted(() => ({
 	account: {
-		authSession: {
-			sessionId: "session-a",
-			refreshToken: "refresh-a",
-		},
 		clear: vi.fn(),
 	},
-	nativeLogout: vi.fn(),
 	router: { replace: vi.fn() },
 }));
 
-vi.mock("@cocrepo/api/core/auth", () => ({
-	nativeLogout: mocks.nativeLogout,
-}));
+vi.stubGlobal(
+	"fetch",
+	vi.fn().mockResolvedValue({ ok: true } as Response),
+);
 
 vi.mock("@cocrepo/store", () => ({
 	useApp: () => ({ account: mocks.account }),

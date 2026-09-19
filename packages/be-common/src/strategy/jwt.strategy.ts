@@ -2,7 +2,6 @@ import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { hydrateEntity, User as UserEntity } from "@cocrepo/entity";
 import type { User } from "@cocrepo/entity";
 import { AuthCacheService, UserService } from "@cocrepo/service";
-import type { AuthConfig } from "@cocrepo/type";
 import {
 	parseBigIntJson,
 	stringifyBigIntJson,
@@ -57,7 +56,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		private readonly authCacheService: AuthCacheService,
 	) {
 		const oidcConfig = config.get<OidcServerConfig>("oidc");
-		const authConfig = config.get<AuthConfig>("auth");
 		const oidcIssuer = oidcConfig?.issuer || "http://localhost:3000";
 		const jwksSecretProvider = jwksRsa.passportJwtSecret({
 			jwksUri: oidcConfig?.jwksUri || "http://localhost:3000/oidc/jwks",
@@ -93,23 +91,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 					return null;
 				},
 			]),
-			secretOrKeyProvider: (
-				req: Request,
-				token: string,
-				done: (error: Error | null, secretOrKey?: string | Buffer) => void,
-			) => {
-				const header = parseJwtHeader(token);
-				if (header?.alg === "HS256") {
-					if (!authConfig?.secret) {
-						return done(new Error("JWT secret is not defined."));
-					}
-					return done(null, authConfig.secret);
-				}
-
-				return jwksSecretProvider(req, token, done);
-			},
-			issuer: [oidcIssuer, `${oidcIssuer}/native`],
-			algorithms: ["RS256", "HS256"],
+			secretOrKeyProvider: jwksSecretProvider,
+			issuer: oidcIssuer,
+			algorithms: ["RS256"],
 		});
 	}
 

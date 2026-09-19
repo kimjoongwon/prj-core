@@ -239,6 +239,14 @@ export interface OidcConfiguration {
 		) => boolean;
 	};
 	loadExistingGrant?: (ctx: OidcProviderContext) => Promise<Grant | undefined>;
+	issueRefreshToken?: (
+		ctx: unknown,
+		client: {
+			clientId?: string;
+			grantTypeAllowed?: (grantType: string) => boolean;
+		},
+		code: { scopes?: Set<string> },
+	) => boolean | Promise<boolean>;
 	renderError?: (
 		ctx: { type: string; body: string },
 		out: Record<string, unknown>,

@@ -1,16 +1,8 @@
-import {
-	type AdminNativeAuthSession,
-	type AdminPersistSpaceSelection,
-	mergeAdminPersistAccountSelection,
-	mergeAdminPersistAuthSession,
-} from "./admin-persist";
-import {
-	type AdminSpaceApiRequestLike,
-	bootstrapAdminSpaceSelection,
-} from "./admin-space-bootstrap";
+import type { AdminPersistSpaceSelection } from "./admin-persist";
 import {
 	type E2EPageLike,
 	navigateToOidcLoginForm,
+	runOidcLoginFlow,
 	submitOidcCredentials,
 	waitForOidcConsentForm,
 } from "./oidc-login";
@@ -20,19 +12,15 @@ interface ConsoleLoginPageLike extends E2EPageLike {
 		pageFunction: (arg: Arg) => Result,
 		arg: Arg,
 	): Promise<Result>;
-	request: AdminSpaceApiRequestLike;
 	url(): string;
 }
 
 const DEFAULT_CONSOLE_BASE_URL =
 	process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin";
-const DEFAULT_API_BASE_URL =
-	process.env.E2E_CORE_API_BASE_URL ?? new URL(DEFAULT_CONSOLE_BASE_URL).origin;
 const LOGIN_PATH =
 	process.env.E2E_IDP_LOGIN_PATH ??
 	"/api/v1/auth/oidc/login?clientId=admin-web";
 const DASHBOARD_PATH = process.env.E2E_IDP_DASHBOARD_PATH ?? "/settings/auth";
-const AUTH_LOGIN_PATH = process.env.E2E_ADMIN_AUTH_LOGIN_PATH ?? "/auth/login";
 
 function trimTrailingSlash(value: string) {
 	return value.endsWith("/") ? value.slice(0, -1) : value;
@@ -55,12 +43,8 @@ function buildPathWithQuery(path: string, query: Record<string, string>) {
 
 const consoleBaseUrl = trimTrailingSlash(DEFAULT_CONSOLE_BASE_URL);
 const consoleOrigin = new URL(consoleBaseUrl).origin;
-const apiBaseUrl = trimTrailingSlash(DEFAULT_API_BASE_URL);
 const normalizedDashboardPath = ensureLeadingSlash(DASHBOARD_PATH);
 const dashboardUrl = `${consoleBaseUrl}${normalizedDashboardPath}`;
-const nativeLoginUrl = `${consoleBaseUrl}${buildPathWithQuery(AUTH_LOGIN_PATH, {
-	returnTo: dashboardUrl,
-})}`;
 const oidcLoginUrl = new URL(
 	buildPathWithQuery(LOGIN_PATH, {
 		returnTo: dashboardUrl,
@@ -68,52 +52,32 @@ const oidcLoginUrl = new URL(
 	consoleOrigin,
 ).toString();
 
-function buildApiUrl(path: string) {
-	return `${apiBaseUrl}${ensureLeadingSlash(path)}`;
-}
-const nativeLoginApiUrl = buildApiUrl("/api/v1/auth/login");
 const CONSENT_TIMEOUT_MS = 30000;
 const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const CONSOLE_PERSIST_KEY = "admin-persist";
 
-async function seedConsolePersist(
-	page: ConsoleLoginPageLike,
-	selection: AdminPersistSpaceSelection,
-) {
-	const raw = await readConsolePersist(page);
-	const document = mergeAdminPersistAccountSelection(raw, selection);
-
-	await page.evaluate(
-		({ storageKey, value }) => {
-			window.localStorage.setItem(storageKey, value);
-		},
-		{
-			storageKey: CONSOLE_PERSIST_KEY,
-			value: JSON.stringify(document),
-		},
-	);
-}
-
 /**
- * Admin console에 native 로그인하고 System FitnessCenter context를 저장합니다.
+ * Admin console에 OIDC UI 로그인하고 앱이 자동 선택한 System FitnessCenter
+ * context가 저장될 때까지 기다립니다.
  *
  * @param page Admin console을 제어할 E2E page
- * @returns API bootstrap과 current-space 선택 응답에서 얻은 tenant/space 선택값
+ * @returns 앱 부트스트랩이 확정한 tenant/space 선택값
  */
 export async function loginToConsole(
 	page: ConsoleLoginPageLike,
 ): Promise<AdminPersistSpaceSelection> {
 	for (let attempt = 1; attempt <= 3; attempt++) {
 		try {
-			await page.goto(nativeLoginUrl, { waitUntil: "domcontentloaded" });
-			const session = await requestNativeLogin(page);
-			await writeConsoleNativeSession(page, session);
-			const selection = await bootstrapAdminSpaceSelection(page.request, {
-				apiBaseUrl,
-				accessToken: session.accessToken,
+			await runOidcLoginFlow(page, {
+				startPath: oidcLoginUrl,
+				email: DEFAULT_EMAIL,
+				password: DEFAULT_PASSWORD,
+				finalUrl: (url: URL) =>
+					url.origin === consoleOrigin &&
+					url.pathname.endsWith(normalizedDashboardPath),
 			});
-			await seedConsolePersist(page, selection);
+			const selection = await waitForConsoleSpaceSelection(page);
 			await page.goto(dashboardUrl, {
 				waitUntil: "domcontentloaded",
 			});
@@ -126,7 +90,66 @@ export async function loginToConsole(
 		}
 	}
 
-	throw new Error("Native console login failed after retries.");
+	throw new Error("Console OIDC login failed after retries.");
+}
+
+/**
+ * OIDC 로그인 이후 앱의 session/space 부트스트랩이 admin-persist에
+ * tenant/space 선택을 기록할 때까지 폴링합니다.
+ */
+async function waitForConsoleSpaceSelection(
+	page: ConsoleLoginPageLike,
+): Promise<AdminPersistSpaceSelection> {
+	const deadline = Date.now() + CONSENT_TIMEOUT_MS;
+	while (Date.now() < deadline) {
+		const selection = await page.evaluate((storageKey) => {
+			const raw = window.localStorage.getItem(storageKey);
+			if (!raw) {
+				return null;
+			}
+
+			try {
+				const parsed = JSON.parse(raw) as {
+					account?: {
+						tenantId?: unknown;
+						spaceId?: unknown;
+						fitnessCenterName?: unknown;
+						contentLanguageCode?: unknown;
+					};
+				};
+				const account = parsed.account;
+				if (
+					typeof account?.tenantId === "string" &&
+					typeof account.spaceId === "string" &&
+					typeof account.fitnessCenterName === "string"
+				) {
+					return {
+						tenantId: account.tenantId,
+						spaceId: account.spaceId,
+						fitnessCenterName: account.fitnessCenterName,
+						contentLanguageCode:
+							typeof account.contentLanguageCode === "string"
+								? account.contentLanguageCode
+								: null,
+					};
+				}
+			} catch {
+				return null;
+			}
+
+			return null;
+		}, CONSOLE_PERSIST_KEY);
+
+		if (selection) {
+			return selection;
+		}
+
+		await page.waitForTimeout(500);
+	}
+
+	throw new Error(
+		"Console space selection was not established after OIDC login.",
+	);
 }
 
 /**
@@ -191,67 +214,5 @@ async function waitForConsentOrFirstPartyRedirect(
 
 	throw new Error(
 		"OIDC consent or first-party redirect did not complete in time.",
-	);
-}
-
-async function requestNativeLogin(
-	page: ConsoleLoginPageLike,
-): Promise<AdminNativeAuthSession> {
-	const response = await page.request.post(nativeLoginApiUrl, {
-		data: {
-			email: DEFAULT_EMAIL,
-			password: DEFAULT_PASSWORD,
-		},
-	});
-
-	if (response.status() !== 200) {
-		throw new Error(`Native login failed: ${response.status()}`);
-	}
-
-	const payload = (await response.json()) as {
-		data?: Partial<AdminNativeAuthSession>;
-	};
-	const session = payload.data;
-	if (
-		typeof session?.accessToken !== "string" ||
-		typeof session.refreshToken !== "string" ||
-		typeof session.sessionId !== "string" ||
-		typeof session.accessTokenExpiresAt !== "number" ||
-		typeof session.refreshTokenExpiresAt !== "number"
-	) {
-		throw new Error("Native login response is invalid.");
-	}
-
-	return {
-		accessToken: session.accessToken,
-		refreshToken: session.refreshToken,
-		sessionId: session.sessionId,
-		accessTokenExpiresAt: session.accessTokenExpiresAt,
-		refreshTokenExpiresAt: session.refreshTokenExpiresAt,
-	};
-}
-
-async function writeConsoleNativeSession(
-	page: ConsoleLoginPageLike,
-	session: AdminNativeAuthSession,
-) {
-	const raw = await readConsolePersist(page);
-	const document = mergeAdminPersistAuthSession(raw, session);
-
-	await page.evaluate(
-		({ storageKey, value }) => {
-			window.localStorage.setItem(storageKey, value);
-		},
-		{
-			storageKey: CONSOLE_PERSIST_KEY,
-			value: JSON.stringify(document),
-		},
-	);
-}
-
-async function readConsolePersist(page: ConsoleLoginPageLike) {
-	return page.evaluate(
-		(storageKey) => window.localStorage.getItem(storageKey),
-		CONSOLE_PERSIST_KEY,
 	);
 }

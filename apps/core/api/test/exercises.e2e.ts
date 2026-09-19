@@ -5,15 +5,18 @@ import { SpaceScope } from "@cocrepo/dto";
 import { SpacesRepository } from "@cocrepo/repository";
 import { AuthCacheService, TokenStorageService } from "@cocrepo/service";
 import { INestApplication, Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
+import {
+	getOidcTestIssuer,
+	getOidcTestPublicKeyPem,
+	signOidcTestToken,
+} from "./helpers/test-auth.helper";
 
-const TEST_JWT_SECRET = "test-jwt-secret-e2e";
 const USER_ULID = "01J00000000000000000001011";
 const USER_ID = 1011n;
 const COMPANY_MANAGER_SPACE_ID = 1111n;
@@ -56,8 +59,9 @@ class TasksTestJwtStrategy extends PassportStrategy(Strategy) {
 	constructor() {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-			secretOrKey: TEST_JWT_SECRET,
-			algorithms: ["HS256"],
+			secretOrKey: getOidcTestPublicKeyPem(),
+			issuer: getOidcTestIssuer(),
+			algorithms: ["RS256"],
 		});
 	}
 
@@ -80,8 +84,7 @@ describe("Tasks API (E2E)", () => {
 	};
 
 	beforeAll(async () => {
-		const jwtService = new JwtService({ secret: TEST_JWT_SECRET });
-		jwtToken = jwtService.sign({
+		jwtToken = signOidcTestToken({
 			sub: USER_ULID,
 		});
 

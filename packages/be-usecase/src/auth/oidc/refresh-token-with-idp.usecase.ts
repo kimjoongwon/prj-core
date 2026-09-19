@@ -12,6 +12,7 @@ import type { AuthSessionResult } from "./auth-session.result";
 import { decodeAccessToken } from "./decode-access-token";
 import { resolveClientIdFromSessionId } from "./resolve-client-id-from-session-id";
 import { resolveOidcClient } from "./resolve-oidc-client";
+import { setLoggedInMarkerCookie } from "./set-logged-in-marker-cookie";
 import { toProtocolClientConfig } from "./to-protocol-client-config";
 
 @CommandHandler(RefreshTokenWithIdpCommand)
@@ -74,11 +75,13 @@ export class RefreshTokenWithIdpUseCase {
 				tokenResponse.refresh_token,
 			);
 		}
+		setLoggedInMarkerCookie(command.res);
 
 		const now = Date.now();
 		return {
 			accessToken: tokenResponse.access_token,
 			refreshToken: tokenResponse.refresh_token || refreshToken,
+			sessionId: command.sessionId ?? null,
 			accessTokenExpiresAt: now + tokenResponse.expires_in * 1000,
 			refreshTokenExpiresAt: now + 30 * 24 * 60 * 60 * 1000,
 			user,

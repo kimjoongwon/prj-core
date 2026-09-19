@@ -125,6 +125,19 @@ export class OidcConfigurationService {
 			pkce: {
 				required: (_ctx, client) => client.tokenEndpointAuthMethod === "none",
 			},
+			// OIDC Core는 offline_access에 prompt=consent를 요구하고, 요청에 동의 prompt가
+			// 없으면 provider가 scope에서 offline_access를 제거한다. 퍼스트파티 skip-consent
+			// 클라이언트는 로그인 시점에 요청 scope 전체를 자동 승인하는 정책이므로 동의
+			// 화면 없이 refresh token을 발급한다. 그 외 클라이언트는 기본 동작을 따른다.
+			issueRefreshToken: async (_ctx, client, code) => {
+				if (client.clientId && skipConsentClientIds.has(client.clientId)) {
+					return true;
+				}
+				return Boolean(
+					client.grantTypeAllowed?.("refresh_token") &&
+						code.scopes?.has("offline_access"),
+				);
+			},
 			// 에러 렌더링 - idp-client의 /error 페이지로 리다이렉트
 			renderError: async (ctx, out, _error) => {
 				const errorParams = new URLSearchParams({

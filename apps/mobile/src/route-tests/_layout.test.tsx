@@ -23,7 +23,6 @@ type StackScreenProps = {
 	};
 };
 
-const mockSetLoginRedirectUrl = jest.fn();
 const mockSetApiBaseUrl = jest.fn();
 const mockSetApiSessionScope = jest.fn();
 const mockSetUniwindTheme = jest.fn();
@@ -81,7 +80,6 @@ jest.mock("@cocrepo/api/core/client", () => ({
 	setApiBaseUrl: (...args: string[]) => mockSetApiBaseUrl(...args),
 	setApiSessionScope: (...args: unknown[]) =>
 		mockSetApiSessionScope(...args),
-	setLoginRedirectUrl: (...args: string[]) => mockSetLoginRedirectUrl(...args),
 }));
 
 jest.mock("@/auth/auth-config", () => ({
@@ -165,7 +163,7 @@ jest.mock("react-native-gesture-handler", () => {
 
 describe("mobile root layout", () => {
 	beforeEach(() => {
-		mockSetLoginRedirectUrl.mockReset();
+		mockSetApiBaseUrl.mockReset();
 		mockSetApiSessionScope.mockReset();
 		mockSetUniwindTheme.mockReset();
 	});
@@ -174,7 +172,6 @@ describe("mobile root layout", () => {
 		render(<AppLayout />);
 
 		expect(mockSetUniwindTheme).toHaveBeenCalledWith("system");
-		expect(mockSetLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");
 		expect(screen.getByLabelText("gesture-root")).toBeTruthy();
 		expect(screen.getByLabelText("safe-area-provider")).toBeTruthy();
 		expect(

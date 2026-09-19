@@ -17,13 +17,6 @@ export class UpdateSpaceFitnessCenterCommand {
 	}
 }
 
-export class NativeLoginCommand {
-	constructor(
-		readonly input: { email: string; password: string },
-		readonly req: unknown,
-	) {}
-}
-
 export class HandleOidcCallbackCommand {
 	constructor(
 		readonly clientId: string,
@@ -51,6 +44,15 @@ export class SubmitInteractionLoginCommand {
 export class HandleOidcCommand {
 	constructor(
 		readonly req: { url: string },
+		readonly res: unknown,
+	) {}
+}
+
+export class RefreshTokenWithIdpCommand {
+	constructor(
+		readonly refreshTokenCookie: string | undefined,
+		readonly refreshTokenHeader: string | undefined,
+		readonly sessionId: string | undefined,
 		readonly res: unknown,
 	) {}
 }

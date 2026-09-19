@@ -138,4 +138,67 @@ describe("OidcConfigurationService", () => {
 		).resolves.toBeUndefined();
 		expect(GrantConstructor).not.toHaveBeenCalled();
 	});
+
+	it("first-party skipConsent client는 offline_access와 무관하게 refresh token을 발급해야 한다", async () => {
+		const service = buildService([
+			buildClient("admin-web", true, true),
+			buildClient("partner-web", false, false),
+		]);
+		const configuration = await service.buildConfiguration();
+		const codeWithGrantedOfflineAccess = {
+			scopes: new Set(["openid", "offline_access"]),
+		};
+		const codeWithoutOfflineAccess = {
+			scopes: new Set(["openid", "profile"]),
+		};
+
+		await expect(
+			configuration.issueRefreshToken?.(
+				{} as never,
+				{ clientId: "admin-web", grantTypeAllowed: () => true },
+				codeWithGrantedOfflineAccess,
+			),
+		).resolves.toBe(true);
+		// provider가 scope에서 offline_access를 제거했더라도 정책상 발급한다.
+		await expect(
+			configuration.issueRefreshToken?.(
+				{} as never,
+				{ clientId: "admin-web", grantTypeAllowed: () => true },
+				codeWithoutOfflineAccess,
+			),
+		).resolves.toBe(true);
+	});
+
+	it("third-party client는 offline_access scope가 승인된 경우에만 refresh token을 발급해야 한다", async () => {
+		const service = buildService([
+			buildClient("partner-web", false, false),
+		]);
+		const configuration = await service.buildConfiguration();
+
+		await expect(
+			configuration.issueRefreshToken?.(
+				{} as never,
+				{ clientId: "partner-web", grantTypeAllowed: () => true },
+				{ scopes: new Set(["openid", "offline_access"]) },
+			),
+		).resolves.toBe(true);
+		await expect(
+			configuration.issueRefreshToken?.(
+				{} as never,
+				{ clientId: "partner-web", grantTypeAllowed: () => true },
+				{ scopes: new Set(["openid"]) },
+			),
+		).resolves.toBe(false);
+		await expect(
+			configuration.issueRefreshToken?.(
+				{} as never,
+				{
+					clientId: "partner-web",
+					grantTypeAllowed: (grantType: string) =>
+						grantType !== "refresh_token",
+				},
+				{ scopes: new Set(["openid", "offline_access"]) },
+			),
+		).resolves.toBe(false);
+	});
 });
