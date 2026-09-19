@@ -49,7 +49,6 @@
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/enum": "workspace:*",
-    "@cocrepo/prisma": "workspace:*",
     "@cocrepo/schema": "workspace:*",
     "@cocrepo/type": "workspace:*",
     "es-toolkit": "^1.26.1",

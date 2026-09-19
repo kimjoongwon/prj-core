@@ -33,7 +33,6 @@
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/entity": "workspace:*",
-    "@cocrepo/enum": "workspace:*",
     "@cocrepo/input": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/type": "workspace:*",

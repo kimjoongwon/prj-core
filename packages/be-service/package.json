@@ -28,16 +28,12 @@
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/context": "workspace:*",
-    "@cocrepo/decorator": "workspace:*",
     "@cocrepo/entity": "workspace:*",
-    "@cocrepo/enum": "workspace:*",
     "@cocrepo/input": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/repository": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",
     "@cocrepo/vo": "workspace:*",
-    "libphonenumber-js": "^1.11.17",
     "nestjs-i18n": "^10.4.14"
   },
   "peerDependencies": {

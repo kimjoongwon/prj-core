@@ -31,7 +31,6 @@
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/context": "workspace:*",
     "@cocrepo/event": "workspace:*",
-    "@cocrepo/prisma": "workspace:*",
     "@cocrepo/service": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",

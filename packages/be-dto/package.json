@@ -30,7 +30,6 @@
     "@cocrepo/enum": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/schema": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",
     "@nestjs/mapped-types": "^2.1.0"
   },

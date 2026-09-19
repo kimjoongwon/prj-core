@@ -110,7 +110,6 @@
 		"@vitejs/plugin-react-swc": "catalog:",
 		"@vitest/coverage-v8": "catalog:",
 		"@vitest/ui": "catalog:",
-		"semver": "^7.7.3",
 		"tsx": "catalog:",
 		"turbo": "2.9.14",
 		"typescript": "catalog:",
@@ -177,9 +176,8 @@
 			"prisma>mysql2": "3.23.1",
 			"query-string>decode-uri-component": "0.5.0",
 			"react-devtools-core>shell-quote": "1.9.0",
-			"react-native>ws": "7.5.11",
-			"recharts>lodash": "4.18.1",
-			"dagre-d3-es>lodash-es": "4.18.0",
+            "react-native>ws": "7.5.11",
+            "dagre-d3-es>lodash-es": "4.18.0",
 			"router>path-to-regexp": "8.4.2",
 			"socket.io>engine.io": "6.6.7",
 			"socket.io>socket.io-parser": "4.2.7",
@@ -201,9 +199,6 @@
 			"detox@20.51.4": "patches/detox@20.51.4.patch",
 			"bunyamin@1.6.3": "patches/bunyamin@1.6.3.patch"
 		}
-	},
-	"dependencies": {
-		"postgres": "^3.4.7"
 	},
 	"type": "commonjs",
 	"bugs": {
