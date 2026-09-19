@@ -102,19 +102,11 @@
 		"test:e2e:idp:local": "bash scripts/e2e-idp-local.sh"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.29.6",
-		"@babel/helper-plugin-utils": "^7.28.6",
-		"@babel/traverse": "^7.29.0",
 		"@biomejs/biome": "catalog:",
 		"@types/node": "catalog:",
-		"@vitejs/plugin-react-swc": "catalog:",
-		"@vitest/coverage-v8": "catalog:",
-		"@vitest/ui": "catalog:",
 		"tsx": "catalog:",
 		"turbo": "2.9.14",
-		"typescript": "catalog:",
-		"vite": "catalog:",
-		"vitest": "catalog:"
+		"typescript": "catalog:"
 	},
 	"pnpm": {
 		"overrides": {
