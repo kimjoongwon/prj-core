@@ -1911,10 +1911,33 @@ function writeEnvFile({ ticket, branch, slot, envFilePath, config }) {
 
   lines.push("");
   fs.writeFileSync(envFilePath, lines.join("\n"), "utf8");
+  const worktreePath = path.dirname(envFilePath);
   writeAppEnvFiles({
-    worktreePath: path.dirname(envFilePath),
+    worktreePath,
     values
   });
+  pullLocalSecretsIntoWorktree(worktreePath);
+}
+
+// OpenBao에서 로컬 개발용 시크릿을 가져와 worktree의 .env에 병합한다.
+// 토큰이 없거나 네트워크가 불가능해도 worktree 생성 자체는 계속 진행한다.
+function pullLocalSecretsIntoWorktree(worktreePath) {
+  const pullScriptPath = path.join(worktreePath, "scripts", "pull-local-secrets.mjs");
+  if (!fs.existsSync(pullScriptPath)) {
+    return;
+  }
+  const pullResult = runAllowFailure(process.execPath, [pullScriptPath, "--quiet"], {
+    cwd: worktreePath
+  });
+  const pullWarnings = (pullResult.stderr || "").trim();
+  if (pullWarnings) {
+    console.log(pullWarnings);
+  }
+  if (pullResult.status !== 0) {
+    console.log(
+      "Secrets: OpenBao 시크릿 pull 실패 — placeholder 값으로 진행합니다. 로그인 후 pnpm secrets:pull로 재시도하세요."
+    );
+  }
 }
 
 function buildWorktreeEnvValues({ ticket, branch, slot, config }) {

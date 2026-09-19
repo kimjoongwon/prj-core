@@ -24,6 +24,7 @@
 		"type-check": "turbo type-check",
 		"type-check:prod": "turbo type-check:prod",
 		"start": "bash scripts/start.sh",
+		"secrets:pull": "node scripts/pull-local-secrets.mjs",
 		"start:core-api": "turbo start:dev --filter=core-api --concurrency=20",
 		"start:admin-web": "turbo start:dev --filter=admin-web --concurrency=20",
 		"start:proposal-web": "turbo start:dev --filter=proposal-web --concurrency=20",
