@@ -207,12 +207,22 @@ async function startKubectlPortForwardTunnel({ isQuiet }) {
   return isTunnelReady ? LOCAL_OPENBAO_ADDRESS : null;
 }
 
-// VAULT_ADDR 지정이 우선이다. 미지정 시 기존 터널 재사용 → 자동 port-forward
-// → 원격 주소 fallback(클러스터 내부 실행 컨텍스트용) 순으로 결정한다.
+// VAULT_ADDR 지정이 우선이다. 다만 구 도메인 등 죽은 주소가 남아 있으면
+// 경고 후 probe 순서(기존 터널 재사용 → 자동 port-forward → 원격 fallback)로
+// 진행한다. 미지정 시에도 같은 순서를 따른다.
 async function resolveOpenBaoConnection({ isQuiet }) {
   const configuredAddress = process.env.VAULT_ADDR?.trim();
   if (configuredAddress) {
-    return configuredAddress;
+    if (await isReachableOpenBao(configuredAddress)) {
+      return configuredAddress;
+    }
+
+    console.warn(
+      `⚠️ VAULT_ADDR(${configuredAddress})에 연결할 수 없어 자동 탐색으로 진행합니다.`
+    );
+    if (!isQuiet) {
+      console.warn("   구 도메인이 export되어 있다면 shell 설정에서 갱신하세요.");
+    }
   }
 
   if (await isReachableOpenBao(LOCAL_OPENBAO_ADDRESS)) {
