@@ -9,7 +9,7 @@
 		"analyze": "ANALYZE=true pnpm build",
 		"start": "next start",
 		"type-check": "tsc --noEmit",
-		"type-check:prod": "tsc --noEmit --incremental false -p tsconfig.prod.json",
+		"type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
 		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
 		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
 		"format": "biome check --write .",

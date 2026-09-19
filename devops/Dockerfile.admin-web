@@ -45,6 +45,7 @@ RUN turbo prune --scope=admin-web --docker
 # 🏭 BUILDER STAGE: Next.js 애플리케이션 빌드
 # ============================================================================
 FROM base AS builder
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 # 📂 작업 디렉토리 설정
 WORKDIR /app
@@ -63,7 +64,7 @@ COPY --from=setup /app/out/full/ ./
 # 🧪 배포용 타입 체크 후 prune된 admin-web 워크스페이스만 빌드 실행
 RUN --mount=type=cache,id=turbo,target=/app/.turbo \
     pnpm exec turbo type-check:prod --filter=admin-web... && \
-    pnpm exec turbo build
+    pnpm exec turbo build --concurrency=1 --filter=admin-web...
 
 # ============================================================================
 # 🚀 PRODUCTION STAGE: Next.js 서버 실행

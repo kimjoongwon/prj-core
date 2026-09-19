@@ -17,16 +17,16 @@ COPY . .
 RUN turbo prune --scope=idp-web --docker
 
 FROM base AS builder
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 WORKDIR /app
 COPY --from=setup /app/out/json/ ./
-# turbo prune output can retain stale importer metadata for excluded workspaces,
-# so Docker installs in the pruned tree must allow lockfile re-resolution.
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --no-frozen-lockfile --prefer-offline
+# lockfile이 정합하므로 frozen-lockfile 사용 (전체 재해석 방지로 메모리 절약)
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --frozen-lockfile --prefer-offline
 COPY --from=setup /app/out/full/ ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     --mount=type=cache,id=turbo,target=/app/.turbo \
-    pnpm exec turbo build --filter=idp-web...
+    pnpm exec turbo build --concurrency=1 --filter=idp-web...
 
 FROM node:24-alpine AS runner
 
