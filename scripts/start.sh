@@ -191,6 +191,8 @@ else
   echo -e "  ${CYAN}4${RESET})  tool-storybook  ${DIM}스토리북${RESET}"
   echo -e "  ${CYAN}5${RESET})  mobile          ${DIM}Expo 모바일 앱${RESET}"
   echo -e "  ${CYAN}6${RESET})  mobile-storybook ${DIM}Expo 모바일 Storybook${RESET}"
+  echo -e "  ${CYAN}7${RESET})  idp-api         ${DIM}IDP 인증 서버(oidc-provider)${RESET}"
+  echo -e "  ${CYAN}8${RESET})  idp-web         ${DIM}IDP 로그인 UI${RESET}"
   echo ""
   echo -e "  ${DIM}복수 선택 가능 (예: 1 2 6)${RESET}"
   echo ""
@@ -227,6 +229,8 @@ get_port() {
     tool-storybook)  echo "${STORYBOOK_PORT:-6006}" ;;
     mobile)          echo "${MOBILE_PORT:-8081}" ;;
     mobile-storybook) echo "${MOBILE_STORYBOOK_PORT:-8083}" ;;
+    idp-api)         echo "${IDP_API_PORT:-3007}" ;;
+    idp-web)         echo "${IDP_WEB_PORT:-3008}" ;;
   esac
 }
 
@@ -433,6 +437,12 @@ for choice in $choices; do
     4|tool-storybook|start:tool-storybook)
       FILTERS="$FILTERS --filter=tool-storybook"; SERVICES="$SERVICES tool-storybook"
       ;;
+    7|idp-api|start:idp-api)
+      FILTERS="$FILTERS --filter=idp-api"; SERVICES="$SERVICES idp-api"; HAS_BACKEND="true"
+      ;;
+    8|idp-web|start:idp-web)
+      FILTERS="$FILTERS --filter=idp-web"; SERVICES="$SERVICES idp-web"
+      ;;
     5|mobile|start:mobile)
       set_mobile_target prompt
       set_mobile_runtime prompt
@@ -611,6 +621,8 @@ pre_cleanup_service_processes() {
       tool-storybook) pattern="turbo start:dev .*--filter=tool-storybook|pnpm(\\.cjs)? --filter=tool-storybook start:dev|apps/tool/storybook|storybook dev -p" ;;
       mobile) pattern="mobile-app@1.0.0 start|pnpm --filter=mobile-app exec expo start|expo start .*--port ${MOBILE_PORT_VALUE}" ;;
       mobile-storybook) pattern="tool-mobile-storybook@1.0.0|pnpm(\\.cjs)? --filter=tool-mobile-storybook|apps/tool/mobile-storybook|expo start .*--port ${MOBILE_STORYBOOK_PORT_VALUE}" ;;
+      idp-api) pattern="turbo start:dev .*--filter=idp-api|pnpm(\\.cjs)? --filter=idp-api start:dev|apps/idp/api/.+nest\\.js build --webpack --webpackPath webpack\\.config\\.js --watch|/apps/idp/api/dist/main.js" ;;
+      idp-web) pattern="turbo start:dev .*--filter=idp-web|pnpm(\\.cjs)? --filter=idp-web start:dev|apps/idp/web" ;;
     esac
 
     if [[ -n "$pattern" ]]; then
