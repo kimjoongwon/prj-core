@@ -62,8 +62,8 @@ return {totalHits, timeToExpire, 0, 0}
 
 const createRedisThrottlerClient = (
 	redisConfig: RedisConfig | undefined,
-): RedisThrottlerClient =>
-	new Redis({
+): RedisThrottlerClient => {
+	const client = new Redis({
 		host: redisConfig?.host ?? "localhost",
 		port: redisConfig?.port ?? 6379,
 		...(redisConfig?.password ? { password: redisConfig.password } : {}),
@@ -73,6 +73,10 @@ const createRedisThrottlerClient = (
 		maxRetriesPerRequest: 1,
 		retryStrategy: () => null,
 	});
+	// teardown 시점의 소켓 에러가 uncaught로 번져 jest suite를 실패시키지 않게 한다.
+	client.on("error", () => undefined);
+	return client;
+};
 
 const toThrottlerStorageRecord = (
 	redisResponse: unknown,
@@ -163,7 +167,7 @@ export class RedisThrottlerStorage
 		if (this.redisClient.status === "end") {
 			return;
 		}
-		await this.redisClient.quit();
+		await this.redisClient.quit().catch(() => undefined);
 	}
 
 	private async connectIfNecessary(): Promise<void> {
