@@ -217,10 +217,12 @@ async function resolveOpenBaoConnection({ isQuiet }) {
       return configuredAddress;
     }
 
-    console.warn(
-      `⚠️ VAULT_ADDR(${configuredAddress})에 연결할 수 없어 자동 탐색으로 진행합니다.`
-    );
+    // 구 도메인 등 죽은 주소가 export되어 있으면 자동 탐색으로 진행한다.
+    // pnpm start(--quiet)에서는 출력 없이 넘어간다.
     if (!isQuiet) {
+      console.warn(
+        `⚠️ VAULT_ADDR(${configuredAddress})에 연결할 수 없어 자동 탐색으로 진행합니다.`
+      );
       console.warn("   구 도메인이 export되어 있다면 shell 설정에서 갱신하세요.");
     }
   }
