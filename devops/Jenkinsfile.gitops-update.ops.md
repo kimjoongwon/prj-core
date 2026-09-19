@@ -14,7 +14,7 @@
 | 항목 | 설명 |
 |------|------|
 | 필수 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV` |
-| 지원 앱 | `core-api`, `admin-web`, `proposal-web`, `spring-api`, `tool-storybook` |
+| 지원 앱 | `core-api`, `admin-web`, `proposal-web`, `spring-api`, `tool-storybook`, `idp-api`, `idp-web` |
 | 추적 파라미터 | `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
 | 인증 | 보호된 내부 job이 주입하는 `GITOPS_CREDENTIAL_ID` (Username/Password 바인딩, 대상 저장소 push 권한 필요) |
 | 대상 브랜치 | `main` (`GITOPS_BRANCH`) |

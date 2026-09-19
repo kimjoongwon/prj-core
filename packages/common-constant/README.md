@@ -32,11 +32,11 @@ src/
 
 ```typescript
 // 프론트엔드 라우팅
-import { ROUTE_ENDPOINTS, ROUTE_NAMES } from "@cocrepo/constant/routing";
+import { ADMIN_PATHS, DASHBOARD_PAGE_PATH } from "@cocrepo/constant/routing";
 
 // 관리자 대시보드 경로
-const dashboardPath = ROUTE_ENDPOINTS.ADMIN.DASHBOARD;
-const dashboardName = ROUTE_NAMES.ADMIN.DASHBOARD;
+const dashboardPath = DASHBOARD_PAGE_PATH;
+const adminPaths = ADMIN_PATHS;
 ```
 
 ## 스키마 상수 사용

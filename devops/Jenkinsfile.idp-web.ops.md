@@ -14,7 +14,7 @@
 | 항목 | 설명 |
 |------|------|
 | 빌드 대상 | `idp-web` |
-| 이미지 경로 | `harbor.cocdev.co.kr/{prod|stg}/idp-web` |
+| 이미지 경로 | `harbor.onjitda.com/{prod|stg}/idp-web` |
 | 실행 Stage | `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
 | GitOps 트리거 | `GITOPS_UPDATE_JOB` 환경변수(기본 `/gitops-prod-image-bump`) |
 | 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |

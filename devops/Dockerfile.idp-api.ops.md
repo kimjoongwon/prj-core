@@ -15,7 +15,7 @@
 |------|------|
 | 기본 구성 | `base -> setup -> builder -> runner` |
 | setup 단계 | `COPY . .` 후 `turbo prune --scope=idp-api --docker` |
-| builder 단계 | `out/json`만 먼저 복사해 `pnpm install` 후 `out/full` 소스를 덮어써 prune된 `idp-api` 워크스페이스 전체에 대해 로컬 `turbo`(`pnpm exec turbo build`) 수행 |
+| builder 단계 | `out/json`만 먼저 복사해 `pnpm install` 후 `out/full` 소스를 덮어써 `pnpm exec turbo build --filter=idp-api^... --concurrency=1`으로 의존 워크스페이스를 빌드하고 `pnpm --filter=idp-api run build`으로 본체를 빌드 |
 | 러너 단계 | `CMD ["node", "apps/idp/api/dist/main.js"]` |
 | 캐시 정책 | `PNPM_STORE_DIR=/pnpm/store` 고정 후 `/pnpm/store`, `/app/.turbo`에 BuildKit cache mount 적용 |
 
@@ -27,13 +27,14 @@
 - [x] `turbo build` 단계 캐시 유지(`/app/.turbo`) 추가
 - [x] prune 결과에 포함된 `turbo.json`을 그대로 사용해 별도 루트 설정 파일 복사를 제거
 - [x] `pnpm install`에 `--frozen-lockfile --prefer-offline` 적용으로 재현 가능한 캐시 빌드 보장
-- [x] `idp-api` 본체와 의존 워크스페이스를 `pnpm exec turbo build`로 함께 빌드해 `^...` 우회와 후행 `tsc` 단계를 제거
+- [x] 의존 워크스페이스를 `pnpm exec turbo build --filter=idp-api^... --concurrency=1`로, 본체를 `pnpm --filter=idp-api run build`로 빌드
 - [x] `out/json`을 먼저 복사하고 `pnpm install` 이후 `out/full`을 복사해 prune 산출물의 최신 lockfile이 오래된 `out/full/pnpm-lock.yaml`에 덮어써지지 않도록 보장
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-09-19 | idp-api 재구축(a8b8addde)으로 복원된 실제 빌드 단계(`--filter=idp-api^... --concurrency=1` + `pnpm --filter=idp-api run build`)에 맞춰 문서 재동기화 | zcode |
 | 2026-03-09 | `idp-api` Docker 빌드에서 `--filter=idp-api^...`, `--concurrency=1`, 후행 `tsc` 단계를 제거하고 prune 결과 전체에 대해 `pnpm exec turbo build`를 실행하도록 단순화 | codex |
 | 2026-03-09 | `builder` 단계의 Turbo 실행을 `pnpm exec turbo build`로 전환해 설치 이후에는 로컬 workspace 버전을 사용하도록 정리 | codex |
 | 2026-03-09 | 전역 `turbo` 설치 버전을 루트 워크스페이스와 동일한 `2.8.14`로 고정해 Docker prune/build 버전 불일치를 제거 | codex |

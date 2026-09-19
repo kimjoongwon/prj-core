@@ -106,23 +106,34 @@ Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트�
 ### Jenkinsfile 템플릿
 
 ```groovy
-def HARBOR_REGISTRY = 'harbor.cocdev.co.kr'
+def DEPLOYMENT_BRANCHES = ['main', 'stg']
+if (env.CHANGE_ID || !DEPLOYMENT_BRANCHES.contains(env.BRANCH_NAME) || env.TRUSTED_DEPLOYMENT != 'true') {
+    error('배포는 보호 브랜치의 승인된 내부 job에서만 실행할 수 있습니다.')
+}
+def HARBOR_REGISTRY = env.HARBOR_REGISTRY
+def HARBOR_CREDENTIAL_ID = env.HARBOR_CREDENTIAL_ID
+if (!HARBOR_REGISTRY || !HARBOR_CREDENTIAL_ID) {
+    error('내부 배포 설정(HARBOR_REGISTRY, HARBOR_CREDENTIAL_ID)이 필요합니다.')
+}
 def HARBOR_REPO = '{{ENV}}/{{APP_NAME}}'
-def HARBOR_CREDENTIAL = 'harbor-credentials'
 def SLACK_CHANNEL = '#{{ENV}}'
 
 podTemplate(
+    volumes: [
+        persistentVolumeClaim(
+            claimName: 'container-builder-pvc',
+            mountPath: '/var/lib/containers'
+        )
+    ],
     containers: [
         containerTemplate(
             name: 'podman',
-            image: 'harbor.cocdev.co.kr/library/podman:latest',
+            image: 'quay.io/podman/stable:v4.8.2',
+            alwaysPullImage: true,
+            privileged: true,
             ttyEnabled: true,
             command: 'cat',
-            privileged: true
         )
-    ],
-    volumes: [
-        emptyDirVolume(mountPath: '/var/lib/containers', memory: false)
     ]
 ) {
     node(POD_LABEL) {
@@ -134,13 +145,17 @@ podTemplate(
             stage('Build and Push Image') {
                 container('podman') {
                     withCredentials([usernamePassword(
-                        credentialsId: HARBOR_CREDENTIAL,
-                        usernameVariable: 'HARBOR_USER',
-                        passwordVariable: 'HARBOR_PASS'
+                        credentialsId: HARBOR_CREDENTIAL_ID,
+                        usernameVariable: 'HARBOR_USERNAME',
+                        passwordVariable: 'HARBOR_PASSWORD'
                     )]) {
                         sh """
-                            # Harbor 로그인
-                            podman login ${HARBOR_REGISTRY} -u \${HARBOR_USER} -p \${HARBOR_PASS}
+                            # Harbor 로그인 (비밀번호는 명령줄 인자 대신 stdin으로 전달)
+                            echo \$HARBOR_PASSWORD | podman login \\
+                                -u \$HARBOR_USERNAME \\
+                                --password-stdin \\
+                                --tls-verify=true \\
+                                ${HARBOR_REGISTRY}
 
                             # 이미지 빌드
                             podman build \
@@ -383,14 +398,15 @@ CMD ["node", "apps/admin/server.js"]
 
 #### Harbor 레포지토리 주소
 
-- **형식**: `harbor.cocdev.co.kr/<환경>/<앱이름>`
+- **형식**: `${HARBOR_REGISTRY}/<환경>/<앱이름>` — `HARBOR_REGISTRY`는 리터럴로 적지 않고
+  승인된 내부 job이 주입하는 환경변수로만 받는다(현재 운영 값은 `harbor.onjitda.com`).
 - **환경별 프리픽스**:
   - `stg` - 스테이징 환경
   - `prod` - 프로덕션 환경
-- **예시**:
-  - `harbor.cocdev.co.kr/stg/core-api` (스테이징 서버)
-  - `harbor.cocdev.co.kr/stg/admin-web` (스테이징 어드민)
-  - `harbor.cocdev.co.kr/prod/core-api` (프로덕션 서버)
+- **예시**(`HARBOR_REGISTRY=harbor.onjitda.com` 기준):
+  - `harbor.onjitda.com/stg/core-api` (스테이징 서버)
+  - `harbor.onjitda.com/stg/admin-web` (스테이징 어드민)
+  - `harbor.onjitda.com/prod/core-api` (프로덕션 서버)
 
 #### Slack 채널
 
