@@ -141,6 +141,7 @@ export const ResetPasswordForm = observer(
 									label="새 비밀번호"
 									placeholder="********"
 									isRequired
+									type="password"
 									autoComplete="new-password"
 									variant="bordered"
 									autoFocus
@@ -182,6 +183,7 @@ export const ResetPasswordForm = observer(
 								label="비밀번호 확인"
 								placeholder="********"
 								isRequired
+								type="password"
 								autoComplete="new-password"
 								variant="bordered"
 								isInvalid={state.confirmPassword.length > 0 && !isPasswordMatch}
