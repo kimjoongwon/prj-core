@@ -11,12 +11,14 @@ const OIDC_LOGIN_START_PATH = "/api/v1/auth/oidc/login?clientId=admin-web";
  * 이 페이지는 IDP authorize 시작점(백엔드 리다이렉트)으로 보내기만 하고
  * 자격증명 입력은 IDP 로그인 화면(idp-web)에서 이뤄진다.
  */
-function AuthLoginPage() {
+	function AuthLoginPage() {
 	const startOidcLogin = () => {
 		const returnTo =
-			new URLSearchParams(window.location.search).get("returnTo") ??
-			"/dashboard";
-		window.location.href = `${OIDC_LOGIN_START_PATH}&returnTo=${encodeURIComponent(returnTo)}`;
+			new URLSearchParams(window.location.search).get("returnTo");
+		const url = returnTo
+			? `${OIDC_LOGIN_START_PATH}&returnTo=${encodeURIComponent(`/admin${returnTo.startsWith("/") ? returnTo : `/${returnTo}`}`)}`
+			: OIDC_LOGIN_START_PATH;
+		window.location.href = url;
 	};
 
 	// 접속 즉시 IDP로 이동한다. 자동 이동 전 짧은 사이에 수동 버튼도 노출한다.
