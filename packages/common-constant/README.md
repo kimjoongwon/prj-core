@@ -32,10 +32,10 @@ src/
 
 ```typescript
 // 프론트엔드 라우팅
-import { ADMIN_PATHS, DASHBOARD_PAGE_PATH } from "@cocrepo/constant/routing";
+import { ADMIN_NAV_ITEMS, ADMIN_PATHS } from "@cocrepo/constant/routing";
 
-// 관리자 대시보드 경로
-const dashboardPath = DASHBOARD_PAGE_PATH;
+// 관리자 내비게이션 항목과 경로 접근
+const navItems = ADMIN_NAV_ITEMS;
 const adminPaths = ADMIN_PATHS;
 ```
 
