@@ -93,9 +93,11 @@ sequenceDiagram
 | core-api | 3006 | 백엔드 API + 임베디드 oidc-provider | issuer는 `http://localhost:3000`(admin-web 오리진). 토큰 검증은 RS256/JWKS 단일 전략 |
 | proposal-web | 3011 | 퍼블릭 제안 랜딩 | 선택 실행 |
 | Redis | 6379 | OIDC 어댑터(interaction/grant/session/code), rate limit, 세션 저장소 | native Homebrew. 여러 세션에서 공유 |
-| PostgreSQL (native) | 5432 | 로컬 DB `plate`, e2e DB `plate_e2e` | OS role `wallykim`(trust). `pnpm start` 시 `DATABASE_URL` 명시 필요 |
-| PostgreSQL (터널) | 5433 | 원격 공유 dev DB | SSH 포워딩. 병렬 세션 등에서 이쪽을 바라보고 실행되기도 함 |
-| OpenBao | — | 팀 시크릿 원천 | `pnpm secrets:pull`이 core-api `.env`에 병합(SMTP, 객체 스토리지, OIDC 서명 키, 클라이언트 시크릿) |
+| PostgreSQL (native) | 5432 | 로컬 DB `plate`, e2e DB `plate_e2e` | OS role `wallykim`(trust). `DATABASE_URL` 미지정 시 자동 탐색으로 선택됨 |
+| PostgreSQL (터널) | 5433 | 원격 공유 dev DB | SSH 포워딩. 사용하려면 `DATABASE_URL` 명시 |
+| OpenBao | — | 팀 시크릿 원천 | `pnpm secrets:pull`이 core-api/idp-api `.env`에 병합(SMTP, 객체 스토리지, OIDC 서명 키, 클라이언트 시크릿) |
+| idp-api | 3007 | 독립 IDP 인증 서버(oidc-provider) | `pnpm start` 선택지 7. 공유 DB/Redis 필요, 자체 `.env`(SMTP/OIDC 시크릿) |
+| idp-web | 3008 | IDP 로그인 UI | `pnpm start` 선택지 8 |
 
 ## 브라우저 측 인증 상태
 
