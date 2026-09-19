@@ -1,6 +1,5 @@
 import { createGlobalModules } from "@cocrepo/be-common";
 import {
-	appConfig,
 	authConfig,
 	corsConfig,
 	oidcConfig,
@@ -10,13 +9,6 @@ import {
 
 export const globalModules = createGlobalModules({
 	envFilePath: ".env",
-	configLoaders: [
-		oidcConfig,
-		authConfig,
-		redisConfig,
-		appConfig,
-		corsConfig,
-		smtpConfig,
-	],
+	configLoaders: [oidcConfig, authConfig, redisConfig, corsConfig, smtpConfig],
 	developmentLoggerMessageFormat: "🔐 {msg}",
 });

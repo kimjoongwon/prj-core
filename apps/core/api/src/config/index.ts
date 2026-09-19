@@ -18,19 +18,12 @@ export {
 export type {
 	AllConfigType,
 	AppConfig,
-	AppleConfig,
 	AuthConfig,
 	CorsConfig,
-	DatabaseConfig,
-	FacebookConfig,
-	FileConfig,
-	GoogleConfig,
-	MailConfig,
 	ObjectStorageConfig,
 	ObjectStorageProvider,
 	RedisConfig,
 	SMTPConfig,
-	TwitterConfig,
 } from "./config.type";
 export type { OidcConfig } from "./oidc.config";
 export type { RuntimeSecurityConfig } from "./runtime-security.config";

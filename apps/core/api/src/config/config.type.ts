@@ -3,17 +3,10 @@
 export type {
 	AllConfigType,
 	AppConfig,
-	AppleConfig,
 	AuthConfig,
 	CorsConfig,
-	DatabaseConfig,
-	FacebookConfig,
-	FileConfig,
-	GoogleConfig,
-	MailConfig,
 	ObjectStorageConfig,
 	ObjectStorageProvider,
 	RedisConfig,
 	SMTPConfig,
-	TwitterConfig,
 } from "@cocrepo/type";
