@@ -212,19 +212,8 @@ async function startKubectlPortForwardTunnel({ isQuiet }) {
 // 진행한다. 미지정 시에도 같은 순서를 따른다.
 async function resolveOpenBaoConnection({ isQuiet }) {
   const configuredAddress = process.env.VAULT_ADDR?.trim();
-  if (configuredAddress) {
-    if (await isReachableOpenBao(configuredAddress)) {
-      return configuredAddress;
-    }
-
-    // 구 도메인 등 죽은 주소가 export되어 있으면 자동 탐색으로 진행한다.
-    // pnpm start(--quiet)에서는 출력 없이 넘어간다.
-    if (!isQuiet) {
-      console.warn(
-        `⚠️ VAULT_ADDR(${configuredAddress})에 연결할 수 없어 자동 탐색으로 진행합니다.`
-      );
-      console.warn("   구 도메인이 export되어 있다면 shell 설정에서 갱신하세요.");
-    }
+  if (configuredAddress && (await isReachableOpenBao(configuredAddress))) {
+    return configuredAddress;
   }
 
   if (await isReachableOpenBao(LOCAL_OPENBAO_ADDRESS)) {
