@@ -107,5 +107,5 @@ sequenceDiagram
 
 - **issuer·redirect_uri는 admin-web 오리진(3000)**: provider 엔드포인트(`/oidc/*`)의 물리적 처리는 core-api지만 URL은 3000을 경유합니다. core-api를 다른 포트로 띄우면 `OIDC_ISSUER`/`OIDC_ADMIN_BASE_URL`/`ADMIN_WEB_URL`을 함께 맞춰야 합니다.
 - **Next dev는 프로젝트 디렉터리당 1개만 실행 가능**(`.next/dev` 락). 포트를 바꿔도 두 번째 인스턴스는 뜨지 않습니다.
-- **DB가 두 경로(5432 native / 5433 턼널)**로 존재할 수 있어, 실행 시 `DATABASE_URL`로 어느 쪽인지 명시하고 계정도 DB에 맞게 사용해야 합니다(5432: `admin@plate.com`, 원격: `local-admin@example.com`).
-- 실행은 루트에서 `pnpm start` — 인프라 기동(docker)/마이그레이션/부트스트랩 후 turbo로 선택 서비스를 띄웁니다. Docker를 쓰지 않는 머신에서는 `START_SKIP_INFRA_START=1`과 네이티브 DB 접속 URL을 함께 지정합니다.
+- **DB는 `DATABASE_URL`이 없으면 자동 탐색** — probe 순서: `DATABASE_URL` → `POSTGRES_*` → 로컬 OS role(native PG 5432) → cocrepo 기본값(docker-compose용). 원격 터널(5433)을 쓰려면 `DATABASE_URL`을 명시하면 됩니다. 계정도 DB에 맞게 사용(5432: `admin@plate.com`, 원격: `local-admin@example.com`).
+- 실행은 루트에서 `pnpm start` — OpenBao 시크릿 pull 후 인프라 기동(docker)/마이그레이션/부트스트랩을 거쳐 선택 서비스를 띄웁니다. Docker를 쓰지 않는 머신에서는 `START_SKIP_INFRA_START=1`을 지정합니다. OpenBao가 봉인(sealed) 상태면 pull이 안내 메시지와 함께 실패합니다(봉인 해제: `kubectl exec -n openbao openbao-0 -- bao operator unseal <UNSEAL_KEY>`).
