@@ -3,24 +3,9 @@ import LoginScreen from "@/app/auth/login";
 import * as authUtils from "@/auth/_utils/auth";
 import { mobileSession } from "@/auth/mobile-session";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
-import type { ReactNode } from "react";
-import type { PressableProps } from "react-native";
 
 const mockReplace = jest.fn();
 const mockUseLocalSearchParams = jest.fn();
-
-interface MockButtonProps extends PressableProps {
-	children?: ReactNode;
-	isDisabled?: boolean;
-}
-
-interface MockIconProps {
-	name: string;
-}
-
-interface MockScreenFrameProps {
-	children?: ReactNode;
-}
 
 jest.mock("expo-secure-store", () => ({
 	deleteItemAsync: jest.fn(),
@@ -28,13 +13,24 @@ jest.mock("expo-secure-store", () => ({
 	setItemAsync: jest.fn(),
 }));
 
+jest.mock("@/auth/oidc/oidc-login", () => ({
+	openOidcAuthPage: jest.fn(),
+}));
+
 jest.mock("@cocrepo/mo-ui", () => {
 	const React = jest.requireActual<typeof import("react")>("react");
 	const { Pressable, Text: MockText, View } =
 		jest.requireActual<typeof import("react-native")>("react-native");
 
+	type ButtonProps = {
+		children?: React.ReactNode;
+		onPress?: () => void;
+		isDisabled?: boolean;
+		[key: string]: unknown;
+	};
+
 	return {
-		Button: ({ children, onPress, isDisabled, ...props }: MockButtonProps) =>
+		Button: ({ children, onPress, isDisabled, ...props }: ButtonProps) =>
 			React.createElement(
 				Pressable,
 				{
@@ -47,9 +43,9 @@ jest.mock("@cocrepo/mo-ui", () => {
 					? React.createElement(MockText, null, children)
 					: children,
 			),
-		Icon: ({ name }: MockIconProps) =>
+		Icon: ({ name }: { name: string }) =>
 			React.createElement(MockText, null, `icon:${name}`),
-		ScreenFrame: ({ children }: MockScreenFrameProps) =>
+		ScreenFrame: ({ children }: { children?: React.ReactNode }) =>
 			React.createElement(
 				View,
 				{ accessibilityLabel: "screen-frame" },
@@ -75,36 +71,28 @@ describe("mobile auth login route", () => {
 		jest
 			.spyOn(mobileSession, "setNextPathAfterLogin")
 			.mockImplementation(() => undefined);
-		jest
-			.spyOn(mobileSession, "loginWithCredentials")
-			.mockResolvedValue(true);
+		jest.spyOn(mobileSession, "loginWithOidc").mockResolvedValue(true);
 	});
 
 	afterEach(() => {
 		jest.restoreAllMocks();
 	});
 
-	it("WebView 없이 native 입력 폼을 렌더링해야 한다", () => {
+	it("IDP 시트 로그인 버튼을 렌더링해야 한다", () => {
 		render(<LoginScreen />);
 
 		expect(screen.getAllByText("로그인").length).toBeGreaterThan(0);
-		expect(screen.getByLabelText("이메일")).toBeTruthy();
-		expect(screen.getByLabelText("비밀번호")).toBeTruthy();
-		expect(screen.queryByLabelText("auth-login-webview")).toBeNull();
+		expect(screen.getByLabelText("oidc-login-submit")).toBeTruthy();
+		expect(screen.queryByLabelText("이메일")).toBeNull();
 	});
 
-	it("로그인 버튼을 누르면 native credential 로그인을 요청해야 한다", async () => {
+	it("IDP 로그인 버튼을 누르면 OIDC 시트 로그인을 요청해야 한다", async () => {
 		render(<LoginScreen />);
 
-		fireEvent.changeText(screen.getByLabelText("이메일"), " user@example.com ");
-		fireEvent.changeText(screen.getByLabelText("비밀번호"), "password123");
-		fireEvent.press(screen.getByLabelText("login-submit"));
+		fireEvent.press(screen.getByLabelText("oidc-login-submit"));
 
 		await waitFor(() => {
-			expect(mobileSession.loginWithCredentials).toHaveBeenCalledWith(
-				"user@example.com",
-				"password123",
-			);
+			expect(mobileSession.loginWithOidc).toHaveBeenCalledTimes(1);
 		});
 		expect(mobileSession.setNextPathAfterLogin).toHaveBeenCalledWith("/");
 		expect(mockReplace).toHaveBeenCalledWith("/");
@@ -114,9 +102,7 @@ describe("mobile auth login route", () => {
 		mobileApiScope.markSpaceSelectionPending();
 		render(<LoginScreen />);
 
-		fireEvent.changeText(screen.getByLabelText("이메일"), "user@example.com");
-		fireEvent.changeText(screen.getByLabelText("비밀번호"), "password123");
-		fireEvent.press(screen.getByLabelText("login-submit"));
+		fireEvent.press(screen.getByLabelText("oidc-login-submit"));
 
 		await waitFor(() => {
 			expect(mockReplace).toHaveBeenCalledWith({
@@ -130,9 +116,7 @@ describe("mobile auth login route", () => {
 		mockUseLocalSearchParams.mockReturnValue({ returnTo: "/dashboard" });
 		render(<LoginScreen />);
 
-		fireEvent.changeText(screen.getByLabelText("이메일"), "user@example.com");
-		fireEvent.changeText(screen.getByLabelText("비밀번호"), "password123");
-		fireEvent.press(screen.getByLabelText("login-submit"));
+		fireEvent.press(screen.getByLabelText("oidc-login-submit"));
 
 		await waitFor(() => {
 			expect(mobileSession.setNextPathAfterLogin).toHaveBeenCalledWith("/");
@@ -140,26 +124,13 @@ describe("mobile auth login route", () => {
 		expect(mockReplace).toHaveBeenCalledWith("/");
 	});
 
-	it("credential이 비어 있으면 API 요청 없이 오류를 보여줘야 한다", async () => {
-		render(<LoginScreen />);
-
-		fireEvent.press(screen.getByLabelText("login-submit"));
-
-		await waitFor(() => {
-			expect(screen.getByText("이메일과 비밀번호를 입력해 주세요.")).toBeTruthy();
-		});
-		expect(mobileSession.loginWithCredentials).not.toHaveBeenCalled();
-	});
-
-	it("native 로그인 실패 메시지를 화면에 표시해야 한다", async () => {
+	it("로그인 실패 메시지를 화면에 표시해야 한다", async () => {
 		jest
-			.spyOn(mobileSession, "loginWithCredentials")
+			.spyOn(mobileSession, "loginWithOidc")
 			.mockRejectedValue(new Error("이메일 또는 비밀번호가 올바르지 않습니다."));
 		render(<LoginScreen />);
 
-		fireEvent.changeText(screen.getByLabelText("이메일"), "user@example.com");
-		fireEvent.changeText(screen.getByLabelText("비밀번호"), "wrong-password");
-		fireEvent.press(screen.getByLabelText("login-submit"));
+		fireEvent.press(screen.getByLabelText("oidc-login-submit"));
 
 		await waitFor(() => {
 			expect(

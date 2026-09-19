@@ -11,7 +11,7 @@ let mockPathname = "/";
 const mockGetCurrentSpace = jest.fn();
 const mockGetMySpaces = jest.fn();
 const mockSetApiBaseUrl = jest.fn();
-const mockSetApiNativeRefreshHandler = jest.fn();
+const mockSetApiSessionRefreshHandler = jest.fn();
 const mockSetApiSessionScope = jest.fn();
 const mockSetLoginRedirectUrl = jest.fn();
 const mockVerifyToken = jest.fn();
@@ -36,8 +36,8 @@ jest.mock("@cocrepo/api/core/auth", () => ({
 
 jest.mock("@cocrepo/api/core/client", () => ({
 	setApiBaseUrl: (...args: unknown[]) => mockSetApiBaseUrl(...args),
-	setApiNativeRefreshHandler: (...args: unknown[]) =>
-		mockSetApiNativeRefreshHandler(...args),
+	setApiSessionRefreshHandler: (...args: unknown[]) =>
+		mockSetApiSessionRefreshHandler(...args),
 	setApiSessionScope: (...args: unknown[]) =>
 		mockSetApiSessionScope(...args),
 	setLoginRedirectUrl: (...args: unknown[]) => mockSetLoginRedirectUrl(...args),
@@ -66,7 +66,7 @@ describe("AuthSessionGate", () => {
 		mockGetCurrentSpace.mockReset();
 		mockGetMySpaces.mockReset();
 		mockSetApiBaseUrl.mockReset();
-		mockSetApiNativeRefreshHandler.mockReset();
+		mockSetApiSessionRefreshHandler.mockReset();
 		mockSetApiSessionScope.mockReset();
 		mockSetLoginRedirectUrl.mockReset();
 		mockVerifyToken.mockReset();
@@ -151,7 +151,7 @@ describe("AuthSessionGate", () => {
 		expect(mobileApiScope.isSpaceSelectionResolved).toBe(true);
 		expect(mockGetCurrentSpace).toHaveBeenCalled();
 		expect(mockSetApiSessionScope).toHaveBeenCalledWith(mobileApiScope);
-		expect(mockSetApiNativeRefreshHandler).toHaveBeenCalled();
+		expect(mockSetApiSessionRefreshHandler).toHaveBeenCalled();
 	});
 
 	it("인증됐지만 지점 선택이 미확정이면 지점 선택 라우트로 보낸다", async () => {

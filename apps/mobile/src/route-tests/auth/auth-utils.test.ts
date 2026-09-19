@@ -1,13 +1,10 @@
-import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import {
-	buildAuthLoginUrl,
 	clearNativeAuthSession,
 	clearNativeSpaceSelection,
 	loadNativeAuthSession,
 	loadNativeSpaceSelection,
-	requestNativeLogin,
-	requestNativeTokenRefresh,
+	rewriteLocalhostUrlForAndroidEmulator,
 	saveNativeAuthSession,
 	saveNativeSpaceSelection,
 } from "@/auth/_utils/auth";
@@ -31,111 +28,16 @@ describe("mobile auth utils", () => {
 		jest.clearAllMocks();
 	});
 
-	it("Android 환경변수 localhost auth API URL을 에뮬레이터 host로 보정해야 한다", () => {
-		const originalAuthApiUrl = process.env.EXPO_PUBLIC_AUTH_API_BASE_URL;
-		jest.replaceProperty(Platform, "OS", "android");
-		process.env.EXPO_PUBLIC_AUTH_API_BASE_URL = "http://localhost:3006";
-
-		try {
-			const loginUrl = buildAuthLoginUrl({
-				clientId: "user-mobile",
-				targetReturnTo: "/",
-			});
-
-			expect(loginUrl).toBe(
-				"http://10.0.2.2:3006/api/v1/auth/login",
-			);
-		} finally {
-			if (originalAuthApiUrl === undefined) {
-				delete process.env.EXPO_PUBLIC_AUTH_API_BASE_URL;
-			} else {
-				process.env.EXPO_PUBLIC_AUTH_API_BASE_URL = originalAuthApiUrl;
-			}
-		}
-	});
-
-	it("native 로그인 요청은 JSON body로 credential을 전달해야 한다", async () => {
-		const originalFetch = globalThis.fetch;
-		const session = {
-			accessToken: "native-access-token",
-			refreshToken: "native-refresh-token",
-			sessionId: "user-mobile.session-1",
-			accessTokenExpiresAt: 1000,
-			refreshTokenExpiresAt: 2000,
-		};
-		const fetchMock = jest.fn().mockResolvedValue({
-			headers: {
-				get: (key: string) =>
-					key.toLowerCase() === "content-type" ? "application/json" : null,
-			},
-			json: jest.fn().mockResolvedValue({ data: session }),
-			ok: true,
-			status: 200,
-		});
-		globalThis.fetch = fetchMock as unknown as typeof fetch;
-
-		try {
-			const result = await requestNativeLogin({
-				apiBaseUrl: "http://localhost:3006",
-				email: "user@example.com",
-				password: "password123",
-			});
-
-			expect(fetchMock).toHaveBeenCalledWith(
-				"http://localhost:3006/api/v1/auth/login",
-				expect.objectContaining({
-					body: JSON.stringify({
-						email: "user@example.com",
-						password: "password123",
-					}),
-					method: "POST",
-				}),
-			);
-			expect(result).toEqual(session);
-		} finally {
-			globalThis.fetch = originalFetch;
-		}
-	});
-
-	it("native refresh 요청은 sessionId와 refreshToken을 전달해야 한다", async () => {
-		const originalFetch = globalThis.fetch;
-		const session = {
-			accessToken: "new-native-access-token",
-			refreshToken: "new-native-refresh-token",
-			sessionId: "user-mobile.session-1",
-		};
-		const fetchMock = jest.fn().mockResolvedValue({
-			headers: {
-				get: (key: string) =>
-					key.toLowerCase() === "content-type" ? "application/json" : null,
-			},
-			json: jest.fn().mockResolvedValue({ data: session }),
-			ok: true,
-			status: 200,
-		});
-		globalThis.fetch = fetchMock as unknown as typeof fetch;
-
-		try {
-			const result = await requestNativeTokenRefresh({
-				apiBaseUrl: "http://localhost:3006",
-				refreshToken: "native-refresh-token",
-				sessionId: "user-mobile.session-1",
-			});
-
-			expect(fetchMock).toHaveBeenCalledWith(
-				"http://localhost:3006/api/v1/auth/native/token/refresh",
-				expect.objectContaining({
-					body: JSON.stringify({
-						sessionId: "user-mobile.session-1",
-						refreshToken: "native-refresh-token",
-					}),
-					method: "POST",
-				}),
-			);
-			expect(result).toEqual(session);
-		} finally {
-			globalThis.fetch = originalFetch;
-		}
+	it("Android 환경의 localhost URL을 에뮬레이터 host로 보정해야 한다", () => {
+		expect(
+			rewriteLocalhostUrlForAndroidEmulator(
+				"http://localhost:3006/oidc/token",
+				"android",
+			),
+		).toBe("http://10.0.2.2:3006/oidc/token");
+		expect(
+			rewriteLocalhostUrlForAndroidEmulator("http://api.example.com", "android"),
+		).toBe("http://api.example.com");
 	});
 
 	it("native 세션은 SecureStore에 저장하고 복원해야 한다", async () => {
