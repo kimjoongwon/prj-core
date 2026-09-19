@@ -1,9 +1,9 @@
-import { TranslationsRepository } from "@cocrepo/repository";
 import { TranslationCatalogAggregate } from "@cocrepo/aggregate";
+import { TranslationsRepository } from "@cocrepo/repository";
+import { I18nCatalogUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { I18nCatalogController } from "./i18n-catalog.controller";
-import { I18nCatalogUseCaseProviders } from "@cocrepo/usecase";
 
 @Module({
 	imports: [CqrsModule],

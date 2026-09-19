@@ -1,3 +1,4 @@
+import { GetI18nCatalogQuery } from "@cocrepo/command";
 import { LanguageCode } from "@cocrepo/constant";
 import {
 	ApiErrors,
@@ -16,7 +17,6 @@ import {
 } from "@nestjs/common";
 import { QueryBus } from "@nestjs/cqrs";
 import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { GetI18nCatalogQuery } from "@cocrepo/command";
 
 @ApiTags("I18N")
 @Public()

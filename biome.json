@@ -10,6 +10,8 @@
 		"includes": [
 			"./apps/admin/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/core/api/**/*.{cjs,js,jsx,mjs,ts,tsx}",
+			"./apps/idp/api/**/*.{cjs,js,jsx,mjs,ts,tsx}",
+			"./apps/idp/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/proposal/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/test/e2e/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/tool/mobile-storybook/**/*.{cjs,js,jsx,mjs,ts,tsx}",

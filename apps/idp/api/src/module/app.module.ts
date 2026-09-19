@@ -1,4 +1,3 @@
-import { SpaceContext } from "@cocrepo/context";
 import { SpaceAggregate } from "@cocrepo/aggregate";
 import {
 	AuthMiddleware,
@@ -9,6 +8,7 @@ import {
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
+import { SpaceContext } from "@cocrepo/context";
 import { SpacesRepository } from "@cocrepo/repository";
 import { I18nModule } from "@cocrepo/service";
 import {

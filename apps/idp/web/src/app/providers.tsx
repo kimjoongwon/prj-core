@@ -3,8 +3,12 @@
 import { customIdpInstance } from "@cocrepo/api/idp/client";
 import { DEFAULT_LANGUAGE, type LanguageCode } from "@cocrepo/constant";
 import { DesignSystemProvider, I18nProvider } from "@cocrepo/ui";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import {
+	QueryClient,
+	QueryClientProvider,
+	useQuery,
+} from "@tanstack/react-query";
+import { type ReactNode, useState } from "react";
 
 type I18nCatalogResponse = {
 	data?: { messages?: Record<string, string> };
@@ -48,7 +52,10 @@ function I18nCatalogBootstrapper({ children }: { children: ReactNode }) {
 	});
 
 	return (
-		<I18nProvider languageCode={languageCode} messages={data?.data?.messages ?? {}}>
+		<I18nProvider
+			languageCode={languageCode}
+			messages={data?.data?.messages ?? {}}
+		>
 			{children}
 		</I18nProvider>
 	);
