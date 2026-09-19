@@ -40,18 +40,25 @@ if [[ ! "${START_SKIP_SECRETS_PULL:-}" =~ ^(y|yes|true|1|on)$ ]]; then
 fi
 
 ensure_shared_local_env() {
-  export POSTGRES_HOST="${POSTGRES_HOST:-localhost}"
-  export POSTGRES_DATABASE="${POSTGRES_DATABASE:-plate}"
-
-  export POSTGRES_PORT="${POSTGRES_PORT:-5432}"
-  export POSTGRES_USER="${POSTGRES_USER:-cocrepo}"
-  export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-devpassword}"
-
+  # DATABASE_URL이 없으면 실제 연결 가능한 Postgres를 probe로 찾아 결정한다.
+  # 후보 순서: DATABASE_URL → POSTGRES_* → 로컬 OS role(native PG) → cocrepo 기본값.
+  # native Homebrew PG는 OS role(trust)만 허용하므로 cocrepo 기본값이 P1010으로
+  # 거부된다. probe 실패 시 아래 기본값으로 진행한다(docker-compose PG용).
   if [[ -z "${DATABASE_URL:-}" ]]; then
-    if [[ -n "${POSTGRES_PASSWORD:-}" ]]; then
-      export DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public"
+    if local_pg_exports="$(node scripts/local-postgres-env.mjs --shell 2>/dev/null)"; then
+      eval "$local_pg_exports"
     else
-      export DATABASE_URL="postgresql://${POSTGRES_USER}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public"
+      export POSTGRES_HOST="${POSTGRES_HOST:-localhost}"
+      export POSTGRES_DATABASE="${POSTGRES_DATABASE:-plate}"
+      export POSTGRES_PORT="${POSTGRES_PORT:-5432}"
+      export POSTGRES_USER="${POSTGRES_USER:-cocrepo}"
+      export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-devpassword}"
+
+      if [[ -n "${POSTGRES_PASSWORD:-}" ]]; then
+        export DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public"
+      else
+        export DATABASE_URL="postgresql://${POSTGRES_USER}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public"
+      fi
     fi
   fi
 
@@ -65,10 +72,8 @@ ensure_shared_local_env() {
   export API_PREFIX="${API_PREFIX:-api}"
   export APP_ADMIN_EMAIL="${APP_ADMIN_EMAIL:-admin@example.com}"
   export APP_HEADER_LANGUAGE="${APP_HEADER_LANGUAGE:-x-custom-lang}"
-  export AUTH_JWT_SECRET="${AUTH_JWT_SECRET:-dev-jwt-secret}"
   export AUTH_JWT_TOKEN_EXPIRES_IN="${AUTH_JWT_TOKEN_EXPIRES_IN:-10d}"
   export AUTH_JWT_TOKEN_REFRESH_IN="${AUTH_JWT_TOKEN_REFRESH_IN:-7d}"
-  export AUTH_JWT_SALT_ROUNDS="${AUTH_JWT_SALT_ROUNDS:-10}"
 
   # Bootstrap credentials are intentionally synthetic and local-only. They
   # must be supplied by the deployment secret manager in production.

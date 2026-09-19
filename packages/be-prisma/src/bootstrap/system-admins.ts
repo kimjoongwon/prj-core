@@ -115,18 +115,30 @@ export async function ensureSystemAdminUsers(
 			},
 		});
 
-		if (!existingTenant) {
-			await db.tenant.create({
-				data: {
-					tenantId: SYSTEM_TENANT_ULID,
-					user: { connect: { id: systemAdminUser.id } },
-					space: { connect: { spaceId: SYSTEM_SPACE_ULID } },
-					role: { connect: { id: platformAdminRoleId } },
-				},
-			});
-			console.log(`System admin tenant created: ${userData.email}`);
-		} else {
+		if (existingTenant) {
 			console.log(`System admin tenant exists: ${userData.email}`);
+		} else {
+			// SYSTEM_TENANT_ULID는 전역 고유키다. 부트스트랩 계정이 달라져도
+			// 이미 다른 시드 계정(예: e2e admin@plate.com)이 이 테넌트를 소유하면
+			// 유니크 제약 실패로 전체 부트스트랩이 죽지 않도록 생성을 건너뛴다.
+			const tenantOwnedByOtherAccount = await db.tenant.findUnique({
+				where: { tenantId: SYSTEM_TENANT_ULID },
+			});
+			if (tenantOwnedByOtherAccount) {
+				console.log(
+					`System admin tenant already owned by another seed account — skip: ${userData.email}`,
+				);
+			} else {
+				await db.tenant.create({
+					data: {
+						tenantId: SYSTEM_TENANT_ULID,
+						user: { connect: { id: systemAdminUser.id } },
+						space: { connect: { spaceId: SYSTEM_SPACE_ULID } },
+						role: { connect: { id: platformAdminRoleId } },
+					},
+				});
+				console.log(`System admin tenant created: ${userData.email}`);
+			}
 		}
 
 		ensuredUsers.push(systemAdminUser);

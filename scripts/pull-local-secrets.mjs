@@ -136,10 +136,13 @@ function printLoginGuidance(address) {
 
 async function isReachableOpenBao(address) {
   try {
-    const response = await fetch(`${address.replace(/\/+$/, "")}/v1/sys/health`, {
+    // /v1/sys/health는 상태를 나타내는 HTTP 코드(200 활성, 429 standby, 503 sealed
+    // 등)를 반환한다. 응답이 왔다는 것 자체가 OpenBao에 도달했다는 뜻이므로
+    // 봉인(503)이어도 터널을 재사용한다 — 봉인 안내는 sealed 검사가 담당한다.
+    await fetch(`${address.replace(/\/+$/, "")}/v1/sys/health`, {
       signal: AbortSignal.timeout(2_000)
     });
-    return response.status < 500;
+    return true;
   } catch {
     return false;
   }
@@ -155,6 +158,28 @@ async function waitForOpenBaoTunnelReady(address, timeoutMs) {
     await new Promise((resolve) => setTimeout(resolve, pollIntervalMs));
   }
   return false;
+}
+
+// 봉인(sealed) 상태면 읽기가 전부 실패하므로 진입 전에 명확히 안내한다.
+// 원격(Cloudflare) 주소는 HTML을 반환해 판별할 수 없으므로 로컬/터널 주소만 검사한다.
+async function resolveOpenBaoSealedMessage(address) {
+  if (!address.startsWith("http://127.0.0.1") && !address.startsWith("http://localhost")) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${address.replace(/\/+$/, "")}/v1/sys/health`, {
+      signal: AbortSignal.timeout(2_000)
+    });
+    const health = await response.json();
+    if (health?.sealed) {
+      return "   봉인 해제: kubectl exec -n openbao openbao-0 -- bao operator unseal <UNSEAL_KEY>";
+    }
+  } catch {
+    // 상태 조회 실패는 기존 흐름의 오류 메시지에 맡긴다.
+  }
+
+  return null;
 }
 
 // kubectl port-forward를 detached로 띄워 클러스터 OpenBao를 localhost:8200에
@@ -351,6 +376,13 @@ async function main() {
 
   const address = await resolveOpenBaoConnection({ isQuiet });
 
+  const sealedMessage = await resolveOpenBaoSealedMessage(address);
+  if (sealedMessage) {
+    console.error("❌ OpenBao가 봉인(sealed) 상태여서 시크릿을 읽을 수 없습니다.");
+    console.error(sealedMessage);
+    process.exit(1);
+  }
+
   if (!isQuiet) {
     const modeLabel = isDryRun ? " (dry-run)" : "";
     console.log(`🔑 OpenBao 시크릿 pull${modeLabel} — ${address}`);
@@ -408,6 +440,18 @@ async function main() {
 }
 
 main().catch((error) => {
+  if (error instanceof SyntaxError && error.message.includes("is not valid JSON")) {
+    // Cloudflare Access 등이 HTML 로그인 페이지를 반환한 경우 — JSON 파싱 전에
+    // 원인(터널 실패로 원격 주소로 폴백)을 안내한다.
+    console.error("❌ OpenBao 응답이 JSON이 아닙니다 (HTML 수신).");
+    console.error("   openbao.onjitda.com은 Cloudflare Access 뒤에 있어 CLI 직접 접근이 불가합니다.");
+    console.error("   kubectl port-forward 터널 실패가 원인일 가능성이 높습니다:");
+    console.error("   1) 클러스터 연결 확인: kubectl get pod -n openbao openbao-0 (Running && Ready여야 함)");
+    console.error("   2) OpenBao가 Sealed이면 봉인 해제 필요: kubectl exec -n openbao openbao-0 -- bao operator unseal <UNSEAL_KEY>");
+    console.error("   3) 재시도: pnpm secrets:pull");
+    process.exit(1);
+  }
+
   console.error(`❌ 예기치 못한 오류: ${error instanceof Error ? error.message : String(error)}`);
   process.exit(1);
 });
