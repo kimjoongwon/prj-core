@@ -4,6 +4,7 @@
 
 - 로컬 실행은 각 프로젝트 디렉터리의 `.env`만 사용합니다.
 - `.env.example`는 커밋되는 템플릿이며, 런타임에서 직접 읽지 않습니다.
+- 로컬 개발용 실제 키(이메일 SMTP, 객체 스토리지, 인증 서명)는 팀 OpenBao에서 `pnpm secrets:pull`로 가져옵니다. 자세한 흐름은 아래 [로컬 개발 시크릿(OpenBao)](#로컬-개발-시크릿openbao) 섹션을 참고하세요.
 - 배포 환경 변수는 `prj-devops`의 OpenBao 연동을 통해 주입됩니다.
 - 아래 표는 현재 코드가 실제로 읽는 키 기준입니다.
 - 주석 처리된 legacy 예시 키(`file.config.ts`, `mail.config.ts`, `database.config.ts`)는 제외했습니다.
@@ -53,6 +54,38 @@
 | Database / Staging | `DATABASE_URL_STG`, `DIRECT_URL_STG` | `db:pull:stg`, `db:push:stg`, `db:migrate:deploy:stg`, `db:data:migrate:stg` 같은 staging 스크립트에서 `DATABASE_URL`/`DIRECT_URL`로 매핑됩니다. |
 | Database / Production | `DATABASE_URL_PROD`, `DIRECT_URL_PROD` | production 대상 Prisma CLI / reference-data 스크립트에서 `DATABASE_URL`/`DIRECT_URL`로 매핑됩니다. |
 | OIDC Seed Override | `OIDC_ADMIN_BASE_URL`, `OIDC_ADMIN_REDIRECT_URI`, `OIDC_ADMIN_CLIENT_SECRET`, `OIDC_STORYBOOK_BASE_URL`, `OIDC_STORYBOOK_REDIRECT_URI`, `OIDC_STORYBOOK_CLIENT_SECRET`, `OIDC_ISSUER`, `OIDC_INTERACTION_BASE_URL`, `OIDC_SWAGGER_REDIRECT_URI` | reference-data bootstrap 시 기본 OIDC client redirect URI와 confidential client secret을 환경별 값으로 덮어쓸 때 사용합니다. `OIDC_ADMIN_BASE_URL`: admin redirect 기본 base URL. `OIDC_ADMIN_REDIRECT_URI`: admin redirect 직접 override. `OIDC_ADMIN_CLIENT_SECRET`: admin client secret override. `OIDC_STORYBOOK_BASE_URL`: Storybook redirect 기본 base URL. `OIDC_STORYBOOK_REDIRECT_URI`: Storybook redirect 직접 override. `OIDC_STORYBOOK_CLIENT_SECRET`: Storybook client secret override. `OIDC_ISSUER`: admin public origin 기준 issuer. `OIDC_INTERACTION_BASE_URL`: interaction 화면 base URL. `OIDC_SWAGGER_REDIRECT_URI`: Swagger redirect 직접 override. |
+
+## 로컬 개발 시크릿(OpenBao)
+
+로컬 개발에서 실제 외부 서비스 키(Resend SMTP, Cloudflare R2)와 인증 서명 시크릿이 필요할 때는 팀 OpenBao에서 가져옵니다. 키 값은 저장소에 커밋되지 않으며, 각 앱의 gitignored `.env` 파일에 병합됩니다.
+
+### 사용 흐름
+
+1. 개발자 읽기 전용 토큰 발급: 관리자에게 `local-dev-pull` 정책 토큰 발급을 요청합니다 (정책 원본: `prj-openbao/policies/local-dev-pull.hcl`, 명령: `vault token create -policy=local-dev-pull -period=168h`). 토큰은 7일 주기(period)이며 pull이 실행될 때마다 자동으로 갱신(self-renew)되어 계속 사용하는 동안 만료되지 않습니다.
+2. 토큰 저장: `export VAULT_ADDR=http://127.0.0.1:8200 && vault login <토큰>` — `~/.vault-token`에 저장됩니다. `VAULT_TOKEN` 환경변수로 직접 지정할 수도 있습니다.
+3. 시크릿 가져오기: `pnpm secrets:pull` (`--dry-run`으로 변경될 키 목록만 확인 가능)
+
+**접근 경로**: `openbao.onjitda.com`은 Cloudflare Access 뒤에 있어 CLI에서 직접 접근할 수 없습니다. `VAULT_ADDR`을 지정하지 않으면 스크립트가 localhost:8200의 OpenBao를 재사용하거나, 없으면 `kubectl port-forward -n openbao svc/openbao 8200:8200` 터널을 자동으로 띄웁니다(터널은 종료 후에도 유지되어 재사용됩니다). 원격 주소를 직접 쓰려면 `VAULT_ADDR`로 지정합니다.
+
+`pnpm start`(`scripts/start.sh`)와 `pnpm wt:new`(`scripts/wt.js`)는 시작 시 자동으로 pull을 시도합니다. 실패해도(오프라인, 미로그인) 기존 `.env` 값으로 계속 진행하며, 자동 pull을 건너뛰려면 `START_SKIP_SECRETS_PULL=1`을 설정합니다.
+
+### OpenBao 경로와 병합 대상
+
+`scripts/pull-local-secrets.mjs`가 다음 경로에서 값을 읽어 각 파일의 해당 키만 교체합니다(나머지 키와 로컬 수정값은 보존).
+
+| OpenBao KV v2 경로 | 대상 파일 | 병합 키 |
+| --- | --- | --- |
+| `secret/core-api/development` | `apps/core/api/.env` | `SMTP_*`, `OBJECT_STORAGE_*`, `AUTH_JWT_SECRET`, `OIDC_COOKIE_SECRET`, `OIDC_JWKS_KEYS`, `OIDC_ADMIN_CLIENT_SECRET`, `OIDC_STORYBOOK_CLIENT_SECRET` |
+| `secret/core-api/development` | `packages/be-prisma/.env` | `OIDC_ADMIN_CLIENT_SECRET`, `OIDC_STORYBOOK_CLIENT_SECRET` (seed가 등록하는 OIDC client 시크릿을 API와 동일하게 유지) |
+| `secret/idp-api/development` | `apps/idp/api/.env` | `SMTP_*`, `AUTH_JWT_SECRET`, `OIDC_COOKIE_SECRET`, `OIDC_JWKS_KEYS`, `OIDC_ADMIN_CLIENT_SECRET`, `OIDC_STORYBOOK_CLIENT_SECRET` |
+
+경로가 OpenBao에 아직 등록되지 않은 경우 해당 경로만 건너뛰고 경고를 출력합니다. development 경로 값은 관리자가 `vault kv put secret/core-api/development ...`으로 등록·갱신합니다(토큰·kubectl port-forward 준비 후 `pnpm secrets:pull --dry-run`으로 확인).
+
+### 문제 해결
+
+- `OpenBao 토큰을 찾을 수 없습니다` → `vault login <토큰>` 또는 `VAULT_TOKEN` 설정
+- `토큰이 만료되었거나 권한이 없습니다` → 관리자에게 토큰 재발급 요청 (`local-dev-pull` 정책)
+- `OpenBao 연결 실패` → 자동 port-forward 실패. `kubectl` 접근 가능한지 확인하거나 직접 `kubectl port-forward -n openbao svc/openbao 8200:8200` 실행 후 재시도. 기존 `.env`가 있으면 그 값으로 개발을 계속할 수 있습니다.
 
 ## Notes
 

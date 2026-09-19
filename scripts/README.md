@@ -281,6 +281,29 @@ pnpm bundle:sizes
 - 패키지 권한 확인
 - 네트워크 연결 확인
 
+## 🔑 로컬 개발 시크릿 pull (`pull-local-secrets.mjs`)
+
+팀 OpenBao의 development KV 경로에서 로컬 개발용 실제 키(이메일 SMTP, 객체 스토리지, 인증 서명)를 읽어와 각 앱의 gitignored `.env`에 병합합니다. 매핑된 키만 교체하고 나머지 키·로컬 수정값은 보존하며, 시크릿 값은 콘솔에 출력하지 않습니다.
+
+**사용법:**
+
+```bash
+pnpm secrets:pull             # OpenBao에서 읽어 .env 병합
+pnpm secrets:pull --dry-run   # 변경될 키 목록만 확인
+```
+
+**인증/주소:**
+
+- 토큰: `VAULT_TOKEN` 환경변수 또는 `vault login`이 저장한 `~/.vault-token` (`local-dev-pull` 정책 토큰, 7일 주기·pull 시 자동 갱신)
+- 주소: `VAULT_ADDR` 환경변수로 지정 가능. 미지정 시 localhost:8200의 OpenBao를 재사용하거나 `kubectl port-forward -n openbao svc/openbao 8200:8200` 터널을 자동으로 띄웁니다 (`openbao.onjitda.com`은 Cloudflare Access 뒤에 있어 CLI 직접 접근 불가)
+
+**통합 지점:**
+
+- `pnpm start`(`start.sh`)가 시작 시 자동 pull을 시도합니다(`START_SKIP_SECRETS_PULL=1`으로 건너뛰기).
+- `pnpm wt:new`(`wt.js`)가 worktree 생성 후 자동 pull을 시도합니다. 실패하면 placeholder 값으로 진행합니다.
+
+경로·키 매핑과 문제 해결은 [`docs/env-reference.md`](../docs/env-reference.md)의 "로컬 개발 시크릿(OpenBao)" 섹션을 참고하세요.
+
 ## Git worktree + tmux automation (`wt.ts` + `wt.js`)
 
 `pnpm wt`는 상황형 메뉴를 띄우는 TypeScript entrypoint이고, 실제 git worktree 작업은 `wt.js` core가 수행합니다.

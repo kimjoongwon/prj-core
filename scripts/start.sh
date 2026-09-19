@@ -30,6 +30,15 @@ if [[ -f ".env.worktree" ]]; then
   set +a
 fi
 
+# 팀 OpenBao에서 로컬 개발용 시크릿(SMTP, 객체 스토리지, 인증 서명)을
+# 가져와 각 앱의 .env에 병합한다. 실패해도 기존 .env로 계속 진행하며,
+# 건너뛰려면 START_SKIP_SECRETS_PULL=1
+if [[ ! "${START_SKIP_SECRETS_PULL:-}" =~ ^(y|yes|true|1|on)$ ]]; then
+  if ! node scripts/pull-local-secrets.mjs --quiet; then
+    echo -e "${YELLOW}⚠️ OpenBao 시크릿 pull 실패 — 기존 .env 값으로 진행합니다.${RESET}" >&2
+  fi
+fi
+
 ensure_shared_local_env() {
   export POSTGRES_HOST="${POSTGRES_HOST:-localhost}"
   export POSTGRES_DATABASE="${POSTGRES_DATABASE:-plate}"
