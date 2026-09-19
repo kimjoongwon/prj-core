@@ -603,7 +603,7 @@ pre_cleanup_service_processes() {
       core-api) pattern="turbo start:dev .*--filter=core-api|pnpm(\\.cjs)? --filter=core-api start:dev|apps/core/api/.+nest\\.js build --webpack --webpackPath webpack\\.config\\.js --watch|/apps/core/api/dist/main.js" ;;
       admin-web) pattern="turbo start:dev .*--filter=admin-web|pnpm(\\.cjs)? --filter=admin-web start:dev|apps/admin/web" ;;
       proposal-web) pattern="turbo start:dev .*--filter=proposal-web|pnpm(\\.cjs)? --filter=proposal-web start:dev|apps/proposal/web" ;;
-      tool-storybook) pattern="turbo start:dev .*--filter=tool-storybook|pnpm(\\.cjs)? --filter=tool-storybook start:dev|apps/tool/storybook|STORYBOOK_REQUIRE_AUTH=true storybook dev|storybook dev -p" ;;
+      tool-storybook) pattern="turbo start:dev .*--filter=tool-storybook|pnpm(\\.cjs)? --filter=tool-storybook start:dev|apps/tool/storybook|storybook dev -p" ;;
       mobile) pattern="mobile-app@1.0.0 start|pnpm --filter=mobile-app exec expo start|expo start .*--port ${MOBILE_PORT_VALUE}" ;;
       mobile-storybook) pattern="tool-mobile-storybook@1.0.0|pnpm(\\.cjs)? --filter=tool-mobile-storybook|apps/tool/mobile-storybook|expo start .*--port ${MOBILE_STORYBOOK_PORT_VALUE}" ;;
     esac

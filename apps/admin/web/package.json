@@ -13,7 +13,7 @@
     "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
     "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "format": "biome check --write .",
-    "clean": "rm -rf node_modules && rm -rf .next && rm -rf package-lock.json",
+    "clean": "rm -rf node_modules && rm -rf .next",
     "clean:next": "rm -rf .next",
     "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },

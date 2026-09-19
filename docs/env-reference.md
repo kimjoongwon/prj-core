@@ -44,7 +44,7 @@
 
 | 범주 | 키 | 설명 |
 | --- | --- | --- |
-| Auth / Proxy | `STORYBOOK_REQUIRE_AUTH`, `STORYBOOK_CORE_API_TARGET` | `STORYBOOK_REQUIRE_AUTH`: Storybook auth plugin 강제 여부. `STORYBOOK_CORE_API_TARGET`: core-api 프록시 대상 URL. Auth/OIDC/IDP 경로도 같은 대상 URL로 프록시됩니다. |
+| Auth / Proxy | `STORYBOOK_DISABLE_CHROMATIC` | `STORYBOOK_DISABLE_CHROMATIC`: Chromatic 연동 빌드 비활성화 여부(`.storybook/main.js`가 읽음). |
 
 ## packages/be-prisma
 

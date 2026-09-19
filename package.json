@@ -75,7 +75,7 @@
 		"publish:packages": "node scripts/public-packages.mjs publish",
 		"publish:dry": "node scripts/public-packages.mjs publish --dry-run",
 		"public-packages:check": "node scripts/public-packages.mjs check",
-		"test:public-boundary": "node --test scripts/public-packages.test.mjs",
+		"test:public-boundary": "node --test scripts/public-packages.test.mjs scripts/public-release-readiness.test.mjs",
 		"public-release:precheck": "node scripts/public-release-readiness.mjs precheck",
 		"public-release:check": "node scripts/public-release-readiness.mjs scan-current",
 		"public-release:scan-clone": "node scripts/public-release-readiness.mjs scan-fresh-clone",
@@ -205,13 +205,6 @@
 	"dependencies": {
 		"postgres": "^3.4.7"
 	},
-	"description": "> 현대적인 풀스택 예약 플랫폼을 위한 모노레포 아키텍처",
-	"main": "index.js",
-	"directories": {
-		"doc": "docs"
-	},
-	"keywords": [],
-	"author": "",
 	"type": "commonjs",
 	"bugs": {
 		"url": "https://github.com/kimjoongwon/prj-core/issues"
