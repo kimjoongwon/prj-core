@@ -1,14 +1,10 @@
 "use client";
 
-import {
-	customIdpInstance,
-	setIdpLoginRedirectUrl,
-} from "@cocrepo/api/idp/client";
-import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
+import { customIdpInstance } from "@cocrepo/api/idp/client";
 import { DEFAULT_LANGUAGE, type LanguageCode } from "@cocrepo/constant";
 import { DesignSystemProvider, I18nProvider } from "@cocrepo/ui";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 type I18nCatalogResponse = {
 	data?: { messages?: Record<string, string> };
@@ -28,11 +24,6 @@ export function Providers({ children }: { children: ReactNode }) {
 				},
 			}),
 	);
-
-	useEffect(() => {
-		setLoginRedirectUrl("/auth/login");
-		setIdpLoginRedirectUrl("/auth/login");
-	}, []);
 
 	return (
 		<QueryClientProvider client={queryClient}>

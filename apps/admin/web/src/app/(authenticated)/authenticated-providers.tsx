@@ -6,7 +6,7 @@ import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
 import { useApp } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { resolveAbilityBootstrapRules } from "./ability-bootstrap";
 
 interface AuthenticatedProvidersProps {
@@ -20,21 +20,108 @@ interface AuthenticatedProvidersProps {
  * 순간부터 세션/권한/tenant bootstrap이 동작합니다.
  *
  * Provider 계층 구조:
- * NativeAuthBridge (native refresh 연결)
- * └── TenantAccessBootstrapper (권한 규칙 + navigation scope)
- *     └── AccountBootstrapper (tenant 선택 부트스트랩과 리다이렉트)
+ * SessionBootstrap (OIDC 세션 쿠키 → 스토어 부트스트랩)
+ * └── NativeAuthBridge (native refresh 연결)
+ *     └── TenantAccessBootstrapper (권한 규칙 + navigation scope)
+ *         └── AccountBootstrapper (tenant 선택 부트스트랩과 리다이렉트)
  */
 export const AuthenticatedProviders = observer(
 	function AuthenticatedProviders({ children }: AuthenticatedProvidersProps) {
 		return (
-			<NativeAuthBridge>
-				<TenantAccessBootstrapper>
-					<AccountBootstrapper>{children}</AccountBootstrapper>
-				</TenantAccessBootstrapper>
-			</NativeAuthBridge>
+			<SessionBootstrap>
+				<NativeAuthBridge>
+					<TenantAccessBootstrapper>
+						<AccountBootstrapper>{children}</AccountBootstrapper>
+					</TenantAccessBootstrapper>
+				</NativeAuthBridge>
+			</SessionBootstrap>
 		);
 	},
 );
+
+const SESSION_ID_COOKIE_NAME = "sessionId";
+
+function readSessionIdCookie(): string | null {
+	const match = document.cookie
+		.split("; ")
+		.find((entry) => entry.startsWith(`${SESSION_ID_COOKIE_NAME}=`));
+	return match
+		? decodeURIComponent(match.slice(SESSION_ID_COOKIE_NAME.length + 1))
+		: null;
+}
+
+/**
+ * SessionBootstrap
+ * OIDC 콜백은 sessionId 쿠키만 심은 채 프론트 스토어는 비어 있는 상태로 도착한다.
+ * 스토어에 세션이 없고 세션 쿠키가 있으면 쿠키 기반 token/refresh로 스토어를
+ * 채운다. 완료 전까지 하위 트리 렌더를 지연해 verify-token 401 → 로그인
+ * 리다이렉트 루프를 방지한다.
+ */
+const SessionBootstrap = observer(function SessionBootstrap({
+	children,
+}: {
+	children: ReactNode;
+}) {
+	const app = useApp();
+	const { authSession } = app.account;
+	const [isReady, setIsReady] = useState(false);
+
+	useEffect(() => {
+		let cancelled = false;
+
+		const bootstrapFromSessionCookie = async () => {
+			if (authSession.refreshToken && authSession.sessionId) {
+				return;
+			}
+			const sessionId = readSessionIdCookie();
+			if (!sessionId) {
+				return;
+			}
+			try {
+				const response = await fetch("/api/v1/auth/token/refresh", {
+					method: "POST",
+					credentials: "include",
+				});
+				const body = (await response.json()) as {
+					data?: {
+						accessToken?: string;
+						refreshToken?: string;
+						accessTokenExpiresAt?: number;
+						refreshTokenExpiresAt?: number;
+					};
+				};
+				const tokens = body?.data;
+				if (response.ok && tokens?.accessToken) {
+					authSession.setNativeAuthSession({
+						accessToken: tokens.accessToken,
+						refreshToken: tokens.refreshToken ?? "",
+						sessionId,
+						accessTokenExpiresAt: tokens.accessTokenExpiresAt ?? 0,
+						refreshTokenExpiresAt: tokens.refreshTokenExpiresAt ?? 0,
+					});
+				}
+			} catch {
+				// 부트스트랩 실패 시 하위 verify-token 흐름이 로그인으로 안내한다.
+			}
+		};
+
+		void bootstrapFromSessionCookie().finally(() => {
+			if (!cancelled) {
+				setIsReady(true);
+			}
+		});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [authSession]);
+
+	if (!isReady) {
+		return null;
+	}
+
+	return children;
+});
 
 const NativeAuthBridge = observer(function NativeAuthBridge({
 	children,

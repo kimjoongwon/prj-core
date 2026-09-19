@@ -3,6 +3,7 @@ import { getCurrentSpace, getMySpaces, verifyToken } from "@cocrepo/api/core/aut
 import type { SpaceDto } from "@cocrepo/api/core/model";
 import { setApiBaseUrl, setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import { getCoreApiBaseUrl, getLoginPath } from "./auth-config";
+import { loginWithOidcSheet, refreshOidcSession } from "./oidc/oidc-login";
 import {
   clearNativeAuthSession,
   clearNativeSpaceSelection,
@@ -93,6 +94,18 @@ class MobileSession {
     return this.verifySession();
   }
 
+  /**
+   * IDP 시트 로그인 (WebView 없음).
+   * 시스템 인증 세션으로 IDP 로그인 화면을 띄우고 스킴 콜백 + PKCE로
+   * 발급자 토큰을 교환받아 기존 세션 저장 구조에 그대로 적용한다.
+   */
+  async loginWithOidc(): Promise<boolean> {
+    configureIdpClient(() => this.refreshNativeSession());
+    const session = await loginWithOidcSheet();
+    await this.applySession(session);
+    return this.verifySession();
+  }
+
   async logout() {
     this.setVerifying(true);
     try {
@@ -121,8 +134,15 @@ class MobileSession {
   async refreshNativeSession(): Promise<void> {
     const sessionId = mobileApiScope.sessionId;
     const refreshToken = mobileApiScope.refreshToken;
-    if (!sessionId || !refreshToken) {
+    if (!refreshToken) {
       throw new Error("native_refresh_token_missing");
+    }
+
+    // OIDC 세션(sessionId 없음)은 발급자 refresh_token 그랜트로 갱신한다.
+    if (!sessionId) {
+      const oidcSession = await refreshOidcSession(refreshToken);
+      await this.applySession(oidcSession);
+      return;
     }
 
     const session = await requestNativeTokenRefresh({

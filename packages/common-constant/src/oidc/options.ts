@@ -37,6 +37,20 @@ export const DEFAULT_OIDC_CLIENT_ID = "admin-web";
 /** first-party native/mobile OIDC 클라이언트 ID */
 export const MOBILE_NATIVE_CLIENT_ID = "user-mobile";
 
+/**
+ * OIDC 발급자(issuer) base URL.
+ * 모바일 번들에서는 EXPO_PUBLIC_OIDC_ISSUER_URL로, 웹/서버에서는
+ * OIDC_ISSUER_URL로 재정의할 수 있고 기본값은 운영 발급자다.
+ */
+export const OIDC_ISSUER_URL: string =
+	process.env.EXPO_PUBLIC_OIDC_ISSUER_URL ??
+	process.env.OIDC_ISSUER_URL ??
+	"https://idp.onjitda.com";
+
+/** user-mobile 클라이언트의 앱 스킴 리다이렉트 URI (앱 식별자와 동일 스킴) */
+export const MOBILE_OIDC_REDIRECT_URI =
+	"kr.co.cocdev.onoramobile://auth/callback";
+
 /** legacy OIDC client id를 canonical id로 정규화하기 위한 map */
 export const LEGACY_OIDC_CLIENT_ID_MAP = {
 	admin: "admin-web",
