@@ -31,6 +31,21 @@ pipeline {
             defaultValue: '',
             description: 'Optional upstream source commit SHA'
         )
+        string(
+            name: 'TRUSTED_DEPLOYMENT',
+            defaultValue: 'true',
+            description: '내부 배포 job 승인 플래그 (이 job이 신뢰 경로 자체)'
+        )
+        string(
+            name: 'GITOPS_REPOSITORY_URL',
+            defaultValue: 'https://github.com/kimjoongwon/prj-devops.git',
+            description: 'GitOps values 저장소'
+        )
+        string(
+            name: 'GITOPS_CREDENTIAL_ID',
+            defaultValue: 'github-app-credential',
+            description: 'GitOps 저장소 push용 credential'
+        )
     }
 
     environment {
