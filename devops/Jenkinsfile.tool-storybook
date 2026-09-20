@@ -116,7 +116,7 @@ podTemplate(
                                     --build-arg STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC} \\
                                     --build-arg STORYBOOK_BUILD_NOFILE=${STORYBOOK_BUILD_NOFILE} \\
                                     -f ./devops/Dockerfile.tool-storybook \\
-                                    ${IMAGE_TAG_ARGS.join(' \\\\\n                                    ')} \\
+                                    ${IMAGE_TAG_ARGS.join(' \\\n                                    ')} \\
                                     .
                             """
 
@@ -137,7 +137,7 @@ podTemplate(
                                 export HOME=${PODMAN_HOME}
                                 export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
                                 podman ${PODMAN_GLOBAL_ARGS} rmi \\
-                                    ${CLEANUP_IMAGES.join(' \\\\\n                                    ')} || true
+                                    ${CLEANUP_IMAGES.join(' \\\n                                    ')} || true
                                 rm -rf ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
                             """
                         }

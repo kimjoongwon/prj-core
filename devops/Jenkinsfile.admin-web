@@ -82,7 +82,7 @@ podTemplate(
                                 --layers \\
                                 --pull=newer \\
                                 -f ./devops/Dockerfile.admin-web \\
-                                ${IMAGE_TAG_ARGS.join(' \\\\\n                                ')} \\
+                                ${IMAGE_TAG_ARGS.join(' \\\n                                ')} \\
                                 .
                         """
 
@@ -106,7 +106,7 @@ podTemplate(
                         // 로컬 이미지 정리 (디스크 공간 절약)
                         sh """
                             podman rmi \\
-                                ${CLEANUP_IMAGES.join(' \\\\\n                                ')} || true
+                                ${CLEANUP_IMAGES.join(' \\\n                                ')} || true
                         """
                     }
                 }
