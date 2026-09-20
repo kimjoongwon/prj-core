@@ -62,6 +62,15 @@ vi.mock("next/navigation", () => ({
 	useRouter: () => mocks.router,
 }));
 
+vi.mock("@heroui/react", async (importOriginal) => {
+	const actualHeroUi = await importOriginal<typeof import("@heroui/react")>();
+
+	return {
+		...actualHeroUi,
+		Spinner: () => <div data-testid="access-guard-spinner" />,
+	};
+});
+
 vi.mock("../../../../i18n", () => ({
 	translateNode: (value: ReactNode) => value,
 	useT: () => (value: string) => value,
@@ -117,36 +126,30 @@ describe("AccessControlGuard", () => {
 		expect(screen.getByText("허용된 관리자 콘텐츠")).toBeInTheDocument();
 	});
 
-	it("account hydration이 완료되지 않으면 확인 UI를 렌더링한다", () => {
+	it("account hydration이 완료되지 않으면 로딩 스피너를 렌더링한다", () => {
 		mocks.account.isHydrated = false;
 
 		renderGuard();
 
-		expect(
-			screen.getByText("화면 접근 권한을 확인하는 중입니다."),
-		).toBeInTheDocument();
+		expect(screen.getByTestId("access-guard-spinner")).toBeInTheDocument();
 		expect(screen.queryByText("허용된 관리자 콘텐츠")).not.toBeInTheDocument();
 	});
 
-	it("token 권한을 확인 중이면 확인 UI를 렌더링한다", () => {
+	it("token 권한을 확인 중이면 로딩 스피너를 렌더링한다", () => {
 		mocks.isVerifyingToken = true;
 
 		renderGuard();
 
-		expect(
-			screen.getByText("화면 접근 권한을 확인하는 중입니다."),
-		).toBeInTheDocument();
+		expect(screen.getByTestId("access-guard-spinner")).toBeInTheDocument();
 		expect(screen.queryByText("허용된 관리자 콘텐츠")).not.toBeInTheDocument();
 	});
 
-	it("access-control이 로드되지 않으면 확인 UI를 렌더링한다", () => {
+	it("access-control이 로드되지 않으면 로딩 스피너를 렌더링한다", () => {
 		mocks.accessControl.isLoaded = false;
 
 		renderGuard();
 
-		expect(
-			screen.getByText("화면 접근 권한을 확인하는 중입니다."),
-		).toBeInTheDocument();
+		expect(screen.getByTestId("access-guard-spinner")).toBeInTheDocument();
 	});
 
 	it("full-access role이면 contents를 렌더링한다", () => {

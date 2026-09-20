@@ -7,6 +7,7 @@ import { useVerifyToken } from "@cocrepo/api/core/auth";
 import { isScopeKindAccessible, Token } from "@cocrepo/constant";
 import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
 import { useApp } from "@cocrepo/store";
+import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
@@ -177,7 +178,11 @@ const SessionBootstrap = observer(function SessionBootstrap({
 	}, [authSession, router]);
 
 	if (!shouldRenderChildren) {
-		return null;
+		return (
+			<div className="flex min-h-screen items-center justify-center bg-background">
+				<Spinner size="lg" />
+			</div>
+		);
 	}
 
 	return <>{children}</>;

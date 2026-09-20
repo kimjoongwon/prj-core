@@ -132,12 +132,6 @@ const translationDefinitions = [
 		zh_CN: "打开 IDP 管理控制台",
 		ja_JP: "IDP管理コンソールを開く",
 	}),
-	defineTranslation("화면 접근 권한을 확인하는 중입니다.", "프론트 UI", {
-		ko_KR: "화면 접근 권한을 확인하는 중입니다.",
-		en_US: "Checking page access permission.",
-		zh_CN: "正在检查页面访问权限。",
-		ja_JP: "画面アクセス権限を確認しています。",
-	}),
 	defineTranslation(
 		"화면을 열 수 있는 화면 접근 권한이 현재 선택한 Space 권한에 없습니다.",
 		"프론트 UI",
@@ -3601,6 +3595,7 @@ export const obsoleteTranslationSeedKeys = [
 	"validation.emailFormat",
 	"validation.minLength",
 	"validation.maxLength",
+	"화면 접근 권한을 확인하는 중입니다.",
 ] as const;
 
 export const translationSeedData: TranslationSeedData[] =

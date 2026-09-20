@@ -7,6 +7,7 @@ import {
 	matchAdminPageAccessItem,
 } from "@cocrepo/constant";
 import { useApp } from "@cocrepo/store";
+import { Spinner } from "@heroui/react";
 import { LockKeyhole } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
@@ -61,23 +62,8 @@ export const AccessControlGuard = observer(function AccessControlGuard({
 		(!accessControl.isLoaded && !hasFullAccessRole)
 	) {
 		return (
-			<div className="mx-auto flex w-full max-w-[1440px] flex-col gap-4">
-				<div className="min-w-0 border-b border-[#d7e4f2] pb-4 dark:border-white/10">
-					<Typography.Heading
-						className="text-2xl font-semibold leading-8"
-						level={1}
-					>
-						{t("권한 확인 중")}
-					</Typography.Heading>
-					<Typography.Paragraph className="mt-1" color="muted" size="sm">
-						{t("현재 화면 접근 권한을 확인하고 있습니다.")}
-					</Typography.Paragraph>
-				</div>
-				<Surface>
-					<div className="flex min-h-[260px] items-center justify-center p-4 text-sm text-muted md:p-5">
-						{t("화면 접근 권한을 확인하는 중입니다.")}
-					</div>
-				</Surface>
+			<div className="mx-auto flex min-h-[320px] w-full max-w-[1440px] items-center justify-center">
+				<Spinner size="lg" />
 			</div>
 		);
 	}

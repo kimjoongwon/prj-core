@@ -1,36 +1,16 @@
-"use client";
+import { Token } from "@cocrepo/constant";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { useVerifyToken } from "@cocrepo/api/core/auth";
-import { SessionCheckScreen } from "@cocrepo/ui";
-import { observer } from "mobx-react-lite";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+/**
+ * 세션 표시(loggedIn) 쿠키는 민감하지 않아 서버가 읽을 수 있다.
+ * 실제 세션 검증은 (authenticated) 그룹의 SessionBootstrap이 담당하므로
+ * 루트는 표시 존재만으로 즉시 리다이렉트한다.
+ */
+export default async function HomePage() {
+	const cookieStore = await cookies();
+	const sessionPresenceMarker = cookieStore.get(Token.LOGGED_IN);
+	const hasSessionPresence = sessionPresenceMarker?.value === "1";
 
-const HomePage = observer(function HomePage() {
-	const router = useRouter();
-	const { data, isPending } = useVerifyToken({
-		query: {
-			retry: false,
-			refetchOnWindowFocus: false,
-		},
-	});
-
-	const hasSession = data?.data?.valid === true;
-
-	useEffect(() => {
-		if (isPending) {
-			return;
-		}
-
-		router.replace(hasSession ? "/dashboard" : "/auth/login");
-	}, [hasSession, isPending, router]);
-
-	return (
-		<SessionCheckScreen
-			title="세션 확인 중"
-			description="인증 상태를 확인한 뒤 적절한 페이지로 이동합니다."
-		/>
-	);
-});
-
-export default HomePage;
+	redirect(hasSessionPresence ? "/dashboard" : "/auth/login");
+}
