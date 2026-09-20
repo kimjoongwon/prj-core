@@ -76,17 +76,16 @@ FROM node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# PreSync 마이그레이션 Job 계약: /app/packages/be-prisma에서
-# node_modules/.bin/prisma, tsx를 실행하므로 워크스페이스 의존성 구조를 보존한다.
+# PreSync 마이그레이션 Job과 앱 실행 모두 워크스페이스 구조를 사용한다.
+# (마이그레이션: /app/packages/be-prisma의 prisma/tsx.
+#  앱: deploy 산출물 단독 실행은 중복 @nestjs 패키지 해석으로 DiscoveryModule DI가 실패해
+#  워크스페이스 node_modules에서 실행하는 기존 운영 형태를 유지한다.)
 COPY --from=builder --chown=node:node /app/node_modules/ ./node_modules/
 COPY --from=builder --chown=node:node /app/packages/ ./packages/
+COPY --from=builder --chown=node:node /app/apps/ ./apps/
 COPY --from=builder --chown=node:node /app/package.json /app/pnpm-workspace.yaml ./
 
-# 앱 자체는 독립 deploy 산출물에서 실행한다 (마이그레이션용 루트 node_modules와
-# 경로 충돌하지 않도록 /app/runtime 하위에 둔다).
-COPY --from=builder --chown=node:node /app/deploy/ /app/runtime/
-
-WORKDIR /app/runtime
+WORKDIR /app
 
 # 운영 환경 변수 설정
 ENV NODE_ENV=production
@@ -95,6 +94,5 @@ ENV APP_PORT=3007
 # 애플리케이션 포트 노출
 EXPOSE 3007
 
-# Node 애플리케이션 단일 프로세스 실행
-# - pnpm deploy가 apps/idp/api 프로젝트를 deploy 루트로 복사하므로 WORKDIR 기준 ./dist/main.js
-CMD ["node", "dist/main.js"]
+# Node 애플리케이션 단일 프로세스 실행 (워크스페이스 내 앱 경로)
+CMD ["node", "apps/idp/api/dist/main.js"]
