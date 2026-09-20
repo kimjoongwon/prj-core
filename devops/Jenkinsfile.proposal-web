@@ -65,7 +65,8 @@ podTemplate(
                         )
                     ]) {
                         sh """
-                            echo \$HARBOR_PASSWORD | podman login \\
+                            # set +x: xtrace로 인한 비밀번호 평문 노출 차단
+                            set +x; echo \$HARBOR_PASSWORD | podman login \\
                                 -u \$HARBOR_USERNAME \\
                                 --password-stdin \\
                                 --tls-verify=true \\

@@ -96,7 +96,8 @@ podTemplate(
                                 export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
                                 export HOME=${PODMAN_HOME}
                                 export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
-                                echo \$HARBOR_PASSWORD | podman ${PODMAN_GLOBAL_ARGS} login \\
+                                # set +x: xtrace로 인한 비밀번호 평문 노출 차단
+                                set +x; echo \$HARBOR_PASSWORD | podman ${PODMAN_GLOBAL_ARGS} login \\
                                     -u \$HARBOR_USERNAME \\
                                     --password-stdin \\
                                     --tls-verify=true \\
