@@ -108,6 +108,16 @@ start_local_infrastructure() {
   if [[ "${START_SKIP_INFRA_START:-}" =~ ^(y|yes|true|1|on)$ ]]; then
     return
   fi
+  # 로컬 PostgreSQL/Redis가 이미 떠 있으면(native Homebrew, 클러스터 터널 등)
+  # 그대로 사용하고 docker compose 기동을 건너뛴다.
+  if (exec 3<>/dev/tcp/"${POSTGRES_HOST:-localhost}"/"${POSTGRES_PORT:-5432}") 2>/dev/null; then
+    exec 3>&- 3<&-
+    if (exec 3<>/dev/tcp/"${REDIS_HOST:-localhost}"/"${REDIS_PORT:-6379}") 2>/dev/null; then
+      exec 3>&- 3<&-
+      echo -e "${GREEN}✅ 로컬 PostgreSQL/Redis가 이미 실행 중 — docker 인프라 기동을 건너뜁니다${RESET}"
+      return
+    fi
+  fi
   if ! command -v docker >/dev/null 2>&1; then
     echo -e "${YELLOW}❌ Docker가 필요합니다. Docker Desktop을 실행하거나 START_SKIP_INFRA_START=1로 자동 기동을 건너뛰세요.${RESET}" >&2
     exit 1
