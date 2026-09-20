@@ -64,7 +64,9 @@ COPY --from=setup /app/out/json/ ./
 # - mount=type=cache: PNPM 스토어를 캐시로 마운트하여 재빌드 시 속도 향상
 # - id=pnpm: 캐시 식별자
 # - target=/pnpm/store: PNPM 캐시 저장소 경로
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+# - --store-dir /pnpm/store: pnpm 스토어를 캐시 마운트 경로와 일치시켜 캐시 적중률 유지
+# - --prefer-offline: 캐시된 패키지를 우선 사용해 네트워크 조회 축소
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline
 
 COPY --from=setup /app/out/full/ ./
 
@@ -77,7 +79,9 @@ WORKDIR /app
 # 🏗️ Turbo를 사용한 프로젝트 빌드
 # - 모든 관련 패키지와 종속성을 최적화된 순서로 빌드
 # - nest build가 TypeScript 컴파일을 포함하므로 별도 type-check 단계 생략
-RUN pnpm exec turbo build --concurrency=1 --filter=core-api...
+# - /app/.turbo 캐시 마운트로 Turbo 작업 캐시를 재사용해 재빌드 시간 단축
+# - --concurrency=2: 병렬 빌드로 빌드 시간 단축
+RUN --mount=type=cache,id=turbo,target=/app/.turbo pnpm exec turbo build --concurrency=2 --filter=core-api...
 
 # 운영 앱과 production 의존성만 독립 실행 가능한 산출물로 구성
 RUN pnpm --filter core-api deploy --prod --legacy /app/deploy

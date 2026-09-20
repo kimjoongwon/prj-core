@@ -17,7 +17,7 @@
 | 이미지 경로 | `HARBOR_REGISTRY/prod/tool-storybook` |
 | 브랜치 정책 | `main` 브랜치만 허용, 그 외 브랜치는 즉시 실패 |
 | Podman 실행 이미지 | `quay.io/podman/stable:v5.8.4` multi-arch manifest를 digest로 고정 |
-| pull 정책 | agent 시작 시 `alwaysPullImage: true`, 이미지 빌드 시 `podman build --pull=always` |
+| pull 정책 | agent 시작 시 `alwaysPullImage: false`, 이미지 빌드 시 `--pull=newer` 사용(로컬 캐시 우선, 원본이 더 최신일 때만 재풀) |
 | 격리 경계 | 동적 Jenkins agent Pod와 build별 PVC 하위 Podman storage/workspace 경로 사용 |
 | 실행 Stage | `Validate Branch` → `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
 | 빌드 인자 | `STORYBOOK_DISABLE_CHROMATIC`, `STORYBOOK_BUILD_NOFILE` |
@@ -37,8 +37,8 @@
 - [x] `main` 브랜치 외에는 배포를 막아 prod-only 정책을 강제함
 - [x] GitOps Job을 `wait: false` 비동기로 실행함
 - [x] GitOps 트리거 실패가 이미지 빌드 성공을 실패로 바꾸지 않음
-- [x] `podman build --pull=always`와 fully qualified base image 리터럴로 short-name resolution 문제를 회피함
-- [x] Podman agent를 안전 버전과 검증된 multi-arch digest로 고정하고 매 실행마다 pull함
+- [x] fully qualified base image 리터럴로 short-name resolution 문제를 회피함
+- [x] Podman agent를 안전 버전과 검증된 multi-arch digest로 고정함
 - [x] Storybook 정적 이미지 빌드에서는 Chromatic addon 비활성화와 `nofile` 상향 인자를 함께 전달함
 - [x] `podman build --ulimit`로 builder RUN 컨테이너 hard/soft nofile 한계를 직접 상향함
 - [x] Podman 컨테이너의 `ephemeral-storage` request/limit를 명시해 low-storage 노드 배치를 피함

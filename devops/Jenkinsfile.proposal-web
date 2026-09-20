@@ -19,14 +19,16 @@ podTemplate(
     containers: [
         containerTemplate(
             name: 'podman',
-            image: 'quay.io/podman/stable:v4.8.2',
-            alwaysPullImage: true,
+            image: 'quay.io/podman/stable:v5.8.4@sha256:3c99be9108dacd2b25d2f343c91386abd14a5ceaca68aa3e8d7f6ee2ebd50a16',
+            alwaysPullImage: false,
             privileged: true,
             ttyEnabled: true,
             command: 'cat',
             resourceLimitMemory: '3Gi',
             resourceRequestMemory: '2Gi',
             resourceLimitCpu: '1500m',
+            // CPU request는 미지정 시 limit과 같게 잡혀 PVC 고정 노드(node-02)에서 스케줄링이 막히므로 명시적으로 낮춤
+            resourceRequestCpu: '300m',
         )
     ]
 ) {
@@ -74,7 +76,7 @@ podTemplate(
                             podman build \\
                                 --format=docker \\
                                 --layers \\
-                                --pull=always \\
+                                --pull=newer \\
                                 -f ./devops/Dockerfile.proposal-web \\
                                 ${IMAGE_TAG_ARGS.join(' \\\\\n                                ')} \\
                                 .
@@ -83,7 +85,7 @@ podTemplate(
                         sh """
                             podman push \\
                                 --compression-format=gzip \\
-                                --compression-level=9 \\
+                                --compression-level=6 \\
                                 ${IMAGE_PATH}:${IMAGE_TAG}
                         """
 
@@ -91,7 +93,7 @@ podTemplate(
                             sh """
                                 podman push \\
                                     --compression-format=gzip \\
-                                    --compression-level=9 \\
+                                    --compression-level=6 \\
                                     ${IMAGE_PATH}:latest
                             """
                         }

@@ -1,0 +1,87 @@
+if (env.CHANGE_ID || env.BRANCH_NAME != 'main' || env.TRUSTED_DEPLOYMENT != 'true') {
+    error('배포는 main 보호 브랜치의 승인된 내부 job에서만 실행할 수 있습니다.')
+}
+def HARBOR_REGISTRY = env.HARBOR_REGISTRY
+def HARBOR_CREDENTIAL_ID = env.HARBOR_CREDENTIAL_ID
+def CONFIGURED_GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB
+if (!HARBOR_REGISTRY || !HARBOR_CREDENTIAL_ID || !CONFIGURED_GITOPS_UPDATE_JOB) {
+    error('내부 배포 설정(HARBOR_REGISTRY, HARBOR_CREDENTIAL_ID, GITOPS_UPDATE_JOB)이 필요합니다.')
+}
+
+podTemplate(
+    containers: [
+        containerTemplate(
+            name: 'buildctl',
+            image: 'docker.io/moby/buildkit:v0.33.0-rootless@sha256:80b15f0735e87bab7bf59ec4d695dfb4a7cfb25521cf56dc75d6f256285b63ef',
+            ttyEnabled: true,
+            command: 'cat',
+            envVars: [
+                containerEnvVar(key: 'BUILDKIT_HOST', value: 'tcp://buildkitd.devops-tools.svc.cluster.local:1234')
+            ],
+            resourceLimitMemory: '3Gi',
+            resourceRequestMemory: '2Gi',
+            resourceLimitCpu: '1500m',
+            // CPU request는 미지정 시 limit과 같게 잡혀 PVC 고정 노드(node-02)에서 스케줄링이 막히므로 명시적으로 낮춤
+            resourceRequestCpu: '300m',
+        )
+    ]
+) {
+    node(POD_LABEL) {
+        def ENV_NAME = 'prod'
+        def IMAGE_TAG = env.BUILD_NUMBER
+        def IMAGE_PATH = "${HARBOR_REGISTRY}/${ENV_NAME}/tool-storybook"
+        def STORYBOOK_DISABLE_CHROMATIC = 'true'
+        def GITOPS_APP = 'tool-storybook'
+        def GITOPS_UPDATE_JOB = CONFIGURED_GITOPS_UPDATE_JOB
+
+        stage('Validate Branch') {
+            if (env.BRANCH_NAME && env.BRANCH_NAME != 'main') {
+                error("tool-storybook only supports main branch because GitOps deployment exists only for prod.")
+            }
+        }
+
+        try {
+            stage('Checkout') {
+                deleteDir()
+                checkout scm
+            }
+
+            stage('Build and Push Image') {
+                container('buildctl') {
+                    // Harbor 인증은 buildkitd 데몬에 마운트된 시크릿으로 처리하므로 registry login 불필요
+                    sh """
+                        buildctl --addr "\$BUILDKIT_HOST" build \\
+                            --frontend dockerfile.v0 \\
+                            --local context=. \\
+                            --local dockerfile=. \\
+                            --opt filename=devops/Dockerfile.tool-storybook \\
+                            --opt build-arg:STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC} \\
+                            --output type=image,name=${IMAGE_PATH}:${IMAGE_TAG},push=true \\
+                            --progress=plain
+                    """
+                }
+            }
+
+            stage('Trigger GitOps Update Job') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    def gitCommit = env.GIT_COMMIT ?: ''
+                    build(
+                        job: GITOPS_UPDATE_JOB,
+                        wait: false,
+                        parameters: [
+                            string(name: 'APP_NAME', value: GITOPS_APP),
+                            string(name: 'IMAGE_TAG', value: IMAGE_TAG),
+                            string(name: 'DEPLOY_ENV', value: 'prod'),
+                            string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
+                            string(name: 'SOURCE_COMMIT', value: gitCommit),
+                        ]
+                    )
+                    echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
+                }
+            }
+
+        } catch (Exception e) {
+            throw e
+        }
+    }
+}

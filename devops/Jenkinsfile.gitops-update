@@ -83,7 +83,7 @@ pipeline {
                         REPO_URL="${GITOPS_REPO}"
                         REPO_URL="$(printf %s "${GITOPS_REPO}" | sed "s|^https://|https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@|")"
                         rm -rf "${GITOPS_DIR}"
-                        git clone --branch "${GITOPS_BRANCH}" "${REPO_URL}" "${GITOPS_DIR}"
+                        git clone --depth 5 --branch "${GITOPS_BRANCH}" "${REPO_URL}" "${GITOPS_DIR}"
 
                         bash "${GITOPS_DIR}/scripts/jenkins/update-gitops-image-tag.sh" \
                           --app "${APP_NAME}" \

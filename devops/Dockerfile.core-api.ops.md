@@ -26,5 +26,5 @@
 - [x] `out/json`을 먼저 복사해 lockfile/의존성 설치의 기준점을 고정
 - [x] `pnpm exec turbo type-check:prod --filter=core-api... --concurrency=1`로 배포용 타입 체크를 먼저 수행
 - [x] 빌드 단계에서 Turbo를 통해 관련 워크스페이스를 함께 빌드
-- [x] Podman/CI 환경에서 메모리 피크를 낮추기 위해 `turbo build --concurrency=1` 적용
+- [x] `/app/.turbo` 캐시 마운트로 Turbo 작업 캐시를 재사용하고 `turbo build --concurrency=2`로 빌드 시간을 단축함
 - [x] 런타임에서 Node 단일 프로세스 실행 구조 유지
