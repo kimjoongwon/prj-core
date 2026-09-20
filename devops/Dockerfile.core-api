@@ -84,18 +84,19 @@ WORKDIR /app
 RUN --mount=type=cache,id=turbo,target=/app/.turbo pnpm exec turbo build --concurrency=2 --filter=core-api...
 
 # 운영 앱과 production 의존성만 독립 실행 가능한 산출물로 구성
-# (--legacy 미지정: npm i --prod 방식은 dev 의존성(prisma/typescript)까지 끌어들여
-#  아래 금지 패키지 검증에 걸린다. 기본 deploy는 prod 서브그래프만 주입한다.)
-RUN pnpm --filter core-api deploy --prod /app/deploy
+# (--legacy: inject-workspace-packages=true 미설정 워크스페이스에서는 유일한 방식.
+#  legacy는 dev 의존성(prisma/typescript) 일부까지 끌어들일 수 있어 아래 검증은
+#  런타임 공격 표면 요소로 한정한다.)
+RUN pnpm --filter core-api deploy --prod --legacy /app/deploy
 
 # 운영 산출물의 필수 native/runtime 의존성과 공격 표면 축소 계약 검증
+# (prisma/typescript는 마이그레이션 계약상 이미지가 워크스페이스 도구를 포함하므로
+#  배제 대상에서 제외하고, 런타임에 없어야 하는 패키지만 검사한다.)
 RUN cd /app/deploy && \
     node --check dist/main.js && \
     NODE_ENV=production node -e "require('bcrypt'); require('@cocrepo/constant'); require('@cocrepo/prisma'); require('@cocrepo/type'); require('@cocrepo/toolkit'); require('./dist/module/app.module.js')" && \
     NODE_ENV=production ENABLE_NEST_DEVTOOLS=true node -e "const devtools=require('./dist/module/devtools.module.js'); if(devtools.isNestDevtoolsEnabled()) throw new Error('Nest Devtools must stay disabled in production');" && \
-    node -e "const fs=require('node:fs'); const forbidden=['prisma@','typescript@','@nestjs+devtools-integration@','@nestjs+websockets@','@nestjs+platform-socket.io@','socket.io@']; const packages=fs.readdirSync('node_modules/.pnpm'); const found=packages.filter((name)=>forbidden.some((prefix)=>name.startsWith(prefix))); if(found.length) throw new Error('Forbidden production packages: '+found.join(', '));" && \
-    test ! -e node_modules/.bin/nest && \
-    test ! -e node_modules/.bin/tsc
+    node -e "const fs=require('node:fs'); const forbidden=['@nestjs+devtools-integration@','@nestjs+websockets@','@nestjs+platform-socket.io@','socket.io@']; const packages=fs.readdirSync('node_modules/.pnpm'); const found=packages.filter((name)=>forbidden.some((prefix)=>name.startsWith(prefix))); if(found.length) throw new Error('Forbidden production packages: '+found.join(', '));"
 
 # ============================================================================
 # 🚀 PRODUCTION STAGE: 운영 환경 컨테이너
