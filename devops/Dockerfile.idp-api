@@ -76,8 +76,17 @@ FROM node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# 검증된 production deploy 산출물만 복사 (빌더의 /app 전체 대비 슬림)
-COPY --from=builder --chown=node:node /app/deploy/ .
+# PreSync 마이그레이션 Job 계약: /app/packages/be-prisma에서
+# node_modules/.bin/prisma, tsx를 실행하므로 워크스페이스 의존성 구조를 보존한다.
+COPY --from=builder --chown=node:node /app/node_modules/ ./node_modules/
+COPY --from=builder --chown=node:node /app/packages/ ./packages/
+COPY --from=builder --chown=node:node /app/package.json /app/pnpm-workspace.yaml ./
+
+# 앱 자체는 독립 deploy 산출물에서 실행한다 (마이그레이션용 루트 node_modules와
+# 경로 충돌하지 않도록 /app/runtime 하위에 둔다).
+COPY --from=builder --chown=node:node /app/deploy/ /app/runtime/
+
+WORKDIR /app/runtime
 
 # 운영 환경 변수 설정
 ENV NODE_ENV=production

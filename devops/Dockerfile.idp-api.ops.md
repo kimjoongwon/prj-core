@@ -18,14 +18,15 @@
 | 도구체인 | pnpm `10.34.5`, turbo `2.9.14` (레포 표준 도구체인) |
 | setup 단계 | `COPY . .` 후 `turbo prune --scope=idp-api --docker` |
 | builder 단계 | `out/json` 복사 → `pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline` → `out/full` 복사 → `pnpm exec turbo build --concurrency=2 --filter=idp-api...` 단일 빌드 → `pnpm --filter idp-api deploy --prod --legacy /app/deploy` |
-| 러너 단계 | `COPY --from=builder --chown=node:node /app/deploy/ .` 후 `CMD ["node", "dist/main.js"]` |
+| 러너 단계 | 마이그레이션용 워크스페이스(루트 `node_modules`, `packages/`, 루트 manifest)를 복사한 뒤 앱 deploy 산출물을 `/app/runtime`에 복사, `WORKDIR /app/runtime`에서 `CMD ["node", "dist/main.js"]` |
 | 캐시 정책 | `/pnpm/store`(pnpm store), `/app/.turbo`(turbo 작업 캐시)에 BuildKit cache mount 적용 |
 
 ## 구조 개요
 
 - prune → install → 단일 turbo build → deploy 산출물 흐름으로 빌드한다.
 - 이전 구조의 이중 빌드(`--filter=idp-api^... --concurrency=1` 전체 그래프 빌드 후 `pnpm --filter idp-api run build` 재빌드)를 제거하고 `--filter=idp-api...` 단일 turbo 빌드로 통합했다.
-- runner는 빌더의 `/app` 전체를 복사하지 않고 `pnpm deploy --prod --legacy`가 구성한 `/app/deploy` 디렉터리(production 의존성 포함)만 복사해 이미지 크기를 축소했다.
+- runner는 ArgoCD PreSync 마이그레이션 Job이 `/app/packages/be-prisma`에서 `node_modules/.bin/prisma`, `tsx`를 실행하는 계약을 보존하기 위해 루트 `node_modules`(.pnpm 심링크), `packages/`, 루트 manifest를 그대로 복사한다.
+- 앱 자체는 `pnpm deploy --prod --legacy`가 구성한 `/app/deploy` 산출물을 `/app/runtime`에 복사해 실행하며, 마이그레이션용 루트 `node_modules`와 경로가 겹치지 않는다.
 - `pnpm deploy`는 `apps/idp/api` 프로젝트 파일을 deploy 루트로 복사하므로 진입점은 WORKDIR 기준 `dist/main.js`다 (idp-api 자체 `start:prod` 스크립트와 동일 경로).
 - core-api 전용 검증 단계(route catalog 보존, 금지 패키지 스캔)는 idp-api에 적용하지 않는다.
 
@@ -36,7 +37,7 @@
 - [x] `pnpm install` 단계 캐시 유지(`/pnpm/store`)
 - [x] `turbo build` 단계 캐시 유지(`/app/.turbo`) 및 `--concurrency=2` 병렬 빌드
 - [x] `pnpm --filter idp-api deploy --prod --legacy /app/deploy`로 production 의존성만 포함된 독립 실행 산출물 구성
-- [x] runner가 `/app/deploy`만 복사해 빌더 `/app` 전체 복사로 인한 이미지 비대화 제거
+- [x] runner가 PreSync 마이그레이션 Job 계약(`/app/packages/be-prisma` 실행, 루트 `node_modules`의 .pnpm 심링크)을 보존하면서 앱은 `/app/runtime`의 deploy 산출물로 실행
 - [x] 런타임 계약(`ENV NODE_ENV=production`, `ENV APP_PORT=3007`, `EXPOSE 3007`, `CMD ["node", ...]`) 유지
 - [x] base 이미지 digest 고정으로 공급망 재현성 확보
 
@@ -44,6 +45,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-09-20 | 러너를 PreSync 마이그레이션 Job 계약에 맞춰 재구성: 루트 `node_modules`, `packages/`, 루트 manifest를 복사해 워크스페이스 구조를 보존하고 앱은 `/app/runtime`에서 실행. `ENV`/`EXPOSE`/`CMD`는 불변 | zcode |
 | 2026-09-20 | core-api 최신 패턴으로 재작성: base 이미지 digest 고정(`node:24.21.0-alpine3.24@sha256:be80f...ea67e2`), pnpm `10.34.5`/turbo `2.9.14` 상향, 이중 빌드를 `--filter=idp-api... --concurrency=2` 단일 turbo 빌드로 통합, `pnpm deploy --prod --legacy` 산출물만 복사하는 슬림 runner로 전환 | zcode |
 | 2026-09-19 | idp-api 재구축(a8b8addde)으로 복원된 실제 빌드 단계(`--filter=idp-api^... --concurrency=1` + `pnpm --filter idp-api run build`)에 맞춰 문서 재동기화 | zcode |
 | 2026-03-09 | `idp-api` Docker 빌드에서 `--filter=idp-api^...`, `--concurrency=1`, 후행 `tsc` 단계를 제거하고 prune 결과 전체에 대해 `pnpm exec turbo build`를 실행하도록 단순화 | codex |
