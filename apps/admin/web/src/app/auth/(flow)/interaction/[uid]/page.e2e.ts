@@ -29,6 +29,11 @@ const assertLoginFailureHandled = async (page: Page) => {
 	}).toPass({ timeout: 10000 });
 };
 
+// 이 파일의 모든 스펙은 미인증 방문자의 로그인/동의 인터랙션을 검증한다.
+// storage state의 OP 세션이 있으면 인가가 폼 없이 자동 재개되므로
+// 파일 전체에 빈 컨텍스트를 적용한다.
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe("OIDC 로그인 인터랙션 @real", () => {
 	test.describe("로그인 폼 렌더링", () => {
 		test("로그인 폼이 정상 렌더링되어야 한다", async ({ page }) => {
@@ -304,13 +309,16 @@ test.describe("OIDC 동의 화면 @real", () => {
 			// Given: OIDC 로그인 후 동의 화면 진입
 			const navigation = await navigateToConsentForm(page);
 			if (navigation === "redirected") {
-				await expect(page).toHaveURL(/\/admin\/settings\/auth/);
+				await expect(page).toHaveURL(/\/admin\/dashboard/);
 				return;
 			}
 
 			// Then: 클라이언트 정보와 권한 요청 문구가 표시됨
 			await expect(
-				page.getByText("서비스 연동을 위해 아래 접근 권한을 확인해 주세요"),
+				page.getByRole("heading", { name: "Admin Web", exact: true }),
+			).toBeVisible();
+			await expect(
+				page.getByText("요청한 서비스 이용에 필요한 접근 권한을 확인해 주세요"),
 			).toBeVisible();
 			await expect(
 				page.getByRole("heading", { name: "요청된 권한" }),
@@ -321,7 +329,7 @@ test.describe("OIDC 동의 화면 @real", () => {
 			// Given: OIDC 동의 화면 진입
 			const navigation = await navigateToConsentForm(page);
 			if (navigation === "redirected") {
-				await expect(page).toHaveURL(/\/admin\/settings\/auth/);
+				await expect(page).toHaveURL(/\/admin\/dashboard/);
 				return;
 			}
 
@@ -337,7 +345,7 @@ test.describe("OIDC 동의 화면 @real", () => {
 			// Given: OIDC 동의 화면 진입
 			const navigation = await navigateToConsentForm(page);
 			if (navigation === "redirected") {
-				await expect(page).toHaveURL(/\/admin\/settings\/auth/);
+				await expect(page).toHaveURL(/\/admin\/dashboard/);
 				return;
 			}
 

@@ -1,7 +1,10 @@
 import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
-const API_BASE_URL = "http://localhost:3000/api/v1";
+const API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 let ADMIN_TENANT_ID = "";
 let ADMIN_SPACE_ID = "";

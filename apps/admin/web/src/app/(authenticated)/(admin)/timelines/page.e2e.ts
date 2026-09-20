@@ -8,7 +8,10 @@ test.beforeEach(async ({ page }) => {
 	ADMIN_TENANT_ID = context.tenantId;
 });
 
-const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
 const TIMELINE_LIST_PATH = "/admin/timelines";
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 

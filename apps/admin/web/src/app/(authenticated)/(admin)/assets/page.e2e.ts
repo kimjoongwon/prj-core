@@ -45,6 +45,10 @@ type AssetMutationResponse = {
 	};
 };
 
+// 서버가 파일 매직 바이트로 MIME을 검증하므로 실제 PNG 시그니처가 필요하다.
+const MINIMAL_PNG_BASE64 =
+	"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
 test.describe("에셋 목록 페이지", () => {
 	test.describe("[E2E-003] 실업로드 회귀 @real", () => {
 		test("한글 파일명의 실제 multipart 업로드가 201로 완료되고 목록에서 바로 조회되어야 한다", async ({
@@ -82,7 +86,7 @@ test.describe("에셋 목록 페이지", () => {
 							file: {
 								name: uploadFileName,
 								mimeType: "image/png",
-								buffer: Buffer.from("e2e-real-upload-png"),
+								buffer: Buffer.from(MINIMAL_PNG_BASE64, "base64"),
 							},
 						},
 					},

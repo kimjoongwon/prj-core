@@ -32,6 +32,8 @@ describe("Admin Space request header contract", () => {
 			}),
 		).toEqual({
 			Authorization: "Bearer access-token",
+			// 상태 변경 API의 쿠키 인증은 신뢰된 Origin을 함께 보낸다.
+			Origin: "http://localhost:3000",
 			"x-tenant-id": tenantId,
 		});
 		expect(() =>

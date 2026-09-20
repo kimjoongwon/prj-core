@@ -1,10 +1,15 @@
 import { expect, test } from "@playwright/test";
 
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
+
 test.describe("문의 상세 페이지", () => {
 	test.describe("[E2E-001] 상세 렌더링", () => {
 		test("문의 상세 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
 			const inquiriesResponse = await page.request.get(
-				"http://localhost:3000/api/v1/inquiries?skip=0&take=1",
+				`${ADMIN_API_BASE_URL}/inquiries?skip=0&take=1`,
 			);
 			test.skip(
 				inquiriesResponse.status() !== 200,

@@ -8,7 +8,13 @@ test.beforeEach(async ({ page }) => {
 	ADMIN_TENANT_ID = context.tenantId;
 });
 
-const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
+const ADMIN_WEB_BASE_URL = (
+	process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin"
+).replace(/\/$/, "");
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 
@@ -84,7 +90,7 @@ test.describe("태스크 목록 페이지", () => {
 			expect(taskId).toBeTruthy();
 
 			// When: 생성된 태스크 상세 페이지로 이동
-			await page.goto(`http://localhost:3000/admin/tasks/${taskId}/exercise`, {
+			await page.goto(`${ADMIN_WEB_BASE_URL}/tasks/${taskId}/exercise`, {
 				waitUntil: "domcontentloaded",
 			});
 			await page.waitForLoadState("networkidle");
@@ -105,7 +111,7 @@ test.describe("태스크 목록 페이지", () => {
 				.waitForURL(/\/tasks\/.*\/exercise\/edit/, { timeout: 5000 })
 				.catch(async () => {
 					await page.goto(
-						`http://localhost:3000/admin/tasks/${taskId}/exercise/edit`,
+						`${ADMIN_WEB_BASE_URL}/tasks/${taskId}/exercise/edit`,
 						{ waitUntil: "domcontentloaded" },
 					);
 				});
@@ -136,7 +142,7 @@ test.describe("태스크 목록 페이지", () => {
 			expect(updateResponse.status()).toBe(200);
 
 			// Then: 상세 페이지로 돌아가 최신 데이터 확인
-			await page.goto(`http://localhost:3000/admin/tasks/${taskId}/exercise`);
+			await page.goto(`${ADMIN_WEB_BASE_URL}/tasks/${taskId}/exercise`);
 			await page.waitForLoadState("networkidle");
 
 			await expect(

@@ -20,7 +20,11 @@ const DEFAULT_CONSOLE_BASE_URL =
 const LOGIN_PATH =
 	process.env.E2E_IDP_LOGIN_PATH ??
 	"/api/v1/auth/oidc/login?clientId=admin-web";
-const DASHBOARD_PATH = process.env.E2E_IDP_DASHBOARD_PATH ?? "/settings/auth";
+// 로그인 후 파킹 위치는 스펙들의 상대 경로 goto("./roles")의 기준이 된다.
+// 루트 바로 아래 경로여야 "./<page>"가 "/admin/<page>"로 해석된다.
+// (예: "/settings/auth"에 파킹하면 "./roles"가 "/admin/settings/roles"로
+// 해석되어 404로 빠진다.)
+const DASHBOARD_PATH = process.env.E2E_IDP_DASHBOARD_PATH ?? "/dashboard";
 
 function trimTrailingSlash(value: string) {
 	return value.endsWith("/") ? value.slice(0, -1) : value;
@@ -48,6 +52,15 @@ const dashboardUrl = `${consoleBaseUrl}${normalizedDashboardPath}`;
 const oidcLoginUrl = new URL(
 	buildPathWithQuery(LOGIN_PATH, {
 		returnTo: dashboardUrl,
+	}),
+	consoleOrigin,
+).toString();
+// first-party skip-consent 클라이언트는 prompt=consent가 있어야 동의 화면이
+// 렌더된다(loadExistingGrant가 prompt=consent에서 기존 grant를 무시한다).
+const oidcConsentLoginUrl = new URL(
+	buildPathWithQuery(LOGIN_PATH, {
+		returnTo: dashboardUrl,
+		prompt: "consent",
 	}),
 	consoleOrigin,
 ).toString();
@@ -178,7 +191,7 @@ export async function navigateToConsentForm(
 	page: E2EPageLike,
 ): Promise<OidcConsentNavigation> {
 	const entry = await navigateToOidcLoginForm(page, {
-		startPath: oidcLoginUrl,
+		startPath: oidcConsentLoginUrl,
 	});
 	if (entry === "login") {
 		await submitOidcCredentials(page);

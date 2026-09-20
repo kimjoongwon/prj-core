@@ -10,6 +10,11 @@ test.beforeEach(async ({ page }) => {
 
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
+
 test.describe("Subject 상세 페이지", () => {
 	// ── E2E-008: Subject 필드 조회 (entity vs non-entity) ──
 
@@ -33,7 +38,7 @@ test.describe("Subject 상세 페이지", () => {
 			condition: "entity" | "non-entity",
 		): Promise<SubjectListItem | null> {
 			const resp = await page.request.get(
-				"http://localhost:3000/api/v1/subjects",
+				`${ADMIN_API_BASE_URL}/subjects`,
 				{ headers: getSpaceHeaders() },
 			);
 			const body = (await resp.json()) as {
@@ -45,7 +50,7 @@ test.describe("Subject 상세 페이지", () => {
 					(item) => item.group === "entity",
 				)) {
 					const fieldsResp = await page.request.get(
-						`http://localhost:3000/api/v1/subjects/${subject.id}/fields`,
+						`${ADMIN_API_BASE_URL}/subjects/${subject.id}/fields`,
 						{ headers: getSpaceHeaders() },
 					);
 					const fieldsBody = (await fieldsResp.json()) as {

@@ -14,6 +14,11 @@ test.beforeEach(async ({ page }) => {
 
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
+
 test.describe("메시지 템플릿 상세 페이지", () => {
 	// ── E2E-001: 활성 상태 토글 ──
 
@@ -23,7 +28,7 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 
 			// Given: SMS 템플릿 API로 직접 생성
 			const createResp = await page.request.post(
-				"http://localhost:3000/api/v1/templates",
+				`${ADMIN_API_BASE_URL}/templates`,
 				{
 					headers: getSpaceHeaders(),
 					data: {
@@ -64,7 +69,7 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 
 			// Cleanup: 템플릿 삭제
 			await page.request.delete(
-				`http://localhost:3000/api/v1/templates/${templateId}`,
+				`${ADMIN_API_BASE_URL}/templates/${templateId}`,
 				{ headers: getSpaceHeaders() },
 			);
 		});

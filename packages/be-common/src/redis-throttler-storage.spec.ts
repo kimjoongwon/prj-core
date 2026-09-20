@@ -22,7 +22,9 @@ const createRedisClient = (): jest.Mocked<RedisThrottlerClient> => ({
 	status: "ready",
 	connect: jest.fn(),
 	eval: jest.fn(),
-	quit: jest.fn(),
+	// RedisThrottlerClient 계약상 quit()는 Promise를 반환해야 shutdown의
+	// quit().catch() 연쇄가 동작한다.
+	quit: jest.fn().mockResolvedValue(undefined),
 	on: jest.fn(),
 });
 

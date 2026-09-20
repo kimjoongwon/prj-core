@@ -14,6 +14,7 @@ interface InputActionable extends Actionable {
 }
 
 export interface E2EPageLike {
+	url(): string;
 	goto(
 		path: string,
 		options?: { waitUntil?: "load" | "domcontentloaded" },
@@ -38,7 +39,7 @@ interface OidcFlowOptions {
 const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const DEFAULT_TIMEOUT_MS = 60000;
-type OidcEntryPoint = "login" | "consent";
+type OidcEntryPoint = "login" | "consent" | "authenticated";
 
 function getLoginButton(page: E2EPageLike) {
 	return page.getByRole("button", { name: "로그인" });
@@ -52,11 +53,30 @@ function getTimeoutMs(timeoutMs?: number) {
 	return timeoutMs ?? DEFAULT_TIMEOUT_MS;
 }
 
+/**
+ * OP 세션이 살아 있으면 인가 요청이 로그인/동의 폼 없이 finalUrl로
+ * 자동 재개된다. 이 경우 폼 대기를 건너뛰고 이미 로그인된 것으로 처리한다.
+ */
+function isFinalUrlReached(page: E2EPageLike, finalUrl?: UrlMatcher): boolean {
+	if (!finalUrl) {
+		return false;
+	}
+
+	const currentUrl = page.url();
+	if (typeof finalUrl === "function") {
+		return finalUrl(new URL(currentUrl));
+	}
+	if (finalUrl instanceof RegExp) {
+		return finalUrl.test(currentUrl);
+	}
+	return currentUrl === finalUrl;
+}
+
 export async function navigateToOidcLoginForm(
 	page: E2EPageLike,
 	options: Pick<
 		OidcFlowOptions,
-		"startPath" | "retryAttempts" | "retryDelayMs" | "timeoutMs"
+		"startPath" | "retryAttempts" | "retryDelayMs" | "timeoutMs" | "finalUrl"
 	>,
 ): Promise<OidcEntryPoint> {
 	const {
@@ -87,6 +107,10 @@ export async function navigateToOidcLoginForm(
 
 	const deadline = Date.now() + getTimeoutMs(timeoutMs);
 	while (Date.now() < deadline) {
+		if (isFinalUrlReached(page, options.finalUrl)) {
+			return "authenticated";
+		}
+
 		const remaining = Math.max(500, deadline - Date.now());
 		const chunkTimeout = Math.min(remaining, 1000);
 		const [loginResult, consentResult] = await Promise.allSettled([
@@ -167,12 +191,14 @@ export async function runOidcLoginFlow(
 				retryAttempts: 1,
 				retryDelayMs,
 				timeoutMs: options.timeoutMs,
+				finalUrl: options.finalUrl,
 			});
 			if (entryPoint === "login") {
 				await submitOidcCredentials(page, options);
-			} else {
+			} else if (entryPoint === "consent") {
 				await waitForOidcConsentForm(page, options);
 			}
+			// "authenticated": 폼 없이 finalUrl에 자동 재개되었으므로 그대로 진행한다.
 
 			if (!options.finalUrl) {
 				await waitForOidcConsentForm(page, options);

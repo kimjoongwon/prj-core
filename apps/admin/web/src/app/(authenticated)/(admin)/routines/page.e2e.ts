@@ -8,7 +8,13 @@ test.beforeEach(async ({ page }) => {
 	ADMIN_TENANT_ID = context.tenantId;
 });
 
-const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
+const ADMIN_WEB_BASE_URL = (
+	process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin"
+).replace(/\/$/, "");
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 
@@ -73,7 +79,7 @@ test.describe("루틴 목록 페이지", () => {
 			// Cleanup: 기존 E2E 테스트 루틴 삭제
 			try {
 				const resp = await page.request.get(
-					"http://localhost:3000/api/v1/routines",
+					`${ADMIN_API_BASE_URL}/routines`,
 					{ headers: getSpaceHeaders() },
 				);
 				const body = await resp.json();
@@ -81,7 +87,7 @@ test.describe("루틴 목록 페이지", () => {
 				for (const routine of routines as { id: string; name: string }[]) {
 					if (routine.name === TEST_NAME || routine.name === UPDATED_NAME) {
 						await page.request.delete(
-							`http://localhost:3000/api/v1/routines/${routine.id}`,
+							`${ADMIN_API_BASE_URL}/routines/${routine.id}`,
 							{ headers: getSpaceHeaders() },
 						);
 					}
@@ -160,7 +166,7 @@ test.describe("루틴 목록 페이지", () => {
 				.waitForURL(/\/routines\/[1-9]\d*$/, { timeout: 5000 })
 				.catch(async () => {
 					await page.goto(
-						`http://localhost:3000/admin/routines/${createdRoutineId}`,
+						`${ADMIN_WEB_BASE_URL}/routines/${createdRoutineId}`,
 						{
 							waitUntil: "domcontentloaded",
 						},
