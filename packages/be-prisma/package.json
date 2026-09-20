@@ -14,7 +14,7 @@
     "src/generated/client/enums.ts"
   ],
   "scripts": {
-    "reference:prepare": "pnpm --filter @cocrepo/constant build",
+    "reference:prepare": "pnpm exec turbo run build --filter=@cocrepo/constant",
     "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
     "type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
     "generate": "prisma generate && node ./scripts/fix-generated-client-module-format.mjs",
