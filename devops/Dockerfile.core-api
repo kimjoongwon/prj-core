@@ -84,7 +84,9 @@ WORKDIR /app
 RUN --mount=type=cache,id=turbo,target=/app/.turbo pnpm exec turbo build --concurrency=2 --filter=core-api...
 
 # 운영 앱과 production 의존성만 독립 실행 가능한 산출물로 구성
-RUN pnpm --filter core-api deploy --prod --legacy /app/deploy
+# (--legacy 미지정: npm i --prod 방식은 dev 의존성(prisma/typescript)까지 끌어들여
+#  아래 금지 패키지 검증에 걸린다. 기본 deploy는 prod 서브그래프만 주입한다.)
+RUN pnpm --filter core-api deploy --prod /app/deploy
 
 # 운영 산출물의 필수 native/runtime 의존성과 공격 표면 축소 계약 검증
 RUN cd /app/deploy && \
