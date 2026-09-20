@@ -7,34 +7,45 @@
 ## 역할
 
 `idp-api` 이미지를 빌드하기 위한 멀티스테이지 Dockerfile입니다.
-`turbo` 빌드 단계에서 `.turbo` 캐시를 Podman 레이어 캐시와 분리해 유지하여 재빌드 시 가능하면 캐시 적중률을 높입니다.
+`turbo prune`으로 idp-api 의존 그래프만 추출하고, pnpm store와 turbo 작업 캐시를 BuildKit cache mount로 유지해 재빌드 시간을 단축합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
 | 기본 구성 | `base -> setup -> builder -> runner` |
+| base 이미지 | `node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2`로 digest 고정 (admin-web runner와 동일) |
+| 도구체인 | pnpm `10.34.5`, turbo `2.9.14` (레포 표준 도구체인) |
 | setup 단계 | `COPY . .` 후 `turbo prune --scope=idp-api --docker` |
-| builder 단계 | `out/json`만 먼저 복사해 `pnpm install` 후 `out/full` 소스를 덮어써 `pnpm exec turbo build --filter=idp-api^... --concurrency=1`으로 의존 워크스페이스를 빌드하고 `pnpm --filter=idp-api run build`으로 본체를 빌드 |
-| 러너 단계 | `CMD ["node", "apps/idp/api/dist/main.js"]` |
-| 캐시 정책 | `PNPM_STORE_DIR=/pnpm/store` 고정 후 `/pnpm/store`, `/app/.turbo`에 BuildKit cache mount 적용 |
+| builder 단계 | `out/json` 복사 → `pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline` → `out/full` 복사 → `pnpm exec turbo build --concurrency=2 --filter=idp-api...` 단일 빌드 → `pnpm --filter idp-api deploy --prod --legacy /app/deploy` |
+| 러너 단계 | `COPY --from=builder --chown=node:node /app/deploy/ .` 후 `CMD ["node", "dist/main.js"]` |
+| 캐시 정책 | `/pnpm/store`(pnpm store), `/app/.turbo`(turbo 작업 캐시)에 BuildKit cache mount 적용 |
+
+## 구조 개요
+
+- prune → install → 단일 turbo build → deploy 산출물 흐름으로 빌드한다.
+- 이전 구조의 이중 빌드(`--filter=idp-api^... --concurrency=1` 전체 그래프 빌드 후 `pnpm --filter idp-api run build` 재빌드)를 제거하고 `--filter=idp-api...` 단일 turbo 빌드로 통합했다.
+- runner는 빌더의 `/app` 전체를 복사하지 않고 `pnpm deploy --prod --legacy`가 구성한 `/app/deploy` 디렉터리(production 의존성 포함)만 복사해 이미지 크기를 축소했다.
+- `pnpm deploy`는 `apps/idp/api` 프로젝트 파일을 deploy 루트로 복사하므로 진입점은 WORKDIR 기준 `dist/main.js`다 (idp-api 자체 `start:prod` 스크립트와 동일 경로).
+- core-api 전용 검증 단계(route catalog 보존, 금지 패키지 스캔)는 idp-api에 적용하지 않는다.
 
 ## 구현 체크리스트
 
 - [x] `idp-api` 대상만 `turbo prune --scope=idp-api --docker` 수행
-- [x] `pnpm install` 단계에서 `PNPM_STORE_DIR=/pnpm/store` 및 `--store-dir /pnpm/store` 사용
+- [x] `out/json`을 먼저 복사하고 `pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline` 이후 `out/full`을 복사해 prune 산출물의 최신 lockfile이 오래된 `out/full/pnpm-lock.yaml`에 덮어써지지 않도록 보장
 - [x] `pnpm install` 단계 캐시 유지(`/pnpm/store`)
-- [x] `turbo build` 단계 캐시 유지(`/app/.turbo`) 추가
-- [x] prune 결과에 포함된 `turbo.json`을 그대로 사용해 별도 루트 설정 파일 복사를 제거
-- [x] `pnpm install`에 `--frozen-lockfile --prefer-offline` 적용으로 재현 가능한 캐시 빌드 보장
-- [x] 의존 워크스페이스를 `pnpm exec turbo build --filter=idp-api^... --concurrency=1`로, 본체를 `pnpm --filter=idp-api run build`로 빌드
-- [x] `out/json`을 먼저 복사하고 `pnpm install` 이후 `out/full`을 복사해 prune 산출물의 최신 lockfile이 오래된 `out/full/pnpm-lock.yaml`에 덮어써지지 않도록 보장
+- [x] `turbo build` 단계 캐시 유지(`/app/.turbo`) 및 `--concurrency=2` 병렬 빌드
+- [x] `pnpm --filter idp-api deploy --prod --legacy /app/deploy`로 production 의존성만 포함된 독립 실행 산출물 구성
+- [x] runner가 `/app/deploy`만 복사해 빌더 `/app` 전체 복사로 인한 이미지 비대화 제거
+- [x] 런타임 계약(`ENV NODE_ENV=production`, `ENV APP_PORT=3007`, `EXPOSE 3007`, `CMD ["node", ...]`) 유지
+- [x] base 이미지 digest 고정으로 공급망 재현성 확보
 
 ## 변경 이력
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
-| 2026-09-19 | idp-api 재구축(a8b8addde)으로 복원된 실제 빌드 단계(`--filter=idp-api^... --concurrency=1` + `pnpm --filter=idp-api run build`)에 맞춰 문서 재동기화 | zcode |
+| 2026-09-20 | core-api 최신 패턴으로 재작성: base 이미지 digest 고정(`node:24.21.0-alpine3.24@sha256:be80f...ea67e2`), pnpm `10.34.5`/turbo `2.9.14` 상향, 이중 빌드를 `--filter=idp-api... --concurrency=2` 단일 turbo 빌드로 통합, `pnpm deploy --prod --legacy` 산출물만 복사하는 슬림 runner로 전환 | zcode |
+| 2026-09-19 | idp-api 재구축(a8b8addde)으로 복원된 실제 빌드 단계(`--filter=idp-api^... --concurrency=1` + `pnpm --filter idp-api run build`)에 맞춰 문서 재동기화 | zcode |
 | 2026-03-09 | `idp-api` Docker 빌드에서 `--filter=idp-api^...`, `--concurrency=1`, 후행 `tsc` 단계를 제거하고 prune 결과 전체에 대해 `pnpm exec turbo build`를 실행하도록 단순화 | codex |
 | 2026-03-09 | `builder` 단계의 Turbo 실행을 `pnpm exec turbo build`로 전환해 설치 이후에는 로컬 workspace 버전을 사용하도록 정리 | codex |
 | 2026-03-09 | 전역 `turbo` 설치 버전을 루트 워크스페이스와 동일한 `2.8.14`로 고정해 Docker prune/build 버전 불일치를 제거 | codex |
