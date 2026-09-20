@@ -41,6 +41,11 @@ export class OidcClient extends OidcClientSchema {
 		description: "인증 성공 후 기본 복귀 URL",
 	})
 	declare defaultReturnTo: OidcClientSchema["defaultReturnTo"];
+	@StringFieldMetadata({
+		description: "로그아웃 후 리다이렉트 URI 목록(RP-Initiated Logout)",
+		each: true,
+	})
+	declare postLogoutRedirectUris: OidcClientSchema["postLogoutRedirectUris"];
 	@StringFieldMetadata({ description: "허용된 Grant 타입", each: true })
 	declare grantTypes: OidcClientSchema["grantTypes"];
 	@StringFieldMetadata({ description: "응답 타입", each: true })

@@ -1,5 +1,6 @@
 export * from "./login-payload.dto";
 export * from "./login-response.dto";
+export * from "./logout-response.dto";
 export * from "./set-current-space.dto";
 export * from "./sign-up-payload.dto";
 export * from "./token.dto";

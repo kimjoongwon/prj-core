@@ -65,6 +65,7 @@ function createUseCase() {
 				exp: Math.floor(Date.now() / 1000) + 3600,
 			}),
 			refresh_token: "refresh-token",
+			id_token: "header.id-token-payload.signature",
 		}),
 	};
 	const tokenStorageService = {
@@ -209,6 +210,7 @@ describe("HandleOidcCallbackUseCase", () => {
 				userAgent: "browser/1.0",
 				ipAddress: "198.51.100.7",
 				clientId: "admin-web",
+				idToken: "header.id-token-payload.signature",
 			},
 		);
 		expect(tokenService.setAccessTokenCookie).toHaveBeenCalled();

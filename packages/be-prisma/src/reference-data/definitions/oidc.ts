@@ -29,6 +29,8 @@ export interface OidcClientSeedData {
 	redirectUris: string[];
 	loginUrl?: string | null;
 	defaultReturnTo?: string | null;
+	/** RP-Initiated Logout(post_logout_redirect_uri) 등록 URI */
+	postLogoutRedirectUris?: string[];
 	grantTypes: string[];
 	responseTypes: string[];
 	tokenEndpointAuthMethod: string;
@@ -62,6 +64,8 @@ const oidcAdminRedirectUri =
 const oidcAdminLoginUrl =
 	process.env.OIDC_ADMIN_LOGIN_URL ||
 	resolveOidcSeedUrl(oidcAdminBaseUrl, "/admin/auth/login");
+const oidcAdminPostLogoutRedirectUri =
+	process.env.OIDC_ADMIN_POST_LOGOUT_REDIRECT_URI || oidcAdminLoginUrl;
 const oidcAdminDefaultReturnTo =
 	process.env.OIDC_ADMIN_DEFAULT_RETURN_TO ||
 	resolveOidcSeedUrl(oidcAdminBaseUrl, "/admin/dashboard");
@@ -79,6 +83,9 @@ const oidcStorybookRedirectUri =
 const oidcStorybookLoginUrl =
 	process.env.OIDC_STORYBOOK_LOGIN_URL ||
 	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/__storybook_auth/login");
+const oidcStorybookPostLogoutRedirectUri =
+	process.env.OIDC_STORYBOOK_POST_LOGOUT_REDIRECT_URI ||
+	oidcStorybookLoginUrl;
 const oidcStorybookDefaultReturnTo =
 	process.env.OIDC_STORYBOOK_DEFAULT_RETURN_TO ||
 	resolveOidcSeedUrl(oidcStorybookBaseUrl, "/");
@@ -102,6 +109,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		redirectUris: [oidcAdminRedirectUri],
 		loginUrl: oidcAdminLoginUrl,
 		defaultReturnTo: oidcAdminDefaultReturnTo,
+		postLogoutRedirectUris: [oidcAdminPostLogoutRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",
@@ -129,6 +137,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		redirectUris: [oidcStorybookRedirectUri],
 		loginUrl: oidcStorybookLoginUrl,
 		defaultReturnTo: oidcStorybookDefaultReturnTo,
+		postLogoutRedirectUris: [oidcStorybookPostLogoutRedirectUri],
 		grantTypes: ["authorization_code", "refresh_token"],
 		responseTypes: ["code"],
 		tokenEndpointAuthMethod: "client_secret_post",

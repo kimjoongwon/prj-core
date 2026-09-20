@@ -37,6 +37,7 @@ import {
 	AuditLogStatsDto,
 	AuthAuditLogDto,
 	EmailVerificationRequestedDto,
+	LogoutResponseDto,
 	PageMetaDto,
 	QueryAuthAuditLogDto,
 	SetCurrentSpaceDto,
@@ -329,14 +330,14 @@ export class AuthController {
 		operationId: "logout",
 		summary: "로그아웃",
 		description:
-			"현재 사용자를 로그아웃하고 IDP 토큰을 무효화하며 쿠키를 삭제합니다.",
+			"현재 사용자를 로그아웃하고 IDP 토큰을 무효화하며 RP 쿠키를 삭제합니다. 응답의 endSessionUrl은 OIDC RP-Initiated Logout(end_session) URL로, 브라우저가 이 URL로 이동하면 OP가 자기 세션을 정리합니다.",
 	})
 	@ApiResponse({
 		status: HttpStatus.OK,
 		description:
-			"로그아웃 성공 시 모든 인증 관련 쿠키가 삭제되고 토큰이 무효화됩니다.",
+			"로그아웃 성공 시 인증 관련 RP 쿠키가 삭제되고 토큰이 무효화됩니다.",
 	})
-	@ApiResponseEntity(Boolean, HttpStatus.OK)
+	@ApiResponseEntity(LogoutResponseDto, HttpStatus.OK)
 	@ResponseMessage("로그아웃 성공")
 	async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
 		const sessionId = req.cookies?.sessionId;

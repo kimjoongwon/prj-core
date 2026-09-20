@@ -30,9 +30,9 @@ export class OidcConfigurationService {
 		const issuer = oidcConfig?.issuer || "http://localhost:3000";
 		const interactionBaseUrl =
 			oidcConfig?.interactionBaseUrl || "http://localhost:3000/admin";
-		const clients = await this.loadClients();
+		const { providerClients, clientLoginUrls } = await this.loadClients();
 		const skipConsentClientIds = new Set(
-			clients
+			providerClients
 				.filter((client) => client.isFirstParty && client.skipConsent)
 				.map((client) => client.client_id),
 		);
@@ -40,21 +40,7 @@ export class OidcConfigurationService {
 		return {
 			adapter: this.adapterFactory.getAdapterFactory(),
 			findAccount: this.accountService.findAccount,
-			clients: clients.map((client) => ({
-				client_id: client.client_id,
-				client_secret: client.client_secret,
-				client_name: client.client_name,
-				application_type:
-					client.token_endpoint_auth_method === "none" ? "native" : "web",
-				redirect_uris: client.redirect_uris,
-				grant_types: client.grant_types,
-				response_types: client.response_types,
-				token_endpoint_auth_method: client.token_endpoint_auth_method,
-				scope: client.scope,
-				logo_uri: client.logo_uri,
-				policy_uri: client.policy_uri,
-				tos_uri: client.tos_uri,
-			})),
+			clients: providerClients,
 			loadExistingGrant: (ctx) =>
 				this.loadExistingGrant(ctx, skipConsentClientIds, issuer),
 
@@ -75,7 +61,24 @@ export class OidcConfigurationService {
 				revocation: { enabled: true },
 				userinfo: { enabled: true },
 				jwtUserinfo: { enabled: false },
-				rpInitiatedLogout: { enabled: true },
+				rpInitiatedLogout: {
+					enabled: true,
+					// 최초파티 로그아웃은 별도 확인 없이 폼을 자동 제출해
+					// 세션 종료 → post_logout_redirect_uri 복귀까지 한 번에 진행한다.
+					// provider 폼은 xsrf만 담고 있어 그대로 제출하면 RP 전용 로그아웃
+					// (그랜트만 폐기, OP 세션 유지)으로 처리된다. logout=yes를 추가해
+					// OP 세션 전체를 종료하는 경로로 보낸다.
+					logoutSource: (ctx, form) => {
+						const logoutAllForm = form.replace(
+							"</form>",
+							'<input type="hidden" name="logout" value="yes"/></form>',
+						);
+						ctx.type = "html";
+						ctx.body = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>로그아웃</title></head><body>${logoutAllForm}<script>document.forms[0].submit();</script></body></html>`;
+					},
+					postLogoutSuccessSource: (ctx, render) =>
+						this.renderPostLogoutSuccess(ctx, render, clientLoginUrls),
+				},
 				// Resource Indicators - JWT Access Token 발급을 위해 필수
 				resourceIndicators: {
 					enabled: true,
@@ -152,9 +155,13 @@ export class OidcConfigurationService {
 	}
 
 	/**
-	 * DB에서 활성 OIDC 클라이언트를 로드합니다.
+	 * DB에서 활성 OIDC 클라이언트를 provider 메타데이터와
+	 * clientId→로그인 화면 URL 매핑으로 로드합니다.
 	 */
-	private async loadClients(): Promise<RuntimeOidcProviderClient[]> {
+	private async loadClients(): Promise<{
+		providerClients: RuntimeOidcProviderClient[];
+		clientLoginUrls: Map<string, string>;
+	}> {
 		try {
 			const clients = await this.oidcClientRepository.findActiveClients();
 
@@ -164,14 +171,25 @@ export class OidcConfigurationService {
 					"활성 OIDC 클라이언트가 없습니다. 어드민에서 OIDC 클라이언트를 등록해야 인증이 동작합니다.",
 				);
 			}
-			return clients.map((client) => {
+
+			const clientLoginUrls = new Map<string, string>();
+			const providerClients = clients.map((client) => {
 				const runtimeClient = applyRuntimeManagedOidcClientConfig(client);
+
+				if (runtimeClient.loginUrl) {
+					clientLoginUrls.set(runtimeClient.clientId, runtimeClient.loginUrl);
+				}
 
 				return {
 					client_id: runtimeClient.clientId,
 					client_secret: runtimeClient.clientSecret || undefined,
 					client_name: runtimeClient.name,
+					application_type:
+						runtimeClient.tokenEndpointAuthMethod === "none"
+							? ("native" as const)
+							: ("web" as const),
 					redirect_uris: runtimeClient.redirectUris,
+					post_logout_redirect_uris: runtimeClient.postLogoutRedirectUris ?? [],
 					grant_types: runtimeClient.grantTypes,
 					response_types: runtimeClient.responseTypes,
 					token_endpoint_auth_method: runtimeClient.tokenEndpointAuthMethod,
@@ -183,12 +201,38 @@ export class OidcConfigurationService {
 					skipConsent: runtimeClient.skipConsent,
 				};
 			});
+
+			return { providerClients, clientLoginUrls };
 		} catch (error) {
 			this.logger.error("DB에서 OIDC 클라이언트 로드 실패");
 			this.logger.debug(String(error));
 		}
 
-		return [];
+		return { providerClients: [], clientLoginUrls: new Map() };
+	}
+
+	/**
+	 * RP-Initiated Logout 완료 화면. 클라이언트가 등록한 로그인 화면 URL로
+	 * 되돌리고(renderError와 같은 meta-refresh 방식), 알 수 없으면 기본
+	 * 안내 화면을 렌더한다.
+	 */
+	private renderPostLogoutSuccess(
+		ctx: Parameters<
+			NonNullable<
+				NonNullable<OidcConfiguration["features"]>["rpInitiatedLogout"]
+			>["postLogoutSuccessSource"]
+		>[0],
+		render: () => unknown,
+		clientLoginUrls: Map<string, string>,
+	) {
+		const clientId = ctx.oidc?.client?.clientId;
+		const loginUrl = clientId ? clientLoginUrls.get(clientId) : undefined;
+		if (!loginUrl) {
+			return render();
+		}
+
+		ctx.type = "html";
+		ctx.body = `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${loginUrl}"></head><body>Redirecting...</body></html>`;
 	}
 
 	private async loadExistingGrant(

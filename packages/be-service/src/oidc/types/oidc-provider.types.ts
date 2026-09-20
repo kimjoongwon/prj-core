@@ -116,6 +116,7 @@ export interface OidcClientConfig {
 	client_name?: string;
 	application_type?: "native" | "web";
 	redirect_uris: string[];
+	post_logout_redirect_uris?: string[];
 	grant_types?: string[];
 	response_types?: string[];
 	token_endpoint_auth_method?: string;
@@ -203,14 +204,40 @@ export interface ResourceIndicatorsConfig {
 	) => ResourceServerInfo | Promise<ResourceServerInfo>;
 }
 
+export interface RpInitiatedLogoutConfig {
+	enabled: boolean;
+	/**
+	 * end_session 확인 화면. 최초파티 로그아웃은 이미 사용자가 로그아웃을
+	 * 눌렀으므로 폼을 자동 제출해 바로 진행한다. provider가 만든 form HTML을
+	 * 받아 이를 포함한 페이지를 렌더하면 된다.
+	 */
+	logoutSource?: (
+		ctx: OidcProviderContext & { type: string; body: string },
+		form: string,
+	) => unknown;
+	/**
+	 * end_session 완료 화면. 클라이언트 로그인 화면으로 되돌릴 때 사용한다.
+	 * render를 호출하면 기본 안내 화면이 렌더된다.
+	 */
+	postLogoutSuccessSource?: (
+		ctx: OidcProviderContext & { type: string; body: string },
+		render: () => unknown,
+	) => unknown;
+}
+
 export interface OidcConfiguration {
 	adapter?: (modelName: string) => unknown;
 	findAccount?: (ctx: unknown, id: string, token?: unknown) => unknown;
 	clients?: OidcClientConfig[];
 	claims?: Record<string, string[]>;
 	features?: {
-		[key: string]: { enabled: boolean } | ResourceIndicatorsConfig | undefined;
+		[key: string]:
+			| { enabled: boolean }
+			| ResourceIndicatorsConfig
+			| RpInitiatedLogoutConfig
+			| undefined;
 		resourceIndicators?: ResourceIndicatorsConfig;
+		rpInitiatedLogout?: RpInitiatedLogoutConfig;
 	};
 	cookies?: {
 		keys: string[];

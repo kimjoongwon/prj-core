@@ -67,7 +67,7 @@ const withQueryKey = <T extends object, K>(
 };
 
 /**
- * 모든 Subject 목록을 조회합니다.
+ * 플랫폼 관리자용 Subject 목록을 조회합니다.
  * @summary Subject 목록 조회
  */
 export const getSubjects = (
@@ -529,7 +529,7 @@ export const prefetchGetSubjectsInfiniteQuery = async <
 };
 
 /**
- * Subject의 필드 목록을 조회합니다. entity:xxx Subject의 경우 DMMF에서 필드 정보를 가져옵니다.
+ * 플랫폼 관리자용 Subject 필드 목록을 조회합니다. entity:xxx Subject의 경우 DMMF에서 필드 정보를 가져옵니다.
  * @summary Subject 필드 목록 조회
  */
 export const getSubjectFields = (
@@ -1020,7 +1020,7 @@ export const prefetchGetSubjectFieldsInfiniteQuery = async <
 };
 
 /**
- * ID로 Subject를 조회합니다.
+ * 플랫폼 관리자용 Subject 상세 정보를 조회합니다.
  * @summary Subject 상세 조회
  */
 export const getSubjectById = (

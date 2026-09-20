@@ -88,6 +88,7 @@ export type OidcClientCountAggregateOutputType = {
   redirectUris: number
   loginUrl: number
   defaultReturnTo: number
+  postLogoutRedirectUris: number
   grantTypes: number
   responseTypes: number
   tokenEndpointAuthMethod: number
@@ -165,6 +166,7 @@ export type OidcClientCountAggregateInputType = {
   redirectUris?: true
   loginUrl?: true
   defaultReturnTo?: true
+  postLogoutRedirectUris?: true
   grantTypes?: true
   responseTypes?: true
   tokenEndpointAuthMethod?: true
@@ -277,6 +279,7 @@ export type OidcClientGroupByOutputType = {
   redirectUris: string[]
   loginUrl: string | null
   defaultReturnTo: string | null
+  postLogoutRedirectUris: string[]
   grantTypes: string[]
   responseTypes: string[]
   tokenEndpointAuthMethod: string
@@ -325,6 +328,7 @@ export type OidcClientWhereInput = {
   redirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   loginUrl?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   defaultReturnTo?: Prisma.StringNullableFilter<"OidcClient"> | string | null
+  postLogoutRedirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   grantTypes?: Prisma.StringNullableListFilter<"OidcClient">
   responseTypes?: Prisma.StringNullableListFilter<"OidcClient">
   tokenEndpointAuthMethod?: Prisma.StringFilter<"OidcClient"> | string
@@ -350,6 +354,7 @@ export type OidcClientOrderByWithRelationInput = {
   redirectUris?: Prisma.SortOrder
   loginUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultReturnTo?: Prisma.SortOrderInput | Prisma.SortOrder
+  postLogoutRedirectUris?: Prisma.SortOrder
   grantTypes?: Prisma.SortOrder
   responseTypes?: Prisma.SortOrder
   tokenEndpointAuthMethod?: Prisma.SortOrder
@@ -378,6 +383,7 @@ export type OidcClientWhereUniqueInput = Prisma.AtLeast<{
   redirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   loginUrl?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   defaultReturnTo?: Prisma.StringNullableFilter<"OidcClient"> | string | null
+  postLogoutRedirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   grantTypes?: Prisma.StringNullableListFilter<"OidcClient">
   responseTypes?: Prisma.StringNullableListFilter<"OidcClient">
   tokenEndpointAuthMethod?: Prisma.StringFilter<"OidcClient"> | string
@@ -403,6 +409,7 @@ export type OidcClientOrderByWithAggregationInput = {
   redirectUris?: Prisma.SortOrder
   loginUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultReturnTo?: Prisma.SortOrderInput | Prisma.SortOrder
+  postLogoutRedirectUris?: Prisma.SortOrder
   grantTypes?: Prisma.SortOrder
   responseTypes?: Prisma.SortOrder
   tokenEndpointAuthMethod?: Prisma.SortOrder
@@ -436,6 +443,7 @@ export type OidcClientScalarWhereWithAggregatesInput = {
   redirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   loginUrl?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
   defaultReturnTo?: Prisma.StringNullableWithAggregatesFilter<"OidcClient"> | string | null
+  postLogoutRedirectUris?: Prisma.StringNullableListFilter<"OidcClient">
   grantTypes?: Prisma.StringNullableListFilter<"OidcClient">
   responseTypes?: Prisma.StringNullableListFilter<"OidcClient">
   tokenEndpointAuthMethod?: Prisma.StringWithAggregatesFilter<"OidcClient"> | string
@@ -461,6 +469,7 @@ export type OidcClientCreateInput = {
   redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
   loginUrl?: string | null
   defaultReturnTo?: string | null
+  postLogoutRedirectUris?: Prisma.OidcClientCreatepostLogoutRedirectUrisInput | string[]
   grantTypes?: Prisma.OidcClientCreategrantTypesInput | string[]
   responseTypes?: Prisma.OidcClientCreateresponseTypesInput | string[]
   tokenEndpointAuthMethod?: string
@@ -486,6 +495,7 @@ export type OidcClientUncheckedCreateInput = {
   redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
   loginUrl?: string | null
   defaultReturnTo?: string | null
+  postLogoutRedirectUris?: Prisma.OidcClientCreatepostLogoutRedirectUrisInput | string[]
   grantTypes?: Prisma.OidcClientCreategrantTypesInput | string[]
   responseTypes?: Prisma.OidcClientCreateresponseTypesInput | string[]
   tokenEndpointAuthMethod?: string
@@ -511,6 +521,7 @@ export type OidcClientUpdateInput = {
   redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
   loginUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultReturnTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postLogoutRedirectUris?: Prisma.OidcClientUpdatepostLogoutRedirectUrisInput | string[]
   grantTypes?: Prisma.OidcClientUpdategrantTypesInput | string[]
   responseTypes?: Prisma.OidcClientUpdateresponseTypesInput | string[]
   tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
@@ -536,6 +547,7 @@ export type OidcClientUncheckedUpdateInput = {
   redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
   loginUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultReturnTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postLogoutRedirectUris?: Prisma.OidcClientUpdatepostLogoutRedirectUrisInput | string[]
   grantTypes?: Prisma.OidcClientUpdategrantTypesInput | string[]
   responseTypes?: Prisma.OidcClientUpdateresponseTypesInput | string[]
   tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
@@ -561,6 +573,7 @@ export type OidcClientCreateManyInput = {
   redirectUris?: Prisma.OidcClientCreateredirectUrisInput | string[]
   loginUrl?: string | null
   defaultReturnTo?: string | null
+  postLogoutRedirectUris?: Prisma.OidcClientCreatepostLogoutRedirectUrisInput | string[]
   grantTypes?: Prisma.OidcClientCreategrantTypesInput | string[]
   responseTypes?: Prisma.OidcClientCreateresponseTypesInput | string[]
   tokenEndpointAuthMethod?: string
@@ -586,6 +599,7 @@ export type OidcClientUpdateManyMutationInput = {
   redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
   loginUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultReturnTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postLogoutRedirectUris?: Prisma.OidcClientUpdatepostLogoutRedirectUrisInput | string[]
   grantTypes?: Prisma.OidcClientUpdategrantTypesInput | string[]
   responseTypes?: Prisma.OidcClientUpdateresponseTypesInput | string[]
   tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
@@ -611,6 +625,7 @@ export type OidcClientUncheckedUpdateManyInput = {
   redirectUris?: Prisma.OidcClientUpdateredirectUrisInput | string[]
   loginUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultReturnTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postLogoutRedirectUris?: Prisma.OidcClientUpdatepostLogoutRedirectUrisInput | string[]
   grantTypes?: Prisma.OidcClientUpdategrantTypesInput | string[]
   responseTypes?: Prisma.OidcClientUpdateresponseTypesInput | string[]
   tokenEndpointAuthMethod?: Prisma.StringFieldUpdateOperationsInput | string
@@ -636,6 +651,7 @@ export type OidcClientCountOrderByAggregateInput = {
   redirectUris?: Prisma.SortOrder
   loginUrl?: Prisma.SortOrder
   defaultReturnTo?: Prisma.SortOrder
+  postLogoutRedirectUris?: Prisma.SortOrder
   grantTypes?: Prisma.SortOrder
   responseTypes?: Prisma.SortOrder
   tokenEndpointAuthMethod?: Prisma.SortOrder
@@ -703,6 +719,10 @@ export type OidcClientCreateredirectUrisInput = {
   set: string[]
 }
 
+export type OidcClientCreatepostLogoutRedirectUrisInput = {
+  set: string[]
+}
+
 export type OidcClientCreategrantTypesInput = {
   set: string[]
 }
@@ -712,6 +732,11 @@ export type OidcClientCreateresponseTypesInput = {
 }
 
 export type OidcClientUpdateredirectUrisInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type OidcClientUpdatepostLogoutRedirectUrisInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -740,6 +765,7 @@ export type OidcClientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   redirectUris?: boolean
   loginUrl?: boolean
   defaultReturnTo?: boolean
+  postLogoutRedirectUris?: boolean
   grantTypes?: boolean
   responseTypes?: boolean
   tokenEndpointAuthMethod?: boolean
@@ -765,6 +791,7 @@ export type OidcClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   redirectUris?: boolean
   loginUrl?: boolean
   defaultReturnTo?: boolean
+  postLogoutRedirectUris?: boolean
   grantTypes?: boolean
   responseTypes?: boolean
   tokenEndpointAuthMethod?: boolean
@@ -790,6 +817,7 @@ export type OidcClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   redirectUris?: boolean
   loginUrl?: boolean
   defaultReturnTo?: boolean
+  postLogoutRedirectUris?: boolean
   grantTypes?: boolean
   responseTypes?: boolean
   tokenEndpointAuthMethod?: boolean
@@ -815,6 +843,7 @@ export type OidcClientSelectScalar = {
   redirectUris?: boolean
   loginUrl?: boolean
   defaultReturnTo?: boolean
+  postLogoutRedirectUris?: boolean
   grantTypes?: boolean
   responseTypes?: boolean
   tokenEndpointAuthMethod?: boolean
@@ -828,7 +857,7 @@ export type OidcClientSelectScalar = {
   tosUri?: boolean
 }
 
-export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"oidcClientId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "name" | "redirectUris" | "loginUrl" | "defaultReturnTo" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "isFirstParty" | "skipConsent" | "loginUi" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
+export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"oidcClientId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "name" | "redirectUris" | "loginUrl" | "defaultReturnTo" | "postLogoutRedirectUris" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "isFirstParty" | "skipConsent" | "loginUi" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
 
 export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OidcClient"
@@ -863,6 +892,10 @@ export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.Internal
      * @displayName 기본 복귀 URL
      */
     defaultReturnTo: string | null
+    /**
+     * @displayName 로그아웃 후 리다이렉트 URI 목록 (RP-Initiated Logout)
+     */
+    postLogoutRedirectUris: string[]
     /**
      * @displayName 허용된 Grant 타입
      */
@@ -1341,6 +1374,7 @@ export interface OidcClientFieldRefs {
   readonly redirectUris: Prisma.FieldRef<"OidcClient", 'String[]'>
   readonly loginUrl: Prisma.FieldRef<"OidcClient", 'String'>
   readonly defaultReturnTo: Prisma.FieldRef<"OidcClient", 'String'>
+  readonly postLogoutRedirectUris: Prisma.FieldRef<"OidcClient", 'String[]'>
   readonly grantTypes: Prisma.FieldRef<"OidcClient", 'String[]'>
   readonly responseTypes: Prisma.FieldRef<"OidcClient", 'String[]'>
   readonly tokenEndpointAuthMethod: Prisma.FieldRef<"OidcClient", 'String'>

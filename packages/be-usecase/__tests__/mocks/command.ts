@@ -57,6 +57,15 @@ export class RefreshTokenWithIdpCommand {
 	) {}
 }
 
+export class LogoutWithCookieCommand {
+	constructor(
+		readonly accessTokenCookie: string | undefined,
+		readonly authorizationHeader: string | undefined,
+		readonly sessionId: string | undefined,
+		readonly res: unknown,
+	) {}
+}
+
 export class GetCurrentSpaceQuery {}
 
 export class SetCurrentSpaceCommand {

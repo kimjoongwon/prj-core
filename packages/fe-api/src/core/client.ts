@@ -1,8 +1,8 @@
 export {
 	AXIOS_INSTANCE,
+	type CoreSessionRecoveryPolicy,
 	customInstance,
 	installCoreSessionRecovery,
-	type CoreSessionRecoveryPolicy,
 	refreshSessionTokens,
 	setApiBaseUrl,
 	setApiLocale,

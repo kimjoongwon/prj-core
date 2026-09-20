@@ -110,4 +110,33 @@ describe("OidcClient", () => {
 		expect(body.get("client_id")).toBe(protocolClient.clientId);
 		expect(body.get("id")).toBeNull();
 	});
+
+	it("end_session URL에 id_token_hint만 담는다(등록 URI 없음)", () => {
+		const client = createClient();
+
+		const endSessionUrl = new URL(client.buildEndSessionUrl("id-token"));
+
+		expect(endSessionUrl.origin).toBe("https://idp.example.com");
+		expect(endSessionUrl.pathname).toBe("/oidc/session/end");
+		expect(endSessionUrl.searchParams.get("id_token_hint")).toBe("id-token");
+		expect(endSessionUrl.searchParams.get("post_logout_redirect_uri")).toBeNull();
+		expect(endSessionUrl.searchParams.get("client_id")).toBeNull();
+	});
+
+	it("end_session URL에 post_logout_redirect_uri와 client_id를 포함한다", () => {
+		const client = createClient();
+
+		const endSessionUrl = new URL(
+			client.buildEndSessionUrl("id-token", {
+				postLogoutRedirectUri: "https://admin.example.com/admin/auth/login",
+				clientId: "admin-web",
+			}),
+		);
+
+		expect(endSessionUrl.searchParams.get("id_token_hint")).toBe("id-token");
+		expect(endSessionUrl.searchParams.get("post_logout_redirect_uri")).toBe(
+			"https://admin.example.com/admin/auth/login",
+		);
+		expect(endSessionUrl.searchParams.get("client_id")).toBe("admin-web");
+	});
 });

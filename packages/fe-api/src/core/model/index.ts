@@ -242,6 +242,7 @@ export * from "./loginRecoveryActionDto";
 export * from "./loginSuccessDto";
 export * from "./loginTrendItemDto";
 export * from "./logout200";
+export * from "./logoutResponseDto";
 export * from "./messageContentType";
 export * from "./moveAsset200";
 export * from "./moveAssetDto";

@@ -90,6 +90,8 @@ export async function handleOidcCallback(params: {
 				userAgent: resolveHttpUserAgent(params.req),
 				ipAddress: resolveHttpClientIp(params.req),
 				clientId: client.clientId,
+				// 로그아웃 시 end_session의 id_token_hint로 쓴다.
+				idToken: tokenResponse.id_token,
 			},
 		);
 	}

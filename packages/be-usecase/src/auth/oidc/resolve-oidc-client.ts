@@ -58,6 +58,7 @@ export async function resolveOidcClient(
 		redirectUri,
 		loginUrl: client.loginUrl,
 		defaultReturnTo: client.defaultReturnTo,
+		postLogoutRedirectUris: client.postLogoutRedirectUris,
 		scope: client.scope,
 	});
 	const hasLoginPage = Boolean(
@@ -72,6 +73,7 @@ export async function resolveOidcClient(
 
 	return {
 		...runtimeClient,
+		postLogoutRedirectUris: runtimeClient.postLogoutRedirectUris ?? [],
 		hasLoginPage,
 	};
 }

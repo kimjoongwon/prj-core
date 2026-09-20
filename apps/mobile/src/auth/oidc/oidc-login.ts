@@ -19,6 +19,7 @@ import type { MobileAuthSession } from "../_utils/auth";
 
 const AUTHORIZE_PATH = "/oidc/auth";
 const TOKEN_PATH = "/oidc/token";
+const REVOCATION_PATH = "/oidc/token/revocation";
 const OIDC_SCOPE = "openid profile email";
 
 const OIDC_REFRESH_TOKEN_LIFETIME_MS = 30 * 24 * 60 * 60 * 1000;
@@ -88,6 +89,36 @@ async function requestTokenEndpoint(
 		throw new Error("oidc_token_request_failed");
 	}
 	return toTokenSession(await response.json());
+}
+
+/**
+ * 로그아웃 시 발급받은 토큰을 RFC 7009 revocation 엔드포인트에서 폐기한다.
+ * public 클라이언트(user-mobile)라 client_id만으로 호출한다. refresh token을
+ * 폐기하면 OP가 연관 토큰(그랜트)을 함께 무효화한다. 폐기 실패가 로그아웃을
+ * 막아서는 안 되므로 best-effort로 실패를 삼킨다.
+ */
+export async function revokeOidcTokens(tokens: {
+	accessToken?: string | null;
+	refreshToken?: string | null;
+}): Promise<void> {
+	const revokeTargets = [tokens.refreshToken, tokens.accessToken].filter(
+		(token): token is string => Boolean(token),
+	);
+
+	for (const token of revokeTargets) {
+		try {
+			await fetch(`${OIDC_ISSUER_URL}${REVOCATION_PATH}`, {
+				method: "POST",
+				headers: { "Content-Type": "application/x-www-form-urlencoded" },
+				body: new URLSearchParams({
+					token,
+					client_id: MOBILE_NATIVE_CLIENT_ID,
+				}).toString(),
+			});
+		} catch {
+			// 네트워크 실패 시에도 나머지 토큰 폐기와 로컬 로그아웃을 계속한다.
+		}
+	}
 }
 
 export async function loginWithOidcSheet(): Promise<MobileAuthSession> {

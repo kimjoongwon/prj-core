@@ -6,6 +6,7 @@ interface RuntimeOidcClientConfig {
 	redirectUris?: string[];
 	loginUrl?: string | null;
 	defaultReturnTo?: string | null;
+	postLogoutRedirectUris?: string[] | null;
 }
 
 interface RuntimeManagedOidcClientEnvConfig {
@@ -14,6 +15,7 @@ interface RuntimeManagedOidcClientEnvConfig {
 	defaultReturnToPath?: string;
 	loginUrlEnv?: string;
 	loginUrlPath?: string;
+	postLogoutRedirectUriEnv?: string;
 	redirectUriEnv: string;
 	redirectUriPath?: string;
 }
@@ -28,6 +30,7 @@ const RUNTIME_MANAGED_OIDC_CLIENT_ENV_CONFIG: Record<
 		redirectUriPath: "/api/v1/auth/callback?clientId=admin-web",
 		loginUrlEnv: "OIDC_ADMIN_LOGIN_URL",
 		loginUrlPath: "/admin/auth/login",
+		postLogoutRedirectUriEnv: "OIDC_ADMIN_POST_LOGOUT_REDIRECT_URI",
 		defaultReturnToEnv: "OIDC_ADMIN_DEFAULT_RETURN_TO",
 		defaultReturnToPath: "/admin/dashboard",
 	},
@@ -37,6 +40,7 @@ const RUNTIME_MANAGED_OIDC_CLIENT_ENV_CONFIG: Record<
 		redirectUriPath: "/api/v1/auth/callback?clientId=storybook-web",
 		loginUrlEnv: "OIDC_STORYBOOK_LOGIN_URL",
 		loginUrlPath: "/__storybook_auth/login",
+		postLogoutRedirectUriEnv: "OIDC_STORYBOOK_POST_LOGOUT_REDIRECT_URI",
 		defaultReturnToEnv: "OIDC_STORYBOOK_DEFAULT_RETURN_TO",
 		defaultReturnToPath: "/",
 	},
@@ -74,6 +78,13 @@ export function applyRuntimeManagedOidcClientConfig<
 		envConfig.baseUrlEnv,
 		envConfig.loginUrlPath,
 	);
+	// post_logout_redirect_uri는 명시 env가 없으면 로그인 화면으로 돌아간다(시드 규칙과 동일).
+	const postLogoutRedirectUri =
+		resolveRuntimeUrl(
+			envConfig.postLogoutRedirectUriEnv,
+			envConfig.baseUrlEnv,
+			envConfig.loginUrlPath,
+		) ?? client.loginUrl ?? undefined;
 	const defaultReturnTo = resolveRuntimeUrl(
 		envConfig.defaultReturnToEnv,
 		envConfig.baseUrlEnv,
@@ -92,6 +103,14 @@ export function applyRuntimeManagedOidcClientConfig<
 			? { redirectUri: redirectUris[0] ?? client.redirectUri }
 			: {}),
 		...(loginUrl ? { loginUrl } : {}),
+		...(postLogoutRedirectUri
+			? {
+					postLogoutRedirectUris: uniqueValues([
+						postLogoutRedirectUri,
+						...(client.postLogoutRedirectUris ?? []),
+					]),
+				}
+			: {}),
 		...(defaultReturnTo ? { defaultReturnTo } : {}),
 	} as TClient;
 }

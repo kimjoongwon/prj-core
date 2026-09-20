@@ -5003,7 +5003,8 @@ export const runtimeManifest: RuntimeManifest = {
 									nullable: false,
 								},
 								data: {
-									type: "boolean",
+									$ref: "#/components/schemas/LogoutResponseDto",
+									nullable: true,
 								},
 							},
 						},
@@ -12292,14 +12293,14 @@ export const runtimeManifest: RuntimeManifest = {
 				accessToken: {
 					type: "string",
 					description: "새로 발급된 JWT Access Token",
-					example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+					example: "eyJhbGciOiJIUzI1NiIsR5cCI6IkpXVCJ9...",
 				},
 				sessionId: {
 					type: "string",
-					nullable: true,
 					description:
-						"갱신된 세션 식별자. HttpOnly sessionId 쿠키를 가진 웹 클라이언트가 스토어를 부트스트랩할 때 사용한다.",
+						"갱신된 세션 식별자. HttpOnly sessionId 쿠키를 가진 웹 클라이언트가 스토어를 부트스트랩할 때 사용한다. 쿠키가 없으면 null",
 					example: "admin-web.0123456789abcdef0123456789abcdef",
+					nullable: true,
 				},
 				refreshToken: {
 					type: "string",
@@ -12451,6 +12452,19 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: ["tenantId"],
+		},
+		LogoutResponseDto: {
+			type: "object",
+			properties: {
+				endSessionUrl: {
+					type: "string",
+					description:
+						"OIDC RP-Initiated Logout(end_session) URL. 브라우저가 이 URL로 최상위 내비게이션하면 OP가 자기 세션과 쿠키를 정리한다. 세션 레코드에 ID Token이 없으면 null",
+					example:
+						"http://localhost:3007/oidc/session/end?id_token_hint=eyJhbGciOiJSUzI1NiJ9...",
+					nullable: true,
+				},
+			},
 		},
 		AuthAuditResult: {
 			type: "string",

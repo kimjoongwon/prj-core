@@ -5749,6 +5749,7 @@ export const OidcClientScalarFieldEnum = {
   redirectUris: 'redirectUris',
   loginUrl: 'loginUrl',
   defaultReturnTo: 'defaultReturnTo',
+  postLogoutRedirectUris: 'postLogoutRedirectUris',
   grantTypes: 'grantTypes',
   responseTypes: 'responseTypes',
   tokenEndpointAuthMethod: 'tokenEndpointAuthMethod',

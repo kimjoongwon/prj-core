@@ -43,6 +43,7 @@ export class TokenStorageService {
 			ipAddress: string;
 			clientId?: string;
 			clientKey?: string;
+			idToken?: string;
 		},
 	): Promise<void> {
 		const authConfig = this.configService.get<AuthConfig>("auth");
@@ -59,6 +60,7 @@ export class TokenStorageService {
 			createdAt: now,
 			lastActivityAt: now,
 			clientKey: metadata.clientKey,
+			idToken: metadata.idToken,
 		};
 
 		await this.redisService.set(key, JSON.stringify(sessionData), ttl);

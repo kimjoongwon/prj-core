@@ -14,22 +14,11 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from "./userDto";
 
-export interface TokenRefreshResponseDto {
-	/** 새로 발급된 JWT Access Token */
-	accessToken: string;
+export interface LogoutResponseDto {
 	/**
-	 * 갱신된 세션 식별자. HttpOnly sessionId 쿠키를 가진 웹 클라이언트가 스토어를 부트스트랩할 때 사용한다. 쿠키가 없으면 null
+	 * OIDC RP-Initiated Logout(end_session) URL. 브라우저가 이 URL로 최상위 내비게이션하면 OP가 자기 세션과 쿠키를 정리한다. 세션 레코드에 ID Token이 없으면 null
 	 * @nullable
 	 */
-	sessionId?: string | null;
-	/** 새로 발급된 JWT Refresh Token */
-	refreshToken: string;
-	/** Access Token 만료 시간 (Unix timestamp, milliseconds) */
-	accessTokenExpiresAt: number;
-	/** Refresh Token 만료 시간 (Unix timestamp, milliseconds) */
-	refreshTokenExpiresAt: number;
-	/** 인증된 사용자 정보 */
-	user: UserDto;
+	endSessionUrl?: string | null;
 }

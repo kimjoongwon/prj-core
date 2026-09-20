@@ -3,7 +3,7 @@ import { getCurrentSpace, getMySpaces, verifyToken } from "@cocrepo/api/core/aut
 import type { SpaceDto } from "@cocrepo/api/core/model";
 import { setApiBaseUrl } from "@cocrepo/api/core/client";
 import { getCoreApiBaseUrl } from "./auth-config";
-import { loginWithOidcSheet, refreshOidcSession } from "./oidc/oidc-login";
+import { loginWithOidcSheet, refreshOidcSession, revokeOidcTokens } from "./oidc/oidc-login";
 import {
   clearNativeAuthSession,
   clearNativeSpaceSelection,
@@ -95,6 +95,12 @@ class MobileSession {
     this.setVerifying(true);
     try {
       configureIdpClient(() => this.refreshSession());
+      // 로컬 세션을 지우기 전에 OP에 토큰을 폐기한다(RFC 7009).
+      // 폐기는 best-effort라 실패해도 로그아웃을 계속한다.
+      await revokeOidcTokens({
+        accessToken: mobileApiScope.accessToken,
+        refreshToken: mobileApiScope.refreshToken,
+      });
       await this.clearLocalSession();
       this.markUnauthenticated("logout");
     } catch (error) {

@@ -42,6 +42,12 @@ export class OidcClientSchema
 	})
 	defaultReturnTo!: string | null;
 
+	@StringValidation({
+		description: "로그아웃 후 리다이렉트 URI 목록(RP-Initiated Logout)",
+		each: true,
+	})
+	postLogoutRedirectUris!: string[];
+
 	@StringValidation({ description: "허용된 Grant 타입", each: true })
 	grantTypes!: string[];
 

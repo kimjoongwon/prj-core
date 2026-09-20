@@ -166,6 +166,32 @@ export class OidcClient {
 		}
 	}
 
+	/**
+	 * OIDC RP-Initiated Logout 엔드포인트(end_session) URL을 만든다.
+	 * 브라우저가 이 URL로 최상위 내비게이션하면 OP가 자기 세션과 쿠키를
+	 * 스스로 정리한다. id_token_hint로 로그인 시 발급받은 ID Token을 전달하고,
+	 * postLogoutRedirectUri는 클라이언트에 등록된 URI여야 OP가 리다이렉트한다.
+	 */
+	buildEndSessionUrl(
+		idTokenHint: string,
+		options: { postLogoutRedirectUri?: string; clientId?: string } = {},
+	): string {
+		const endSessionUrl = new URL(
+			`${this.oidcConfig.issuer}/oidc/session/end`,
+		);
+		endSessionUrl.searchParams.set("id_token_hint", idTokenHint);
+		if (options.postLogoutRedirectUri) {
+			endSessionUrl.searchParams.set(
+				"post_logout_redirect_uri",
+				options.postLogoutRedirectUri,
+			);
+		}
+		if (options.clientId) {
+			endSessionUrl.searchParams.set("client_id", options.clientId);
+		}
+		return endSessionUrl.toString();
+	}
+
 	private resolveConfig(
 		rawConfig?: Partial<OidcServerConfig>,
 	): OidcServerConfig {

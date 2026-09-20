@@ -989,6 +989,10 @@ export const prefetchOidcCallbackInfiniteQuery = async <
 	return queryClient;
 };
 
+/**
+ * 리프레시 토큰을 사용하여 IDP에서 새로운 토큰을 발급받습니다.
+ * @summary 토큰 재발급
+ */
 export const refreshToken = (
 	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
@@ -3522,7 +3526,7 @@ export const useSetCurrentSpace = <
 	return useMutation(getSetCurrentSpaceMutationOptions(options), queryClient);
 };
 /**
- * 현재 사용자를 로그아웃하고 IDP 토큰을 무효화하며 쿠키를 삭제합니다.
+ * 현재 사용자를 로그아웃하고 IDP 토큰을 무효화하며 RP 쿠키를 삭제합니다. 응답의 endSessionUrl은 OIDC RP-Initiated Logout(end_session) URL로, 브라우저가 이 URL로 이동하면 OP가 자기 세션을 정리합니다.
  * @summary 로그아웃
  */
 export const logout = (
