@@ -1,4 +1,4 @@
-FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS base
+FROM docker.io/library/node:24.21.0-alpine3.24@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1 AS base
 
 ARG PNPM_VERSION=10.34.5
 ARG TURBO_VERSION=2.9.14
@@ -38,7 +38,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
         cp -R apps/proposal/web/public apps/proposal/web/.next/standalone/apps/proposal/web/public; \
       fi'
 
-FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS runner
+FROM docker.io/library/node:24.21.0-alpine3.24@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1 AS runner
 
 WORKDIR /app
 
