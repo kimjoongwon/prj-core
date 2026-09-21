@@ -43,5 +43,14 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    # node 베이스 이미지 메이저 범프는 LTS 전환 검증이 필요한 수동 업그레이드 작업으로만 수행한다.
+    # (docker.io/library/node 접두사 형태 둘 다 커버)
+    ignore:
+      - dependency-name: "node"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "library/node"
+        update-types:
+          - "version-update:semver-major"
     commit-message:
       prefix: "chore"
