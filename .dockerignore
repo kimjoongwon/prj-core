@@ -41,6 +41,11 @@ test-results
 .vscode
 .wt
 browsers
+**/browsers
+.playwright-cli
+# 모바일 네이티브 로컬 빌드 산출물(iOS/Android)은 서버 이미지 빌드에 불필요
+apps/mobile/ios
+apps/mobile/android
 storybook-static
 **/storybook-static
 # Git 히스토리 제외 - 보안 및 이미지 크기 최적화
