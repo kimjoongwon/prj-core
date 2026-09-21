@@ -14,7 +14,7 @@ pipeline {
         string(
             name: 'IMAGE_TAG',
             defaultValue: '',
-            description: 'Target image tag (usually upstream build number)'
+            description: 'Target image tag (빌드 커밋 SHA 앞 12자 기준)'
         )
         choice(
             name: 'DEPLOY_ENV',
@@ -84,6 +84,13 @@ pipeline {
                         REPO_URL="$(printf %s "${GITOPS_REPO}" | sed "s|^https://|https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@|")"
                         rm -rf "${GITOPS_DIR}"
                         git clone --depth 5 --branch "${GITOPS_BRANCH}" "${REPO_URL}" "${GITOPS_DIR}"
+
+                        # yq 부트스트랩: prj-devops에 install-yq.sh가 있을 때만 수행
+                        # (양쪽 저장소 반영 순서와 무관하게 동작하도록 조건부)
+                        if [ -f "${GITOPS_DIR}/scripts/jenkins/install-yq.sh" ]; then
+                            bash "${GITOPS_DIR}/scripts/jenkins/install-yq.sh" --prefix "${PWD}/.tools"
+                            export PATH="${PWD}/.tools/bin:${PATH}"
+                        fi
 
                         bash "${GITOPS_DIR}/scripts/jenkins/update-gitops-image-tag.sh" \
                           --app "${APP_NAME}" \

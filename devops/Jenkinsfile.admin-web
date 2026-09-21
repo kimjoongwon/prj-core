@@ -35,23 +35,29 @@ podTemplate(
     node(POD_LABEL) {
         // 브랜치에 따른 환경 설정
         def ENV_NAME = env.BRANCH_NAME == 'main' ? 'prod' : 'stg'
-        def IMAGE_TAG = env.BUILD_NUMBER
+        // SHA-12 immutable tag: 이미지-빌드커밋 1:1 추적. 실제 값은 checkout 후에 확정한다.
+        def IMAGE_TAG = ''
         def PUSH_LATEST = ENV_NAME != 'prod'
         def IMAGE_PATH = "${HARBOR_REGISTRY}/${ENV_NAME}/admin-web"
-        def IMAGE_TAG_ARGS = ["-t ${IMAGE_PATH}:${IMAGE_TAG}"]
-        if (PUSH_LATEST) {
-            IMAGE_TAG_ARGS << "-t ${IMAGE_PATH}:latest"
-        }
-        def CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
-        if (PUSH_LATEST) {
-            CLEANUP_IMAGES << "${IMAGE_PATH}:latest"
-        }
+        def IMAGE_TAG_ARGS = []
+        def CLEANUP_IMAGES = []
         def GITOPS_APP = 'admin-web'
         def GITOPS_UPDATE_JOB = CONFIGURED_GITOPS_UPDATE_JOB
 
         try {
             stage('Checkout') {
-                checkout scm
+                def scmVars = checkout scm
+                def commitSha = scmVars.GIT_COMMIT ?: env.GIT_COMMIT ?: ''
+                if (commitSha.length() < 12) {
+                    error("GIT_COMMIT을 확인할 수 없어 SHA 이미지 태그를 만들 수 없습니다: '${commitSha}'")
+                }
+                IMAGE_TAG = commitSha.substring(0, 12)
+                IMAGE_TAG_ARGS = ["-t ${IMAGE_PATH}:${IMAGE_TAG}"]
+                CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
+                if (PUSH_LATEST) {
+                    IMAGE_TAG_ARGS << "-t ${IMAGE_PATH}:latest"
+                    CLEANUP_IMAGES << "${IMAGE_PATH}:latest"
+                }
             }
 
             stage('Build and Push Image') {
