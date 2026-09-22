@@ -119,7 +119,9 @@ describe("OidcClient", () => {
 		expect(endSessionUrl.origin).toBe("https://idp.example.com");
 		expect(endSessionUrl.pathname).toBe("/oidc/session/end");
 		expect(endSessionUrl.searchParams.get("id_token_hint")).toBe("id-token");
-		expect(endSessionUrl.searchParams.get("post_logout_redirect_uri")).toBeNull();
+		expect(
+			endSessionUrl.searchParams.get("post_logout_redirect_uri"),
+		).toBeNull();
 		expect(endSessionUrl.searchParams.get("client_id")).toBeNull();
 	});
 
@@ -134,6 +136,24 @@ describe("OidcClient", () => {
 		);
 
 		expect(endSessionUrl.searchParams.get("id_token_hint")).toBe("id-token");
+		expect(endSessionUrl.searchParams.get("post_logout_redirect_uri")).toBe(
+			"https://admin.example.com/admin/auth/login",
+		);
+		expect(endSessionUrl.searchParams.get("client_id")).toBe("admin-web");
+	});
+
+	it("end_session URL에 id_token_hint 없이 client_id만 담는다(레거시 세션 확인 화면 경유)", () => {
+		const client = createClient();
+
+		const endSessionUrl = new URL(
+			client.buildEndSessionUrl(null, {
+				postLogoutRedirectUri: "https://admin.example.com/admin/auth/login",
+				clientId: "admin-web",
+			}),
+		);
+
+		expect(endSessionUrl.pathname).toBe("/oidc/session/end");
+		expect(endSessionUrl.searchParams.get("id_token_hint")).toBeNull();
 		expect(endSessionUrl.searchParams.get("post_logout_redirect_uri")).toBe(
 			"https://admin.example.com/admin/auth/login",
 		);

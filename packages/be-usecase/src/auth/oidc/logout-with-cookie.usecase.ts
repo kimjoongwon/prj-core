@@ -9,14 +9,17 @@ import { decodeAccessToken } from "./decode-access-token";
 import { extractBearerToken } from "./extract-bearer-token";
 import { resolveClientIdFromSessionId } from "./resolve-client-id-from-session-id";
 import { resolveOidcClient } from "./resolve-oidc-client";
+import { ResolvedOidcClient } from "./resolved-oidc-client";
 import { toProtocolClientConfig } from "./to-protocol-client-config";
 
 export interface LogoutWithCookieResult {
 	/**
 	 * OIDC RP-Initiated Logout(end_session) URL. 세션 레코드에 보관된
-	 * ID Token이 있을 때 제공되며, 브라우저가 이 URL로 최상위 내비게이션하면
-	 * OP가 자기 세션(_session 쿠키 등)을 스스로 정리한다. ID Token이 없는
-	 * 세션(레거시)에서는 null이고 호출자는 자기 로그인 화면으로 이동한다.
+	 * ID Token이 있으면 id_token_hint로 함께 전달해 확인 없이 진행되고,
+	 * 없는 세션(레거시)은 client_id만 담아 OP 확인 화면(한 번 클릭)을
+	 * 거친다. 브라우저가 이 URL로 최상위 내비게이션하면 OP가 자기 세션
+	 * (_session 쿠키 등)을 스스로 정리한다. OIDC 클라이언트 조회에 실패하면
+	 * null이고 호출자는 자기 로그인 화면으로 이동한다.
 	 */
 	endSessionUrl: string | null;
 }
@@ -40,26 +43,38 @@ export class LogoutWithCookieUseCase {
 		const sessionLookup = command.sessionId
 			? await this.tokenStorageService.getSessionBySessionId(command.sessionId)
 			: null;
+		// 클라이언트 조회는 end_session URL 구성과 OP 토큰 폐기에만 쓴다.
+		// 조회가 실패해도 RP 쿠키 정리까지 막히지 않게 best-effort로 진행한다.
 		const clientId = resolveClientIdFromSessionId(command.sessionId);
-		const client = await resolveOidcClient(this.oidcClientService, clientId, {
-			requireActive: false,
-			requireLoginPage: false,
-		});
-		const endSessionUrl = sessionLookup?.session.idToken
-			? this.oidcClient.buildEndSessionUrl(sessionLookup.session.idToken, {
-					postLogoutRedirectUri: client.postLogoutRedirectUris[0],
-					clientId: client.clientId,
-				})
+		let client: ResolvedOidcClient | null = null;
+		try {
+			client = await resolveOidcClient(this.oidcClientService, clientId, {
+				requireActive: false,
+				requireLoginPage: false,
+			});
+		} catch (error) {
+			this.logger.warn(`로그아웃용 OIDC 클라이언트 조회 실패: ${error}`);
+		}
+		const endSessionUrl = client
+			? this.oidcClient.buildEndSessionUrl(
+					sessionLookup?.session.idToken ?? null,
+					{
+						postLogoutRedirectUri: client.postLogoutRedirectUris[0],
+						clientId: client.clientId,
+					},
+				)
 			: null;
 
 		const accessToken =
 			command.accessTokenCookie ??
 			extractBearerToken(command.authorizationHeader);
 		if (accessToken) {
-			await this.oidcClient.revokeToken(
-				accessToken,
-				toProtocolClientConfig(client),
-			);
+			if (client) {
+				await this.oidcClient.revokeToken(
+					accessToken,
+					toProtocolClientConfig(client),
+				);
+			}
 
 			try {
 				const payload = decodeAccessToken(accessToken);

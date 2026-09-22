@@ -12459,7 +12459,7 @@ export const runtimeManifest: RuntimeManifest = {
 				endSessionUrl: {
 					type: "string",
 					description:
-						"OIDC RP-Initiated Logout(end_session) URL. 브라우저가 이 URL로 최상위 내비게이션하면 OP가 자기 세션과 쿠키를 정리한다. 세션 레코드에 ID Token이 없으면 null",
+						"OIDC RP-Initiated Logout(end_session) URL. 브라우저가 이 URL로 최상위 내비게이션하면 OP가 자기 세션과 쿠키를 정리한다. 세션 레코드에 ID Token이 있는 경우 id_token_hint도 포함되고, 없는 세션(레거시)은 client_id만 담겨 OP 확인 화면(한 번 클릭)을 거친다. OIDC 클라이언트 조회에 실패하면 null",
 					example:
 						"http://localhost:3007/oidc/session/end?id_token_hint=eyJhbGciOiJSUzI1NiJ9...",
 					nullable: true,

@@ -11,7 +11,9 @@ import { useT } from "../../../i18n";
  *
  * 서버 응답의 endSessionUrl(OIDC RP-Initiated Logout)로 최상위 내비게이션하면
  * OP가 자기 세션(_session 쿠키)을 정리한 뒤 로그인 화면으로 되돌립니다.
- * 세션 레코드에 ID Token이 없어 URL이 없으면 앱 로그인 화면으로 이동합니다.
+ * ID Token이 있는 세션은 확인 없이, 없는 세션(레거시)은 OP 확인 화면(한 번
+ * 클릭)을 거칩니다. URL이 없으면(클라이언트 조회 실패 등) 앱 로그인 화면으로
+ * 이동합니다.
  */
 export const AccountLogoutButton = () => {
 	const t = useT();

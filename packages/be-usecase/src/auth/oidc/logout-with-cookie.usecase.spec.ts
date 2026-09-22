@@ -36,8 +36,26 @@ function createMocks() {
 		revokeToken: jest.fn().mockResolvedValue(undefined),
 		buildEndSessionUrl: jest
 			.fn()
-			.mockReturnValue(
-				"http://localhost:3007/oidc/session/end?id_token_hint=stored-id-token",
+			.mockImplementation(
+				(
+					idTokenHint: string | null,
+					options: { postLogoutRedirectUri?: string; clientId?: string } = {},
+				) => {
+					const endSessionParams = new URLSearchParams();
+					if (idTokenHint) {
+						endSessionParams.set("id_token_hint", idTokenHint);
+					}
+					if (options.postLogoutRedirectUri) {
+						endSessionParams.set(
+							"post_logout_redirect_uri",
+							options.postLogoutRedirectUri,
+						);
+					}
+					if (options.clientId) {
+						endSessionParams.set("client_id", options.clientId);
+					}
+					return `http://localhost:3007/oidc/session/end?${endSessionParams.toString()}`;
+				},
 			),
 	};
 	const tokenStorageService = {
@@ -110,9 +128,9 @@ describe("LogoutWithCookieUseCase", () => {
 
 		const result = await mocks.useCase.execute(command);
 
-		expect(mocks.tokenStorageService.getSessionBySessionId).toHaveBeenCalledWith(
-			"admin-web.0123456789abcdef0123456789abcdef",
-		);
+		expect(
+			mocks.tokenStorageService.getSessionBySessionId,
+		).toHaveBeenCalledWith("admin-web.0123456789abcdef0123456789abcdef");
 		expect(mocks.oidcClient.buildEndSessionUrl).toHaveBeenCalledWith(
 			"stored-id-token",
 			{
@@ -121,7 +139,7 @@ describe("LogoutWithCookieUseCase", () => {
 			},
 		);
 		expect(result.endSessionUrl).toBe(
-			"http://localhost:3007/oidc/session/end?id_token_hint=stored-id-token",
+			"http://localhost:3007/oidc/session/end?id_token_hint=stored-id-token&post_logout_redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fadmin%2Fauth%2Flogin&client_id=admin-web",
 		);
 	});
 
@@ -135,14 +153,16 @@ describe("LogoutWithCookieUseCase", () => {
 
 		await mocks.useCase.execute(command);
 
-		const clearedCookieNames = (mocks.res.clearCookie as jest.Mock).mock.calls.map(
-			([cookieName]) => cookieName,
-		);
+		const clearedCookieNames = (
+			mocks.res.clearCookie as jest.Mock
+		).mock.calls.map(([cookieName]) => cookieName);
 		expect(clearedCookieNames).toEqual(
 			expect.not.arrayContaining(["_session", "_interaction"]),
 		);
 		expect(clearedCookieNames).toContain("sessionId");
-		expect(mocks.tokenService.clearTokenCookies).toHaveBeenCalledWith(mocks.res);
+		expect(mocks.tokenService.clearTokenCookies).toHaveBeenCalledWith(
+			mocks.res,
+		);
 	});
 
 	it("access 토큰을 폐기·블랙리스트에 추가하고 세션 레코드를 삭제한다", async () => {
@@ -169,7 +189,7 @@ describe("LogoutWithCookieUseCase", () => {
 		);
 	});
 
-	it("세션 레코드에 ID Token이 없으면 endSessionUrl로 null을 반환한다", async () => {
+	it("세션 레코드에 ID Token이 없으면 client_id만 담은 확인 화면 end_session URL을 반환한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
 			userId: "01J00000000000000000001001",
@@ -184,8 +204,40 @@ describe("LogoutWithCookieUseCase", () => {
 
 		const result = await mocks.useCase.execute(command);
 
-		expect(mocks.oidcClient.buildEndSessionUrl).not.toHaveBeenCalled();
+		expect(mocks.oidcClient.buildEndSessionUrl).toHaveBeenCalledWith(null, {
+			postLogoutRedirectUri: "http://localhost:3000/admin/auth/login",
+			clientId: "admin-web",
+		});
+		expect(result.endSessionUrl).toBe(
+			"http://localhost:3007/oidc/session/end?post_logout_redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fadmin%2Fauth%2Flogin&client_id=admin-web",
+		);
+	});
+
+	it("OIDC 클라이언트 조회가 실패해도 쿠키 정리와 세션 삭제는 계속한다", async () => {
+		const mocks = createMocks();
+		mocks.oidcClientService.getByClientId.mockRejectedValue(
+			new Error("db unavailable"),
+		);
+		const command = createLogoutCommand({
+			accessTokenCookie: mocks.accessToken,
+			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			res: mocks.res,
+		});
+
+		const result = await mocks.useCase.execute(command);
+
 		expect(result.endSessionUrl).toBeNull();
+		expect(mocks.oidcClient.revokeToken).not.toHaveBeenCalled();
+		expect(mocks.tokenService.clearTokenCookies).toHaveBeenCalledWith(
+			mocks.res,
+		);
+		const clearedCookieNames = (
+			mocks.res.clearCookie as jest.Mock
+		).mock.calls.map(([cookieName]) => cookieName);
+		expect(clearedCookieNames).toContain("sessionId");
+		// OP 폐기 외 토큰 정리(블랙리스트/세션 삭제)는 클라이언트와 무관하게 계속한다.
+		expect(mocks.tokenStorageService.addToBlacklist).toHaveBeenCalled();
+		expect(mocks.tokenStorageService.deleteSession).toHaveBeenCalled();
 	});
 
 	it("sessionId가 없으면 세션 조회 없이 사용자 refresh 토큰을 삭제한다", async () => {

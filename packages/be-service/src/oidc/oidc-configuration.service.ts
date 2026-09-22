@@ -36,6 +36,11 @@ export class OidcConfigurationService {
 				.filter((client) => client.isFirstParty && client.skipConsent)
 				.map((client) => client.client_id),
 		);
+		const firstPartyClientIds = new Set(
+			providerClients
+				.filter((client) => client.isFirstParty)
+				.map((client) => client.client_id),
+		);
 
 		return {
 			adapter: this.adapterFactory.getAdapterFactory(),
@@ -63,19 +68,15 @@ export class OidcConfigurationService {
 				jwtUserinfo: { enabled: false },
 				rpInitiatedLogout: {
 					enabled: true,
-					// 최초파티 로그아웃은 별도 확인 없이 폼을 자동 제출해
-					// 세션 종료 → post_logout_redirect_uri 복귀까지 한 번에 진행한다.
-					// provider 폼은 xsrf만 담고 있어 그대로 제출하면 RP 전용 로그아웃
-					// (그랜트만 폐기, OP 세션 유지)으로 처리된다. logout=yes를 추가해
-					// OP 세션 전체를 종료하는 경로로 보낸다.
-					logoutSource: (ctx, form) => {
-						const logoutAllForm = form.replace(
-							"</form>",
-							'<input type="hidden" name="logout" value="yes"/></form>',
-						);
-						ctx.type = "html";
-						ctx.body = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>로그아웃</title></head><body>${logoutAllForm}<script>document.forms[0].submit();</script></body></html>`;
-					},
+					// 검증된 id_token_hint를 가진 최초파티 로그아웃만 별도 확인 없이
+					// 폼을 자동 제출해 세션 종료 → post_logout_redirect_uri 복귀까지
+					// 한 번에 진행한다. 그 외 요청은 확인 화면을 렌더해 사용자가
+					// 직접 로그아웃을 확정하게 한다(RP-Initiated Logout은 id_token_hint가
+					// 없으면 사용자 확인이 필수다). provider 폼은 xsrf만 담고 있어
+					// 그대로 제출하면 RP 전용 로그아웃(그랜트만 폐기, OP 세션 유지)으로
+					// 처리되므로 logout=yes를 추가해 OP 세션 전체를 종료하는 경로로 보낸다.
+					logoutSource: (ctx, form) =>
+						this.renderLogoutConfirmation(ctx, form, firstPartyClientIds),
 					postLogoutSuccessSource: (ctx, render) =>
 						this.renderPostLogoutSuccess(ctx, render, clientLoginUrls),
 				},
@@ -212,6 +213,41 @@ export class OidcConfigurationService {
 	}
 
 	/**
+	 * end_session 확인 화면. 검증된 id_token_hint를 가진 최초파티 클라이언트는
+	 * 사용자가 이미 로그아웃을 눌렀으므로 자동 제출하고, 그 외 요청은 전체
+	 * 로그아웃/유지 버튼이 있는 확인 화면을 렌더한다. 버튼은 provider 폼의
+	 * form id(op.logoutForm)를 참조해 제출하며, name=logout value=yes 제출이
+	 * OP 세션 전체 종료, 미지정 제출은 RP 전용 로그아웃(그랜트만 폐기)이다.
+	 */
+	private renderLogoutConfirmation(
+		ctx: Parameters<
+			NonNullable<
+				NonNullable<OidcConfiguration["features"]>["rpInitiatedLogout"]
+			>["logoutSource"]
+		>[0],
+		form: string,
+		firstPartyClientIds: Set<string>,
+	) {
+		const clientId = ctx.oidc?.client?.clientId;
+		const hasVerifiedIdTokenHint = Boolean(ctx.oidc?.entities?.IdTokenHint);
+		const isTrustedFirstPartyLogout = Boolean(
+			clientId && firstPartyClientIds.has(clientId) && hasVerifiedIdTokenHint,
+		);
+
+		ctx.type = "html";
+		if (isTrustedFirstPartyLogout && form.includes("</form>")) {
+			const logoutAllForm = form.replace(
+				"</form>",
+				'<input type="hidden" name="logout" value="yes"/></form>',
+			);
+			ctx.body = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>로그아웃</title></head><body>${logoutAllForm}<script>document.forms[0].submit();</script></body></html>`;
+			return;
+		}
+
+		ctx.body = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>로그아웃</title></head><body><div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:48px 16px;font-family:sans-serif"><h2 style="margin:0;font-size:18px">로그아웃하시겠습니까?</h2><p style="margin:0;font-size:14px;color:#666">OP 세션을 종료하면 모든 연동 앱에서 로그아웃됩니다.</p>${form}<button type="submit" form="op.logoutForm" name="logout" value="yes">로그아웃</button><button type="submit" form="op.logoutForm">로그인 유지</button></div></body></html>`;
+	}
+
+	/**
 	 * RP-Initiated Logout 완료 화면. 클라이언트가 등록한 로그인 화면 URL로
 	 * 되돌리고(renderError와 같은 meta-refresh 방식), 알 수 없으면 기본
 	 * 안내 화면을 렌더한다.
@@ -231,8 +267,13 @@ export class OidcConfigurationService {
 			return render();
 		}
 
+		const escapedLoginUrl = loginUrl
+			.replaceAll("&", "&amp;")
+			.replaceAll('"', "&quot;")
+			.replaceAll("<", "&lt;")
+			.replaceAll(">", "&gt;");
 		ctx.type = "html";
-		ctx.body = `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${loginUrl}"></head><body>Redirecting...</body></html>`;
+		ctx.body = `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${escapedLoginUrl}"></head><body>Redirecting...</body></html>`;
 	}
 
 	private async loadExistingGrant(

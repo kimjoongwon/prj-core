@@ -36,6 +36,10 @@ describe("OidcConfigurationService", () => {
 		clientId: string,
 		isFirstParty: boolean,
 		skipConsent: boolean,
+		overrides: {
+			loginUrl?: string | null;
+			postLogoutRedirectUris?: string[];
+		} = {},
 	) => ({
 		clientId,
 		clientSecret: null,
@@ -47,6 +51,9 @@ describe("OidcConfigurationService", () => {
 		scope: "openid profile email",
 		isFirstParty,
 		skipConsent,
+		loginUrl: null,
+		postLogoutRedirectUris: [] as string[],
+		...overrides,
 	});
 
 	it("first-party skipConsent client는 기존 grant가 없으면 grant를 자동 생성해야 한다", async () => {
@@ -170,9 +177,7 @@ describe("OidcConfigurationService", () => {
 	});
 
 	it("third-party client는 offline_access scope가 승인된 경우에만 refresh token을 발급해야 한다", async () => {
-		const service = buildService([
-			buildClient("partner-web", false, false),
-		]);
+		const service = buildService([buildClient("partner-web", false, false)]);
 		const configuration = await service.buildConfiguration();
 
 		await expect(
@@ -200,5 +205,108 @@ describe("OidcConfigurationService", () => {
 				{ scopes: new Set(["openid", "offline_access"]) },
 			),
 		).resolves.toBe(false);
+	});
+
+	describe("rpInitiatedLogout", () => {
+		const providerLogoutForm =
+			'<form id="op.logoutForm" method="post" action="/oidc/session/end/confirm"><input type="hidden" name="xsrf" value="xsrf-secret"/></form>';
+
+		const renderLogoutConfirmationPage = async (
+			clients: Parameters<typeof buildService>[0],
+			oidcContext: {
+				client?: { clientId: string };
+				entities?: { IdTokenHint?: unknown };
+			},
+		) => {
+			const service = buildService(clients);
+			const configuration = await service.buildConfiguration();
+			const ctx = { oidc: oidcContext, type: "", body: "" };
+			await configuration.features?.rpInitiatedLogout?.logoutSource?.(
+				ctx,
+				providerLogoutForm,
+			);
+			return ctx;
+		};
+
+		it("검증된 id_token_hint를 가진 최초파티 클라이언트는 전체 로그아웃 폼을 자동 제출한다", async () => {
+			const ctx = await renderLogoutConfirmationPage(
+				[buildClient("admin-web", true, true)],
+				{
+					client: { clientId: "admin-web" },
+					entities: { IdTokenHint: { payload: { sub: "user-1" } } },
+				},
+			);
+
+			expect(ctx.type).toBe("html");
+			expect(ctx.body).toContain('name="logout" value="yes"');
+			expect(ctx.body).toContain("document.forms[0].submit()");
+		});
+
+		it("id_token_hint가 없는 요청은 자동 제출하지 않고 확인 버튼을 렌더한다", async () => {
+			const ctx = await renderLogoutConfirmationPage(
+				[buildClient("admin-web", true, true)],
+				{ client: { clientId: "admin-web" } },
+			);
+
+			expect(ctx.body).toContain('form="op.logoutForm"');
+			expect(ctx.body).toContain('name="logout" value="yes"');
+			expect(ctx.body).not.toContain("document.forms[0].submit()");
+		});
+
+		it("third-party 클라이언트는 id_token_hint가 있어도 확인 버튼을 렌더한다", async () => {
+			const ctx = await renderLogoutConfirmationPage(
+				[buildClient("partner-web", false, false)],
+				{
+					client: { clientId: "partner-web" },
+					entities: { IdTokenHint: { payload: { sub: "user-1" } } },
+				},
+			);
+
+			expect(ctx.body).toContain('form="op.logoutForm"');
+			expect(ctx.body).not.toContain("document.forms[0].submit()");
+		});
+
+		it("postLogoutSuccessSource는 등록된 로그인 화면 URL을 이스케이프해 meta-refresh로 되돌린다", async () => {
+			const service = buildService([
+				buildClient("admin-web", true, true, {
+					loginUrl: "http://localhost:3000/admin/auth/login?next=/a&b=1",
+				}),
+			]);
+			const configuration = await service.buildConfiguration();
+			const ctx = {
+				oidc: { client: { clientId: "admin-web" } },
+				type: "",
+				body: "",
+			};
+
+			await configuration.features?.rpInitiatedLogout?.postLogoutSuccessSource?.(
+				ctx,
+				() => undefined,
+			);
+
+			expect(ctx.body).toContain(
+				"url=http://localhost:3000/admin/auth/login?next=/a&amp;b=1",
+			);
+			expect(ctx.body).not.toContain('next=/a&b=1"');
+		});
+
+		it("postLogoutSuccessSource는 로그인 화면이 없는 클라이언트는 기본 안내 화면을 렌더한다", async () => {
+			const service = buildService([buildClient("partner-web", false, false)]);
+			const configuration = await service.buildConfiguration();
+			const ctx = {
+				oidc: { client: { clientId: "partner-web" } },
+				type: "",
+				body: "",
+			};
+			const renderDefaultPage = jest.fn();
+
+			await configuration.features?.rpInitiatedLogout?.postLogoutSuccessSource?.(
+				ctx,
+				renderDefaultPage,
+			);
+
+			expect(renderDefaultPage).toHaveBeenCalled();
+			expect(ctx.body).toBe("");
+		});
 	});
 });

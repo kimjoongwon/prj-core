@@ -134,6 +134,13 @@ export interface OidcProviderContext {
 		client?: {
 			clientId: string;
 		};
+		/**
+		 * provider가 검증을 통과한 요청 매개변수와 자격. IdTokenHint는
+		 * id_token_hint가 제공·검증되었을 때만 존재한다.
+		 */
+		entities?: {
+			IdTokenHint?: unknown;
+		};
 		params?: {
 			client_id?: string;
 			prompt?: string;
@@ -207,9 +214,11 @@ export interface ResourceIndicatorsConfig {
 export interface RpInitiatedLogoutConfig {
 	enabled: boolean;
 	/**
-	 * end_session 확인 화면. 최초파티 로그아웃은 이미 사용자가 로그아웃을
-	 * 눌렀으므로 폼을 자동 제출해 바로 진행한다. provider가 만든 form HTML을
-	 * 받아 이를 포함한 페이지를 렌더하면 된다.
+	 * end_session 확인 화면. 검증된 id_token_hint를 가진 최초파티 클라이언트는
+	 * 사용자가 이미 로그아웃을 눌렀으므로 폼을 자동 제출해 바로 진행한다.
+	 * 그 외(id_token_hint가 없거나 검증되지 않았거나 third-party 클라이언트)에는
+	 * 확인 버튼이 있는 화면을 렌더해 사용자 확인(RP-Initiated Logout 필수 조건)을
+	 * 거친다. provider가 만든 form HTML을 받아 이를 포함한 페이지를 렌더하면 된다.
 	 */
 	logoutSource?: (
 		ctx: OidcProviderContext & { type: string; body: string },
