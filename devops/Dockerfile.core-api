@@ -77,26 +77,11 @@ COPY turbo.json turbo.json
 WORKDIR /app
 
 # 🏗️ Turbo를 사용한 프로젝트 빌드
-# - 모든 관련 패키지와 종속성을 최적화된 순서로 빌드
+# - 모든 관련 패키지와 의존성을 최적화된 순서로 빌드
 # - nest build가 TypeScript 컴파일을 포함하므로 별도 type-check 단계 생략
 # - /app/.turbo 캐시 마운트로 Turbo 작업 캐시를 재사용해 재빌드 시간 단축
 # - --concurrency=2: 병렬 빌드로 빌드 시간 단축
 RUN --mount=type=cache,id=turbo,target=/app/.turbo pnpm exec turbo build --concurrency=2 --filter=core-api...
-
-# 운영 앱과 production 의존성만 독립 실행 가능한 산출물로 구성
-# (--legacy: inject-workspace-packages=true 미설정 워크스페이스에서는 유일한 방식.
-#  legacy는 dev 의존성(prisma/typescript) 일부까지 끌어들일 수 있어 아래 검증은
-#  런타임 공격 표면 요소로 한정한다.)
-RUN pnpm --filter core-api deploy --prod --legacy /app/deploy
-
-# 운영 산출물의 필수 native/runtime 의존성과 공격 표면 축소 계약 검증
-# (prisma/typescript는 마이그레이션 계약상 이미지가 워크스페이스 도구를 포함하므로
-#  배제 대상에서 제외하고, 런타임에 없어야 하는 패키지만 검사한다.)
-RUN cd /app/deploy && \
-    node --check dist/main.js && \
-    NODE_ENV=production node -e "require('bcrypt'); require('@cocrepo/constant'); require('@cocrepo/prisma'); require('@cocrepo/type'); require('@cocrepo/toolkit'); require('./dist/module/app.module.js')" && \
-    NODE_ENV=production ENABLE_NEST_DEVTOOLS=true node -e "const devtools=require('./dist/module/devtools.module.js'); if(devtools.isNestDevtoolsEnabled()) throw new Error('Nest Devtools must stay disabled in production');" && \
-    node -e "const fs=require('node:fs'); const forbidden=['@nestjs+devtools-integration@','@nestjs+websockets@','@nestjs+platform-socket.io@','socket.io@']; const packages=fs.readdirSync('node_modules/.pnpm'); const found=packages.filter((name)=>forbidden.some((prefix)=>name.startsWith(prefix))); if(found.length) throw new Error('Forbidden production packages: '+found.join(', '));"
 
 # ============================================================================
 # 🚀 PRODUCTION STAGE: 운영 환경 컨테이너
@@ -114,6 +99,19 @@ COPY --from=builder --chown=node:node /app/node_modules/ ./node_modules/
 COPY --from=builder --chown=node:node /app/packages/ ./packages/
 COPY --from=builder --chown=node:node /app/apps/ ./apps/
 COPY --from=builder --chown=node:node /app/package.json /app/pnpm-workspace.yaml ./
+
+# 배포되는 워크스페이스 트리 그대로에서 런타임 계약을 검증한다.
+# - 검증은 실제 실행 디렉토리(/app/apps/core/api) 기준으로 수행한다.
+# - 금지 패키지는 "이미지에 존재하는가"가 아니라 "앱이 require로 해석할 수 있는가"로
+#   검사한다. 워크스페이스 node_modules는 마이그레이션 계약상 dev 도구를 포함하므로
+#   디렉터리 이름 스캔은 배포 트리에 적용할 수 없다.
+# - @nestjs/devtools-integration은 앱 devDependency로 존재하므로 런타임
+#   가드(isNestDevtoolsEnabled)로 비활성을 검증한다.
+RUN cd /app/apps/core/api && \
+    node --check dist/main.js && \
+    NODE_ENV=production node -e "require('bcrypt'); require('@cocrepo/constant'); require('@cocrepo/prisma'); require('@cocrepo/type'); require('@cocrepo/toolkit'); require('./dist/module/app.module.js')" && \
+    NODE_ENV=production ENABLE_NEST_DEVTOOLS=true node -e "const devtools=require('./dist/module/devtools.module.js'); if(devtools.isNestDevtoolsEnabled()) throw new Error('Nest Devtools must stay disabled in production');" && \
+    node -e "const forbidden=['socket.io','@nestjs/websockets','@nestjs/platform-socket.io']; for (const packageName of forbidden) { let resolvedPath=null; try { resolvedPath=require.resolve(packageName); } catch {} if (resolvedPath) throw new Error('Forbidden runtime package resolvable from app: '+packageName+' -> '+resolvedPath); }"
 
 WORKDIR /app
 

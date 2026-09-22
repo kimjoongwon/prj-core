@@ -65,9 +65,6 @@ COPY turbo.json turbo.json
 # - --concurrency=2: 병렬 빌드로 빌드 시간 단축
 RUN --mount=type=cache,id=turbo,target=/app/.turbo pnpm exec turbo build --concurrency=2 --filter=idp-api...
 
-# 운영 앱과 production 의존성만 독립 실행 가능한 산출물로 구성
-RUN pnpm --filter idp-api deploy --prod --legacy /app/deploy
-
 # ============================================================================
 # PRODUCTION STAGE: 운영 환경 컨테이너
 # ============================================================================
@@ -84,6 +81,16 @@ COPY --from=builder --chown=node:node /app/node_modules/ ./node_modules/
 COPY --from=builder --chown=node:node /app/packages/ ./packages/
 COPY --from=builder --chown=node:node /app/apps/ ./apps/
 COPY --from=builder --chown=node:node /app/package.json /app/pnpm-workspace.yaml ./
+
+# 배포되는 워크스페이스 트리 그대로에서 런타임 계약을 검증한다(core-api와 동일 계약).
+# - 검증은 실제 실행 디렉토리(/app/apps/idp/api) 기준으로 수행한다.
+# - 금지 패키지는 "이미지에 존재하는가"가 아니라 "앱이 require로 해석할 수 있는가"로
+#   검사한다. 워크스페이스 node_modules는 마이그레이션 계약상 dev 도구를 포함하므로
+#   디렉터리 이름 스캔은 배포 트리에 적용할 수 없다.
+RUN cd /app/apps/idp/api && \
+    node --check dist/main.js && \
+    NODE_ENV=production node -e "require('bcrypt'); require('@cocrepo/constant'); require('@cocrepo/prisma'); require('./dist/module/app.module.js')" && \
+    node -e "const forbidden=['socket.io','@nestjs/websockets','@nestjs/platform-socket.io']; for (const packageName of forbidden) { let resolvedPath=null; try { resolvedPath=require.resolve(packageName); } catch {} if (resolvedPath) throw new Error('Forbidden runtime package resolvable from app: '+packageName+' -> '+resolvedPath); }"
 
 WORKDIR /app
 
