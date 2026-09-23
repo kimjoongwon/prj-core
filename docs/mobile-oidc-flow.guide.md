@@ -65,7 +65,11 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 
 ## 로컬 개발
 
-- 발급자 기본값은 운영(`https://idp.onjitda.com`)이다. 로컬 idp-api를 쓰려면
-  모바일 빌드 환경변수로 `EXPO_PUBLIC_OIDC_ISSUER_URL=http://localhost:3007`을 지정한다.
+- 발급자 기본값은 운영(`https://idp.onjitda.com`)이다. 로컬 발급자를 쓰려면
+  `idp-api`(3007)와 `idp-web`(3008)을 함께 띄우고(`pnpm start` 메뉴 7·8)
+  모바일 빌드 환경변수로 `EXPO_PUBLIC_OIDC_ISSUER_URL=http://localhost:3008`을
+  지정한다. 로컬 issuer는 idp-web origin이다 — 로그인 UI가 발급자와 같은
+  origin이어야 interaction 세션 쿠키가 로그인 제출에 실려간다(3007을 직접
+  지정하면 인가는 되지만 로그인 폼 제출이 세션 쿠키를 못 찾아 실패한다).
 - 로컬 시트 콜백은 앱 스킴이 등록된 dev 클라이언트 빌드에서만 동작한다
   (Expo Go의 커스텀 스킴 지원 제한 참고).

@@ -301,6 +301,7 @@ pnpm secrets:pull --dry-run   # 변경될 키 목록만 확인
 
 - `pnpm start`(`start.sh`)가 시작 시 자동 pull을 시도합니다(`START_SKIP_SECRETS_PULL=1`으로 건너뛰기).
 - `start.sh`의 기본 컨셉은 "이미 실행 중인 서비스는 종료하고 다시 시작"입니다. 다른 세션이 띄운 서비스를 죽이지 않고 재사용하려면 `START_REUSE=1`을 설정하세요.
+- `start.sh`에서 admin-web을 선택하면 인증에 필요한 core-api·idp-api·idp-web이 자동으로 포함됩니다. 로컬 발급자(issuer)는 idp-web 오리진(3008)이고, `OIDC_ISSUER`·`OIDC_INTERACTION_BASE_URL`은 idp-web이 세션에 있을 때 자동으로 설정됩니다.
 - `pnpm wt:new`(`wt.js`)가 worktree 생성 후 자동 pull을 시도합니다. 실패하면 placeholder 값으로 진행합니다.
 
 경로·키 매핑과 문제 해결은 [`docs/env-reference.md`](../docs/env-reference.md)의 "로컬 개발 시크릿(OpenBao)" 섹션을 참고하세요.
