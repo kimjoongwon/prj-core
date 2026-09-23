@@ -69,6 +69,8 @@
 
 `pnpm start`(`scripts/start.sh`)와 `pnpm wt:new`(`scripts/wt.js`)는 시작 시 자동으로 pull을 시도합니다. 실패해도(오프라인, 미로그인) 기존 `.env` 값으로 계속 진행하며, 자동 pull을 건너뛰려면 `START_SKIP_SECRETS_PULL=1`을 설정합니다.
 
+`start.sh`의 서버 실행 컨셉은 "이미 실행 중이면 종료하고 다시 시작"입니다. 다른 세션이 띄운 서비스를 종료하지 않고 재사용하려면 `START_REUSE=1`을 설정합니다(재사용한 서비스는 이 세션 종료 시 정리 대상에서도 제외).
+
 ### OpenBao 경로와 병합 대상
 
 `scripts/pull-local-secrets.mjs`가 다음 경로에서 값을 읽어 각 파일의 해당 키만 교체합니다(나머지 키와 로컬 수정값은 보존).

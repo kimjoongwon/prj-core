@@ -589,13 +589,14 @@ run_local_infra_preflight() {
 
 # 종료 시 선택된 서비스의 포트 프로세스 정리
 #
-# 포트가 이미 점유된 서비스는 다른 start.sh 세션(또는 사용자 터미널)이 실행
-# 중인 정상 프로세스일 수 있어 pre_cleanup에서 죽이지 않고 "재사용"으로
-# 건너뛴다. 재사용한 서비스는 이 세션이 소유한 것이 아니므로 종료 cleanup
-# 대상에서도 제외한다. 종전처럼 무조건 정리하려면 START_FORCE_CLEAN=1.
+# 기본 컨셉은 "이미 실행 중이면 종료하고 다시 시작"이다 — pre_cleanup이 점유
+# 포트와 잔여 프로세스를 정리한 뒤 새로 띄운다. 단, 다른 start.sh 세션(또는
+# 사용자 터미널)이 실행 중인 서비스를 건드리지 않고 재사용하려면
+# START_REUSE=1. 재사용한 서비스는 이 세션이 소유한 것이 아니므로 종료
+# cleanup 대상에서도 제외한다.
 REUSED_SERVICES=""
-force_clean_enabled() {
-  [[ "${START_FORCE_CLEAN:-}" =~ ^(y|yes|true|1|on)$ ]]
+reuse_enabled() {
+  [[ "${START_REUSE:-}" =~ ^(y|yes|true|1|on)$ ]]
 }
 service_is_reused() {
   [[ " $REUSED_SERVICES " == *" $1 "* ]]
@@ -642,14 +643,15 @@ trap cleanup EXIT INT TERM
 
 # 시작 전 선택된 서비스와 관련된 잔여 dev 프로세스 정리
 #
-# 포트가 점유된 서비스(다른 세션의 정상 실행)는 패턴 매칭 kill 대상에서
-# 제외하고 재사용 목록에 넣는다. 패턴 kill은 포트가 비어 있을 때만 수행해
-# 바인딩에 실패한 채 남은 잔여 프로세스만 정리한다.
+# 기본적으로 점유 포트도 정리 대상이다(종료 후 재시작 컨셉). START_REUSE=1이면
+# 포트가 점유된 서비스(다른 세션의 정상 실행)를 패턴 매칭 kill 대상에서 제외하고
+# 재사용 목록에 넣는다. 재사용 중이 아닐 때 패턴 kill은 항상 수행해 바인딩에
+# 실패한 채 남은 잔여 프로세스를 정리한다.
 pre_cleanup_service_processes() {
   echo -e "${YELLOW}🧼 시작 전 관련 프로세스 정리 중...${RESET}"
   local cleaned="false"
   for svc in $SERVICES; do
-    if ! force_clean_enabled && service_port_occupied "$svc"; then
+    if reuse_enabled && service_port_occupied "$svc"; then
       REUSED_SERVICES="$REUSED_SERVICES $svc"
       port=$(get_port "$svc")
       echo -e "  ${YELLOW}⚠️  포트 ${port} (${svc}) 사용 중 — 다른 세션이 실행 중일 수 있어 정리하지 않고 재사용${RESET}"
