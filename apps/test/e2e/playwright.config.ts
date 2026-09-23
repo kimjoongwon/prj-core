@@ -164,7 +164,9 @@ const seededCoreApiServer = createCoreApiServer("start:e2e");
 
 const adminWebServer = {
 	command: `CORE_API_INTERNAL_URL="${coreApiInternalUrl}" pnpm --filter=admin-web exec next dev --webpack -p "\${ADMIN_WEB_PORT:-3000}"`,
-	url: new URL("/admin/auth/login", adminBaseUrl).toString(),
+	// /admin/auth/login은 이제 307 리다이렉트라 준비 확인용 200 응답이 아니므로
+	// 렌더만 되는 폼 페이지로 프로브한다.
+	url: new URL("/admin/auth/forgot-password", adminBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
 	cwd: "../../..",
