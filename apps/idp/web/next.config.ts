@@ -37,6 +37,15 @@ const nextConfig: NextConfig = {
 		return {
 			beforeFiles: [
 				// IDP 서버 API 프록시 (인증 플로우)
+				//
+				// 로컬 인증 origin은 idp-web(이 origin)이다 — 발급자(issuer)와
+				// interaction UI가 같은 origin이어야 oidc-provider의 세션 쿠키가
+				// interaction 제출 XHR에 실려가 로그인이 완료된다. 그래서 /oidc도
+				// 이 프록시를 통과한다(prod는 ingress가 같은 경로 계약을 담당).
+				{
+					source: "/oidc/:path*",
+					destination: `${idpApiInternalUrl}/oidc/:path*`,
+				},
 				{
 					source: "/api/interaction/:path*",
 					destination: `${idpApiInternalUrl}/api/interaction/:path*`,

@@ -25,8 +25,12 @@ import { AuthModule } from "./auth";
 import { EmailVerificationsModule } from "./email-verification";
 import { globalModules } from "./global.module";
 import { I18nCatalogModule } from "./i18n";
+import { IdpAccountsModule } from "./idp-accounts";
+import { IdpDashboardModule } from "./idp-dashboard";
 import { InteractionModule } from "./interaction/interaction.module";
 import { OidcModule } from "./oidc/oidc.module";
+import { OidcClientsModule } from "./oidc-client";
+import { OidcSessionsModule } from "./oidc-session";
 import { PasswordResetModule } from "./password-reset/password-reset.module";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
@@ -57,6 +61,10 @@ const enableNestDevtools =
 		AuthModule,
 		EmailVerificationsModule,
 		SecurityPolicyModule,
+		IdpAccountsModule,
+		IdpDashboardModule,
+		OidcClientsModule,
+		OidcSessionsModule,
 		RouterModule.register([
 			{
 				path: "api",
@@ -79,6 +87,22 @@ const enableNestDevtools =
 							{
 								path: "idp/email-verifications",
 								module: EmailVerificationsModule,
+							},
+							{
+								path: "idp/accounts",
+								module: IdpAccountsModule,
+							},
+							{
+								path: "idp/dashboard",
+								module: IdpDashboardModule,
+							},
+							{
+								path: "oidc-clients",
+								module: OidcClientsModule,
+							},
+							{
+								path: "oidc-sessions",
+								module: OidcSessionsModule,
 							},
 						],
 					},
