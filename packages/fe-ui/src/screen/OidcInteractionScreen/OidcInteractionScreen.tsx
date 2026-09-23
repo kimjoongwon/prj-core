@@ -49,10 +49,35 @@ export const OidcInteractionScreen = observer(
 	(props: OidcInteractionScreenProps) => {
 		const t = useT();
 		const [showLoadingRecovery, setShowLoadingRecovery] = useState(false);
+		// 짧은 로딩(로컬 데이터 페치는 수십 ms)에도 스피너가 페인트되면 화면이
+		// 깜빡이는 것처럼 보인다 — 유예 시간 동안은 아무것도 그리지 않다가,
+		// 그래도 로딩이면 그때 준비 화면을 노출한다.
+		const [isLoadingPanelVisible, setIsLoadingPanelVisible] = useState(false);
 		const shouldFocusAuthPanel = Boolean(
 			props.state.client?.loginUi?.mobileFullScreen ||
 				props.state.client?.loginUi?.showIntroPanel === false,
 		);
+
+		useEffect(() => {
+			if (props.state.mode !== "loading") {
+				setIsLoadingPanelVisible(false);
+			}
+		}, [props.state.mode]);
+
+		useEffect(() => {
+			if (props.state.mode !== "loading") {
+				return;
+			}
+
+			const graceTimeoutId = window.setTimeout(
+				() => setIsLoadingPanelVisible(true),
+				350,
+			);
+
+			return () => {
+				window.clearTimeout(graceTimeoutId);
+			};
+		}, [props.state.mode]);
 
 		useEffect(() => {
 			if (props.state.mode !== "loading") {
@@ -115,6 +140,10 @@ export const OidcInteractionScreen = observer(
 		};
 
 		if (props.state.mode === "loading") {
+			if (!isLoadingPanelVisible) {
+				return null;
+			}
+
 			return (
 				<Auth.Panel>
 					<div className="flex flex-col items-center gap-5 py-10 text-center">

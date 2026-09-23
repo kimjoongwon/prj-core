@@ -579,6 +579,15 @@ fi
 if [[ " $SERVICES " == *" idp-web "* ]]; then
   export OIDC_ISSUER="${OIDC_ISSUER:-$IDP_WEB_URL}"
   export OIDC_INTERACTION_BASE_URL="${OIDC_INTERACTION_BASE_URL:-$IDP_WEB_URL}"
+
+  # idp-web dev의 온디맨드 컴파일로 첫 로그인 화면이 지연되는 것을 예열로
+  # 흡수한다(로그인 플로우 경로를 백그라운드에서 한 번 방문). 더미 uid 방문은
+  # interaction 조회 실패 에러 로그 1줄을 idp-api에 남긴다.
+  (
+    sleep 10
+    curl -s -o /dev/null --max-time 60 "http://localhost:${IDP_WEB_PORT:-3008}/auth/forgot-password"
+    curl -s -o /dev/null --max-time 60 "http://localhost:${IDP_WEB_PORT:-3008}/auth/interaction/__prewarm__"
+  ) >/dev/null 2>&1 &
 fi
 
 # codegen 실행 커맨드 결정
