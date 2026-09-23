@@ -5,6 +5,14 @@ const API_BASE_URL = new URL(
 	"/api/v1",
 	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
 ).toString();
+// /api/v1/auth/*는 발급자(idp-api) 소유다 — 브라우저 컨텍스트 쿠키가 살아있는
+// admin origin 경유로 호출한다(admin rewrites가 발급자로 프록시).
+const AUTH_API_BASE_URL = new URL(
+	"/api/v1",
+	new URL(
+		process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin/",
+	).origin,
+).toString();
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 let ADMIN_TENANT_ID = "";
 let ADMIN_SPACE_ID = "";
@@ -62,7 +70,7 @@ function expectCanonicalId(value: string | undefined) {
 
 async function ensureAdminCurrentSpace(page: Page) {
 	const response = await page.request.post(
-		`${API_BASE_URL}/auth/current-space`,
+		`${AUTH_API_BASE_URL}/auth/current-space`,
 		{
 			headers: getSpaceHeaders(),
 			data: { tenantId: ADMIN_TENANT_ID },

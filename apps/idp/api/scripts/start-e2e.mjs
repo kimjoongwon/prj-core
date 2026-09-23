@@ -48,7 +48,7 @@ function getE2eDatabaseUrl() {
 	}
 
 	throw new Error(
-		"E2E_DATABASE_URL, TEST_DATABASE_URL, or DATABASE_URL is required for core-api start:e2e.",
+		"E2E_DATABASE_URL, TEST_DATABASE_URL, or DATABASE_URL is required for idp-api start:e2e.",
 	);
 }
 
@@ -74,8 +74,19 @@ function getOrigin(url) {
 	return new URL(url).origin;
 }
 
-function applyOidcAdminEnv() {
+/**
+ * e2e 세션의 인증 토폴로지를 맞춘다 — 발급자(issuer)와 로그인 UI는 둘 다
+ * idp-web origin, admin-web 클라이언트의 redirect/login/return URL은 admin
+ * origin으로 보정한다(runtime-managed 클라이언트 설정).
+ */
+function applyOidcE2eEnv() {
+	const idpWebOrigin = getOrigin(
+		process.env.E2E_IDP_WEB_BASE_URL ?? "http://localhost:3008",
+	);
 	const adminOrigin = getOrigin(process.env.E2E_ADMIN_BASE_URL);
+
+	process.env.OIDC_ISSUER = idpWebOrigin;
+	process.env.OIDC_INTERACTION_BASE_URL = idpWebOrigin;
 
 	if (!adminOrigin) {
 		return;
@@ -85,22 +96,16 @@ function applyOidcAdminEnv() {
 	process.env.OIDC_ADMIN_REDIRECT_URI = `${adminOrigin}/api/v1/auth/callback?clientId=admin-web`;
 	process.env.OIDC_ADMIN_LOGIN_URL = `${adminOrigin}/admin/auth/login`;
 	process.env.OIDC_ADMIN_DEFAULT_RETURN_TO = `${adminOrigin}/admin/dashboard`;
-
-	// 발급자는 idp-api지만 issuer 식별자는 로그인 UI origin(idp-web)이다 —
-	// core-api의 JwtStrategy iss 검증과 JWKS 조회를 그 기준에 맞춘다(admin
-	// origin에는 더 이상 /oidc 프록시가 없으니 JWKS는 idp-api를 직접 가리킨다).
-	const idpIssuerOrigin = getOrigin(
-		process.env.E2E_IDP_WEB_BASE_URL ?? "http://localhost:3008",
-	);
-	const idpApiOrigin = getOrigin(
-		process.env.E2E_IDP_API_BASE_URL ?? "http://localhost:3007",
-	);
-	process.env.OIDC_ISSUER = idpIssuerOrigin;
-	process.env.OIDC_JWKS_URI ??= `${idpApiOrigin}/oidc/jwks`;
 }
 
 loadEnvFile();
-applyOidcAdminEnv();
+applyOidcE2eEnv();
+
+// start.sh가 dev 세션에 내려주는 공통 런타임 기본값 — idp .env에는 시크릿만
+// 있어서 e2e 단독 기동 시 config 검증이 실패한다.
+process.env.AUTH_JWT_TOKEN_EXPIRES_IN ??= "10d";
+process.env.AUTH_JWT_TOKEN_REFRESH_IN ??= "7d";
+process.env.CORS_ENABLED ??= "true";
 
 const databaseUrl = getE2eDatabaseUrl();
 
@@ -110,7 +115,7 @@ process.env.DIRECT_URL =
 process.env.NODE_ENV = "test";
 process.env.ENABLE_NEST_DEVTOOLS = "false";
 process.env.APP_PORT =
-	process.env.CORE_API_PORT ?? process.env.APP_PORT ?? "3006";
+	process.env.IDP_API_PORT ?? process.env.APP_PORT ?? "3007";
 process.env.SMTP_SECURE = process.env.SMTP_SECURE ?? "false";
 
 const child = spawn(

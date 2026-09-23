@@ -120,6 +120,16 @@ const coreApiBaseUrl = resolveBaseUrl({
 	localDefault: "http://localhost:3006/",
 	required: false,
 });
+const idpApiBaseUrl = resolveBaseUrl({
+	envKey: "E2E_IDP_API_BASE_URL",
+	localDefault: "http://localhost:3007/",
+	required: false,
+});
+const idpWebBaseUrl = resolveBaseUrl({
+	envKey: "E2E_IDP_WEB_BASE_URL",
+	localDefault: "http://localhost:3008/",
+	required: false,
+});
 const storybookBaseUrl = resolveBaseUrl({
 	envKey: "E2E_STORYBOOK_BASE_URL",
 	localDefault: "http://localhost:6006/",
@@ -128,9 +138,12 @@ const storybookBaseUrl = resolveBaseUrl({
 
 process.env.E2E_ADMIN_BASE_URL = adminBaseUrl;
 process.env.E2E_CORE_API_BASE_URL = coreApiBaseUrl;
+process.env.E2E_IDP_API_BASE_URL = idpApiBaseUrl;
+process.env.E2E_IDP_WEB_BASE_URL = idpWebBaseUrl;
 process.env.E2E_STORYBOOK_BASE_URL = storybookBaseUrl;
 
 const coreApiInternalUrl = coreApiBaseUrl.replace(/\/$/, "");
+const idpApiInternalUrl = idpApiBaseUrl.replace(/\/$/, "");
 
 const adminAuthStorageStatePath = path.join(
 	__dirname,
@@ -140,7 +153,7 @@ const adminAuthStorageStatePath = path.join(
 );
 
 function buildApiStartCommand(
-	filter: "core-api",
+	filter: "core-api" | "idp-api",
 	script: "start:dev" | "start:e2e",
 ) {
 	return [
@@ -162,8 +175,27 @@ function createCoreApiServer(script: "start:dev" | "start:e2e") {
 const coreApiServer = createCoreApiServer("start:dev");
 const seededCoreApiServer = createCoreApiServer("start:e2e");
 
+// 발급자(idp-api) — issuer/interaction UI는 idp-web origin으로 고정하고
+// admin-web 클라이언트의 redirect/login/return URL은 admin origin으로 보정한다.
+const idpApiServer = {
+	command: `E2E_IDP_WEB_BASE_URL="${idpWebBaseUrl}" E2E_ADMIN_BASE_URL="${adminBaseUrl}" ${buildApiStartCommand("idp-api", "start:e2e")}`,
+	url: new URL("/api/password-policy", idpApiBaseUrl).toString(),
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+const idpWebServer = {
+	command: `IDP_API_INTERNAL_URL="${idpApiInternalUrl}" pnpm --filter=idp-web start:dev`,
+	// /auth/login은 302 리다이렉트 진입점이라 렌더만 되는 폼 페이지로 프로브한다.
+	url: new URL("/auth/forgot-password", idpWebBaseUrl).toString(),
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
 const adminWebServer = {
-	command: `CORE_API_INTERNAL_URL="${coreApiInternalUrl}" pnpm --filter=admin-web exec next dev --webpack -p "\${ADMIN_WEB_PORT:-3000}"`,
+	command: `CORE_API_INTERNAL_URL="${coreApiInternalUrl}" IDP_API_INTERNAL_URL="${idpApiInternalUrl}" pnpm --filter=admin-web exec next dev --webpack -p "\${ADMIN_WEB_PORT:-3000}"`,
 	// /admin/auth/login은 이제 307 리다이렉트라 준비 확인용 200 응답이 아니므로
 	// 렌더만 되는 폼 페이지로 프로브한다.
 	url: new URL("/admin/auth/forgot-password", adminBaseUrl).toString(),
@@ -182,14 +214,26 @@ const storybookServer = {
 
 function getWebServers() {
 	if (e2eTarget === "admin") {
-		return [seededCoreApiServer, adminWebServer];
+		return [seededCoreApiServer, idpApiServer, idpWebServer, adminWebServer];
 	}
 
 	if (e2eTarget === "storybook") {
-		return [coreApiServer, adminWebServer, storybookServer];
+		return [
+			coreApiServer,
+			idpApiServer,
+			idpWebServer,
+			adminWebServer,
+			storybookServer,
+		];
 	}
 
-	return [seededCoreApiServer, adminWebServer, storybookServer];
+	return [
+		seededCoreApiServer,
+		idpApiServer,
+		idpWebServer,
+		adminWebServer,
+		storybookServer,
+	];
 }
 
 /**

@@ -9,6 +9,7 @@
     "start:dev": "set -a; [ -f .env ] && . ./.env; set +a; APP_PORT=${IDP_API_PORT:-${APP_PORT:-3007}} nest build --webpack --webpackPath webpack.config.js --watch",
     "start:debug": "set -a; [ -f .env ] && . ./.env; set +a; APP_PORT=${IDP_API_PORT:-${APP_PORT:-3007}} nest build --webpack --webpackPath webpack.config.js --watch",
     "start:prod": "node dist/main.js",
+    "start:e2e": "node ./scripts/start-e2e.mjs",
     "type-check": "tsc --noEmit",
     "lint": "biome check src",
     "lint:fix": "biome check --write src",
