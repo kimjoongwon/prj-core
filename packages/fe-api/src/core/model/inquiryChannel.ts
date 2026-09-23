@@ -18,14 +18,14 @@
 /**
  * 문의 채널
  */
-export type InquiryChannel =
-	(typeof InquiryChannel)[keyof typeof InquiryChannel];
+export type InquiryChannel = typeof InquiryChannel[keyof typeof InquiryChannel];
+
 
 export const InquiryChannel = {
-	WEB: "WEB",
-	EMAIL: "EMAIL",
-	CHAT: "CHAT",
-	SMS: "SMS",
-	PHONE: "PHONE",
-	WALK_IN: "WALK_IN",
+  WEB: 'WEB',
+  EMAIL: 'EMAIL',
+  CHAT: 'CHAT',
+  SMS: 'SMS',
+  PHONE: 'PHONE',
+  WALK_IN: 'WALK_IN',
 } as const;

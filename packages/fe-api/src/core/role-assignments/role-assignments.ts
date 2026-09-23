@@ -14,59 +14,59 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type {
-	DataTag,
-	DefinedInitialDataOptions,
-	DefinedUseQueryResult,
-	InfiniteData,
-	MutationFunction,
-	QueryClient,
-	QueryFunction,
-	QueryKey,
-	UndefinedInitialDataOptions,
-	UseMutationOptions,
-	UseMutationResult,
-	UseQueryOptions,
-	UseQueryResult,
-	UseSuspenseInfiniteQueryOptions,
-	UseSuspenseInfiniteQueryResult,
-	UseSuspenseQueryOptions,
-	UseSuspenseQueryResult,
-} from "@tanstack/react-query";
 import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customAxios";
-
-import { customInstance } from "../../libs/customAxios";
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import type {
-	GetRoleAssignments200,
-	SyncRoleAssignments200,
-	SyncRoleAssignmentsDto,
-} from "../model";
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
+} from '@tanstack/react-query';
+
+import type {
+  GetRoleAssignments200,
+  SyncRoleAssignments200,
+  SyncRoleAssignmentsDto
+} from '../model';
+
+import { customInstance } from '../../libs/customAxios';
+import type { ErrorType , BodyType } from '../../libs/customAxios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-const withQueryKey = <T extends object, K>(
-	query: T,
-	queryKey: K,
-): T & { queryKey: K } => {
-	const result = { queryKey } as T & { queryKey: K };
-	for (const key of Object.keys(query)) {
-		// The explicit queryKey always wins, matching the previous
-		// `{ ...query, queryKey }` spread where it was set last.
-		if (key === "queryKey") continue;
-		Object.defineProperty(result, key, {
-			enumerable: true,
-			configurable: true,
-			get: () => (query as Record<string, unknown>)[key],
-		});
-	}
-	return result;
+
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
+  for (const key of Object.keys(query)) {
+    // The explicit queryKey always wins, matching the previous
+    // `{ ...query, queryKey }` spread where it was set last.
+    if (key === 'queryKey') continue;
+    Object.defineProperty(result, key, {
+      enumerable: true,
+      configurable: true,
+      get: () => (query as Record<string, unknown>)[key],
+    });
+  }
+  return result;
 };
 
 /**
@@ -74,595 +74,304 @@ const withQueryKey = <T extends object, K>(
  * @summary Role 정책 할당 목록 조회
  */
 export const getRoleAssignments = (
-	roleId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    roleId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetRoleAssignments200>(
-		{ url: `/api/v1/roles/${roleId}/assignments`, method: "GET", signal },
-		options,
-	);
-};
 
-export const getGetRoleAssignmentsQueryKey = (roleId: string) => {
-	return [`/api/v1/roles/${roleId}/assignments`] as const;
-};
 
-export const getGetRoleAssignmentsInfiniteQueryKey = (roleId: string) => {
-	return ["infinite", `/api/v1/roles/${roleId}/assignments`] as const;
-};
+      return customInstance<GetRoleAssignments200>(
+      {url: `/api/v1/roles/${roleId}/assignments`, method: 'GET', signal
+    },
+      options);
+    }
 
-export const getGetRoleAssignmentsQueryOptions = <
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+
+export const getGetRoleAssignmentsQueryKey = (roleId: string,) => {
+    return [
+    `/api/v1/roles/${roleId}/assignments`
+    ] as const;
+    }
+
+export const getGetRoleAssignmentsInfiniteQueryKey = (roleId: string,) => {
+    return [
+    'infinite', `/api/v1/roles/${roleId}/assignments`
+    ] as const;
+    }
+
+
+export const getGetRoleAssignmentsQueryOptions = <TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(roleId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetRoleAssignmentsQueryKey(roleId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getRoleAssignments>>
-	> = ({ signal }) => getRoleAssignments(roleId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleAssignmentsQueryKey(roleId);
 
-	return {
-		queryKey,
-		queryFn,
-		enabled: roleId !== null && roleId !== undefined,
-		...queryOptions,
-	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getRoleAssignments>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetRoleAssignmentsQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoleAssignments>>
->;
-export type GetRoleAssignmentsQueryError = ErrorType<void>;
 
-export function useGetRoleAssignments<
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options: {
-		query: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getRoleAssignments>>,
-					TError,
-					Awaited<ReturnType<typeof getRoleAssignments>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoleAssignments<
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getRoleAssignments>>,
-					TError,
-					Awaited<ReturnType<typeof getRoleAssignments>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoleAssignments<
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleAssignments>>> = ({ signal }) => getRoleAssignments(roleId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: roleId !== null && roleId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleAssignmentsQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleAssignments>>>
+export type GetRoleAssignmentsQueryError = ErrorType<void>
+
+
+export function useGetRoleAssignments<TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ roleId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoleAssignments>>,
+          TError,
+          Awaited<ReturnType<typeof getRoleAssignments>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleAssignments<TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoleAssignments>>,
+          TError,
+          Awaited<ReturnType<typeof getRoleAssignments>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleAssignments<TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Role 정책 할당 목록 조회
  */
 
-export function useGetRoleAssignments<
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoleAssignmentsQueryOptions(roleId, options);
+export function useGetRoleAssignments<TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetRoleAssignmentsQueryOptions(roleId,options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary Role 정책 할당 목록 조회
  */
-export const prefetchGetRoleAssignmentsQuery = async <
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetRoleAssignmentsQueryOptions(roleId, options);
+export const prefetchGetRoleAssignmentsQuery = async <TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, roleId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetRoleAssignmentsQueryOptions(roleId,options)
 
-export const getGetRoleAssignmentsSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetRoleAssignmentsQueryKey(roleId);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getRoleAssignments>>
-	> = ({ signal }) => getRoleAssignments(roleId, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getRoleAssignments>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetRoleAssignmentsSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoleAssignments>>
->;
-export type GetRoleAssignmentsSuspenseQueryError = ErrorType<void>;
-
-export function useGetRoleAssignmentsSuspense<
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoleAssignmentsSuspense<
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoleAssignmentsSuspense<
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Role 정책 할당 목록 조회
- */
-
-export function useGetRoleAssignmentsSuspense<
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoleAssignmentsSuspenseQueryOptions(
-		roleId,
-		options,
-	);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	return withQueryKey(query, queryOptions.queryKey);
+  return queryClient;
 }
 
-export const getGetRoleAssignmentsSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+
+
+export const getGetRoleAssignmentsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(roleId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetRoleAssignmentsInfiniteQueryKey(roleId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getRoleAssignments>>
-	> = ({ signal }) => getRoleAssignments(roleId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleAssignmentsQueryKey(roleId);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getRoleAssignments>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetRoleAssignmentsSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoleAssignments>>
->;
-export type GetRoleAssignmentsSuspenseInfiniteQueryError = ErrorType<void>;
 
-export function useGetRoleAssignmentsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoleAssignmentsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoleAssignmentsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleAssignments>>> = ({ signal }) => getRoleAssignments(roleId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleAssignmentsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleAssignments>>>
+export type GetRoleAssignmentsSuspenseQueryError = ErrorType<void>
+
+
+export function useGetRoleAssignmentsSuspense<TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ roleId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleAssignmentsSuspense<TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleAssignmentsSuspense<TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Role 정책 할당 목록 조회
  */
 
-export function useGetRoleAssignmentsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>,
-	TError = ErrorType<void>,
->(
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoleAssignmentsSuspenseInfiniteQueryOptions(
-		roleId,
-		options,
-	);
+export function useGetRoleAssignmentsSuspense<TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetRoleAssignmentsSuspenseQueryOptions(roleId,options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+export const getGetRoleAssignmentsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>, TError = ErrorType<void>>(roleId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleAssignmentsInfiniteQueryKey(roleId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleAssignments>>> = ({ signal }) => getRoleAssignments(roleId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleAssignmentsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleAssignments>>>
+export type GetRoleAssignmentsSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetRoleAssignmentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>, TError = ErrorType<void>>(
+ roleId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleAssignmentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleAssignmentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Role 정책 할당 목록 조회
+ */
+
+export function useGetRoleAssignmentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleAssignments>>>, TError = ErrorType<void>>(
+ roleId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoleAssignmentsSuspenseInfiniteQueryOptions(roleId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary Role 정책 할당 목록 조회
  */
-export const prefetchGetRoleAssignmentsInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getRoleAssignments>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	roleId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoleAssignments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetRoleAssignmentsSuspenseInfiniteQueryOptions(
-		roleId,
-		options,
-	);
+export const prefetchGetRoleAssignmentsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getRoleAssignments>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, roleId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleAssignments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetRoleAssignmentsSuspenseInfiniteQueryOptions(roleId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
 
 /**
  * 특정 Role에 할당할 Policy 목록을 전체 동기화 방식으로 반영합니다.
  * @summary Role 정책 할당 동기화
  */
 export const syncRoleAssignments = (
-	roleId: string,
-	syncRoleAssignmentsDto: BodyType<SyncRoleAssignmentsDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    roleId: string,
+    syncRoleAssignmentsDto: BodyType<SyncRoleAssignmentsDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<SyncRoleAssignments200>(
-		{
-			url: `/api/v1/roles/${roleId}/assignments`,
-			method: "PUT",
-			headers: { "Content-Type": "application/json" },
-			data: syncRoleAssignmentsDto,
-			signal,
-		},
-		options,
-	);
-};
 
-export const getSyncRoleAssignmentsMutationKey = () =>
-	["syncRoleAssignments"] as const;
 
-export const getSyncRoleAssignmentsMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof syncRoleAssignments>>,
-		TError,
-		SyncRoleAssignmentsMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof syncRoleAssignments>>,
-	TError,
-	SyncRoleAssignmentsMutationVariables,
-	TContext
-> => {
-	const mutationKey = getSyncRoleAssignmentsMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<SyncRoleAssignments200>(
+      {url: `/api/v1/roles/${roleId}/assignments`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: syncRoleAssignmentsDto, signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof syncRoleAssignments>>,
-		SyncRoleAssignmentsMutationVariables
-	> = (props) => {
-		const { roleId, data } = props ?? {};
 
-		return syncRoleAssignments(roleId, data, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type SyncRoleAssignmentsMutationResult = NonNullable<
-	Awaited<ReturnType<typeof syncRoleAssignments>>
->;
-export type SyncRoleAssignmentsMutationBody = BodyType<SyncRoleAssignmentsDto>;
-export type SyncRoleAssignmentsMutationError = ErrorType<void>;
-export type SyncRoleAssignmentsMutationVariables = {
-	roleId: string;
-	data: BodyType<SyncRoleAssignmentsDto>;
-};
+export const getSyncRoleAssignmentsMutationKey = () => ['syncRoleAssignments'] as const;
 
-/**
+export const getSyncRoleAssignmentsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncRoleAssignments>>, TError,SyncRoleAssignmentsMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof syncRoleAssignments>>, TError,SyncRoleAssignmentsMutationVariables, TContext> => {
+
+const mutationKey = getSyncRoleAssignmentsMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncRoleAssignments>>, SyncRoleAssignmentsMutationVariables> = (props) => {
+          const {roleId,data} = props ?? {};
+
+          return  syncRoleAssignments(roleId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncRoleAssignmentsMutationResult = NonNullable<Awaited<ReturnType<typeof syncRoleAssignments>>>
+    export type SyncRoleAssignmentsMutationBody = BodyType<SyncRoleAssignmentsDto>
+    export type SyncRoleAssignmentsMutationError = ErrorType<void>
+    export type SyncRoleAssignmentsMutationVariables = {roleId: string;data: BodyType<SyncRoleAssignmentsDto>}
+
+    /**
  * @summary Role 정책 할당 동기화
  */
-export const useSyncRoleAssignments = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof syncRoleAssignments>>,
-			TError,
-			SyncRoleAssignmentsMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof syncRoleAssignments>>,
-	TError,
-	SyncRoleAssignmentsMutationVariables,
-	TContext
-> => {
-	return useMutation(
-		getSyncRoleAssignmentsMutationOptions(options),
-		queryClient,
-	);
-};
+export const useSyncRoleAssignments = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncRoleAssignments>>, TError,SyncRoleAssignmentsMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof syncRoleAssignments>>,
+        TError,
+        SyncRoleAssignmentsMutationVariables,
+        TContext
+      > => {
+      return useMutation(getSyncRoleAssignmentsMutationOptions(options), queryClient);
+    }

@@ -14,65 +14,65 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type {
-	DataTag,
-	DefinedInitialDataOptions,
-	DefinedUseQueryResult,
-	InfiniteData,
-	MutationFunction,
-	QueryClient,
-	QueryFunction,
-	QueryKey,
-	UndefinedInitialDataOptions,
-	UseMutationOptions,
-	UseMutationResult,
-	UseQueryOptions,
-	UseQueryResult,
-	UseSuspenseInfiniteQueryOptions,
-	UseSuspenseInfiniteQueryResult,
-	UseSuspenseQueryOptions,
-	UseSuspenseQueryResult,
-} from "@tanstack/react-query";
 import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customAxios";
-
-import { customInstance } from "../../libs/customAxios";
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import type {
-	CreatePolicy201,
-	CreatePolicyDto,
-	DeletePolicy200,
-	GetPolicies200,
-	GetPolicyById200,
-	SyncPolicyEntries200,
-	SyncPolicyEntriesDto,
-	UpdatePolicy200,
-	UpdatePolicyDto,
-} from "../model";
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
+} from '@tanstack/react-query';
+
+import type {
+  CreatePolicy201,
+  CreatePolicyDto,
+  DeletePolicy200,
+  GetPolicies200,
+  GetPolicyById200,
+  SyncPolicyEntries200,
+  SyncPolicyEntriesDto,
+  UpdatePolicy200,
+  UpdatePolicyDto
+} from '../model';
+
+import { customInstance } from '../../libs/customAxios';
+import type { ErrorType , BodyType } from '../../libs/customAxios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-const withQueryKey = <T extends object, K>(
-	query: T,
-	queryKey: K,
-): T & { queryKey: K } => {
-	const result = { queryKey } as T & { queryKey: K };
-	for (const key of Object.keys(query)) {
-		// The explicit queryKey always wins, matching the previous
-		// `{ ...query, queryKey }` spread where it was set last.
-		if (key === "queryKey") continue;
-		Object.defineProperty(result, key, {
-			enumerable: true,
-			configurable: true,
-			get: () => (query as Record<string, unknown>)[key],
-		});
-	}
-	return result;
+
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
+  for (const key of Object.keys(query)) {
+    // The explicit queryKey always wins, matching the previous
+    // `{ ...query, queryKey }` spread where it was set last.
+    if (key === 'queryKey') continue;
+    Object.defineProperty(result, key, {
+      enumerable: true,
+      configurable: true,
+      get: () => (query as Record<string, unknown>)[key],
+    });
+  }
+  return result;
 };
 
 /**
@@ -80,1262 +80,744 @@ const withQueryKey = <T extends object, K>(
  * @summary Policy 목록 조회
  */
 export const getPolicies = (
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetPolicies200>(
-		{ url: `/api/v1/policies`, method: "GET", signal },
-		options,
-	);
-};
+
+
+      return customInstance<GetPolicies200>(
+      {url: `/api/v1/policies`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getGetPoliciesQueryKey = () => {
-	return [`/api/v1/policies`] as const;
-};
+    return [
+    `/api/v1/policies`
+    ] as const;
+    }
 
 export const getGetPoliciesInfiniteQueryKey = () => {
-	return ["infinite", `/api/v1/policies`] as const;
-};
+    return [
+    'infinite', `/api/v1/policies`
+    ] as const;
+    }
 
-export const getGetPoliciesQueryOptions = <
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetPoliciesQueryKey();
+export const getGetPoliciesQueryOptions = <TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicies>>> = ({
-		signal,
-	}) => getPolicies(requestOptions, signal);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getPolicies>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  const queryKey =  queryOptions?.queryKey ?? getGetPoliciesQueryKey();
 
-export type GetPoliciesQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getPolicies>>
->;
-export type GetPoliciesQueryError = ErrorType<void>;
 
-export function useGetPolicies<
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getPolicies>>,
-					TError,
-					Awaited<ReturnType<typeof getPolicies>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPolicies<
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getPolicies>>,
-					TError,
-					Awaited<ReturnType<typeof getPolicies>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPolicies<
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicies>>> = ({ signal }) => getPolicies(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPoliciesQueryResult = NonNullable<Awaited<ReturnType<typeof getPolicies>>>
+export type GetPoliciesQueryError = ErrorType<void>
+
+
+export function useGetPolicies<TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPolicies>>,
+          TError,
+          Awaited<ReturnType<typeof getPolicies>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPolicies<TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPolicies>>,
+          TError,
+          Awaited<ReturnType<typeof getPolicies>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPolicies<TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Policy 목록 조회
  */
 
-export function useGetPolicies<
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetPoliciesQueryOptions(options);
+export function useGetPolicies<TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetPoliciesQueryOptions(options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary Policy 목록 조회
  */
-export const prefetchGetPoliciesQuery = async <
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetPoliciesQueryOptions(options);
+export const prefetchGetPoliciesQuery = async <TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+ queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetPoliciesQueryOptions(options)
 
-export const getGetPoliciesSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseSuspenseQueryOptions<
-			Awaited<ReturnType<typeof getPolicies>>,
-			TError,
-			TData
-		>
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey = queryOptions?.queryKey ?? getGetPoliciesQueryKey();
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicies>>> = ({
-		signal,
-	}) => getPolicies(requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getPolicies>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetPoliciesSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getPolicies>>
->;
-export type GetPoliciesSuspenseQueryError = ErrorType<void>;
-
-export function useGetPoliciesSuspense<
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPoliciesSuspense<
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPoliciesSuspense<
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Policy 목록 조회
- */
-
-export function useGetPoliciesSuspense<
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetPoliciesSuspenseQueryOptions(options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	return withQueryKey(query, queryOptions.queryKey);
+  return queryClient;
 }
 
-export const getGetPoliciesSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>,
-	TError = ErrorType<void>,
->(options?: {
-	query?: Partial<
-		UseSuspenseInfiniteQueryOptions<
-			Awaited<ReturnType<typeof getPolicies>>,
-			TError,
-			TData
-		>
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetPoliciesInfiniteQueryKey();
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicies>>> = ({
-		signal,
-	}) => getPolicies(requestOptions, signal);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getPolicies>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetPoliciesSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getPolicies>>
->;
-export type GetPoliciesSuspenseInfiniteQueryError = ErrorType<void>;
+export const getGetPoliciesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
 
-export function useGetPoliciesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>,
-	TError = ErrorType<void>,
->(
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPoliciesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPoliciesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPoliciesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicies>>> = ({ signal }) => getPolicies(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPoliciesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPolicies>>>
+export type GetPoliciesSuspenseQueryError = ErrorType<void>
+
+
+export function useGetPoliciesSuspense<TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPoliciesSuspense<TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPoliciesSuspense<TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Policy 목록 조회
  */
 
-export function useGetPoliciesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>,
-	TError = ErrorType<void>,
->(
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetPoliciesSuspenseInfiniteQueryOptions(options);
+export function useGetPoliciesSuspense<TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetPoliciesSuspenseQueryOptions(options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+export const getGetPoliciesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPoliciesInfiniteQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicies>>> = ({ signal }) => getPolicies(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPoliciesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getPolicies>>>
+export type GetPoliciesSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetPoliciesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPoliciesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPoliciesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Policy 목록 조회
+ */
+
+export function useGetPoliciesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPolicies>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetPoliciesSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary Policy 목록 조회
  */
-export const prefetchGetPoliciesInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getPolicies>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicies>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetPoliciesSuspenseInfiniteQueryOptions(options);
+export const prefetchGetPoliciesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getPolicies>>, TError = ErrorType<void>>(
+ queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicies>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetPoliciesSuspenseInfiniteQueryOptions(options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
 
 /**
  * 재사용 가능한 권한 정책 묶음을 생성합니다.
  * @summary Policy 생성
  */
 export const createPolicy = (
-	createPolicyDto: BodyType<CreatePolicyDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    createPolicyDto: BodyType<CreatePolicyDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<CreatePolicy201>(
-		{
-			url: `/api/v1/policies`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: createPolicyDto,
-			signal,
-		},
-		options,
-	);
-};
 
-export const getCreatePolicyMutationKey = () => ["createPolicy"] as const;
 
-export const getCreatePolicyMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof createPolicy>>,
-		TError,
-		CreatePolicyMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof createPolicy>>,
-	TError,
-	CreatePolicyMutationVariables,
-	TContext
-> => {
-	const mutationKey = getCreatePolicyMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<CreatePolicy201>(
+      {url: `/api/v1/policies`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createPolicyDto, signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof createPolicy>>,
-		CreatePolicyMutationVariables
-	> = (props) => {
-		const { data } = props ?? {};
 
-		return createPolicy(data, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type CreatePolicyMutationResult = NonNullable<
-	Awaited<ReturnType<typeof createPolicy>>
->;
-export type CreatePolicyMutationBody = BodyType<CreatePolicyDto>;
-export type CreatePolicyMutationError = ErrorType<void>;
-export type CreatePolicyMutationVariables = { data: BodyType<CreatePolicyDto> };
+export const getCreatePolicyMutationKey = () => ['createPolicy'] as const;
 
-/**
+export const getCreatePolicyMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPolicy>>, TError,CreatePolicyMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createPolicy>>, TError,CreatePolicyMutationVariables, TContext> => {
+
+const mutationKey = getCreatePolicyMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPolicy>>, CreatePolicyMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  createPolicy(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreatePolicyMutationResult = NonNullable<Awaited<ReturnType<typeof createPolicy>>>
+    export type CreatePolicyMutationBody = BodyType<CreatePolicyDto>
+    export type CreatePolicyMutationError = ErrorType<void>
+    export type CreatePolicyMutationVariables = {data: BodyType<CreatePolicyDto>}
+
+    /**
  * @summary Policy 생성
  */
-export const useCreatePolicy = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof createPolicy>>,
-			TError,
-			CreatePolicyMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof createPolicy>>,
-	TError,
-	CreatePolicyMutationVariables,
-	TContext
-> => {
-	return useMutation(getCreatePolicyMutationOptions(options), queryClient);
-};
-/**
+export const useCreatePolicy = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPolicy>>, TError,CreatePolicyMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createPolicy>>,
+        TError,
+        CreatePolicyMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCreatePolicyMutationOptions(options), queryClient);
+    }
+    /**
  * ID로 특정 Policy를 조회합니다.
  * @summary Policy 상세 조회
  */
 export const getPolicyById = (
-	policyId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    policyId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetPolicyById200>(
-		{ url: `/api/v1/policies/${policyId}`, method: "GET", signal },
-		options,
-	);
-};
 
-export const getGetPolicyByIdQueryKey = (policyId: string) => {
-	return [`/api/v1/policies/${policyId}`] as const;
-};
 
-export const getGetPolicyByIdInfiniteQueryKey = (policyId: string) => {
-	return ["infinite", `/api/v1/policies/${policyId}`] as const;
-};
+      return customInstance<GetPolicyById200>(
+      {url: `/api/v1/policies/${policyId}`, method: 'GET', signal
+    },
+      options);
+    }
 
-export const getGetPolicyByIdQueryOptions = <
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+
+export const getGetPolicyByIdQueryKey = (policyId: string,) => {
+    return [
+    `/api/v1/policies/${policyId}`
+    ] as const;
+    }
+
+export const getGetPolicyByIdInfiniteQueryKey = (policyId: string,) => {
+    return [
+    'infinite', `/api/v1/policies/${policyId}`
+    ] as const;
+    }
+
+
+export const getGetPolicyByIdQueryOptions = <TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(policyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetPolicyByIdQueryKey(policyId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicyById>>> = ({
-		signal,
-	}) => getPolicyById(policyId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetPolicyByIdQueryKey(policyId);
 
-	return {
-		queryKey,
-		queryFn,
-		enabled: policyId !== null && policyId !== undefined,
-		...queryOptions,
-	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getPolicyById>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetPolicyByIdQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getPolicyById>>
->;
-export type GetPolicyByIdQueryError = ErrorType<void>;
 
-export function useGetPolicyById<
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getPolicyById>>,
-					TError,
-					Awaited<ReturnType<typeof getPolicyById>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPolicyById<
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getPolicyById>>,
-					TError,
-					Awaited<ReturnType<typeof getPolicyById>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPolicyById<
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicyById>>> = ({ signal }) => getPolicyById(policyId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: policyId !== null && policyId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPolicyByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getPolicyById>>>
+export type GetPolicyByIdQueryError = ErrorType<void>
+
+
+export function useGetPolicyById<TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ policyId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPolicyById>>,
+          TError,
+          Awaited<ReturnType<typeof getPolicyById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPolicyById<TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPolicyById>>,
+          TError,
+          Awaited<ReturnType<typeof getPolicyById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPolicyById<TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Policy 상세 조회
  */
 
-export function useGetPolicyById<
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetPolicyByIdQueryOptions(policyId, options);
+export function useGetPolicyById<TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetPolicyByIdQueryOptions(policyId,options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary Policy 상세 조회
  */
-export const prefetchGetPolicyByIdQuery = async <
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetPolicyByIdQueryOptions(policyId, options);
+export const prefetchGetPolicyByIdQuery = async <TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, policyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetPolicyByIdQueryOptions(policyId,options)
 
-export const getGetPolicyByIdSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey = queryOptions?.queryKey ?? getGetPolicyByIdQueryKey(policyId);
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicyById>>> = ({
-		signal,
-	}) => getPolicyById(policyId, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getPolicyById>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetPolicyByIdSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getPolicyById>>
->;
-export type GetPolicyByIdSuspenseQueryError = ErrorType<void>;
-
-export function useGetPolicyByIdSuspense<
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPolicyByIdSuspense<
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPolicyByIdSuspense<
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Policy 상세 조회
- */
-
-export function useGetPolicyByIdSuspense<
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetPolicyByIdSuspenseQueryOptions(policyId, options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	return withQueryKey(query, queryOptions.queryKey);
+  return queryClient;
 }
 
-export const getGetPolicyByIdSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+
+
+export const getGetPolicyByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(policyId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetPolicyByIdInfiniteQueryKey(policyId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicyById>>> = ({
-		signal,
-	}) => getPolicyById(policyId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetPolicyByIdQueryKey(policyId);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getPolicyById>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetPolicyByIdSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getPolicyById>>
->;
-export type GetPolicyByIdSuspenseInfiniteQueryError = ErrorType<void>;
 
-export function useGetPolicyByIdSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPolicyByIdSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetPolicyByIdSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicyById>>> = ({ signal }) => getPolicyById(policyId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPolicyByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPolicyById>>>
+export type GetPolicyByIdSuspenseQueryError = ErrorType<void>
+
+
+export function useGetPolicyByIdSuspense<TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ policyId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPolicyByIdSuspense<TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPolicyByIdSuspense<TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Policy 상세 조회
  */
 
-export function useGetPolicyByIdSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>,
-	TError = ErrorType<void>,
->(
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetPolicyByIdSuspenseInfiniteQueryOptions(
-		policyId,
-		options,
-	);
+export function useGetPolicyByIdSuspense<TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetPolicyByIdSuspenseQueryOptions(policyId,options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+export const getGetPolicyByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>, TError = ErrorType<void>>(policyId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPolicyByIdInfiniteQueryKey(policyId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPolicyById>>> = ({ signal }) => getPolicyById(policyId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPolicyByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getPolicyById>>>
+export type GetPolicyByIdSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetPolicyByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>, TError = ErrorType<void>>(
+ policyId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPolicyByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPolicyByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Policy 상세 조회
+ */
+
+export function useGetPolicyByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPolicyById>>>, TError = ErrorType<void>>(
+ policyId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetPolicyByIdSuspenseInfiniteQueryOptions(policyId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary Policy 상세 조회
  */
-export const prefetchGetPolicyByIdInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getPolicyById>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	policyId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getPolicyById>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetPolicyByIdSuspenseInfiniteQueryOptions(
-		policyId,
-		options,
-	);
+export const prefetchGetPolicyByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getPolicyById>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, policyId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPolicyById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetPolicyByIdSuspenseInfiniteQueryOptions(policyId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
 
 /**
  * 기존 Policy 정보를 수정합니다.
  * @summary Policy 수정
  */
 export const updatePolicy = (
-	policyId: string,
-	updatePolicyDto: BodyType<UpdatePolicyDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    policyId: string,
+    updatePolicyDto: BodyType<UpdatePolicyDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<UpdatePolicy200>(
-		{
-			url: `/api/v1/policies/${policyId}`,
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			data: updatePolicyDto,
-			signal,
-		},
-		options,
-	);
-};
 
-export const getUpdatePolicyMutationKey = () => ["updatePolicy"] as const;
 
-export const getUpdatePolicyMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof updatePolicy>>,
-		TError,
-		UpdatePolicyMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof updatePolicy>>,
-	TError,
-	UpdatePolicyMutationVariables,
-	TContext
-> => {
-	const mutationKey = getUpdatePolicyMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<UpdatePolicy200>(
+      {url: `/api/v1/policies/${policyId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updatePolicyDto, signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof updatePolicy>>,
-		UpdatePolicyMutationVariables
-	> = (props) => {
-		const { policyId, data } = props ?? {};
 
-		return updatePolicy(policyId, data, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type UpdatePolicyMutationResult = NonNullable<
-	Awaited<ReturnType<typeof updatePolicy>>
->;
-export type UpdatePolicyMutationBody = BodyType<UpdatePolicyDto>;
-export type UpdatePolicyMutationError = ErrorType<void>;
-export type UpdatePolicyMutationVariables = {
-	policyId: string;
-	data: BodyType<UpdatePolicyDto>;
-};
+export const getUpdatePolicyMutationKey = () => ['updatePolicy'] as const;
 
-/**
+export const getUpdatePolicyMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePolicy>>, TError,UpdatePolicyMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updatePolicy>>, TError,UpdatePolicyMutationVariables, TContext> => {
+
+const mutationKey = getUpdatePolicyMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updatePolicy>>, UpdatePolicyMutationVariables> = (props) => {
+          const {policyId,data} = props ?? {};
+
+          return  updatePolicy(policyId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdatePolicyMutationResult = NonNullable<Awaited<ReturnType<typeof updatePolicy>>>
+    export type UpdatePolicyMutationBody = BodyType<UpdatePolicyDto>
+    export type UpdatePolicyMutationError = ErrorType<void>
+    export type UpdatePolicyMutationVariables = {policyId: string;data: BodyType<UpdatePolicyDto>}
+
+    /**
  * @summary Policy 수정
  */
-export const useUpdatePolicy = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof updatePolicy>>,
-			TError,
-			UpdatePolicyMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof updatePolicy>>,
-	TError,
-	UpdatePolicyMutationVariables,
-	TContext
-> => {
-	return useMutation(getUpdatePolicyMutationOptions(options), queryClient);
-};
-/**
+export const useUpdatePolicy = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePolicy>>, TError,UpdatePolicyMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updatePolicy>>,
+        TError,
+        UpdatePolicyMutationVariables,
+        TContext
+      > => {
+      return useMutation(getUpdatePolicyMutationOptions(options), queryClient);
+    }
+    /**
  * 기존 Policy를 삭제합니다. (소프트 삭제)
  * @summary Policy 삭제
  */
 export const deletePolicy = (
-	policyId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    policyId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<DeletePolicy200>(
-		{ url: `/api/v1/policies/${policyId}`, method: "DELETE", signal },
-		options,
-	);
-};
 
-export const getDeletePolicyMutationKey = () => ["deletePolicy"] as const;
 
-export const getDeletePolicyMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof deletePolicy>>,
-		TError,
-		DeletePolicyMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof deletePolicy>>,
-	TError,
-	DeletePolicyMutationVariables,
-	TContext
-> => {
-	const mutationKey = getDeletePolicyMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<DeletePolicy200>(
+      {url: `/api/v1/policies/${policyId}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof deletePolicy>>,
-		DeletePolicyMutationVariables
-	> = (props) => {
-		const { policyId } = props ?? {};
 
-		return deletePolicy(policyId, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type DeletePolicyMutationResult = NonNullable<
-	Awaited<ReturnType<typeof deletePolicy>>
->;
+export const getDeletePolicyMutationKey = () => ['deletePolicy'] as const;
 
-export type DeletePolicyMutationError = ErrorType<void>;
-export type DeletePolicyMutationVariables = { policyId: string };
+export const getDeletePolicyMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePolicy>>, TError,DeletePolicyMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deletePolicy>>, TError,DeletePolicyMutationVariables, TContext> => {
 
-/**
+const mutationKey = getDeletePolicyMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deletePolicy>>, DeletePolicyMutationVariables> = (props) => {
+          const {policyId} = props ?? {};
+
+          return  deletePolicy(policyId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeletePolicyMutationResult = NonNullable<Awaited<ReturnType<typeof deletePolicy>>>
+
+    export type DeletePolicyMutationError = ErrorType<void>
+    export type DeletePolicyMutationVariables = {policyId: string}
+
+    /**
  * @summary Policy 삭제
  */
-export const useDeletePolicy = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof deletePolicy>>,
-			TError,
-			DeletePolicyMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof deletePolicy>>,
-	TError,
-	DeletePolicyMutationVariables,
-	TContext
-> => {
-	return useMutation(getDeletePolicyMutationOptions(options), queryClient);
-};
-/**
+export const useDeletePolicy = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePolicy>>, TError,DeletePolicyMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deletePolicy>>,
+        TError,
+        DeletePolicyMutationVariables,
+        TContext
+      > => {
+      return useMutation(getDeletePolicyMutationOptions(options), queryClient);
+    }
+    /**
  * 특정 Policy에 포함되는 Ability 목록을 전체 동기화 방식으로 반영합니다.
  * @summary Policy 권한 항목 동기화
  */
 export const syncPolicyEntries = (
-	policyId: string,
-	syncPolicyEntriesDto: BodyType<SyncPolicyEntriesDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    policyId: string,
+    syncPolicyEntriesDto: BodyType<SyncPolicyEntriesDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<SyncPolicyEntries200>(
-		{
-			url: `/api/v1/policies/${policyId}/entries`,
-			method: "PUT",
-			headers: { "Content-Type": "application/json" },
-			data: syncPolicyEntriesDto,
-			signal,
-		},
-		options,
-	);
-};
 
-export const getSyncPolicyEntriesMutationKey = () =>
-	["syncPolicyEntries"] as const;
 
-export const getSyncPolicyEntriesMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof syncPolicyEntries>>,
-		TError,
-		SyncPolicyEntriesMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof syncPolicyEntries>>,
-	TError,
-	SyncPolicyEntriesMutationVariables,
-	TContext
-> => {
-	const mutationKey = getSyncPolicyEntriesMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<SyncPolicyEntries200>(
+      {url: `/api/v1/policies/${policyId}/entries`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: syncPolicyEntriesDto, signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof syncPolicyEntries>>,
-		SyncPolicyEntriesMutationVariables
-	> = (props) => {
-		const { policyId, data } = props ?? {};
 
-		return syncPolicyEntries(policyId, data, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type SyncPolicyEntriesMutationResult = NonNullable<
-	Awaited<ReturnType<typeof syncPolicyEntries>>
->;
-export type SyncPolicyEntriesMutationBody = BodyType<SyncPolicyEntriesDto>;
-export type SyncPolicyEntriesMutationError = ErrorType<void>;
-export type SyncPolicyEntriesMutationVariables = {
-	policyId: string;
-	data: BodyType<SyncPolicyEntriesDto>;
-};
+export const getSyncPolicyEntriesMutationKey = () => ['syncPolicyEntries'] as const;
 
-/**
+export const getSyncPolicyEntriesMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncPolicyEntries>>, TError,SyncPolicyEntriesMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof syncPolicyEntries>>, TError,SyncPolicyEntriesMutationVariables, TContext> => {
+
+const mutationKey = getSyncPolicyEntriesMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncPolicyEntries>>, SyncPolicyEntriesMutationVariables> = (props) => {
+          const {policyId,data} = props ?? {};
+
+          return  syncPolicyEntries(policyId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SyncPolicyEntriesMutationResult = NonNullable<Awaited<ReturnType<typeof syncPolicyEntries>>>
+    export type SyncPolicyEntriesMutationBody = BodyType<SyncPolicyEntriesDto>
+    export type SyncPolicyEntriesMutationError = ErrorType<void>
+    export type SyncPolicyEntriesMutationVariables = {policyId: string;data: BodyType<SyncPolicyEntriesDto>}
+
+    /**
  * @summary Policy 권한 항목 동기화
  */
-export const useSyncPolicyEntries = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof syncPolicyEntries>>,
-			TError,
-			SyncPolicyEntriesMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof syncPolicyEntries>>,
-	TError,
-	SyncPolicyEntriesMutationVariables,
-	TContext
-> => {
-	return useMutation(getSyncPolicyEntriesMutationOptions(options), queryClient);
-};
+export const useSyncPolicyEntries = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncPolicyEntries>>, TError,SyncPolicyEntriesMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof syncPolicyEntries>>,
+        TError,
+        SyncPolicyEntriesMutationVariables,
+        TContext
+      > => {
+      return useMutation(getSyncPolicyEntriesMutationOptions(options), queryClient);
+    }

@@ -18,11 +18,11 @@
 /**
  * 상태
  */
-export type ServiceDocumentStatus =
-	(typeof ServiceDocumentStatus)[keyof typeof ServiceDocumentStatus];
+export type ServiceDocumentStatus = typeof ServiceDocumentStatus[keyof typeof ServiceDocumentStatus];
+
 
 export const ServiceDocumentStatus = {
-	DRAFT: "DRAFT",
-	PUBLISHED: "PUBLISHED",
-	ARCHIVED: "ARCHIVED",
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED',
 } as const;

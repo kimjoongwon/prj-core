@@ -1,11 +1,11 @@
 "use client";
 
-import { useUnlockAccount } from "@cocrepo/api/core/auth";
+import { useUnlockAccount } from "@cocrepo/api/idp/auth";
 import {
 	getGetIdpAccountQueryKey,
 	getGetIdpAccountsQueryKey,
 	useGetIdpAccounts,
-} from "@cocrepo/api/core/idp-accounts";
+} from "@cocrepo/api/idp/idp-accounts";
 import { AccountListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";

@@ -15,15 +15,15 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type RecurringDayOfWeek =
-	(typeof RecurringDayOfWeek)[keyof typeof RecurringDayOfWeek];
+export type RecurringDayOfWeek = typeof RecurringDayOfWeek[keyof typeof RecurringDayOfWeek];
+
 
 export const RecurringDayOfWeek = {
-	MONDAY: "MONDAY",
-	TUESDAY: "TUESDAY",
-	WEDNESDAY: "WEDNESDAY",
-	THURSDAY: "THURSDAY",
-	FRIDAY: "FRIDAY",
-	SATURDAY: "SATURDAY",
-	SUNDAY: "SUNDAY",
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY',
 } as const;

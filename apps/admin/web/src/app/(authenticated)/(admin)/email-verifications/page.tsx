@@ -5,7 +5,7 @@ import {
 	getGetEmailVerificationsQueryKey,
 	useGetEmailVerifications,
 	useResendEmailVerification,
-} from "@cocrepo/api/core/email-verifications";
+} from "@cocrepo/api/idp/email-verifications";
 import { EmailVerificationListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";

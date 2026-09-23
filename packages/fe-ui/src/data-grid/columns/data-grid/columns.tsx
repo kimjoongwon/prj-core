@@ -8,11 +8,11 @@ import type { RoleDto } from "@cocrepo/api/core/roles";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type { TaskDto } from "@cocrepo/api/core/tasks";
 import type { TimelineDto } from "@cocrepo/api/core/timelines";
-import type { AuthAuditLogDto } from "@cocrepo/api/core/auth";
-import type { EmailVerificationDto } from "@cocrepo/api/core/email-verifications";
-import type { IdpAccountDto } from "@cocrepo/api/core/idp-accounts";
-import type { OidcClientDto } from "@cocrepo/api/core/oidc-clients";
-import type { OidcSessionDto } from "@cocrepo/api/core/oidc-sessions";
+import type { AuthAuditLogDto } from "@cocrepo/api/idp/auth";
+import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications";
+import type { IdpAccountDto } from "@cocrepo/api/idp/idp-accounts";
+import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
+import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
 import { Ban, Eye, Pencil, Send, Trash2 } from "lucide-react";
 import {
 	ActionButtonCell,

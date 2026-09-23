@@ -16,14 +16,14 @@
  */
 
 export interface ActionConfigDto {
-	/** 설정 유형 (masking, format, transform) */
-	type: string;
-	/** 마스킹 프리셋 (PRESET_EMAIL, PRESET_PHONE 등) */
-	preset?: string;
-	/** 커스텀 패턴 (정규식) */
-	pattern?: string;
-	/** 치환 문자열 */
-	replacement?: string;
-	/** 변환 규칙 */
-	rule?: string;
+  /** 설정 유형 (masking, format, transform) */
+  type: string;
+  /** 마스킹 프리셋 (PRESET_EMAIL, PRESET_PHONE 등) */
+  preset?: string;
+  /** 커스텀 패턴 (정규식) */
+  pattern?: string;
+  /** 치환 문자열 */
+  replacement?: string;
+  /** 변환 규칙 */
+  rule?: string;
 }

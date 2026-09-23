@@ -16,6 +16,6 @@
  */
 
 export type ExecutePasswordResetBody = {
-	password: string;
-	confirmPassword: string;
+  password: string;
+  confirmPassword: string;
 };

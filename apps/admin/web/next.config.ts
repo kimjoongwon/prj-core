@@ -8,6 +8,8 @@ const withBundleAnalyzer = bundleAnalyzer({
 const isDevelopment = process.env.NODE_ENV === "development";
 const coreApiInternalUrl =
 	process.env.CORE_API_INTERNAL_URL ?? "http://localhost:3006";
+const idpApiInternalUrl =
+	process.env.IDP_API_INTERNAL_URL ?? "http://localhost:3007";
 
 const nextConfig: NextConfig = {
 	// Docker 배포를 위한 standalone 출력 모드
@@ -50,17 +52,30 @@ const nextConfig: NextConfig = {
 			// basePath를 무시하고 /api 경로를 프록시
 			// OIDC callback 포함 모든 /api/v1 요청을 백엔드로 프록시
 			beforeFiles: [
-				// Auth/OIDC 관련 경로 -> core-api
+				// 인증/OIDC·IDP 관리 경로 → idp-api(발급자). /oidc와 /api/interaction은
+				// 로그인 UI를 소유한 idp-web origin의 몫이라 이 프록시에 없다.
 				{
-					source: "/oidc/:path*",
-					destination: `${coreApiInternalUrl}/oidc/:path*`,
+					source: "/api/v1/auth/:path*",
+					destination: `${idpApiInternalUrl}/api/v1/auth/:path*`,
 					basePath: false,
 				},
 				{
-					source: "/api/interaction/:path*",
-					destination: `${coreApiInternalUrl}/api/interaction/:path*`,
+					source: "/api/v1/idp/:path*",
+					destination: `${idpApiInternalUrl}/api/v1/idp/:path*`,
 					basePath: false,
 				},
+				{
+					source: "/api/v1/oidc-clients/:path*",
+					destination: `${idpApiInternalUrl}/api/v1/oidc-clients/:path*`,
+					basePath: false,
+				},
+				{
+					source: "/api/v1/oidc-sessions/:path*",
+					destination: `${idpApiInternalUrl}/api/v1/oidc-sessions/:path*`,
+					basePath: false,
+				},
+				// 비밀번호 재설정 → core-api(prod에서 /api Prefix 폴백이 core로 보내는
+				// 것과 같은 계약)
 				{
 					source: "/api/forgot-password",
 					destination: `${coreApiInternalUrl}/api/forgot-password`,
@@ -74,26 +89,6 @@ const nextConfig: NextConfig = {
 				{
 					source: "/api/reset-password/:path*",
 					destination: `${coreApiInternalUrl}/api/reset-password/:path*`,
-					basePath: false,
-				},
-				{
-					source: "/api/v1/auth/:path*",
-					destination: `${coreApiInternalUrl}/api/v1/auth/:path*`,
-					basePath: false,
-				},
-				{
-					source: "/api/v1/idp/:path*",
-					destination: `${coreApiInternalUrl}/api/v1/idp/:path*`,
-					basePath: false,
-				},
-				{
-					source: "/api/v1/oidc-clients/:path*",
-					destination: `${coreApiInternalUrl}/api/v1/oidc-clients/:path*`,
-					basePath: false,
-				},
-				{
-					source: "/api/v1/oidc-sessions/:path*",
-					destination: `${coreApiInternalUrl}/api/v1/oidc-sessions/:path*`,
 					basePath: false,
 				},
 				// 나머지 → main server (port 3006)

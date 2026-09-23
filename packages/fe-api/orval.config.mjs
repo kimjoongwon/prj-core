@@ -12,6 +12,16 @@ const apiSpecEnvironments = {
 	production: "https://onjitda.com/api-json",
 };
 
+// 발급자(idp-api) 스펙 — 인증(auth)·OIDC 클라이언트/세션·IDP 관리 태그의 원천.
+const idpApiSpecEnvironments = {
+	development: "http://localhost:3007/api-json",
+	local: "http://localhost:3007/api-json",
+	stg: "https://stg.onjitda.com/api-json",
+	staging: "https://stg.onjitda.com/api-json",
+	prod: "https://idp.onjitda.com/api-json",
+	production: "https://idp.onjitda.com/api-json",
+};
+
 /**
  * localhost 서버가 실행 중인지 확인
  * @param {string} url - 체크할 URL
@@ -52,9 +62,9 @@ async function isServerRunning(url, timeout = 2000) {
  * @param {Record<string, string>} envMap - 환경별 URL 매핑
  * @param {string} label - 로깅용 라벨 (예: "Server", "IDP")
  */
-async function resolveApiUrl(envMap, label) {
+async function resolveApiUrl(envMap, label, explicitUrlEnvName = "CORE_API_INTERNAL_URL") {
 	const orvalEnv = process.env.ORVAL_ENV;
-	const explicitUrl = process.env.CORE_API_INTERNAL_URL;
+	const explicitUrl = process.env[explicitUrlEnvName];
 
 	// 명시적 환경 지정 시 바로 해당 URL 사용
 	if (orvalEnv) {
@@ -95,6 +105,11 @@ async function getApiUrl() {
 	return resolveApiUrl(apiSpecEnvironments, "Swagger");
 }
 
+/** IDP(발급자) Swagger spec URL 결정 */
+async function getIdpApiUrl() {
+	return resolveApiUrl(idpApiSpecEnvironments, "IDP", "IDP_API_INTERNAL_URL");
+}
+
 /** 공통 React Query 훅 생성 옵션 */
 const queryOptions = {
 	// useQuery는 명시하지 않아 GET만 Query, 나머지 HTTP verb는 Mutation으로 생성
@@ -116,9 +131,11 @@ const queryOptions = {
 // 비동기 설정 래퍼
 async function createConfig() {
 	const apiUrl = await getApiUrl();
+	const idpApiUrl = await getIdpApiUrl();
 
 	console.log(`🚀 Orval 설정 로드됨`);
 	console.log(`   Swagger Spec: ${apiUrl}`);
+	console.log(`   IDP Spec: ${idpApiUrl}`);
 
 	return {
 		// ─── 통합 API client from unified Swagger spec ───
@@ -165,7 +182,45 @@ async function createConfig() {
 			hooks: {
 				afterAllFilesWrite: {
 					command:
-						"pnpm exec biome check --write src/core src/libs/runtimeManifest.ts",
+						"node ./scripts/merge-runtime-manifest.mjs && pnpm exec biome check --write src/core src/libs/runtimeManifest.ts",
+					injectGeneratedDirsAndFiles: false,
+				},
+			},
+		},
+
+		// ─── 발급자(idp-api) client — 인증·OIDC·IDP 관리 태그 ───
+		// core-api가 발급자를 내려놓았으므로 auth/oidc-clients/oidc-sessions/
+		// interaction/idp-*/security-policy/email-verifications 태그는 여기서
+		// 생성한다. axios instance는 core와 같은 customAxios — 경로는 전부 앱
+		// origin 상대경로로 각 앱의 프록시(rewrite/ingress)가 발급자로 보낸다.
+		idp: {
+			input: {
+				target: idpApiUrl,
+				override: {
+					transformer: "./remove-tenant-header.transformer.cjs",
+				},
+			},
+
+			output: {
+				target: "src/idp/index.ts",
+				schemas: "src/idp/model",
+				client: "react-query",
+				httpClient: "axios",
+				mode: "tags-split",
+				override: {
+					useBigInt: true,
+					useDates: true,
+					mutator: {
+						path: "./src/libs/customAxios.ts",
+						name: "customInstance",
+					},
+					query: queryOptions,
+				},
+			},
+			hooks: {
+				afterAllFilesWrite: {
+					command:
+						"node ./scripts/merge-runtime-manifest.mjs && pnpm exec biome check --write src/idp src/libs/runtimeManifest.ts",
 					injectGeneratedDirsAndFiles: false,
 				},
 			},

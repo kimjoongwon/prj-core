@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetOidcClients } from "@cocrepo/api/core/oidc-clients";
+import { useGetOidcClients } from "@cocrepo/api/idp/oidc-clients";
 import { OidcClientListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";

@@ -1,6 +1,6 @@
 "use client";
 
-import type { IdpAccountDto } from "@cocrepo/api/core/idp-accounts";
+import type { IdpAccountDto } from "@cocrepo/api/idp/idp-accounts";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,

@@ -41,7 +41,7 @@ jest.mock("expo-router", () => ({
   }),
 }));
 
-jest.mock("@cocrepo/api/core/auth", () => ({
+jest.mock("@cocrepo/api/idp/auth", () => ({
   useGetMySpaces: (...args: unknown[]) => mockUseGetMySpaces(...args),
   useSetCurrentSpace: jest.fn(() => ({
     isPending: false,

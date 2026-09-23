@@ -14,66 +14,66 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type {
-	DataTag,
-	DefinedInitialDataOptions,
-	DefinedUseQueryResult,
-	InfiniteData,
-	MutationFunction,
-	QueryClient,
-	QueryFunction,
-	QueryKey,
-	UndefinedInitialDataOptions,
-	UseMutationOptions,
-	UseMutationResult,
-	UseQueryOptions,
-	UseQueryResult,
-	UseSuspenseInfiniteQueryOptions,
-	UseSuspenseInfiniteQueryResult,
-	UseSuspenseQueryOptions,
-	UseSuspenseQueryResult,
-} from "@tanstack/react-query";
 import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customAxios";
-
-import { customInstance } from "../../libs/customAxios";
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import type {
-	CreateTemplate201,
-	CreateTemplateDto,
-	GetTemplate200,
-	GetTemplates200,
-	GetTemplatesParams,
-	PreviewTemplateDto,
-	SendTestTemplateDto,
-	ToggleTemplateStatus200,
-	UpdateTemplate200,
-	UpdateTemplateDto,
-} from "../model";
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
+} from '@tanstack/react-query';
+
+import type {
+  CreateTemplate201,
+  CreateTemplateDto,
+  GetTemplate200,
+  GetTemplates200,
+  GetTemplatesParams,
+  PreviewTemplateDto,
+  SendTestTemplateDto,
+  ToggleTemplateStatus200,
+  UpdateTemplate200,
+  UpdateTemplateDto
+} from '../model';
+
+import { customInstance } from '../../libs/customAxios';
+import type { ErrorType , BodyType } from '../../libs/customAxios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-const withQueryKey = <T extends object, K>(
-	query: T,
-	queryKey: K,
-): T & { queryKey: K } => {
-	const result = { queryKey } as T & { queryKey: K };
-	for (const key of Object.keys(query)) {
-		// The explicit queryKey always wins, matching the previous
-		// `{ ...query, queryKey }` spread where it was set last.
-		if (key === "queryKey") continue;
-		Object.defineProperty(result, key, {
-			enumerable: true,
-			configurable: true,
-			get: () => (query as Record<string, unknown>)[key],
-		});
-	}
-	return result;
+
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
+  for (const key of Object.keys(query)) {
+    // The explicit queryKey always wins, matching the previous
+    // `{ ...query, queryKey }` spread where it was set last.
+    if (key === 'queryKey') continue;
+    Object.defineProperty(result, key, {
+      enumerable: true,
+      configurable: true,
+      get: () => (query as Record<string, unknown>)[key],
+    });
+  }
+  return result;
 };
 
 /**
@@ -81,1493 +81,880 @@ const withQueryKey = <T extends object, K>(
  * @summary 템플릿 목록 조회
  */
 export const getTemplates = (
-	params?: GetTemplatesParams,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    params?: GetTemplatesParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetTemplates200>(
-		{ url: `/api/v1/templates`, method: "GET", params, signal },
-		options,
-	);
-};
 
-export const getGetTemplatesQueryKey = (params?: GetTemplatesParams) => {
-	return [`/api/v1/templates`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetTemplatesInfiniteQueryKey = (
-	params?: GetTemplatesParams,
+      return customInstance<GetTemplates200>(
+      {url: `/api/v1/templates`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetTemplatesQueryKey = (params?: GetTemplatesParams,) => {
+    return [
+    `/api/v1/templates`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+export const getGetTemplatesInfiniteQueryKey = (params?: GetTemplatesParams,) => {
+    return [
+    'infinite', `/api/v1/templates`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetTemplatesQueryOptions = <TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(params?: GetTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	return [
-		"infinite",
-		`/api/v1/templates`,
-		...(params ? [params] : []),
-	] as const;
-};
 
-export const getGetTemplatesQueryOptions = <
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetTemplatesQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesQueryKey(params);
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({
-		signal,
-	}) => getTemplates(params, requestOptions, signal);
 
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getTemplates>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetTemplatesQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTemplates>>
->;
-export type GetTemplatesQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({ signal }) => getTemplates(params, requestOptions, signal);
 
-export function useGetTemplates<
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetTemplatesParams,
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getTemplates>>,
-					TError,
-					Awaited<ReturnType<typeof getTemplates>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplates<
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getTemplates>>,
-					TError,
-					Awaited<ReturnType<typeof getTemplates>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplates<
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplatesQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplates>>>
+export type GetTemplatesQueryError = ErrorType<void>
+
+
+export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params: undefined |  GetTemplatesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTemplates>>,
+          TError,
+          Awaited<ReturnType<typeof getTemplates>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTemplates>>,
+          TError,
+          Awaited<ReturnType<typeof getTemplates>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 템플릿 목록 조회
  */
 
-export function useGetTemplates<
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetTemplatesQueryOptions(params, options);
+export function useGetTemplates<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetTemplatesQueryOptions(params,options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 템플릿 목록 조회
  */
-export const prefetchGetTemplatesQuery = async <
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetTemplatesQueryOptions(params, options);
+export const prefetchGetTemplatesQuery = async <TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetTemplatesQueryOptions(params,options)
 
-export const getGetTemplatesSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey = queryOptions?.queryKey ?? getGetTemplatesQueryKey(params);
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({
-		signal,
-	}) => getTemplates(params, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getTemplates>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetTemplatesSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTemplates>>
->;
-export type GetTemplatesSuspenseQueryError = ErrorType<void>;
-
-export function useGetTemplatesSuspense<
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetTemplatesParams,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplatesSuspense<
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplatesSuspense<
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 템플릿 목록 조회
- */
-
-export function useGetTemplatesSuspense<
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetTemplatesSuspenseQueryOptions(params, options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	return withQueryKey(query, queryOptions.queryKey);
+  return queryClient;
 }
 
-export const getGetTemplatesSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+
+
+export const getGetTemplatesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetTemplatesInfiniteQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({
-		signal,
-	}) => getTemplates(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesQueryKey(params);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getTemplates>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetTemplatesSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTemplates>>
->;
-export type GetTemplatesSuspenseInfiniteQueryError = ErrorType<void>;
 
-export function useGetTemplatesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetTemplatesParams,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplatesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplatesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({ signal }) => getTemplates(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplatesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplates>>>
+export type GetTemplatesSuspenseQueryError = ErrorType<void>
+
+
+export function useGetTemplatesSuspense<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params: undefined |  GetTemplatesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplatesSuspense<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplatesSuspense<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 템플릿 목록 조회
  */
 
-export function useGetTemplatesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetTemplatesSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
+export function useGetTemplatesSuspense<TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetTemplatesSuspenseQueryOptions(params,options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+export const getGetTemplatesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesInfiniteQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplates>>> = ({ signal }) => getTemplates(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplatesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplates>>>
+export type GetTemplatesSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetTemplatesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(
+ params: undefined |  GetTemplatesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplatesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplatesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 템플릿 목록 조회
+ */
+
+export function useGetTemplatesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplates>>>, TError = ErrorType<void>>(
+ params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTemplatesSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 템플릿 목록 조회
  */
-export const prefetchGetTemplatesInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getTemplates>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetTemplatesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplates>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetTemplatesSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
+export const prefetchGetTemplatesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTemplates>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetTemplatesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetTemplatesSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
 
 /**
  * 새로운 템플릿을 등록합니다. System Space 전용 API입니다.
  * @summary 템플릿 등록
  */
 export const createTemplate = (
-	createTemplateDto: BodyType<CreateTemplateDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    createTemplateDto: BodyType<CreateTemplateDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<CreateTemplate201>(
-		{
-			url: `/api/v1/templates`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: createTemplateDto,
-			signal,
-		},
-		options,
-	);
-};
 
-export const getCreateTemplateMutationKey = () => ["createTemplate"] as const;
 
-export const getCreateTemplateMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof createTemplate>>,
-		TError,
-		CreateTemplateMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof createTemplate>>,
-	TError,
-	CreateTemplateMutationVariables,
-	TContext
-> => {
-	const mutationKey = getCreateTemplateMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<CreateTemplate201>(
+      {url: `/api/v1/templates`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createTemplateDto, signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof createTemplate>>,
-		CreateTemplateMutationVariables
-	> = (props) => {
-		const { data } = props ?? {};
 
-		return createTemplate(data, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type CreateTemplateMutationResult = NonNullable<
-	Awaited<ReturnType<typeof createTemplate>>
->;
-export type CreateTemplateMutationBody = BodyType<CreateTemplateDto>;
-export type CreateTemplateMutationError = ErrorType<void>;
-export type CreateTemplateMutationVariables = {
-	data: BodyType<CreateTemplateDto>;
-};
+export const getCreateTemplateMutationKey = () => ['createTemplate'] as const;
 
-/**
+export const getCreateTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,CreateTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,CreateTemplateMutationVariables, TContext> => {
+
+const mutationKey = getCreateTemplateMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTemplate>>, CreateTemplateMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  createTemplate(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof createTemplate>>>
+    export type CreateTemplateMutationBody = BodyType<CreateTemplateDto>
+    export type CreateTemplateMutationError = ErrorType<void>
+    export type CreateTemplateMutationVariables = {data: BodyType<CreateTemplateDto>}
+
+    /**
  * @summary 템플릿 등록
  */
-export const useCreateTemplate = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof createTemplate>>,
-			TError,
-			CreateTemplateMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof createTemplate>>,
-	TError,
-	CreateTemplateMutationVariables,
-	TContext
-> => {
-	return useMutation(getCreateTemplateMutationOptions(options), queryClient);
-};
-/**
+export const useCreateTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,CreateTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createTemplate>>,
+        TError,
+        CreateTemplateMutationVariables,
+        TContext
+      > => {
+      return useMutation(getCreateTemplateMutationOptions(options), queryClient);
+    }
+    /**
  * 특정 템플릿의 상세 정보를 조회합니다. System Space 전용 API입니다.
  * @summary 템플릿 상세 조회
  */
 export const getTemplate = (
-	templateId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    templateId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetTemplate200>(
-		{ url: `/api/v1/templates/${templateId}`, method: "GET", signal },
-		options,
-	);
-};
 
-export const getGetTemplateQueryKey = (templateId: string) => {
-	return [`/api/v1/templates/${templateId}`] as const;
-};
 
-export const getGetTemplateInfiniteQueryKey = (templateId: string) => {
-	return ["infinite", `/api/v1/templates/${templateId}`] as const;
-};
+      return customInstance<GetTemplate200>(
+      {url: `/api/v1/templates/${templateId}`, method: 'GET', signal
+    },
+      options);
+    }
 
-export const getGetTemplateQueryOptions = <
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+
+export const getGetTemplateQueryKey = (templateId: string,) => {
+    return [
+    `/api/v1/templates/${templateId}`
+    ] as const;
+    }
+
+export const getGetTemplateInfiniteQueryKey = (templateId: string,) => {
+    return [
+    'infinite', `/api/v1/templates/${templateId}`
+    ] as const;
+    }
+
+
+export const getGetTemplateQueryOptions = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({
-		signal,
-	}) => getTemplate(templateId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
 
-	return {
-		queryKey,
-		queryFn,
-		enabled: templateId !== null && templateId !== undefined,
-		...queryOptions,
-	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getTemplate>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetTemplateQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTemplate>>
->;
-export type GetTemplateQueryError = ErrorType<void>;
 
-export function useGetTemplate<
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getTemplate>>,
-					TError,
-					Awaited<ReturnType<typeof getTemplate>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplate<
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getTemplate>>,
-					TError,
-					Awaited<ReturnType<typeof getTemplate>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplate<
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: templateId !== null && templateId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplateQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
+export type GetTemplateQueryError = ErrorType<void>
+
+
+export function useGetTemplate<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTemplate>>,
+          TError,
+          Awaited<ReturnType<typeof getTemplate>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplate<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTemplate>>,
+          TError,
+          Awaited<ReturnType<typeof getTemplate>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplate<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 템플릿 상세 조회
  */
 
-export function useGetTemplate<
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetTemplateQueryOptions(templateId, options);
+export function useGetTemplate<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetTemplateQueryOptions(templateId,options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 템플릿 상세 조회
  */
-export const prefetchGetTemplateQuery = async <
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetTemplateQueryOptions(templateId, options);
+export const prefetchGetTemplateQuery = async <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetTemplateQueryOptions(templateId,options)
 
-export const getGetTemplateSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey = queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({
-		signal,
-	}) => getTemplate(templateId, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getTemplate>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetTemplateSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTemplate>>
->;
-export type GetTemplateSuspenseQueryError = ErrorType<void>;
-
-export function useGetTemplateSuspense<
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplateSuspense<
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplateSuspense<
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 템플릿 상세 조회
- */
-
-export function useGetTemplateSuspense<
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetTemplateSuspenseQueryOptions(templateId, options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	return withQueryKey(query, queryOptions.queryKey);
+  return queryClient;
 }
 
-export const getGetTemplateSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+
+
+export const getGetTemplateSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetTemplateInfiniteQueryKey(templateId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({
-		signal,
-	}) => getTemplate(templateId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getTemplate>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetTemplateSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getTemplate>>
->;
-export type GetTemplateSuspenseInfiniteQueryError = ErrorType<void>;
 
-export function useGetTemplateSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplateSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetTemplateSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplateSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
+export type GetTemplateSuspenseQueryError = ErrorType<void>
+
+
+export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 템플릿 상세 조회
  */
 
-export function useGetTemplateSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
-	TError = ErrorType<void>,
->(
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(
-		templateId,
-		options,
-	);
+export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetTemplateSuspenseQueryOptions(templateId,options)
 
-	return withQueryKey(query, queryOptions.queryKey);
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+export const getGetTemplateSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplateInfiniteQueryKey(templateId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTemplateSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
+export type GetTemplateSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 템플릿 상세 조회
+ */
+
+export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(templateId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 템플릿 상세 조회
  */
-export const prefetchGetTemplateInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getTemplate>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	templateId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getTemplate>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(
-		templateId,
-		options,
-	);
+export const prefetchGetTemplateInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(templateId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+
 
 /**
  * 템플릿 정보를 수정합니다. 변경하려는 필드만 전송하면 됩니다. System Space 전용 API입니다.
  * @summary 템플릿 수정
  */
 export const updateTemplate = (
-	templateId: string,
-	updateTemplateDto: BodyType<UpdateTemplateDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    templateId: string,
+    updateTemplateDto: BodyType<UpdateTemplateDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<UpdateTemplate200>(
-		{
-			url: `/api/v1/templates/${templateId}`,
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			data: updateTemplateDto,
-			signal,
-		},
-		options,
-	);
-};
 
-export const getUpdateTemplateMutationKey = () => ["updateTemplate"] as const;
 
-export const getUpdateTemplateMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof updateTemplate>>,
-		TError,
-		UpdateTemplateMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof updateTemplate>>,
-	TError,
-	UpdateTemplateMutationVariables,
-	TContext
-> => {
-	const mutationKey = getUpdateTemplateMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<UpdateTemplate200>(
+      {url: `/api/v1/templates/${templateId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateTemplateDto, signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof updateTemplate>>,
-		UpdateTemplateMutationVariables
-	> = (props) => {
-		const { templateId, data } = props ?? {};
 
-		return updateTemplate(templateId, data, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type UpdateTemplateMutationResult = NonNullable<
-	Awaited<ReturnType<typeof updateTemplate>>
->;
-export type UpdateTemplateMutationBody = BodyType<UpdateTemplateDto>;
-export type UpdateTemplateMutationError = ErrorType<void>;
-export type UpdateTemplateMutationVariables = {
-	templateId: string;
-	data: BodyType<UpdateTemplateDto>;
-};
+export const getUpdateTemplateMutationKey = () => ['updateTemplate'] as const;
 
-/**
+export const getUpdateTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,UpdateTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,UpdateTemplateMutationVariables, TContext> => {
+
+const mutationKey = getUpdateTemplateMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTemplate>>, UpdateTemplateMutationVariables> = (props) => {
+          const {templateId,data} = props ?? {};
+
+          return  updateTemplate(templateId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof updateTemplate>>>
+    export type UpdateTemplateMutationBody = BodyType<UpdateTemplateDto>
+    export type UpdateTemplateMutationError = ErrorType<void>
+    export type UpdateTemplateMutationVariables = {templateId: string;data: BodyType<UpdateTemplateDto>}
+
+    /**
  * @summary 템플릿 수정
  */
-export const useUpdateTemplate = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof updateTemplate>>,
-			TError,
-			UpdateTemplateMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof updateTemplate>>,
-	TError,
-	UpdateTemplateMutationVariables,
-	TContext
-> => {
-	return useMutation(getUpdateTemplateMutationOptions(options), queryClient);
-};
-/**
+export const useUpdateTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,UpdateTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateTemplate>>,
+        TError,
+        UpdateTemplateMutationVariables,
+        TContext
+      > => {
+      return useMutation(getUpdateTemplateMutationOptions(options), queryClient);
+    }
+    /**
  * 템플릿을 삭제합니다. System Space 전용 API입니다.
  * @summary 템플릿 삭제
  */
 export const deleteTemplate = (
-	templateId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    templateId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<unknown>(
-		{ url: `/api/v1/templates/${templateId}`, method: "DELETE", signal },
-		options,
-	);
-};
 
-export const getDeleteTemplateMutationKey = () => ["deleteTemplate"] as const;
 
-export const getDeleteTemplateMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof deleteTemplate>>,
-		TError,
-		DeleteTemplateMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof deleteTemplate>>,
-	TError,
-	DeleteTemplateMutationVariables,
-	TContext
-> => {
-	const mutationKey = getDeleteTemplateMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<unknown>(
+      {url: `/api/v1/templates/${templateId}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof deleteTemplate>>,
-		DeleteTemplateMutationVariables
-	> = (props) => {
-		const { templateId } = props ?? {};
 
-		return deleteTemplate(templateId, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type DeleteTemplateMutationResult = NonNullable<
-	Awaited<ReturnType<typeof deleteTemplate>>
->;
+export const getDeleteTemplateMutationKey = () => ['deleteTemplate'] as const;
 
-export type DeleteTemplateMutationError = ErrorType<void>;
-export type DeleteTemplateMutationVariables = { templateId: string };
+export const getDeleteTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,DeleteTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,DeleteTemplateMutationVariables, TContext> => {
 
-/**
+const mutationKey = getDeleteTemplateMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTemplate>>, DeleteTemplateMutationVariables> = (props) => {
+          const {templateId} = props ?? {};
+
+          return  deleteTemplate(templateId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTemplate>>>
+
+    export type DeleteTemplateMutationError = ErrorType<void>
+    export type DeleteTemplateMutationVariables = {templateId: string}
+
+    /**
  * @summary 템플릿 삭제
  */
-export const useDeleteTemplate = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof deleteTemplate>>,
-			TError,
-			DeleteTemplateMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof deleteTemplate>>,
-	TError,
-	DeleteTemplateMutationVariables,
-	TContext
-> => {
-	return useMutation(getDeleteTemplateMutationOptions(options), queryClient);
-};
-/**
+export const useDeleteTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,DeleteTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteTemplate>>,
+        TError,
+        DeleteTemplateMutationVariables,
+        TContext
+      > => {
+      return useMutation(getDeleteTemplateMutationOptions(options), queryClient);
+    }
+    /**
  * 템플릿의 활성/비활성 상태를 전환합니다. System Space 전용 API입니다.
  * @summary 템플릿 활성/비활성 토글
  */
 export const toggleTemplateStatus = (
-	templateId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    templateId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<ToggleTemplateStatus200>(
-		{
-			url: `/api/v1/templates/${templateId}/toggle-status`,
-			method: "PATCH",
-			signal,
-		},
-		options,
-	);
-};
 
-export const getToggleTemplateStatusMutationKey = () =>
-	["toggleTemplateStatus"] as const;
 
-export const getToggleTemplateStatusMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof toggleTemplateStatus>>,
-		TError,
-		ToggleTemplateStatusMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof toggleTemplateStatus>>,
-	TError,
-	ToggleTemplateStatusMutationVariables,
-	TContext
-> => {
-	const mutationKey = getToggleTemplateStatusMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<ToggleTemplateStatus200>(
+      {url: `/api/v1/templates/${templateId}/toggle-status`, method: 'PATCH', signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof toggleTemplateStatus>>,
-		ToggleTemplateStatusMutationVariables
-	> = (props) => {
-		const { templateId } = props ?? {};
 
-		return toggleTemplateStatus(templateId, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type ToggleTemplateStatusMutationResult = NonNullable<
-	Awaited<ReturnType<typeof toggleTemplateStatus>>
->;
+export const getToggleTemplateStatusMutationKey = () => ['toggleTemplateStatus'] as const;
 
-export type ToggleTemplateStatusMutationError = ErrorType<void>;
-export type ToggleTemplateStatusMutationVariables = { templateId: string };
+export const getToggleTemplateStatusMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof toggleTemplateStatus>>, TError,ToggleTemplateStatusMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof toggleTemplateStatus>>, TError,ToggleTemplateStatusMutationVariables, TContext> => {
 
-/**
+const mutationKey = getToggleTemplateStatusMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof toggleTemplateStatus>>, ToggleTemplateStatusMutationVariables> = (props) => {
+          const {templateId} = props ?? {};
+
+          return  toggleTemplateStatus(templateId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ToggleTemplateStatusMutationResult = NonNullable<Awaited<ReturnType<typeof toggleTemplateStatus>>>
+
+    export type ToggleTemplateStatusMutationError = ErrorType<void>
+    export type ToggleTemplateStatusMutationVariables = {templateId: string}
+
+    /**
  * @summary 템플릿 활성/비활성 토글
  */
-export const useToggleTemplateStatus = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof toggleTemplateStatus>>,
-			TError,
-			ToggleTemplateStatusMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof toggleTemplateStatus>>,
-	TError,
-	ToggleTemplateStatusMutationVariables,
-	TContext
-> => {
-	return useMutation(
-		getToggleTemplateStatusMutationOptions(options),
-		queryClient,
-	);
-};
-/**
+export const useToggleTemplateStatus = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof toggleTemplateStatus>>, TError,ToggleTemplateStatusMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof toggleTemplateStatus>>,
+        TError,
+        ToggleTemplateStatusMutationVariables,
+        TContext
+      > => {
+      return useMutation(getToggleTemplateStatusMutationOptions(options), queryClient);
+    }
+    /**
  * 템플릿에 변수를 대입하여 미리보기 결과를 반환합니다. System Space 전용 API입니다.
  * @summary 템플릿 미리보기
  */
 export const previewTemplate = (
-	templateId: string,
-	previewTemplateDto: BodyType<PreviewTemplateDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    templateId: string,
+    previewTemplateDto: BodyType<PreviewTemplateDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<unknown>(
-		{
-			url: `/api/v1/templates/${templateId}/preview`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: previewTemplateDto,
-			signal,
-		},
-		options,
-	);
-};
 
-export const getPreviewTemplateMutationKey = () => ["previewTemplate"] as const;
 
-export const getPreviewTemplateMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof previewTemplate>>,
-		TError,
-		PreviewTemplateMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof previewTemplate>>,
-	TError,
-	PreviewTemplateMutationVariables,
-	TContext
-> => {
-	const mutationKey = getPreviewTemplateMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<unknown>(
+      {url: `/api/v1/templates/${templateId}/preview`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: previewTemplateDto, signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof previewTemplate>>,
-		PreviewTemplateMutationVariables
-	> = (props) => {
-		const { templateId, data } = props ?? {};
 
-		return previewTemplate(templateId, data, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type PreviewTemplateMutationResult = NonNullable<
-	Awaited<ReturnType<typeof previewTemplate>>
->;
-export type PreviewTemplateMutationBody = BodyType<PreviewTemplateDto>;
-export type PreviewTemplateMutationError = ErrorType<void>;
-export type PreviewTemplateMutationVariables = {
-	templateId: string;
-	data: BodyType<PreviewTemplateDto>;
-};
+export const getPreviewTemplateMutationKey = () => ['previewTemplate'] as const;
 
-/**
+export const getPreviewTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof previewTemplate>>, TError,PreviewTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof previewTemplate>>, TError,PreviewTemplateMutationVariables, TContext> => {
+
+const mutationKey = getPreviewTemplateMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof previewTemplate>>, PreviewTemplateMutationVariables> = (props) => {
+          const {templateId,data} = props ?? {};
+
+          return  previewTemplate(templateId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PreviewTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof previewTemplate>>>
+    export type PreviewTemplateMutationBody = BodyType<PreviewTemplateDto>
+    export type PreviewTemplateMutationError = ErrorType<void>
+    export type PreviewTemplateMutationVariables = {templateId: string;data: BodyType<PreviewTemplateDto>}
+
+    /**
  * @summary 템플릿 미리보기
  */
-export const usePreviewTemplate = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof previewTemplate>>,
-			TError,
-			PreviewTemplateMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof previewTemplate>>,
-	TError,
-	PreviewTemplateMutationVariables,
-	TContext
-> => {
-	return useMutation(getPreviewTemplateMutationOptions(options), queryClient);
-};
-/**
+export const usePreviewTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof previewTemplate>>, TError,PreviewTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof previewTemplate>>,
+        TError,
+        PreviewTemplateMutationVariables,
+        TContext
+      > => {
+      return useMutation(getPreviewTemplateMutationOptions(options), queryClient);
+    }
+    /**
  * 템플릿을 테스트 수신자에게 발송합니다. System Space 전용 API입니다.
  * @summary 템플릿 발송 테스트
  */
 export const sendTestTemplate = (
-	templateId: string,
-	sendTestTemplateDto: BodyType<SendTestTemplateDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    templateId: string,
+    sendTestTemplateDto: BodyType<SendTestTemplateDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<unknown>(
-		{
-			url: `/api/v1/templates/${templateId}/send-test`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: sendTestTemplateDto,
-			signal,
-		},
-		options,
-	);
-};
 
-export const getSendTestTemplateMutationKey = () =>
-	["sendTestTemplate"] as const;
 
-export const getSendTestTemplateMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof sendTestTemplate>>,
-		TError,
-		SendTestTemplateMutationVariables,
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof sendTestTemplate>>,
-	TError,
-	SendTestTemplateMutationVariables,
-	TContext
-> => {
-	const mutationKey = getSendTestTemplateMutationKey();
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
+      return customInstance<unknown>(
+      {url: `/api/v1/templates/${templateId}/send-test`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sendTestTemplateDto, signal
+    },
+      options);
+    }
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof sendTestTemplate>>,
-		SendTestTemplateMutationVariables
-	> = (props) => {
-		const { templateId, data } = props ?? {};
 
-		return sendTestTemplate(templateId, data, requestOptions);
-	};
 
-	return { mutationFn, ...mutationOptions };
-};
 
-export type SendTestTemplateMutationResult = NonNullable<
-	Awaited<ReturnType<typeof sendTestTemplate>>
->;
-export type SendTestTemplateMutationBody = BodyType<SendTestTemplateDto>;
-export type SendTestTemplateMutationError = ErrorType<void>;
-export type SendTestTemplateMutationVariables = {
-	templateId: string;
-	data: BodyType<SendTestTemplateDto>;
-};
+export const getSendTestTemplateMutationKey = () => ['sendTestTemplate'] as const;
 
-/**
+export const getSendTestTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendTestTemplate>>, TError,SendTestTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof sendTestTemplate>>, TError,SendTestTemplateMutationVariables, TContext> => {
+
+const mutationKey = getSendTestTemplateMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sendTestTemplate>>, SendTestTemplateMutationVariables> = (props) => {
+          const {templateId,data} = props ?? {};
+
+          return  sendTestTemplate(templateId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SendTestTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof sendTestTemplate>>>
+    export type SendTestTemplateMutationBody = BodyType<SendTestTemplateDto>
+    export type SendTestTemplateMutationError = ErrorType<void>
+    export type SendTestTemplateMutationVariables = {templateId: string;data: BodyType<SendTestTemplateDto>}
+
+    /**
  * @summary 템플릿 발송 테스트
  */
-export const useSendTestTemplate = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof sendTestTemplate>>,
-			TError,
-			SendTestTemplateMutationVariables,
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof sendTestTemplate>>,
-	TError,
-	SendTestTemplateMutationVariables,
-	TContext
-> => {
-	return useMutation(getSendTestTemplateMutationOptions(options), queryClient);
-};
+export const useSendTestTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendTestTemplate>>, TError,SendTestTemplateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof sendTestTemplate>>,
+        TError,
+        SendTestTemplateMutationVariables,
+        TContext
+      > => {
+      return useMutation(getSendTestTemplateMutationOptions(options), queryClient);
+    }

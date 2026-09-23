@@ -203,10 +203,20 @@ const createRuntimeManifest = (spec) => {
 	return { operations, schemas: spec.components?.schemas ?? {} };
 };
 
-const writeRuntimeManifest = (manifest) => {
-	const target = path.join(__dirname, "src/libs/runtimeManifest.ts");
-	const source = `// Orval input transformer가 codegen 시 갱신합니다.\nimport type { RuntimeManifest } from "./runtimeSchema";\n\nexport const runtimeManifest: RuntimeManifest = ${JSON.stringify(manifest, null, 2)};\n`;
-	fs.writeFileSync(target, source);
+// 스펙이 core·idp 두 프로젝트로 나뉘어 순차 실행되므로 매니페스트는 프로젝트별
+// JSON 파편으로 기록하고 merge-runtime-manifest.mjs가 합쳐 최종 TS를 쓴다
+// (TS 파일을 재파싱하지 않는다 — biome이 포맷을 바꾸기 때문).
+const writeRuntimeManifest = (manifest, spec) => {
+	const hasInteractionPaths = Object.keys(spec.paths ?? {}).some((p) =>
+		p.startsWith("/api/interaction"),
+	);
+	const fragmentName = hasInteractionPaths
+		? "runtimeManifest.idp.json"
+		: "runtimeManifest.core.json";
+	fs.writeFileSync(
+		path.join(__dirname, "src/libs", fragmentName),
+		JSON.stringify(manifest, null, 2),
+	);
 };
 
 function transformSpecForCodegen(spec, { writeManifest = true } = {}) {
@@ -248,7 +258,8 @@ function transformSpecForCodegen(spec, { writeManifest = true } = {}) {
 		}
 	}
 	normalizeSpecSchemas(nextSpec);
-	if (writeManifest) writeRuntimeManifest(createRuntimeManifest(nextSpec));
+	if (writeManifest)
+		writeRuntimeManifest(createRuntimeManifest(nextSpec), nextSpec);
 
 	return nextSpec;
 }

@@ -1,7 +1,7 @@
 import type { AxiosAdapter } from "axios";
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { getCurrentSpace, setCurrentSpace } from "../core/auth/auth";
-import type { setCurrentSpace as setLegacyCurrentSpace } from "../core/auth/current-space";
+import { getCurrentSpace, setCurrentSpace } from "../idp/auth/auth";
+import type { setCurrentSpace as setLegacyCurrentSpace } from "../idp/auth/current-space";
 import type { CreateSessionDto } from "../core/model/createSessionDto";
 import type { InquiryParticipant } from "../core/model/inquiryParticipant";
 import type { UserDto } from "../core/model/userDto";

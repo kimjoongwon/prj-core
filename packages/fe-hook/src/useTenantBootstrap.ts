@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetCurrentSpace, useGetMySpaces } from "@cocrepo/api/core/auth";
+import { useGetCurrentSpace, useGetMySpaces } from "@cocrepo/api/idp/auth";
 import { useApp } from "@cocrepo/store";
 import type {
 	AccountBootstrapSpaceLike,

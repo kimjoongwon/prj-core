@@ -1,6 +1,6 @@
 "use client";
 
-import type { EmailVerificationDto } from "@cocrepo/api/core/email-verifications";
+import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,

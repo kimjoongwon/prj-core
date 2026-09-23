@@ -43,7 +43,7 @@ vi.mock("@cocrepo/store", () => ({
 	useApp: () => ({ account: mocks.account }),
 }));
 
-vi.mock("@cocrepo/api/core/auth", () => ({
+vi.mock("@cocrepo/api/idp/auth", () => ({
 	useSetCurrentSpace: (options: { mutation?: MutationOptions }) => {
 		mocks.mutationOptions = options.mutation;
 		return { mutate: mocks.mutate, isPending: mocks.isPending };

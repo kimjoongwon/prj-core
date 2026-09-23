@@ -1,5 +1,5 @@
 import { SpaceSelectScreen, type SpaceListItemInfo } from "@cocrepo/mo-ui";
-import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/core/auth";
+import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceDto } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Href } from "expo-router";

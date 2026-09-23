@@ -8,7 +8,7 @@ import {
 	useRevokeAllOidcSessions,
 	useRevokeOidcSession,
 	useRevokeOidcSessionsByGrant,
-} from "@cocrepo/api/core/oidc-sessions";
+} from "@cocrepo/api/idp/oidc-sessions";
 import {
 	OidcSessionListScreen,
 	type OidcSessionListScreenStats,

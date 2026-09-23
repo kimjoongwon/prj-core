@@ -91,14 +91,16 @@ ensure_shared_local_env() {
 
   export ADMIN_WEB_URL="${ADMIN_WEB_URL:-http://localhost:${ADMIN_WEB_PORT:-3000}}"
   export CORE_API_URL="${CORE_API_URL:-http://localhost:${CORE_API_PORT:-3006}}"
+  export IDP_API_URL="${IDP_API_URL:-http://localhost:${IDP_API_PORT:-3007}}"
+  export IDP_WEB_URL="${IDP_WEB_URL:-http://localhost:${IDP_WEB_PORT:-3008}}"
   export STORYBOOK_URL="${STORYBOOK_URL:-http://localhost:${STORYBOOK_PORT:-6006}}"
 
   export CORE_API_INTERNAL_URL="${CORE_API_INTERNAL_URL:-$CORE_API_URL}"
+  export IDP_API_INTERNAL_URL="${IDP_API_INTERNAL_URL:-$IDP_API_URL}"
   export NEXT_PUBLIC_WS_URL="${NEXT_PUBLIC_WS_URL:-ws://localhost:${CORE_API_PORT:-3006}}"
-  export OIDC_ISSUER="${OIDC_ISSUER:-$ADMIN_WEB_URL}"
-  export OIDC_JWKS_URI="${OIDC_JWKS_URI:-${ADMIN_WEB_URL}/oidc/jwks}"
+  # 발급자는 idp-api다 — core-api는 이 JWKS로 토큰을 검증만 한다.
+  export OIDC_JWKS_URI="${OIDC_JWKS_URI:-${IDP_API_URL}/oidc/jwks}"
   export OIDC_ADMIN_BASE_URL="${OIDC_ADMIN_BASE_URL:-$ADMIN_WEB_URL}"
-  export OIDC_INTERACTION_BASE_URL="${OIDC_INTERACTION_BASE_URL:-${ADMIN_WEB_URL}/admin}"
   export OIDC_STORYBOOK_BASE_URL="${OIDC_STORYBOOK_BASE_URL:-$STORYBOOK_URL}"
 }
 
@@ -554,6 +556,29 @@ if [[ "$CODEGEN_ENV" == "local" ]]; then
     HAS_BACKEND="true"
     echo -e "${YELLOW}⚠️  local IDP 코드젠은 core-api를 자동으로 포함합니다.${RESET}"
   fi
+fi
+
+# admin-web은 core-api(비즈니스 API)와 idp-api·idp-web(발급자+로그인 UI)을
+# 함께 필요로 한다 — 선택되지 않았으면 자동으로 포함한다.
+if [[ " $SERVICES " == *" admin-web "* ]]; then
+  for required_service in core-api idp-api idp-web; do
+    if [[ " $SERVICES " != *" $required_service "* ]]; then
+      FILTERS="$FILTERS --filter=$required_service"
+      SERVICES="$SERVICES $required_service"
+      if [[ "$required_service" != "idp-web" ]]; then
+        HAS_BACKEND="true"
+      fi
+      echo -e "${YELLOW}⚠️  admin-web은 ${required_service}가 필요합니다. 자동으로 포함합니다.${RESET}"
+    fi
+  done
+fi
+
+# 인증 origin은 idp-web이다 — 발급자(issuer)와 로그인 UI가 같은 origin이어야
+# oidc-provider 세션 쿠키가 interaction 제출 XHR에 실려간다. idp-web이 세션에
+# 있을 때만 기본값을 덮어쓴다(단독 idp-api 세션은 .env 기본값 3007/3008 유지).
+if [[ " $SERVICES " == *" idp-web "* ]]; then
+  export OIDC_ISSUER="${OIDC_ISSUER:-$IDP_WEB_URL}"
+  export OIDC_INTERACTION_BASE_URL="${OIDC_INTERACTION_BASE_URL:-$IDP_WEB_URL}"
 fi
 
 # codegen 실행 커맨드 결정

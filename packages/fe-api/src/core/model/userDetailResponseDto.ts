@@ -14,70 +14,70 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { ProfileDto } from "./profileDto";
-import type { TenantDto } from "./tenantDto";
-import type { UserAssociationDto } from "./userAssociationDto";
-import type { UserClassificationDto } from "./userClassificationDto";
+import type { ProfileDto } from './profileDto';
+import type { TenantDto } from './tenantDto';
+import type { UserAssociationDto } from './userAssociationDto';
+import type { UserClassificationDto } from './userClassificationDto';
 
 export interface UserDetailResponseDto {
-	/** 사용자 이름 */
-	name: string;
-	/** 이메일 주소 */
-	email: string;
-	/** 연락처 */
-	phone: string;
-	/** 로그인 실패 횟수 */
-	failedLoginAttempts: number;
-	/** 영구 잠금 여부 */
-	isPermanentlyLocked: boolean;
-	/** 비밀번호 변경 필요 */
-	mustChangePassword: boolean;
-	/** 활성 상태 */
-	isActive: boolean;
-	/**
-	 * 잠금 해제 시각
-	 * @nullable
-	 */
-	lockedUntil: Date | null;
-	/**
-	 * 비밀번호 변경일
-	 * @nullable
-	 */
-	passwordChangedAt: Date | null;
-	/**
-	 * 마지막 로그인 시각
-	 * @nullable
-	 */
-	lastLoginAt: Date | null;
-	/**
-	 * 마지막 로그인 IP
-	 * @nullable
-	 */
-	lastLoginIp: string | null;
-	/**
-	 * 현재 선택된 Tenant membership ID
-	 * @nullable
-	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
-	 */
-	currentTenantId: bigint | null;
-	/** 프로필 목록 */
-	profiles?: ProfileDto[];
-	/** 테넌트 목록 */
-	tenants?: TenantDto[];
-	/** 사용자 연결 정보 */
-	associations?: UserAssociationDto[];
-	/** 사용자 분류 정보 */
-	classification?: UserClassificationDto;
-	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-	id: bigint;
-	createdAt: Date;
-	/** @nullable */
-	updatedAt: Date | null;
-	/** @nullable */
-	removedAt: Date | null;
-	/**
-	 * 소속 공간 ID
-	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
-	 */
-	spaceId: bigint;
+  /** 사용자 이름 */
+  name: string;
+  /** 이메일 주소 */
+  email: string;
+  /** 연락처 */
+  phone: string;
+  /** 로그인 실패 횟수 */
+  failedLoginAttempts: number;
+  /** 영구 잠금 여부 */
+  isPermanentlyLocked: boolean;
+  /** 비밀번호 변경 필요 */
+  mustChangePassword: boolean;
+  /** 활성 상태 */
+  isActive: boolean;
+  /**
+     * 잠금 해제 시각
+     * @nullable
+     */
+  lockedUntil: Date | null;
+  /**
+     * 비밀번호 변경일
+     * @nullable
+     */
+  passwordChangedAt: Date | null;
+  /**
+     * 마지막 로그인 시각
+     * @nullable
+     */
+  lastLoginAt: Date | null;
+  /**
+     * 마지막 로그인 IP
+     * @nullable
+     */
+  lastLoginIp: string | null;
+  /**
+     * 현재 선택된 Tenant membership ID
+     * @nullable
+     * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
+     */
+  currentTenantId: bigint | null;
+  /** 프로필 목록 */
+  profiles?: ProfileDto[];
+  /** 테넌트 목록 */
+  tenants?: TenantDto[];
+  /** 사용자 연결 정보 */
+  associations?: UserAssociationDto[];
+  /** 사용자 분류 정보 */
+  classification?: UserClassificationDto;
+  /** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+  id: bigint;
+  createdAt: Date;
+  /** @nullable */
+  updatedAt: Date | null;
+  /** @nullable */
+  removedAt: Date | null;
+  /**
+     * 소속 공간 ID
+     * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
+     */
+  spaceId: bigint;
 }

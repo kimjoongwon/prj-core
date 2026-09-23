@@ -1,6 +1,6 @@
 "use client";
 
-import type { OidcClientDto } from "@cocrepo/api/core/oidc-clients";
+import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,

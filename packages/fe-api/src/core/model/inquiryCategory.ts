@@ -18,16 +18,16 @@
 /**
  * 문의 카테고리
  */
-export type InquiryCategory =
-	(typeof InquiryCategory)[keyof typeof InquiryCategory];
+export type InquiryCategory = typeof InquiryCategory[keyof typeof InquiryCategory];
+
 
 export const InquiryCategory = {
-	GENERAL: "GENERAL",
-	DELIVERY: "DELIVERY",
-	REFUND: "REFUND",
-	PRODUCT: "PRODUCT",
-	ACCOUNT: "ACCOUNT",
-	TECHNICAL: "TECHNICAL",
-	COMPLAINT: "COMPLAINT",
-	OTHER: "OTHER",
+  GENERAL: 'GENERAL',
+  DELIVERY: 'DELIVERY',
+  REFUND: 'REFUND',
+  PRODUCT: 'PRODUCT',
+  ACCOUNT: 'ACCOUNT',
+  TECHNICAL: 'TECHNICAL',
+  COMPLAINT: 'COMPLAINT',
+  OTHER: 'OTHER',
 } as const;

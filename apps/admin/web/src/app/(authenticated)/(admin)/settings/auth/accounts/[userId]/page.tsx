@@ -4,7 +4,7 @@ import {
 	useForceResetPassword,
 	useInvalidateUserSessions,
 	useUnlockAccount,
-} from "@cocrepo/api/core/auth";
+} from "@cocrepo/api/idp/auth";
 import {
 	getGetIdpAccountAccessGrantFormQueryKey,
 	getGetIdpAccountQueryKey,
@@ -16,7 +16,7 @@ import {
 	useGrantIdpAccountAccess,
 	useResetIdpAccountFailedAttempts,
 	useToggleIdpAccountActive,
-} from "@cocrepo/api/core/idp-accounts";
+} from "@cocrepo/api/idp/idp-accounts";
 import {
 	AccountDetailScreen,
 	type AccountDetailScreenAccessGrantForm,

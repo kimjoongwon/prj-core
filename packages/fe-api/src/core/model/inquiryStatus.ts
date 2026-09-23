@@ -18,14 +18,15 @@
 /**
  * 문의 상태
  */
-export type InquiryStatus = (typeof InquiryStatus)[keyof typeof InquiryStatus];
+export type InquiryStatus = typeof InquiryStatus[keyof typeof InquiryStatus];
+
 
 export const InquiryStatus = {
-	NEW: "NEW",
-	OPEN: "OPEN",
-	IN_PROGRESS: "IN_PROGRESS",
-	WAITING_CUSTOMER: "WAITING_CUSTOMER",
-	RESOLVED: "RESOLVED",
-	CLOSED: "CLOSED",
-	ESCALATED: "ESCALATED",
+  NEW: 'NEW',
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  WAITING_CUSTOMER: 'WAITING_CUSTOMER',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED',
+  ESCALATED: 'ESCALATED',
 } as const;

@@ -18,10 +18,11 @@
 /**
  * 발신자 유형
  */
-export type SenderType = (typeof SenderType)[keyof typeof SenderType];
+export type SenderType = typeof SenderType[keyof typeof SenderType];
+
 
 export const SenderType = {
-	USER: "USER",
-	AI: "AI",
-	SYSTEM: "SYSTEM",
+  USER: 'USER',
+  AI: 'AI',
+  SYSTEM: 'SYSTEM',
 } as const;

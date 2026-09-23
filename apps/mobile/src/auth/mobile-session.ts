@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { getCurrentSpace, getMySpaces, verifyToken } from "@cocrepo/api/core/auth";
+import { getCurrentSpace, getMySpaces, verifyToken } from "@cocrepo/api/idp/auth";
 import type { SpaceDto } from "@cocrepo/api/core/model";
 import { setApiBaseUrl } from "@cocrepo/api/core/client";
 import { getCoreApiBaseUrl } from "./auth-config";

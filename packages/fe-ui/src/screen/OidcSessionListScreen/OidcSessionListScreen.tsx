@@ -1,6 +1,6 @@
 "use client";
 
-import type { OidcSessionDto } from "@cocrepo/api/core/oidc-sessions";
+import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
 import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
 import type {
 	DataGridQueryStates,

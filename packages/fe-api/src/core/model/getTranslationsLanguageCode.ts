@@ -15,12 +15,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetTranslationsLanguageCode =
-	(typeof GetTranslationsLanguageCode)[keyof typeof GetTranslationsLanguageCode];
+export type GetTranslationsLanguageCode = typeof GetTranslationsLanguageCode[keyof typeof GetTranslationsLanguageCode];
+
 
 export const GetTranslationsLanguageCode = {
-	ko_KR: "ko_KR",
-	en_US: "en_US",
-	zh_CN: "zh_CN",
-	ja_JP: "ja_JP",
+  ko_KR: 'ko_KR',
+  en_US: 'en_US',
+  zh_CN: 'zh_CN',
+  ja_JP: 'ja_JP',
 } as const;

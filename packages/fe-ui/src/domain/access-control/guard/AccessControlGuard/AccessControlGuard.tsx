@@ -1,6 +1,6 @@
 "use client";
 
-import { useVerifyToken } from "@cocrepo/api/core/auth";
+import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import {
 	ADMIN_PATHS,
 	isScopeKindAccessible,

@@ -4,7 +4,7 @@ import {
 	useDeleteOidcClient,
 	useGetOidcClient,
 	useToggleActiveOidcClient,
-} from "@cocrepo/api/core/oidc-clients";
+} from "@cocrepo/api/idp/oidc-clients";
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	Button,

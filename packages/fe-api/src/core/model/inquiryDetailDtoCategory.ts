@@ -18,16 +18,16 @@
 /**
  * 문의 카테리
  */
-export type InquiryDetailDtoCategory =
-	(typeof InquiryDetailDtoCategory)[keyof typeof InquiryDetailDtoCategory];
+export type InquiryDetailDtoCategory = typeof InquiryDetailDtoCategory[keyof typeof InquiryDetailDtoCategory];
+
 
 export const InquiryDetailDtoCategory = {
-	GENERAL: "GENERAL",
-	DELIVERY: "DELIVERY",
-	REFUND: "REFUND",
-	PRODUCT: "PRODUCT",
-	ACCOUNT: "ACCOUNT",
-	TECHNICAL: "TECHNICAL",
-	COMPLAINT: "COMPLAINT",
-	OTHER: "OTHER",
+  GENERAL: 'GENERAL',
+  DELIVERY: 'DELIVERY',
+  REFUND: 'REFUND',
+  PRODUCT: 'PRODUCT',
+  ACCOUNT: 'ACCOUNT',
+  TECHNICAL: 'TECHNICAL',
+  COMPLAINT: 'COMPLAINT',
+  OTHER: 'OTHER',
 } as const;

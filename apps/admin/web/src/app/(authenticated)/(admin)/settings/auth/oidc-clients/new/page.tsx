@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateOidcClient } from "@cocrepo/api/core/oidc-clients";
+import { useCreateOidcClient } from "@cocrepo/api/idp/oidc-clients";
 import {
 	Button,
 	buildOidcClientLoginUi,

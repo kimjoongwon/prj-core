@@ -3,8 +3,9 @@ import { type NextRequest, NextResponse } from "next/server";
 const OIDC_LOGIN_START_PATH = "/api/v1/auth/oidc/login?clientId=admin-web";
 
 /**
- * 로그인 진입 라우트 — 렌더할 화면 없이 core-api의 OIDC authorize 시작점으로
- * 즉시 보낸다. 자격증명 입력은 IDP 로그인 화면(auth/interaction)에서 이뤄진다.
+ * 로그인 진입 라우트 — 렌더할 화면 없이 발급자(idp-api)의 OIDC authorize
+ * 시작점으로 즉시 보낸다. 자격증명 입력은 idp-web의 로그인 화면
+ * (auth/interaction)에서 이뤄진다.
  *
  * 서버 컴포넌트의 redirect()는 Location에 basePath(/admin)를 강제로 붙이므로
  * Route Handler에서 Location을 직접 내보낸다. 절대 URL 대신 루트 상대 경로를

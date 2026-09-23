@@ -18,12 +18,12 @@
 /**
  * 신청 상태
  */
-export type TenantAccessRequestStatus =
-	(typeof TenantAccessRequestStatus)[keyof typeof TenantAccessRequestStatus];
+export type TenantAccessRequestStatus = typeof TenantAccessRequestStatus[keyof typeof TenantAccessRequestStatus];
+
 
 export const TenantAccessRequestStatus = {
-	PENDING: "PENDING",
-	APPROVED: "APPROVED",
-	REJECTED: "REJECTED",
-	CANCELED: "CANCELED",
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELED: 'CANCELED',
 } as const;

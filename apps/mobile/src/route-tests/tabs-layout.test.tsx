@@ -93,7 +93,7 @@ jest.mock("@tanstack/react-query", () => ({
   }),
 }));
 
-jest.mock("@cocrepo/api/core/auth", () => ({
+jest.mock("@cocrepo/api/idp/auth", () => ({
   useGetMySpaces: jest.fn(() => ({
     data: { data: [] },
   })),

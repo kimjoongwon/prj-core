@@ -26,7 +26,7 @@ jest.mock("expo-splash-screen", () => ({
 	hideAsync: jest.fn(() => Promise.resolve(true)),
 }));
 
-jest.mock("@cocrepo/api/core/auth", () => ({
+jest.mock("@cocrepo/api/idp/auth", () => ({
 	getCurrentSpace: (...args: unknown[]) => mockGetCurrentSpace(...args),
 	getMySpaces: (...args: unknown[]) => mockGetMySpaces(...args),
 	logout: jest.fn(),

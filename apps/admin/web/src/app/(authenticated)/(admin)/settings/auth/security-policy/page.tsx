@@ -5,7 +5,7 @@ import {
 	type UpdateSecurityPolicyMutationBody,
 	useGetSecurityPolicy,
 	useUpdateSecurityPolicy,
-} from "@cocrepo/api/core/security-policy";
+} from "@cocrepo/api/idp/security-policy";
 import {
 	SecurityPolicyFormScreen,
 	type SecurityPolicyFormScreenFormState,

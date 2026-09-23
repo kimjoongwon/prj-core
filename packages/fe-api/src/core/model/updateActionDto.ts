@@ -16,12 +16,12 @@
  */
 
 export interface UpdateActionDto {
-	name?: string;
-	/** @nullable */
-	displayName?: string | null;
-	/** @nullable */
-	description?: string | null;
-	/** @nullable */
-	group?: string | null;
-	order?: number;
+  name?: string;
+  /** @nullable */
+  displayName?: string | null;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  group?: string | null;
+  order?: number;
 }

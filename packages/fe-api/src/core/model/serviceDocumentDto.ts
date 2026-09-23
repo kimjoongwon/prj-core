@@ -14,52 +14,52 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { ServiceDocumentFormat } from "./serviceDocumentFormat";
-import type { ServiceDocumentKind } from "./serviceDocumentKind";
-import type { ServiceDocumentPlatform } from "./serviceDocumentPlatform";
-import type { ServiceDocumentStatus } from "./serviceDocumentStatus";
+import type { ServiceDocumentFormat } from './serviceDocumentFormat';
+import type { ServiceDocumentKind } from './serviceDocumentKind';
+import type { ServiceDocumentPlatform } from './serviceDocumentPlatform';
+import type { ServiceDocumentStatus } from './serviceDocumentStatus';
 
 export interface ServiceDocumentDto {
-	/** 문서 종류 */
-	kind: ServiceDocumentKind;
-	/** 노출 플랫폼 */
-	platform: ServiceDocumentPlatform;
-	/** 로케일 */
-	locale: string;
-	/** 제목 */
-	title: string;
-	/**
-	 * 요약
-	 * @nullable
-	 */
-	summary?: string | null;
-	/** 본문 */
-	content: string;
-	/** 본문 형식 */
-	format: ServiceDocumentFormat;
-	/** 버전 */
-	version: string;
-	/** 상태 */
-	status: ServiceDocumentStatus;
-	/** 필수 동의 여부 */
-	isRequired: boolean;
-	/** 정렬 순서 */
-	displayOrder: number;
-	/**
-	 * 효력 시작 시각
-	 * @nullable
-	 */
-	effectiveAt?: Date | null;
-	/**
-	 * 게시 시각
-	 * @nullable
-	 */
-	publishedAt?: Date | null;
-	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-	id: bigint;
-	createdAt: Date;
-	/** @nullable */
-	updatedAt: Date | null;
-	/** @nullable */
-	removedAt: Date | null;
+  /** 문서 종류 */
+  kind: ServiceDocumentKind;
+  /** 노출 플랫폼 */
+  platform: ServiceDocumentPlatform;
+  /** 로케일 */
+  locale: string;
+  /** 제목 */
+  title: string;
+  /**
+     * 요약
+     * @nullable
+     */
+  summary?: string | null;
+  /** 본문 */
+  content: string;
+  /** 본문 형식 */
+  format: ServiceDocumentFormat;
+  /** 버전 */
+  version: string;
+  /** 상태 */
+  status: ServiceDocumentStatus;
+  /** 필수 동의 여부 */
+  isRequired: boolean;
+  /** 정렬 순서 */
+  displayOrder: number;
+  /**
+     * 효력 시작 시각
+     * @nullable
+     */
+  effectiveAt?: Date | null;
+  /**
+     * 게시 시각
+     * @nullable
+     */
+  publishedAt?: Date | null;
+  /** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+  id: bigint;
+  createdAt: Date;
+  /** @nullable */
+  updatedAt: Date | null;
+  /** @nullable */
+  removedAt: Date | null;
 }

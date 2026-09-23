@@ -5,7 +5,7 @@ import {
 	type SpaceDto,
 	useGetSignUpSpaces,
 	useSignUp,
-} from "@cocrepo/api/core/auth";
+} from "@cocrepo/api/idp/auth";
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import {
 	type SignUpFormField,

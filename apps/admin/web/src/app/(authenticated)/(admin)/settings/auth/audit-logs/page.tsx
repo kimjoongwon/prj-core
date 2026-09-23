@@ -3,7 +3,7 @@
 import {
 	useGetAuthAuditLogStats,
 	useGetAuthAuditLogs,
-} from "@cocrepo/api/core/auth";
+} from "@cocrepo/api/idp/auth";
 import {
 	AuthAuditLogListScreen,
 	type AuthAuditLogListScreenStats,

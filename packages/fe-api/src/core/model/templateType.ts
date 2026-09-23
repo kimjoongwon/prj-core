@@ -18,10 +18,11 @@
 /**
  * 템플릿 유형
  */
-export type TemplateType = (typeof TemplateType)[keyof typeof TemplateType];
+export type TemplateType = typeof TemplateType[keyof typeof TemplateType];
+
 
 export const TemplateType = {
-	EMAIL: "EMAIL",
-	SMS: "SMS",
-	PUSH: "PUSH",
+  EMAIL: 'EMAIL',
+  SMS: 'SMS',
+  PUSH: 'PUSH',
 } as const;

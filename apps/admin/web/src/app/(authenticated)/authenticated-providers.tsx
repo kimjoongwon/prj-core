@@ -3,7 +3,7 @@ import {
 	installCoreSessionRecovery,
 	refreshSessionTokens,
 } from "@cocrepo/api/core/client";
-import { useVerifyToken } from "@cocrepo/api/core/auth";
+import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import { isScopeKindAccessible, Token } from "@cocrepo/constant";
 import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
 import { useApp } from "@cocrepo/store";
