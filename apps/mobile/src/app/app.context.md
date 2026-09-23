@@ -46,7 +46,7 @@
 
 | ID | 대상 | 설명 |
 |----|------|------|
-| `MO-E2E-001` | `/` | 앱 launch 후 오노라 하단 탭 메인의 홈/예약/내 정보 탭이 보여야 합니다. |
+| `MO-E2E-001` | `/` | 앱 launch 후 Plate 하단 탭 메인의 홈/예약/내 정보 탭이 보여야 합니다. |
 | `MO-E2E-002` | `/auth/login` | 로그인 라우트에서 WebView 없이 native email/password form으로 IDP API native login endpoint를 호출해야 합니다. |
 | `MO-E2E-003` | app launch | SecureStore에 저장된 native token/session을 복원하고 refresh 필요 시 native refresh endpoint로 갱신해야 합니다. |
 | `MO-E2E-004` | `/` | 홈에서 날짜 스트립과 수업 카드 booking feed가 보여야 합니다. |

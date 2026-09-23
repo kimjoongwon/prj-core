@@ -475,7 +475,7 @@ export const OidcClientForm = observer(
 								</Select>
 								<TextField
 									label="브랜드 라벨"
-									placeholder="Onora Mobile"
+									placeholder="Plate Mobile"
 									value={state.loginUiBrandLabel}
 									onValueChange={(v) => {
 										if (readOnly) {
@@ -488,7 +488,7 @@ export const OidcClientForm = observer(
 								/>
 								<TextField
 									label="헤드라인"
-									placeholder="오노라 로그인"
+									placeholder="Plate 로그인"
 									value={state.loginUiHeadline}
 									onValueChange={(v) => {
 										if (readOnly) {

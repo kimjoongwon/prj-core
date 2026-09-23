@@ -81,7 +81,7 @@ describe("mobile auth utils", () => {
 	});
 
 	it("Given version 없는 예전 선택이 있을 때 When SecureStore에서 복원하면 Then 값을 폐기한다", async () => {
-		const storageKey = "onora.mobile.native.space-selection.v1";
+		const storageKey = "plate.mobile.native.space-selection.v1";
 		mockSecureStore.set(
 			storageKey,
 			JSON.stringify({
@@ -98,7 +98,7 @@ describe("mobile auth utils", () => {
 	});
 
 	it("Given 이전 version 선택이 있을 때 When SecureStore에서 복원하면 Then 값을 폐기한다", async () => {
-		const storageKey = "onora.mobile.native.space-selection.v1";
+		const storageKey = "plate.mobile.native.space-selection.v1";
 		mockSecureStore.set(
 			storageKey,
 			JSON.stringify({

@@ -23,7 +23,7 @@ const baseState = {
 	loginUiVariant: "branded",
 	loginUiHeadline: "관리자 로그인",
 	loginUiDescription: "운영 콘솔에 접속합니다.",
-	loginUiBrandLabel: "Onora",
+	loginUiBrandLabel: "Plate",
 	loginUiBrandColor: "#2563eb",
 	loginUiShowIntroPanel: true,
 	loginUiMobileFullScreen: false,

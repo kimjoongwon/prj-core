@@ -79,7 +79,7 @@ const AuthLoginRoute = observer(() => {
 		>
 			<View className={classNames.centerView()}>
 				<View className={classNames.header()}>
-					<Text className={classNames.eyebrow()}>ONORA</Text>
+					<Text className={classNames.eyebrow()}>PLATE</Text>
 					<Text className={classNames.title()}>로그인</Text>
 					<Text className={classNames.description()}>
 						로그인은 IDP(onjitda)를 통해 진행됩니다. 시트에서 계정에

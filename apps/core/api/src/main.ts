@@ -526,7 +526,7 @@ async function bootstrap() {
 		configureSwaggerAccessProtection(app, runtimeSecurity);
 
 		const swaggerConfig = new DocumentBuilder()
-			.setTitle(process.env.APP_NAME || "Onora")
+			.setTitle(process.env.APP_NAME || "Plate")
 			.setVersion("1.0.0")
 			.setDescription(
 				"API 문서입니다. Core API와 IDP 관리 API를 함께 제공합니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +

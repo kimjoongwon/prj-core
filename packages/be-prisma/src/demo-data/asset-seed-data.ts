@@ -183,8 +183,8 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
-		originalName: "onora-logo-full.svg",
-		storageKey: "assets/images/logo/onora-logo-full-2024.svg",
+		originalName: "plate-logo-full.svg",
+		storageKey: "assets/images/logo/plate-logo-full-2024.svg",
 		kind: "IMAGE",
 		mimeType: "image/svg+xml",
 		extension: "svg",
@@ -434,7 +434,7 @@ export const imageDetailSeedData: ImageDetailSeedData[] = [
 		hasAlpha: true,
 	},
 	{
-		storageKey: "assets/images/logo/onora-logo-full-2024.svg",
+		storageKey: "assets/images/logo/plate-logo-full-2024.svg",
 		width: 512,
 		height: 512,
 		orientation: 1,
@@ -606,7 +606,7 @@ export const documentDetailSeedData: DocumentDetailSeedData[] = [
 		storageKey: "assets/documents/guide/member-signup-guide-2024.pdf",
 		pageCount: 12,
 		wordCount: 3500,
-		author: "오노라 운영팀",
+		author: "Plate 운영팀",
 		title: "회원 가입 가이드",
 		subject: "회원 가입 절차 안내",
 		keywords: "회원,가입,가이드,안내",
@@ -615,7 +615,7 @@ export const documentDetailSeedData: DocumentDetailSeedData[] = [
 		storageKey: "assets/documents/guide/facility-rules-2024.pdf",
 		pageCount: 8,
 		wordCount: 2100,
-		author: "오노라 운영팀",
+		author: "Plate 운영팀",
 		title: "시설 이용 규정",
 		subject: "피트니스 시설 이용 규정 안내",
 		keywords: "시설,이용,규정,안내",
@@ -624,7 +624,7 @@ export const documentDetailSeedData: DocumentDetailSeedData[] = [
 		storageKey: "assets/documents/guide/workout-program-guide-2024.docx",
 		pageCount: 25,
 		wordCount: 8500,
-		author: "오노라 트레이닝팀",
+		author: "Plate 트레이닝팀",
 		title: "운동 프로그램 가이드",
 		subject: "운동 프로그램 구성 및 진행 가이드",
 		keywords: "운동,프로그램,가이드,트레이닝",
@@ -824,7 +824,7 @@ export interface AlbumSeedData {
 export const albumSeedData: AlbumSeedData[] = [
 	{
 		name: "브랜드 에셋",
-		description: "오노라 및 파트너 브랜드 로고, 아이덴티티 에셋 모음",
+		description: "Plate 및 파트너 브랜드 로고, 아이덴티티 에셋 모음",
 		coverStorageKey: "assets/images/logo/f45-logo-primary-2024.png",
 		sortOrder: 0,
 		createdByEmail: resolveSystemAdminSeedData()[0].email,
@@ -878,9 +878,9 @@ export const albumEntrySeedData: AlbumEntrySeedData[] = [
 	},
 	{
 		albumName: "브랜드 에셋",
-		assetStorageKey: "assets/images/logo/onora-logo-full-2024.svg",
+		assetStorageKey: "assets/images/logo/plate-logo-full-2024.svg",
 		position: 2,
-		caption: "오노라 풀 로고 (SVG)",
+		caption: "Plate 풀 로고 (SVG)",
 	},
 	{
 		albumName: "브랜드 에셋",

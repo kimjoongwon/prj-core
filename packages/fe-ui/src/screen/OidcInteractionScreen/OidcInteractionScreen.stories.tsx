@@ -96,13 +96,13 @@ export const Login: Story = {
 			mode: "login",
 			client: {
 				clientId: "user-mobile",
-				name: "Onora Mobile",
+				name: "Plate Mobile",
 				loginUi: {
 					variant: "compact",
-					headline: "오노라 로그인",
+					headline: "Plate 로그인",
 					description:
 						"예약과 방문 일정을 계속 확인하려면 계정으로 로그인하세요.",
-					brandLabel: "Onora Mobile",
+					brandLabel: "Plate Mobile",
 					brandColor: "#16a34a",
 					showIntroPanel: false,
 					mobileFullScreen: true,

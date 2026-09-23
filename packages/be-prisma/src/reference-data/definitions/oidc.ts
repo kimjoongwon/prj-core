@@ -120,7 +120,7 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		loginUi: {
 			variant: "branded",
 			headline: "관리자 계정으로 로그인",
-			description: "운영 콘솔 접근을 위해 Onora 계정으로 로그인하세요.",
+			description: "운영 콘솔 접근을 위해 Plate 계정으로 로그인하세요.",
 			brandLabel: "Admin Web",
 			brandColor: "#2563eb",
 			showIntroPanel: true,
@@ -166,9 +166,9 @@ export const oidcClientSeedData: OidcClientSeedData[] = [
 		skipConsent: true,
 		loginUi: {
 			variant: "compact",
-			headline: "오노라 로그인",
+			headline: "Plate 로그인",
 			description: "예약과 방문 일정을 계속 확인하려면 계정으로 로그인하세요.",
-			brandLabel: "Onora Mobile",
+			brandLabel: "Plate Mobile",
 			brandColor: "#16a34a",
 			showIntroPanel: false,
 			mobileFullScreen: true,

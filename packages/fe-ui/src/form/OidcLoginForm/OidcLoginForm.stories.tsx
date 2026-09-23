@@ -7,7 +7,7 @@ const client = {
 	name: "예약 관리자",
 	loginUi: {
 		variant: "branded",
-		brandLabel: "Onora Admin",
+		brandLabel: "Plate Admin",
 		headline: "관리자 로그인",
 		description: "운영 콘솔에 접속하세요.",
 	},

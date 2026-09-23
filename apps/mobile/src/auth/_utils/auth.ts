@@ -25,9 +25,9 @@ export interface MobileAuthLoginQuery {
 }
 
 const DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO = "/";
-const NATIVE_SESSION_STORAGE_KEY = "onora.mobile.native.session.v1";
+const NATIVE_SESSION_STORAGE_KEY = "plate.mobile.native.session.v1";
 const NATIVE_SPACE_SELECTION_STORAGE_KEY =
-	"onora.mobile.native.space-selection.v1";
+	"plate.mobile.native.space-selection.v1";
 const NATIVE_SPACE_SELECTION_PERSIST_VERSION = 2 as const;
 
 interface PersistedNativeSpaceSelection extends MobileSpaceInfo {

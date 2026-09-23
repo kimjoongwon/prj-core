@@ -43,7 +43,7 @@ export default registerAs<AppConfig>("app", () => {
 
 	return {
 		nodeEnv: process.env.NODE_ENV || "development",
-		name: process.env.APP_NAME || "Onora",
+		name: process.env.APP_NAME || "Plate",
 		workingDirectory: process.cwd(),
 		backendDomain: process.env.BACKEND_DOMAIN ?? "http://localhost",
 		port: Number(process.env.APP_PORT) || 3006,

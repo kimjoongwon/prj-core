@@ -39,7 +39,7 @@ describe("모바일 앱 스모크", () => {
 	});
 
 	it("MO-E2E-004 인증 전 로그인 화면이 표시되어야 한다", async () => {
-		await waitFor(element(by.text("ONORA")))
+		await waitFor(element(by.text("PLATE")))
 			.toBeVisible()
 			.withTimeout(30000);
 		await expect(element(by.label("이메일")).atIndex(0)).toBeVisible();

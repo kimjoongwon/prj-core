@@ -87,13 +87,13 @@ const resolveLoginDescription = (
 	}
 
 	if (client) {
-		return "{{clientName}}에 계속 접속하려면 Onora 계정으로 로그인하세요.".replace(
+		return "{{clientName}}에 계속 접속하려면 Plate 계정으로 로그인하세요.".replace(
 			"{{clientName}}",
 			client.name,
 		);
 	}
 
-	return "Onora 계정으로 로그인하세요.";
+	return "Plate 계정으로 로그인하세요.";
 };
 
 const resolveBrandLabel = (

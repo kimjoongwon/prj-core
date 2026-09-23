@@ -5,7 +5,7 @@ import { OidcConsentPanel } from "./OidcConsentPanel";
 const client = {
 	clientId: "reservation-admin",
 	name: "예약 관리자",
-	loginUi: { brandLabel: "Onora Admin", variant: "branded" },
+	loginUi: { brandLabel: "Plate Admin", variant: "branded" },
 } as const;
 const meta = {
 	title: "form/OidcConsentPanel",
