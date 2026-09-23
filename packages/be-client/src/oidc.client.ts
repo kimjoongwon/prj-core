@@ -42,6 +42,11 @@ export class OidcClient {
 		this.oidcConfig = this.resolveConfig(rawConfig);
 	}
 
+	/** 이 RP가 바라보는 OP 발급자(issuer). end_session URL과 id_token_hint 사전 검증의 기준값 */
+	get issuer(): string {
+		return this.oidcConfig.issuer;
+	}
+
 	createAuthorizationRequest(
 		client: OidcClientProtocolConfig,
 		returnTo?: string,

@@ -261,7 +261,8 @@ sequenceDiagram
 | 프론트엔드 로그아웃 | `packages/fe-store/src/stores/authStore.ts:27-42` | `logout(logoutApi?)` - API 호출 후 리다이렉트 |
 | 로그아웃 컨트롤러 | `packages/be-controller/src/auth/auth.controller.ts` | 쿠키에서 accessToken 추출 |
 | IDP 토큰 폐기 | `packages/be-client/src/oidc.client.ts` | `revokeToken()` - revocation endpoint 호출 |
-| 쿠키 삭제 | `packages/be-usecase/src/auth/logout-with-cookie.usecase.ts` | `LogoutWithCookieUseCase` |
+| 쿠키 삭제 | `packages/be-usecase/src/auth/oidc/logout-with-cookie.usecase.ts` | `LogoutWithCookieUseCase` |
+| end_session id_token_hint 사전 검증 | `packages/be-usecase/src/auth/oidc/resolve-usable-id-token-hint.ts` | 세션 레코드의 ID Token을 iss/aud/exp로 검증해 무효(만료·구발급자·audience 불일치)면 hint에서 제외, 확인 화면 경유 폴백 |
 | 토큰 쿠키 관리 | `packages/be-service/src/auth/token.service.ts:64-75` | `clearTokenCookies()` |
 
 ---
@@ -282,6 +283,7 @@ sequenceDiagram
 | **JWKS Rate Limit** | 10 requests/min | IDP 과부하 방지 |
 | **토큰 폐기** | IDP Revocation Endpoint | RFC 7009 - 로그아웃 시 토큰 즉시 무효화 |
 | **RP-Initiated Logout** | rpInitiatedLogout 활성화 | End Session 엔드포인트 (`/oidc/session/end`) |
+| **id_token_hint 사전 검증** | iss/aud/exp 클레임 검사 | 만료·구발급자 ID Token으로 end_session이 invalid_request 하드페일하지 않게 client_id만으로 확인 화면 경유 |
 | **Account 캐시** | Redis (TTL 5분) | AccountService에서 반복 DB 조회 방지 |
 | **RS256 전용 쿠키** | JwtStrategy 헤더 검증 | 쿠키에서 추출한 토큰의 `alg` 헤더가 RS256인지 확인 |
 

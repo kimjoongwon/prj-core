@@ -12,6 +12,17 @@ function createJwt(payload: Record<string, unknown>): string {
 	].join(".");
 }
 
+function createStoredIdToken(
+	claims: Partial<{ iss: string; aud: string | string[]; exp: number }> = {},
+): string {
+	return createJwt({
+		iss: "http://localhost:3007",
+		aud: "admin-web",
+		exp: Math.floor(Date.now() / 1000) + 3600,
+		...claims,
+	});
+}
+
 function createClient() {
 	return {
 		clientId: "admin-web",
@@ -32,7 +43,9 @@ function createMocks() {
 	const oidcClientService = {
 		getByClientId: jest.fn().mockResolvedValue(createClient()),
 	};
+	const storedIdToken = createStoredIdToken();
 	const oidcClient = {
+		issuer: "http://localhost:3007",
 		revokeToken: jest.fn().mockResolvedValue(undefined),
 		buildEndSessionUrl: jest
 			.fn()
@@ -64,7 +77,7 @@ function createMocks() {
 			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
-				idToken: "stored-id-token",
+				idToken: storedIdToken,
 			},
 		}),
 		addToBlacklist: jest.fn().mockResolvedValue(undefined),
@@ -95,6 +108,7 @@ function createMocks() {
 
 	return {
 		accessToken,
+		storedIdToken,
 		oidcClient,
 		oidcClientService,
 		tokenStorageService,
@@ -132,15 +146,92 @@ describe("LogoutWithCookieUseCase", () => {
 			mocks.tokenStorageService.getSessionBySessionId,
 		).toHaveBeenCalledWith("admin-web.0123456789abcdef0123456789abcdef");
 		expect(mocks.oidcClient.buildEndSessionUrl).toHaveBeenCalledWith(
-			"stored-id-token",
+			mocks.storedIdToken,
 			{
 				postLogoutRedirectUri: "http://localhost:3000/admin/auth/login",
 				clientId: "admin-web",
 			},
 		);
 		expect(result.endSessionUrl).toBe(
-			"http://localhost:3007/oidc/session/end?id_token_hint=stored-id-token&post_logout_redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fadmin%2Fauth%2Flogin&client_id=admin-web",
+			`http://localhost:3007/oidc/session/end?id_token_hint=${mocks.storedIdToken}&post_logout_redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fadmin%2Fauth%2Flogin&client_id=admin-web`,
 		);
+	});
+
+	it("만료된 ID Token은 id_token_hint에서 제외해 확인 화면 경유 URL을 반환한다", async () => {
+		const mocks = createMocks();
+		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
+			userId: "01J00000000000000000001001",
+			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			session: {
+				refreshToken: "stored-refresh-token",
+				idToken: createStoredIdToken({
+					exp: Math.floor(Date.now() / 1000) - 1,
+				}),
+			},
+		});
+		const command = createLogoutCommand({
+			accessTokenCookie: mocks.accessToken,
+			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			res: mocks.res,
+		});
+
+		const result = await mocks.useCase.execute(command);
+
+		expect(mocks.oidcClient.buildEndSessionUrl).toHaveBeenCalledWith(null, {
+			postLogoutRedirectUri: "http://localhost:3000/admin/auth/login",
+			clientId: "admin-web",
+		});
+		expect(result.endSessionUrl).not.toContain("id_token_hint");
+	});
+
+	it("발급자가 현재 OP와 다른 ID Token(발급자 단일화 이전 세션)은 id_token_hint에서 제외한다", async () => {
+		const mocks = createMocks();
+		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
+			userId: "01J00000000000000000001001",
+			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			session: {
+				refreshToken: "stored-refresh-token",
+				idToken: createStoredIdToken({ iss: "http://localhost:3000" }),
+			},
+		});
+		const command = createLogoutCommand({
+			accessTokenCookie: mocks.accessToken,
+			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			res: mocks.res,
+		});
+
+		const result = await mocks.useCase.execute(command);
+
+		expect(mocks.oidcClient.buildEndSessionUrl).toHaveBeenCalledWith(null, {
+			postLogoutRedirectUri: "http://localhost:3000/admin/auth/login",
+			clientId: "admin-web",
+		});
+		expect(result.endSessionUrl).not.toContain("id_token_hint");
+	});
+
+	it("audience가 클라이언트와 다른 ID Token은 id_token_hint에서 제외한다", async () => {
+		const mocks = createMocks();
+		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
+			userId: "01J00000000000000000001001",
+			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			session: {
+				refreshToken: "stored-refresh-token",
+				idToken: createStoredIdToken({ aud: "other-client" }),
+			},
+		});
+		const command = createLogoutCommand({
+			accessTokenCookie: mocks.accessToken,
+			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			res: mocks.res,
+		});
+
+		const result = await mocks.useCase.execute(command);
+
+		expect(mocks.oidcClient.buildEndSessionUrl).toHaveBeenCalledWith(null, {
+			postLogoutRedirectUri: "http://localhost:3000/admin/auth/login",
+			clientId: "admin-web",
+		});
+		expect(result.endSessionUrl).not.toContain("id_token_hint");
 	});
 
 	it("RP 쿠키만 지우고 OP 세션 쿠키(_session 등)는 직접 지우지 않는다", async () => {

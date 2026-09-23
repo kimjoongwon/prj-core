@@ -9,6 +9,7 @@ import { decodeAccessToken } from "./decode-access-token";
 import { extractBearerToken } from "./extract-bearer-token";
 import { resolveClientIdFromSessionId } from "./resolve-client-id-from-session-id";
 import { resolveOidcClient } from "./resolve-oidc-client";
+import { resolveUsableIdTokenHint } from "./resolve-usable-id-token-hint";
 import { ResolvedOidcClient } from "./resolved-oidc-client";
 import { toProtocolClientConfig } from "./to-protocol-client-config";
 
@@ -57,7 +58,12 @@ export class LogoutWithCookieUseCase {
 		}
 		const endSessionUrl = client
 			? this.oidcClient.buildEndSessionUrl(
-					sessionLookup?.session.idToken ?? null,
+					// OP에 도달하기 전에 만료·발급자 불일치 등으로 검증될 수 없는
+					// 토큰은 hint에서 제외해 invalid_request 하드페일을 피한다.
+					resolveUsableIdTokenHint(sessionLookup?.session.idToken, {
+						clientId: client.clientId,
+						issuer: this.oidcClient.issuer,
+					}),
 					{
 						postLogoutRedirectUri: client.postLogoutRedirectUris[0],
 						clientId: client.clientId,
