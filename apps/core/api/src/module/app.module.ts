@@ -30,24 +30,16 @@ import { ThrottlerGuard } from "@nestjs/throttler";
 import { AbilitiesModule } from "./abilities";
 import { ActionsModule } from "./actions";
 import { AssetsModule } from "./assets";
-import { AuthModule } from "./auth";
 import { CommunityModule } from "./community";
 import {
 	isNestDevtoolsEnabled,
 	loadNestDevtoolsModule,
 } from "./devtools.module";
-import { EmailVerificationsModule } from "./email-verification";
 // Global modules
 import { FoldersModule } from "./folders";
 import { globalModules } from "./global.module";
 import { I18nCatalogModule } from "./i18n";
-import { IdpAccountsModule } from "./idp-accounts";
-import { IdpDashboardModule } from "./idp-dashboard";
 import { InquiriesModule } from "./inquiries";
-import { InteractionModule } from "./interaction";
-import { OidcModule } from "./oidc";
-import { OidcClientsModule } from "./oidc-client";
-import { OidcSessionsModule } from "./oidc-session";
 import { PasswordResetModule } from "./password-reset";
 import { PoliciesModule } from "./policies";
 import { PrismaModule } from "./prisma.module";
@@ -56,7 +48,6 @@ import { ReservationsModule } from "./reservations";
 import { RoleAssignmentsModule } from "./role-assignments";
 import { RolesModule } from "./roles";
 import { RoutinesModule } from "./routines";
-import { SecurityPolicyModule } from "./security-policy";
 import { ServiceDocumentsModule } from "./service-documents";
 import { SpacesModule } from "./spaces";
 import { SubjectsModule } from "./subjects";
@@ -99,16 +90,9 @@ const devtoolsImports = isNestDevtoolsEnabled()
 		InquiriesModule,
 		TenantAccessRequestsModule,
 		ReservationsModule,
-		AuthModule,
-		OidcModule,
-		InteractionModule,
+		// 발급자(OIDC provider·interaction·auth)는 idp-api가 소유한다 — core-api는
+		// 비밀번호 재설정과 토큰 검증(JwtStrategy·JWKS)만 담당한다.
 		PasswordResetModule,
-		OidcClientsModule,
-		OidcSessionsModule,
-		SecurityPolicyModule,
-		IdpAccountsModule,
-		IdpDashboardModule,
-		EmailVerificationsModule,
 		// Resource Modules는 필요할 때 추가합니다.
 		// 가이드: .claude/agents/be-controller-builder.md
 		RouterModule.register([
@@ -201,34 +185,6 @@ const devtoolsImports = isNestDevtoolsEnabled()
 							{
 								path: "reservations",
 								module: ReservationsModule,
-							},
-							{
-								path: "auth",
-								module: AuthModule,
-							},
-							{
-								path: "oidc-clients",
-								module: OidcClientsModule,
-							},
-							{
-								path: "oidc-sessions",
-								module: OidcSessionsModule,
-							},
-							{
-								path: "idp/security-policy",
-								module: SecurityPolicyModule,
-							},
-							{
-								path: "idp/accounts",
-								module: IdpAccountsModule,
-							},
-							{
-								path: "idp/dashboard",
-								module: IdpDashboardModule,
-							},
-							{
-								path: "idp/email-verifications",
-								module: EmailVerificationsModule,
 							},
 							// 새로운 Resource 라우트는 여기에 추가
 						],

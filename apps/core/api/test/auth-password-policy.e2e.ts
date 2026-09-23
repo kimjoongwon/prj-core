@@ -198,7 +198,7 @@ describe("Auth Password Policy API E2E 테스트", () => {
 			expect(response.body.error).toBe("PASSWORD_REUSE");
 		});
 
-		it("Given 정책을 만족하는 새 비밀번호 When 재설정을 실행하면 Then 새 비밀번호로 로그인할 수 있어야 한다", async () => {
+		it("Given 정책을 만족하는 새 비밀번호 When 재설정을 실행하면 Then 재설정에 성공해야 한다", async () => {
 			// Given
 			const user = await createTestUser("CurrentPass1!");
 			const token = await createResetToken(user);
@@ -220,42 +220,9 @@ describe("Auth Password Policy API E2E 테스트", () => {
 				}),
 			);
 
-			// 새 비밀번호가 실제 자격증명 경로(OIDC interaction 로그인)를 통과하는지 확인한다.
-			const authorizeResponse = await request(app.getHttpServer())
-				.get("/oidc/auth")
-				.query({
-					response_type: "code",
-					client_id: "admin-web",
-					redirect_uri:
-						"http://localhost:3000/api/v1/auth/callback?clientId=admin-web",
-					scope: "openid",
-					state: "password-policy-e2e",
-				});
-
-			expect(authorizeResponse.status).toBe(303);
-			const interactionUid = /\/auth\/interaction\/([^/?]+)/.exec(
-				authorizeResponse.headers.location ?? "",
-			)?.[1];
-			expect(interactionUid).toBeDefined();
-
-			const interactionCookies = authorizeResponse.headers["set-cookie"];
-			const cookieHeader = Array.isArray(interactionCookies)
-				? interactionCookies.join("; ")
-				: (interactionCookies ?? "");
-
-			const loginResponse = await request(app.getHttpServer())
-				.post(`/api/interaction/${interactionUid}/login`)
-				.set("User-Agent", "core-api-password-policy-e2e")
-				.set("Cookie", cookieHeader)
-				.send({
-					email: user.email,
-					password: newPassword,
-				});
-
-			expect(loginResponse.status).toBe(200);
-			expect(loginResponse.body).toEqual(
-				expect.objectContaining({ redirectTo: expect.any(String) }),
-			);
+			// 새 비밀번호가 실제 자격증명 경로(OIDC interaction 로그인)를 통과하는지는
+			// 발급자(idp-api) 스택에서 구동하는 apps/test/e2e 로그인 스펙이 검증한다 —
+			// core-api에는 이제 발급자가 없다.
 		});
 	});
 

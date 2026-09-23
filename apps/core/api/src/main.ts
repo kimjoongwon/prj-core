@@ -16,26 +16,17 @@ import { AbilitiesModule } from "./module/abilities";
 import { ActionsModule } from "./module/actions";
 import { AppModule } from "./module/app.module";
 import { AssetsModule } from "./module/assets";
-import { AuthModule } from "./module/auth";
 import { CommunityModule } from "./module/community";
 import { isNestDevtoolsEnabled } from "./module/devtools.module";
-import { EmailVerificationsModule } from "./module/email-verification";
 import { FoldersModule } from "./module/folders";
 import { I18nCatalogModule } from "./module/i18n";
-import { IdpAccountsModule } from "./module/idp-accounts";
-import { IdpDashboardModule } from "./module/idp-dashboard";
 import { InquiriesModule } from "./module/inquiries";
-import { InteractionModule } from "./module/interaction";
-import { OidcModule } from "./module/oidc";
-import { OidcClientsModule } from "./module/oidc-client";
-import { OidcSessionsModule } from "./module/oidc-session";
 import { PasswordResetModule } from "./module/password-reset";
 import { PoliciesModule } from "./module/policies";
 import { ReservationsModule } from "./module/reservations";
 import { RoleAssignmentsModule } from "./module/role-assignments";
 import { RolesModule } from "./module/roles";
 import { RoutinesModule } from "./module/routines";
-import { SecurityPolicyModule } from "./module/security-policy";
 import { ServiceDocumentsModule } from "./module/service-documents";
 import { SpacesModule } from "./module/spaces";
 import { SubjectsModule } from "./module/subjects";
@@ -305,16 +296,7 @@ const SWAGGER_MODULES = [
 	InquiriesModule,
 	TenantAccessRequestsModule,
 	ReservationsModule,
-	AuthModule,
-	OidcModule,
-	InteractionModule,
 	PasswordResetModule,
-	OidcClientsModule,
-	OidcSessionsModule,
-	SecurityPolicyModule,
-	IdpAccountsModule,
-	IdpDashboardModule,
-	EmailVerificationsModule,
 ];
 
 interface HotModule {
@@ -644,9 +626,6 @@ async function bootstrap() {
 		logger.log(`📊 API 문서: http://localhost:${port}/api`);
 		logger.log(`📊 API Spec: http://localhost:${port}/api-json`);
 	}
-	logger.log(
-		`🔑 OIDC Discovery: http://localhost:${port}/oidc/.well-known/openid-configuration`,
-	);
 	if (enableNestDevtools) {
 		const devtoolsPort =
 			Number.parseInt(process.env.CORE_API_NEST_DEVTOOLS_PORT ?? "8000", 10) ||
