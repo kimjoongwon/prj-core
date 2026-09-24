@@ -12,6 +12,9 @@ podTemplate(
             privileged: true,
             ttyEnabled: true,
             command: 'cat',
+            resourceLimitMemory: '3Gi',
+            resourceRequestMemory: '2Gi',
+            resourceLimitCpu: '1500m',
             // CPU request는 미지정 시 limit과 같게 잡혀 PVC 고정 노드(node-02)에서 스케줄링이 막히므로 명시적으로 낮춤
             resourceRequestCpu: '300m',
         )
