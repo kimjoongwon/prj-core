@@ -22,13 +22,11 @@ WORKDIR /app
 COPY --from=setup /app/out/json/ ./
 # turbo prune output can retain stale importer metadata for excluded workspaces,
 # so Docker installs in the pruned tree must allow lockfile re-resolution.
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --no-frozen-lockfile --prefer-offline
+RUN pnpm install --store-dir /cache/pnpm-store --no-frozen-lockfile --prefer-offline
 COPY --from=setup /app/out/full/ ./
 # Mirror runtime assets into the standalone tree so the minimal server can serve
 # them without relying on extra runner-stage copies.
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    --mount=type=cache,id=turbo,target=/app/.turbo \
-    sh -c 'pnpm exec turbo build --filter=proposal-web... && \
+RUN sh -c 'pnpm exec turbo build --cache-dir=/cache/turbo --filter=proposal-web... && \
       if [ -d apps/proposal/web/.next/static ]; then \
         mkdir -p apps/proposal/web/.next/standalone/apps/proposal/web/.next && \
         cp -R apps/proposal/web/.next/static apps/proposal/web/.next/standalone/apps/proposal/web/.next/static; \

@@ -22,11 +22,10 @@ ENV NODE_OPTIONS="--max-old-space-size=2048"
 WORKDIR /app
 COPY --from=setup /app/out/json/ ./
 # lockfile이 정합하므로 frozen-lockfile 사용 (전체 재해석 방지로 메모리 절약)
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --store-dir /pnpm/store --frozen-lockfile --prefer-offline
+# /cache: 빌드 잡이 podman build -v로 PVC의 영속 캐시를 마운트
+RUN pnpm install --store-dir /cache/pnpm-store --frozen-lockfile --prefer-offline
 COPY --from=setup /app/out/full/ ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    --mount=type=cache,id=turbo,target=/app/.turbo \
-    pnpm exec turbo build --concurrency=1 --filter=idp-web...
+RUN pnpm exec turbo build --concurrency=1 --cache-dir=/cache/turbo --filter=idp-web...
 
 FROM node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS runner
 

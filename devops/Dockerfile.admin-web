@@ -54,16 +54,15 @@ WORKDIR /app
 # (의존성 변경 없으면 이 레이어가 캐시 히트 → pnpm install 스킵)
 COPY --from=setup /app/out/json/ ./
 
-# --store-dir /pnpm/store --prefer-offline: pnpm 스토어를 캐시 마운트 경로에 두고 캐시 우선 조회
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline
+# --store-dir /cache/pnpm-store --prefer-offline: pnpm 스토어를 PVC 영속 캐시에 두고 캐시 우선 조회
+RUN pnpm install --frozen-lockfile --store-dir /cache/pnpm-store --prefer-offline
 
 # 📦 2단계: 소스 복사 (코드 변경 시에도 위 install 레이어는 캐시 유지)
 COPY --from=setup /app/out/full/ ./
 
 # 🚀 Next.js 빌드 (next build가 TypeScript 타입체크를 포함)
 # --concurrency=2: 병렬 빌드로 빌드 시간 단축
-RUN --mount=type=cache,id=turbo,target=/app/.turbo \
-    pnpm exec turbo build --concurrency=2 --filter=admin-web...
+RUN pnpm exec turbo build --concurrency=2 --cache-dir=/cache/turbo --filter=admin-web...
 
 # ============================================================================
 # 🚀 PRODUCTION STAGE: Next.js 서버 실행

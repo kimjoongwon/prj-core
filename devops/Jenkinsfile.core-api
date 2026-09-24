@@ -88,6 +88,7 @@ podTemplate(
                                 --format=docker \\
                                 --layers \\
                                 --pull=newer \\
+                                -v /var/lib/containers/build-cache:/cache \\
                                 -f ./devops/Dockerfile.core-api \\
                                 ${IMAGE_TAG_ARGS.join(' \\\n                                ')} \\
                                 .

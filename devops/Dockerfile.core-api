@@ -60,13 +60,10 @@ WORKDIR /app
 # - /app/out/full/: Turbo prune으로 생성된 최적화된 프로젝트 구조
 COPY --from=setup /app/out/json/ ./
 
-# 🚀 종속성 설치 (캐시 마운트로 성능 최적화)
-# - mount=type=cache: PNPM 스토어를 캐시로 마운트하여 재빌드 시 속도 향상
-# - id=pnpm: 캐시 식별자
-# - target=/pnpm/store: PNPM 캐시 저장소 경로
-# - --store-dir /pnpm/store: pnpm 스토어를 캐시 마운트 경로와 일치시켜 캐시 적중률 유지
+# 🚀 종속성 설치 (영속 캐시)
+# - /cache: 빌드 잡이 podman build -v로 PVC의 영속 캐시를 마운트 (buildah의 --mount=type=cache는 빌드 간 유지되지 않음)
 # - --prefer-offline: 캐시된 패키지를 우선 사용해 네트워크 조회 축소
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline
+RUN pnpm install --frozen-lockfile --store-dir /cache/pnpm-store --prefer-offline
 
 COPY --from=setup /app/out/full/ ./
 
@@ -79,9 +76,9 @@ WORKDIR /app
 # 🏗️ Turbo를 사용한 프로젝트 빌드
 # - 모든 관련 패키지와 의존성을 최적화된 순서로 빌드
 # - nest build가 TypeScript 컴파일을 포함하므로 별도 type-check 단계 생략
-# - /app/.turbo 캐시 마운트로 Turbo 작업 캐시를 재사용해 재빌드 시간 단축
+# - --cache-dir=/cache/turbo: 영속 캐시로 변경 없는 워크스페이스 패키지 재빌드 회피
 # - --concurrency=2: 병렬 빌드로 빌드 시간 단축
-RUN --mount=type=cache,id=turbo,target=/app/.turbo pnpm exec turbo build --concurrency=2 --filter=core-api...
+RUN pnpm exec turbo build --concurrency=2 --cache-dir=/cache/turbo --filter=core-api...
 
 # ============================================================================
 # 🚀 PRODUCTION STAGE: 운영 환경 컨테이너
