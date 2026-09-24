@@ -72,6 +72,7 @@ podTemplate(
                                 --format=docker \\
                                 --layers \\
                                 --pull=newer \\
+                                -v /var/lib/containers/build-cache:/cache \\
                                 -f ./devops/Dockerfile.idp-api \\
                                 ${IMAGE_TAG_ARGS.join(' \\\n                                ')} \\
                                 .
@@ -80,7 +81,7 @@ podTemplate(
                         sh """
                             podman push \\
                                 --compression-format=gzip \\
-                                --compression-level=6 \\
+                                --compression-level=3 \\
                                 ${IMAGE_PATH}:${IMAGE_TAG}
                         """
 
@@ -88,7 +89,7 @@ podTemplate(
                             sh """
                                 podman push \\
                                     --compression-format=gzip \\
-                                    --compression-level=6 \\
+                                    --compression-level=3 \\
                                     ${IMAGE_PATH}:latest
                             """
                         }

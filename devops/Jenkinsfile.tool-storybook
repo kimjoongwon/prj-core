@@ -136,7 +136,7 @@ podTemplate(
                                 export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
                                 podman ${PODMAN_GLOBAL_ARGS} push \\
                                     --compression-format=gzip \\
-                                    --compression-level=6 \\
+                                    --compression-level=3 \\
                                     ${IMAGE_PATH}:${IMAGE_TAG}
                             """
 
