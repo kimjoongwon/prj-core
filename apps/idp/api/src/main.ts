@@ -1,3 +1,4 @@
+// 빌드 캐시 히트 검증용 주석 (2026-09-24) — 동작 변화 없음
 import { Token } from "@cocrepo/constant";
 import { NestFactory } from "@nestjs/core";
 import type { NestExpressApplication } from "@nestjs/platform-express";
