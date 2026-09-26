@@ -25,8 +25,8 @@
 
 ## 구현 체크리스트
 
-- [ ] `IMAGE_TAG` 누락 시 즉시 실패함
-- [ ] `GITOPS_REPOSITORY_URL`과 `GITOPS_CREDENTIAL_ID`로 인증된 repo URL을 구성함
-- [ ] 스크립트는 `prj-devops` 클론에서 실행하고, workdir·push는 `prj-deploy` 클론(공개 — 익명 클론, deploy key push)으로 수행함
-- [ ] 스크립트 실행으로 GitOps tag 업데이트를 수행함
-- [ ] 실행 결과에 입력 파라미터 요약을 출력함
+- [x] `IMAGE_TAG` 누락 시 즉시 실패함
+- [x] `GITOPS_REPOSITORY_URL`·`DEPLOY_REPOSITORY_URL`·`GITOPS_DEPLOY_CREDENTIAL_ID` 누락 시 즉시 실패함
+- [x] 스크립트는 `prj-devops` 클론에서 실행하고, workdir·push는 `prj-deploy` 클론(공개 — 익명 클론, deploy key push)으로 수행함
+- [x] 스크립트 실행으로 GitOps tag 업데이트를 수행함 (2026-09-27 deploy key 전환 검증: #170/#171 no-op 성공)
+- [x] 실행 결과에 입력 파라미터 요약을 출력함
