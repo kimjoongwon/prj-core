@@ -3,6 +3,7 @@ import {
   type MyReservationCardItem,
   type MyReservationsScreenStatus,
 } from "@cocrepo/mo-ui";
+import { ApiClientError } from "@cocrepo/api/core/client";
 import { useGetMyReservations } from "@cocrepo/api/core/reservations";
 import type {
   ReservationDto,
@@ -10,7 +11,6 @@ import type {
 } from "@cocrepo/api/core/model";
 import { observer } from "mobx-react-lite";
 import { formatDatabaseId } from "@cocrepo/type";
-import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const RESERVATION_QUERY_PARAMS = {
@@ -43,8 +43,7 @@ const formatReservationTime = (date: Date) => {
 };
 
 const getApiErrorDescription = (error: unknown) => {
-  const status = (error as { response?: { status?: number } })?.response
-    ?.status;
+  const status = (error as ApiClientError).status;
 
   switch (status) {
     case 401:
@@ -104,14 +103,12 @@ const getReservationsStatus = (params: {
 };
 
 const ReservationsTabRoute = observer(() => {
-  const requestOptions = { baseURL: getCoreApiBaseUrl() };
   const isSpaceSelectionPending = !mobileApiScope.isSpaceSelectionResolved;
   const hasSelectedSpace = Boolean(mobileApiScope.spaceId);
   const isSpaceUnavailable =
     mobileApiScope.isSpaceSelectionResolved && !hasSelectedSpace;
   const reservationsQuery = useGetMyReservations(RESERVATION_QUERY_PARAMS, {
     query: { enabled: hasSelectedSpace },
-    request: requestOptions,
   });
   const reservations = reservationsQuery.data?.data ?? [];
   const items = reservations.map(toMyReservationCardItem);

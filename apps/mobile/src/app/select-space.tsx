@@ -1,4 +1,5 @@
 import { SpaceSelectScreen, type SpaceListItemInfo } from "@cocrepo/mo-ui";
+import { ApiClientError } from "@cocrepo/api/core/client";
 import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import type { SpaceDto } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
@@ -8,7 +9,6 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
   getAuthenticatedHomePath,
-  getCoreApiBaseUrl,
   resolveAuthenticatedRoutePath,
 } from "@/auth/auth-config";
 import { mobileSession } from "@/auth/mobile-session";
@@ -40,7 +40,7 @@ const findSpaceByItem = (
   );
 
 const getSelectionErrorDescription = (error: unknown) => {
-  const status = (error as { response?: { status?: number } })?.response?.status;
+  const status = (error as ApiClientError).status;
   if (status === 403) {
     return "이 계정으로 선택할 수 없는 지점입니다.";
   }
@@ -64,17 +64,14 @@ const SpaceSelectRoute = observer(() => {
     mobileApiScope.tenantId,
   );
   const [selectionErrorDescription, setSelectionErrorDescription] = useState("");
-  const requestOptions = { baseURL: getCoreApiBaseUrl() };
 
   const spacesQuery = useGetMySpaces({
     query: {
       refetchOnWindowFocus: false,
       retry: false,
     },
-    request: requestOptions,
   });
   const setCurrentSpaceMutation = useSetCurrentSpace({
-    request: requestOptions,
   });
 
   const rawSpaces = spacesQuery.data?.data ?? [];

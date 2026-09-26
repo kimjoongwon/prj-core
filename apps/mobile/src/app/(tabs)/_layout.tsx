@@ -21,7 +21,6 @@ import {
 	type GestureResponderEvent,
 	type PressableProps,
 } from "react-native";
-import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileSession } from "@/auth/mobile-session";
 import {
 	mobileApiScope,
@@ -85,17 +84,14 @@ const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 	);
 	const [selectionErrorDescription, setSelectionErrorDescription] =
 		useState("");
-	const requestOptions = { baseURL: getCoreApiBaseUrl() };
 	const spacesQuery = useGetMySpaces({
 		query: {
 			enabled: isSpaceSheetOpen,
 			refetchOnWindowFocus: false,
 			retry: false,
 		},
-		request: requestOptions,
 	});
 	const setCurrentSpaceMutation = useSetCurrentSpace({
-		request: requestOptions,
 	});
 	const rawSpaces = spacesQuery.data?.data ?? [];
 	const spaceInfos =

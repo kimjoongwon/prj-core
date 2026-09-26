@@ -331,9 +331,7 @@ const createQuery = (
 });
 
 const createError = (status: number) => ({
-  response: {
-    status,
-  },
+  status,
 });
 
 const createFeedItem = (overrides: Record<string, unknown> = {}) => ({
@@ -467,7 +465,6 @@ describe("mobile reservation booking routes", () => {
       }),
       {
         query: { enabled: true },
-        request: { baseURL: "http://localhost:3306" },
       },
     );
   });
@@ -555,7 +552,6 @@ describe("mobile reservation booking routes", () => {
       { skip: 0, take: 20 },
       {
         query: { enabled: true },
-        request: { baseURL: "http://localhost:3306" },
       },
     );
   });

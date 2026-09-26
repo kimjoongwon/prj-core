@@ -204,7 +204,6 @@ describe("mobile community tab route", () => {
 			{ skip: 0, take: 20 },
 			{
 				query: { enabled: true },
-				request: { baseURL: "http://localhost:3306" },
 			},
 		);
 	});

@@ -204,9 +204,7 @@ class MobileSession {
   }
 
   private async loadAuthenticatedContext() {
-    const verifyResponse = await verifyToken({
-      baseURL: getCoreApiBaseUrl(),
-    });
+    const verifyResponse = await verifyToken();
     const verifiedSession = verifyResponse.data;
     if (
       verifiedSession?.accessTokenExpiresAt &&
@@ -224,15 +222,11 @@ class MobileSession {
       mobileApiScope.setSpaceInfo(storedSpaceSelection, false);
     }
 
-    const mySpacesResponse = await getMySpaces({
-      baseURL: getCoreApiBaseUrl(),
-    });
+    const mySpacesResponse = await getMySpaces();
     const spaces = mySpacesResponse.data ?? [];
     mobileApiScope.setSpaces(spaces);
 
-	const currentSpaceResponse = await getCurrentSpace({
-		baseURL: getCoreApiBaseUrl(),
-	});
+	const currentSpaceResponse = await getCurrentSpace();
 	const currentSpace = currentSpaceResponse.data;
 	if (
 		currentSpace?.tenantId &&

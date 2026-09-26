@@ -8,12 +8,12 @@ import {
 	useCreateCommunityPost,
 	useGetCommunityPosts,
 } from "@cocrepo/api/core/community";
+import { ApiClientError } from "@cocrepo/api/core/client";
 import type { CommunityPostDto } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { formatDatabaseId } from "@cocrepo/type";
-import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const COMMUNITY_QUERY_PARAMS = {
@@ -47,8 +47,7 @@ const formatCommunityCreatedAtLabel = (date: Date) => {
 };
 
 const getApiErrorDescription = (error: unknown) => {
-	const status = (error as { response?: { status?: number } })?.response
-		?.status;
+	const status = (error as ApiClientError).status;
 
 	switch (status) {
 		case 401:
@@ -94,7 +93,6 @@ const getCommunityStatus = (params: {
 
 const CommunityTabRoute = observer(() => {
 	const queryClient = useQueryClient();
-	const requestOptions = { baseURL: getCoreApiBaseUrl() };
 	const [isComposerOpen, setIsComposerOpen] = useState(false);
 	const [composerTitle, setComposerTitle] = useState("");
 	const [composerText, setComposerText] = useState("");
@@ -105,10 +103,8 @@ const CommunityTabRoute = observer(() => {
 		mobileApiScope.isSpaceSelectionResolved && !hasSelectedSpace;
 	const communityQuery = useGetCommunityPosts(COMMUNITY_QUERY_PARAMS, {
 		query: { enabled: hasSelectedSpace },
-		request: requestOptions,
 	});
 	const createPostMutation = useCreateCommunityPost({
-		request: requestOptions,
 	});
 	const posts = communityQuery.data?.data ?? [];
 	const items = posts.map(toCommunityPostCardItem);

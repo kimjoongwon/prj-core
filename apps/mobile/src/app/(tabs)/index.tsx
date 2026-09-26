@@ -1,3 +1,4 @@
+import { ApiClientError } from "@cocrepo/api/core/client";
 import {
   ReservationHomeScreen,
   type BookingAvailabilityStatus,
@@ -20,7 +21,6 @@ import type {
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const BOOKING_WINDOW_DAYS = 14;
@@ -118,8 +118,7 @@ const formatReservationDate = (date: Date) => {
 };
 
 const getApiErrorDescription = (error: unknown) => {
-  const status = (error as { response?: { status?: number } })?.response
-    ?.status;
+  const status = (error as ApiClientError).status;
 
   switch (status) {
     case 400:
@@ -276,7 +275,6 @@ const HomeTabRoute = observer(() => {
   const bookingDates = createBookingDates();
   const firstBookingDate = bookingDates[0] ?? startOfLocalDay(new Date());
   const feedParams = createBookingFeedParams(bookingDates);
-  const requestOptions = { baseURL: getCoreApiBaseUrl() };
   const [selectedDate, setSelectedDate] = useState(toDateKey(firstBookingDate));
   const [selectedFeedItem, setSelectedFeedItem] =
     useState<BookingFeedItemDto | null>(null);
@@ -294,7 +292,6 @@ const HomeTabRoute = observer(() => {
 
   const bookingFeedQuery = useGetReservationBookingFeed(feedParams, {
     query: { enabled: hasSelectedSpace },
-    request: requestOptions,
   });
 
   const createReservationMutation = useCreateReservation({
@@ -313,7 +310,6 @@ const HomeTabRoute = observer(() => {
         });
       },
     },
-    request: requestOptions,
   });
 
   const feedItems = bookingFeedQuery.data?.data ?? [];
