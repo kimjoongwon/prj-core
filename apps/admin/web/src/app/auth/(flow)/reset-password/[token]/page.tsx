@@ -13,7 +13,7 @@ import {
 	type PasswordRule,
 } from "@cocrepo/constant";
 import { ResetPasswordScreen } from "@cocrepo/ui";
-import type { AxiosError } from "axios";
+import type { ApiClientError } from "@cocrepo/api/core/client";
 import {
 	type IReactionDisposer,
 	makeAutoObservable,
@@ -178,8 +178,8 @@ class ResetPasswordRoutePageState {
 				this.resetPasswordForm.isComplete = true;
 			});
 		} catch (err) {
-			const axiosError = err as AxiosError<ResetPasswordErrorDto>;
-			const errorCode = axiosError.response?.data?.error || "";
+			const apiError = err as ApiClientError<ResetPasswordErrorDto>;
+			const errorCode = apiError.body?.error || "";
 
 			runInAction(() => {
 				if (errorCode === "PASSWORD_REUSE") {

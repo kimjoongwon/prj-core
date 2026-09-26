@@ -1,5 +1,5 @@
 "use client";
-import { customInstance } from "@cocrepo/api/core/client";
+import { customFetch } from "@cocrepo/api/core/client";
 import { ADMIN_NAV_ITEMS } from "@cocrepo/constant";
 import { AppProvider, useApp } from "@cocrepo/store";
 import type { AppProviderConfig } from "@cocrepo/type";
@@ -110,9 +110,8 @@ const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
 	const { data } = useQuery({
 		queryKey: ["core-i18n-catalog", languageCode],
 		queryFn: () =>
-			customInstance<ApiResponse<I18nCatalogData>>({
+			customFetch<ApiResponse<I18nCatalogData>>(`/api/v1/i18n/catalog/${languageCode}`, {
 				method: "GET",
-				url: `/api/v1/i18n/catalog/${languageCode}`,
 			}),
 		retry: false,
 		refetchOnWindowFocus: false,

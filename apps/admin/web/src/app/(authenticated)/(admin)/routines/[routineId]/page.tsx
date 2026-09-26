@@ -18,7 +18,7 @@ import {
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
-import type { AxiosError } from "axios";
+import type { ApiClientError } from "@cocrepo/api/core/client";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -93,7 +93,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 				errors: {},
 			}
 		: undefined;
-	const responseStatus = (error as AxiosError | null)?.response?.status;
+	const responseStatus = (error as ApiClientError | null)?.status;
 	const isNotFound = responseStatus === 404;
 	const errorTitle = error
 		? isNotFound

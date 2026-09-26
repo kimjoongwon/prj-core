@@ -12,7 +12,7 @@ import {
 	SignUpScreen,
 	type SignUpSpaceOption,
 } from "@cocrepo/ui";
-import type { AxiosError } from "axios";
+import type { ApiClientError } from "@cocrepo/api/core/client";
 import { makeAutoObservable, runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
@@ -206,9 +206,9 @@ class SignUpRoutePageState {
 	}
 
 	private resolveSubmitError(error: unknown) {
-		const axiosError = error as AxiosError<SignUpErrorResponse>;
-		const errorCode = axiosError.response?.data?.error;
-		const message = axiosError.response?.data?.message;
+		const apiError = error as ApiClientError<SignUpErrorResponse>;
+		const errorCode = apiError.body?.error;
+		const message = apiError.body?.message;
 
 		if (errorCode === "EMAIL_ALREADY_EXISTS") {
 			return "이미 가입된 이메일입니다.";
