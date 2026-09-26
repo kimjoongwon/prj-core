@@ -80,6 +80,17 @@ WORKDIR /app
 # - --concurrency=2: 병렬 빌드로 빌드 시간 단축
 RUN pnpm exec turbo build --concurrency=2 --cache-dir=/cache/turbo --filter=core-api...
 
+# 런타임 이미지에서 devDependencies를 제거한다(typescript/@nestjs/cli 등).
+# PreSync 마이그레이션 계약에 필요한 prisma/tsx/dotenv는 @cocrepo/prisma(be-prisma)의
+# dependencies로 승격되어 --prod 설치에도 남는다. 빌드 산출물(dist)은 워크스페이스 트리에 있어 영향 없음.
+# 런타임 이미지에서 devDependencies를 제거한다(typescript/@nestjs/cli 등).
+# pnpm headless 설치는 기존 dev 패키지를 물리적으로 제거하지 않으므로
+# node_modules를 명시적으로 비운 뒤 스토어(영속 캐시)에서 prod만 재설치한다.
+# PreSync 마이그레이션 계약에 필요한 prisma/tsx/dotenv는 @cocrepo/prisma(be-prisma)의
+# dependencies로 승격되어 --prod 설치에도 남는다. 빌드 산출물(dist)은 워크스페이스 트리에 있어 영향 없음.
+RUN find /app -maxdepth 4 -name node_modules -type d -prune -exec rm -rf '{}' + && \
+    CI=true pnpm install --frozen-lockfile --prod --store-dir /cache/pnpm-store --prefer-offline
+
 # ============================================================================
 # 🚀 PRODUCTION STAGE: 운영 환경 컨테이너
 # ============================================================================
@@ -108,7 +119,11 @@ RUN cd /app/apps/core/api && \
     node --check dist/main.js && \
     NODE_ENV=production node -e "require('bcrypt'); require('@cocrepo/constant'); require('@cocrepo/prisma'); require('@cocrepo/type'); require('@cocrepo/toolkit'); require('./dist/module/app.module.js')" && \
     NODE_ENV=production ENABLE_NEST_DEVTOOLS=true node -e "const devtools=require('./dist/module/devtools.module.js'); if(devtools.isNestDevtoolsEnabled()) throw new Error('Nest Devtools must stay disabled in production');" && \
-    node -e "const forbidden=['socket.io','@nestjs/websockets','@nestjs/platform-socket.io']; for (const packageName of forbidden) { let resolvedPath=null; try { resolvedPath=require.resolve(packageName); } catch {} if (resolvedPath) throw new Error('Forbidden runtime package resolvable from app: '+packageName+' -> '+resolvedPath); }"
+    node -e "const forbidden=['socket.io','@nestjs/websockets','@nestjs/platform-socket.io']; for (const packageName of forbidden) { let resolvedPath=null; try { resolvedPath=require.resolve(packageName); } catch {} if (resolvedPath) throw new Error('Forbidden runtime package resolvable from app: '+packageName+' -> '+resolvedPath); }" && \
+    cd /app/packages/be-prisma && \
+    test -x node_modules/.bin/prisma && \
+    test -x node_modules/.bin/tsx && \
+    node -e "require.resolve('dotenv')"
 
 WORKDIR /app
 

@@ -41,6 +41,7 @@
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.6",
     "@nestjs/cqrs": "^11.0.3",
+    "@nestjs/devtools-integration": "0.2.1",
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.1.6",
@@ -69,7 +70,6 @@
   "devDependencies": {
     "@cocrepo/tsconfig": "workspace:*",
     "@nestjs/cli": "^11.0.10",
-    "@nestjs/devtools-integration": "0.2.1",
     "@nestjs/schematics": "^11.0.7",
     "@nestjs/testing": "^11.1.6",
     "@types/bcrypt": "^5.0.2",
