@@ -479,7 +479,7 @@ describe("SessionCard", () => {
 4. InteractionService 로그인 검증 강화 (실패 제한 + 잠금 + 감사 로그)
 5. Auth UseCase 로그아웃 강화 (블랙리스트 + Refresh Token 삭제)
 6. LoginForm UI 수정 (남은 시도, 잠금 배너, 비밀번호 찾기 링크)
-7. Axios 인터셉터 세션 만료 메시지 개선
+7. fetch 클라이언트(customFetch) 세션 만료 메시지 개선
 ```
 
 ### Phase 2: 비밀번호 관리

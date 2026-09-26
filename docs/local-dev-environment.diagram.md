@@ -121,7 +121,7 @@ sequenceDiagram
 
 - **HttpOnly 쿠키(앱 origin 3000)**: `accessToken`(RS256 at+jwt), `refreshToken`, `sessionId` — JS가 읽을 수 없고 모든 요청에 자동 첨부
 - **HttpOnly 쿠키(발급자 origin 3008)**: `_session` 등 OP 세션 쿠키 — SSO 재개·RP-Initiated Logout에 사용
-- **`loggedIn` 마커 쿠키**: 비민감 값, JS 읽기 허용. SessionBootstrap/axios 인터셉터가 이 표시가 없으면 갱신 요청 없이 로그인 화면으로 이동
+- **`loggedIn` 마커 쿠키**: 비민감 값, JS 읽기 허용. SessionBootstrap/fetch 클라이언트(customFetch)가 이 표시가 없으면 갱신 요청 없이 로그인 화면으로 이동
 - **localStorage `admin-persist`**: MobX 스토어 부트스트랩 결과(토큰 세션, 선택 스페이스, 가용 스페이스 목록)
 
 ## 주의사항

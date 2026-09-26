@@ -284,7 +284,7 @@
 | Phase | 위치 | 화면 | 경로 | 상태 |
 |-------|------|------|------|------|
 | 1 | idp-client | 로그인 | `/interaction/[uid]` | 수정 |
-| 1 | admin | - | - | Axios 인터셉터 세션 만료 UX 개선 |
+| 1 | admin | - | - | fetch 클라이언트 세션 만료 UX 개선 |
 | 2 | idp-client | 비밀번호 찾기 | `/forgot-password` | 신규 |
 | 2 | idp-client | 비밀번호 재설정 | `/reset-password/[token]` | 신규 |
 | 2 | admin | 비밀번호 변경 | `/my-account/change-password` | 신규 |

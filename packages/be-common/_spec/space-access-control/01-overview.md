@@ -20,7 +20,7 @@
 
 space.tenantId                    Guard Layer (요청 차단)
     ↓                             ┌─ JwtAuthGuard ─→ JWT 검증, request.user 설정
-Axios Interceptor                 ├─ SpaceAccessGuard ─→ x-tenant-id + Tenant 검증
+fetch 클라이언트(customFetch)     ├─ SpaceAccessGuard ─→ x-tenant-id + Tenant 검증
   x-tenant-id 헤더 자동 추가      └─ RolesGuard/RoleCategoryGuard/RoleGroupGuard (선택적)
     ↓                                  ↓
 ─── HTTP Request ──────────────→  Interceptor Layer (컨텍스트 설정)
@@ -99,7 +99,7 @@ Axios Interceptor                 ├─ SpaceAccessGuard ─→ x-tenant-id + T
 | Tenant 선택 전 API | `@ApiAuth({ tenantHeader: false })` 또는 인증 전용 decorator로 `x-tenant-id` 필수 표시 제외 |
 | 선택적 Tenant API | `@ApiTenantHeader({ required: false })`로 선택 header 표시 |
 | Scope decorator | `x-space-resource-scope` vendor extension에 `WITH_DESCENDANTS`, `WITH_ANCESTORS`, `WITH_TREE` 기록 |
-| Orval codegen | `x-tenant-id` header parameter는 codegen 입력 transformer에서 제거하고 Axios interceptor 주입을 유지 |
+| Orval codegen | `x-tenant-id` header parameter는 codegen 입력 transformer에서 제거하고 fetch 클라이언트 헤더 주입을 유지 |
 
 ---
 
@@ -153,18 +153,15 @@ User A:
 - **space** (MobX): `tenantId`를 메모리 + localStorage에 보관
 - Tenant 전환 시 선택된 `tenantId`를 갱신하고 이후 요청 header에 반영
 
-### Axios Interceptor
+### fetch 클라이언트 헤더 주입
 ```typescript
-// 앱 초기화 시 space 참조 주입
-setApiSpace(spaceRef);
+// 앱 초기화 시 session scope 참조 주입
+setApiSessionScope(sessionScopeRef);
 
-// 모든 API 요청에 x-tenant-id 자동 추가
-AXIOS_INSTANCE.interceptors.request.use((config) => {
-  if (spaceRef?.tenantId) {
-    config.headers["x-tenant-id"] = spaceRef.tenantId;
-  }
-  return config;
-});
+// 모든 API 요청에 x-tenant-id 자동 추가 (customFetch 내부)
+if (tenantId) {
+  headers.set(REQUEST_HEADER_KEYS.TENANT_ID, tenantId);
+}
 ```
 
 ---
@@ -186,7 +183,7 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
 | Constant | `packages/common-constant/src/context/context-keys.constant.ts` | CLS 키 상수 |
 | Util | `packages/be-common/src/util/permission.util.ts` | 현재 Tenant/Space 파생 유틸 |
 | Setup | `apps/core/api/src/setNestApp.ts` | 글로벌 Guard/Interceptor 등록 |
-| FE API | `packages/fe-api/src/libs/customAxios.ts` | x-tenant-id 헤더 자동 추가 |
+| FE API | `packages/fe-api/src/libs/customFetch.ts` | x-tenant-id 헤더 자동 추가 |
 | FE Store | `packages/fe-store/src/stores/persistStore.ts` | tenantId 보관 |
 
 ---

@@ -110,7 +110,7 @@ description: "이 skill은 `fe-feature-agent` 역할로 일할 때 사용합니�
 | reusable UI/Hook에 `Admin`, `Management` 접두/접미 사용 | 공용 패키지 이름은 역할명만 사용하고, admin 전용 의미가 확실한 경우에만 Feature 이름에서 `Admin` 허용 |
 | 기존 Feature와 유사한 컴포넌트 신규 생성 | 중복 자산 증가 및 유지보수 비용 상승 |
 | 커스텀 className 직접 사용 | UI/입력에서만 허용 |
-| 직접 axios/fetch 호출 | @cocrepo/api 사용 필수 |
+| 직접 fetch 호출 | @cocrepo/api 사용 필수 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | inline style | Tailwind/HeroUI만 사용 |
 | render/constructor에서 localStorage hydrate | hydration mismatch 유발 |

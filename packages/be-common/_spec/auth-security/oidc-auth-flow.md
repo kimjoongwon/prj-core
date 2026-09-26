@@ -155,7 +155,7 @@ sequenceDiagram
 |-----------|------|----------|
 | JwtAuthGuard | `packages/be-common/src/guard/jwt.auth-guard.ts:13-73` | 블랙리스트 확인 + Passport 인증 |
 | JwtStrategy | `packages/be-common/src/strategy/jwt.strategy.ts:25-90` | JWKS 기반 RS256 검증, Bearer/쿠키 추출, 사용자 조회 |
-| Request 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:31-42` | `x-space-id` 헤더 자동 추가 |
+| 세션 헤더 주입 | `packages/fe-api/src/libs/customFetch.ts` | `Authorization`/`x-refresh-token`/`x-tenant-id`/`x-language` 헤더 주입 |
 
 ---
 
@@ -164,7 +164,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant U as User (Browser)
-    participant AX as Axios Interceptor
+    participant AX as Fetch 클라이언트
     participant S as Server (NestJS)
     participant I as IDP (oidc-provider)
 
@@ -218,7 +218,7 @@ sequenceDiagram
 
 | 구성 요소 | 파일 | 핵심 로직 |
 |-----------|------|----------|
-| 401 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:63-124` | 토큰 갱신 + 큐 패턴 + workspace 업데이트 |
+| 401 세션 복구 | `packages/fe-api/src/libs/customFetch.ts` | 토큰 갱신 single-flight + 큐 대기 후 원요청 재시도 |
 | Refresh 엔드포인트 | `packages/be-controller/src/auth/auth.controller.ts` | 쿠키에서 refreshToken 추출 |
 | IDP 토큰 갱신 | `packages/be-client/src/oidc.client.ts` | `refreshTokens()` |
 
@@ -389,7 +389,7 @@ graph TB
     subgraph "Frontend (Admin - Next.js)"
         LP[Login Page<br/>useAuthLoginPage]
         RW[Rewrite Proxy<br/>/api/v1/* → Server]
-        AX[Axios Interceptor<br/>customAxios.ts]
+        AX[Fetch 클라이언트<br/>customFetch.ts]
         AS[Session<br/>session.ts]
     end
 
@@ -527,5 +527,5 @@ packages/be-service/src/idp/
 |------|------|
 | `apps/admin/web/src/app/auth/login/page.tsx` | 로그인 페이지 (OIDC 리다이렉트) |
 | `apps/admin/web/next.config.ts` | API 프록시 설정 (rewrite: `/api/v1/*` → Core API) |
-| `packages/fe-api/src/libs/customAxios.ts` | Axios 인터셉터 (401 토큰 갱신, x-space-id 헤더, workspace 업데이트) |
+| `packages/fe-api/src/libs/customFetch.ts` | fetch 클라이언트 (401 토큰 갱신·재시도, 세션/tenant 헤더 주입) |
 | `packages/fe-store/src/stores/account/authSession.ts` | 인증 상태 관리 (로그아웃 처리) |
