@@ -49,7 +49,12 @@ pipeline {
         string(
             name: 'GITOPS_CREDENTIAL_ID',
             defaultValue: 'github-app-credential',
-            description: 'GitOps 저장소 push용 credential'
+            description: 'prj-core/prj-devops 클론용 credential'
+        )
+        string(
+            name: 'GITOPS_DEPLOY_CREDENTIAL_ID',
+            defaultValue: 'prj-deploy-deploy-key',
+            description: 'prj-deploy push 전용 deploy key (Secret text, PEM)'
         )
     }
 
@@ -81,18 +86,30 @@ pipeline {
                         credentialsId: env.GITOPS_CREDENTIAL_ID,
                         usernameVariable: 'GITHUB_USERNAME',
                         passwordVariable: 'GITHUB_TOKEN'
+                    ),
+                    string(
+                        credentialsId: env.GITOPS_DEPLOY_CREDENTIAL_ID,
+                        variable: 'DEPLOY_SSH_KEY'
                     )
                 ]) {
                     sh '''#!/usr/bin/env bash
                         set -euo pipefail
                         set +x
 
+                        KEYFILE="${PWD}/.prj-deploy-deploy-key"
+                        trap 'rm -f "${KEYFILE}"' EXIT
+
                         REPO_URL="$(printf %s "${GITOPS_REPO}" | sed "s|^https://|https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@|")"
-                        DEPLOY_URL="$(printf %s "${DEPLOY_REPO}" | sed "s|^https://|https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@|")"
                         rm -rf "${GITOPS_DIR}" "${DEPLOY_DIR}"
-                        # 스크립트는 prj-devops, 범프 커밋·push는 prj-deploy (배포 상태 분리, 2026-09-27)
+                        # 스크립트는 prj-devops(토큰 클론), 범프 커밋·push 대상은 prj-deploy(공개 — 익명 클론).
+                        # push는 prj-deploy에만 유효한 deploy key로만 수행 (2026-09-27 CI 권한 축소)
                         git clone --depth 5 --branch "${GITOPS_BRANCH}" "${REPO_URL}" "${GITOPS_DIR}"
-                        git clone --depth 5 --branch "${GITOPS_BRANCH}" "${DEPLOY_URL}" "${DEPLOY_DIR}"
+                        git clone --depth 5 --branch "${GITOPS_BRANCH}" "${DEPLOY_REPO}" "${DEPLOY_DIR}"
+
+                        printf '%s\\n' "${DEPLOY_SSH_KEY}" > "${KEYFILE}"
+                        chmod 600 "${KEYFILE}"
+                        git -C "${DEPLOY_DIR}" remote set-url --push origin git@github.com:kimjoongwon/prj-deploy.git
+                        export GIT_SSH_COMMAND="ssh -i ${KEYFILE} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 
                         # yq 부트스트랩: prj-devops에 install-yq.sh가 있을 때만 수행
                         # (양쪽 저장소 반영 순서와 무관하게 동작하도록 조건부)

@@ -7,7 +7,8 @@
 ## 역할
 
 이미지 빌드와 분리된 GitOps 전용 Job입니다.  
-파라미터로 전달받은 앱/태그 기준으로 `prj-devops`의 `values-prod.yaml` 태그를 갱신하고 커밋/푸시합니다.
+파라미터로 전달받은 앱/태그 기준으로 **`prj-deploy`**의 `prod/<앱>.yaml` 태그를 갱신하고 커밋/푸시합니다
+(2026-09-27 저장소 분리 — 이전에는 `prj-devops`의 `values-prod.yaml`을 갱신했음).
 
 ## 공개 계약
 
@@ -16,7 +17,8 @@
 | 필수 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV` |
 | 지원 앱 | `core-api`, `admin-web`, `proposal-web`, `spring-api`, `tool-storybook`, `idp-api`, `idp-web` |
 | 추적 파라미터 | `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
-| 인증 | 보호된 내부 job이 주입하는 `GITOPS_CREDENTIAL_ID` (Username/Password 바인딩, 대상 저장소 push 권한 필요) |
+| 클론 인증 | `GITOPS_CREDENTIAL_ID` (GitHub App — prj-core/prj-devops 클론용) |
+| push 인증 | `GITOPS_DEPLOY_CREDENTIAL_ID` (prj-deploy 전용 deploy key, Secret text PEM — **다른 저장소에는 쓸 수 없는 키**, 2026-09-27 CI 권한 축소) |
 | 대상 브랜치 | `main` (`GITOPS_BRANCH`) |
 | 실행 스크립트 | `prj-devops/scripts/jenkins/update-gitops-image-tag.sh` |
 | 동시 실행 제어 | `disableConcurrentBuilds()` |
@@ -25,6 +27,6 @@
 
 - [ ] `IMAGE_TAG` 누락 시 즉시 실패함
 - [ ] `GITOPS_REPOSITORY_URL`과 `GITOPS_CREDENTIAL_ID`로 인증된 repo URL을 구성함
-- [ ] 별도 app repo checkout 없이 `prj-devops` 저장소를 clone 한 뒤 workdir 기준으로 스크립트를 실행함
+- [ ] 스크립트는 `prj-devops` 클론에서 실행하고, workdir·push는 `prj-deploy` 클론(공개 — 익명 클론, deploy key push)으로 수행함
 - [ ] 스크립트 실행으로 GitOps tag 업데이트를 수행함
 - [ ] 실행 결과에 입력 파라미터 요약을 출력함
