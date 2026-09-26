@@ -81,7 +81,6 @@
     "@vitejs/plugin-react-swc": "catalog:",
     "@vitest/ui": "catalog:",
     "autoprefixer": "catalog:",
-    "axios": "catalog:",
     "dayjs": "catalog:",
     "framer-motion": "catalog:",
     "jsdom": "catalog:",
