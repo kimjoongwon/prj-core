@@ -18,10 +18,10 @@
 /**
  * 폼 모드
  */
-export type InquiryCreateUpdateFormBootstrapDtoMode = typeof InquiryCreateUpdateFormBootstrapDtoMode[keyof typeof InquiryCreateUpdateFormBootstrapDtoMode];
-
+export type InquiryCreateUpdateFormBootstrapDtoMode =
+	(typeof InquiryCreateUpdateFormBootstrapDtoMode)[keyof typeof InquiryCreateUpdateFormBootstrapDtoMode];
 
 export const InquiryCreateUpdateFormBootstrapDtoMode = {
-  CREATE: 'CREATE',
-  UPDATE: 'UPDATE',
+	CREATE: "CREATE",
+	UPDATE: "UPDATE",
 } as const;

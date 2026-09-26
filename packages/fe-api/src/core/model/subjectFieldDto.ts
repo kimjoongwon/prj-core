@@ -16,9 +16,9 @@
  */
 
 export interface SubjectFieldDto {
-  name: string;
-  displayName?: string;
-  type: string;
-  isRequired: boolean;
-  isRelation: boolean;
+	name: string;
+	displayName?: string;
+	type: string;
+	isRequired: boolean;
+	isRelation: boolean;
 }

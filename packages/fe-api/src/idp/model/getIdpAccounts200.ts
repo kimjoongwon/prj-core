@@ -11,12 +11,12 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { IdpAccountDto } from './idpAccountDto';
-import type { PageMetaDto } from './pageMetaDto';
+import type { IdpAccountDto } from "./idpAccountDto";
+import type { PageMetaDto } from "./pageMetaDto";
 
 export type GetIdpAccounts200 = {
-  httpStatus?: number;
-  message?: string;
-  data?: IdpAccountDto[];
-  meta?: PageMetaDto;
+	httpStatus?: number;
+	message?: string;
+	data?: IdpAccountDto[];
+	meta?: PageMetaDto;
 };

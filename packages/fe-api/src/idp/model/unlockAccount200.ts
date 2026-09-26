@@ -13,7 +13,7 @@
  */
 
 export type UnlockAccount200 = {
-  httpStatus?: number;
-  message?: string;
-  data?: boolean;
+	httpStatus?: number;
+	message?: string;
+	data?: boolean;
 };

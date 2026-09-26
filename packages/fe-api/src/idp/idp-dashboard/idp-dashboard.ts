@@ -11,527 +11,965 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
-import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { ErrorType } from "../../libs/customFetch";
 
-import type {
-  GetIdpDashboardStats200,
-  GetIdpLoginTrend200
-} from '../model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType } from '../../libs/customAxios';
-
+import { customFetch } from "../../libs/customFetch";
+import type { GetIdpDashboardStats200, GetIdpLoginTrend200 } from "../model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+const withQueryKey = <T extends object, K>(
+	query: T,
+	queryKey: K,
+): T & { queryKey: K } => {
+	const result = { queryKey } as T & { queryKey: K };
+	for (const key of Object.keys(query)) {
+		// The explicit queryKey always wins, matching the previous
+		// `{ ...query, queryKey }` spread where it was set last.
+		if (key === "queryKey") continue;
+		Object.defineProperty(result, key, {
+			enumerable: true,
+			configurable: true,
+			get: () => (query as Record<string, unknown>)[key],
+		});
+	}
+	return result;
+};
 
-
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
-  for (const key of Object.keys(query)) {
-    // The explicit queryKey always wins, matching the previous
-    // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
-    Object.defineProperty(result, key, {
-      enumerable: true,
-      configurable: true,
-      get: () => (query as Record<string, unknown>)[key],
-    });
-  }
-  return result;
+export const getGetIdpDashboardStatsUrl = () => {
+	return `/api/v1/idp/dashboard/stats`;
 };
 
 /**
  * 활성 세션, 로그인 성공/실패/잠금 현황, 잠금 계정 수 등 종합 통계를 조회합니다.
  * @summary IDP 대시보드 통계 조회
  */
-export const getIdpDashboardStats = (
-
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<GetIdpDashboardStats200>(
-      {url: `/api/v1/idp/dashboard/stats`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
+export const getIdpDashboardStats = async (
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetIdpDashboardStats200> => {
+	return customFetch<GetIdpDashboardStats200>(getGetIdpDashboardStatsUrl(), {
+		...options,
+		method: "GET",
+	});
+};
 
 export const getGetIdpDashboardStatsQueryKey = () => {
-    return [
-    `/api/v1/idp/dashboard/stats`
-    ] as const;
-    }
+	return [`/api/v1/idp/dashboard/stats`] as const;
+};
 
 export const getGetIdpDashboardStatsInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/idp/dashboard/stats`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/idp/dashboard/stats`] as const;
+};
 
+export const getGetIdpDashboardStatsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<
+			Awaited<ReturnType<typeof getIdpDashboardStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-export const getGetIdpDashboardStatsQueryOptions = <TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+	const queryKey = queryOptions?.queryKey ?? getGetIdpDashboardStatsQueryKey();
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpDashboardStats>>
+	> = ({ signal }) => getIdpDashboardStats({ signal, ...requestOptions });
 
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpDashboardStatsQueryKey();
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getIdpDashboardStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetIdpDashboardStatsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpDashboardStats>>
+>;
+export type GetIdpDashboardStatsQueryError = ErrorType<void>;
 
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpDashboardStats>>> = ({ signal }) => getIdpDashboardStats(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpDashboardStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpDashboardStats>>>
-export type GetIdpDashboardStatsQueryError = ErrorType<void>
-
-
-export function useGetIdpDashboardStats<TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdpDashboardStats>>,
-          TError,
-          Awaited<ReturnType<typeof getIdpDashboardStats>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpDashboardStats<TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdpDashboardStats>>,
-          TError,
-          Awaited<ReturnType<typeof getIdpDashboardStats>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpDashboardStats<TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdpDashboardStats<
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getIdpDashboardStats>>,
+					TError,
+					Awaited<ReturnType<typeof getIdpDashboardStats>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpDashboardStats<
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getIdpDashboardStats>>,
+					TError,
+					Awaited<ReturnType<typeof getIdpDashboardStats>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpDashboardStats<
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary IDP 대시보드 통계 조회
  */
 
-export function useGetIdpDashboardStats<TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetIdpDashboardStats<
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetIdpDashboardStatsQueryOptions(options);
 
-  const queryOptions = getGetIdpDashboardStatsQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary IDP 대시보드 통계 조회
- */
-export const prefetchGetIdpDashboardStatsQuery = async <TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetIdpDashboardStatsQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetIdpDashboardStatsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpDashboardStatsQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpDashboardStats>>> = ({ signal }) => getIdpDashboardStats(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpDashboardStatsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpDashboardStats>>>
-export type GetIdpDashboardStatsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetIdpDashboardStatsSuspense<TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpDashboardStatsSuspense<TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpDashboardStatsSuspense<TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary IDP 대시보드 통계 조회
- */
-
-export function useGetIdpDashboardStatsSuspense<TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetIdpDashboardStatsSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetIdpDashboardStatsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpDashboardStatsInfiniteQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpDashboardStats>>> = ({ signal }) => getIdpDashboardStats(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpDashboardStatsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpDashboardStats>>>
-export type GetIdpDashboardStatsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetIdpDashboardStatsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpDashboardStatsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpDashboardStatsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary IDP 대시보드 통계 조회
- */
-
-export function useGetIdpDashboardStatsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetIdpDashboardStatsSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary IDP 대시보드 통계 조회
  */
-export const prefetchGetIdpDashboardStatsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getIdpDashboardStats>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpDashboardStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetIdpDashboardStatsQuery = async <
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetIdpDashboardStatsQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetIdpDashboardStatsSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetIdpDashboardStatsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getIdpDashboardStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getGetIdpDashboardStatsQueryKey();
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpDashboardStats>>
+	> = ({ signal }) => getIdpDashboardStats({ signal, ...requestOptions });
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getIdpDashboardStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetIdpDashboardStatsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpDashboardStats>>
+>;
+export type GetIdpDashboardStatsSuspenseQueryError = ErrorType<void>;
+
+export function useGetIdpDashboardStatsSuspense<
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpDashboardStatsSuspense<
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpDashboardStatsSuspense<
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary IDP 대시보드 통계 조회
+ */
+
+export function useGetIdpDashboardStatsSuspense<
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetIdpDashboardStatsSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+export const getGetIdpDashboardStatsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getIdpDashboardStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetIdpDashboardStatsInfiniteQueryKey();
 
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpDashboardStats>>
+	> = ({ signal }) => getIdpDashboardStats({ signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getIdpDashboardStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetIdpDashboardStatsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpDashboardStats>>
+>;
+export type GetIdpDashboardStatsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetIdpDashboardStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpDashboardStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpDashboardStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary IDP 대시보드 통계 조회
+ */
+
+export function useGetIdpDashboardStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpDashboardStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions =
+		getGetIdpDashboardStatsSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
+}
+
+/**
+ * @summary IDP 대시보드 통계 조회
+ */
+export const prefetchGetIdpDashboardStatsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getIdpDashboardStats>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpDashboardStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions =
+		getGetIdpDashboardStatsSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetIdpLoginTrendUrl = () => {
+	return `/api/v1/idp/dashboard/login-trend`;
+};
 
 /**
  * 최근 7일간 일별 로그인 성공/실패 건수를 조회합니다.
  * @summary 로그인 추이 조회
  */
-export const getIdpLoginTrend = (
-
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<GetIdpLoginTrend200>(
-      {url: `/api/v1/idp/dashboard/login-trend`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
+export const getIdpLoginTrend = async (
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetIdpLoginTrend200> => {
+	return customFetch<GetIdpLoginTrend200>(getGetIdpLoginTrendUrl(), {
+		...options,
+		method: "GET",
+	});
+};
 
 export const getGetIdpLoginTrendQueryKey = () => {
-    return [
-    `/api/v1/idp/dashboard/login-trend`
-    ] as const;
-    }
+	return [`/api/v1/idp/dashboard/login-trend`] as const;
+};
 
 export const getGetIdpLoginTrendInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/idp/dashboard/login-trend`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/idp/dashboard/login-trend`] as const;
+};
 
+export const getGetIdpLoginTrendQueryOptions = <
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-export const getGetIdpLoginTrendQueryOptions = <TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+	const queryKey = queryOptions?.queryKey ?? getGetIdpLoginTrendQueryKey();
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpLoginTrend>>
+	> = ({ signal }) => getIdpLoginTrend({ signal, ...requestOptions });
 
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpLoginTrendQueryKey();
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getIdpLoginTrend>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetIdpLoginTrendQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpLoginTrend>>
+>;
+export type GetIdpLoginTrendQueryError = ErrorType<void>;
 
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpLoginTrend>>> = ({ signal }) => getIdpLoginTrend(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpLoginTrendQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpLoginTrend>>>
-export type GetIdpLoginTrendQueryError = ErrorType<void>
-
-
-export function useGetIdpLoginTrend<TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdpLoginTrend>>,
-          TError,
-          Awaited<ReturnType<typeof getIdpLoginTrend>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpLoginTrend<TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdpLoginTrend>>,
-          TError,
-          Awaited<ReturnType<typeof getIdpLoginTrend>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpLoginTrend<TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdpLoginTrend<
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getIdpLoginTrend>>,
+					TError,
+					Awaited<ReturnType<typeof getIdpLoginTrend>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpLoginTrend<
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getIdpLoginTrend>>,
+					TError,
+					Awaited<ReturnType<typeof getIdpLoginTrend>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpLoginTrend<
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 로그인 추이 조회
  */
 
-export function useGetIdpLoginTrend<TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetIdpLoginTrend<
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetIdpLoginTrendQueryOptions(options);
 
-  const queryOptions = getGetIdpLoginTrendQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary 로그인 추이 조회
- */
-export const prefetchGetIdpLoginTrendQuery = async <TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetIdpLoginTrendQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetIdpLoginTrendSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpLoginTrendQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpLoginTrend>>> = ({ signal }) => getIdpLoginTrend(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpLoginTrendSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpLoginTrend>>>
-export type GetIdpLoginTrendSuspenseQueryError = ErrorType<void>
-
-
-export function useGetIdpLoginTrendSuspense<TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpLoginTrendSuspense<TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpLoginTrendSuspense<TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 로그인 추이 조회
- */
-
-export function useGetIdpLoginTrendSuspense<TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetIdpLoginTrendSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetIdpLoginTrendSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetIdpLoginTrendInfiniteQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdpLoginTrend>>> = ({ signal }) => getIdpLoginTrend(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetIdpLoginTrendSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getIdpLoginTrend>>>
-export type GetIdpLoginTrendSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetIdpLoginTrendSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpLoginTrendSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdpLoginTrendSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 로그인 추이 조회
- */
-
-export function useGetIdpLoginTrendSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetIdpLoginTrendSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 로그인 추이 조회
  */
-export const prefetchGetIdpLoginTrendInfiniteQuery = async <TData = Awaited<ReturnType<typeof getIdpLoginTrend>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetIdpLoginTrendQuery = async <
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetIdpLoginTrendQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetIdpLoginTrendSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetIdpLoginTrendSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getIdpLoginTrend>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getGetIdpLoginTrendQueryKey();
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpLoginTrend>>
+	> = ({ signal }) => getIdpLoginTrend({ signal, ...requestOptions });
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getIdpLoginTrend>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetIdpLoginTrendSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpLoginTrend>>
+>;
+export type GetIdpLoginTrendSuspenseQueryError = ErrorType<void>;
+
+export function useGetIdpLoginTrendSuspense<
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpLoginTrendSuspense<
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpLoginTrendSuspense<
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 로그인 추이 조회
+ */
+
+export function useGetIdpLoginTrendSuspense<
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetIdpLoginTrendSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+export const getGetIdpLoginTrendSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getIdpLoginTrend>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetIdpLoginTrendInfiniteQueryKey();
 
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getIdpLoginTrend>>
+	> = ({ signal }) => getIdpLoginTrend({ signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getIdpLoginTrend>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetIdpLoginTrendSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getIdpLoginTrend>>
+>;
+export type GetIdpLoginTrendSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetIdpLoginTrendSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpLoginTrendSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetIdpLoginTrendSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 로그인 추이 조회
+ */
+
+export function useGetIdpLoginTrendSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getIdpLoginTrend>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetIdpLoginTrendSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
+}
+
+/**
+ * @summary 로그인 추이 조회
+ */
+export const prefetchGetIdpLoginTrendInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getIdpLoginTrend>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getIdpLoginTrend>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetIdpLoginTrendSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};

@@ -1,10 +1,14 @@
 export {
-	AXIOS_INSTANCE,
+	ApiClientError,
+	type ApiRequestInit,
+	apiJsonStringify,
 	type CoreSessionRecoveryPolicy,
-	customInstance,
+	customFetch,
 	installCoreSessionRecovery,
+	isApiClientError,
+	readApiErrorMessage,
 	refreshSessionTokens,
 	setApiBaseUrl,
 	setApiLocale,
 	setApiSessionScope,
-} from "../libs/customAxios";
+} from "../libs/customFetch";

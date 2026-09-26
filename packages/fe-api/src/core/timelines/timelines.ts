@@ -14,2239 +14,4248 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customFetch";
+
+import { apiJsonStringify, customFetch } from "../../libs/customFetch";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  CreateProgram201,
-  CreateProgramDto,
-  CreateSession201,
-  CreateSessionDto,
-  CreateTimeline201,
-  CreateTimelineDto,
-  GetProgramById200,
-  GetPrograms200,
-  GetProgramsParams,
-  GetSessionById200,
-  GetSessions200,
-  GetSessionsParams,
-  GetTimelineById200,
-  GetTimelines200,
-  GetTimelinesParams,
-  UpdateProgram200,
-  UpdateProgramDto,
-  UpdateSession200,
-  UpdateSessionDto,
-  UpdateTimeline200,
-  UpdateTimelineDto
-} from '../model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType , BodyType } from '../../libs/customAxios';
-
+	CreateProgram201,
+	CreateProgramDto,
+	CreateSession201,
+	CreateSessionDto,
+	CreateTimeline201,
+	CreateTimelineDto,
+	GetProgramById200,
+	GetPrograms200,
+	GetProgramsParams,
+	GetSessionById200,
+	GetSessions200,
+	GetSessionsParams,
+	GetTimelineById200,
+	GetTimelines200,
+	GetTimelinesParams,
+	UpdateProgram200,
+	UpdateProgramDto,
+	UpdateSession200,
+	UpdateSessionDto,
+	UpdateTimeline200,
+	UpdateTimelineDto,
+} from "../model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+const withQueryKey = <T extends object, K>(
+	query: T,
+	queryKey: K,
+): T & { queryKey: K } => {
+	const result = { queryKey } as T & { queryKey: K };
+	for (const key of Object.keys(query)) {
+		// The explicit queryKey always wins, matching the previous
+		// `{ ...query, queryKey }` spread where it was set last.
+		if (key === "queryKey") continue;
+		Object.defineProperty(result, key, {
+			enumerable: true,
+			configurable: true,
+			get: () => (query as Record<string, unknown>)[key],
+		});
+	}
+	return result;
+};
 
+export const getGetTimelinesUrl = (params?: GetTimelinesParams) => {
+	const normalizedParams = new URLSearchParams();
 
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
-  for (const key of Object.keys(query)) {
-    // The explicit queryKey always wins, matching the previous
-    // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
-    Object.defineProperty(result, key, {
-      enumerable: true,
-      configurable: true,
-      get: () => (query as Record<string, unknown>)[key],
-    });
-  }
-  return result;
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/api/v1/timelines?${stringifiedParams}`
+		: `/api/v1/timelines`;
 };
 
 /**
  * 현재 Space의 타임라인 목록을 조회합니다. 검색 및 페이지네이션을 지원합니다.
  * @summary 타임라인 목록 조회
  */
-export const getTimelines = (
-    params?: GetTimelinesParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getTimelines = async (
+	params?: GetTimelinesParams,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetTimelines200> => {
+	return customFetch<GetTimelines200>(getGetTimelinesUrl(params), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetTimelinesQueryKey = (params?: GetTimelinesParams) => {
+	return [`/api/v1/timelines`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetTimelinesInfiniteQueryKey = (
+	params?: GetTimelinesParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/timelines`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-
-      return customInstance<GetTimelines200>(
-      {url: `/api/v1/timelines`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetTimelinesQueryKey = (params?: GetTimelinesParams,) => {
-    return [
-    `/api/v1/timelines`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-export const getGetTimelinesInfiniteQueryKey = (params?: GetTimelinesParams,) => {
-    return [
-    'infinite', `/api/v1/timelines`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-
-export const getGetTimelinesQueryOptions = <TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(params?: GetTimelinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelinesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetTimelinesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelinesQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelines>>> = ({
+		signal,
+	}) => getTimelines(params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getTimelines>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetTimelinesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getTimelines>>
+>;
+export type GetTimelinesQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelines>>> = ({ signal }) => getTimelines(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTimelinesQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelines>>>
-export type GetTimelinesQueryError = ErrorType<void>
-
-
-export function useGetTimelines<TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- params: undefined |  GetTimelinesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTimelines>>,
-          TError,
-          Awaited<ReturnType<typeof getTimelines>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelines<TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTimelines>>,
-          TError,
-          Awaited<ReturnType<typeof getTimelines>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelines<TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTimelines<
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetTimelinesParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getTimelines>>,
+					TError,
+					Awaited<ReturnType<typeof getTimelines>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelines<
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getTimelines>>,
+					TError,
+					Awaited<ReturnType<typeof getTimelines>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelines<
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 타임라인 목록 조회
  */
 
-export function useGetTimelines<TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTimelines<
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetTimelinesQueryOptions(params, options);
 
-  const queryOptions = getGetTimelinesQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 타임라인 목록 조회
  */
-export const prefetchGetTimelinesQuery = async <TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetTimelinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetTimelinesQuery = async <
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetTimelinesQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetTimelinesQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetTimelinesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelinesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetTimelinesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelinesQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelines>>> = ({
+		signal,
+	}) => getTimelines(params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getTimelines>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetTimelinesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getTimelines>>
+>;
+export type GetTimelinesSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelines>>> = ({ signal }) => getTimelines(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTimelinesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelines>>>
-export type GetTimelinesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetTimelinesSuspense<TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- params: undefined |  GetTimelinesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelinesSuspense<TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelinesSuspense<TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTimelinesSuspense<
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetTimelinesParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelinesSuspense<
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelinesSuspense<
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 타임라인 목록 조회
  */
 
-export function useGetTimelinesSuspense<TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTimelinesSuspense<
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetTimelinesSuspenseQueryOptions(params, options);
 
-  const queryOptions = getGetTimelinesSuspenseQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
-
-
-
-
-
-export const getGetTimelinesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>, TError = ErrorType<void>>(params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelinesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetTimelinesInfiniteQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelinesInfiniteQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelines>>> = ({
+		signal,
+	}) => getTimelines(params, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getTimelines>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetTimelinesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getTimelines>>
+>;
+export type GetTimelinesSuspenseInfiniteQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelines>>> = ({ signal }) => getTimelines(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTimelinesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelines>>>
-export type GetTimelinesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetTimelinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>, TError = ErrorType<void>>(
- params: undefined |  GetTimelinesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTimelinesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetTimelinesParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelinesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelinesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 타임라인 목록 조회
  */
 
-export function useGetTimelinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>, TError = ErrorType<void>>(
- params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTimelinesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelines>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetTimelinesSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  const queryOptions = getGetTimelinesSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 타임라인 목록 조회
  */
-export const prefetchGetTimelinesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTimelines>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetTimelinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetTimelinesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getTimelines>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetTimelinesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelines>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetTimelinesSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetTimelinesSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getCreateTimelineUrl = () => {
+	return `/api/v1/timelines`;
+};
 
 /**
  * 새로운 타임라인을 등록합니다.
  * @summary 타임라인 등록
  */
-export const createTimeline = (
-    createTimelineDto: BodyType<CreateTimelineDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const createTimeline = async (
+	createTimelineDto: CreateTimelineDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<CreateTimeline201> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<CreateTimeline201>(getCreateTimelineUrl(), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(createTimelineDto),
+	});
+};
 
+export const getCreateTimelineMutationKey = () => ["createTimeline"] as const;
 
-      return customInstance<CreateTimeline201>(
-      {url: `/api/v1/timelines`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createTimelineDto, signal
-    },
-      options);
-    }
+export const getCreateTimelineMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createTimeline>>,
+		TError,
+		CreateTimelineMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createTimeline>>,
+	TError,
+	CreateTimelineMutationVariables,
+	TContext
+> => {
+	const mutationKey = getCreateTimelineMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createTimeline>>,
+		CreateTimelineMutationVariables
+	> = (props) => {
+		const { data } = props ?? {};
 
+		return createTimeline(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getCreateTimelineMutationKey = () => ['createTimeline'] as const;
+export type CreateTimelineMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createTimeline>>
+>;
+export type CreateTimelineMutationBody = BodyType<CreateTimelineDto>;
+export type CreateTimelineMutationError = ErrorType<void>;
+export type CreateTimelineMutationVariables = {
+	data: BodyType<CreateTimelineDto>;
+};
 
-export const getCreateTimelineMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTimeline>>, TError,CreateTimelineMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createTimeline>>, TError,CreateTimelineMutationVariables, TContext> => {
-
-const mutationKey = getCreateTimelineMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTimeline>>, CreateTimelineMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  createTimeline(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateTimelineMutationResult = NonNullable<Awaited<ReturnType<typeof createTimeline>>>
-    export type CreateTimelineMutationBody = BodyType<CreateTimelineDto>
-    export type CreateTimelineMutationError = ErrorType<void>
-    export type CreateTimelineMutationVariables = {data: BodyType<CreateTimelineDto>}
-
-    /**
+/**
  * @summary 타임라인 등록
  */
-export const useCreateTimeline = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTimeline>>, TError,CreateTimelineMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createTimeline>>,
-        TError,
-        CreateTimelineMutationVariables,
-        TContext
-      > => {
-      return useMutation(getCreateTimelineMutationOptions(options), queryClient);
-    }
-    /**
+export const useCreateTimeline = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createTimeline>>,
+			TError,
+			CreateTimelineMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createTimeline>>,
+	TError,
+	CreateTimelineMutationVariables,
+	TContext
+> => {
+	return useMutation(getCreateTimelineMutationOptions(options), queryClient);
+};
+export const getGetTimelineByIdUrl = (timelineId: string) => {
+	return `/api/v1/timelines/${timelineId}`;
+};
+
+/**
  * 특정 타임라인의 상세 정보를 조회합니다.
  * @summary 타임라인 상세 조회
  */
-export const getTimelineById = (
-    timelineId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getTimelineById = async (
+	timelineId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetTimelineById200> => {
+	return customFetch<GetTimelineById200>(getGetTimelineByIdUrl(timelineId), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetTimelineByIdQueryKey = (timelineId: string) => {
+	return [`/api/v1/timelines/${timelineId}`] as const;
+};
+
+export const getGetTimelineByIdInfiniteQueryKey = (timelineId: string) => {
+	return ["infinite", `/api/v1/timelines/${timelineId}`] as const;
+};
+
+export const getGetTimelineByIdQueryOptions = <
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetTimelineByIdQueryKey(timelineId);
 
-      return customInstance<GetTimelineById200>(
-      {url: `/api/v1/timelines/${timelineId}`, method: 'GET', signal
-    },
-      options);
-    }
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineById>>> = ({
+		signal,
+	}) => getTimelineById(timelineId, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		enabled: timelineId !== null && timelineId !== undefined,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getTimelineById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetTimelineByIdQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getTimelineById>>
+>;
+export type GetTimelineByIdQueryError = ErrorType<void>;
 
+export function useGetTimelineById<
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getTimelineById>>,
+					TError,
+					Awaited<ReturnType<typeof getTimelineById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelineById<
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getTimelineById>>,
+					TError,
+					Awaited<ReturnType<typeof getTimelineById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelineById<
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 타임라인 상세 조회
+ */
 
-export const getGetTimelineByIdQueryKey = (timelineId: string,) => {
-    return [
-    `/api/v1/timelines/${timelineId}`
-    ] as const;
-    }
+export function useGetTimelineById<
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetTimelineByIdQueryOptions(timelineId, options);
 
-export const getGetTimelineByIdInfiniteQueryKey = (timelineId: string,) => {
-    return [
-    'infinite', `/api/v1/timelines/${timelineId}`
-    ] as const;
-    }
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-export const getGetTimelineByIdQueryOptions = <TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(timelineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+/**
+ * @summary 타임라인 상세 조회
+ */
+export const prefetchGetTimelineByIdQuery = async <
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetTimelineByIdQueryOptions(timelineId, options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetTimelineByIdSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetTimelineByIdQueryKey(timelineId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineByIdQueryKey(timelineId);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineById>>> = ({
+		signal,
+	}) => getTimelineById(timelineId, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getTimelineById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetTimelineByIdSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getTimelineById>>
+>;
+export type GetTimelineByIdSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineById>>> = ({ signal }) => getTimelineById(timelineId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: timelineId !== null && timelineId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTimelineByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineById>>>
-export type GetTimelineByIdQueryError = ErrorType<void>
-
-
-export function useGetTimelineById<TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- timelineId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTimelineById>>,
-          TError,
-          Awaited<ReturnType<typeof getTimelineById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelineById<TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getTimelineById>>,
-          TError,
-          Awaited<ReturnType<typeof getTimelineById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelineById<TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTimelineByIdSuspense<
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelineByIdSuspense<
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelineByIdSuspense<
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 타임라인 상세 조회
  */
 
-export function useGetTimelineById<TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTimelineByIdSuspense<
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetTimelineByIdSuspenseQueryOptions(
+		timelineId,
+		options,
+	);
 
-  const queryOptions = getGetTimelineByIdQueryOptions(timelineId,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
-/**
- * @summary 타임라인 상세 조회
- */
-export const prefetchGetTimelineByIdQuery = async <TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetTimelineByIdQueryOptions(timelineId,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetTimelineByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(timelineId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelineByIdSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetTimelineByIdInfiniteQueryKey(timelineId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineByIdQueryKey(timelineId);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineById>>> = ({
+		signal,
+	}) => getTimelineById(timelineId, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getTimelineById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetTimelineByIdSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getTimelineById>>
+>;
+export type GetTimelineByIdSuspenseInfiniteQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineById>>> = ({ signal }) => getTimelineById(timelineId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTimelineByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineById>>>
-export type GetTimelineByIdSuspenseQueryError = ErrorType<void>
-
-
-export function useGetTimelineByIdSuspense<TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- timelineId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelineByIdSuspense<TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelineByIdSuspense<TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTimelineByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelineByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetTimelineByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 타임라인 상세 조회
  */
 
-export function useGetTimelineByIdSuspense<TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetTimelineByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetTimelineByIdSuspenseInfiniteQueryOptions(
+		timelineId,
+		options,
+	);
 
-  const queryOptions = getGetTimelineByIdSuspenseQueryOptions(timelineId,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetTimelineByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>, TError = ErrorType<void>>(timelineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineByIdInfiniteQueryKey(timelineId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineById>>> = ({ signal }) => getTimelineById(timelineId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetTimelineByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineById>>>
-export type GetTimelineByIdSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetTimelineByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>, TError = ErrorType<void>>(
- timelineId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelineByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetTimelineByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 타임라인 상세 조회
- */
-
-export function useGetTimelineByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineById>>>, TError = ErrorType<void>>(
- timelineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetTimelineByIdSuspenseInfiniteQueryOptions(timelineId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 타임라인 상세 조회
  */
-export const prefetchGetTimelineByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getTimelineById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetTimelineByIdInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getTimelineById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getTimelineById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetTimelineByIdSuspenseInfiniteQueryOptions(
+		timelineId,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetTimelineByIdSuspenseInfiniteQueryOptions(timelineId,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getUpdateTimelineUrl = (timelineId: string) => {
+	return `/api/v1/timelines/${timelineId}`;
+};
 
 /**
  * 타임라인 정보를 수정합니다.
  * @summary 타임라인 수정
  */
-export const updateTimeline = (
-    timelineId: string,
-    updateTimelineDto: BodyType<UpdateTimelineDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const updateTimeline = async (
+	timelineId: string,
+	updateTimelineDto: UpdateTimelineDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<UpdateTimeline200> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<UpdateTimeline200>(getUpdateTimelineUrl(timelineId), {
+		...options,
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(updateTimelineDto),
+	});
+};
 
+export const getUpdateTimelineMutationKey = () => ["updateTimeline"] as const;
 
-      return customInstance<UpdateTimeline200>(
-      {url: `/api/v1/timelines/${timelineId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateTimelineDto, signal
-    },
-      options);
-    }
+export const getUpdateTimelineMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateTimeline>>,
+		TError,
+		UpdateTimelineMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof updateTimeline>>,
+	TError,
+	UpdateTimelineMutationVariables,
+	TContext
+> => {
+	const mutationKey = getUpdateTimelineMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateTimeline>>,
+		UpdateTimelineMutationVariables
+	> = (props) => {
+		const { timelineId, data } = props ?? {};
 
+		return updateTimeline(timelineId, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getUpdateTimelineMutationKey = () => ['updateTimeline'] as const;
+export type UpdateTimelineMutationResult = NonNullable<
+	Awaited<ReturnType<typeof updateTimeline>>
+>;
+export type UpdateTimelineMutationBody = BodyType<UpdateTimelineDto>;
+export type UpdateTimelineMutationError = ErrorType<void>;
+export type UpdateTimelineMutationVariables = {
+	timelineId: string;
+	data: BodyType<UpdateTimelineDto>;
+};
 
-export const getUpdateTimelineMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTimeline>>, TError,UpdateTimelineMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateTimeline>>, TError,UpdateTimelineMutationVariables, TContext> => {
-
-const mutationKey = getUpdateTimelineMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTimeline>>, UpdateTimelineMutationVariables> = (props) => {
-          const {timelineId,data} = props ?? {};
-
-          return  updateTimeline(timelineId,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateTimelineMutationResult = NonNullable<Awaited<ReturnType<typeof updateTimeline>>>
-    export type UpdateTimelineMutationBody = BodyType<UpdateTimelineDto>
-    export type UpdateTimelineMutationError = ErrorType<void>
-    export type UpdateTimelineMutationVariables = {timelineId: string;data: BodyType<UpdateTimelineDto>}
-
-    /**
+/**
  * @summary 타임라인 수정
  */
-export const useUpdateTimeline = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTimeline>>, TError,UpdateTimelineMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateTimeline>>,
-        TError,
-        UpdateTimelineMutationVariables,
-        TContext
-      > => {
-      return useMutation(getUpdateTimelineMutationOptions(options), queryClient);
-    }
-    /**
+export const useUpdateTimeline = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateTimeline>>,
+			TError,
+			UpdateTimelineMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof updateTimeline>>,
+	TError,
+	UpdateTimelineMutationVariables,
+	TContext
+> => {
+	return useMutation(getUpdateTimelineMutationOptions(options), queryClient);
+};
+export const getDeleteTimelineUrl = (timelineId: string) => {
+	return `/api/v1/timelines/${timelineId}`;
+};
+
+/**
  * 타임라인을 삭제합니다. 세션이 있는 타임라인은 삭제할 수 없습니다.
  * @summary 타임라인 삭제
  */
-export const deleteTimeline = (
-    timelineId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const deleteTimeline = async (
+	timelineId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<unknown> => {
+	return customFetch<unknown>(getDeleteTimelineUrl(timelineId), {
+		...options,
+		method: "DELETE",
+	});
+};
 
+export const getDeleteTimelineMutationKey = () => ["deleteTimeline"] as const;
 
-      return customInstance<unknown>(
-      {url: `/api/v1/timelines/${timelineId}`, method: 'DELETE', signal
-    },
-      options);
-    }
+export const getDeleteTimelineMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof deleteTimeline>>,
+		TError,
+		DeleteTimelineMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof deleteTimeline>>,
+	TError,
+	DeleteTimelineMutationVariables,
+	TContext
+> => {
+	const mutationKey = getDeleteTimelineMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof deleteTimeline>>,
+		DeleteTimelineMutationVariables
+	> = (props) => {
+		const { timelineId } = props ?? {};
 
+		return deleteTimeline(timelineId, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getDeleteTimelineMutationKey = () => ['deleteTimeline'] as const;
+export type DeleteTimelineMutationResult = NonNullable<
+	Awaited<ReturnType<typeof deleteTimeline>>
+>;
 
-export const getDeleteTimelineMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTimeline>>, TError,DeleteTimelineMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteTimeline>>, TError,DeleteTimelineMutationVariables, TContext> => {
+export type DeleteTimelineMutationError = ErrorType<void>;
+export type DeleteTimelineMutationVariables = { timelineId: string };
 
-const mutationKey = getDeleteTimelineMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTimeline>>, DeleteTimelineMutationVariables> = (props) => {
-          const {timelineId} = props ?? {};
-
-          return  deleteTimeline(timelineId,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteTimelineMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTimeline>>>
-
-    export type DeleteTimelineMutationError = ErrorType<void>
-    export type DeleteTimelineMutationVariables = {timelineId: string}
-
-    /**
+/**
  * @summary 타임라인 삭제
  */
-export const useDeleteTimeline = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTimeline>>, TError,DeleteTimelineMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteTimeline>>,
-        TError,
-        DeleteTimelineMutationVariables,
-        TContext
-      > => {
-      return useMutation(getDeleteTimelineMutationOptions(options), queryClient);
-    }
-    /**
+export const useDeleteTimeline = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof deleteTimeline>>,
+			TError,
+			DeleteTimelineMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof deleteTimeline>>,
+	TError,
+	DeleteTimelineMutationVariables,
+	TContext
+> => {
+	return useMutation(getDeleteTimelineMutationOptions(options), queryClient);
+};
+export const getGetSessionsUrl = (
+	timelineId: string,
+	params?: GetSessionsParams,
+) => {
+	const normalizedParams = new URLSearchParams();
+
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/api/v1/timelines/${timelineId}/sessions?${stringifiedParams}`
+		: `/api/v1/timelines/${timelineId}/sessions`;
+};
+
+/**
  * 특정 타임라인 내의 세션 목록을 조회합니다.
  * @summary 세션 목록 조회
  */
-export const getSessions = (
-    timelineId: string,
-    params?: GetSessionsParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getSessions = async (
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetSessions200> => {
+	return customFetch<GetSessions200>(getGetSessionsUrl(timelineId, params), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetSessionsQueryKey = (
+	timelineId: string,
+	params?: GetSessionsParams,
 ) => {
+	return [
+		`/api/v1/timelines/${timelineId}/sessions`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-
-      return customInstance<GetSessions200>(
-      {url: `/api/v1/timelines/${timelineId}/sessions`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetSessionsQueryKey = (timelineId: string,
-    params?: GetSessionsParams,) => {
-    return [
-    `/api/v1/timelines/${timelineId}/sessions`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-export const getGetSessionsInfiniteQueryKey = (timelineId: string,
-    params?: GetSessionsParams,) => {
-    return [
-    'infinite', `/api/v1/timelines/${timelineId}/sessions`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-
-export const getGetSessionsQueryOptions = <TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionsInfiniteQueryKey = (
+	timelineId: string,
+	params?: GetSessionsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/timelines/${timelineId}/sessions`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionsQueryKey(timelineId,params);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessions>>> = ({ signal }) => getSessions(timelineId,params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: timelineId !== null && timelineId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSessionsQueryResult = NonNullable<Awaited<ReturnType<typeof getSessions>>>
-export type GetSessionsQueryError = ErrorType<void>
-
-
-export function useGetSessions<TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- timelineId: string,
-    params: undefined |  GetSessionsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSessions>>,
-          TError,
-          Awaited<ReturnType<typeof getSessions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessions<TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSessions>>,
-          TError,
-          Awaited<ReturnType<typeof getSessions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessions<TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 세션 목록 조회
- */
-
-export function useGetSessions<TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetSessionsQueryOptions(timelineId,params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary 세션 목록 조회
- */
-export const prefetchGetSessionsQuery = async <TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetSessionsQueryOptions(timelineId,params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetSessionsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSessionsQueryKey(timelineId, params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionsQueryKey(timelineId,params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessions>>> = ({
+		signal,
+	}) => getSessions(timelineId, params, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		enabled: timelineId !== null && timelineId !== undefined,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getSessions>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetSessionsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSessions>>
+>;
+export type GetSessionsQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessions>>> = ({ signal }) => getSessions(timelineId,params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSessionsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSessions>>>
-export type GetSessionsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetSessionsSuspense<TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- timelineId: string,
-    params: undefined |  GetSessionsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionsSuspense<TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionsSuspense<TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSessions<
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params: undefined | GetSessionsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSessions>>,
+					TError,
+					Awaited<ReturnType<typeof getSessions>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessions<
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSessions>>,
+					TError,
+					Awaited<ReturnType<typeof getSessions>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessions<
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 세션 목록 조회
  */
 
-export function useGetSessionsSuspense<TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSessions<
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSessionsQueryOptions(timelineId, params, options);
 
-  const queryOptions = getGetSessionsSuspenseQueryOptions(timelineId,params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+/**
+ * @summary 세션 목록 조회
+ */
+export const prefetchGetSessionsQuery = async <
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSessionsQueryOptions(timelineId, params, options);
 
+	await queryClient.prefetchQuery(queryOptions);
 
+	return queryClient;
+};
 
-
-
-export const getGetSessionsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>, TError = ErrorType<void>>(timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSessionsQueryKey(timelineId, params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionsInfiniteQueryKey(timelineId,params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessions>>> = ({
+		signal,
+	}) => getSessions(timelineId, params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getSessions>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetSessionsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSessions>>
+>;
+export type GetSessionsSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessions>>> = ({ signal }) => getSessions(timelineId,params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSessionsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSessions>>>
-export type GetSessionsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSessionsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>, TError = ErrorType<void>>(
- timelineId: string,
-    params: undefined |  GetSessionsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSessionsSuspense<
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params: undefined | GetSessionsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionsSuspense<
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionsSuspense<
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 세션 목록 조회
  */
 
-export function useGetSessionsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>, TError = ErrorType<void>>(
- timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSessionsSuspense<
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSessionsSuspenseQueryOptions(
+		timelineId,
+		params,
+		options,
+	);
 
-  const queryOptions = getGetSessionsSuspenseInfiniteQueryOptions(timelineId,params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-  return withQueryKey(query, queryOptions.queryKey);
+export const getGetSessionsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetSessionsInfiniteQueryKey(timelineId, params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessions>>> = ({
+		signal,
+	}) => getSessions(timelineId, params, { signal, ...requestOptions });
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getSessions>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSessionsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSessions>>
+>;
+export type GetSessionsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetSessionsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params: undefined | GetSessionsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 세션 목록 조회
+ */
+
+export function useGetSessionsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessions>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSessionsSuspenseInfiniteQueryOptions(
+		timelineId,
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 세션 목록 조회
  */
-export const prefetchGetSessionsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getSessions>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string,
-    params?: GetSessionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetSessionsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getSessions>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	params?: GetSessionsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessions>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSessionsSuspenseInfiniteQueryOptions(
+		timelineId,
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetSessionsSuspenseInfiniteQueryOptions(timelineId,params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getCreateSessionUrl = (timelineId: string) => {
+	return `/api/v1/timelines/${timelineId}/sessions`;
+};
 
 /**
  * 타임라인에 새로운 세션을 등록합니다.
  * @summary 세션 등록
  */
-export const createSession = (
-    timelineId: string,
-    createSessionDto: BodyType<CreateSessionDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const createSession = async (
+	timelineId: string,
+	createSessionDto: CreateSessionDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<CreateSession201> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<CreateSession201>(getCreateSessionUrl(timelineId), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(createSessionDto),
+	});
+};
 
+export const getCreateSessionMutationKey = () => ["createSession"] as const;
 
-      return customInstance<CreateSession201>(
-      {url: `/api/v1/timelines/${timelineId}/sessions`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createSessionDto, signal
-    },
-      options);
-    }
+export const getCreateSessionMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createSession>>,
+		TError,
+		CreateSessionMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createSession>>,
+	TError,
+	CreateSessionMutationVariables,
+	TContext
+> => {
+	const mutationKey = getCreateSessionMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createSession>>,
+		CreateSessionMutationVariables
+	> = (props) => {
+		const { timelineId, data } = props ?? {};
 
+		return createSession(timelineId, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getCreateSessionMutationKey = () => ['createSession'] as const;
+export type CreateSessionMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createSession>>
+>;
+export type CreateSessionMutationBody = BodyType<CreateSessionDto>;
+export type CreateSessionMutationError = ErrorType<void>;
+export type CreateSessionMutationVariables = {
+	timelineId: string;
+	data: BodyType<CreateSessionDto>;
+};
 
-export const getCreateSessionMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,CreateSessionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,CreateSessionMutationVariables, TContext> => {
-
-const mutationKey = getCreateSessionMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSession>>, CreateSessionMutationVariables> = (props) => {
-          const {timelineId,data} = props ?? {};
-
-          return  createSession(timelineId,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateSessionMutationResult = NonNullable<Awaited<ReturnType<typeof createSession>>>
-    export type CreateSessionMutationBody = BodyType<CreateSessionDto>
-    export type CreateSessionMutationError = ErrorType<void>
-    export type CreateSessionMutationVariables = {timelineId: string;data: BodyType<CreateSessionDto>}
-
-    /**
+/**
  * @summary 세션 등록
  */
-export const useCreateSession = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,CreateSessionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createSession>>,
-        TError,
-        CreateSessionMutationVariables,
-        TContext
-      > => {
-      return useMutation(getCreateSessionMutationOptions(options), queryClient);
-    }
-    /**
+export const useCreateSession = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createSession>>,
+			TError,
+			CreateSessionMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createSession>>,
+	TError,
+	CreateSessionMutationVariables,
+	TContext
+> => {
+	return useMutation(getCreateSessionMutationOptions(options), queryClient);
+};
+export const getGetSessionByIdUrl = (timelineId: string, sessionId: string) => {
+	return `/api/v1/timelines/${timelineId}/sessions/${sessionId}`;
+};
+
+/**
  * 특정 세션의 상세 정보를 조회합니다.
  * @summary 세션 상세 조회
  */
-export const getSessionById = (
-    timelineId: string,
-    sessionId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getSessionById = async (
+	timelineId: string,
+	sessionId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetSessionById200> => {
+	return customFetch<GetSessionById200>(
+		getGetSessionByIdUrl(timelineId, sessionId),
+		{
+			...options,
+			method: "GET",
+		},
+	);
+};
+
+export const getGetSessionByIdQueryKey = (
+	timelineId: string,
+	sessionId: string,
 ) => {
+	return [`/api/v1/timelines/${timelineId}/sessions/${sessionId}`] as const;
+};
 
-
-      return customInstance<GetSessionById200>(
-      {url: `/api/v1/timelines/${timelineId}/sessions/${sessionId}`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetSessionByIdQueryKey = (timelineId: string,
-    sessionId: string,) => {
-    return [
-    `/api/v1/timelines/${timelineId}/sessions/${sessionId}`
-    ] as const;
-    }
-
-export const getGetSessionByIdInfiniteQueryKey = (timelineId: string,
-    sessionId: string,) => {
-    return [
-    'infinite', `/api/v1/timelines/${timelineId}/sessions/${sessionId}`
-    ] as const;
-    }
-
-
-export const getGetSessionByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionByIdInfiniteQueryKey = (
+	timelineId: string,
+	sessionId: string,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/timelines/${timelineId}/sessions/${sessionId}`,
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionByIdQueryKey(timelineId,sessionId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionById>>> = ({ signal }) => getSessionById(timelineId,sessionId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: timelineId !== null && timelineId !== undefined && sessionId !== null && sessionId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSessionByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionById>>>
-export type GetSessionByIdQueryError = ErrorType<void>
-
-
-export function useGetSessionById<TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSessionById>>,
-          TError,
-          Awaited<ReturnType<typeof getSessionById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionById<TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSessionById>>,
-          TError,
-          Awaited<ReturnType<typeof getSessionById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionById<TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 세션 상세 조회
- */
-
-export function useGetSessionById<TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetSessionByIdQueryOptions(timelineId,sessionId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary 세션 상세 조회
- */
-export const prefetchGetSessionByIdQuery = async <TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetSessionByIdQueryOptions(timelineId,sessionId,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetSessionByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionByIdQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSessionByIdQueryKey(timelineId, sessionId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionByIdQueryKey(timelineId,sessionId);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionById>>> = ({
+		signal,
+	}) => getSessionById(timelineId, sessionId, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		enabled:
+			timelineId !== null &&
+			timelineId !== undefined &&
+			sessionId !== null &&
+			sessionId !== undefined,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getSessionById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetSessionByIdQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSessionById>>
+>;
+export type GetSessionByIdQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionById>>> = ({ signal }) => getSessionById(timelineId,sessionId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSessionByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionById>>>
-export type GetSessionByIdSuspenseQueryError = ErrorType<void>
-
-
-export function useGetSessionByIdSuspense<TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionByIdSuspense<TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionByIdSuspense<TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSessionById<
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSessionById>>,
+					TError,
+					Awaited<ReturnType<typeof getSessionById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionById<
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSessionById>>,
+					TError,
+					Awaited<ReturnType<typeof getSessionById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionById<
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 세션 상세 조회
  */
 
-export function useGetSessionByIdSuspense<TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSessionById<
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSessionByIdQueryOptions(
+		timelineId,
+		sessionId,
+		options,
+	);
 
-  const queryOptions = getGetSessionByIdSuspenseQueryOptions(timelineId,sessionId,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+/**
+ * @summary 세션 상세 조회
+ */
+export const prefetchGetSessionByIdQuery = async <
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSessionByIdQueryOptions(
+		timelineId,
+		sessionId,
+		options,
+	);
 
+	await queryClient.prefetchQuery(queryOptions);
 
+	return queryClient;
+};
 
-
-
-export const getGetSessionByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionByIdSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSessionByIdQueryKey(timelineId, sessionId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionByIdInfiniteQueryKey(timelineId,sessionId);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionById>>> = ({
+		signal,
+	}) => getSessionById(timelineId, sessionId, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getSessionById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetSessionByIdSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSessionById>>
+>;
+export type GetSessionByIdSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionById>>> = ({ signal }) => getSessionById(timelineId,sessionId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSessionByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionById>>>
-export type GetSessionByIdSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSessionByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSessionByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSessionByIdSuspense<
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionByIdSuspense<
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionByIdSuspense<
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 세션 상세 조회
  */
 
-export function useGetSessionByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSessionByIdSuspense<
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSessionByIdSuspenseQueryOptions(
+		timelineId,
+		sessionId,
+		options,
+	);
 
-  const queryOptions = getGetSessionByIdSuspenseInfiniteQueryOptions(timelineId,sessionId,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-  return withQueryKey(query, queryOptions.queryKey);
+export const getGetSessionByIdSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetSessionByIdInfiniteQueryKey(timelineId, sessionId);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionById>>> = ({
+		signal,
+	}) => getSessionById(timelineId, sessionId, { signal, ...requestOptions });
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getSessionById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSessionByIdSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSessionById>>
+>;
+export type GetSessionByIdSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetSessionByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSessionByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 세션 상세 조회
+ */
+
+export function useGetSessionByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSessionById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSessionByIdSuspenseInfiniteQueryOptions(
+		timelineId,
+		sessionId,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 세션 상세 조회
  */
-export const prefetchGetSessionByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getSessionById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string,
-    sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetSessionByIdInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getSessionById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	sessionId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSessionById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSessionByIdSuspenseInfiniteQueryOptions(
+		timelineId,
+		sessionId,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetSessionByIdSuspenseInfiniteQueryOptions(timelineId,sessionId,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getUpdateSessionUrl = (timelineId: string, sessionId: string) => {
+	return `/api/v1/timelines/${timelineId}/sessions/${sessionId}`;
+};
 
 /**
  * 세션 정보를 수정합니다. 유형 변경 시 관련 필드가 초기화됩니다.
  * @summary 세션 수정
  */
-export const updateSession = (
-    timelineId: string,
-    sessionId: string,
-    updateSessionDto: BodyType<UpdateSessionDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const updateSession = async (
+	timelineId: string,
+	sessionId: string,
+	updateSessionDto: UpdateSessionDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<UpdateSession200> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<UpdateSession200>(
+		getUpdateSessionUrl(timelineId, sessionId),
+		{
+			...options,
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+				...getHeaders(options?.headers),
+			},
+			body: apiJsonStringify(updateSessionDto),
+		},
+	);
+};
 
+export const getUpdateSessionMutationKey = () => ["updateSession"] as const;
 
-      return customInstance<UpdateSession200>(
-      {url: `/api/v1/timelines/${timelineId}/sessions/${sessionId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateSessionDto, signal
-    },
-      options);
-    }
+export const getUpdateSessionMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateSession>>,
+		TError,
+		UpdateSessionMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof updateSession>>,
+	TError,
+	UpdateSessionMutationVariables,
+	TContext
+> => {
+	const mutationKey = getUpdateSessionMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateSession>>,
+		UpdateSessionMutationVariables
+	> = (props) => {
+		const { timelineId, sessionId, data } = props ?? {};
 
+		return updateSession(timelineId, sessionId, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getUpdateSessionMutationKey = () => ['updateSession'] as const;
+export type UpdateSessionMutationResult = NonNullable<
+	Awaited<ReturnType<typeof updateSession>>
+>;
+export type UpdateSessionMutationBody = BodyType<UpdateSessionDto>;
+export type UpdateSessionMutationError = ErrorType<void>;
+export type UpdateSessionMutationVariables = {
+	timelineId: string;
+	sessionId: string;
+	data: BodyType<UpdateSessionDto>;
+};
 
-export const getUpdateSessionMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,UpdateSessionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,UpdateSessionMutationVariables, TContext> => {
-
-const mutationKey = getUpdateSessionMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSession>>, UpdateSessionMutationVariables> = (props) => {
-          const {timelineId,sessionId,data} = props ?? {};
-
-          return  updateSession(timelineId,sessionId,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateSessionMutationResult = NonNullable<Awaited<ReturnType<typeof updateSession>>>
-    export type UpdateSessionMutationBody = BodyType<UpdateSessionDto>
-    export type UpdateSessionMutationError = ErrorType<void>
-    export type UpdateSessionMutationVariables = {timelineId: string;sessionId: string;data: BodyType<UpdateSessionDto>}
-
-    /**
+/**
  * @summary 세션 수정
  */
-export const useUpdateSession = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,UpdateSessionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateSession>>,
-        TError,
-        UpdateSessionMutationVariables,
-        TContext
-      > => {
-      return useMutation(getUpdateSessionMutationOptions(options), queryClient);
-    }
-    /**
+export const useUpdateSession = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateSession>>,
+			TError,
+			UpdateSessionMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof updateSession>>,
+	TError,
+	UpdateSessionMutationVariables,
+	TContext
+> => {
+	return useMutation(getUpdateSessionMutationOptions(options), queryClient);
+};
+export const getDeleteSessionUrl = (timelineId: string, sessionId: string) => {
+	return `/api/v1/timelines/${timelineId}/sessions/${sessionId}`;
+};
+
+/**
  * 세션을 삭제합니다. 프로그램이 연결된 세션은 삭제할 수 없습니다.
  * @summary 세션 삭제
  */
-export const deleteSession = (
-    timelineId: string,
-    sessionId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const deleteSession = async (
+	timelineId: string,
+	sessionId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<unknown> => {
+	return customFetch<unknown>(getDeleteSessionUrl(timelineId, sessionId), {
+		...options,
+		method: "DELETE",
+	});
+};
 
+export const getDeleteSessionMutationKey = () => ["deleteSession"] as const;
 
-      return customInstance<unknown>(
-      {url: `/api/v1/timelines/${timelineId}/sessions/${sessionId}`, method: 'DELETE', signal
-    },
-      options);
-    }
+export const getDeleteSessionMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof deleteSession>>,
+		TError,
+		DeleteSessionMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof deleteSession>>,
+	TError,
+	DeleteSessionMutationVariables,
+	TContext
+> => {
+	const mutationKey = getDeleteSessionMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof deleteSession>>,
+		DeleteSessionMutationVariables
+	> = (props) => {
+		const { timelineId, sessionId } = props ?? {};
 
+		return deleteSession(timelineId, sessionId, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getDeleteSessionMutationKey = () => ['deleteSession'] as const;
+export type DeleteSessionMutationResult = NonNullable<
+	Awaited<ReturnType<typeof deleteSession>>
+>;
 
-export const getDeleteSessionMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,DeleteSessionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,DeleteSessionMutationVariables, TContext> => {
+export type DeleteSessionMutationError = ErrorType<void>;
+export type DeleteSessionMutationVariables = {
+	timelineId: string;
+	sessionId: string;
+};
 
-const mutationKey = getDeleteSessionMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSession>>, DeleteSessionMutationVariables> = (props) => {
-          const {timelineId,sessionId} = props ?? {};
-
-          return  deleteSession(timelineId,sessionId,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteSessionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSession>>>
-
-    export type DeleteSessionMutationError = ErrorType<void>
-    export type DeleteSessionMutationVariables = {timelineId: string;sessionId: string}
-
-    /**
+/**
  * @summary 세션 삭제
  */
-export const useDeleteSession = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,DeleteSessionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteSession>>,
-        TError,
-        DeleteSessionMutationVariables,
-        TContext
-      > => {
-      return useMutation(getDeleteSessionMutationOptions(options), queryClient);
-    }
-    /**
+export const useDeleteSession = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof deleteSession>>,
+			TError,
+			DeleteSessionMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof deleteSession>>,
+	TError,
+	DeleteSessionMutationVariables,
+	TContext
+> => {
+	return useMutation(getDeleteSessionMutationOptions(options), queryClient);
+};
+export const getGetProgramsUrl = (
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+) => {
+	const normalizedParams = new URLSearchParams();
+
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs?${stringifiedParams}`
+		: `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs`;
+};
+
+/**
  * 특정 세션 내의 프로그램 목록을 조회합니다.
  * @summary 프로그램 목록 조회
  */
-export const getPrograms = (
-    timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getPrograms = async (
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetPrograms200> => {
+	return customFetch<GetPrograms200>(
+		getGetProgramsUrl(timelineId, sessionId, params),
+		{
+			...options,
+			method: "GET",
+		},
+	);
+};
+
+export const getGetProgramsQueryKey = (
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
 ) => {
+	return [
+		`/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-
-      return customInstance<GetPrograms200>(
-      {url: `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetProgramsQueryKey = (timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams,) => {
-    return [
-    `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-export const getGetProgramsInfiniteQueryKey = (timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams,) => {
-    return [
-    'infinite', `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-
-export const getGetProgramsQueryOptions = <TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetProgramsInfiniteQueryKey = (
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetProgramsQueryKey(timelineId,sessionId,params);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrograms>>> = ({ signal }) => getPrograms(timelineId,sessionId,params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: timelineId !== null && timelineId !== undefined && sessionId !== null && sessionId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetProgramsQueryResult = NonNullable<Awaited<ReturnType<typeof getPrograms>>>
-export type GetProgramsQueryError = ErrorType<void>
-
-
-export function useGetPrograms<TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params: undefined |  GetProgramsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getPrograms>>,
-          TError,
-          Awaited<ReturnType<typeof getPrograms>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetPrograms<TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getPrograms>>,
-          TError,
-          Awaited<ReturnType<typeof getPrograms>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetPrograms<TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 프로그램 목록 조회
- */
-
-export function useGetPrograms<TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetProgramsQueryOptions(timelineId,sessionId,params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary 프로그램 목록 조회
- */
-export const prefetchGetProgramsQuery = async <TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetProgramsQueryOptions(timelineId,sessionId,params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetProgramsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetProgramsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetProgramsQueryKey(timelineId, sessionId, params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetProgramsQueryKey(timelineId,sessionId,params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrograms>>> = ({
+		signal,
+	}) =>
+		getPrograms(timelineId, sessionId, params, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		enabled:
+			timelineId !== null &&
+			timelineId !== undefined &&
+			sessionId !== null &&
+			sessionId !== undefined,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getPrograms>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetProgramsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getPrograms>>
+>;
+export type GetProgramsQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrograms>>> = ({ signal }) => getPrograms(timelineId,sessionId,params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetProgramsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPrograms>>>
-export type GetProgramsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetProgramsSuspense<TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params: undefined |  GetProgramsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramsSuspense<TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramsSuspense<TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPrograms<
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params: undefined | GetProgramsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getPrograms>>,
+					TError,
+					Awaited<ReturnType<typeof getPrograms>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetPrograms<
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getPrograms>>,
+					TError,
+					Awaited<ReturnType<typeof getPrograms>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetPrograms<
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 프로그램 목록 조회
  */
 
-export function useGetProgramsSuspense<TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetPrograms<
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetProgramsQueryOptions(
+		timelineId,
+		sessionId,
+		params,
+		options,
+	);
 
-  const queryOptions = getGetProgramsSuspenseQueryOptions(timelineId,sessionId,params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+/**
+ * @summary 프로그램 목록 조회
+ */
+export const prefetchGetProgramsQuery = async <
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetProgramsQueryOptions(
+		timelineId,
+		sessionId,
+		params,
+		options,
+	);
 
+	await queryClient.prefetchQuery(queryOptions);
 
+	return queryClient;
+};
 
-
-
-export const getGetProgramsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetProgramsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetProgramsQueryKey(timelineId, sessionId, params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetProgramsInfiniteQueryKey(timelineId,sessionId,params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrograms>>> = ({
+		signal,
+	}) =>
+		getPrograms(timelineId, sessionId, params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getPrograms>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetProgramsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getPrograms>>
+>;
+export type GetProgramsSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrograms>>> = ({ signal }) => getPrograms(timelineId,sessionId,params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetProgramsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getPrograms>>>
-export type GetProgramsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetProgramsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params: undefined |  GetProgramsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProgramsSuspense<
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params: undefined | GetProgramsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramsSuspense<
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramsSuspense<
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 프로그램 목록 조회
  */
 
-export function useGetProgramsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetProgramsSuspense<
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetProgramsSuspenseQueryOptions(
+		timelineId,
+		sessionId,
+		params,
+		options,
+	);
 
-  const queryOptions = getGetProgramsSuspenseInfiniteQueryOptions(timelineId,sessionId,params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-  return withQueryKey(query, queryOptions.queryKey);
+export const getGetProgramsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetProgramsInfiniteQueryKey(timelineId, sessionId, params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getPrograms>>> = ({
+		signal,
+	}) =>
+		getPrograms(timelineId, sessionId, params, { signal, ...requestOptions });
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getPrograms>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetProgramsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getPrograms>>
+>;
+export type GetProgramsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetProgramsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params: undefined | GetProgramsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 프로그램 목록 조회
+ */
+
+export function useGetProgramsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getPrograms>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetProgramsSuspenseInfiniteQueryOptions(
+		timelineId,
+		sessionId,
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 프로그램 목록 조회
  */
-export const prefetchGetProgramsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getPrograms>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string,
-    sessionId: string,
-    params?: GetProgramsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPrograms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetProgramsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getPrograms>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	sessionId: string,
+	params?: GetProgramsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getPrograms>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetProgramsSuspenseInfiniteQueryOptions(
+		timelineId,
+		sessionId,
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetProgramsSuspenseInfiniteQueryOptions(timelineId,sessionId,params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getCreateProgramUrl = (timelineId: string, sessionId: string) => {
+	return `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs`;
+};
 
 /**
  * 세션에 새로운 프로그램을 등록합니다. 같은 세션 내 동일 루틴은 중복 등록할 수 없습니다.
  * @summary 프로그램 등록
  */
-export const createProgram = (
-    timelineId: string,
-    sessionId: string,
-    createProgramDto: BodyType<CreateProgramDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const createProgram = async (
+	timelineId: string,
+	sessionId: string,
+	createProgramDto: CreateProgramDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<CreateProgram201> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<CreateProgram201>(
+		getCreateProgramUrl(timelineId, sessionId),
+		{
+			...options,
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				...getHeaders(options?.headers),
+			},
+			body: apiJsonStringify(createProgramDto),
+		},
+	);
+};
 
+export const getCreateProgramMutationKey = () => ["createProgram"] as const;
 
-      return customInstance<CreateProgram201>(
-      {url: `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createProgramDto, signal
-    },
-      options);
-    }
+export const getCreateProgramMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createProgram>>,
+		TError,
+		CreateProgramMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createProgram>>,
+	TError,
+	CreateProgramMutationVariables,
+	TContext
+> => {
+	const mutationKey = getCreateProgramMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createProgram>>,
+		CreateProgramMutationVariables
+	> = (props) => {
+		const { timelineId, sessionId, data } = props ?? {};
 
+		return createProgram(timelineId, sessionId, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getCreateProgramMutationKey = () => ['createProgram'] as const;
+export type CreateProgramMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createProgram>>
+>;
+export type CreateProgramMutationBody = BodyType<CreateProgramDto>;
+export type CreateProgramMutationError = ErrorType<void>;
+export type CreateProgramMutationVariables = {
+	timelineId: string;
+	sessionId: string;
+	data: BodyType<CreateProgramDto>;
+};
 
-export const getCreateProgramMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProgram>>, TError,CreateProgramMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createProgram>>, TError,CreateProgramMutationVariables, TContext> => {
-
-const mutationKey = getCreateProgramMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createProgram>>, CreateProgramMutationVariables> = (props) => {
-          const {timelineId,sessionId,data} = props ?? {};
-
-          return  createProgram(timelineId,sessionId,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateProgramMutationResult = NonNullable<Awaited<ReturnType<typeof createProgram>>>
-    export type CreateProgramMutationBody = BodyType<CreateProgramDto>
-    export type CreateProgramMutationError = ErrorType<void>
-    export type CreateProgramMutationVariables = {timelineId: string;sessionId: string;data: BodyType<CreateProgramDto>}
-
-    /**
+/**
  * @summary 프로그램 등록
  */
-export const useCreateProgram = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createProgram>>, TError,CreateProgramMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createProgram>>,
-        TError,
-        CreateProgramMutationVariables,
-        TContext
-      > => {
-      return useMutation(getCreateProgramMutationOptions(options), queryClient);
-    }
-    /**
+export const useCreateProgram = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createProgram>>,
+			TError,
+			CreateProgramMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createProgram>>,
+	TError,
+	CreateProgramMutationVariables,
+	TContext
+> => {
+	return useMutation(getCreateProgramMutationOptions(options), queryClient);
+};
+export const getGetProgramByIdUrl = (
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+) => {
+	return `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`;
+};
+
+/**
  * 특정 프로그램의 상세 정보를 조회합니다.
  * @summary 프로그램 상세 조회
  */
-export const getProgramById = (
-    timelineId: string,
-    sessionId: string,
-    programId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getProgramById = async (
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetProgramById200> => {
+	return customFetch<GetProgramById200>(
+		getGetProgramByIdUrl(timelineId, sessionId, programId),
+		{
+			...options,
+			method: "GET",
+		},
+	);
+};
+
+export const getGetProgramByIdQueryKey = (
+	timelineId: string,
+	sessionId: string,
+	programId: string,
 ) => {
+	return [
+		`/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`,
+	] as const;
+};
 
-
-      return customInstance<GetProgramById200>(
-      {url: `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetProgramByIdQueryKey = (timelineId: string,
-    sessionId: string,
-    programId: string,) => {
-    return [
-    `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`
-    ] as const;
-    }
-
-export const getGetProgramByIdInfiniteQueryKey = (timelineId: string,
-    sessionId: string,
-    programId: string,) => {
-    return [
-    'infinite', `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`
-    ] as const;
-    }
-
-
-export const getGetProgramByIdQueryOptions = <TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetProgramByIdInfiniteQueryKey = (
+	timelineId: string,
+	sessionId: string,
+	programId: string,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`,
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetProgramByIdQueryKey(timelineId,sessionId,programId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProgramById>>> = ({ signal }) => getProgramById(timelineId,sessionId,programId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: timelineId !== null && timelineId !== undefined && sessionId !== null && sessionId !== undefined && programId !== null && programId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetProgramByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getProgramById>>>
-export type GetProgramByIdQueryError = ErrorType<void>
-
-
-export function useGetProgramById<TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getProgramById>>,
-          TError,
-          Awaited<ReturnType<typeof getProgramById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramById<TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getProgramById>>,
-          TError,
-          Awaited<ReturnType<typeof getProgramById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramById<TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 프로그램 상세 조회
- */
-
-export function useGetProgramById<TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetProgramByIdQueryOptions(timelineId,sessionId,programId,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary 프로그램 상세 조회
- */
-export const prefetchGetProgramByIdQuery = async <TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetProgramByIdQueryOptions(timelineId,sessionId,programId,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetProgramByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetProgramByIdQueryOptions = <
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetProgramByIdQueryKey(timelineId, sessionId, programId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetProgramByIdQueryKey(timelineId,sessionId,programId);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getProgramById>>> = ({
+		signal,
+	}) =>
+		getProgramById(timelineId, sessionId, programId, {
+			signal,
+			...requestOptions,
+		});
 
+	return {
+		queryKey,
+		queryFn,
+		enabled:
+			timelineId !== null &&
+			timelineId !== undefined &&
+			sessionId !== null &&
+			sessionId !== undefined &&
+			programId !== null &&
+			programId !== undefined,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getProgramById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetProgramByIdQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getProgramById>>
+>;
+export type GetProgramByIdQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProgramById>>> = ({ signal }) => getProgramById(timelineId,sessionId,programId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetProgramByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getProgramById>>>
-export type GetProgramByIdSuspenseQueryError = ErrorType<void>
-
-
-export function useGetProgramByIdSuspense<TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramByIdSuspense<TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramByIdSuspense<TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProgramById<
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getProgramById>>,
+					TError,
+					Awaited<ReturnType<typeof getProgramById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramById<
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getProgramById>>,
+					TError,
+					Awaited<ReturnType<typeof getProgramById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramById<
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 프로그램 상세 조회
  */
 
-export function useGetProgramByIdSuspense<TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetProgramById<
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetProgramByIdQueryOptions(
+		timelineId,
+		sessionId,
+		programId,
+		options,
+	);
 
-  const queryOptions = getGetProgramByIdSuspenseQueryOptions(timelineId,sessionId,programId,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+/**
+ * @summary 프로그램 상세 조회
+ */
+export const prefetchGetProgramByIdQuery = async <
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetProgramByIdQueryOptions(
+		timelineId,
+		sessionId,
+		programId,
+		options,
+	);
 
+	await queryClient.prefetchQuery(queryOptions);
 
+	return queryClient;
+};
 
-
-
-export const getGetProgramByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>, TError = ErrorType<void>>(timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetProgramByIdSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetProgramByIdQueryKey(timelineId, sessionId, programId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetProgramByIdInfiniteQueryKey(timelineId,sessionId,programId);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getProgramById>>> = ({
+		signal,
+	}) =>
+		getProgramById(timelineId, sessionId, programId, {
+			signal,
+			...requestOptions,
+		});
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getProgramById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetProgramByIdSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getProgramById>>
+>;
+export type GetProgramByIdSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProgramById>>> = ({ signal }) => getProgramById(timelineId,sessionId,programId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetProgramByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getProgramById>>>
-export type GetProgramByIdSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetProgramByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetProgramByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProgramByIdSuspense<
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramByIdSuspense<
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramByIdSuspense<
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 프로그램 상세 조회
  */
 
-export function useGetProgramByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>, TError = ErrorType<void>>(
- timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetProgramByIdSuspense<
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetProgramByIdSuspenseQueryOptions(
+		timelineId,
+		sessionId,
+		programId,
+		options,
+	);
 
-  const queryOptions = getGetProgramByIdSuspenseInfiniteQueryOptions(timelineId,sessionId,programId,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-  return withQueryKey(query, queryOptions.queryKey);
+export const getGetProgramByIdSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetProgramByIdInfiniteQueryKey(timelineId, sessionId, programId);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getProgramById>>> = ({
+		signal,
+	}) =>
+		getProgramById(timelineId, sessionId, programId, {
+			signal,
+			...requestOptions,
+		});
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getProgramById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetProgramByIdSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getProgramById>>
+>;
+export type GetProgramByIdSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetProgramByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetProgramByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 프로그램 상세 조회
+ */
+
+export function useGetProgramByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getProgramById>>>,
+	TError = ErrorType<void>,
+>(
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetProgramByIdSuspenseInfiniteQueryOptions(
+		timelineId,
+		sessionId,
+		programId,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 프로그램 상세 조회
  */
-export const prefetchGetProgramByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getProgramById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, timelineId: string,
-    sessionId: string,
-    programId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getProgramById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetProgramByIdInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getProgramById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getProgramById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetProgramByIdSuspenseInfiniteQueryOptions(
+		timelineId,
+		sessionId,
+		programId,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetProgramByIdSuspenseInfiniteQueryOptions(timelineId,sessionId,programId,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getUpdateProgramUrl = (
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+) => {
+	return `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`;
+};
 
 /**
  * 프로그램 정보를 수정합니다. 루틴 변경 시 세션 내 중복 여부를 확인합니다.
  * @summary 프로그램 수정
  */
-export const updateProgram = (
-    timelineId: string,
-    sessionId: string,
-    programId: string,
-    updateProgramDto: BodyType<UpdateProgramDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const updateProgram = async (
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	updateProgramDto: UpdateProgramDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<UpdateProgram200> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<UpdateProgram200>(
+		getUpdateProgramUrl(timelineId, sessionId, programId),
+		{
+			...options,
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+				...getHeaders(options?.headers),
+			},
+			body: apiJsonStringify(updateProgramDto),
+		},
+	);
+};
 
+export const getUpdateProgramMutationKey = () => ["updateProgram"] as const;
 
-      return customInstance<UpdateProgram200>(
-      {url: `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateProgramDto, signal
-    },
-      options);
-    }
+export const getUpdateProgramMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateProgram>>,
+		TError,
+		UpdateProgramMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof updateProgram>>,
+	TError,
+	UpdateProgramMutationVariables,
+	TContext
+> => {
+	const mutationKey = getUpdateProgramMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateProgram>>,
+		UpdateProgramMutationVariables
+	> = (props) => {
+		const { timelineId, sessionId, programId, data } = props ?? {};
 
+		return updateProgram(
+			timelineId,
+			sessionId,
+			programId,
+			data,
+			requestOptions,
+		);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getUpdateProgramMutationKey = () => ['updateProgram'] as const;
+export type UpdateProgramMutationResult = NonNullable<
+	Awaited<ReturnType<typeof updateProgram>>
+>;
+export type UpdateProgramMutationBody = BodyType<UpdateProgramDto>;
+export type UpdateProgramMutationError = ErrorType<void>;
+export type UpdateProgramMutationVariables = {
+	timelineId: string;
+	sessionId: string;
+	programId: string;
+	data: BodyType<UpdateProgramDto>;
+};
 
-export const getUpdateProgramMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProgram>>, TError,UpdateProgramMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateProgram>>, TError,UpdateProgramMutationVariables, TContext> => {
-
-const mutationKey = getUpdateProgramMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateProgram>>, UpdateProgramMutationVariables> = (props) => {
-          const {timelineId,sessionId,programId,data} = props ?? {};
-
-          return  updateProgram(timelineId,sessionId,programId,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateProgramMutationResult = NonNullable<Awaited<ReturnType<typeof updateProgram>>>
-    export type UpdateProgramMutationBody = BodyType<UpdateProgramDto>
-    export type UpdateProgramMutationError = ErrorType<void>
-    export type UpdateProgramMutationVariables = {timelineId: string;sessionId: string;programId: string;data: BodyType<UpdateProgramDto>}
-
-    /**
+/**
  * @summary 프로그램 수정
  */
-export const useUpdateProgram = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateProgram>>, TError,UpdateProgramMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateProgram>>,
-        TError,
-        UpdateProgramMutationVariables,
-        TContext
-      > => {
-      return useMutation(getUpdateProgramMutationOptions(options), queryClient);
-    }
-    /**
+export const useUpdateProgram = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateProgram>>,
+			TError,
+			UpdateProgramMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof updateProgram>>,
+	TError,
+	UpdateProgramMutationVariables,
+	TContext
+> => {
+	return useMutation(getUpdateProgramMutationOptions(options), queryClient);
+};
+export const getDeleteProgramUrl = (
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+) => {
+	return `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`;
+};
+
+/**
  * 프로그램을 삭제합니다.
  * @summary 프로그램 삭제
  */
-export const deleteProgram = (
-    timelineId: string,
-    sessionId: string,
-    programId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const deleteProgram = async (
+	timelineId: string,
+	sessionId: string,
+	programId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<unknown> => {
+	return customFetch<unknown>(
+		getDeleteProgramUrl(timelineId, sessionId, programId),
+		{
+			...options,
+			method: "DELETE",
+		},
+	);
+};
 
+export const getDeleteProgramMutationKey = () => ["deleteProgram"] as const;
 
-      return customInstance<unknown>(
-      {url: `/api/v1/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}`, method: 'DELETE', signal
-    },
-      options);
-    }
+export const getDeleteProgramMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof deleteProgram>>,
+		TError,
+		DeleteProgramMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof deleteProgram>>,
+	TError,
+	DeleteProgramMutationVariables,
+	TContext
+> => {
+	const mutationKey = getDeleteProgramMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof deleteProgram>>,
+		DeleteProgramMutationVariables
+	> = (props) => {
+		const { timelineId, sessionId, programId } = props ?? {};
 
+		return deleteProgram(timelineId, sessionId, programId, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getDeleteProgramMutationKey = () => ['deleteProgram'] as const;
+export type DeleteProgramMutationResult = NonNullable<
+	Awaited<ReturnType<typeof deleteProgram>>
+>;
 
-export const getDeleteProgramMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProgram>>, TError,DeleteProgramMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteProgram>>, TError,DeleteProgramMutationVariables, TContext> => {
+export type DeleteProgramMutationError = ErrorType<void>;
+export type DeleteProgramMutationVariables = {
+	timelineId: string;
+	sessionId: string;
+	programId: string;
+};
 
-const mutationKey = getDeleteProgramMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteProgram>>, DeleteProgramMutationVariables> = (props) => {
-          const {timelineId,sessionId,programId} = props ?? {};
-
-          return  deleteProgram(timelineId,sessionId,programId,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteProgramMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProgram>>>
-
-    export type DeleteProgramMutationError = ErrorType<void>
-    export type DeleteProgramMutationVariables = {timelineId: string;sessionId: string;programId: string}
-
-    /**
+/**
  * @summary 프로그램 삭제
  */
-export const useDeleteProgram = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProgram>>, TError,DeleteProgramMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteProgram>>,
-        TError,
-        DeleteProgramMutationVariables,
-        TContext
-      > => {
-      return useMutation(getDeleteProgramMutationOptions(options), queryClient);
-    }
+export const useDeleteProgram = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof deleteProgram>>,
+			TError,
+			DeleteProgramMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof deleteProgram>>,
+	TError,
+	DeleteProgramMutationVariables,
+	TContext
+> => {
+	return useMutation(getDeleteProgramMutationOptions(options), queryClient);
+};

@@ -18,14 +18,14 @@
 /**
  * 예약 가능 상태
  */
-export type ReservationAvailabilityStatus = typeof ReservationAvailabilityStatus[keyof typeof ReservationAvailabilityStatus];
-
+export type ReservationAvailabilityStatus =
+	(typeof ReservationAvailabilityStatus)[keyof typeof ReservationAvailabilityStatus];
 
 export const ReservationAvailabilityStatus = {
-  AVAILABLE: 'AVAILABLE',
-  FEW_LEFT: 'FEW_LEFT',
-  WAITLIST_OPEN: 'WAITLIST_OPEN',
-  RESERVED: 'RESERVED',
-  WAITLISTED: 'WAITLISTED',
-  BOOKING_CLOSED: 'BOOKING_CLOSED',
+	AVAILABLE: "AVAILABLE",
+	FEW_LEFT: "FEW_LEFT",
+	WAITLIST_OPEN: "WAITLIST_OPEN",
+	RESERVED: "RESERVED",
+	WAITLISTED: "WAITLISTED",
+	BOOKING_CLOSED: "BOOKING_CLOSED",
 } as const;

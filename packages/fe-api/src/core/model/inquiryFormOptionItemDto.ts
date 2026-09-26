@@ -16,8 +16,8 @@
  */
 
 export interface InquiryFormOptionItemDto {
-  /** 옵션 값 */
-  value: string | number | boolean | null;
-  /** 옵션 라벨 */
-  label: string;
+	/** 옵션 값 */
+	value: string | number | boolean | null;
+	/** 옵션 라벨 */
+	label: string;
 }

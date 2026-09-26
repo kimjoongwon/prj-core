@@ -16,19 +16,19 @@
  */
 
 export interface ActionDto {
-  name: string;
-  /** @nullable */
-  displayName?: string | null;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  group?: string | null;
-  order: number;
-  /** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-  id: bigint;
-  createdAt: Date;
-  /** @nullable */
-  updatedAt: Date | null;
-  /** @nullable */
-  removedAt: Date | null;
+	name: string;
+	/** @nullable */
+	displayName?: string | null;
+	/** @nullable */
+	description?: string | null;
+	/** @nullable */
+	group?: string | null;
+	order: number;
+	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+	id: bigint;
+	createdAt: Date;
+	/** @nullable */
+	updatedAt: Date | null;
+	/** @nullable */
+	removedAt: Date | null;
 }

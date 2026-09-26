@@ -14,29 +14,29 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { FitnessCenterSpaceDto } from './fitnessCenterSpaceDto';
-import type { LanguageCode } from './languageCode';
+import type { FitnessCenterSpaceDto } from "./fitnessCenterSpaceDto";
+import type { LanguageCode } from "./languageCode";
 
 export interface CreateSpaceWithFitnessCenterDto {
-  name: string;
-  /** @nullable */
-  label?: string | null;
-  address: string;
-  phone: string;
-  email: string;
-  /**
-     * @nullable
-     * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-     */
-  imageFileId?: string | null;
-  /** @nullable */
-  space?: FitnessCenterSpaceDto | null;
-  /** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
-  contentLanguageCode: LanguageCode;
-  businessNo: string;
-  /**
-     * @nullable
-     * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-     */
-  logoImageFileId?: string | null;
+	name: string;
+	/** @nullable */
+	label?: string | null;
+	address: string;
+	phone: string;
+	email: string;
+	/**
+	 * @nullable
+	 * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+	 */
+	imageFileId?: string | null;
+	/** @nullable */
+	space?: FitnessCenterSpaceDto | null;
+	/** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
+	contentLanguageCode: LanguageCode;
+	businessNo: string;
+	/**
+	 * @nullable
+	 * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+	 */
+	logoImageFileId?: string | null;
 }

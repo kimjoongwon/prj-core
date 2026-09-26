@@ -14,28 +14,28 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryCategory } from './inquiryCategory';
-import type { InquiryPriority } from './inquiryPriority';
-import type { InquiryStatus } from './inquiryStatus';
+import type { InquiryCategory } from "./inquiryCategory";
+import type { InquiryPriority } from "./inquiryPriority";
+import type { InquiryStatus } from "./inquiryStatus";
 
 export interface UpdateInquiryDto {
-  /** 문의 카테고리 */
-  category?: InquiryCategory;
-  /** 문의 상태 */
-  status?: InquiryStatus;
-  /** 문의 우선순위 */
-  priority?: InquiryPriority;
-  /** 실시간 채팅 활성화 여부 */
-  isRealtimeChat?: boolean;
-  /**
-     * 문의 제목
-     * @minLength 2
-     * @maxLength 200
-     */
-  title?: string;
-  /**
-     * 담당자 ID
-     * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
-     */
-  assigneeId?: bigint;
+	/** 문의 카테고리 */
+	category?: InquiryCategory;
+	/** 문의 상태 */
+	status?: InquiryStatus;
+	/** 문의 우선순위 */
+	priority?: InquiryPriority;
+	/** 실시간 채팅 활성화 여부 */
+	isRealtimeChat?: boolean;
+	/**
+	 * 문의 제목
+	 * @minLength 2
+	 * @maxLength 200
+	 */
+	title?: string;
+	/**
+	 * 담당자 ID
+	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
+	 */
+	assigneeId?: bigint;
 }

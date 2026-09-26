@@ -14,502 +14,864 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customFetch";
+
+import { apiJsonStringify, customFetch } from "../../libs/customFetch";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  CreateFolder201,
-  CreateFolderDto,
-  GetFolders200,
-  GetFoldersParams,
-  UpdateFolder200,
-  UpdateFolderDto
-} from '../model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType , BodyType } from '../../libs/customAxios';
-
+	CreateFolder201,
+	CreateFolderDto,
+	GetFolders200,
+	GetFoldersParams,
+	UpdateFolder200,
+	UpdateFolderDto,
+} from "../model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+const withQueryKey = <T extends object, K>(
+	query: T,
+	queryKey: K,
+): T & { queryKey: K } => {
+	const result = { queryKey } as T & { queryKey: K };
+	for (const key of Object.keys(query)) {
+		// The explicit queryKey always wins, matching the previous
+		// `{ ...query, queryKey }` spread where it was set last.
+		if (key === "queryKey") continue;
+		Object.defineProperty(result, key, {
+			enumerable: true,
+			configurable: true,
+			get: () => (query as Record<string, unknown>)[key],
+		});
+	}
+	return result;
+};
 
+export const getGetFoldersUrl = (params?: GetFoldersParams) => {
+	const normalizedParams = new URLSearchParams();
 
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
-  for (const key of Object.keys(query)) {
-    // The explicit queryKey always wins, matching the previous
-    // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
-    Object.defineProperty(result, key, {
-      enumerable: true,
-      configurable: true,
-      get: () => (query as Record<string, unknown>)[key],
-    });
-  }
-  return result;
+	Object.entries(params || {}).forEach(([key, value]) => {
+		const explodeParameters = ["sort"];
+
+		if (Array.isArray(value) && explodeParameters.includes(key)) {
+			value.forEach((v) => {
+				normalizedParams.append(key, v === null ? "null" : String(v));
+			});
+			return;
+		}
+
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/api/v1/folders?${stringifiedParams}`
+		: `/api/v1/folders`;
 };
 
 /**
  * 현재 선택한 Space의 폴더 목록을 조회합니다. 이름, 부모 폴더, 삭제 상태 필터를 지원합니다.
  * @summary 폴더 목록 조회
  */
-export const getFolders = (
-    params?: GetFoldersParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getFolders = async (
+	params?: GetFoldersParams,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetFolders200> => {
+	return customFetch<GetFolders200>(getGetFoldersUrl(params), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetFoldersQueryKey = (params?: GetFoldersParams) => {
+	return [`/api/v1/folders`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetFoldersInfiniteQueryKey = (params?: GetFoldersParams) => {
+	return ["infinite", `/api/v1/folders`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetFoldersQueryOptions = <
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey = queryOptions?.queryKey ?? getGetFoldersQueryKey(params);
 
-      return customInstance<GetFolders200>(
-      {url: `/api/v1/folders`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({
+		signal,
+	}) => getFolders(params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getFolders>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetFoldersQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getFolders>>
+>;
+export type GetFoldersQueryError = ErrorType<void>;
 
+export function useGetFolders<
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetFoldersParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getFolders>>,
+					TError,
+					Awaited<ReturnType<typeof getFolders>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFolders<
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getFolders>>,
+					TError,
+					Awaited<ReturnType<typeof getFolders>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFolders<
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 폴더 목록 조회
+ */
 
-export const getGetFoldersQueryKey = (params?: GetFoldersParams,) => {
-    return [
-    `/api/v1/folders`, ...(params ? [params] : [])
-    ] as const;
-    }
+export function useGetFolders<
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetFoldersQueryOptions(params, options);
 
-export const getGetFoldersInfiniteQueryKey = (params?: GetFoldersParams,) => {
-    return [
-    'infinite', `/api/v1/folders`, ...(params ? [params] : [])
-    ] as const;
-    }
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-export const getGetFoldersQueryOptions = <TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+/**
+ * @summary 폴더 목록 조회
+ */
+export const prefetchGetFoldersQuery = async <
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetFoldersQueryOptions(params, options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetFoldersSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetFoldersQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFoldersQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({
+		signal,
+	}) => getFolders(params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getFolders>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetFoldersSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getFolders>>
+>;
+export type GetFoldersSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({ signal }) => getFolders(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetFoldersQueryResult = NonNullable<Awaited<ReturnType<typeof getFolders>>>
-export type GetFoldersQueryError = ErrorType<void>
-
-
-export function useGetFolders<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- params: undefined |  GetFoldersParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFolders>>,
-          TError,
-          Awaited<ReturnType<typeof getFolders>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFolders<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getFolders>>,
-          TError,
-          Awaited<ReturnType<typeof getFolders>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFolders<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoldersSuspense<
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetFoldersParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFoldersSuspense<
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFoldersSuspense<
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 폴더 목록 조회
  */
 
-export function useGetFolders<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetFoldersSuspense<
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetFoldersSuspenseQueryOptions(params, options);
 
-  const queryOptions = getGetFoldersQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
-/**
- * @summary 폴더 목록 조회
- */
-export const prefetchGetFoldersQuery = async <TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetFoldersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetFoldersQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetFoldersSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetFoldersSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetFoldersInfiniteQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFoldersQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({
+		signal,
+	}) => getFolders(params, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getFolders>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetFoldersSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getFolders>>
+>;
+export type GetFoldersSuspenseInfiniteQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({ signal }) => getFolders(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetFoldersSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFolders>>>
-export type GetFoldersSuspenseQueryError = ErrorType<void>
-
-
-export function useGetFoldersSuspense<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- params: undefined |  GetFoldersParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFoldersSuspense<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFoldersSuspense<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoldersSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetFoldersParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFoldersSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFoldersSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 폴더 목록 조회
  */
 
-export function useGetFoldersSuspense<TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetFoldersSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetFoldersSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  const queryOptions = getGetFoldersSuspenseQueryOptions(params,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetFoldersSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetFoldersInfiniteQueryKey(params);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolders>>> = ({ signal }) => getFolders(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetFoldersSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getFolders>>>
-export type GetFoldersSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetFoldersSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(
- params: undefined |  GetFoldersParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFoldersSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFoldersSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 폴더 목록 조회
- */
-
-export function useGetFoldersSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFolders>>>, TError = ErrorType<void>>(
- params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetFoldersSuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 폴더 목록 조회
  */
-export const prefetchGetFoldersInfiniteQuery = async <TData = Awaited<ReturnType<typeof getFolders>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetFoldersParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetFoldersInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getFolders>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetFoldersParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getFolders>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetFoldersSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetFoldersSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getCreateFolderUrl = () => {
+	return `/api/v1/folders`;
+};
 
 /**
  * 현재 선택한 Space 아래에 새 폴더를 생성합니다. parentFolderId를 지정하면 하위 폴더로 생성합니다.
  * @summary 폴더 생성
  */
-export const createFolder = (
-    createFolderDto: BodyType<CreateFolderDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const createFolder = async (
+	createFolderDto: CreateFolderDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<CreateFolder201> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<CreateFolder201>(getCreateFolderUrl(), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(createFolderDto),
+	});
+};
 
+export const getCreateFolderMutationKey = () => ["createFolder"] as const;
 
-      return customInstance<CreateFolder201>(
-      {url: `/api/v1/folders`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createFolderDto, signal
-    },
-      options);
-    }
+export const getCreateFolderMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createFolder>>,
+		TError,
+		CreateFolderMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createFolder>>,
+	TError,
+	CreateFolderMutationVariables,
+	TContext
+> => {
+	const mutationKey = getCreateFolderMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createFolder>>,
+		CreateFolderMutationVariables
+	> = (props) => {
+		const { data } = props ?? {};
 
+		return createFolder(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getCreateFolderMutationKey = () => ['createFolder'] as const;
+export type CreateFolderMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createFolder>>
+>;
+export type CreateFolderMutationBody = BodyType<CreateFolderDto>;
+export type CreateFolderMutationError = ErrorType<void>;
+export type CreateFolderMutationVariables = { data: BodyType<CreateFolderDto> };
 
-export const getCreateFolderMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFolder>>, TError,CreateFolderMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createFolder>>, TError,CreateFolderMutationVariables, TContext> => {
-
-const mutationKey = getCreateFolderMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFolder>>, CreateFolderMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  createFolder(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateFolderMutationResult = NonNullable<Awaited<ReturnType<typeof createFolder>>>
-    export type CreateFolderMutationBody = BodyType<CreateFolderDto>
-    export type CreateFolderMutationError = ErrorType<void>
-    export type CreateFolderMutationVariables = {data: BodyType<CreateFolderDto>}
-
-    /**
+/**
  * @summary 폴더 생성
  */
-export const useCreateFolder = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFolder>>, TError,CreateFolderMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createFolder>>,
-        TError,
-        CreateFolderMutationVariables,
-        TContext
-      > => {
-      return useMutation(getCreateFolderMutationOptions(options), queryClient);
-    }
-    /**
+export const useCreateFolder = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createFolder>>,
+			TError,
+			CreateFolderMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createFolder>>,
+	TError,
+	CreateFolderMutationVariables,
+	TContext
+> => {
+	return useMutation(getCreateFolderMutationOptions(options), queryClient);
+};
+export const getUpdateFolderUrl = (folderId: string) => {
+	return `/api/v1/folders/${folderId}`;
+};
+
+/**
  * 현재 선택한 Space 안에서 폴더명 또는 상위 폴더를 수정합니다.
  * @summary 폴더 수정
  */
-export const updateFolder = (
-    folderId: string,
-    updateFolderDto: BodyType<UpdateFolderDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const updateFolder = async (
+	folderId: string,
+	updateFolderDto: UpdateFolderDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<UpdateFolder200> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<UpdateFolder200>(getUpdateFolderUrl(folderId), {
+		...options,
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(updateFolderDto),
+	});
+};
 
+export const getUpdateFolderMutationKey = () => ["updateFolder"] as const;
 
-      return customInstance<UpdateFolder200>(
-      {url: `/api/v1/folders/${folderId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateFolderDto, signal
-    },
-      options);
-    }
+export const getUpdateFolderMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateFolder>>,
+		TError,
+		UpdateFolderMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof updateFolder>>,
+	TError,
+	UpdateFolderMutationVariables,
+	TContext
+> => {
+	const mutationKey = getUpdateFolderMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateFolder>>,
+		UpdateFolderMutationVariables
+	> = (props) => {
+		const { folderId, data } = props ?? {};
 
+		return updateFolder(folderId, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getUpdateFolderMutationKey = () => ['updateFolder'] as const;
+export type UpdateFolderMutationResult = NonNullable<
+	Awaited<ReturnType<typeof updateFolder>>
+>;
+export type UpdateFolderMutationBody = BodyType<UpdateFolderDto>;
+export type UpdateFolderMutationError = ErrorType<void>;
+export type UpdateFolderMutationVariables = {
+	folderId: string;
+	data: BodyType<UpdateFolderDto>;
+};
 
-export const getUpdateFolderMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFolder>>, TError,UpdateFolderMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateFolder>>, TError,UpdateFolderMutationVariables, TContext> => {
-
-const mutationKey = getUpdateFolderMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateFolder>>, UpdateFolderMutationVariables> = (props) => {
-          const {folderId,data} = props ?? {};
-
-          return  updateFolder(folderId,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateFolderMutationResult = NonNullable<Awaited<ReturnType<typeof updateFolder>>>
-    export type UpdateFolderMutationBody = BodyType<UpdateFolderDto>
-    export type UpdateFolderMutationError = ErrorType<void>
-    export type UpdateFolderMutationVariables = {folderId: string;data: BodyType<UpdateFolderDto>}
-
-    /**
+/**
  * @summary 폴더 수정
  */
-export const useUpdateFolder = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFolder>>, TError,UpdateFolderMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateFolder>>,
-        TError,
-        UpdateFolderMutationVariables,
-        TContext
-      > => {
-      return useMutation(getUpdateFolderMutationOptions(options), queryClient);
-    }
-    /**
+export const useUpdateFolder = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateFolder>>,
+			TError,
+			UpdateFolderMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof updateFolder>>,
+	TError,
+	UpdateFolderMutationVariables,
+	TContext
+> => {
+	return useMutation(getUpdateFolderMutationOptions(options), queryClient);
+};
+export const getDeleteFolderUrl = (folderId: string) => {
+	return `/api/v1/folders/${folderId}`;
+};
+
+/**
  * 현재 선택한 Space 안에서 하위 폴더와 에셋이 없는 폴더를 삭제합니다.
  * @summary 폴더 삭제
  */
-export const deleteFolder = (
-    folderId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const deleteFolder = async (
+	folderId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<unknown> => {
+	return customFetch<unknown>(getDeleteFolderUrl(folderId), {
+		...options,
+		method: "DELETE",
+	});
+};
 
+export const getDeleteFolderMutationKey = () => ["deleteFolder"] as const;
 
-      return customInstance<unknown>(
-      {url: `/api/v1/folders/${folderId}`, method: 'DELETE', signal
-    },
-      options);
-    }
+export const getDeleteFolderMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof deleteFolder>>,
+		TError,
+		DeleteFolderMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof deleteFolder>>,
+	TError,
+	DeleteFolderMutationVariables,
+	TContext
+> => {
+	const mutationKey = getDeleteFolderMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof deleteFolder>>,
+		DeleteFolderMutationVariables
+	> = (props) => {
+		const { folderId } = props ?? {};
 
+		return deleteFolder(folderId, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getDeleteFolderMutationKey = () => ['deleteFolder'] as const;
+export type DeleteFolderMutationResult = NonNullable<
+	Awaited<ReturnType<typeof deleteFolder>>
+>;
 
-export const getDeleteFolderMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFolder>>, TError,DeleteFolderMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteFolder>>, TError,DeleteFolderMutationVariables, TContext> => {
+export type DeleteFolderMutationError = ErrorType<void>;
+export type DeleteFolderMutationVariables = { folderId: string };
 
-const mutationKey = getDeleteFolderMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFolder>>, DeleteFolderMutationVariables> = (props) => {
-          const {folderId} = props ?? {};
-
-          return  deleteFolder(folderId,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteFolderMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFolder>>>
-
-    export type DeleteFolderMutationError = ErrorType<void>
-    export type DeleteFolderMutationVariables = {folderId: string}
-
-    /**
+/**
  * @summary 폴더 삭제
  */
-export const useDeleteFolder = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFolder>>, TError,DeleteFolderMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteFolder>>,
-        TError,
-        DeleteFolderMutationVariables,
-        TContext
-      > => {
-      return useMutation(getDeleteFolderMutationOptions(options), queryClient);
-    }
+export const useDeleteFolder = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof deleteFolder>>,
+			TError,
+			DeleteFolderMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof deleteFolder>>,
+	TError,
+	DeleteFolderMutationVariables,
+	TContext
+> => {
+	return useMutation(getDeleteFolderMutationOptions(options), queryClient);
+};

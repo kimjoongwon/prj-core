@@ -13,20 +13,20 @@
  */
 
 export interface PasswordPolicyDto {
-  /** 최소 길이 */
-  minLength: number;
-  /** 최대 길이 */
-  maxLength: number;
-  /** 영문 대문자 필수 여부 */
-  requireUppercase: boolean;
-  /** 영문 소문자 필수 여부 */
-  requireLowercase: boolean;
-  /** 숫자 필수 여부 */
-  requireNumber: boolean;
-  /** 특수문자 필수 여부 */
-  requireSpecial: boolean;
-  /** 흔한 비밀번호 차단 여부 */
-  blockCommonPasswords: boolean;
-  /** 최근 비밀번호 재사용 제한 개수 */
-  reuseLimit: number;
+	/** 최소 길이 */
+	minLength: number;
+	/** 최대 길이 */
+	maxLength: number;
+	/** 영문 대문자 필수 여부 */
+	requireUppercase: boolean;
+	/** 영문 소문자 필수 여부 */
+	requireLowercase: boolean;
+	/** 숫자 필수 여부 */
+	requireNumber: boolean;
+	/** 특수문자 필수 여부 */
+	requireSpecial: boolean;
+	/** 흔한 비밀번호 차단 여부 */
+	blockCommonPasswords: boolean;
+	/** 최근 비밀번호 재사용 제한 개수 */
+	reuseLimit: number;
 }

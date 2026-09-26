@@ -18,12 +18,11 @@
 /**
  * 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어
  */
-export type LanguageCode = typeof LanguageCode[keyof typeof LanguageCode];
-
+export type LanguageCode = (typeof LanguageCode)[keyof typeof LanguageCode];
 
 export const LanguageCode = {
-  ko_KR: 'ko_KR',
-  en_US: 'en_US',
-  zh_CN: 'zh_CN',
-  ja_JP: 'ja_JP',
+	ko_KR: "ko_KR",
+	en_US: "en_US",
+	zh_CN: "zh_CN",
+	ja_JP: "ja_JP",
 } as const;

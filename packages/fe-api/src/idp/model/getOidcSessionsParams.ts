@@ -13,25 +13,25 @@
  */
 
 export type GetOidcSessionsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 모델 유형
- */
-modelType?: string;
-/**
- * 계정 ID (accountId) 검색
- */
-accountId?: string;
-/**
- * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, updatedAt, modelType, accountId. 예: ?sort=modelType&sort=-createdAt
- */
-sort?: string[];
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 모델 유형
+	 */
+	modelType?: string;
+	/**
+	 * 계정 ID (accountId) 검색
+	 */
+	accountId?: string;
+	/**
+	 * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, updatedAt, modelType, accountId. 예: ?sort=modelType&sort=-createdAt
+	 */
+	sort?: string[];
 };

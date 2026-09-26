@@ -11,12 +11,12 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { I18nCatalogResponseDtoLanguageCode } from './i18nCatalogResponseDtoLanguageCode';
-import type { I18nCatalogResponseDtoMessages } from './i18nCatalogResponseDtoMessages';
+import type { I18nCatalogResponseDtoLanguageCode } from "./i18nCatalogResponseDtoLanguageCode";
+import type { I18nCatalogResponseDtoMessages } from "./i18nCatalogResponseDtoMessages";
 
 export interface I18nCatalogResponseDto {
-  /** 언어 코드 */
-  languageCode: I18nCatalogResponseDtoLanguageCode;
-  /** 번역 catalog */
-  messages: I18nCatalogResponseDtoMessages;
+	/** 언어 코드 */
+	languageCode: I18nCatalogResponseDtoLanguageCode;
+	/** 번역 catalog */
+	messages: I18nCatalogResponseDtoMessages;
 }

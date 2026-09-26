@@ -13,9 +13,9 @@
  */
 
 export type OidcCallbackParams = {
-clientId: string;
-code: string;
-state: string;
-error: string;
-error_description: string;
+	clientId: string;
+	code: string;
+	state: string;
+	error: string;
+	error_description: string;
 };

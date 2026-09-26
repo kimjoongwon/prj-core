@@ -15,10 +15,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type RepeatCycleTypes = typeof RepeatCycleTypes[keyof typeof RepeatCycleTypes];
-
+export type RepeatCycleTypes =
+	(typeof RepeatCycleTypes)[keyof typeof RepeatCycleTypes];
 
 export const RepeatCycleTypes = {
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY',
+	WEEKLY: "WEEKLY",
+	MONTHLY: "MONTHLY",
 } as const;

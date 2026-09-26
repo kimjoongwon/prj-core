@@ -14,20 +14,20 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { LanguageCode } from './languageCode';
-import type { SpaceScope } from './spaceScope';
+import type { LanguageCode } from "./languageCode";
+import type { SpaceScope } from "./spaceScope";
 
 export type GetTasksParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-search?: string;
-spaceScope?: SpaceScope;
-contentLanguageCode?: LanguageCode;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	search?: string;
+	spaceScope?: SpaceScope;
+	contentLanguageCode?: LanguageCode;
 };

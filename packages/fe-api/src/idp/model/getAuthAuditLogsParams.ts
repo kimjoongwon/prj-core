@@ -11,40 +11,40 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { AuthAuditResult } from './authAuditResult';
+import type { AuthAuditResult } from "./authAuditResult";
 
 export type GetAuthAuditLogsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 결과
- */
-result?: AuthAuditResult;
-/**
- * 이메일 (부분 일치)
- */
-email?: string;
-/**
- * IP 주소 (부분 일치)
- */
-ipAddress?: string;
-/**
- * OIDC 클라이언트 ID (부분 일치)
- */
-clientId?: string;
-/**
- * 시작일 (createdAt >= startDate)
- */
-startDate?: Date;
-/**
- * 종료일 (createdAt <= endDate)
- */
-endDate?: Date;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 결과
+	 */
+	result?: AuthAuditResult;
+	/**
+	 * 이메일 (부분 일치)
+	 */
+	email?: string;
+	/**
+	 * IP 주소 (부분 일치)
+	 */
+	ipAddress?: string;
+	/**
+	 * OIDC 클라이언트 ID (부분 일치)
+	 */
+	clientId?: string;
+	/**
+	 * 시작일 (createdAt >= startDate)
+	 */
+	startDate?: Date;
+	/**
+	 * 종료일 (createdAt <= endDate)
+	 */
+	endDate?: Date;
 };

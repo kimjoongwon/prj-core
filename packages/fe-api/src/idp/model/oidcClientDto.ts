@@ -11,79 +11,79 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { OidcClientDtoLoginUi } from './oidcClientDtoLoginUi';
+import type { OidcClientDtoLoginUi } from "./oidcClientDtoLoginUi";
 
 export interface OidcClientDto {
-  /**
-     * 클라이언트 식별자
-     * @maxLength 64
-     * @pattern ^[a-z0-9-]+$
-     */
-  clientId: string;
-  /**
-     * 클라이언트 시크릿
-     * @nullable
-     */
-  clientSecret?: string | null;
-  /**
-     * 클라이언트 이름
-     * @maxLength 128
-     */
-  name: string;
-  /** 리다이렉트 URI 목록 */
-  redirectUris: string[];
-  /**
-     * 로그인 화면 URL
-     * @nullable
-     */
-  loginUrl?: string | null;
-  /**
-     * 인증 성공 후 기본 복귀 URL
-     * @nullable
-     */
-  defaultReturnTo?: string | null;
-  /** 허용된 Grant 타입 */
-  grantTypes: string[];
-  /** 응답 타입 */
-  responseTypes: string[];
-  /**
-     * 토큰 엔드포인트 인증 방식
-     * @maxLength 50
-     */
-  tokenEndpointAuthMethod: string;
-  /** 허용된 스코프 */
-  scope: string;
-  /** 활성화 여부 */
-  isActive: boolean;
-  /** First-party 클라이언트 여부 */
-  isFirstParty: boolean;
-  /** 권한 동의 화면 생략 여부 */
-  skipConsent: boolean;
-  /**
-     * 로그인 화면 표시 설정
-     * @nullable
-     */
-  loginUi?: OidcClientDtoLoginUi;
-  /**
-     * 로고 URI
-     * @nullable
-     */
-  logoUri?: string | null;
-  /**
-     * 정책 URI
-     * @nullable
-     */
-  policyUri?: string | null;
-  /**
-     * 서비스 약관 URI
-     * @nullable
-     */
-  tosUri?: string | null;
-  /** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-  id: bigint;
-  createdAt: Date;
-  /** @nullable */
-  updatedAt: Date | null;
-  /** @nullable */
-  removedAt: Date | null;
+	/**
+	 * 클라이언트 식별자
+	 * @maxLength 64
+	 * @pattern ^[a-z0-9-]+$
+	 */
+	clientId: string;
+	/**
+	 * 클라이언트 시크릿
+	 * @nullable
+	 */
+	clientSecret?: string | null;
+	/**
+	 * 클라이언트 이름
+	 * @maxLength 128
+	 */
+	name: string;
+	/** 리다이렉트 URI 목록 */
+	redirectUris: string[];
+	/**
+	 * 로그인 화면 URL
+	 * @nullable
+	 */
+	loginUrl?: string | null;
+	/**
+	 * 인증 성공 후 기본 복귀 URL
+	 * @nullable
+	 */
+	defaultReturnTo?: string | null;
+	/** 허용된 Grant 타입 */
+	grantTypes: string[];
+	/** 응답 타입 */
+	responseTypes: string[];
+	/**
+	 * 토큰 엔드포인트 인증 방식
+	 * @maxLength 50
+	 */
+	tokenEndpointAuthMethod: string;
+	/** 허용된 스코프 */
+	scope: string;
+	/** 활성화 여부 */
+	isActive: boolean;
+	/** First-party 클라이언트 여부 */
+	isFirstParty: boolean;
+	/** 권한 동의 화면 생략 여부 */
+	skipConsent: boolean;
+	/**
+	 * 로그인 화면 표시 설정
+	 * @nullable
+	 */
+	loginUi?: OidcClientDtoLoginUi;
+	/**
+	 * 로고 URI
+	 * @nullable
+	 */
+	logoUri?: string | null;
+	/**
+	 * 정책 URI
+	 * @nullable
+	 */
+	policyUri?: string | null;
+	/**
+	 * 서비스 약관 URI
+	 * @nullable
+	 */
+	tosUri?: string | null;
+	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+	id: bigint;
+	createdAt: Date;
+	/** @nullable */
+	updatedAt: Date | null;
+	/** @nullable */
+	removedAt: Date | null;
 }

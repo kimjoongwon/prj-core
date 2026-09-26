@@ -11,20 +11,20 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceDto } from './spaceDto';
+import type { SpaceDto } from "./spaceDto";
 
 export type GetMySpaces200 = {
-  httpStatus?: number;
-  message?: string;
-  data?: SpaceDto[];
-  meta?: {
-  /** 전체 항목 수 */
-  total?: number;
-  /** 현재 페이지 */
-  page?: number;
-  /** 페이지당 항목 수 */
-  limit?: number;
-  /** 전체 페이지 수 */
-  totalPages?: number;
-};
+	httpStatus?: number;
+	message?: string;
+	data?: SpaceDto[];
+	meta?: {
+		/** 전체 항목 수 */
+		total?: number;
+		/** 현재 페이지 */
+		page?: number;
+		/** 페이지당 항목 수 */
+		limit?: number;
+		/** 전체 페이지 수 */
+		totalPages?: number;
+	};
 };

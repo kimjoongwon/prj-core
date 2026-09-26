@@ -18,11 +18,10 @@
 /**
  * 에셋 상태 (UPLOADING, READY, FAILED)
  */
-export type AssetStatus = typeof AssetStatus[keyof typeof AssetStatus];
-
+export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus];
 
 export const AssetStatus = {
-  UPLOADING: 'UPLOADING',
-  READY: 'READY',
-  FAILED: 'FAILED',
+	UPLOADING: "UPLOADING",
+	READY: "READY",
+	FAILED: "FAILED",
 } as const;

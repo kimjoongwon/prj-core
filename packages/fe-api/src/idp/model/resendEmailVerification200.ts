@@ -11,10 +11,10 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { EmailVerificationDto } from './emailVerificationDto';
+import type { EmailVerificationDto } from "./emailVerificationDto";
 
-export type ResendEmailVerification200 = ({
-  httpStatus?: number;
-  message?: string;
-  data?: EmailVerificationDto | null;
-});
+export type ResendEmailVerification200 = {
+	httpStatus?: number;
+	message?: string;
+	data?: EmailVerificationDto | null;
+};

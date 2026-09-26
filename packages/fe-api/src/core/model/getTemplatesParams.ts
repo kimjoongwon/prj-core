@@ -14,28 +14,28 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { TemplateType } from './templateType';
+import type { TemplateType } from "./templateType";
 
 export type GetTemplatesParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 템플릿 유형
- */
-type?: TemplateType;
-/**
- * 활성 상태
- */
-isActive?: boolean;
-/**
- * 코드 또는 이름 통합 검색
- */
-search?: string;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 템플릿 유형
+	 */
+	type?: TemplateType;
+	/**
+	 * 활성 상태
+	 */
+	isActive?: boolean;
+	/**
+	 * 코드 또는 이름 통합 검색
+	 */
+	search?: string;
 };

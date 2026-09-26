@@ -13,5 +13,5 @@
  */
 
 export type RequestPasswordResetBody = {
-  email: string;
+	email: string;
 };

@@ -14,365 +14,696 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customFetch";
+
+import { apiJsonStringify, customFetch } from "../../libs/customFetch";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  CreateCommunityPost201,
-  CreateCommunityPostPayloadDto,
-  GetCommunityPosts200,
-  GetCommunityPostsParams
-} from '../model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType , BodyType } from '../../libs/customAxios';
-
+	CreateCommunityPost201,
+	CreateCommunityPostPayloadDto,
+	GetCommunityPosts200,
+	GetCommunityPostsParams,
+} from "../model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+const withQueryKey = <T extends object, K>(
+	query: T,
+	queryKey: K,
+): T & { queryKey: K } => {
+	const result = { queryKey } as T & { queryKey: K };
+	for (const key of Object.keys(query)) {
+		// The explicit queryKey always wins, matching the previous
+		// `{ ...query, queryKey }` spread where it was set last.
+		if (key === "queryKey") continue;
+		Object.defineProperty(result, key, {
+			enumerable: true,
+			configurable: true,
+			get: () => (query as Record<string, unknown>)[key],
+		});
+	}
+	return result;
+};
 
+export const getGetCommunityPostsUrl = (params?: GetCommunityPostsParams) => {
+	const normalizedParams = new URLSearchParams();
 
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
-  for (const key of Object.keys(query)) {
-    // The explicit queryKey always wins, matching the previous
-    // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
-    Object.defineProperty(result, key, {
-      enumerable: true,
-      configurable: true,
-      get: () => (query as Record<string, unknown>)[key],
-    });
-  }
-  return result;
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/api/v1/community/posts?${stringifiedParams}`
+		: `/api/v1/community/posts`;
 };
 
 /**
  * 현재 Space 기준 커뮤니티 게시글 목록을 조회합니다.
  * @summary 커뮤니티 게시글 목록 조회
  */
-export const getCommunityPosts = (
-    params?: GetCommunityPostsParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getCommunityPosts = async (
+	params?: GetCommunityPostsParams,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetCommunityPosts200> => {
+	return customFetch<GetCommunityPosts200>(getGetCommunityPostsUrl(params), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetCommunityPostsQueryKey = (
+	params?: GetCommunityPostsParams,
 ) => {
+	return [`/api/v1/community/posts`, ...(params ? [params] : [])] as const;
+};
 
-
-      return customInstance<GetCommunityPosts200>(
-      {url: `/api/v1/community/posts`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetCommunityPostsQueryKey = (params?: GetCommunityPostsParams,) => {
-    return [
-    `/api/v1/community/posts`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-export const getGetCommunityPostsInfiniteQueryKey = (params?: GetCommunityPostsParams,) => {
-    return [
-    'infinite', `/api/v1/community/posts`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-
-export const getGetCommunityPostsQueryOptions = <TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(params?: GetCommunityPostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCommunityPostsInfiniteQueryKey = (
+	params?: GetCommunityPostsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/community/posts`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCommunityPostsQueryKey(params);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCommunityPosts>>> = ({ signal }) => getCommunityPosts(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCommunityPostsQueryResult = NonNullable<Awaited<ReturnType<typeof getCommunityPosts>>>
-export type GetCommunityPostsQueryError = ErrorType<void>
-
-
-export function useGetCommunityPosts<TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- params: undefined |  GetCommunityPostsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCommunityPosts>>,
-          TError,
-          Awaited<ReturnType<typeof getCommunityPosts>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCommunityPosts<TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCommunityPosts>>,
-          TError,
-          Awaited<ReturnType<typeof getCommunityPosts>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCommunityPosts<TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 커뮤니티 게시글 목록 조회
- */
-
-export function useGetCommunityPosts<TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCommunityPostsQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary 커뮤니티 게시글 목록 조회
- */
-export const prefetchGetCommunityPostsQuery = async <TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetCommunityPostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetCommunityPostsQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetCommunityPostsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCommunityPostsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCommunityPostsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCommunityPostsQueryKey(params);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getCommunityPosts>>
+	> = ({ signal }) => getCommunityPosts(params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getCommunityPosts>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetCommunityPostsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCommunityPosts>>
+>;
+export type GetCommunityPostsQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCommunityPosts>>> = ({ signal }) => getCommunityPosts(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCommunityPostsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCommunityPosts>>>
-export type GetCommunityPostsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetCommunityPostsSuspense<TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- params: undefined |  GetCommunityPostsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCommunityPostsSuspense<TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCommunityPostsSuspense<TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCommunityPosts<
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCommunityPostsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCommunityPosts>>,
+					TError,
+					Awaited<ReturnType<typeof getCommunityPosts>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCommunityPosts<
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCommunityPosts>>,
+					TError,
+					Awaited<ReturnType<typeof getCommunityPosts>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCommunityPosts<
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 커뮤니티 게시글 목록 조회
  */
 
-export function useGetCommunityPostsSuspense<TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCommunityPosts<
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCommunityPostsQueryOptions(params, options);
 
-  const queryOptions = getGetCommunityPostsSuspenseQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+/**
+ * @summary 커뮤니티 게시글 목록 조회
+ */
+export const prefetchGetCommunityPostsQuery = async <
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCommunityPostsQueryOptions(params, options);
 
+	await queryClient.prefetchQuery(queryOptions);
 
+	return queryClient;
+};
 
-
-
-export const getGetCommunityPostsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>, TError = ErrorType<void>>(params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCommunityPostsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCommunityPostsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCommunityPostsInfiniteQueryKey(params);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getCommunityPosts>>
+	> = ({ signal }) => getCommunityPosts(params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getCommunityPosts>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetCommunityPostsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCommunityPosts>>
+>;
+export type GetCommunityPostsSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCommunityPosts>>> = ({ signal }) => getCommunityPosts(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCommunityPostsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCommunityPosts>>>
-export type GetCommunityPostsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetCommunityPostsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>, TError = ErrorType<void>>(
- params: undefined |  GetCommunityPostsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCommunityPostsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCommunityPostsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCommunityPostsSuspense<
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCommunityPostsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCommunityPostsSuspense<
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCommunityPostsSuspense<
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 커뮤니티 게시글 목록 조회
  */
 
-export function useGetCommunityPostsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>, TError = ErrorType<void>>(
- params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCommunityPostsSuspense<
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCommunityPostsSuspenseQueryOptions(
+		params,
+		options,
+	);
 
-  const queryOptions = getGetCommunityPostsSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-  return withQueryKey(query, queryOptions.queryKey);
+export const getGetCommunityPostsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCommunityPostsInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getCommunityPosts>>
+	> = ({ signal }) => getCommunityPosts(params, { signal, ...requestOptions });
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getCommunityPosts>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCommunityPostsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCommunityPosts>>
+>;
+export type GetCommunityPostsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetCommunityPostsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetCommunityPostsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCommunityPostsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCommunityPostsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 커뮤니티 게시글 목록 조회
+ */
+
+export function useGetCommunityPostsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCommunityPosts>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCommunityPostsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 커뮤니티 게시글 목록 조회
  */
-export const prefetchGetCommunityPostsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getCommunityPosts>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetCommunityPostsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCommunityPosts>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetCommunityPostsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getCommunityPosts>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetCommunityPostsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCommunityPosts>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCommunityPostsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetCommunityPostsSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getCreateCommunityPostUrl = () => {
+	return `/api/v1/community/posts`;
+};
 
 /**
  * 현재 Space에 커뮤니티 게시글을 작성합니다.
  * @summary 커뮤니티 게시글 작성
  */
-export const createCommunityPost = (
-    createCommunityPostPayloadDto: BodyType<CreateCommunityPostPayloadDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const createCommunityPost = async (
+	createCommunityPostPayloadDto: CreateCommunityPostPayloadDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<CreateCommunityPost201> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<CreateCommunityPost201>(getCreateCommunityPostUrl(), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(createCommunityPostPayloadDto),
+	});
+};
 
+export const getCreateCommunityPostMutationKey = () =>
+	["createCommunityPost"] as const;
 
-      return customInstance<CreateCommunityPost201>(
-      {url: `/api/v1/community/posts`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createCommunityPostPayloadDto, signal
-    },
-      options);
-    }
+export const getCreateCommunityPostMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createCommunityPost>>,
+		TError,
+		CreateCommunityPostMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createCommunityPost>>,
+	TError,
+	CreateCommunityPostMutationVariables,
+	TContext
+> => {
+	const mutationKey = getCreateCommunityPostMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createCommunityPost>>,
+		CreateCommunityPostMutationVariables
+	> = (props) => {
+		const { data } = props ?? {};
 
+		return createCommunityPost(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getCreateCommunityPostMutationKey = () => ['createCommunityPost'] as const;
+export type CreateCommunityPostMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createCommunityPost>>
+>;
+export type CreateCommunityPostMutationBody =
+	BodyType<CreateCommunityPostPayloadDto>;
+export type CreateCommunityPostMutationError = ErrorType<void>;
+export type CreateCommunityPostMutationVariables = {
+	data: BodyType<CreateCommunityPostPayloadDto>;
+};
 
-export const getCreateCommunityPostMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCommunityPost>>, TError,CreateCommunityPostMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createCommunityPost>>, TError,CreateCommunityPostMutationVariables, TContext> => {
-
-const mutationKey = getCreateCommunityPostMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCommunityPost>>, CreateCommunityPostMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  createCommunityPost(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateCommunityPostMutationResult = NonNullable<Awaited<ReturnType<typeof createCommunityPost>>>
-    export type CreateCommunityPostMutationBody = BodyType<CreateCommunityPostPayloadDto>
-    export type CreateCommunityPostMutationError = ErrorType<void>
-    export type CreateCommunityPostMutationVariables = {data: BodyType<CreateCommunityPostPayloadDto>}
-
-    /**
+/**
  * @summary 커뮤니티 게시글 작성
  */
-export const useCreateCommunityPost = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCommunityPost>>, TError,CreateCommunityPostMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createCommunityPost>>,
-        TError,
-        CreateCommunityPostMutationVariables,
-        TContext
-      > => {
-      return useMutation(getCreateCommunityPostMutationOptions(options), queryClient);
-    }
+export const useCreateCommunityPost = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createCommunityPost>>,
+			TError,
+			CreateCommunityPostMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createCommunityPost>>,
+	TError,
+	CreateCommunityPostMutationVariables,
+	TContext
+> => {
+	return useMutation(
+		getCreateCommunityPostMutationOptions(options),
+		queryClient,
+	);
+};

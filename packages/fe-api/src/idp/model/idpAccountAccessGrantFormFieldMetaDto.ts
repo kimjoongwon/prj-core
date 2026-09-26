@@ -13,6 +13,6 @@
  */
 
 export interface IdpAccountAccessGrantFormFieldMetaDto {
-  /** 필드 라벨 */
-  label?: string;
+	/** 필드 라벨 */
+	label?: string;
 }

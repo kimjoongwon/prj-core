@@ -15,11 +15,11 @@
 /**
  * 결과
  */
-export type AuthAuditResult = typeof AuthAuditResult[keyof typeof AuthAuditResult];
-
+export type AuthAuditResult =
+	(typeof AuthAuditResult)[keyof typeof AuthAuditResult];
 
 export const AuthAuditResult = {
-  SUCCESS: 'SUCCESS',
-  FAILURE: 'FAILURE',
-  LOCKED: 'LOCKED',
+	SUCCESS: "SUCCESS",
+	FAILURE: "FAILURE",
+	LOCKED: "LOCKED",
 } as const;

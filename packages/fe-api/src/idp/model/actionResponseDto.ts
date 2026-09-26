@@ -11,34 +11,34 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { ActionConfigDto } from './actionConfigDto';
+import type { ActionConfigDto } from "./actionConfigDto";
 
 export interface ActionResponseDto {
-  name: string;
-  order: number;
-  /** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-  id: bigint;
-  createdAt: Date;
-  /** @nullable */
-  updatedAt: Date | null;
-  /**
-     * 표시명
-     * @nullable
-     */
-  displayName: string | null;
-  /**
-     * 설명
-     * @nullable
-     */
-  description: string | null;
-  /**
-     * 그룹 (crud, visibility, bulk, workflow)
-     * @nullable
-     */
-  group: string | null;
-  /**
-     * Action 설정 (마스킹, 포맷팅 등)
-     * @nullable
-     */
-  config: ActionConfigDto | null;
+	name: string;
+	order: number;
+	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+	id: bigint;
+	createdAt: Date;
+	/** @nullable */
+	updatedAt: Date | null;
+	/**
+	 * 표시명
+	 * @nullable
+	 */
+	displayName: string | null;
+	/**
+	 * 설명
+	 * @nullable
+	 */
+	description: string | null;
+	/**
+	 * 그룹 (crud, visibility, bulk, workflow)
+	 * @nullable
+	 */
+	group: string | null;
+	/**
+	 * Action 설정 (마스킹, 포맷팅 등)
+	 * @nullable
+	 */
+	config: ActionConfigDto | null;
 }

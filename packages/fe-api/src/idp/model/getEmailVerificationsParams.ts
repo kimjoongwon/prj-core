@@ -11,36 +11,36 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { EmailVerificationStatus } from './emailVerificationStatus';
+import type { EmailVerificationStatus } from "./emailVerificationStatus";
 
 export type GetEmailVerificationsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 상태
- */
-status?: EmailVerificationStatus;
-/**
- * 이메일 (부분 일치)
- */
-email?: string;
-/**
- * 시작일 (createdAt >= startDate)
- */
-startDate?: Date;
-/**
- * 종료일 (createdAt <= endDate)
- */
-endDate?: Date;
-/**
- * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, email, status. 예: ?sort=email&sort=-createdAt
- */
-sort?: string[];
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 상태
+	 */
+	status?: EmailVerificationStatus;
+	/**
+	 * 이메일 (부분 일치)
+	 */
+	email?: string;
+	/**
+	 * 시작일 (createdAt >= startDate)
+	 */
+	startDate?: Date;
+	/**
+	 * 종료일 (createdAt <= endDate)
+	 */
+	endDate?: Date;
+	/**
+	 * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, email, status. 예: ?sort=email&sort=-createdAt
+	 */
+	sort?: string[];
 };

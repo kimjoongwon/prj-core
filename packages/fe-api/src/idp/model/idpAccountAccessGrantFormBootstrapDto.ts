@@ -11,21 +11,21 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { IdpAccountAccessGrantFormBootstrapDtoDefaultObject } from './idpAccountAccessGrantFormBootstrapDtoDefaultObject';
-import type { IdpAccountAccessGrantFormBootstrapDtoFieldMeta } from './idpAccountAccessGrantFormBootstrapDtoFieldMeta';
-import type { IdpAccountAccessGrantFormBootstrapDtoMode } from './idpAccountAccessGrantFormBootstrapDtoMode';
-import type { IdpAccountAccessGrantFormBootstrapDtoOptions } from './idpAccountAccessGrantFormBootstrapDtoOptions';
-import type { IdpAccountAccessGrantFormUiPathsDto } from './idpAccountAccessGrantFormUiPathsDto';
+import type { IdpAccountAccessGrantFormBootstrapDtoDefaultObject } from "./idpAccountAccessGrantFormBootstrapDtoDefaultObject";
+import type { IdpAccountAccessGrantFormBootstrapDtoFieldMeta } from "./idpAccountAccessGrantFormBootstrapDtoFieldMeta";
+import type { IdpAccountAccessGrantFormBootstrapDtoMode } from "./idpAccountAccessGrantFormBootstrapDtoMode";
+import type { IdpAccountAccessGrantFormBootstrapDtoOptions } from "./idpAccountAccessGrantFormBootstrapDtoOptions";
+import type { IdpAccountAccessGrantFormUiPathsDto } from "./idpAccountAccessGrantFormUiPathsDto";
 
 export interface IdpAccountAccessGrantFormBootstrapDto {
-  /** 폼 모드 */
-  mode: IdpAccountAccessGrantFormBootstrapDtoMode;
-  /** 초기 폼 객체 */
-  defaultObject: IdpAccountAccessGrantFormBootstrapDtoDefaultObject;
-  /** 경로별 선택 옵션 */
-  options: IdpAccountAccessGrantFormBootstrapDtoOptions;
-  /** UI 제어 경로 */
-  ui: IdpAccountAccessGrantFormUiPathsDto;
-  /** 경로별 필드 메타 */
-  fieldMeta: IdpAccountAccessGrantFormBootstrapDtoFieldMeta;
+	/** 폼 모드 */
+	mode: IdpAccountAccessGrantFormBootstrapDtoMode;
+	/** 초기 폼 객체 */
+	defaultObject: IdpAccountAccessGrantFormBootstrapDtoDefaultObject;
+	/** 경로별 선택 옵션 */
+	options: IdpAccountAccessGrantFormBootstrapDtoOptions;
+	/** UI 제어 경로 */
+	ui: IdpAccountAccessGrantFormUiPathsDto;
+	/** 경로별 필드 메타 */
+	fieldMeta: IdpAccountAccessGrantFormBootstrapDtoFieldMeta;
 }

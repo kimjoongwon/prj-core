@@ -11,10 +11,10 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { DashboardStatsDto } from './dashboardStatsDto';
+import type { DashboardStatsDto } from "./dashboardStatsDto";
 
-export type GetIdpDashboardStats200 = ({
-  httpStatus?: number;
-  message?: string;
-  data?: DashboardStatsDto | null;
-});
+export type GetIdpDashboardStats200 = {
+	httpStatus?: number;
+	message?: string;
+	data?: DashboardStatsDto | null;
+};

@@ -11,10 +11,10 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { TokenRefreshResponseDto } from './tokenRefreshResponseDto';
+import type { TokenRefreshResponseDto } from "./tokenRefreshResponseDto";
 
-export type RefreshToken200 = ({
-  httpStatus?: number;
-  message?: string;
-  data?: TokenRefreshResponseDto | null;
-});
+export type RefreshToken200 = {
+	httpStatus?: number;
+	message?: string;
+	data?: TokenRefreshResponseDto | null;
+};

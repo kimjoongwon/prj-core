@@ -14,977 +14,1721 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customFetch";
+
+import { apiJsonStringify, customFetch } from "../../libs/customFetch";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  CreateAbility201,
-  CreateAbilityDto,
-  DeleteAbility200,
-  GetAbilities200,
-  GetAbilityById200,
-  GetMyAbilities200,
-  UpdateAbility200,
-  UpdateAbilityDto
-} from '../model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType , BodyType } from '../../libs/customAxios';
-
+	CreateAbility201,
+	CreateAbilityDto,
+	DeleteAbility200,
+	GetAbilities200,
+	GetAbilityById200,
+	GetMyAbilities200,
+	UpdateAbility200,
+	UpdateAbilityDto,
+} from "../model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+const withQueryKey = <T extends object, K>(
+	query: T,
+	queryKey: K,
+): T & { queryKey: K } => {
+	const result = { queryKey } as T & { queryKey: K };
+	for (const key of Object.keys(query)) {
+		// The explicit queryKey always wins, matching the previous
+		// `{ ...query, queryKey }` spread where it was set last.
+		if (key === "queryKey") continue;
+		Object.defineProperty(result, key, {
+			enumerable: true,
+			configurable: true,
+			get: () => (query as Record<string, unknown>)[key],
+		});
+	}
+	return result;
+};
 
-
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
-  for (const key of Object.keys(query)) {
-    // The explicit queryKey always wins, matching the previous
-    // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
-    Object.defineProperty(result, key, {
-      enumerable: true,
-      configurable: true,
-      get: () => (query as Record<string, unknown>)[key],
-    });
-  }
-  return result;
+export const getGetAbilitiesUrl = () => {
+	return `/api/v1/abilities`;
 };
 
 /**
  * 모든 권한 정의(Ability) 목록을 조회합니다. Subject, Action 정보를 포함합니다.
  * @summary 전체 권한 정의 목록 조회
  */
-export const getAbilities = (
-
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<GetAbilities200>(
-      {url: `/api/v1/abilities`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
+export const getAbilities = async (
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetAbilities200> => {
+	return customFetch<GetAbilities200>(getGetAbilitiesUrl(), {
+		...options,
+		method: "GET",
+	});
+};
 
 export const getGetAbilitiesQueryKey = () => {
-    return [
-    `/api/v1/abilities`
-    ] as const;
-    }
+	return [`/api/v1/abilities`] as const;
+};
 
 export const getGetAbilitiesInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/abilities`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/abilities`] as const;
+};
 
+export const getGetAbilitiesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-export const getGetAbilitiesQueryOptions = <TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+	const queryKey = queryOptions?.queryKey ?? getGetAbilitiesQueryKey();
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilities>>> = ({
+		signal,
+	}) => getAbilities({ signal, ...requestOptions });
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesQueryKey();
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getAbilities>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetAbilitiesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAbilities>>
+>;
+export type GetAbilitiesQueryError = ErrorType<void>;
 
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilities>>> = ({ signal }) => getAbilities(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAbilitiesQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilities>>>
-export type GetAbilitiesQueryError = ErrorType<void>
-
-
-export function useGetAbilities<TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAbilities>>,
-          TError,
-          Awaited<ReturnType<typeof getAbilities>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilities<TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAbilities>>,
-          TError,
-          Awaited<ReturnType<typeof getAbilities>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilities<TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAbilities<
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getAbilities>>,
+					TError,
+					Awaited<ReturnType<typeof getAbilities>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilities<
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getAbilities>>,
+					TError,
+					Awaited<ReturnType<typeof getAbilities>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilities<
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 전체 권한 정의 목록 조회
  */
 
-export function useGetAbilities<TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAbilities<
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAbilitiesQueryOptions(options);
 
-  const queryOptions = getGetAbilitiesQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary 전체 권한 정의 목록 조회
- */
-export const prefetchGetAbilitiesQuery = async <TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetAbilitiesQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetAbilitiesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilities>>> = ({ signal }) => getAbilities(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAbilitiesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilities>>>
-export type GetAbilitiesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetAbilitiesSuspense<TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilitiesSuspense<TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilitiesSuspense<TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 전체 권한 정의 목록 조회
- */
-
-export function useGetAbilitiesSuspense<TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetAbilitiesSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetAbilitiesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesInfiniteQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilities>>> = ({ signal }) => getAbilities(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAbilitiesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilities>>>
-export type GetAbilitiesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAbilitiesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilitiesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilitiesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 전체 권한 정의 목록 조회
- */
-
-export function useGetAbilitiesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetAbilitiesSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 전체 권한 정의 목록 조회
  */
-export const prefetchGetAbilitiesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAbilities>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetAbilitiesQuery = async <
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilities>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetAbilitiesQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetAbilitiesSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetAbilitiesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getAbilities>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getGetAbilitiesQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilities>>> = ({
+		signal,
+	}) => getAbilities({ signal, ...requestOptions });
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getAbilities>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetAbilitiesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAbilities>>
+>;
+export type GetAbilitiesSuspenseQueryError = ErrorType<void>;
+
+export function useGetAbilitiesSuspense<
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilitiesSuspense<
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilitiesSuspense<
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 전체 권한 정의 목록 조회
+ */
+
+export function useGetAbilitiesSuspense<
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAbilitiesSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+export const getGetAbilitiesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getAbilities>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey = queryOptions?.queryKey ?? getGetAbilitiesInfiniteQueryKey();
 
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilities>>> = ({
+		signal,
+	}) => getAbilities({ signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getAbilities>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetAbilitiesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAbilities>>
+>;
+export type GetAbilitiesSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetAbilitiesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilitiesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilitiesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 전체 권한 정의 목록 조회
+ */
+
+export function useGetAbilitiesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilities>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAbilitiesSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
+}
+
+/**
+ * @summary 전체 권한 정의 목록 조회
+ */
+export const prefetchGetAbilitiesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getAbilities>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetAbilitiesSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getCreateAbilityUrl = () => {
+	return `/api/v1/abilities`;
+};
 
 /**
  * 재사용 가능한 권한 정의를 생성합니다. Role/User에 할당하려면 Policy에 포함하세요.
  * @summary 권한 정의 생성
  */
-export const createAbility = (
-    createAbilityDto: BodyType<CreateAbilityDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const createAbility = async (
+	createAbilityDto: CreateAbilityDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<CreateAbility201> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<CreateAbility201>(getCreateAbilityUrl(), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(createAbilityDto),
+	});
+};
 
+export const getCreateAbilityMutationKey = () => ["createAbility"] as const;
 
-      return customInstance<CreateAbility201>(
-      {url: `/api/v1/abilities`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createAbilityDto, signal
-    },
-      options);
-    }
+export const getCreateAbilityMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createAbility>>,
+		TError,
+		CreateAbilityMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createAbility>>,
+	TError,
+	CreateAbilityMutationVariables,
+	TContext
+> => {
+	const mutationKey = getCreateAbilityMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createAbility>>,
+		CreateAbilityMutationVariables
+	> = (props) => {
+		const { data } = props ?? {};
 
+		return createAbility(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getCreateAbilityMutationKey = () => ['createAbility'] as const;
+export type CreateAbilityMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createAbility>>
+>;
+export type CreateAbilityMutationBody = BodyType<CreateAbilityDto>;
+export type CreateAbilityMutationError = ErrorType<void>;
+export type CreateAbilityMutationVariables = {
+	data: BodyType<CreateAbilityDto>;
+};
 
-export const getCreateAbilityMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,CreateAbilityMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,CreateAbilityMutationVariables, TContext> => {
-
-const mutationKey = getCreateAbilityMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAbility>>, CreateAbilityMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  createAbility(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateAbilityMutationResult = NonNullable<Awaited<ReturnType<typeof createAbility>>>
-    export type CreateAbilityMutationBody = BodyType<CreateAbilityDto>
-    export type CreateAbilityMutationError = ErrorType<void>
-    export type CreateAbilityMutationVariables = {data: BodyType<CreateAbilityDto>}
-
-    /**
+/**
  * @summary 권한 정의 생성
  */
-export const useCreateAbility = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,CreateAbilityMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createAbility>>,
-        TError,
-        CreateAbilityMutationVariables,
-        TContext
-      > => {
-      return useMutation(getCreateAbilityMutationOptions(options), queryClient);
-    }
-    /**
+export const useCreateAbility = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createAbility>>,
+			TError,
+			CreateAbilityMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createAbility>>,
+	TError,
+	CreateAbilityMutationVariables,
+	TContext
+> => {
+	return useMutation(getCreateAbilityMutationOptions(options), queryClient);
+};
+export const getGetMyAbilitiesUrl = () => {
+	return `/api/v1/abilities/my`;
+};
+
+/**
  * 현재 선택한 Space 기준으로 로그인 사용자에게 적용되는 Role/User Policy를 병합해 조회합니다.
  * @summary 현재 로그인 사용자의 권한 조회
  */
-export const getMyAbilities = (
-
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<GetMyAbilities200>(
-      {url: `/api/v1/abilities/my`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
+export const getMyAbilities = async (
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetMyAbilities200> => {
+	return customFetch<GetMyAbilities200>(getGetMyAbilitiesUrl(), {
+		...options,
+		method: "GET",
+	});
+};
 
 export const getGetMyAbilitiesQueryKey = () => {
-    return [
-    `/api/v1/abilities/my`
-    ] as const;
-    }
+	return [`/api/v1/abilities/my`] as const;
+};
 
 export const getGetMyAbilitiesInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/abilities/my`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/abilities/my`] as const;
+};
 
+export const getGetMyAbilitiesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-export const getGetMyAbilitiesQueryOptions = <TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+	const queryKey = queryOptions?.queryKey ?? getGetMyAbilitiesQueryKey();
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAbilities>>> = ({
+		signal,
+	}) => getMyAbilities({ signal, ...requestOptions });
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMyAbilitiesQueryKey();
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getMyAbilities>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetMyAbilitiesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMyAbilities>>
+>;
+export type GetMyAbilitiesQueryError = ErrorType<void>;
 
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAbilities>>> = ({ signal }) => getMyAbilities(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMyAbilitiesQueryResult = NonNullable<Awaited<ReturnType<typeof getMyAbilities>>>
-export type GetMyAbilitiesQueryError = ErrorType<void>
-
-
-export function useGetMyAbilities<TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMyAbilities>>,
-          TError,
-          Awaited<ReturnType<typeof getMyAbilities>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyAbilities<TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMyAbilities>>,
-          TError,
-          Awaited<ReturnType<typeof getMyAbilities>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyAbilities<TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyAbilities<
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getMyAbilities>>,
+					TError,
+					Awaited<ReturnType<typeof getMyAbilities>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAbilities<
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getMyAbilities>>,
+					TError,
+					Awaited<ReturnType<typeof getMyAbilities>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAbilities<
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 현재 로그인 사용자의 권한 조회
  */
 
-export function useGetMyAbilities<TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetMyAbilities<
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMyAbilitiesQueryOptions(options);
 
-  const queryOptions = getGetMyAbilitiesQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-/**
- * @summary 현재 로그인 사용자의 권한 조회
- */
-export const prefetchGetMyAbilitiesQuery = async <TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetMyAbilitiesQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetMyAbilitiesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetMyAbilitiesQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAbilities>>> = ({ signal }) => getMyAbilities(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMyAbilitiesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getMyAbilities>>>
-export type GetMyAbilitiesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetMyAbilitiesSuspense<TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyAbilitiesSuspense<TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyAbilitiesSuspense<TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 현재 로그인 사용자의 권한 조회
- */
-
-export function useGetMyAbilitiesSuspense<TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetMyAbilitiesSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetMyAbilitiesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetMyAbilitiesInfiniteQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAbilities>>> = ({ signal }) => getMyAbilities(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMyAbilitiesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getMyAbilities>>>
-export type GetMyAbilitiesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetMyAbilitiesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyAbilitiesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyAbilitiesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 현재 로그인 사용자의 권한 조회
- */
-
-export function useGetMyAbilitiesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetMyAbilitiesSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 현재 로그인 사용자의 권한 조회
  */
-export const prefetchGetMyAbilitiesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getMyAbilities>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetMyAbilitiesQuery = async <
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMyAbilities>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetMyAbilitiesQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetMyAbilitiesSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetMyAbilitiesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getMyAbilities>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getGetMyAbilitiesQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAbilities>>> = ({
+		signal,
+	}) => getMyAbilities({ signal, ...requestOptions });
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getMyAbilities>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyAbilitiesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMyAbilities>>
+>;
+export type GetMyAbilitiesSuspenseQueryError = ErrorType<void>;
+
+export function useGetMyAbilitiesSuspense<
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAbilitiesSuspense<
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAbilitiesSuspense<
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 현재 로그인 사용자의 권한 조회
+ */
+
+export function useGetMyAbilitiesSuspense<
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMyAbilitiesSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
+export const getGetMyAbilitiesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getMyAbilities>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetMyAbilitiesInfiniteQueryKey();
 
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAbilities>>> = ({
+		signal,
+	}) => getMyAbilities({ signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getMyAbilities>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyAbilitiesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMyAbilities>>
+>;
+export type GetMyAbilitiesSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetMyAbilitiesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAbilitiesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAbilitiesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 현재 로그인 사용자의 권한 조회
+ */
+
+export function useGetMyAbilitiesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyAbilities>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMyAbilitiesSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
+}
+
+/**
+ * @summary 현재 로그인 사용자의 권한 조회
+ */
+export const prefetchGetMyAbilitiesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getMyAbilities>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyAbilities>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetMyAbilitiesSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetAbilityByIdUrl = (id: string) => {
+	return `/api/v1/abilities/${id}`;
+};
 
 /**
  * ID로 특정 권한을 조회합니다.
  * @summary 권한 상세 조회
  */
-export const getAbilityById = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getAbilityById = async (
+	id: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetAbilityById200> => {
+	return customFetch<GetAbilityById200>(getGetAbilityByIdUrl(id), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetAbilityByIdQueryKey = (id: string) => {
+	return [`/api/v1/abilities/${id}`] as const;
+};
+
+export const getGetAbilityByIdInfiniteQueryKey = (id: string) => {
+	return ["infinite", `/api/v1/abilities/${id}`] as const;
+};
+
+export const getGetAbilityByIdQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey = queryOptions?.queryKey ?? getGetAbilityByIdQueryKey(id);
 
-      return customInstance<GetAbilityById200>(
-      {url: `/api/v1/abilities/${id}`, method: 'GET', signal
-    },
-      options);
-    }
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({
+		signal,
+	}) => getAbilityById(id, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		enabled: id !== null && id !== undefined,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getAbilityById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetAbilityByIdQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAbilityById>>
+>;
+export type GetAbilityByIdQueryError = ErrorType<void>;
 
+export function useGetAbilityById<
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getAbilityById>>,
+					TError,
+					Awaited<ReturnType<typeof getAbilityById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilityById<
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getAbilityById>>,
+					TError,
+					Awaited<ReturnType<typeof getAbilityById>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilityById<
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 권한 상세 조회
+ */
 
-export const getGetAbilityByIdQueryKey = (id: string,) => {
-    return [
-    `/api/v1/abilities/${id}`
-    ] as const;
-    }
+export function useGetAbilityById<
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAbilityByIdQueryOptions(id, options);
 
-export const getGetAbilityByIdInfiniteQueryKey = (id: string,) => {
-    return [
-    'infinite', `/api/v1/abilities/${id}`
-    ] as const;
-    }
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-export const getGetAbilityByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+/**
+ * @summary 권한 상세 조회
+ */
+export const prefetchGetAbilityByIdQuery = async <
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	id: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetAbilityByIdQueryOptions(id, options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetAbilityByIdSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetAbilityByIdQueryKey(id);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilityByIdQueryKey(id);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({
+		signal,
+	}) => getAbilityById(id, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getAbilityById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetAbilityByIdSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAbilityById>>
+>;
+export type GetAbilityByIdSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({ signal }) => getAbilityById(id, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAbilityByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilityById>>>
-export type GetAbilityByIdQueryError = ErrorType<void>
-
-
-export function useGetAbilityById<TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAbilityById>>,
-          TError,
-          Awaited<ReturnType<typeof getAbilityById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilityById<TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAbilityById>>,
-          TError,
-          Awaited<ReturnType<typeof getAbilityById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilityById<TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAbilityByIdSuspense<
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilityByIdSuspense<
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilityByIdSuspense<
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 권한 상세 조회
  */
 
-export function useGetAbilityById<TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAbilityByIdSuspense<
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAbilityByIdSuspenseQueryOptions(id, options);
 
-  const queryOptions = getGetAbilityByIdQueryOptions(id,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
-/**
- * @summary 권한 상세 조회
- */
-export const prefetchGetAbilityByIdQuery = async <TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetAbilityByIdQueryOptions(id,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetAbilityByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAbilityByIdSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetAbilityByIdInfiniteQueryKey(id);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilityByIdQueryKey(id);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({
+		signal,
+	}) => getAbilityById(id, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getAbilityById>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetAbilityByIdSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAbilityById>>
+>;
+export type GetAbilityByIdSuspenseInfiniteQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({ signal }) => getAbilityById(id, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAbilityByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilityById>>>
-export type GetAbilityByIdSuspenseQueryError = ErrorType<void>
-
-
-export function useGetAbilityByIdSuspense<TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- id: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilityByIdSuspense<TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilityByIdSuspense<TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAbilityByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilityByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAbilityByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 권한 상세 조회
  */
 
-export function useGetAbilityByIdSuspense<TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAbilityByIdSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>,
+	TError = ErrorType<void>,
+>(
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAbilityByIdSuspenseInfiniteQueryOptions(
+		id,
+		options,
+	);
 
-  const queryOptions = getGetAbilityByIdSuspenseQueryOptions(id,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetAbilityByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilityByIdInfiniteQueryKey(id);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({ signal }) => getAbilityById(id, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAbilityByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilityById>>>
-export type GetAbilityByIdSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAbilityByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>, TError = ErrorType<void>>(
- id: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilityByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAbilityByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 권한 상세 조회
- */
-
-export function useGetAbilityByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetAbilityByIdSuspenseInfiniteQueryOptions(id,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 권한 상세 조회
  */
-export const prefetchGetAbilityByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetAbilityByIdInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getAbilityById>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	id: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAbilityById>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetAbilityByIdSuspenseInfiniteQueryOptions(
+		id,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetAbilityByIdSuspenseInfiniteQueryOptions(id,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getUpdateAbilityUrl = (id: string) => {
+	return `/api/v1/abilities/${id}`;
+};
 
 /**
  * 기존 권한 정의를 수정합니다. Policy assignment 메타데이터(isActive, priority)는 변경되지 않습니다.
  * @summary 권한 정의 수정
  */
-export const updateAbility = (
-    id: string,
-    updateAbilityDto: BodyType<UpdateAbilityDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const updateAbility = async (
+	id: string,
+	updateAbilityDto: UpdateAbilityDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<UpdateAbility200> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<UpdateAbility200>(getUpdateAbilityUrl(id), {
+		...options,
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(updateAbilityDto),
+	});
+};
 
+export const getUpdateAbilityMutationKey = () => ["updateAbility"] as const;
 
-      return customInstance<UpdateAbility200>(
-      {url: `/api/v1/abilities/${id}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateAbilityDto, signal
-    },
-      options);
-    }
+export const getUpdateAbilityMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateAbility>>,
+		TError,
+		UpdateAbilityMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof updateAbility>>,
+	TError,
+	UpdateAbilityMutationVariables,
+	TContext
+> => {
+	const mutationKey = getUpdateAbilityMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateAbility>>,
+		UpdateAbilityMutationVariables
+	> = (props) => {
+		const { id, data } = props ?? {};
 
+		return updateAbility(id, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getUpdateAbilityMutationKey = () => ['updateAbility'] as const;
+export type UpdateAbilityMutationResult = NonNullable<
+	Awaited<ReturnType<typeof updateAbility>>
+>;
+export type UpdateAbilityMutationBody = BodyType<UpdateAbilityDto>;
+export type UpdateAbilityMutationError = ErrorType<void>;
+export type UpdateAbilityMutationVariables = {
+	id: string;
+	data: BodyType<UpdateAbilityDto>;
+};
 
-export const getUpdateAbilityMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAbility>>, TError,UpdateAbilityMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateAbility>>, TError,UpdateAbilityMutationVariables, TContext> => {
-
-const mutationKey = getUpdateAbilityMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAbility>>, UpdateAbilityMutationVariables> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  updateAbility(id,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateAbilityMutationResult = NonNullable<Awaited<ReturnType<typeof updateAbility>>>
-    export type UpdateAbilityMutationBody = BodyType<UpdateAbilityDto>
-    export type UpdateAbilityMutationError = ErrorType<void>
-    export type UpdateAbilityMutationVariables = {id: string;data: BodyType<UpdateAbilityDto>}
-
-    /**
+/**
  * @summary 권한 정의 수정
  */
-export const useUpdateAbility = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAbility>>, TError,UpdateAbilityMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateAbility>>,
-        TError,
-        UpdateAbilityMutationVariables,
-        TContext
-      > => {
-      return useMutation(getUpdateAbilityMutationOptions(options), queryClient);
-    }
-    /**
+export const useUpdateAbility = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateAbility>>,
+			TError,
+			UpdateAbilityMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof updateAbility>>,
+	TError,
+	UpdateAbilityMutationVariables,
+	TContext
+> => {
+	return useMutation(getUpdateAbilityMutationOptions(options), queryClient);
+};
+export const getDeleteAbilityUrl = (id: string) => {
+	return `/api/v1/abilities/${id}`;
+};
+
+/**
  * 기존 권한을 삭제합니다. (소프트 삭제)
  * @summary 권한 삭제
  */
-export const deleteAbility = (
-    id: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const deleteAbility = async (
+	id: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<DeleteAbility200> => {
+	return customFetch<DeleteAbility200>(getDeleteAbilityUrl(id), {
+		...options,
+		method: "DELETE",
+	});
+};
 
+export const getDeleteAbilityMutationKey = () => ["deleteAbility"] as const;
 
-      return customInstance<DeleteAbility200>(
-      {url: `/api/v1/abilities/${id}`, method: 'DELETE', signal
-    },
-      options);
-    }
+export const getDeleteAbilityMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof deleteAbility>>,
+		TError,
+		DeleteAbilityMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof deleteAbility>>,
+	TError,
+	DeleteAbilityMutationVariables,
+	TContext
+> => {
+	const mutationKey = getDeleteAbilityMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof deleteAbility>>,
+		DeleteAbilityMutationVariables
+	> = (props) => {
+		const { id } = props ?? {};
 
+		return deleteAbility(id, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getDeleteAbilityMutationKey = () => ['deleteAbility'] as const;
+export type DeleteAbilityMutationResult = NonNullable<
+	Awaited<ReturnType<typeof deleteAbility>>
+>;
 
-export const getDeleteAbilityMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAbility>>, TError,DeleteAbilityMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteAbility>>, TError,DeleteAbilityMutationVariables, TContext> => {
+export type DeleteAbilityMutationError = ErrorType<void>;
+export type DeleteAbilityMutationVariables = { id: string };
 
-const mutationKey = getDeleteAbilityMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAbility>>, DeleteAbilityMutationVariables> = (props) => {
-          const {id} = props ?? {};
-
-          return  deleteAbility(id,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteAbilityMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAbility>>>
-
-    export type DeleteAbilityMutationError = ErrorType<void>
-    export type DeleteAbilityMutationVariables = {id: string}
-
-    /**
+/**
  * @summary 권한 삭제
  */
-export const useDeleteAbility = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAbility>>, TError,DeleteAbilityMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteAbility>>,
-        TError,
-        DeleteAbilityMutationVariables,
-        TContext
-      > => {
-      return useMutation(getDeleteAbilityMutationOptions(options), queryClient);
-    }
+export const useDeleteAbility = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof deleteAbility>>,
+			TError,
+			DeleteAbilityMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof deleteAbility>>,
+	TError,
+	DeleteAbilityMutationVariables,
+	TContext
+> => {
+	return useMutation(getDeleteAbilityMutationOptions(options), queryClient);
+};

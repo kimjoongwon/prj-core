@@ -8,8 +8,9 @@ import {
 	useMutation,
 	useQuery,
 } from "@tanstack/react-query";
-import type { ErrorType } from "../../libs/customAxios";
-import { customInstance } from "../../libs/customAxios";
+import { apiJsonStringify } from "../../libs/apiFetchCore";
+import type { ErrorType } from "../../libs/customFetch";
+import { customFetch } from "../../libs/customFetch";
 import type { SpaceDto } from "../model/spaceDto";
 
 type CurrentSpaceResponse = {
@@ -23,17 +24,14 @@ type SetCurrentSpacePayload = {
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export const getCurrentSpace = (
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 	signal?: AbortSignal,
 ) =>
-	customInstance<CurrentSpaceResponse>(
-		{
-			url: "/api/v1/auth/current-space",
-			method: "GET",
-			signal,
-		},
-		options,
-	);
+	customFetch<CurrentSpaceResponse>("/api/v1/auth/current-space", {
+		...options,
+		method: "GET",
+		signal: signal ?? options?.signal,
+	});
 
 export const getCurrentSpaceQueryKey = () =>
 	["/api/v1/auth/current-space"] as const;
@@ -50,7 +48,7 @@ export function useGetCurrentSpace<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> {
@@ -69,22 +67,19 @@ export function useGetCurrentSpace<
 
 export const setCurrentSpace = (
 	payload: SetCurrentSpacePayload,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 ) => {
-	// 기존 문자열 입력 계약을 공용 클라이언트의 bigint 요청 변환에 연결합니다.
+	// 기존 문자열 입력 계약을 공용 클라이언트의 bigint 안전 직렬화에 연결합니다.
 	const tenantId = parseDecimalId(payload.tenantId);
 	if (tenantId === null) {
 		throw new TypeError("tenantId must be a canonical positive BIGINT string");
 	}
-	return customInstance<CurrentSpaceResponse>(
-		{
-			url: "/api/v1/auth/current-space",
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: { ...payload, tenantId },
-		},
-		options,
-	);
+	return customFetch<CurrentSpaceResponse>("/api/v1/auth/current-space", {
+		...options,
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: apiJsonStringify({ ...payload, tenantId }),
+	});
 };
 
 export function useSetCurrentSpace<
@@ -98,7 +93,7 @@ export function useSetCurrentSpace<
 			SetCurrentSpacePayload,
 			TContext
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

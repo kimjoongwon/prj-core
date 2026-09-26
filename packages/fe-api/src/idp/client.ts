@@ -1,1 +1,1 @@
-export { customIdpInstance, IDP_AXIOS_INSTANCE } from "../libs/customIdpAxios";
+export { customIdpFetch } from "../libs/customIdpFetch";

@@ -18,11 +18,10 @@
 /**
  * 스레드 상태
  */
-export type ThreadStatus = typeof ThreadStatus[keyof typeof ThreadStatus];
-
+export type ThreadStatus = (typeof ThreadStatus)[keyof typeof ThreadStatus];
 
 export const ThreadStatus = {
-  ACTIVE: 'ACTIVE',
-  RESOLVED: 'RESOLVED',
-  CLOSED: 'CLOSED',
+	ACTIVE: "ACTIVE",
+	RESOLVED: "RESOLVED",
+	CLOSED: "CLOSED",
 } as const;

@@ -96,22 +96,6 @@ export const findRuntimeOperation = (manifest: RuntimeManifest, method: string |
 	return manifest.operations.find((operation) => operation.method === method.toUpperCase() && operationPathPattern(operation.path).test(pathname));
 };
 
-export const transformRequestConfig = <T extends { method?: string; url?: string; data?: unknown; params?: unknown }>(config: T, manifest: RuntimeManifest): T => {
-	const operation = findRuntimeOperation(manifest, config.method, config.url);
-	if (!operation) return config;
-	const nextConfig = { ...config };
-	if (operation.requestSchema && config.data !== undefined) nextConfig.data = convertRuntimeValue(config.data, operation.requestSchema, manifest, "request", operation.operationId, "request.body");
-	if (config.params && typeof config.params === "object") {
-		const nextParams = { ...(config.params as Record<string, unknown>) };
-		for (const [parameterKey, parameterSchema] of Object.entries(operation.parameterSchemas)) {
-			const [location, parameterName] = parameterKey.split(":");
-			if (location === "query" && parameterName in nextParams) nextParams[parameterName] = convertRuntimeValue(nextParams[parameterName], parameterSchema, manifest, "request", operation.operationId, `request.query.${parameterName}`);
-		}
-		nextConfig.params = nextParams;
-	}
-	return nextConfig;
-};
-
 export const transformResponseData = (data: unknown, status: number, method: string | undefined, url: string | undefined, manifest: RuntimeManifest) => {
 	const operation = findRuntimeOperation(manifest, method, url);
 	if (!operation) return data;

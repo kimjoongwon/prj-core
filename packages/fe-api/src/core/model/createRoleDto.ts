@@ -16,22 +16,22 @@
  */
 
 export interface CreateRoleDto {
-  /**
-     * 역할 식별자
-     * @maxLength 50
-     * @pattern ^[A-Z][A-Z0-9_]*$
-     */
-  name: string;
-  /**
-     * 표시명
-     * @maxLength 50
-     * @nullable
-     */
-  displayName?: string | null;
-  /**
-     * 설명
-     * @maxLength 200
-     * @nullable
-     */
-  description?: string | null;
+	/**
+	 * 역할 식별자
+	 * @maxLength 50
+	 * @pattern ^[A-Z][A-Z0-9_]*$
+	 */
+	name: string;
+	/**
+	 * 표시명
+	 * @maxLength 50
+	 * @nullable
+	 */
+	displayName?: string | null;
+	/**
+	 * 설명
+	 * @maxLength 200
+	 * @nullable
+	 */
+	description?: string | null;
 }

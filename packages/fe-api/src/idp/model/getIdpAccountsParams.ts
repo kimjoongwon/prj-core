@@ -13,29 +13,29 @@
  */
 
 export type GetIdpAccountsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 활성 상태
- */
-isActive?: boolean;
-/**
- * 이름 또는 이메일 검색
- */
-search?: string;
-/**
- * 잠금 상태 필터
- */
-isLocked?: boolean;
-/**
- * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, name, email, lastLoginAt. 예: ?sort=name&sort=-createdAt
- */
-sort?: string[];
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 활성 상태
+	 */
+	isActive?: boolean;
+	/**
+	 * 이름 또는 이메일 검색
+	 */
+	search?: string;
+	/**
+	 * 잠금 상태 필터
+	 */
+	isLocked?: boolean;
+	/**
+	 * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, name, email, lastLoginAt. 예: ?sort=name&sort=-createdAt
+	 */
+	sort?: string[];
 };

@@ -15,10 +15,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type SpaceScope = typeof SpaceScope[keyof typeof SpaceScope];
-
+export type SpaceScope = (typeof SpaceScope)[keyof typeof SpaceScope];
 
 export const SpaceScope = {
-  CURRENT: 'CURRENT',
-  INCLUDE_ANCESTORS: 'INCLUDE_ANCESTORS',
+	CURRENT: "CURRENT",
+	INCLUDE_ANCESTORS: "INCLUDE_ANCESTORS",
 } as const;

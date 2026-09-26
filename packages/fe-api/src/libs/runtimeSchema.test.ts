@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { RuntimeManifest } from "./runtimeSchema";
-import { transformRequestConfig, transformResponseData } from "./runtimeSchema";
+import { transformResponseData } from "./runtimeSchema";
 
 const manifest: RuntimeManifest = {
 	operations: [{
@@ -22,15 +22,6 @@ const manifest: RuntimeManifest = {
 };
 
 describe("runtimeSchema", () => {
-	it("request의 nested Date와 bigint, query bigint를 schema 기반 wire 값으로 변환한다", () => {
-		const config = transformRequestConfig({
-			method: "post", url: "/api/timelines/42", params: { cursor: 99n },
-			data: { createdAt: new Date("2026-01-02T03:04:05.000Z"), sequence: 7n, child: { occurredAt: new Date("2026-02-03T04:05:06.000Z") } },
-		}, manifest);
-		expect(config.params.cursor).toBe("99");
-		expect(config.data).toEqual({ createdAt: "2026-01-02T03:04:05.000Z", sequence: "7", child: { occurredAt: "2026-02-03T04:05:06.000Z" } });
-	});
-
 	it("response의 arrays, nested ref, nullable Date와 bigint를 runtime 값으로 변환한다", () => {
 		const result = transformResponseData([
 			{ createdAt: "2026-01-02T03:04:05.000Z", sequence: "9007199254740993", child: null },

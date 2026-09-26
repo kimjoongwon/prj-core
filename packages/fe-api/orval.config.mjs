@@ -126,6 +126,10 @@ const queryOptions = {
 
 	// SSR 예외 페이지를 위해 prefetch 함수는 유지
 	usePrefetch: true,
+
+	// queryFn의 AbortSignal을 요청 options에 실어 보낸다(fetch 생성기 방식).
+	// 미지정 시 취소 signal이 mutator까지 전달되지 않는다.
+	signal: true,
 };
 
 // 비동기 설정 래퍼
@@ -157,22 +161,27 @@ async function createConfig() {
 
 				// React Query를 사용한 클라이언트 생성
 				client: "react-query",
-				httpClient: "axios",
+				// 네이티브 fetch 기반 생성기 — 응답은 data만 반환한다.
+				httpClient: "fetch",
 
 				// OpenAPI 태그별로 파일 분할하여 직접 생성
 				// 후처리 스크립트 없이 생성 결과를 그대로 사용합니다.
 				mode: "tags-split",
 
 				override: {
-					// customInstance가 복원하는 실제 클라이언트 값과 타입을 맞춥니다.
+					// customFetch가 복원하는 실제 클라이언트 값과 타입을 맞춥니다.
 					useBigInt: true,
 					useDates: true,
-					// 커스텀 Axios 인스턴스 사용 설정
+					// 커스텀 fetch 클라이언트 사용 설정
 					mutator: {
-						// 커스텀 Axios 설정 파일 경로
-						path: "./src/libs/customAxios.ts",
-						// 사용할 Axios 인스턴스 함수명
-						name: "customInstance",
+						// 커스텀 fetch 클라이언트 파일 경로
+						path: "./src/libs/customFetch.ts",
+						// 사용할 fetch 함수명
+						name: "customFetch",
+					},
+					fetch: {
+						// 응답을 {data, status, headers} 래퍼가 아니라 본문만 반환한다.
+						includeHttpResponseReturnType: false,
 					},
 
 					// React Query 훅 생성 옵션
@@ -182,7 +191,7 @@ async function createConfig() {
 			hooks: {
 				afterAllFilesWrite: {
 					command:
-						"node ./scripts/merge-runtime-manifest.mjs && pnpm exec biome check --write src/core src/libs/runtimeManifest.ts",
+						"node ./scripts/serialize-fetch-bodies.mjs && node ./scripts/merge-runtime-manifest.mjs && pnpm exec biome check --write src/core src/libs/runtimeManifest.ts",
 					injectGeneratedDirsAndFiles: false,
 				},
 			},
@@ -191,7 +200,7 @@ async function createConfig() {
 		// ─── 발급자(idp-api) client — 인증·OIDC·IDP 관리 태그 ───
 		// core-api가 발급자를 내려놓았으므로 auth/oidc-clients/oidc-sessions/
 		// interaction/idp-*/security-policy/email-verifications 태그는 여기서
-		// 생성한다. axios instance는 core와 같은 customAxios — 경로는 전부 앱
+		// 생성한다. fetch 클라이언트는 core와 같은 customFetch — 경로는 전부 앱
 		// origin 상대경로로 각 앱의 프록시(rewrite/ingress)가 발급자로 보낸다.
 		idp: {
 			input: {
@@ -205,14 +214,17 @@ async function createConfig() {
 				target: "src/idp/index.ts",
 				schemas: "src/idp/model",
 				client: "react-query",
-				httpClient: "axios",
+				httpClient: "fetch",
 				mode: "tags-split",
 				override: {
 					useBigInt: true,
 					useDates: true,
 					mutator: {
-						path: "./src/libs/customAxios.ts",
-						name: "customInstance",
+						path: "./src/libs/customFetch.ts",
+						name: "customFetch",
+					},
+					fetch: {
+						includeHttpResponseReturnType: false,
 					},
 					query: queryOptions,
 				},

@@ -16,12 +16,12 @@
  */
 
 export interface TenantAccessRequestPaginationMetaDto {
-  /** 전체 신청 수 */
-  total: number;
-  /** 건너뛴 항목 수 (offset) */
-  skip: number;
-  /** 조회 항목 수 */
-  take: number;
-  /** 전체 페이지 수 */
-  totalPages: number;
+	/** 전체 신청 수 */
+	total: number;
+	/** 건너뛴 항목 수 (offset) */
+	skip: number;
+	/** 조회 항목 수 */
+	take: number;
+	/** 전체 페이지 수 */
+	totalPages: number;
 }

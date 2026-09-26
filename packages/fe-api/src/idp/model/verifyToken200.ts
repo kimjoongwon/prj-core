@@ -11,10 +11,10 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { VerifyTokenResponseDto } from './verifyTokenResponseDto';
+import type { VerifyTokenResponseDto } from "./verifyTokenResponseDto";
 
-export type VerifyToken200 = ({
-  httpStatus?: number;
-  message?: string;
-  data?: VerifyTokenResponseDto | null;
-});
+export type VerifyToken200 = {
+	httpStatus?: number;
+	message?: string;
+	data?: VerifyTokenResponseDto | null;
+};

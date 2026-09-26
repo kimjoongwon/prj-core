@@ -14,42 +14,42 @@
  * - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { ServiceDocumentKind } from './serviceDocumentKind';
-import type { ServiceDocumentPlatform } from './serviceDocumentPlatform';
-import type { ServiceDocumentStatus } from './serviceDocumentStatus';
+import type { ServiceDocumentKind } from "./serviceDocumentKind";
+import type { ServiceDocumentPlatform } from "./serviceDocumentPlatform";
+import type { ServiceDocumentStatus } from "./serviceDocumentStatus";
 
 export type GetServiceDocumentsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 문서 종류
- */
-kind?: ServiceDocumentKind;
-/**
- * 노출 플랫폼
- */
-platform?: ServiceDocumentPlatform;
-/**
- * 로케일
- */
-locale?: string;
-/**
- * 상태
- */
-status?: ServiceDocumentStatus;
-/**
- * 필수 동의 여부
- */
-isRequired?: boolean;
-/**
- * 제목, 요약, 버전 통합 검색
- */
-search?: string;
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 문서 종류
+	 */
+	kind?: ServiceDocumentKind;
+	/**
+	 * 노출 플랫폼
+	 */
+	platform?: ServiceDocumentPlatform;
+	/**
+	 * 로케일
+	 */
+	locale?: string;
+	/**
+	 * 상태
+	 */
+	status?: ServiceDocumentStatus;
+	/**
+	 * 필수 동의 여부
+	 */
+	isRequired?: boolean;
+	/**
+	 * 제목, 요약, 버전 통합 검색
+	 */
+	search?: string;
 };

@@ -18,11 +18,10 @@
 /**
  * 감정 유형
  */
-export type SentimentType = typeof SentimentType[keyof typeof SentimentType];
-
+export type SentimentType = (typeof SentimentType)[keyof typeof SentimentType];
 
 export const SentimentType = {
-  POSITIVE: 'POSITIVE',
-  NEUTRAL: 'NEUTRAL',
-  NEGATIVE: 'NEGATIVE',
+	POSITIVE: "POSITIVE",
+	NEUTRAL: "NEUTRAL",
+	NEGATIVE: "NEGATIVE",
 } as const;

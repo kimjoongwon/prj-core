@@ -11,807 +11,1461 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customFetch";
+
+import { apiJsonStringify, customFetch } from "../../libs/customFetch";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  CreateOidcClient201,
-  CreateOidcClientDto,
-  GetOidcClient200,
-  GetOidcClients200,
-  GetOidcClientsParams,
-  ToggleActiveOidcClient200,
-  UpdateOidcClient200,
-  UpdateOidcClientDto
-} from '../model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType , BodyType } from '../../libs/customAxios';
-
+	CreateOidcClient201,
+	CreateOidcClientDto,
+	GetOidcClient200,
+	GetOidcClients200,
+	GetOidcClientsParams,
+	ToggleActiveOidcClient200,
+	UpdateOidcClient200,
+	UpdateOidcClientDto,
+} from "../model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+const withQueryKey = <T extends object, K>(
+	query: T,
+	queryKey: K,
+): T & { queryKey: K } => {
+	const result = { queryKey } as T & { queryKey: K };
+	for (const key of Object.keys(query)) {
+		// The explicit queryKey always wins, matching the previous
+		// `{ ...query, queryKey }` spread where it was set last.
+		if (key === "queryKey") continue;
+		Object.defineProperty(result, key, {
+			enumerable: true,
+			configurable: true,
+			get: () => (query as Record<string, unknown>)[key],
+		});
+	}
+	return result;
+};
 
+export const getGetOidcClientsUrl = (params?: GetOidcClientsParams) => {
+	const normalizedParams = new URLSearchParams();
 
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
-  for (const key of Object.keys(query)) {
-    // The explicit queryKey always wins, matching the previous
-    // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
-    Object.defineProperty(result, key, {
-      enumerable: true,
-      configurable: true,
-      get: () => (query as Record<string, unknown>)[key],
-    });
-  }
-  return result;
+	Object.entries(params || {}).forEach(([key, value]) => {
+		const explodeParameters = ["sort"];
+
+		if (Array.isArray(value) && explodeParameters.includes(key)) {
+			value.forEach((v) => {
+				normalizedParams.append(key, v === null ? "null" : String(v));
+			});
+			return;
+		}
+
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/api/v1/oidc-clients?${stringifiedParams}`
+		: `/api/v1/oidc-clients`;
 };
 
 /**
  * 등록된 OIDC 클라이언트 목록을 조회합니다. 검색 및 필터링을 지원합니다.
  * @summary OIDC 클라이언트 목록 조회
  */
-export const getOidcClients = (
-    params?: GetOidcClientsParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getOidcClients = async (
+	params?: GetOidcClientsParams,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetOidcClients200> => {
+	return customFetch<GetOidcClients200>(getGetOidcClientsUrl(params), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetOidcClientsQueryKey = (params?: GetOidcClientsParams) => {
+	return [`/api/v1/oidc-clients`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetOidcClientsInfiniteQueryKey = (
+	params?: GetOidcClientsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/oidc-clients`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-
-      return customInstance<GetOidcClients200>(
-      {url: `/api/v1/oidc-clients`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetOidcClientsQueryKey = (params?: GetOidcClientsParams,) => {
-    return [
-    `/api/v1/oidc-clients`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-export const getGetOidcClientsInfiniteQueryKey = (params?: GetOidcClientsParams,) => {
-    return [
-    'infinite', `/api/v1/oidc-clients`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-
-export const getGetOidcClientsQueryOptions = <TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(params?: GetOidcClientsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetOidcClientsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetOidcClientsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetOidcClientsQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClients>>> = ({
+		signal,
+	}) => getOidcClients(params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getOidcClients>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetOidcClientsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcClients>>
+>;
+export type GetOidcClientsQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClients>>> = ({ signal }) => getOidcClients(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetOidcClientsQueryResult = NonNullable<Awaited<ReturnType<typeof getOidcClients>>>
-export type GetOidcClientsQueryError = ErrorType<void>
-
-
-export function useGetOidcClients<TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- params: undefined |  GetOidcClientsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getOidcClients>>,
-          TError,
-          Awaited<ReturnType<typeof getOidcClients>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClients<TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getOidcClients>>,
-          TError,
-          Awaited<ReturnType<typeof getOidcClients>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClients<TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOidcClients<
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetOidcClientsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getOidcClients>>,
+					TError,
+					Awaited<ReturnType<typeof getOidcClients>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClients<
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getOidcClients>>,
+					TError,
+					Awaited<ReturnType<typeof getOidcClients>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClients<
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 클라이언트 목록 조회
  */
 
-export function useGetOidcClients<TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetOidcClients<
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcClientsQueryOptions(params, options);
 
-  const queryOptions = getGetOidcClientsQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary OIDC 클라이언트 목록 조회
  */
-export const prefetchGetOidcClientsQuery = async <TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetOidcClientsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetOidcClientsQuery = async <
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetOidcClientsQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetOidcClientsQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetOidcClientsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetOidcClientsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetOidcClientsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetOidcClientsQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClients>>> = ({
+		signal,
+	}) => getOidcClients(params, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getOidcClients>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetOidcClientsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcClients>>
+>;
+export type GetOidcClientsSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClients>>> = ({ signal }) => getOidcClients(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetOidcClientsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getOidcClients>>>
-export type GetOidcClientsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetOidcClientsSuspense<TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- params: undefined |  GetOidcClientsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClientsSuspense<TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClientsSuspense<TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOidcClientsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetOidcClientsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClientsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClientsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 클라이언트 목록 조회
  */
 
-export function useGetOidcClientsSuspense<TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetOidcClientsSuspense<
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcClientsSuspenseQueryOptions(params, options);
 
-  const queryOptions = getGetOidcClientsSuspenseQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
-
-
-
-
-
-export const getGetOidcClientsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>, TError = ErrorType<void>>(params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetOidcClientsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetOidcClientsInfiniteQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetOidcClientsInfiniteQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClients>>> = ({
+		signal,
+	}) => getOidcClients(params, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getOidcClients>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetOidcClientsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcClients>>
+>;
+export type GetOidcClientsSuspenseInfiniteQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClients>>> = ({ signal }) => getOidcClients(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetOidcClientsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getOidcClients>>>
-export type GetOidcClientsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetOidcClientsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>, TError = ErrorType<void>>(
- params: undefined |  GetOidcClientsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClientsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClientsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOidcClientsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetOidcClientsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClientsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClientsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 클라이언트 목록 조회
  */
 
-export function useGetOidcClientsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>, TError = ErrorType<void>>(
- params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetOidcClientsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClients>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcClientsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  const queryOptions = getGetOidcClientsSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary OIDC 클라이언트 목록 조회
  */
-export const prefetchGetOidcClientsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getOidcClients>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetOidcClientsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetOidcClientsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getOidcClients>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetOidcClientsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClients>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetOidcClientsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetOidcClientsSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getCreateOidcClientUrl = () => {
+	return `/api/v1/oidc-clients`;
+};
 
 /**
  * 새로운 OIDC 클라이언트를 등록합니다. Client ID는 고유해야 합니다.
  * @summary OIDC 클라이언트 등록
  */
-export const createOidcClient = (
-    createOidcClientDto: BodyType<CreateOidcClientDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const createOidcClient = async (
+	createOidcClientDto: CreateOidcClientDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<CreateOidcClient201> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<CreateOidcClient201>(getCreateOidcClientUrl(), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(createOidcClientDto),
+	});
+};
 
+export const getCreateOidcClientMutationKey = () =>
+	["createOidcClient"] as const;
 
-      return customInstance<CreateOidcClient201>(
-      {url: `/api/v1/oidc-clients`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createOidcClientDto, signal
-    },
-      options);
-    }
+export const getCreateOidcClientMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createOidcClient>>,
+		TError,
+		CreateOidcClientMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createOidcClient>>,
+	TError,
+	CreateOidcClientMutationVariables,
+	TContext
+> => {
+	const mutationKey = getCreateOidcClientMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createOidcClient>>,
+		CreateOidcClientMutationVariables
+	> = (props) => {
+		const { data } = props ?? {};
 
+		return createOidcClient(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getCreateOidcClientMutationKey = () => ['createOidcClient'] as const;
+export type CreateOidcClientMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createOidcClient>>
+>;
+export type CreateOidcClientMutationBody = BodyType<CreateOidcClientDto>;
+export type CreateOidcClientMutationError = ErrorType<void>;
+export type CreateOidcClientMutationVariables = {
+	data: BodyType<CreateOidcClientDto>;
+};
 
-export const getCreateOidcClientMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOidcClient>>, TError,CreateOidcClientMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createOidcClient>>, TError,CreateOidcClientMutationVariables, TContext> => {
-
-const mutationKey = getCreateOidcClientMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOidcClient>>, CreateOidcClientMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  createOidcClient(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateOidcClientMutationResult = NonNullable<Awaited<ReturnType<typeof createOidcClient>>>
-    export type CreateOidcClientMutationBody = BodyType<CreateOidcClientDto>
-    export type CreateOidcClientMutationError = ErrorType<void>
-    export type CreateOidcClientMutationVariables = {data: BodyType<CreateOidcClientDto>}
-
-    /**
+/**
  * @summary OIDC 클라이언트 등록
  */
-export const useCreateOidcClient = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOidcClient>>, TError,CreateOidcClientMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createOidcClient>>,
-        TError,
-        CreateOidcClientMutationVariables,
-        TContext
-      > => {
-      return useMutation(getCreateOidcClientMutationOptions(options), queryClient);
-    }
-    /**
+export const useCreateOidcClient = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createOidcClient>>,
+			TError,
+			CreateOidcClientMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createOidcClient>>,
+	TError,
+	CreateOidcClientMutationVariables,
+	TContext
+> => {
+	return useMutation(getCreateOidcClientMutationOptions(options), queryClient);
+};
+export const getGetOidcClientUrl = (oidcClientId: string) => {
+	return `/api/v1/oidc-clients/${oidcClientId}`;
+};
+
+/**
  * 특정 OIDC 클라이언트의 상세 정보를 조회합니다.
  * @summary OIDC 클라이언트 상세 조회
  */
-export const getOidcClient = (
-    oidcClientId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getOidcClient = async (
+	oidcClientId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<GetOidcClient200> => {
+	return customFetch<GetOidcClient200>(getGetOidcClientUrl(oidcClientId), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetOidcClientQueryKey = (oidcClientId: string) => {
+	return [`/api/v1/oidc-clients/${oidcClientId}`] as const;
+};
+
+export const getGetOidcClientInfiniteQueryKey = (oidcClientId: string) => {
+	return ["infinite", `/api/v1/oidc-clients/${oidcClientId}`] as const;
+};
+
+export const getGetOidcClientQueryOptions = <
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetOidcClientQueryKey(oidcClientId);
 
-      return customInstance<GetOidcClient200>(
-      {url: `/api/v1/oidc-clients/${oidcClientId}`, method: 'GET', signal
-    },
-      options);
-    }
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClient>>> = ({
+		signal,
+	}) => getOidcClient(oidcClientId, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		enabled: oidcClientId !== null && oidcClientId !== undefined,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getOidcClient>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetOidcClientQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcClient>>
+>;
+export type GetOidcClientQueryError = ErrorType<void>;
 
+export function useGetOidcClient<
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getOidcClient>>,
+					TError,
+					Awaited<ReturnType<typeof getOidcClient>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClient<
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getOidcClient>>,
+					TError,
+					Awaited<ReturnType<typeof getOidcClient>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClient<
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary OIDC 클라이언트 상세 조회
+ */
 
-export const getGetOidcClientQueryKey = (oidcClientId: string,) => {
-    return [
-    `/api/v1/oidc-clients/${oidcClientId}`
-    ] as const;
-    }
+export function useGetOidcClient<
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcClientQueryOptions(oidcClientId, options);
 
-export const getGetOidcClientInfiniteQueryKey = (oidcClientId: string,) => {
-    return [
-    'infinite', `/api/v1/oidc-clients/${oidcClientId}`
-    ] as const;
-    }
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-export const getGetOidcClientQueryOptions = <TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(oidcClientId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+/**
+ * @summary OIDC 클라이언트 상세 조회
+ */
+export const prefetchGetOidcClientQuery = async <
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetOidcClientQueryOptions(oidcClientId, options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetOidcClientSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetOidcClientQueryKey(oidcClientId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetOidcClientQueryKey(oidcClientId);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClient>>> = ({
+		signal,
+	}) => getOidcClient(oidcClientId, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getOidcClient>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetOidcClientSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcClient>>
+>;
+export type GetOidcClientSuspenseQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClient>>> = ({ signal }) => getOidcClient(oidcClientId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: oidcClientId !== null && oidcClientId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetOidcClientQueryResult = NonNullable<Awaited<ReturnType<typeof getOidcClient>>>
-export type GetOidcClientQueryError = ErrorType<void>
-
-
-export function useGetOidcClient<TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- oidcClientId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getOidcClient>>,
-          TError,
-          Awaited<ReturnType<typeof getOidcClient>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClient<TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getOidcClient>>,
-          TError,
-          Awaited<ReturnType<typeof getOidcClient>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClient<TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOidcClientSuspense<
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClientSuspense<
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClientSuspense<
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 클라이언트 상세 조회
  */
 
-export function useGetOidcClient<TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetOidcClientSuspense<
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcClientSuspenseQueryOptions(
+		oidcClientId,
+		options,
+	);
 
-  const queryOptions = getGetOidcClientQueryOptions(oidcClientId,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
-/**
- * @summary OIDC 클라이언트 상세 조회
- */
-export const prefetchGetOidcClientQuery = async <TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- queryClient: QueryClient, oidcClientId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetOidcClientQueryOptions(oidcClientId,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetOidcClientSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(oidcClientId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetOidcClientSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetOidcClientInfiniteQueryKey(oidcClientId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetOidcClientQueryKey(oidcClientId);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClient>>> = ({
+		signal,
+	}) => getOidcClient(oidcClientId, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getOidcClient>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetOidcClientSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getOidcClient>>
+>;
+export type GetOidcClientSuspenseInfiniteQueryError = ErrorType<void>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClient>>> = ({ signal }) => getOidcClient(oidcClientId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetOidcClientSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getOidcClient>>>
-export type GetOidcClientSuspenseQueryError = ErrorType<void>
-
-
-export function useGetOidcClientSuspense<TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- oidcClientId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClientSuspense<TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClientSuspense<TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetOidcClientSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClientSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetOidcClientSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 클라이언트 상세 조회
  */
 
-export function useGetOidcClientSuspense<TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetOidcClientSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>,
+	TError = ErrorType<void>,
+>(
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetOidcClientSuspenseInfiniteQueryOptions(
+		oidcClientId,
+		options,
+	);
 
-  const queryOptions = getGetOidcClientSuspenseQueryOptions(oidcClientId,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetOidcClientSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>, TError = ErrorType<void>>(oidcClientId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetOidcClientInfiniteQueryKey(oidcClientId);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOidcClient>>> = ({ signal }) => getOidcClient(oidcClientId, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetOidcClientSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getOidcClient>>>
-export type GetOidcClientSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetOidcClientSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>, TError = ErrorType<void>>(
- oidcClientId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClientSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetOidcClientSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary OIDC 클라이언트 상세 조회
- */
-
-export function useGetOidcClientSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getOidcClient>>>, TError = ErrorType<void>>(
- oidcClientId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetOidcClientSuspenseInfiniteQueryOptions(oidcClientId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary OIDC 클라이언트 상세 조회
  */
-export const prefetchGetOidcClientInfiniteQuery = async <TData = Awaited<ReturnType<typeof getOidcClient>>, TError = ErrorType<void>>(
- queryClient: QueryClient, oidcClientId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetOidcClientInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getOidcClient>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	oidcClientId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getOidcClient>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetOidcClientSuspenseInfiniteQueryOptions(
+		oidcClientId,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetOidcClientSuspenseInfiniteQueryOptions(oidcClientId,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getUpdateOidcClientUrl = (oidcClientId: string) => {
+	return `/api/v1/oidc-clients/${oidcClientId}`;
+};
 
 /**
  * OIDC 클라이언트 정보를 수정합니다. Client ID는 수정할 수 없습니다.
  * @summary OIDC 클라이언트 수정
  */
-export const updateOidcClient = (
-    oidcClientId: string,
-    updateOidcClientDto: BodyType<UpdateOidcClientDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const updateOidcClient = async (
+	oidcClientId: string,
+	updateOidcClientDto: UpdateOidcClientDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<UpdateOidcClient200> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<UpdateOidcClient200>(
+		getUpdateOidcClientUrl(oidcClientId),
+		{
+			...options,
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+				...getHeaders(options?.headers),
+			},
+			body: apiJsonStringify(updateOidcClientDto),
+		},
+	);
+};
 
+export const getUpdateOidcClientMutationKey = () =>
+	["updateOidcClient"] as const;
 
-      return customInstance<UpdateOidcClient200>(
-      {url: `/api/v1/oidc-clients/${oidcClientId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateOidcClientDto, signal
-    },
-      options);
-    }
+export const getUpdateOidcClientMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateOidcClient>>,
+		TError,
+		UpdateOidcClientMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof updateOidcClient>>,
+	TError,
+	UpdateOidcClientMutationVariables,
+	TContext
+> => {
+	const mutationKey = getUpdateOidcClientMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateOidcClient>>,
+		UpdateOidcClientMutationVariables
+	> = (props) => {
+		const { oidcClientId, data } = props ?? {};
 
+		return updateOidcClient(oidcClientId, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getUpdateOidcClientMutationKey = () => ['updateOidcClient'] as const;
+export type UpdateOidcClientMutationResult = NonNullable<
+	Awaited<ReturnType<typeof updateOidcClient>>
+>;
+export type UpdateOidcClientMutationBody = BodyType<UpdateOidcClientDto>;
+export type UpdateOidcClientMutationError = ErrorType<void>;
+export type UpdateOidcClientMutationVariables = {
+	oidcClientId: string;
+	data: BodyType<UpdateOidcClientDto>;
+};
 
-export const getUpdateOidcClientMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOidcClient>>, TError,UpdateOidcClientMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateOidcClient>>, TError,UpdateOidcClientMutationVariables, TContext> => {
-
-const mutationKey = getUpdateOidcClientMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOidcClient>>, UpdateOidcClientMutationVariables> = (props) => {
-          const {oidcClientId,data} = props ?? {};
-
-          return  updateOidcClient(oidcClientId,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateOidcClientMutationResult = NonNullable<Awaited<ReturnType<typeof updateOidcClient>>>
-    export type UpdateOidcClientMutationBody = BodyType<UpdateOidcClientDto>
-    export type UpdateOidcClientMutationError = ErrorType<void>
-    export type UpdateOidcClientMutationVariables = {oidcClientId: string;data: BodyType<UpdateOidcClientDto>}
-
-    /**
+/**
  * @summary OIDC 클라이언트 수정
  */
-export const useUpdateOidcClient = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOidcClient>>, TError,UpdateOidcClientMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateOidcClient>>,
-        TError,
-        UpdateOidcClientMutationVariables,
-        TContext
-      > => {
-      return useMutation(getUpdateOidcClientMutationOptions(options), queryClient);
-    }
-    /**
+export const useUpdateOidcClient = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateOidcClient>>,
+			TError,
+			UpdateOidcClientMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof updateOidcClient>>,
+	TError,
+	UpdateOidcClientMutationVariables,
+	TContext
+> => {
+	return useMutation(getUpdateOidcClientMutationOptions(options), queryClient);
+};
+export const getDeleteOidcClientUrl = (oidcClientId: string) => {
+	return `/api/v1/oidc-clients/${oidcClientId}`;
+};
+
+/**
  * OIDC 클라이언트를 삭제합니다 (소프트 삭제).
  * @summary OIDC 클라이언트 삭제
  */
-export const deleteOidcClient = (
-    oidcClientId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const deleteOidcClient = async (
+	oidcClientId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<unknown> => {
+	return customFetch<unknown>(getDeleteOidcClientUrl(oidcClientId), {
+		...options,
+		method: "DELETE",
+	});
+};
 
+export const getDeleteOidcClientMutationKey = () =>
+	["deleteOidcClient"] as const;
 
-      return customInstance<unknown>(
-      {url: `/api/v1/oidc-clients/${oidcClientId}`, method: 'DELETE', signal
-    },
-      options);
-    }
+export const getDeleteOidcClientMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof deleteOidcClient>>,
+		TError,
+		DeleteOidcClientMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof deleteOidcClient>>,
+	TError,
+	DeleteOidcClientMutationVariables,
+	TContext
+> => {
+	const mutationKey = getDeleteOidcClientMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof deleteOidcClient>>,
+		DeleteOidcClientMutationVariables
+	> = (props) => {
+		const { oidcClientId } = props ?? {};
 
+		return deleteOidcClient(oidcClientId, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getDeleteOidcClientMutationKey = () => ['deleteOidcClient'] as const;
+export type DeleteOidcClientMutationResult = NonNullable<
+	Awaited<ReturnType<typeof deleteOidcClient>>
+>;
 
-export const getDeleteOidcClientMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteOidcClient>>, TError,DeleteOidcClientMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteOidcClient>>, TError,DeleteOidcClientMutationVariables, TContext> => {
+export type DeleteOidcClientMutationError = ErrorType<void>;
+export type DeleteOidcClientMutationVariables = { oidcClientId: string };
 
-const mutationKey = getDeleteOidcClientMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteOidcClient>>, DeleteOidcClientMutationVariables> = (props) => {
-          const {oidcClientId} = props ?? {};
-
-          return  deleteOidcClient(oidcClientId,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteOidcClientMutationResult = NonNullable<Awaited<ReturnType<typeof deleteOidcClient>>>
-
-    export type DeleteOidcClientMutationError = ErrorType<void>
-    export type DeleteOidcClientMutationVariables = {oidcClientId: string}
-
-    /**
+/**
  * @summary OIDC 클라이언트 삭제
  */
-export const useDeleteOidcClient = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteOidcClient>>, TError,DeleteOidcClientMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteOidcClient>>,
-        TError,
-        DeleteOidcClientMutationVariables,
-        TContext
-      > => {
-      return useMutation(getDeleteOidcClientMutationOptions(options), queryClient);
-    }
-    /**
+export const useDeleteOidcClient = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof deleteOidcClient>>,
+			TError,
+			DeleteOidcClientMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof deleteOidcClient>>,
+	TError,
+	DeleteOidcClientMutationVariables,
+	TContext
+> => {
+	return useMutation(getDeleteOidcClientMutationOptions(options), queryClient);
+};
+export const getToggleActiveOidcClientUrl = (oidcClientId: string) => {
+	return `/api/v1/oidc-clients/${oidcClientId}/toggle-active`;
+};
+
+/**
  * OIDC 클라이언트의 활성 상태를 반전시킵니다.
  * @summary OIDC 클라이언트 활성/비활성 토글
  */
-export const toggleActiveOidcClient = (
-    oidcClientId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const toggleActiveOidcClient = async (
+	oidcClientId: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<ToggleActiveOidcClient200> => {
+	return customFetch<ToggleActiveOidcClient200>(
+		getToggleActiveOidcClientUrl(oidcClientId),
+		{
+			...options,
+			method: "PATCH",
+		},
+	);
+};
 
+export const getToggleActiveOidcClientMutationKey = () =>
+	["toggleActiveOidcClient"] as const;
 
-      return customInstance<ToggleActiveOidcClient200>(
-      {url: `/api/v1/oidc-clients/${oidcClientId}/toggle-active`, method: 'PATCH', signal
-    },
-      options);
-    }
+export const getToggleActiveOidcClientMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof toggleActiveOidcClient>>,
+		TError,
+		ToggleActiveOidcClientMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof toggleActiveOidcClient>>,
+	TError,
+	ToggleActiveOidcClientMutationVariables,
+	TContext
+> => {
+	const mutationKey = getToggleActiveOidcClientMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof toggleActiveOidcClient>>,
+		ToggleActiveOidcClientMutationVariables
+	> = (props) => {
+		const { oidcClientId } = props ?? {};
 
+		return toggleActiveOidcClient(oidcClientId, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getToggleActiveOidcClientMutationKey = () => ['toggleActiveOidcClient'] as const;
+export type ToggleActiveOidcClientMutationResult = NonNullable<
+	Awaited<ReturnType<typeof toggleActiveOidcClient>>
+>;
 
-export const getToggleActiveOidcClientMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof toggleActiveOidcClient>>, TError,ToggleActiveOidcClientMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof toggleActiveOidcClient>>, TError,ToggleActiveOidcClientMutationVariables, TContext> => {
+export type ToggleActiveOidcClientMutationError = ErrorType<void>;
+export type ToggleActiveOidcClientMutationVariables = { oidcClientId: string };
 
-const mutationKey = getToggleActiveOidcClientMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof toggleActiveOidcClient>>, ToggleActiveOidcClientMutationVariables> = (props) => {
-          const {oidcClientId} = props ?? {};
-
-          return  toggleActiveOidcClient(oidcClientId,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ToggleActiveOidcClientMutationResult = NonNullable<Awaited<ReturnType<typeof toggleActiveOidcClient>>>
-
-    export type ToggleActiveOidcClientMutationError = ErrorType<void>
-    export type ToggleActiveOidcClientMutationVariables = {oidcClientId: string}
-
-    /**
+/**
  * @summary OIDC 클라이언트 활성/비활성 토글
  */
-export const useToggleActiveOidcClient = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof toggleActiveOidcClient>>, TError,ToggleActiveOidcClientMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof toggleActiveOidcClient>>,
-        TError,
-        ToggleActiveOidcClientMutationVariables,
-        TContext
-      > => {
-      return useMutation(getToggleActiveOidcClientMutationOptions(options), queryClient);
-    }
+export const useToggleActiveOidcClient = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof toggleActiveOidcClient>>,
+			TError,
+			ToggleActiveOidcClientMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof toggleActiveOidcClient>>,
+	TError,
+	ToggleActiveOidcClientMutationVariables,
+	TContext
+> => {
+	return useMutation(
+		getToggleActiveOidcClientMutationOptions(options),
+		queryClient,
+	);
+};

@@ -1,9 +1,10 @@
-import {
-	type AxiosAdapter,
-	AxiosHeaders,
-	type InternalAxiosRequestConfig,
-} from "axios";
 import { afterEach, describe, expect, it, vi } from "vitest";
+
+const jsonResponse = (body: unknown, status = 200) =>
+	new Response(JSON.stringify(body), {
+		status,
+		headers: { "Content-Type": "application/json" },
+	});
 
 describe("현재 Space API의 공용 클라이언트 연결", () => {
 	afterEach(() => {
@@ -15,7 +16,7 @@ describe("현재 Space API의 공용 클라이언트 연결", () => {
 	it("서버 URL과 인증·Tenant 헤더, 쿠키 설정을 생성 클라이언트와 공유한다", async () => {
 		vi.stubEnv("CORE_API_INTERNAL_URL", "http://core-api.test:3006");
 		const { setApiSessionScope, setApiLocale } = await import(
-			"../../libs/customAxios"
+			"../../libs/customFetch"
 		);
 		const { getCurrentSpace, setCurrentSpace } = await import(
 			"./current-space"
@@ -23,17 +24,12 @@ describe("현재 Space API의 공용 클라이언트 연결", () => {
 		const { getCurrentSpace: getGeneratedCurrentSpace } = await import(
 			"./auth"
 		);
-		const capturedRequests: InternalAxiosRequestConfig[] = [];
-		const adapter: AxiosAdapter = async (requestConfig) => {
-			capturedRequests.push(requestConfig);
-			return {
-				config: requestConfig,
-				data: { data: null },
-				headers: {},
-				status: 200,
-				statusText: "OK",
-			};
-		};
+		const capturedRequests: Array<{ url: string; init: RequestInit }> = [];
+		const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
+			capturedRequests.push({ url: String(input), init: init ?? {} });
+			return jsonResponse({ data: null });
+		});
+		vi.stubGlobal("fetch", fetchMock);
 		setApiSessionScope({
 			accessToken: "test-access-token",
 			refreshToken: "test-refresh-token",
@@ -41,27 +37,26 @@ describe("현재 Space API의 공용 클라이언트 연결", () => {
 		});
 		setApiLocale({ languageCode: "ko_KR" });
 
-		await expect(getCurrentSpace({ adapter })).resolves.toEqual({ data: null });
-		await getGeneratedCurrentSpace({ adapter });
-		await setCurrentSpace({ tenantId: "9223372036854775807" }, { adapter });
+		await expect(getCurrentSpace()).resolves.toEqual({ data: null });
+		await getGeneratedCurrentSpace();
+		await setCurrentSpace({ tenantId: "9223372036854775807" });
 
 		expect(capturedRequests).toHaveLength(3);
-		for (const requestConfig of capturedRequests) {
-			expect(requestConfig).toMatchObject({
-				url: "/api/v1/auth/current-space",
-				baseURL: "http://core-api.test:3006",
-				withCredentials: true,
-				timeout: 10000,
-			});
-			const headers = AxiosHeaders.from(requestConfig.headers);
+		for (const { url, init } of capturedRequests) {
+			expect(url).toBe("http://core-api.test:3006/api/v1/auth/current-space");
+			expect(init.credentials).toBe("include");
+			const headers = new Headers(init.headers);
 			expect(headers.get("Authorization")).toBe("Bearer test-access-token");
 			expect(headers.get("x-refresh-token")).toBe("test-refresh-token");
 			expect(headers.get("x-tenant-id")).toBe("11");
+			expect(headers.get("x-language")).toBe("ko_KR");
 		}
-		expect(
-			capturedRequests.map((requestConfig) => requestConfig.method),
-		).toEqual(["get", "get", "post"]);
-		expect(JSON.parse(capturedRequests[2]?.data)).toEqual({
+		expect(capturedRequests.map(({ init }) => init.method)).toEqual([
+			"GET",
+			"GET",
+			"POST",
+		]);
+		expect(JSON.parse(String(capturedRequests[2]?.init.body))).toEqual({
 			tenantId: "9223372036854775807",
 		});
 	});
@@ -69,42 +64,33 @@ describe("현재 Space API의 공용 클라이언트 연결", () => {
 	it("브라우저에서는 같은 origin의 상대 경로와 쿠키 인증을 사용한다", async () => {
 		vi.stubGlobal("window", {});
 		const { getCurrentSpace } = await import("./current-space");
-		const adapter: AxiosAdapter = async (requestConfig) => {
-			expect(requestConfig.baseURL).toBeUndefined();
-			expect(requestConfig.url).toBe("/api/v1/auth/current-space");
-			expect(requestConfig.withCredentials).toBe(true);
-			return {
-				config: requestConfig,
-				data: { data: null },
-				headers: {},
-				status: 200,
-				statusText: "OK",
-			};
-		};
+		const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
+			expect(String(input)).toBe("/api/v1/auth/current-space");
+			expect(init?.credentials).toBe("include");
+			return jsonResponse({ data: null });
+		});
+		vi.stubGlobal("fetch", fetchMock);
 
-		await getCurrentSpace({ adapter });
+		await getCurrentSpace();
+		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 
 	it("호출자가 지정한 서버 URL과 Cookie 헤더를 보존한다", async () => {
+		// 브라우저/RN 환경(window 존재)에서는 setApiBaseUrl의 값이 요청 URL이 된다.
+		vi.stubGlobal("window", {});
+		const { setApiBaseUrl } = await import("../../libs/customFetch");
 		const { getCurrentSpace } = await import("./current-space");
-		const adapter: AxiosAdapter = async (requestConfig) => {
-			expect(requestConfig.baseURL).toBe("http://override.test");
-			expect(AxiosHeaders.from(requestConfig.headers).get("Cookie")).toBe(
+		const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
+			expect(String(input)).toBe("http://override.test/api/v1/auth/current-space");
+			expect(new Headers(init?.headers).get("Cookie")).toBe(
 				"session=test-session",
 			);
-			return {
-				config: requestConfig,
-				data: { data: null },
-				headers: {},
-				status: 200,
-				statusText: "OK",
-			};
-		};
-
-		await getCurrentSpace({
-			adapter,
-			baseURL: "http://override.test",
-			headers: { Cookie: "session=test-session" },
+			return jsonResponse({ data: null });
 		});
+		vi.stubGlobal("fetch", fetchMock);
+
+		setApiBaseUrl("http://override.test");
+		await getCurrentSpace({ headers: { Cookie: "session=test-session" } });
+		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 });

@@ -11,22 +11,22 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
+import type { UserDto } from "./userDto";
 
 export interface TokenRefreshResponseDto {
-  /** 새로 발급된 JWT Access Token */
-  accessToken: string;
-  /**
-     * 갱신된 세션 식별자. HttpOnly sessionId 쿠키를 가진 웹 클라이언트가 스토어를 부트스트랩할 때 사용한다. 쿠키가 없으면 null
-     * @nullable
-     */
-  sessionId?: string | null;
-  /** 새로 발급된 JWT Refresh Token */
-  refreshToken: string;
-  /** Access Token 만료 시간 (Unix timestamp, milliseconds) */
-  accessTokenExpiresAt: number;
-  /** Refresh Token 만료 시간 (Unix timestamp, milliseconds) */
-  refreshTokenExpiresAt: number;
-  /** 인증된 사용자 정보 */
-  user: UserDto;
+	/** 새로 발급된 JWT Access Token */
+	accessToken: string;
+	/**
+	 * 갱신된 세션 식별자. HttpOnly sessionId 쿠키를 가진 웹 클라이언트가 스토어를 부트스트랩할 때 사용한다. 쿠키가 없으면 null
+	 * @nullable
+	 */
+	sessionId?: string | null;
+	/** 새로 발급된 JWT Refresh Token */
+	refreshToken: string;
+	/** Access Token 만료 시간 (Unix timestamp, milliseconds) */
+	accessTokenExpiresAt: number;
+	/** Refresh Token 만료 시간 (Unix timestamp, milliseconds) */
+	refreshTokenExpiresAt: number;
+	/** 인증된 사용자 정보 */
+	user: UserDto;
 }

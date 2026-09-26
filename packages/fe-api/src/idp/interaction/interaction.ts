@@ -11,499 +11,832 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customFetch";
+
+import { apiJsonStringify, customFetch } from "../../libs/customFetch";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  AbortResultDto,
-  ConsentResultDto,
-  InteractionDataDto,
-  LoginErrorDto,
-  LoginSuccessDto,
-  OidcLoginPayloadDto
-} from '../model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType , BodyType } from '../../libs/customAxios';
-
+	AbortResultDto,
+	ConsentResultDto,
+	InteractionDataDto,
+	LoginErrorDto,
+	LoginSuccessDto,
+	OidcLoginPayloadDto,
+} from "../model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
+const withQueryKey = <T extends object, K>(
+	query: T,
+	queryKey: K,
+): T & { queryKey: K } => {
+	const result = { queryKey } as T & { queryKey: K };
+	for (const key of Object.keys(query)) {
+		// The explicit queryKey always wins, matching the previous
+		// `{ ...query, queryKey }` spread where it was set last.
+		if (key === "queryKey") continue;
+		Object.defineProperty(result, key, {
+			enumerable: true,
+			configurable: true,
+			get: () => (query as Record<string, unknown>)[key],
+		});
+	}
+	return result;
+};
 
-
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
-  for (const key of Object.keys(query)) {
-    // The explicit queryKey always wins, matching the previous
-    // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
-    Object.defineProperty(result, key, {
-      enumerable: true,
-      configurable: true,
-      get: () => (query as Record<string, unknown>)[key],
-    });
-  }
-  return result;
+export const getGetInteractionUrl = (uid: string) => {
+	return `/api/interaction/${uid}`;
 };
 
 /**
  * OIDC 인증 흐름의 로그인 또는 동의에 필요한 데이터를 JSON으로 반환합니다.
  * @summary 인증 상호작용 데이터 조회
  */
-export const getInteraction = (
-    uid: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const getInteraction = async (
+	uid: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<InteractionDataDto> => {
+	return customFetch<InteractionDataDto>(getGetInteractionUrl(uid), {
+		...options,
+		method: "GET",
+	});
+};
+
+export const getGetInteractionQueryKey = (uid: string) => {
+	return [`/api/interaction/${uid}`] as const;
+};
+
+export const getGetInteractionInfiniteQueryKey = (uid: string) => {
+	return ["infinite", `/api/interaction/${uid}`] as const;
+};
+
+export const getGetInteractionQueryOptions = <
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey = queryOptions?.queryKey ?? getGetInteractionQueryKey(uid);
 
-      return customInstance<InteractionDataDto>(
-      {url: `/api/interaction/${uid}`, method: 'GET', signal
-    },
-      options);
-    }
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getInteraction>>> = ({
+		signal,
+	}) => getInteraction(uid, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		enabled: uid !== null && uid !== undefined,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getInteraction>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetInteractionQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getInteraction>>
+>;
+export type GetInteractionQueryError = ErrorType<unknown>;
 
+export function useGetInteraction<
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getInteraction>>,
+					TError,
+					Awaited<ReturnType<typeof getInteraction>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetInteraction<
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getInteraction>>,
+					TError,
+					Awaited<ReturnType<typeof getInteraction>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetInteraction<
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 인증 상호작용 데이터 조회
+ */
 
-export const getGetInteractionQueryKey = (uid: string,) => {
-    return [
-    `/api/interaction/${uid}`
-    ] as const;
-    }
+export function useGetInteraction<
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetInteractionQueryOptions(uid, options);
 
-export const getGetInteractionInfiniteQueryKey = (uid: string,) => {
-    return [
-    'infinite', `/api/interaction/${uid}`
-    ] as const;
-    }
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
+	return withQueryKey(query, queryOptions.queryKey);
+}
 
-export const getGetInteractionQueryOptions = <TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(uid: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+/**
+ * @summary 인증 상호작용 데이터 조회
+ */
+export const prefetchGetInteractionQuery = async <
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	queryClient: QueryClient,
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetInteractionQueryOptions(uid, options);
+
+	await queryClient.prefetchQuery(queryOptions);
+
+	return queryClient;
+};
+
+export const getGetInteractionSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetInteractionQueryKey(uid);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetInteractionQueryKey(uid);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getInteraction>>> = ({
+		signal,
+	}) => getInteraction(uid, { signal, ...requestOptions });
 
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getInteraction>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetInteractionSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getInteraction>>
+>;
+export type GetInteractionSuspenseQueryError = ErrorType<unknown>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getInteraction>>> = ({ signal }) => getInteraction(uid, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: uid !== null && uid !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetInteractionQueryResult = NonNullable<Awaited<ReturnType<typeof getInteraction>>>
-export type GetInteractionQueryError = ErrorType<unknown>
-
-
-export function useGetInteraction<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getInteraction>>,
-          TError,
-          Awaited<ReturnType<typeof getInteraction>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteraction<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getInteraction>>,
-          TError,
-          Awaited<ReturnType<typeof getInteraction>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteraction<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetInteractionSuspense<
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetInteractionSuspense<
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetInteractionSuspense<
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 인증 상호작용 데이터 조회
  */
 
-export function useGetInteraction<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetInteractionSuspense<
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetInteractionSuspenseQueryOptions(uid, options);
 
-  const queryOptions = getGetInteractionQueryOptions(uid,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
-/**
- * @summary 인증 상호작용 데이터 조회
- */
-export const prefetchGetInteractionQuery = async <TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- queryClient: QueryClient, uid: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetInteractionQueryOptions(uid,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
-
-export const getGetInteractionSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(uid: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetInteractionSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetInteractionInfiniteQueryKey(uid);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetInteractionQueryKey(uid);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getInteraction>>> = ({
+		signal,
+	}) => getInteraction(uid, { signal, ...requestOptions });
 
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getInteraction>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetInteractionSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getInteraction>>
+>;
+export type GetInteractionSuspenseInfiniteQueryError = ErrorType<unknown>;
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getInteraction>>> = ({ signal }) => getInteraction(uid, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetInteractionSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getInteraction>>>
-export type GetInteractionSuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetInteractionSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetInteractionSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetInteractionSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 인증 상호작용 데이터 조회
  */
 
-export function useGetInteractionSuspense<TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetInteractionSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>,
+	TError = ErrorType<unknown>,
+>(
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetInteractionSuspenseInfiniteQueryOptions(
+		uid,
+		options,
+	);
 
-  const queryOptions = getGetInteractionSuspenseQueryOptions(uid,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-export const getGetInteractionSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetInteractionInfiniteQueryKey(uid);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getInteraction>>> = ({ signal }) => getInteraction(uid, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetInteractionSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getInteraction>>>
-export type GetInteractionSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
- uid: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 인증 상호작용 데이터 조회
- */
-
-export function useGetInteractionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getInteraction>>>, TError = ErrorType<unknown>>(
- uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetInteractionSuspenseInfiniteQueryOptions(uid,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+	return withQueryKey(query, queryOptions.queryKey);
 }
 
 /**
  * @summary 인증 상호작용 데이터 조회
  */
-export const prefetchGetInteractionInfiniteQuery = async <TData = Awaited<ReturnType<typeof getInteraction>>, TError = ErrorType<unknown>>(
- queryClient: QueryClient, uid: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetInteractionInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getInteraction>>,
+	TError = ErrorType<unknown>,
+>(
+	queryClient: QueryClient,
+	uid: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getInteraction>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetInteractionSuspenseInfiniteQueryOptions(
+		uid,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetInteractionSuspenseInfiniteQueryOptions(uid,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-
+export const getSubmitLoginUrl = (uid: string) => {
+	return `/api/interaction/${uid}/login`;
+};
 
 /**
  * 사용자 인증을 처리하고 리다이렉트 URL을 반환합니다.
  * @summary 로그인 처리
  */
-export const submitLogin = (
-    uid: string,
-    oidcLoginPayloadDto: BodyType<OidcLoginPayloadDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const submitLogin = async (
+	uid: string,
+	oidcLoginPayloadDto: OidcLoginPayloadDto,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<LoginSuccessDto> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return customFetch<LoginSuccessDto>(getSubmitLoginUrl(uid), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: apiJsonStringify(oidcLoginPayloadDto),
+	});
+};
 
+export const getSubmitLoginMutationKey = () => ["submitLogin"] as const;
 
-      return customInstance<LoginSuccessDto>(
-      {url: `/api/interaction/${uid}/login`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: oidcLoginPayloadDto, signal
-    },
-      options);
-    }
+export const getSubmitLoginMutationOptions = <
+	TError = ErrorType<LoginErrorDto>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof submitLogin>>,
+		TError,
+		SubmitLoginMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof submitLogin>>,
+	TError,
+	SubmitLoginMutationVariables,
+	TContext
+> => {
+	const mutationKey = getSubmitLoginMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof submitLogin>>,
+		SubmitLoginMutationVariables
+	> = (props) => {
+		const { uid, data } = props ?? {};
 
+		return submitLogin(uid, data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getSubmitLoginMutationKey = () => ['submitLogin'] as const;
+export type SubmitLoginMutationResult = NonNullable<
+	Awaited<ReturnType<typeof submitLogin>>
+>;
+export type SubmitLoginMutationBody = BodyType<OidcLoginPayloadDto>;
+export type SubmitLoginMutationError = ErrorType<LoginErrorDto>;
+export type SubmitLoginMutationVariables = {
+	uid: string;
+	data: BodyType<OidcLoginPayloadDto>;
+};
 
-export const getSubmitLoginMutationOptions = <TError = ErrorType<LoginErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitLogin>>, TError,SubmitLoginMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof submitLogin>>, TError,SubmitLoginMutationVariables, TContext> => {
-
-const mutationKey = getSubmitLoginMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitLogin>>, SubmitLoginMutationVariables> = (props) => {
-          const {uid,data} = props ?? {};
-
-          return  submitLogin(uid,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SubmitLoginMutationResult = NonNullable<Awaited<ReturnType<typeof submitLogin>>>
-    export type SubmitLoginMutationBody = BodyType<OidcLoginPayloadDto>
-    export type SubmitLoginMutationError = ErrorType<LoginErrorDto>
-    export type SubmitLoginMutationVariables = {uid: string;data: BodyType<OidcLoginPayloadDto>}
-
-    /**
+/**
  * @summary 로그인 처리
  */
-export const useSubmitLogin = <TError = ErrorType<LoginErrorDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitLogin>>, TError,SubmitLoginMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof submitLogin>>,
-        TError,
-        SubmitLoginMutationVariables,
-        TContext
-      > => {
-      return useMutation(getSubmitLoginMutationOptions(options), queryClient);
-    }
-    /**
+export const useSubmitLogin = <
+	TError = ErrorType<LoginErrorDto>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof submitLogin>>,
+			TError,
+			SubmitLoginMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof submitLogin>>,
+	TError,
+	SubmitLoginMutationVariables,
+	TContext
+> => {
+	return useMutation(getSubmitLoginMutationOptions(options), queryClient);
+};
+export const getConfirmConsentUrl = (uid: string) => {
+	return `/api/interaction/${uid}/confirm`;
+};
+
+/**
  * 사용자 동의를 처리하고 리다이렉트 URL을 반환합니다.
  * @summary 동의 처리
  */
-export const confirmConsent = (
-    uid: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const confirmConsent = async (
+	uid: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<ConsentResultDto> => {
+	return customFetch<ConsentResultDto>(getConfirmConsentUrl(uid), {
+		...options,
+		method: "POST",
+	});
+};
 
+export const getConfirmConsentMutationKey = () => ["confirmConsent"] as const;
 
-      return customInstance<ConsentResultDto>(
-      {url: `/api/interaction/${uid}/confirm`, method: 'POST', signal
-    },
-      options);
-    }
+export const getConfirmConsentMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof confirmConsent>>,
+		TError,
+		ConfirmConsentMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof confirmConsent>>,
+	TError,
+	ConfirmConsentMutationVariables,
+	TContext
+> => {
+	const mutationKey = getConfirmConsentMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof confirmConsent>>,
+		ConfirmConsentMutationVariables
+	> = (props) => {
+		const { uid } = props ?? {};
 
+		return confirmConsent(uid, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getConfirmConsentMutationKey = () => ['confirmConsent'] as const;
+export type ConfirmConsentMutationResult = NonNullable<
+	Awaited<ReturnType<typeof confirmConsent>>
+>;
 
-export const getConfirmConsentMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof confirmConsent>>, TError,ConfirmConsentMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof confirmConsent>>, TError,ConfirmConsentMutationVariables, TContext> => {
+export type ConfirmConsentMutationError = ErrorType<unknown>;
+export type ConfirmConsentMutationVariables = { uid: string };
 
-const mutationKey = getConfirmConsentMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof confirmConsent>>, ConfirmConsentMutationVariables> = (props) => {
-          const {uid} = props ?? {};
-
-          return  confirmConsent(uid,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ConfirmConsentMutationResult = NonNullable<Awaited<ReturnType<typeof confirmConsent>>>
-
-    export type ConfirmConsentMutationError = ErrorType<unknown>
-    export type ConfirmConsentMutationVariables = {uid: string}
-
-    /**
+/**
  * @summary 동의 처리
  */
-export const useConfirmConsent = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof confirmConsent>>, TError,ConfirmConsentMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof confirmConsent>>,
-        TError,
-        ConfirmConsentMutationVariables,
-        TContext
-      > => {
-      return useMutation(getConfirmConsentMutationOptions(options), queryClient);
-    }
-    /**
+export const useConfirmConsent = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof confirmConsent>>,
+			TError,
+			ConfirmConsentMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof confirmConsent>>,
+	TError,
+	ConfirmConsentMutationVariables,
+	TContext
+> => {
+	return useMutation(getConfirmConsentMutationOptions(options), queryClient);
+};
+export const getAbortInteractionUrl = (uid: string) => {
+	return `/api/interaction/${uid}/abort`;
+};
+
+/**
  * 사용자가 인증을 거부하고 리다이렉트 URL을 반환합니다.
  * @summary 인증 취소
  */
-export const abortInteraction = (
-    uid: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
+export const abortInteraction = async (
+	uid: string,
+	options?: Parameters<typeof customFetch>[1],
+): Promise<AbortResultDto> => {
+	return customFetch<AbortResultDto>(getAbortInteractionUrl(uid), {
+		...options,
+		method: "POST",
+	});
+};
 
+export const getAbortInteractionMutationKey = () =>
+	["abortInteraction"] as const;
 
-      return customInstance<AbortResultDto>(
-      {url: `/api/interaction/${uid}/abort`, method: 'POST', signal
-    },
-      options);
-    }
+export const getAbortInteractionMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof abortInteraction>>,
+		TError,
+		AbortInteractionMutationVariables,
+		TContext
+	>;
+	request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof abortInteraction>>,
+	TError,
+	AbortInteractionMutationVariables,
+	TContext
+> => {
+	const mutationKey = getAbortInteractionMutationKey();
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof abortInteraction>>,
+		AbortInteractionMutationVariables
+	> = (props) => {
+		const { uid } = props ?? {};
 
+		return abortInteraction(uid, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-export const getAbortInteractionMutationKey = () => ['abortInteraction'] as const;
+export type AbortInteractionMutationResult = NonNullable<
+	Awaited<ReturnType<typeof abortInteraction>>
+>;
 
-export const getAbortInteractionMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof abortInteraction>>, TError,AbortInteractionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof abortInteraction>>, TError,AbortInteractionMutationVariables, TContext> => {
+export type AbortInteractionMutationError = ErrorType<unknown>;
+export type AbortInteractionMutationVariables = { uid: string };
 
-const mutationKey = getAbortInteractionMutationKey();
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof abortInteraction>>, AbortInteractionMutationVariables> = (props) => {
-          const {uid} = props ?? {};
-
-          return  abortInteraction(uid,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AbortInteractionMutationResult = NonNullable<Awaited<ReturnType<typeof abortInteraction>>>
-
-    export type AbortInteractionMutationError = ErrorType<unknown>
-    export type AbortInteractionMutationVariables = {uid: string}
-
-    /**
+/**
  * @summary 인증 취소
  */
-export const useAbortInteraction = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof abortInteraction>>, TError,AbortInteractionMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof abortInteraction>>,
-        TError,
-        AbortInteractionMutationVariables,
-        TContext
-      > => {
-      return useMutation(getAbortInteractionMutationOptions(options), queryClient);
-    }
+export const useAbortInteraction = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof abortInteraction>>,
+			TError,
+			AbortInteractionMutationVariables,
+			TContext
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof abortInteraction>>,
+	TError,
+	AbortInteractionMutationVariables,
+	TContext
+> => {
+	return useMutation(getAbortInteractionMutationOptions(options), queryClient);
+};

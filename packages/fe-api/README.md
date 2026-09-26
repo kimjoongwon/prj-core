@@ -16,7 +16,9 @@ src/
 │   ├── ...
 │   └── model/
 └── libs/
-    └── customAxios.ts      # 통합 API용 Axios 설정
+    ├── apiFetchCore.ts     # 공용 fetch 실행부(URL 해석·타임아웃·에러·응답 변환)
+    ├── customFetch.ts       # 통합 API용 fetch 클라이언트(세션 헤더·401 복구)
+    └── customIdpFetch.ts    # IDP 공개 API용 fetch 클라이언트
 ```
 
 ## 🛠️ 사용법
@@ -80,9 +82,9 @@ function UserList() {
 
 - **모드**: `tags-split` - OpenAPI 태그별로 파일 분할
 - **클라이언트**: `react-query` - React Query 훅 생성
-- **커스텀 Axios**: `customInstance` 사용 (`src/libs/customAxios.ts` 단일 인스턴스)
-- **런타임 타입**: `useBigInt: true`, `useDates: true`로 생성한 `bigint`·`Date` 타입을 `customInstance`의 변환 결과와 일치시킵니다. HTTP JSON의 ID 문자열·ISO 시각 문자열 표현은 유지하며, 요청에서는 클라이언트 값을 문자열로 직렬화하고 응답에서는 해당 값으로 복원합니다.
-- **생성 방식**: Orval 산출물을 직접 사용, 후처리 스크립트 없음
+- **커스텀 fetch 클라이언트**: `customFetch` 사용 (`src/libs/customFetch.ts` 단일 클라이언트, `httpClient: "fetch"`)
+- **런타임 타입**: `useBigInt: true`, `useDates: true`로 생성한 `bigint`·`Date` 타입을 `customFetch`의 변환 결과와 일치시킵니다. 요청은 생성기의 URL 직렬화(Date→ISO, bigint→10진 문자열)와 `apiJsonStringify`(bigint 안전 직렬화)가, 응답은 `customFetch`의 런타임 매니페스트 변환이 담당합니다.
+- **생성 방식**: Orval 산출물 + codegen 후처리(요청 본문 직렬화 안전화 `serialize-fetch-bodies.mjs`, 런타임 매니페스트 병합)
 - **배럴 정책**: 태그 경로는 훅/함수와 최소 DTO/enum만 노출, 전체 모델은 재export하지 않음
 - **환경별 API URL**: `ORVAL_ENV` 또는 localhost 자동 감지 기반 선택
 - **Spec source**: 단일 `/api-json`에서 core/idp 태그를 통합해 한 번의 출력으로 생성
@@ -125,7 +127,7 @@ pnpm clean
 
 - OpenAPI 스펙이 변경되면 `pnpm codegen` 또는 `pnpm build` 명령어로 API 클라이언트를 재생성하세요
 - 생성된 파일들(`src/core/*`)은 직접 수정하지 마세요
-- 커스텀 Axios 설정이 필요한 경우 `src/libs/customAxios.ts`를 수정하세요
+- 커스텀 fetch 클라이언트 설정이 필요한 경우 `src/libs/customFetch.ts`(세션 정책·헤더) 또는 `src/libs/apiFetchCore.ts`(타임아웃·URL 해석)를 수정하세요
 - DTO/enum이 태그 배럴에 없으면 `@cocrepo/api/core/model`에서 import 하세요
 - 환경 변수 `ORVAL_ENV`가 설정되지 않으면 localhost를 먼저 확인하고, 없으면 staging으로 fallback 합니다
 - 신규 admin/idp 페이지의 기본 조회는 `useGetXxx`/`useInfiniteQuery`입니다

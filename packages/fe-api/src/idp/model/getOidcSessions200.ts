@@ -11,12 +11,12 @@
  * 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
  * OpenAPI spec version: 1.0.0
  */
-import type { OidcSessionDto } from './oidcSessionDto';
-import type { PageMetaDto } from './pageMetaDto';
+import type { OidcSessionDto } from "./oidcSessionDto";
+import type { PageMetaDto } from "./pageMetaDto";
 
 export type GetOidcSessions200 = {
-  httpStatus?: number;
-  message?: string;
-  data?: OidcSessionDto[];
-  meta?: PageMetaDto;
+	httpStatus?: number;
+	message?: string;
+	data?: OidcSessionDto[];
+	meta?: PageMetaDto;
 };

@@ -12,8 +12,9 @@ import {
 	useQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "./libs/customAxios";
-import { customInstance } from "./libs/customAxios";
+import { apiJsonStringify } from "./libs/apiFetchCore";
+import type { BodyType, ErrorType } from "./libs/customFetch";
+import { customFetch } from "./libs/customFetch";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -101,20 +102,36 @@ export interface UploadAsset201AllOf {
 	data: AssetDto;
 }
 
+const buildGetAssetsUrl = (params?: GetAssetsParams) => {
+	const queryString = new URLSearchParams();
+	for (const [paramKey, paramValue] of Object.entries(params ?? {})) {
+		if (paramValue === undefined || paramValue === null) {
+			continue;
+		}
+		if (Array.isArray(paramValue)) {
+			for (const arrayValue of paramValue) {
+				queryString.append(paramKey, String(arrayValue));
+			}
+			continue;
+		}
+		queryString.append(paramKey, String(paramValue));
+	}
+	const serializedQuery = queryString.toString();
+	return serializedQuery
+		? `/api/v1/assets?${serializedQuery}`
+		: "/api/v1/assets";
+};
+
 export const getAssets = (
 	params?: GetAssetsParams,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 	signal?: AbortSignal,
 ) => {
-	return customInstance<GetAssets200AllOf>(
-		{
-			url: "/api/v1/assets",
-			method: "GET",
-			params,
-			signal,
-		},
-		options,
-	);
+	return customFetch<GetAssets200AllOf>(buildGetAssetsUrl(params), {
+		...options,
+		method: "GET",
+		signal: signal ?? options?.signal,
+	});
 };
 
 export const getGetAssetsQueryKey = (params?: GetAssetsParams) =>
@@ -129,7 +146,7 @@ export const useGetAssets = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> => {
@@ -161,7 +178,7 @@ export const prefetchGetAssetsQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAssets>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = options?.query;
@@ -189,7 +206,7 @@ export const getGetAssetsSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 ): UseSuspenseQueryOptions<
 	Awaited<ReturnType<typeof getAssets>>,
@@ -224,7 +241,7 @@ export const useGetAssetsSuspense = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> => {
@@ -234,17 +251,14 @@ export const useGetAssetsSuspense = <
 
 export const getAssetById = (
 	assetId: string,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 	signal?: AbortSignal,
 ) => {
-	return customInstance<GetAssetById200AllOf>(
-		{
-			url: `/api/v1/assets/${assetId}`,
-			method: "GET",
-			signal,
-		},
-		options,
-	);
+	return customFetch<GetAssetById200AllOf>(`/api/v1/assets/${assetId}`, {
+		...options,
+		method: "GET",
+		signal: signal ?? options?.signal,
+	});
 };
 
 export const getGetAssetByIdQueryKey = (assetId: string) =>
@@ -259,7 +273,7 @@ export const useGetAssetById = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> => {
@@ -291,7 +305,7 @@ export const prefetchGetAssetByIdQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAssetById>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = options?.query;
@@ -319,7 +333,7 @@ export const getGetAssetByIdSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 ): UseSuspenseQueryOptions<
 	Awaited<ReturnType<typeof getAssetById>>,
@@ -354,7 +368,7 @@ export const useGetAssetByIdSuspense = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> => {
@@ -364,17 +378,13 @@ export const useGetAssetByIdSuspense = <
 
 export const uploadAsset = (
 	data: FormData,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 ) => {
-	return customInstance<UploadAsset201AllOf>(
-		{
-			url: "/api/v1/assets",
-			method: "POST",
-			headers: { "Content-Type": "multipart/form-data" },
-			data,
-		},
-		options,
-	);
+	return customFetch<UploadAsset201AllOf>("/api/v1/assets", {
+		...options,
+		method: "POST",
+		body: data,
+	});
 };
 
 export const getUploadAssetMutationOptions = <
@@ -387,7 +397,7 @@ export const getUploadAssetMutationOptions = <
 		{ data: FormData },
 		TContext
 	>;
-	request?: SecondParameter<typeof customInstance>;
+	request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof uploadAsset>>,
 	TError,
@@ -428,7 +438,7 @@ export const useUploadAsset = <TError = ErrorType<void>, TContext = unknown>(
 			{ data: FormData },
 			TContext
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -443,15 +453,12 @@ export const useUploadAsset = <TError = ErrorType<void>, TContext = unknown>(
 
 export const removeAsset = (
 	assetId: string,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 ) => {
-	return customInstance<void>(
-		{
-			url: `/api/v1/assets/${assetId}`,
-			method: "DELETE",
-		},
-		options,
-	);
+	return customFetch<void>(`/api/v1/assets/${assetId}`, {
+		...options,
+		method: "DELETE",
+	});
 };
 
 export const getRemoveAssetMutationOptions = <
@@ -464,7 +471,7 @@ export const getRemoveAssetMutationOptions = <
 		{ assetId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customInstance>;
+	request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof removeAsset>>,
 	TError,
@@ -489,7 +496,7 @@ export const useRemoveAsset = <TError = ErrorType<void>, TContext = unknown>(
 			{ assetId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -505,16 +512,14 @@ export const useRemoveAsset = <TError = ErrorType<void>, TContext = unknown>(
 export const moveAsset = (
 	assetId: string,
 	data: BodyType<MoveAssetDto>,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 ) => {
-	return customInstance<AssetDto>(
-		{
-			url: `/api/v1/assets/${assetId}/move`,
-			method: "PATCH",
-			data,
-		},
-		options,
-	);
+	return customFetch<AssetDto>(`/api/v1/assets/${assetId}/move`, {
+		...options,
+		method: "PATCH",
+		headers: { "Content-Type": "application/json" },
+		body: apiJsonStringify(data),
+	});
 };
 
 export const getMoveAssetMutationOptions = <
@@ -527,7 +532,7 @@ export const getMoveAssetMutationOptions = <
 		{ assetId: string; data: BodyType<MoveAssetDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customInstance>;
+	request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof moveAsset>>,
 	TError,
@@ -552,7 +557,7 @@ export const useMoveAsset = <TError = ErrorType<void>, TContext = unknown>(
 			{ assetId: string; data: BodyType<MoveAssetDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -566,17 +571,14 @@ export const useMoveAsset = <TError = ErrorType<void>, TContext = unknown>(
 };
 
 export const getFolders = (
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 	signal?: AbortSignal,
 ) => {
-	return customInstance<GetFolders200AllOf>(
-		{
-			url: "/api/v1/folders",
-			method: "GET",
-			signal,
-		},
-		options,
-	);
+	return customFetch<GetFolders200AllOf>("/api/v1/folders", {
+		...options,
+		method: "GET",
+		signal: signal ?? options?.signal,
+	});
 };
 
 export const getGetFoldersQueryKey = () => ["/api/v1/folders"] as const;
@@ -589,7 +591,7 @@ export const useGetFolders = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> => {
@@ -620,7 +622,7 @@ export const prefetchGetFoldersQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getFolders>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = options?.query;
@@ -646,7 +648,7 @@ export const getGetFoldersSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customInstance>;
+	request?: SecondParameter<typeof customFetch>;
 }): UseSuspenseQueryOptions<
 	Awaited<ReturnType<typeof getFolders>>,
 	TError,
@@ -679,7 +681,7 @@ export const useGetFoldersSuspense = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> => {
@@ -689,17 +691,14 @@ export const useGetFoldersSuspense = <
 
 export const createFolder = (
 	data: BodyType<CreateFolderDto>,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 ) => {
-	return customInstance<CreateFolder201AllOf>(
-		{
-			url: "/api/v1/folders",
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data,
-		},
-		options,
-	);
+	return customFetch<CreateFolder201AllOf>("/api/v1/folders", {
+		...options,
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: apiJsonStringify(data),
+	});
 };
 
 export const getCreateFolderMutationOptions = <
@@ -712,7 +711,7 @@ export const getCreateFolderMutationOptions = <
 		{ data: BodyType<CreateFolderDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customInstance>;
+	request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof createFolder>>,
 	TError,
@@ -753,7 +752,7 @@ export const useCreateFolder = <TError = ErrorType<void>, TContext = unknown>(
 			{ data: BodyType<CreateFolderDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -769,17 +768,14 @@ export const useCreateFolder = <TError = ErrorType<void>, TContext = unknown>(
 export const updateFolder = (
 	folderId: string,
 	data: BodyType<UpdateFolderDto>,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 ) => {
-	return customInstance<UpdateFolder200AllOf>(
-		{
-			url: `/api/v1/folders/${folderId}`,
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			data,
-		},
-		options,
-	);
+	return customFetch<UpdateFolder200AllOf>(`/api/v1/folders/${folderId}`, {
+		...options,
+		method: "PATCH",
+		headers: { "Content-Type": "application/json" },
+		body: apiJsonStringify(data),
+	});
 };
 
 export const getUpdateFolderMutationOptions = <
@@ -792,7 +788,7 @@ export const getUpdateFolderMutationOptions = <
 		{ folderId: string; data: BodyType<UpdateFolderDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customInstance>;
+	request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof updateFolder>>,
 	TError,
@@ -833,7 +829,7 @@ export const useUpdateFolder = <TError = ErrorType<void>, TContext = unknown>(
 			{ folderId: string; data: BodyType<UpdateFolderDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -848,15 +844,12 @@ export const useUpdateFolder = <TError = ErrorType<void>, TContext = unknown>(
 
 export const removeFolder = (
 	folderId: string,
-	options?: SecondParameter<typeof customInstance>,
+	options?: SecondParameter<typeof customFetch>,
 ) => {
-	return customInstance<void>(
-		{
-			url: `/api/v1/folders/${folderId}`,
-			method: "DELETE",
-		},
-		options,
-	);
+	return customFetch<void>(`/api/v1/folders/${folderId}`, {
+		...options,
+		method: "DELETE",
+	});
 };
 
 export const getRemoveFolderMutationOptions = <
@@ -869,7 +862,7 @@ export const getRemoveFolderMutationOptions = <
 		{ folderId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customInstance>;
+	request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof removeFolder>>,
 	TError,
@@ -910,7 +903,7 @@ export const useRemoveFolder = <TError = ErrorType<void>, TContext = unknown>(
 			{ folderId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customInstance>;
+		request?: SecondParameter<typeof customFetch>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

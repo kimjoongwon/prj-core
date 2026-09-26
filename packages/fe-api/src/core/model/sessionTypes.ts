@@ -15,11 +15,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type SessionTypes = typeof SessionTypes[keyof typeof SessionTypes];
-
+export type SessionTypes = (typeof SessionTypes)[keyof typeof SessionTypes];
 
 export const SessionTypes = {
-  ONE_TIME: 'ONE_TIME',
-  ONE_TIME_RANGE: 'ONE_TIME_RANGE',
-  RECURRING: 'RECURRING',
+	ONE_TIME: "ONE_TIME",
+	ONE_TIME_RANGE: "ONE_TIME_RANGE",
+	RECURRING: "RECURRING",
 } as const;
