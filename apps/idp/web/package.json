@@ -24,7 +24,6 @@
     "@cocrepo/ui": "workspace:^",
     "@heroui/styles": "catalog:",
     "@tanstack/react-query": "catalog:",
-    "axios": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
     "next": "^16.1.0",

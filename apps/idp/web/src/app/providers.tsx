@@ -1,6 +1,6 @@
 "use client";
 
-import { customIdpInstance } from "@cocrepo/api/idp/client";
+import { customIdpFetch } from "@cocrepo/api/idp/client";
 import { DEFAULT_LANGUAGE, type LanguageCode } from "@cocrepo/constant";
 import { DesignSystemProvider, I18nProvider } from "@cocrepo/ui";
 import {
@@ -43,10 +43,12 @@ function I18nCatalogBootstrapper({ children }: { children: ReactNode }) {
 	const { data } = useQuery({
 		queryKey: ["idp-i18n-catalog", languageCode],
 		queryFn: () =>
-			customIdpInstance<I18nCatalogResponse>({
-				method: "GET",
-				url: `/api/v1/i18n/catalog/${languageCode}`,
-			}),
+			customIdpFetch<I18nCatalogResponse>(
+				`/api/v1/i18n/catalog/${languageCode}`,
+				{
+					method: "GET",
+				},
+			),
 		retry: false,
 		refetchOnWindowFocus: false,
 	});

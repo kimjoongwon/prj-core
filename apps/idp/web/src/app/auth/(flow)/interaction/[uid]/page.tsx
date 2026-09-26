@@ -1,5 +1,6 @@
 "use client";
 
+import type { ApiClientError } from "@cocrepo/api/core/client";
 import {
 	useAbortInteraction,
 	useConfirmConsent,
@@ -8,7 +9,6 @@ import {
 } from "@cocrepo/api/idp/interaction";
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import { type LoginErrorResponse, OidcInteractionScreen } from "@cocrepo/ui";
-import type { AxiosError } from "axios";
 import {
 	type IReactionDisposer,
 	makeAutoObservable,
@@ -146,11 +146,11 @@ class InteractionRoutePageState {
 				remember: this.oidcLoginForm.remember,
 			});
 		} catch (err) {
-			const axiosError = err as AxiosError<LoginErrorResponse>;
+			const apiError = err as ApiClientError<LoginErrorResponse>;
 
 			runInAction(() => {
-				if (axiosError.response?.data) {
-					this.oidcLoginForm.error = axiosError.response.data;
+				if (apiError.body) {
+					this.oidcLoginForm.error = apiError.body;
 					return;
 				}
 
@@ -209,16 +209,16 @@ const InteractionPage = observer(() => {
 	const loginMutation = useSubmitLogin();
 	const abortMutation = useAbortInteraction();
 	const consentMutation = useConfirmConsent();
-	const interactionError = error as AxiosError<{
+	const interactionError = error as ApiClientError<{
 		message?: string;
 		error?: string;
 	}> | null;
-	const errorStatus = interactionError?.response?.status;
+	const errorStatus = interactionError?.status;
 	const isExpiredInteraction = errorStatus === 400 || errorStatus === 404;
 	const errorMessage = isExpiredInteraction
 		? "인증 세션이 만료되었거나 더 이상 유효하지 않습니다. 다시 로그인해 주세요."
-		: interactionError?.response?.data?.error ||
-			interactionError?.response?.data?.message ||
+		: interactionError?.body?.error ||
+			interactionError?.body?.message ||
 			error?.message ||
 			"알 수 없는 오류가 발생했습니다.";
 	const missingScopes =
