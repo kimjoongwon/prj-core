@@ -17,7 +17,7 @@
 | 필수 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV` |
 | 지원 앱 | `core-api`, `admin-web`, `proposal-web`, `spring-api`, `tool-storybook`, `idp-api`, `idp-web` |
 | 추적 파라미터 | `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
-| 클론 인증 | `GITOPS_CREDENTIAL_ID` (GitHub App — prj-core/prj-devops 클론용) |
+| 클론 인증 | 없음 — 두 저장소 모두 공개라 익명 클론 (github-app-credential은 잡 정의의 prj-core 체크아웃에만 사용) |
 | push 인증 | `GITOPS_DEPLOY_CREDENTIAL_ID` (prj-deploy 전용 deploy key, Secret text PEM — **다른 저장소에는 쓸 수 없는 키**, 2026-09-27 CI 권한 축소) |
 | 대상 브랜치 | `main` (`GITOPS_BRANCH`) |
 | 실행 스크립트 | `prj-devops/scripts/jenkins/update-gitops-image-tag.sh` |
