@@ -3,6 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
+import { JwtStrategy } from "@cocrepo/be-common";
 import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 import { GuardTestController } from "./mock-controllers/tenant-injection-test.controller";
 
@@ -16,7 +17,10 @@ describe("Guards E2E 테스트", () => {
 			imports: [AppModule],
 			controllers: [GuardTestController],
 			providers: [TestJwtStrategy],
-		}).compile();
+		})
+			.overrideProvider(JwtStrategy)
+			.useClass(TestJwtStrategy)
+			.compile();
 
 		app = moduleFixture.createNestApplication();
 		setNestApp(app);

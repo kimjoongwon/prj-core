@@ -4,6 +4,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
+import { JwtStrategy } from "@cocrepo/be-common";
 import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 
 describe("Actions API E2E 테스트", () => {
@@ -18,7 +19,10 @@ describe("Actions API E2E 테스트", () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
 			providers: [TestJwtStrategy],
-		}).compile();
+		})
+			.overrideProvider(JwtStrategy)
+			.useClass(TestJwtStrategy)
+			.compile();
 
 		app = moduleFixture.createNestApplication();
 		setNestApp(app);

@@ -131,7 +131,29 @@ export class TestJwtStrategy extends PassportStrategy(Strategy) {
 			where: { userId: payload.sub, removedAt: null },
 			include: {
 				tenants: {
-					include: { space: true },
+					// 운영 JwtStrategy가 로드하는 권한 그래프와 동일하게 role까지 포함합니다.
+					// (RolesGuard/RoleCategoryGuard/RoleGroupGuard가 tenant.role을 검사)
+					include: {
+						role: {
+							include: {
+								classification: {
+									include: {
+										category: {
+											include: {
+												parent: {
+													include: {
+														parent: { include: { parent: true } },
+													},
+												},
+											},
+										},
+									},
+								},
+								associations: { include: { group: true } },
+							},
+						},
+						space: true,
+					},
 					where: { removedAt: null },
 				},
 			},

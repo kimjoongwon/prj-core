@@ -382,20 +382,9 @@ describe("Space Scope API (E2E)", () => {
 			});
 		});
 
-		it("Given Space 선택 전 API When OpenAPI 문서를 만들면 Then required x-tenant-id header를 노출하지 않는다", () => {
-			const operation = getSwaggerOperation("/api/v1/auth/my-spaces", "get");
-
-			expect(findTenantHeader(operation)).toBeUndefined();
-		});
-
-		it("Given 저장된 current-space 조회 API When OpenAPI 문서를 만들면 Then x-tenant-id header를 노출하지 않는다", () => {
-			const operation = getSwaggerOperation(
-				"/api/v1/auth/current-space",
-				"get",
-			);
-
-			expect(findTenantHeader(operation)).toBeUndefined();
-		});
+		// /api/v1/auth/my-spaces, /api/v1/auth/current-space는 발급자 단일화 때
+		// AuthModule이 idp-api로 이동하며 core-api 스웨거에서 사라졌습니다.
+		// core-api에는 더 이상 Space 선택 전 공개 라우트가 없으므로 두 케이스를 제거합니다.
 
 		it("Given Space scope 데코레이터 When OpenAPI 문서를 만들면 Then scope vendor extension을 노출한다", () => {
 			const ancestorOperation = getSwaggerOperation(

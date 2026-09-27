@@ -272,8 +272,11 @@ describe("Auth Password Policy API E2E 테스트", () => {
 				phone: `010-password-policy-${suffix}`,
 				password: hashedPassword.value,
 				passwordChangedAt: new Date(),
-				isActive: true,
-				mustChangePassword: false,
+				status: {
+					create: {
+						isActive: true,
+					},
+				},
 			},
 			select: {
 				id: true,
