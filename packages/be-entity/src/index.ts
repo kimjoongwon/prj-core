@@ -65,5 +65,6 @@ export * from "./translation.entity";
 export * from "./user.entity";
 export * from "./user-association.entity";
 export * from "./user-classification.entity";
+export * from "./user-status.entity";
 export * from "./video.entity";
 export * from "./whitelist-entry.entity";

@@ -323,6 +323,11 @@ export type UserAssociation = Prisma.UserAssociationModel
  */
 export type UserClassification = Prisma.UserClassificationModel
 /**
+ * Model UserStatus
+ * @displayName 사용자 상태
+ */
+export type UserStatus = Prisma.UserStatusModel
+/**
  * Model User
  * @displayName 사용자
  */

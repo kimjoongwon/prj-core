@@ -26,8 +26,25 @@ describe("DmmfParser field contract manifest", () => {
 			isEnum: false,
 			dbName: "updated_at",
 		});
-		expect(userFields).toContainEqual({
-			modelName: "User",
+		// currentTenant 관계는 UserStatus 1:1 모델로 이동했습니다.
+		expect(userFields).toEqual(
+			expect.not.arrayContaining([
+				expect.objectContaining({ fieldName: "currentTenant" }),
+			]),
+		);
+		const userStatusFields = parser.parseFieldContractManifestByModel("UserStatus");
+		expect(userStatusFields).toContainEqual({
+			modelName: "UserStatus",
+			fieldName: "userId",
+			type: "BigInt",
+			isRequired: true,
+			isList: false,
+			isRelation: false,
+			isEnum: false,
+			dbName: "user_id",
+		});
+		expect(userStatusFields).toContainEqual({
+			modelName: "UserStatus",
 			fieldName: "currentTenant",
 			type: "Tenant",
 			isRequired: false,

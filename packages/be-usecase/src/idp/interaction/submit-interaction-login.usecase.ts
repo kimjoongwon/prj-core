@@ -48,7 +48,6 @@ export class SubmitInteractionLoginUseCase {
 				redirectTo: this.oidcRedirectUrlService.toAbsolute(
 					loginResult.redirectTo,
 				),
-				mustChangePassword: result.mustChangePassword,
 			},
 		};
 	}

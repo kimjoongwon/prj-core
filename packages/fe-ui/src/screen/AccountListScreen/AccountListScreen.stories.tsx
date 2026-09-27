@@ -7,7 +7,6 @@ const defaultArgs: ComponentProps<typeof AccountListScreen> = {
 		{
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			name: "운영 계정",
-			mustChangePassword: false,
 			email: "member1@example.com",
 			failedLoginAttempts: 1,
 			id: 1n,
@@ -19,7 +18,6 @@ const defaultArgs: ComponentProps<typeof AccountListScreen> = {
 		{
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			name: "운영 계정",
-			mustChangePassword: false,
 			email: "member1@example.com",
 			failedLoginAttempts: 1,
 			id: 1n,

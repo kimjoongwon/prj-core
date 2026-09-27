@@ -87,7 +87,7 @@ validateUser(email, password, ipAddress, userAgent, clientId):
         lastLoginAt = now()
         lastLoginIp = ipAddress
         감사 로그 저장 (SUCCESS)
-        return { success: true, userId: user.id, mustChangePassword }
+        return { success: true, userId: user.id }
 ```
 
 ### 로그아웃 완성 로직 (Auth UseCase 강화)
@@ -172,7 +172,7 @@ executeReset(rawToken, newPassword):
      const hashed = await bcrypt.hash(newPassword, saltRounds)
      UPDATE User SET password=hashed, passwordChangedAt=now(),
                      failedLoginAttempts=0, lockedUntil=null,
-                     isPermanentlyLocked=false, mustChangePassword=false
+                     isPermanentlyLocked=false
 
   5. 이전 비밀번호 히스토리 저장
      INSERT PasswordHistory (userId, passwordHash=hashed)
@@ -417,7 +417,7 @@ describe("계정 잠금 해제", () => {
 
 describe("비밀번호 강제 재설정", () => {
   it("임시 비밀번호를 생성하고 이메일로 발송해야 한다")
-  it("mustChangePassword를 true로 설정해야 한다")
+  it("mustChangePassword 플래그 설정 — 제거됨: 활성화 코드 없이 배포된 것으로 확인되어 2026-09 삭제")
   it("기존 비밀번호 해시를 히스토리에 저장해야 한다")
   it("PLATFORM_ADMIN이 아닌 사용자는 403이어야 한다")
 })
@@ -515,7 +515,7 @@ describe("SessionCard", () => {
 ### Phase 4: 비밀번호 라이프사이클
 
 ```
-28. mustChangePassword 플래그 + 첫 로그인 변경 강제
+28. mustChangePassword 플래그 + 첫 로그인 변경 강제 (제거됨: 2026-09)
 29. /change-password 페이지 (idp-client)
 30. 비밀번호 만료 체크 미들웨어 (main server)
 31. 만료 경고 배너 (admin 레이아웃)

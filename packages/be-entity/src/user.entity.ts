@@ -1,10 +1,7 @@
 import {
-	BigIntIdFieldMetadata,
-	BooleanFieldMetadata,
 	ClassField,
 	DateFieldMetadata,
 	EmailFieldMetadata,
-	NumberFieldMetadata,
 	StringFieldMetadata,
 	ULIDFieldMetadata,
 } from "@cocrepo/decorator/field";
@@ -18,6 +15,7 @@ import { Profile } from "./profile.entity";
 import { Tenant } from "./tenant.entity";
 import { UserAssociation } from "./user-association.entity";
 import { UserClassification } from "./user-classification.entity";
+import { UserStatus } from "./user-status.entity";
 
 /**
  * Tenant with Space relations for User entity
@@ -65,35 +63,21 @@ export class User extends UserSchema {
 	declare phone: UserSchema["phone"];
 	@Exclude({ toPlainOnly: true })
 	declare password: UserSchema["password"];
-	@NumberFieldMetadata({ description: "로그인 실패 횟수" })
-	declare failedLoginAttempts: UserSchema["failedLoginAttempts"];
-	@BooleanFieldMetadata({ description: "영구 잠금 여부" })
-	declare isPermanentlyLocked: UserSchema["isPermanentlyLocked"];
-	@BooleanFieldMetadata({ description: "비밀번호 변경 필요" })
-	declare mustChangePassword: UserSchema["mustChangePassword"];
-	@BooleanFieldMetadata({ description: "활성 상태" })
-	declare isActive: UserSchema["isActive"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@DateFieldMetadata({ nullable: true, description: "잠금 해제 시각" })
-	declare lockedUntil: UserSchema["lockedUntil"];
 	@DateFieldMetadata({ nullable: true, description: "비밀번호 변경일" })
 	declare passwordChangedAt: UserSchema["passwordChangedAt"];
-	@DateFieldMetadata({ nullable: true, description: "마지막 로그인 시각" })
-	declare lastLoginAt: UserSchema["lastLoginAt"];
-	@StringFieldMetadata({ nullable: true, description: "마지막 로그인 IP" })
-	declare lastLoginIp: UserSchema["lastLoginIp"];
-	@BigIntIdFieldMetadata({
-		nullable: true,
-		description: "현재 선택된 Tenant membership ID",
-	})
-	declare currentTenantId: UserSchema["currentTenantId"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
+	@ClassField(() => UserStatus, {
+		required: false,
+		description: "사용자 인증 상태",
+	})
+	status?: UserStatus;
 	@ClassField(() => Profile, {
 		isArray: true,
 		required: false,
@@ -133,37 +117,6 @@ export class User extends UserSchema {
 	// ============================================================================
 	// 도메인 메서드
 	// ============================================================================
-
-	/**
-	 * 사용자가 특정 테넌트에 속해 있는지 확인합니다
-	 */
-	hasTenantAccess(tenantId: bigint): boolean {
-		if (!this.tenants) return false;
-		return this.tenants.some((tenant) => tenant.id === tenantId);
-	}
-
-	/**
-	 * 사용자가 삭제되지 않은 상태인지 확인
-	 */
-	isNotRemoved(): boolean {
-		return this.removedAt === null;
-	}
-
-	/**
-	 * 사용자 계정이 현재 잠금 상태인지 확인
-	 */
-	isLocked(): boolean {
-		if (this.isPermanentlyLocked) return true;
-		if (this.lockedUntil && this.lockedUntil > new Date()) return true;
-		return false;
-	}
-
-	/**
-	 * 비밀번호 변경이 필요한지 확인
-	 */
-	needsPasswordChange(): boolean {
-		return this.mustChangePassword;
-	}
 
 	/**
 	 * DTO로부터 Entity 생성 (팩토리)

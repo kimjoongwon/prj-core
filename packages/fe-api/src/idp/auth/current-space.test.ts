@@ -81,7 +81,9 @@ describe("현재 Space API의 공용 클라이언트 연결", () => {
 		const { setApiBaseUrl } = await import("../../libs/customFetch");
 		const { getCurrentSpace } = await import("./current-space");
 		const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
-			expect(String(input)).toBe("http://override.test/api/v1/auth/current-space");
+			expect(String(input)).toBe(
+				"http://override.test/api/v1/auth/current-space",
+			);
 			expect(new Headers(init?.headers).get("Cookie")).toBe(
 				"session=test-session",
 			);

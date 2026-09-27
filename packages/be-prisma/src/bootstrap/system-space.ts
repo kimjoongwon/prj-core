@@ -246,6 +246,9 @@ export async function createRegularUsersAndFitnessCenters(
 						phone: fitnessCenterData.phone,
 						email: fitnessCenterData.email,
 						password: defaultAdminPassword,
+						status: {
+							create: {},
+						},
 						profiles: {
 							create: {
 								name: `${fitnessCenterData.name} 관리자`,
@@ -368,6 +371,9 @@ export async function createRegularUsersAndFitnessCenters(
 					phone: userData.phone,
 					email: userData.email,
 					password: hashedPassword,
+					status: {
+						create: {},
+					},
 					profiles: {
 						create: {
 							name: userData.profile.name,

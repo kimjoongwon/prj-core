@@ -6,7 +6,6 @@ import { CreateAbilityDto } from "../abilities/create-ability.dto";
 import { CreateAssetDto } from "../asset/create-asset.dto";
 import { UpdateAssetDto } from "../asset/update-asset.dto";
 import { CreateRoleDto } from "../create/create-role.dto";
-import { CreateUserDto } from "../create/create-user.dto";
 import { CreateFolderDto } from "../folder/create-folder.dto";
 import { UpdateFolderDto } from "../folder/update-folder.dto";
 import { CreateInquiryDto } from "../inquiries/create-inquiry.dto";
@@ -14,7 +13,6 @@ import { CreatePolicyDto } from "../policies/create-policy.dto";
 import { UpdatePolicyDto } from "../policies/update-policy.dto";
 import { CreateServiceDocumentDto } from "../service-documents/create-service-document.dto";
 import { UpdateRoleDto } from "../update/update-role.dto";
-import { UpdateUserDto } from "../update/update-user.dto";
 
 const validationPipe = new ValidationPipe({
 	transform: true,
@@ -77,40 +75,6 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 		await expect(
 			validateRequest(UpdateRoleDto, { name: "NEW_NAME" }),
 		).rejects.toThrow();
-	});
-
-	it("User의 기존 필수 보안 상태 필드와 API 전용 spaceId를 유지한다", async () => {
-		const userBody = {
-			spaceId: "1",
-			email: "member@example.com",
-			name: "회원",
-			phone: "01012345678",
-			failedLoginAttempts: 0,
-			lockedUntil: null,
-			isPermanentlyLocked: false,
-			mustChangePassword: false,
-			passwordChangedAt: null,
-			lastLoginAt: null,
-			lastLoginIp: null,
-			isActive: true,
-			currentTenantId: null,
-		};
-		await expect(
-			validateRequest(CreateUserDto, userBody),
-		).resolves.toMatchObject({ spaceId: 1n });
-		const { failedLoginAttempts: _attempts, ...missingAttemptsBody } = userBody;
-		await expect(
-			validateRequest(CreateUserDto, missingAttemptsBody),
-		).rejects.toThrow();
-		await expect(
-			validateRequest(CreateUserDto, { ...userBody, password: "Plaintext1!" }),
-		).rejects.toThrow();
-		await expect(
-			validateRequest(UpdateUserDto, { spaceId: null }),
-		).resolves.toMatchObject({ spaceId: null });
-		const userRequest = plainToInstance(CreateUserDto, userBody);
-		expect("hasTenantAccess" in userRequest).toBe(false);
-		expect("isLocked" in userRequest).toBe(false);
 	});
 
 	it("Folder는 공통 ID 변환과 입력 전용 파일명 제약을 함께 유지한다", async () => {

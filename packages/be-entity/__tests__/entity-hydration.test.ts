@@ -14,8 +14,8 @@ describe("Entity Schema 상속과 내부 복원", () => {
 		const user = new User();
 		expect(role).toBeInstanceOf(Role);
 		expect(user).toBeInstanceOf(User);
-		user.tenants = [{ id: 7n }];
-		expect(user.hasTenantAccess(7n)).toBe(true);
+		user.tenants = [{ id: 7n, spaceId: 3n }];
+		expect(user.canAccessSpace(3n)).toBe(true);
 	});
 
 	it("DB 값의 bigint, Date, 비밀번호, ULID를 변환 없이 복원합니다", () => {

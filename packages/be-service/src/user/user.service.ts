@@ -303,6 +303,9 @@ export class UserService {
 			email: email.value,
 			phone: phone.normalized,
 			password: params.password,
+			status: {
+				create: {},
+			},
 			tenants: {
 				create: {
 					space: { connect: { id: params.spaceId } },

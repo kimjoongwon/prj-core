@@ -1,6 +1,8 @@
 import {
+	BooleanField,
 	ClassField,
 	DateFieldOptional,
+	NumberField,
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
@@ -8,19 +10,17 @@ import { User } from "@cocrepo/entity";
 import { EntityResponseType } from "../mapped-types";
 import { IdpAccountAccessGrantDto } from "./idp-account-access-grant.dto";
 
+/**
+ * IDP 계정 상세 응답 DTO. 활성/잠금 상태는 UserStatus에서 읽은 값을 평평하게 노출합니다.
+ */
 export class IdpAccountDetailDto extends EntityResponseType(User, {
-	pick: [
-		"id",
-		"name",
-		"isActive",
-		"failedLoginAttempts",
-		"isPermanentlyLocked",
-		"mustChangePassword",
-		"createdAt",
-	] as const,
+	pick: ["id", "name", "createdAt"] as const,
 
 	extraFields: [
 		"email",
+		"isActive",
+		"failedLoginAttempts",
+		"isPermanentlyLocked",
 		"lockedUntil",
 		"lastLoginAt",
 		"lastLoginIp",
@@ -29,6 +29,15 @@ export class IdpAccountDetailDto extends EntityResponseType(User, {
 }) {
 	@StringField({ description: "이메일" })
 	email!: string;
+
+	@BooleanField({ description: "활성 상태" })
+	isActive: boolean;
+
+	@NumberField({ description: "로그인 실패 횟수" })
+	failedLoginAttempts: number;
+
+	@BooleanField({ description: "영구 잠금 여부" })
+	isPermanentlyLocked: boolean;
 
 	@DateFieldOptional({ nullable: true, description: "일시 잠금 해제 시간" })
 	lockedUntil!: Date | null;

@@ -239,17 +239,21 @@ export class PasswordResetService {
 			}
 		}
 
-		// 4. 비밀번호 변경
+		// 4. 비밀번호 변경 (자격 증명은 User에, 잠금 해제는 UserStatus에 반영)
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
+		const unlockedStatus = {
+			failedLoginAttempts: 0,
+			lockedUntil: null,
+			isPermanentlyLocked: false,
+		};
 		await prisma.user.update({
 			where: { id: tokenData.userId },
 			data: {
 				password: hashedPassword.value,
 				passwordChangedAt: new Date(),
-				failedLoginAttempts: 0,
-				lockedUntil: null,
-				isPermanentlyLocked: false,
-				mustChangePassword: false,
+				status: {
+					upsert: { create: unlockedStatus, update: unlockedStatus },
+				},
 			},
 		});
 

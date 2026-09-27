@@ -44,7 +44,7 @@
 
 | ID | 기능 | 위치 | 여정 | 설명 |
 |----|------|------|------|------|
-| AUTH-FEA-401 | 첫 로그인 비밀번호 변경 강제 | idp-server + idp-client | 여정 1 | mustChangePassword 플래그 → 변경 화면 리다이렉트 |
+| AUTH-FEA-401 | 첫 로그인 비밀번호 변경 강제 | - | - | **제거됨** — mustChangePassword 플래그는 활성화 코드 없이 배포됨이 확인되어 2026-09 UserStatus 분리 때 삭제 |
 | AUTH-FEA-402 | 비밀번호 만료 체크 | main server | 여정 7 | passwordChangedAt + 90일 → 만료 여부 확인 |
 | AUTH-FEA-403 | 만료 경고 배너 | admin | 여정 7 | 7일 전부터 상단 배너 "비밀번호가 N일 후 만료됩니다" |
 | AUTH-FEA-404 | 만료 시 변경 강제 | admin | 여정 7 | 만료된 경우 비밀번호 변경 페이지로 강제 이동 |

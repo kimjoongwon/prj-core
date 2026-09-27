@@ -189,7 +189,6 @@ export class InteractionLoginService {
 		return {
 			success: true,
 			userId: user.userId,
-			mustChangePassword: user.mustChangePassword,
 		};
 	}
 

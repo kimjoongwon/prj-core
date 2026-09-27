@@ -485,7 +485,7 @@ describe("UsersRepository", () => {
 				expect.objectContaining({
 					where: {
 						removedAt: null,
-						isActive: true,
+						status: { isActive: true },
 						AND: [
 							{
 								OR: [
@@ -507,7 +507,9 @@ describe("UsersRepository", () => {
 					select: expect.objectContaining({
 						id: true,
 						email: true,
-						isActive: true,
+						status: expect.objectContaining({
+							select: expect.objectContaining({ isActive: true }),
+						}),
 					}),
 				}),
 			);
@@ -520,19 +522,20 @@ describe("UsersRepository", () => {
 				id: "user-test-id",
 				name: "Test User",
 				email: "test@example.com",
-				isActive: true,
-				failedLoginAttempts: 0,
-				isPermanentlyLocked: false,
-				lockedUntil: null,
-				mustChangePassword: false,
-				lastLoginAt: null,
-				lastLoginIp: null,
 				createdAt: new Date("2024-01-01"),
+				status: {
+					isActive: true,
+					failedLoginAttempts: 0,
+					isPermanentlyLocked: false,
+					lockedUntil: null,
+					lastLoginAt: null,
+					lastLoginIp: null,
+				},
 			};
 			mockTxHost.tx.user.findFirst.mockResolvedValue(account);
 			mockTxHost.tx.user.update.mockResolvedValue({
 				...account,
-				isActive: false,
+				status: { ...account.status, isActive: false },
 			});
 
 			const result = await repository.updateIdpAccountById({
@@ -558,11 +561,7 @@ describe("UsersRepository", () => {
 			expect(mockTxHost.tx.user.update).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: { id: 101n },
-					data: { isActive: false },
-					select: expect.objectContaining({
-						id: true,
-						isActive: true,
-					}),
+					data: { status: { upsert: { create: { isActive: false }, update: { isActive: false } } } },
 				}),
 			);
 			expect(result?.isActive).toBe(false);

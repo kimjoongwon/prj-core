@@ -7311,52 +7311,11 @@ export const runtimeManifest: RuntimeManifest = {
           "type": "string",
           "description": "연락처"
         },
-        "failedLoginAttempts": {
-          "type": "number",
-          "description": "로그인 실패 횟수"
-        },
-        "isPermanentlyLocked": {
-          "type": "boolean",
-          "description": "영구 잠금 여부"
-        },
-        "mustChangePassword": {
-          "type": "boolean",
-          "description": "비밀번호 변경 필요"
-        },
-        "isActive": {
-          "type": "boolean",
-          "description": "활성 상태"
-        },
-        "lockedUntil": {
-          "format": "date-time",
-          "type": "string",
-          "nullable": true,
-          "description": "잠금 해제 시각"
-        },
         "passwordChangedAt": {
           "format": "date-time",
           "type": "string",
           "nullable": true,
           "description": "비밀번호 변경일"
-        },
-        "lastLoginAt": {
-          "format": "date-time",
-          "type": "string",
-          "nullable": true,
-          "description": "마지막 로그인 시각"
-        },
-        "lastLoginIp": {
-          "type": "string",
-          "nullable": true,
-          "description": "마지막 로그인 IP"
-        },
-        "currentTenantId": {
-          "type": "integer",
-          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-          "x-runtime-type": "bigint",
-          "nullable": true,
-          "description": "현재 선택된 Tenant membership ID",
-          "format": "int64"
         },
         "profiles": {
           "description": "프로필 목록",
@@ -7413,26 +7372,62 @@ export const runtimeManifest: RuntimeManifest = {
           "x-runtime-type": "bigint",
           "description": "소속 공간 ID",
           "format": "int64"
+        },
+        "failedLoginAttempts": {
+          "type": "number",
+          "description": "로그인 실패 횟수"
+        },
+        "lockedUntil": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "잠금 해제 시각"
+        },
+        "isPermanentlyLocked": {
+          "type": "boolean",
+          "description": "영구 잠금 여부"
+        },
+        "lastLoginAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 로그인 시각"
+        },
+        "lastLoginIp": {
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 로그인 IP"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "활성 상태"
+        },
+        "currentTenantId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "nullable": true,
+          "description": "현재 선택된 Tenant membership ID",
+          "format": "int64"
         }
       },
       "required": [
         "name",
         "email",
         "phone",
-        "failedLoginAttempts",
-        "isPermanentlyLocked",
-        "mustChangePassword",
-        "isActive",
-        "lockedUntil",
         "passwordChangedAt",
-        "lastLoginAt",
-        "lastLoginIp",
-        "currentTenantId",
         "id",
         "createdAt",
         "updatedAt",
         "removedAt",
-        "spaceId"
+        "spaceId",
+        "failedLoginAttempts",
+        "lockedUntil",
+        "isPermanentlyLocked",
+        "lastLoginAt",
+        "lastLoginIp",
+        "isActive",
+        "currentTenantId"
       ]
     },
     "ProfileDto": {
@@ -7570,52 +7565,11 @@ export const runtimeManifest: RuntimeManifest = {
           "type": "string",
           "description": "연락처"
         },
-        "failedLoginAttempts": {
-          "type": "number",
-          "description": "로그인 실패 횟수"
-        },
-        "isPermanentlyLocked": {
-          "type": "boolean",
-          "description": "영구 잠금 여부"
-        },
-        "mustChangePassword": {
-          "type": "boolean",
-          "description": "비밀번호 변경 필요"
-        },
-        "isActive": {
-          "type": "boolean",
-          "description": "활성 상태"
-        },
-        "lockedUntil": {
-          "format": "date-time",
-          "type": "string",
-          "nullable": true,
-          "description": "잠금 해제 시각"
-        },
         "passwordChangedAt": {
           "format": "date-time",
           "type": "string",
           "nullable": true,
           "description": "비밀번호 변경일"
-        },
-        "lastLoginAt": {
-          "format": "date-time",
-          "type": "string",
-          "nullable": true,
-          "description": "마지막 로그인 시각"
-        },
-        "lastLoginIp": {
-          "type": "string",
-          "nullable": true,
-          "description": "마지막 로그인 IP"
-        },
-        "currentTenantId": {
-          "type": "integer",
-          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-          "x-runtime-type": "bigint",
-          "nullable": true,
-          "description": "현재 선택된 Tenant membership ID",
-          "format": "int64"
         },
         "profiles": {
           "description": "프로필 목록",
@@ -7672,26 +7626,62 @@ export const runtimeManifest: RuntimeManifest = {
           "x-runtime-type": "bigint",
           "description": "소속 공간 ID",
           "format": "int64"
+        },
+        "failedLoginAttempts": {
+          "type": "number",
+          "description": "로그인 실패 횟수"
+        },
+        "lockedUntil": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "잠금 해제 시각"
+        },
+        "isPermanentlyLocked": {
+          "type": "boolean",
+          "description": "영구 잠금 여부"
+        },
+        "lastLoginAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 로그인 시각"
+        },
+        "lastLoginIp": {
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 로그인 IP"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "활성 상태"
+        },
+        "currentTenantId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "nullable": true,
+          "description": "현재 선택된 Tenant membership ID",
+          "format": "int64"
         }
       },
       "required": [
         "name",
         "email",
         "phone",
-        "failedLoginAttempts",
-        "isPermanentlyLocked",
-        "mustChangePassword",
-        "isActive",
-        "lockedUntil",
         "passwordChangedAt",
-        "lastLoginAt",
-        "lastLoginIp",
-        "currentTenantId",
         "id",
         "createdAt",
         "updatedAt",
         "removedAt",
-        "spaceId"
+        "spaceId",
+        "failedLoginAttempts",
+        "lockedUntil",
+        "isPermanentlyLocked",
+        "lastLoginAt",
+        "lastLoginIp",
+        "isActive",
+        "currentTenantId"
       ]
     },
     "UserTenantDetailResponseDto": {
@@ -12494,10 +12484,6 @@ export const runtimeManifest: RuntimeManifest = {
         "redirectTo": {
           "type": "string",
           "description": "리다이렉트 URL"
-        },
-        "mustChangePassword": {
-          "type": "boolean",
-          "description": "비밀번호 변경 필요 여부"
         }
       },
       "required": [
@@ -13588,22 +13574,6 @@ export const runtimeManifest: RuntimeManifest = {
           "type": "string",
           "description": "사용자 이름"
         },
-        "failedLoginAttempts": {
-          "type": "number",
-          "description": "로그인 실패 횟수"
-        },
-        "isPermanentlyLocked": {
-          "type": "boolean",
-          "description": "영구 잠금 여부"
-        },
-        "mustChangePassword": {
-          "type": "boolean",
-          "description": "비밀번호 변경 필요"
-        },
-        "isActive": {
-          "type": "boolean",
-          "description": "활성 상태"
-        },
         "id": {
           "type": "integer",
           "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
@@ -13617,6 +13587,18 @@ export const runtimeManifest: RuntimeManifest = {
         "email": {
           "type": "string",
           "description": "이메일"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "활성 상태"
+        },
+        "failedLoginAttempts": {
+          "type": "number",
+          "description": "로그인 실패 횟수"
+        },
+        "isPermanentlyLocked": {
+          "type": "boolean",
+          "description": "영구 잠금 여부"
         },
         "lockedUntil": {
           "format": "date-time",
@@ -13638,13 +13620,12 @@ export const runtimeManifest: RuntimeManifest = {
       },
       "required": [
         "name",
-        "failedLoginAttempts",
-        "isPermanentlyLocked",
-        "mustChangePassword",
-        "isActive",
         "id",
         "createdAt",
-        "email"
+        "email",
+        "isActive",
+        "failedLoginAttempts",
+        "isPermanentlyLocked"
       ]
     },
     "IdpAccountAccessGrantDto": {
@@ -13717,22 +13698,6 @@ export const runtimeManifest: RuntimeManifest = {
           "type": "string",
           "description": "사용자 이름"
         },
-        "failedLoginAttempts": {
-          "type": "number",
-          "description": "로그인 실패 횟수"
-        },
-        "isPermanentlyLocked": {
-          "type": "boolean",
-          "description": "영구 잠금 여부"
-        },
-        "mustChangePassword": {
-          "type": "boolean",
-          "description": "비밀번호 변경 필요"
-        },
-        "isActive": {
-          "type": "boolean",
-          "description": "활성 상태"
-        },
         "id": {
           "type": "integer",
           "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
@@ -13746,6 +13711,18 @@ export const runtimeManifest: RuntimeManifest = {
         "email": {
           "type": "string",
           "description": "이메일"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "활성 상태"
+        },
+        "failedLoginAttempts": {
+          "type": "number",
+          "description": "로그인 실패 횟수"
+        },
+        "isPermanentlyLocked": {
+          "type": "boolean",
+          "description": "영구 잠금 여부"
         },
         "lockedUntil": {
           "format": "date-time",
@@ -13774,13 +13751,12 @@ export const runtimeManifest: RuntimeManifest = {
       },
       "required": [
         "name",
-        "failedLoginAttempts",
-        "isPermanentlyLocked",
-        "mustChangePassword",
-        "isActive",
         "id",
         "createdAt",
         "email",
+        "isActive",
+        "failedLoginAttempts",
+        "isPermanentlyLocked",
         "accessGrants"
       ]
     },

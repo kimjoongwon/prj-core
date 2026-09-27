@@ -112,6 +112,7 @@ export const ModelName = {
   Translation: 'Translation',
   UserAssociation: 'UserAssociation',
   UserClassification: 'UserClassification',
+  UserStatus: 'UserStatus',
   User: 'User',
   Video: 'Video',
   WhitelistEntry: 'WhitelistEntry'
@@ -1213,6 +1214,24 @@ export const UserClassificationScalarFieldEnum = {
 export type UserClassificationScalarFieldEnum = (typeof UserClassificationScalarFieldEnum)[keyof typeof UserClassificationScalarFieldEnum]
 
 
+export const UserStatusScalarFieldEnum = {
+  userStatusId: 'userStatusId',
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  isActive: 'isActive',
+  failedLoginAttempts: 'failedLoginAttempts',
+  lockedUntil: 'lockedUntil',
+  isPermanentlyLocked: 'isPermanentlyLocked',
+  lastLoginAt: 'lastLoginAt',
+  lastLoginIp: 'lastLoginIp',
+  currentTenantId: 'currentTenantId'
+} as const
+
+export type UserStatusScalarFieldEnum = (typeof UserStatusScalarFieldEnum)[keyof typeof UserStatusScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   userId: 'userId',
   id: 'id',
@@ -1223,15 +1242,7 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
-  failedLoginAttempts: 'failedLoginAttempts',
-  lockedUntil: 'lockedUntil',
-  isPermanentlyLocked: 'isPermanentlyLocked',
-  mustChangePassword: 'mustChangePassword',
-  passwordChangedAt: 'passwordChangedAt',
-  lastLoginAt: 'lastLoginAt',
-  lastLoginIp: 'lastLoginIp',
-  isActive: 'isActive',
-  currentTenantId: 'currentTenantId'
+  passwordChangedAt: 'passwordChangedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]

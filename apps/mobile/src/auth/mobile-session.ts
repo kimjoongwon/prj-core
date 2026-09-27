@@ -193,7 +193,6 @@ class MobileSession {
       refreshToken: mobileApiScope.refreshToken,
       refreshTokenExpiresAt: mobileApiScope.refreshTokenExpiresAt,
       sessionId: mobileApiScope.sessionId,
-      mustChangePassword: session.mustChangePassword,
     });
   }
 

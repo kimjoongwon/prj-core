@@ -270,7 +270,6 @@ describe("접근·인증 Entity 응답", () => {
 				"isActive",
 				"failedLoginAttempts",
 				"isPermanentlyLocked",
-				"mustChangePassword",
 				"createdAt",
 			].sort(),
 		);

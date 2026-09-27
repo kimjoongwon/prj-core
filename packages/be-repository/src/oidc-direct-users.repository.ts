@@ -21,29 +21,47 @@ export class OidcDirectUsersRepository {
 	/**
 	 * 이메일로 인증용 조회 (보안 필드 포함)
 	 * 로그인 비밀번호 검증 시 사용합니다.
+	 * 잠금·활성 상태는 UserStatus 1:1 관계에서 읽어 평평하게 펴서 반환합니다.
 	 */
 	async findByEmailForAuth(email: string): Promise<OidcAuthUserData | null> {
 		this.logger.debug(`인증용 이메일 조회: ${email}`);
 
 		const prisma = await this.directPrismaProvider.getClient();
-		return prisma.user.findUnique({
+		const user = await prisma.user.findUnique({
 			where: { email },
 			select: {
 				id: true,
 				userId: true,
 				email: true,
 				password: true,
-				failedLoginAttempts: true,
-				lockedUntil: true,
-				isPermanentlyLocked: true,
-				isActive: true,
-				mustChangePassword: true,
+				status: {
+					select: {
+						failedLoginAttempts: true,
+						lockedUntil: true,
+						isPermanentlyLocked: true,
+						isActive: true,
+					},
+				},
 			},
 		});
+		if (!user) {
+			return null;
+		}
+
+		return {
+			id: user.id,
+			userId: user.userId,
+			email: user.email,
+			password: user.password,
+			failedLoginAttempts: user.status?.failedLoginAttempts ?? 0,
+			lockedUntil: user.status?.lockedUntil ?? null,
+			isPermanentlyLocked: user.status?.isPermanentlyLocked ?? false,
+			isActive: user.status?.isActive ?? true,
+		};
 	}
 
 	/**
-	 * 로그인 실패 처리 (실패 횟수 증가 + 잠금 설정)
+	 * 로그인 실패 처리 (실패 횟수 증가 + 잠금 설정) — UserStatus에 기록
 	 */
 	async updateLoginFailure(
 		userId: bigint,
@@ -51,45 +69,48 @@ export class OidcDirectUsersRepository {
 		lockData?: { lockedUntil?: Date; isPermanentlyLocked?: boolean },
 	): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
+		const data = {
+			failedLoginAttempts: failedAttempts,
+			...(lockData?.lockedUntil && { lockedUntil: lockData.lockedUntil }),
+			...(lockData?.isPermanentlyLocked !== undefined && {
+				isPermanentlyLocked: lockData.isPermanentlyLocked,
+			}),
+		};
 		await prisma.user.update({
 			where: { id: userId },
-			data: {
-				failedLoginAttempts: failedAttempts,
-				...(lockData?.lockedUntil && { lockedUntil: lockData.lockedUntil }),
-				...(lockData?.isPermanentlyLocked !== undefined && {
-					isPermanentlyLocked: lockData.isPermanentlyLocked,
-				}),
-			},
+			data: { status: { upsert: { create: data, update: data } } },
 		});
 	}
 
 	/**
-	 * 로그인 성공 처리 (실패 횟수 리셋 + 마지막 로그인 정보 업데이트)
+	 * 로그인 성공 처리 (실패 횟수 리셋 + 마지막 로그인 정보 업데이트) — UserStatus에 기록
 	 */
 	async updateLoginSuccess(userId: bigint, ipAddress: string): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
+		const data = {
+			failedLoginAttempts: 0,
+			lockedUntil: null,
+			lastLoginAt: new Date(),
+			lastLoginIp: ipAddress,
+		};
 		await prisma.user.update({
 			where: { id: userId },
-			data: {
-				failedLoginAttempts: 0,
-				lockedUntil: null,
-				lastLoginAt: new Date(),
-				lastLoginIp: ipAddress,
-			},
+			data: { status: { upsert: { create: data, update: data } } },
 		});
 	}
 
 	/**
-	 * 잠금 자동 해제 (일시 잠금 시간 경과 후)
+	 * 잠금 자동 해제 (일시 잠금 시간 경과 후) — UserStatus에 기록
 	 */
 	async clearLock(userId: bigint): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
+		const data = {
+			failedLoginAttempts: 0,
+			lockedUntil: null,
+		};
 		await prisma.user.update({
 			where: { id: userId },
-			data: {
-				failedLoginAttempts: 0,
-				lockedUntil: null,
-			},
+			data: { status: { upsert: { create: data, update: data } } },
 		});
 	}
 

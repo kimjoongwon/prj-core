@@ -25,7 +25,6 @@ const defaultArgs = {
 		lastLoginAt: "2026-04-14T09:00:00.000Z",
 		lastLoginIp: "last-login-ip-1",
 		lockedUntil: "locked-until-1",
-		mustChangePassword: false,
 		name: "샘플 계정",
 	},
 	accessGrantForm: {

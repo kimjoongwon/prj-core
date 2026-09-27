@@ -15,6 +15,4 @@
 export interface LoginSuccessDto {
 	/** 리다이렉트 URL */
 	redirectTo: string;
-	/** 비밀번호 변경 필요 여부 */
-	mustChangePassword?: boolean;
 }

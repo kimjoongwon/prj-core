@@ -78,7 +78,6 @@ describe("SubmitInteractionLoginUseCase", () => {
 		interactionLoginService.validateUser.mockResolvedValue({
 			success: true,
 			userId: "user-1",
-			mustChangePassword: true,
 		});
 
 		const result = await useCase.execute(
@@ -108,7 +107,6 @@ describe("SubmitInteractionLoginUseCase", () => {
 			statusCode: 200,
 			body: {
 				redirectTo: "https://idp.example.com/interaction/complete",
-				mustChangePassword: true,
 			},
 		});
 	});

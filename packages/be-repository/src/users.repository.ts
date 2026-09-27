@@ -7,13 +7,24 @@ import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import {
 	IDP_ACCOUNT_SELECT,
+	flattenIdpAccountRecord,
 	type IdpAccountRecord,
 } from "./idp-account.select";
 import {
 	buildIdpAccountQueryOrderBy,
 	buildIdpAccountQueryWhere,
+	withStatusRelationOrderBy,
 } from "./idp-account-query.mapper";
 import { toDomainEntity } from "./to-domain-entity";
+
+/** UserStatus 관계를 포함한 조회 결과의 상태 필드를 평평하게 펼칩니다(API 형상 유지). */
+function flattenUserStatus(user: Record<string, unknown>) {
+	const { status, ...userWithoutStatus } = user;
+	return {
+		...userWithoutStatus,
+		...((status as Record<string, unknown> | null) ?? {}),
+	};
+}
 
 @Injectable()
 export class UsersRepository {
@@ -42,8 +53,11 @@ export class UsersRepository {
 
 	/**
 	 * 내부 숫자 ID로 사용자 조회 (Tenants, Profiles 포함)
+	 * 현재 선택 Tenant는 UserStatus 1:1 관계에서 읽어 평평하게 포함합니다(CLS 스냅샷 계약 유지).
 	 */
-	async findByIdWithTenantsAndProfiles(id: bigint): Promise<User | null> {
+	async findByIdWithTenantsAndProfiles(
+		id: bigint,
+	): Promise<(User & { currentTenantId: bigint | null }) | null> {
 		this.logger.debug(`ID로 사용자 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
@@ -106,10 +120,24 @@ export class UsersRepository {
 				associations: {
 					include: { group: true },
 				},
+				status: {
+					select: { currentTenantId: true },
+				},
 			},
 		} as never);
 
-		return result ? toDomainEntity(User, result) : null;
+		if (!result) {
+			return null;
+		}
+
+		// as never 쿼리는 select 결과를 스칼라로만 추론하므로 status는 수동으로 꺼낸다.
+		const { status, ...user } = result as unknown as {
+			status: { currentTenantId: bigint | null } | null;
+		} & Record<string, unknown>;
+		return toDomainEntity(User, {
+			...user,
+			currentTenantId: status?.currentTenantId ?? null,
+		}) as User & { currentTenantId: bigint | null };
 	}
 
 	/**
@@ -117,7 +145,7 @@ export class UsersRepository {
 	 */
 	async findByUserIdWithTenantsAndProfiles(
 		userId: string,
-	): Promise<User | null> {
+	): Promise<(User & { currentTenantId: bigint | null }) | null> {
 		this.logger.debug(`사용자 ULID로 조회: ${userId}`);
 
 		const user = await this.txHost.tx.user.findUnique({
@@ -245,7 +273,9 @@ export class UsersRepository {
 			buildIdpAccountQueryWhere(params.input, { removedAt: null }),
 			params.spaceIds,
 		);
-		const orderBy = buildIdpAccountQueryOrderBy(params.input);
+		const orderBy = withStatusRelationOrderBy(
+			buildIdpAccountQueryOrderBy(params.input),
+		);
 		const skip = params.input.skip ?? 0;
 		const take = params.input.take ?? 20;
 
@@ -260,7 +290,10 @@ export class UsersRepository {
 			this.txHost.tx.user.count({ where }),
 		]);
 
-		return { data, totalCount };
+		return {
+			data: data.map(flattenIdpAccountRecord),
+			totalCount,
+		};
 	}
 
 	/**
@@ -272,21 +305,28 @@ export class UsersRepository {
 	}): Promise<IdpAccountRecord | null> {
 		this.logger.debug(`IDP 계정 조회: ${params.userId}`);
 
-		return this.txHost.tx.user.findFirst({
-			where: this.applySpaceScopeToUserWhere(
-				{ id: params.userId, removedAt: null },
-				params.spaceIds,
-			),
-			select: IDP_ACCOUNT_SELECT,
-		});
+		return this.txHost.tx.user
+			.findFirst({
+				where: this.applySpaceScopeToUserWhere(
+					{ id: params.userId, removedAt: null },
+					params.spaceIds,
+				),
+				select: IDP_ACCOUNT_SELECT,
+			})
+			.then((account) => account && flattenIdpAccountRecord(account));
 	}
 
 	/**
-	 * IDP 계정 projection 수정.
+	 * IDP 계정 projection 수정. data는 UserStatus 상태 필드만 다룹니다.
 	 */
 	async updateIdpAccountById(params: {
 		userId: bigint;
-		data: Prisma.UserUncheckedUpdateInput;
+		data: {
+			isActive?: boolean;
+			failedLoginAttempts?: number;
+			lockedUntil?: Date | null;
+			isPermanentlyLocked?: boolean;
+		};
 		spaceIds?: bigint[];
 	}): Promise<IdpAccountRecord | null> {
 		this.logger.debug(`IDP 계정 수정: ${params.userId}`);
@@ -299,11 +339,15 @@ export class UsersRepository {
 			return null;
 		}
 
-		return this.txHost.tx.user.update({
+		const updated = await this.txHost.tx.user.update({
 			where: { id: params.userId },
-			data: params.data,
+			data: {
+				status: { upsert: { create: params.data, update: params.data } },
+			},
 			select: IDP_ACCOUNT_SELECT,
 		});
+
+		return flattenIdpAccountRecord(updated);
 	}
 
 	/**
@@ -331,6 +375,7 @@ export class UsersRepository {
 			this.txHost.tx.user.findMany({
 				where: scopedWhere,
 				include: {
+					status: true,
 					profiles: true,
 					tenants: {
 						where: {
@@ -374,7 +419,8 @@ export class UsersRepository {
 		]);
 
 		return {
-			users: users.map((user) => toDomainEntity(User, user)),
+			// API 형상 유지를 위해 UserStatus 관계 필드를 평평하게 펴서 반환합니다.
+			users: users.map((user) => toDomainEntity(User, flattenUserStatus(user))),
 			totalCount,
 		};
 	}
@@ -500,6 +546,7 @@ export class UsersRepository {
 					: {}),
 			},
 			include: {
+				status: true,
 				profiles: true,
 				tenants: {
 					include: {
@@ -532,7 +579,9 @@ export class UsersRepository {
 			},
 		} as never);
 
-		return result ? toDomainEntity(User, result) : null;
+		return result
+			? toDomainEntity(User, flattenUserStatus(result))
+			: null;
 	}
 
 	/**
@@ -599,52 +648,6 @@ export class UsersRepository {
 	}
 
 	/**
-	 * 이메일 중복 확인
-	 */
-	async existsByEmail(email: string): Promise<boolean> {
-		const user = await this.txHost.tx.user.findUnique({
-			where: { email },
-			select: { id: true },
-		});
-		return user !== null;
-	}
-
-	/**
-	 * 전화번호 중복 확인
-	 */
-	async existsByPhone(phone: string): Promise<boolean> {
-		const user = await this.txHost.tx.user.findUnique({
-			where: { phone },
-			select: { id: true },
-		});
-		return user !== null;
-	}
-
-	/**
-	 * 이름 중복 확인
-	 */
-	async existsByName(name: string): Promise<boolean> {
-		const user = await this.txHost.tx.user.findUnique({
-			where: { name },
-			select: { id: true },
-		});
-		return user !== null;
-	}
-
-	/**
-	 * 생성
-	 */
-	async create(data: Prisma.UserUncheckedCreateInput): Promise<User> {
-		this.logger.debug("생성 중...");
-
-		const result = await this.txHost.tx.user.create({
-			data,
-		});
-
-		return toDomainEntity(User, result);
-	}
-
-	/**
 	 * 관계 포함 생성 (Tenants, Profiles, Classification, Associations)
 	 */
 	async createWithRelations(data: Prisma.UserCreateInput): Promise<User> {
@@ -676,24 +679,7 @@ export class UsersRepository {
 		return toDomainEntity(User, result);
 	}
 
-	/**
-	 * 업데이트
-	 */
-	async updateById(
-		id: bigint,
-		data: Prisma.UserUncheckedUpdateInput,
-	): Promise<User> {
-		this.logger.debug(`업데이트 중: ${id.toString()}`);
-
-		const result = await this.txHost.tx.user.update({
-			where: { id },
-			data,
-		});
-
-		return toDomainEntity(User, result);
-	}
-
-	/** 사용자의 현재 Tenant 선택값을 저장합니다. */
+	/** 사용자의 현재 Tenant 선택값을 UserStatus에 저장합니다. */
 	async updateCurrentTenantId(
 		userId: bigint,
 		currentTenantId: bigint | null,
@@ -702,100 +688,16 @@ export class UsersRepository {
 
 		await this.txHost.tx.user.update({
 			where: { id: userId },
-			data: { currentTenantId },
-		});
-	}
-
-	/**
-	 * 관계 포함 업데이트 (Classification, Associations)
-	 */
-	async updateByIdWithRelations(
-		userId: bigint,
-		data: Prisma.UserUncheckedUpdateInput,
-		options?: {
-			categoryId?: bigint | null;
-			groupIds?: bigint[];
-		},
-	): Promise<User> {
-		this.logger.debug(`관계 포함 업데이트: userId=${userId.toString()}`);
-
-		// 기본 정보 업데이트
-		if (Object.keys(data).length > 0) {
-			await this.txHost.tx.user.update({
-				where: { id: userId },
-				data,
-			});
-		}
-
-		// 분류 카테고리 업데이트
-		if (options?.categoryId !== undefined) {
-			await this.txHost.tx.userClassification.deleteMany({
-				where: { userId },
-			});
-
-			if (options.categoryId) {
-				await this.txHost.tx.userClassification.create({
-					data: {
-						userId,
-						categoryId: options.categoryId,
-					},
-				});
-			}
-		}
-
-		// 그룹 연결 업데이트
-		if (options?.groupIds !== undefined) {
-			await this.txHost.tx.userAssociation.deleteMany({
-				where: { userId },
-			});
-
-			if (options.groupIds.length > 0) {
-				await Promise.all(
-					options.groupIds.map((groupId) =>
-						this.txHost.tx.userAssociation.create({
-							data: {
-								userId,
-								groupId,
-							},
-						}),
-					),
-				);
-			}
-		}
-
-		// 업데이트된 사용자 조회
-		const result = await this.txHost.tx.user.findUnique({
-			where: { id: userId },
-			include: {
-				profiles: true,
-				tenants: {
-					include: {
-						user: { select: { id: true } },
-						role: true,
-						space: true,
-					},
-				},
-				classification: {
-					include: {
-						user: { select: { id: true } },
-						category: true,
-					},
-				},
-				associations: {
-					where: { removedAt: null },
-					include: {
-						user: { select: { id: true } },
-						group: true,
-					},
+			data: {
+				status: {
+					upsert: { create: { currentTenantId }, update: { currentTenantId } },
 				},
 			},
 		});
-
-		return toDomainEntity(User, result);
 	}
 
 	/**
-	 * 비밀번호 업데이트 (관련 필드 함께)
+	 * 비밀번호 업데이트 (자격 증명은 User에, 잠금 해제는 UserStatus에 함께 반영)
 	 */
 	async updatePassword(id: string, hashedPassword: string): Promise<void> {
 		this.logger.debug(`비밀번호 업데이트: ${id.toString()}`);
@@ -805,16 +707,26 @@ export class UsersRepository {
 			data: {
 				password: hashedPassword,
 				passwordChangedAt: new Date(),
-				mustChangePassword: false,
-				failedLoginAttempts: 0,
-				lockedUntil: null,
-				isPermanentlyLocked: false,
+				status: {
+					upsert: {
+						create: {
+							failedLoginAttempts: 0,
+							lockedUntil: null,
+							isPermanentlyLocked: false,
+						},
+						update: {
+							failedLoginAttempts: 0,
+							lockedUntil: null,
+							isPermanentlyLocked: false,
+						},
+					},
+				},
 			},
 		});
 	}
 
 	/**
-	 * 계정 잠금 해제 (failedLoginAttempts 초기화, lockedUntil null, isPermanentlyLocked false)
+	 * 계정 잠금 해제 (UserStatus의 failedLoginAttempts 초기화, lockedUntil null, isPermanentlyLocked false)
 	 */
 	async unlockAccount(id: string): Promise<void> {
 		this.logger.debug(`계정 잠금 해제: ${id.toString()}`);
@@ -822,9 +734,20 @@ export class UsersRepository {
 		await this.txHost.tx.user.update({
 			where: { userId: id },
 			data: {
-				failedLoginAttempts: 0,
-				lockedUntil: null,
-				isPermanentlyLocked: false,
+				status: {
+					upsert: {
+						create: {
+							failedLoginAttempts: 0,
+							lockedUntil: null,
+							isPermanentlyLocked: false,
+						},
+						update: {
+							failedLoginAttempts: 0,
+							lockedUntil: null,
+							isPermanentlyLocked: false,
+						},
+					},
+				},
 			},
 		});
 	}
@@ -842,29 +765,33 @@ export class UsersRepository {
 	} | null> {
 		this.logger.debug(`보안 정보 조회: ${id.toString()}`);
 
-		return this.txHost.tx.user.findUnique({
+		const result = await this.txHost.tx.user.findUnique({
 			where: { userId: id, removedAt: null },
 			select: {
-				failedLoginAttempts: true,
-				lockedUntil: true,
-				isPermanentlyLocked: true,
-				passwordChangedAt: true,
-				lastLoginAt: true,
 				email: true,
+				passwordChangedAt: true,
+				status: {
+					select: {
+						failedLoginAttempts: true,
+						lockedUntil: true,
+						isPermanentlyLocked: true,
+						lastLoginAt: true,
+					},
+				},
 			},
 		});
-	}
 
-	/**
-	 * 물리 삭제
-	 */
-	async deleteById(id: bigint): Promise<User> {
-		this.logger.debug(`삭제 중: ${id.toString()}`);
+		if (!result) {
+			return null;
+		}
 
-		const result = await this.txHost.tx.user.delete({
-			where: { id },
-		});
-
-		return toDomainEntity(User, result);
+		return {
+			email: result.email,
+			passwordChangedAt: result.passwordChangedAt,
+			failedLoginAttempts: result.status?.failedLoginAttempts ?? 0,
+			lockedUntil: result.status?.lockedUntil ?? null,
+			isPermanentlyLocked: result.status?.isPermanentlyLocked ?? false,
+			lastLoginAt: result.status?.lastLoginAt ?? null,
+		};
 	}
 }

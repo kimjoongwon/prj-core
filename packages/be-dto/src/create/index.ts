@@ -16,7 +16,6 @@ export * from "./create-task.dto";
 export * from "./create-template.dto";
 export * from "./create-tenant.dto";
 export * from "./create-timeline.dto";
-export * from "./create-user.dto";
 export * from "./create-user-association.dto";
 export * from "./create-user-classification.dto";
 export * from "./create-whitelist-entry.dto";

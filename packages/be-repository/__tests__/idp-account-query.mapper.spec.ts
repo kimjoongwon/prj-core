@@ -20,7 +20,7 @@ describe("IdpAccount query mapper", () => {
 			),
 		).toEqual({
 			removedAt: null,
-			isActive: false,
+			status: { isActive: false },
 			AND: [
 				{
 					OR: [
@@ -48,8 +48,8 @@ describe("IdpAccount query mapper", () => {
 				},
 				{
 					OR: [
-						{ isPermanentlyLocked: true },
-						{ lockedUntil: { gt: new Date("2026-06-22T00:00:00.000Z") } },
+						{ status: { isPermanentlyLocked: true } },
+						{ status: { lockedUntil: { gt: new Date("2026-06-22T00:00:00.000Z") } } },
 					],
 				},
 			],

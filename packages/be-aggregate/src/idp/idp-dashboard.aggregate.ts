@@ -45,7 +45,7 @@ export class IdpDashboardAggregate {
 				createdAt: { gte: today },
 			}),
 			this.usersRepository.count({
-				isPermanentlyLocked: true,
+				status: { isPermanentlyLocked: true },
 				removedAt: null,
 			}),
 			this.oidcClientsRepository.count({

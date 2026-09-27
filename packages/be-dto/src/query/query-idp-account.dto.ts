@@ -2,11 +2,12 @@ import {
 	BooleanFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { User } from "@cocrepo/entity";
+import { UserStatus } from "@cocrepo/entity";
 import { Transform } from "class-transformer";
 import { EntityQueryType } from "./entity-query-type";
 
-export class QueryIdpAccountDto extends EntityQueryType(User, [
+// isActive 필터는 UserStatus 1:1 모델의 필드에서 파생합니다.
+export class QueryIdpAccountDto extends EntityQueryType(UserStatus, [
 	"isActive",
 ] as const) {
 	@StringFieldOptional({ description: "이름 또는 이메일 검색" })

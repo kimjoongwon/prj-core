@@ -179,7 +179,6 @@ function mapAccountDetail(
 		isPermanentlyLocked: account.isPermanentlyLocked,
 		lockedUntil: formatLocalDateTime(account.lockedUntil),
 		failedLoginAttempts: account.failedLoginAttempts,
-		mustChangePassword: account.mustChangePassword,
 		lastLoginAt: formatLocalDateTime(account.lastLoginAt),
 		lastLoginIp: account.lastLoginIp,
 		createdAt: formatLocalDateTime(account.createdAt) ?? "",

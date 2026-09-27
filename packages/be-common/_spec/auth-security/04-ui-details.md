@@ -12,7 +12,6 @@ model User {
   failedLoginAttempts   Int       @default(0) @map("failed_login_attempts")
   lockedUntil           DateTime? @map("locked_until") @db.Timestamptz(6)
   isPermanentlyLocked   Boolean   @default(false) @map("is_permanently_locked")
-  mustChangePassword    Boolean   @default(false) @map("must_change_password")
   passwordChangedAt     DateTime? @map("password_changed_at") @db.Timestamptz(6)
   lastLoginAt           DateTime? @map("last_login_at") @db.Timestamptz(6)
   lastLoginIp           String?   @map("last_login_ip")
@@ -31,7 +30,6 @@ model User {
 | `failedLoginAttempts` | 연속 실패 횟수 (0으로 리셋 조건: 성공, 잠금 해제) | 여정 2 |
 | `lockedUntil` | 일시 잠금 해제 시각 (null=잠금 아님, 미래=잠김) | 여정 2 |
 | `isPermanentlyLocked` | 영구 잠금 여부 (관리자만 해제 가능) | 여정 2 |
-| `mustChangePassword` | 다음 로그인 시 비밀번호 변경 강제 | 여정 1 |
 | `passwordChangedAt` | 마지막 비밀번호 변경 시각 (만료 계산용) | 여정 7 |
 | `lastLoginAt` | 마지막 성공 로그인 시각 | 여정 9 |
 | `lastLoginIp` | 마지막 성공 로그인 IP | 여정 9 |

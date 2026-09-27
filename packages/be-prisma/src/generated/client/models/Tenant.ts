@@ -256,7 +256,7 @@ export type TenantWhereInput = {
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   accessRequests?: Prisma.TenantAccessRequestListRelationFilter
-  currentUsers?: Prisma.UserListRelationFilter
+  currentUserStatuses?: Prisma.UserStatusListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -272,7 +272,7 @@ export type TenantOrderByWithRelationInput = {
   space?: Prisma.SpaceOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   accessRequests?: Prisma.TenantAccessRequestOrderByRelationAggregateInput
-  currentUsers?: Prisma.UserOrderByRelationAggregateInput
+  currentUserStatuses?: Prisma.UserStatusOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -292,7 +292,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   accessRequests?: Prisma.TenantAccessRequestListRelationFilter
-  currentUsers?: Prisma.UserListRelationFilter
+  currentUserStatuses?: Prisma.UserStatusListRelationFilter
 }, "id" | "tenantId" | "userId_spaceId">
 
 export type TenantOrderByWithAggregationInput = {
@@ -335,7 +335,7 @@ export type TenantCreateInput = {
   space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
   user: Prisma.UserCreateNestedOneWithoutTenantsInput
   accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  currentUsers?: Prisma.UserCreateNestedManyWithoutCurrentTenantInput
+  currentUserStatuses?: Prisma.UserStatusCreateNestedManyWithoutCurrentTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -348,7 +348,7 @@ export type TenantUncheckedCreateInput = {
   spaceId: bigint | number
   roleId: bigint | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  currentUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCurrentTenantInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedCreateNestedManyWithoutCurrentTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -361,7 +361,7 @@ export type TenantUpdateInput = {
   space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
   accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  currentUsers?: Prisma.UserUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -374,7 +374,7 @@ export type TenantUncheckedUpdateInput = {
   spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  currentUsers?: Prisma.UserUncheckedUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -574,10 +574,20 @@ export type TenantUpdateOneWithoutAccessRequestsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAccessRequestsInput, Prisma.TenantUpdateWithoutAccessRequestsInput>, Prisma.TenantUncheckedUpdateWithoutAccessRequestsInput>
 }
 
-export type TenantCreateNestedOneWithoutCurrentUsersInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutCurrentUsersInput, Prisma.TenantUncheckedCreateWithoutCurrentUsersInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCurrentUsersInput
+export type TenantCreateNestedOneWithoutCurrentUserStatusesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCurrentUserStatusesInput, Prisma.TenantUncheckedCreateWithoutCurrentUserStatusesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCurrentUserStatusesInput
   connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneWithoutCurrentUserStatusesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCurrentUserStatusesInput, Prisma.TenantUncheckedCreateWithoutCurrentUserStatusesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCurrentUserStatusesInput
+  upsert?: Prisma.TenantUpsertWithoutCurrentUserStatusesInput
+  disconnect?: Prisma.TenantWhereInput | boolean
+  delete?: Prisma.TenantWhereInput | boolean
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCurrentUserStatusesInput, Prisma.TenantUpdateWithoutCurrentUserStatusesInput>, Prisma.TenantUncheckedUpdateWithoutCurrentUserStatusesInput>
 }
 
 export type TenantCreateNestedManyWithoutUserInput = {
@@ -592,16 +602,6 @@ export type TenantUncheckedCreateNestedManyWithoutUserInput = {
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutUserInput | Prisma.TenantCreateOrConnectWithoutUserInput[]
   createMany?: Prisma.TenantCreateManyUserInputEnvelope
   connect?: Prisma.TenantWhereUniqueInput | Prisma.TenantWhereUniqueInput[]
-}
-
-export type TenantUpdateOneWithoutCurrentUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutCurrentUsersInput, Prisma.TenantUncheckedCreateWithoutCurrentUsersInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCurrentUsersInput
-  upsert?: Prisma.TenantUpsertWithoutCurrentUsersInput
-  disconnect?: Prisma.TenantWhereInput | boolean
-  delete?: Prisma.TenantWhereInput | boolean
-  connect?: Prisma.TenantWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCurrentUsersInput, Prisma.TenantUpdateWithoutCurrentUsersInput>, Prisma.TenantUncheckedUpdateWithoutCurrentUsersInput>
 }
 
 export type TenantUpdateManyWithoutUserNestedInput = {
@@ -641,7 +641,7 @@ export type TenantCreateWithoutRoleInput = {
   space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
   user: Prisma.UserCreateNestedOneWithoutTenantsInput
   accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  currentUsers?: Prisma.UserCreateNestedManyWithoutCurrentTenantInput
+  currentUserStatuses?: Prisma.UserStatusCreateNestedManyWithoutCurrentTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRoleInput = {
@@ -653,7 +653,7 @@ export type TenantUncheckedCreateWithoutRoleInput = {
   userId: bigint | number
   spaceId: bigint | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  currentUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCurrentTenantInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedCreateNestedManyWithoutCurrentTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRoleInput = {
@@ -705,7 +705,7 @@ export type TenantCreateWithoutSpaceInput = {
   role: Prisma.RoleCreateNestedOneWithoutTenantsInput
   user: Prisma.UserCreateNestedOneWithoutTenantsInput
   accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  currentUsers?: Prisma.UserCreateNestedManyWithoutCurrentTenantInput
+  currentUserStatuses?: Prisma.UserStatusCreateNestedManyWithoutCurrentTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSpaceInput = {
@@ -717,7 +717,7 @@ export type TenantUncheckedCreateWithoutSpaceInput = {
   userId: bigint | number
   roleId: bigint | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  currentUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCurrentTenantInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedCreateNestedManyWithoutCurrentTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSpaceInput = {
@@ -755,7 +755,7 @@ export type TenantCreateWithoutAccessRequestsInput = {
   role: Prisma.RoleCreateNestedOneWithoutTenantsInput
   space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
   user: Prisma.UserCreateNestedOneWithoutTenantsInput
-  currentUsers?: Prisma.UserCreateNestedManyWithoutCurrentTenantInput
+  currentUserStatuses?: Prisma.UserStatusCreateNestedManyWithoutCurrentTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAccessRequestsInput = {
@@ -767,7 +767,7 @@ export type TenantUncheckedCreateWithoutAccessRequestsInput = {
   userId: bigint | number
   spaceId: bigint | number
   roleId: bigint | number
-  currentUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCurrentTenantInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedCreateNestedManyWithoutCurrentTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAccessRequestsInput = {
@@ -795,7 +795,7 @@ export type TenantUpdateWithoutAccessRequestsInput = {
   role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
-  currentUsers?: Prisma.UserUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAccessRequestsInput = {
@@ -807,10 +807,10 @@ export type TenantUncheckedUpdateWithoutAccessRequestsInput = {
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  currentUsers?: Prisma.UserUncheckedUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedUpdateManyWithoutCurrentTenantNestedInput
 }
 
-export type TenantCreateWithoutCurrentUsersInput = {
+export type TenantCreateWithoutCurrentUserStatusesInput = {
   tenantId?: string
   id?: bigint | number
   createdAt?: Date | string
@@ -822,7 +822,7 @@ export type TenantCreateWithoutCurrentUsersInput = {
   accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
 }
 
-export type TenantUncheckedCreateWithoutCurrentUsersInput = {
+export type TenantUncheckedCreateWithoutCurrentUserStatusesInput = {
   tenantId?: string
   id?: bigint | number
   createdAt?: Date | string
@@ -834,57 +834,23 @@ export type TenantUncheckedCreateWithoutCurrentUsersInput = {
   accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
 }
 
-export type TenantCreateOrConnectWithoutCurrentUsersInput = {
+export type TenantCreateOrConnectWithoutCurrentUserStatusesInput = {
   where: Prisma.TenantWhereUniqueInput
-  create: Prisma.XOR<Prisma.TenantCreateWithoutCurrentUsersInput, Prisma.TenantUncheckedCreateWithoutCurrentUsersInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCurrentUserStatusesInput, Prisma.TenantUncheckedCreateWithoutCurrentUserStatusesInput>
 }
 
-export type TenantCreateWithoutUserInput = {
-  tenantId?: string
-  id?: bigint | number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
-  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
-  accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  currentUsers?: Prisma.UserCreateNestedManyWithoutCurrentTenantInput
-}
-
-export type TenantUncheckedCreateWithoutUserInput = {
-  tenantId?: string
-  id?: bigint | number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  spaceId: bigint | number
-  roleId: bigint | number
-  accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  currentUsers?: Prisma.UserUncheckedCreateNestedManyWithoutCurrentTenantInput
-}
-
-export type TenantCreateOrConnectWithoutUserInput = {
-  where: Prisma.TenantWhereUniqueInput
-  create: Prisma.XOR<Prisma.TenantCreateWithoutUserInput, Prisma.TenantUncheckedCreateWithoutUserInput>
-}
-
-export type TenantCreateManyUserInputEnvelope = {
-  data: Prisma.TenantCreateManyUserInput | Prisma.TenantCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type TenantUpsertWithoutCurrentUsersInput = {
-  update: Prisma.XOR<Prisma.TenantUpdateWithoutCurrentUsersInput, Prisma.TenantUncheckedUpdateWithoutCurrentUsersInput>
-  create: Prisma.XOR<Prisma.TenantCreateWithoutCurrentUsersInput, Prisma.TenantUncheckedCreateWithoutCurrentUsersInput>
+export type TenantUpsertWithoutCurrentUserStatusesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCurrentUserStatusesInput, Prisma.TenantUncheckedUpdateWithoutCurrentUserStatusesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCurrentUserStatusesInput, Prisma.TenantUncheckedCreateWithoutCurrentUserStatusesInput>
   where?: Prisma.TenantWhereInput
 }
 
-export type TenantUpdateToOneWithWhereWithoutCurrentUsersInput = {
+export type TenantUpdateToOneWithWhereWithoutCurrentUserStatusesInput = {
   where?: Prisma.TenantWhereInput
-  data: Prisma.XOR<Prisma.TenantUpdateWithoutCurrentUsersInput, Prisma.TenantUncheckedUpdateWithoutCurrentUsersInput>
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCurrentUserStatusesInput, Prisma.TenantUncheckedUpdateWithoutCurrentUserStatusesInput>
 }
 
-export type TenantUpdateWithoutCurrentUsersInput = {
+export type TenantUpdateWithoutCurrentUserStatusesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -896,7 +862,7 @@ export type TenantUpdateWithoutCurrentUsersInput = {
   accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
 }
 
-export type TenantUncheckedUpdateWithoutCurrentUsersInput = {
+export type TenantUncheckedUpdateWithoutCurrentUserStatusesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -906,6 +872,40 @@ export type TenantUncheckedUpdateWithoutCurrentUsersInput = {
   spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
+}
+
+export type TenantCreateWithoutUserInput = {
+  tenantId?: string
+  id?: bigint | number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
+  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
+  accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
+  currentUserStatuses?: Prisma.UserStatusCreateNestedManyWithoutCurrentTenantInput
+}
+
+export type TenantUncheckedCreateWithoutUserInput = {
+  tenantId?: string
+  id?: bigint | number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  spaceId: bigint | number
+  roleId: bigint | number
+  accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedCreateNestedManyWithoutCurrentTenantInput
+}
+
+export type TenantCreateOrConnectWithoutUserInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutUserInput, Prisma.TenantUncheckedCreateWithoutUserInput>
+}
+
+export type TenantCreateManyUserInputEnvelope = {
+  data: Prisma.TenantCreateManyUserInput | Prisma.TenantCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type TenantUpsertWithWhereUniqueWithoutUserInput = {
@@ -943,7 +943,7 @@ export type TenantUpdateWithoutRoleInput = {
   space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
   accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  currentUsers?: Prisma.UserUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRoleInput = {
@@ -955,7 +955,7 @@ export type TenantUncheckedUpdateWithoutRoleInput = {
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  currentUsers?: Prisma.UserUncheckedUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutRoleInput = {
@@ -987,7 +987,7 @@ export type TenantUpdateWithoutSpaceInput = {
   role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
   accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  currentUsers?: Prisma.UserUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSpaceInput = {
@@ -999,7 +999,7 @@ export type TenantUncheckedUpdateWithoutSpaceInput = {
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  currentUsers?: Prisma.UserUncheckedUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutSpaceInput = {
@@ -1031,7 +1031,7 @@ export type TenantUpdateWithoutUserInput = {
   role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
   space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
   accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  currentUsers?: Prisma.UserUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUserInput = {
@@ -1043,7 +1043,7 @@ export type TenantUncheckedUpdateWithoutUserInput = {
   spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  currentUsers?: Prisma.UserUncheckedUpdateManyWithoutCurrentTenantNestedInput
+  currentUserStatuses?: Prisma.UserStatusUncheckedUpdateManyWithoutCurrentTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutUserInput = {
@@ -1063,12 +1063,12 @@ export type TenantUncheckedUpdateManyWithoutUserInput = {
 
 export type TenantCountOutputType = {
   accessRequests: number
-  currentUsers: number
+  currentUserStatuses: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accessRequests?: boolean | TenantCountOutputTypeCountAccessRequestsArgs
-  currentUsers?: boolean | TenantCountOutputTypeCountCurrentUsersArgs
+  currentUserStatuses?: boolean | TenantCountOutputTypeCountCurrentUserStatusesArgs
 }
 
 /**
@@ -1091,8 +1091,8 @@ export type TenantCountOutputTypeCountAccessRequestsArgs<ExtArgs extends runtime
 /**
  * TenantCountOutputType without action
  */
-export type TenantCountOutputTypeCountCurrentUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserWhereInput
+export type TenantCountOutputTypeCountCurrentUserStatusesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserStatusWhereInput
 }
 
 
@@ -1109,7 +1109,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   accessRequests?: boolean | Prisma.Tenant$accessRequestsArgs<ExtArgs>
-  currentUsers?: boolean | Prisma.Tenant$currentUsersArgs<ExtArgs>
+  currentUserStatuses?: boolean | Prisma.Tenant$currentUserStatusesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -1158,7 +1158,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   accessRequests?: boolean | Prisma.Tenant$accessRequestsArgs<ExtArgs>
-  currentUsers?: boolean | Prisma.Tenant$currentUsersArgs<ExtArgs>
+  currentUserStatuses?: boolean | Prisma.Tenant$currentUserStatusesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1179,7 +1179,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     space: Prisma.$SpacePayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
     accessRequests: Prisma.$TenantAccessRequestPayload<ExtArgs>[]
-    currentUsers: Prisma.$UserPayload<ExtArgs>[]
+    currentUserStatuses: Prisma.$UserStatusPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     tenantId: string
@@ -1588,7 +1588,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   accessRequests<T extends Prisma.Tenant$accessRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$accessRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  currentUsers<T extends Prisma.Tenant$currentUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$currentUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  currentUserStatuses<T extends Prisma.Tenant$currentUserStatusesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$currentUserStatusesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserStatusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2051,27 +2051,27 @@ export type Tenant$accessRequestsArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * Tenant.currentUsers
+ * Tenant.currentUserStatuses
  */
-export type Tenant$currentUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Tenant$currentUserStatusesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the UserStatus
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.UserStatusSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the UserStatus
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.UserStatusOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
-  cursor?: Prisma.UserWhereUniqueInput
+  include?: Prisma.UserStatusInclude<ExtArgs> | null
+  where?: Prisma.UserStatusWhereInput
+  orderBy?: Prisma.UserStatusOrderByWithRelationInput | Prisma.UserStatusOrderByWithRelationInput[]
+  cursor?: Prisma.UserStatusWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+  distinct?: Prisma.UserStatusScalarFieldEnum | Prisma.UserStatusScalarFieldEnum[]
 }
 
 /**

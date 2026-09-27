@@ -36,7 +36,6 @@ export interface AccountDetailScreenAccount {
 	failedLoginAttempts: number;
 	isPermanentlyLocked: boolean;
 	lockedUntil?: string | null;
-	mustChangePassword: boolean;
 	lastLoginAt?: string | null;
 	lastLoginIp?: string | null;
 	createdAt: string;
@@ -277,25 +276,7 @@ export const AccountDetailScreen = observer(
 													</div>
 												</dd>
 											</div>
-											<div>
-												<dt className="text-sm text-muted mb-1">
-													비밀번호 변경 필요
-												</dt>
-												<dd>
-													<Chip
-														size="sm"
-														variant="flat"
-														color={
-															account.mustChangePassword ? "warning" : "default"
-														}
-													>
-														{account.mustChangePassword
-															? "변경 필요"
-															: "불필요"}
-													</Chip>
-												</dd>
-											</div>
-											<div>
+												<div>
 												<dt className="text-sm text-muted mb-1">
 													마지막 로그인 시간
 												</dt>

@@ -458,6 +458,7 @@ export const ModelName = {
   Translation: 'Translation',
   UserAssociation: 'UserAssociation',
   UserClassification: 'UserClassification',
+  UserStatus: 'UserStatus',
   User: 'User',
   Video: 'Video',
   WhitelistEntry: 'WhitelistEntry'
@@ -476,7 +477,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ability" | "action" | "activity" | "aIAgentLog" | "albumEntry" | "album" | "asset" | "authAuditLog" | "category" | "company" | "content" | "derivative" | "document" | "emailVerification" | "exercise" | "fitnessCenter" | "folder" | "group" | "image" | "inquiryAttachment" | "inquiryMessage" | "inquiryParticipant" | "inquiryTag" | "inquiryThread" | "inquiry" | "oidcClient" | "oidcModel" | "passwordHistory" | "policyEntry" | "policy" | "post" | "profile" | "programActivity" | "program" | "referenceDataMigrationHistory" | "reservation" | "roleAssignment" | "roleAssociation" | "roleClassification" | "role" | "routine" | "safeConfirmation" | "safeTransaction" | "safeWallet" | "securityPolicy" | "sentimentAnalysis" | "serviceDocument" | "session" | "spaceAssociation" | "spaceClassification" | "space" | "subject" | "task" | "templateVariable" | "template" | "tenantAccessRequest" | "tenant" | "timeline" | "translation" | "userAssociation" | "userClassification" | "user" | "video" | "whitelistEntry"
+    modelProps: "ability" | "action" | "activity" | "aIAgentLog" | "albumEntry" | "album" | "asset" | "authAuditLog" | "category" | "company" | "content" | "derivative" | "document" | "emailVerification" | "exercise" | "fitnessCenter" | "folder" | "group" | "image" | "inquiryAttachment" | "inquiryMessage" | "inquiryParticipant" | "inquiryTag" | "inquiryThread" | "inquiry" | "oidcClient" | "oidcModel" | "passwordHistory" | "policyEntry" | "policy" | "post" | "profile" | "programActivity" | "program" | "referenceDataMigrationHistory" | "reservation" | "roleAssignment" | "roleAssociation" | "roleClassification" | "role" | "routine" | "safeConfirmation" | "safeTransaction" | "safeWallet" | "securityPolicy" | "sentimentAnalysis" | "serviceDocument" | "session" | "spaceAssociation" | "spaceClassification" | "space" | "subject" | "task" | "templateVariable" | "template" | "tenantAccessRequest" | "tenant" | "timeline" | "translation" | "userAssociation" | "userClassification" | "userStatus" | "user" | "video" | "whitelistEntry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4994,6 +4995,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UserStatus: {
+      payload: Prisma.$UserStatusPayload<ExtArgs>
+      fields: Prisma.UserStatusFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserStatusFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserStatusFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>
+        }
+        findFirst: {
+          args: Prisma.UserStatusFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserStatusFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>
+        }
+        findMany: {
+          args: Prisma.UserStatusFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>[]
+        }
+        create: {
+          args: Prisma.UserStatusCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>
+        }
+        createMany: {
+          args: Prisma.UserStatusCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserStatusCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>[]
+        }
+        delete: {
+          args: Prisma.UserStatusDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>
+        }
+        update: {
+          args: Prisma.UserStatusUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserStatusDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserStatusUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserStatusUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserStatusUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserStatusPayload>
+        }
+        aggregate: {
+          args: Prisma.UserStatusAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserStatus>
+        }
+        groupBy: {
+          args: Prisma.UserStatusGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserStatusGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserStatusCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserStatusCountAggregateOutputType> | number
+        }
+      }
+    }
     User: {
       payload: Prisma.$UserPayload<ExtArgs>
       fields: Prisma.UserFieldRefs
@@ -6335,6 +6410,24 @@ export const UserClassificationScalarFieldEnum = {
 export type UserClassificationScalarFieldEnum = (typeof UserClassificationScalarFieldEnum)[keyof typeof UserClassificationScalarFieldEnum]
 
 
+export const UserStatusScalarFieldEnum = {
+  userStatusId: 'userStatusId',
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  isActive: 'isActive',
+  failedLoginAttempts: 'failedLoginAttempts',
+  lockedUntil: 'lockedUntil',
+  isPermanentlyLocked: 'isPermanentlyLocked',
+  lastLoginAt: 'lastLoginAt',
+  lastLoginIp: 'lastLoginIp',
+  currentTenantId: 'currentTenantId'
+} as const
+
+export type UserStatusScalarFieldEnum = (typeof UserStatusScalarFieldEnum)[keyof typeof UserStatusScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   userId: 'userId',
   id: 'id',
@@ -6345,15 +6438,7 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
-  failedLoginAttempts: 'failedLoginAttempts',
-  lockedUntil: 'lockedUntil',
-  isPermanentlyLocked: 'isPermanentlyLocked',
-  mustChangePassword: 'mustChangePassword',
-  passwordChangedAt: 'passwordChangedAt',
-  lastLoginAt: 'lastLoginAt',
-  lastLoginIp: 'lastLoginIp',
-  isActive: 'isActive',
-  currentTenantId: 'currentTenantId'
+  passwordChangedAt: 'passwordChangedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -7182,6 +7267,7 @@ export type GlobalOmitConfig = {
   translation?: Prisma.TranslationOmit
   userAssociation?: Prisma.UserAssociationOmit
   userClassification?: Prisma.UserClassificationOmit
+  userStatus?: Prisma.UserStatusOmit
   user?: Prisma.UserOmit
   video?: Prisma.VideoOmit
   whitelistEntry?: Prisma.WhitelistEntryOmit

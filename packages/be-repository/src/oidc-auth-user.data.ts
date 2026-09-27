@@ -7,5 +7,4 @@ export interface OidcAuthUserData {
 	lockedUntil: Date | null;
 	isPermanentlyLocked: boolean;
 	isActive: boolean;
-	mustChangePassword: boolean;
 }

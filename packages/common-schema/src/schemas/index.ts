@@ -59,5 +59,6 @@ export * from "./user";
 export * from "./user/user-form.schema";
 export * from "./user-association";
 export * from "./user-classification";
+export * from "./user-status";
 export * from "./video";
 export * from "./whitelist-entry";

@@ -17,7 +17,6 @@ export * from "./update-task.dto";
 export * from "./update-template.dto";
 export * from "./update-tenant.dto";
 export * from "./update-timeline.dto";
-export * from "./update-user.dto";
 export * from "./update-user-association.dto";
 export * from "./update-user-classification.dto";
 export * from "./update-whitelist-entry.dto";

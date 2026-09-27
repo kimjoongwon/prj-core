@@ -85,6 +85,9 @@ export async function ensureSystemAdminUsers(
 						phone: userData.phone,
 						email: userData.email,
 						password: hashedPassword,
+						status: {
+							create: {},
+						},
 						profiles: {
 							create: {
 								name: userData.profile.name,

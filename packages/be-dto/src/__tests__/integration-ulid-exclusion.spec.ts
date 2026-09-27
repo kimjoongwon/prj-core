@@ -21,7 +21,6 @@ describe("일반 REST DTO의 integration ULID 제외와 숫자 ID 직렬화", ()
 			failedLoginAttempts: 3,
 			lockedUntil: null,
 			isPermanentlyLocked: false,
-			mustChangePassword: false,
 			passwordChangedAt: null,
 			lastLoginAt: null,
 			lastLoginIp: null,

@@ -52,7 +52,6 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 			passwordChangedAt: "2023-11-14T20:13:20.000Z",
 			lastLoginAt: "2023-11-14T21:13:20.000Z",
 			isPermanentlyLocked: false,
-			mustChangePassword: true,
 			currentTenantId: 9_007_199_254_740_994n,
 			tenants: [{ id: 9_007_199_254_740_994n, spaceId: 301n }],
 		};
@@ -65,16 +64,10 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 		expect(authCacheService.get).toHaveBeenCalledWith(authenticatedUserId);
 		expect(authenticatedUser).toBeInstanceOf(User);
 		expect(authenticatedUser).toMatchObject(cachedUserSnapshot);
-		expect(authenticatedUser.hasTenantAccess(9_007_199_254_740_994n)).toBe(
-			true,
-		);
-		expect(authenticatedUser.hasTenantAccess(9_007_199_254_740_995n)).toBe(
-			false,
-		);
+		expect(authenticatedUser.tenants?.[0]?.id).toBe(9_007_199_254_740_994n);
 		expect(authenticatedUser.canAccessSpace(301n)).toBe(true);
 		expect(authenticatedUser.accessibleSpaceIds).toEqual([301n]);
-		expect(authenticatedUser.needsPasswordChange()).toBe(true);
-		expect(authenticatedUser.isNotRemoved()).toBe(true);
+		expect(authenticatedUser.removedAt).toBeNull();
 		expect(usersService.findByUserIdWithTenants).not.toHaveBeenCalled();
 		expect(authCacheService.set).not.toHaveBeenCalled();
 	});
@@ -87,7 +80,7 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 			email: "Existing.Case@Example.COM",
 			password: "$2b$10$database.password.hash",
 			createdAt: new Date("2023-11-14T22:13:20.000Z"),
-			lastLoginAt: new Date("2023-11-14T22:00:00.000Z"),
+			passwordChangedAt: new Date("2023-11-14T22:00:00.000Z"),
 			removedAt: null,
 			tenants: [{ id: 201n, spaceId: 301n }],
 		});
@@ -114,10 +107,10 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 		expect(cachedUser).toBeInstanceOf(User);
 		expect(cachedUser).toMatchObject(parseBigIntJson(savedUserJson));
 		expect(cachedUser.createdAt).toBe(databaseUser.createdAt.toISOString());
-		expect(cachedUser.lastLoginAt).toBe(
-			databaseUser.lastLoginAt?.toISOString(),
+		expect(cachedUser.passwordChangedAt).toBe(
+			databaseUser.passwordChangedAt?.toISOString(),
 		);
-		expect(cachedUser.hasTenantAccess(201n)).toBe(true);
+		expect(cachedUser.tenants?.[0]?.id).toBe(201n);
 		expect(usersService.findByUserIdWithTenants).toHaveBeenCalledTimes(1);
 		expect(authCacheService.set).toHaveBeenCalledTimes(1);
 	});

@@ -10,7 +10,6 @@ export interface MobileAuthSession {
 	refreshToken?: string | null;
 	refreshTokenExpiresAt?: number | null;
 	sessionId?: string | null;
-	mustChangePassword?: boolean | null;
 }
 
 export interface MobileAuthCallbackTransitionState {

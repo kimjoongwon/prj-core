@@ -3,6 +3,7 @@ import { Ability } from "./ability.entity";
 import { Policy } from "./policy.entity";
 import { PolicyEntry } from "./policy-entry.entity";
 import { RoleAssignment } from "./role-assignment.entity";
+import { UserStatus } from "./user-status.entity";
 
 type NestedEntityConstructor = Constructor<object>;
 
@@ -16,6 +17,7 @@ const NESTED_ENTITY_KEYS: Record<
 	Policy: { entries: PolicyEntry, roleAssignments: RoleAssignment },
 	PolicyEntry: { ability: Ability },
 	RoleAssignment: { policy: Policy },
+	User: { status: UserStatus },
 };
 
 /**

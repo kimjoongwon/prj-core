@@ -4,6 +4,7 @@ import {
 	PolicyEntry,
 	RoleAssignment,
 	User,
+	UserStatus,
 } from "@cocrepo/entity";
 import { toDomainEntity } from "../src/to-domain-entity";
 
@@ -82,7 +83,7 @@ describe("toDomainEntity", () => {
 		expect(result.space).toBeNull();
 	});
 
-	it("Prisma scalar를 변형하지 않고 User domain method를 사용할 수 있게 복원한다", () => {
+	it("Prisma scalar를 변형하지 않고 User/UserStatus 관계를 복원한다", () => {
 		const lockedUntil = new Date("2030-01-01T00:00:00.000Z");
 		const persistenceRow = {
 			id: 101n,
@@ -91,20 +92,26 @@ describe("toDomainEntity", () => {
 			email: "ADMIN@EXAMPLE.COM",
 			phone: "010-0000-0000",
 			password: "$2b$10$hashedPassword",
-			failedLoginAttempts: 0,
-			lockedUntil,
 			passwordChangedAt: null,
-			lastLoginAt: null,
-			lastLoginIp: null,
-			isPermanentlyLocked: false,
-			mustChangePassword: false,
-			isActive: true,
-			currentTenantId: 202n,
 			createdAt: new Date("2026-01-01T00:00:00.000Z"),
 			updatedAt: null,
 			removedAt: null,
+			status: {
+				userStatusId: "01J0000000000000000000000S",
+				id: 901n,
+				userId: 101n,
+				failedLoginAttempts: 0,
+				lockedUntil,
+				isPermanentlyLocked: false,
+				lastLoginAt: null,
+				lastLoginIp: null,
+				isActive: true,
+				currentTenantId: 202n,
+				createdAt: new Date("2026-01-01T00:00:00.000Z"),
+				updatedAt: null,
+			},
 			tenants: [{ id: 303n, spaceId: 404n }],
-	};
+		};
 
 		const result = toDomainEntity(User, persistenceRow);
 
@@ -113,9 +120,11 @@ describe("toDomainEntity", () => {
 		expect(result.userId).toBe(persistenceRow.userId);
 		expect(result.password).toBe(persistenceRow.password);
 		expect(result.id).toBe(101n);
-		expect(result.currentTenantId).toBe(202n);
-		expect(result.lockedUntil).toBe(lockedUntil);
-		expect(result.hasTenantAccess(303n)).toBe(true);
+		expect(result.status).toBeInstanceOf(UserStatus);
+		expect(result.status?.currentTenantId).toBe(202n);
+		expect(result.status?.lockedUntil).toBe(lockedUntil);
+		expect(result.status?.isActive).toBe(true);
+		expect(result.canAccessSpace(404n)).toBe(true);
 	});
 
 	it("Policy graph의 기존 nested Entity prototype과 순환·공유 참조를 보존한다", () => {
