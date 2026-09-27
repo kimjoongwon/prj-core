@@ -86,4 +86,36 @@ test.describe("로그아웃 플로우 @real", () => {
 		// 대시보드로 되돌아가지 않았는지가 이 회귀의 핵심 판정이다.
 		await expect(page).not.toHaveURL(/dashboard/);
 	});
+
+	test("id_token_hint 없는 end_session도 first-party는 확인 화면 없이 자동 진행한다", async ({
+		page,
+	}) => {
+		await loginToConsole(page);
+		await expect(
+			page.getByRole("button", { name: "사용자 메뉴" }),
+		).toBeVisible({ timeout: 20000 });
+
+		// OP 세션이 살아 있는 상태에서 hint 없는 end_session URL로 직접
+		// 이동한다(로그인 1시간 넘은 세션의 로그아웃과 같은 조건). first-party
+		// 신뢰로 확인 화면 없이 자동 진행해 로그인 폼에 도달해야 한다.
+		const idpWebOrigin = new URL(
+			process.env.E2E_IDP_WEB_BASE_URL ?? "http://localhost:3008",
+		).origin;
+		const adminOrigin = new URL(
+			process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin",
+		).origin;
+		const endSessionUrl = `${idpWebOrigin}/oidc/session/end?post_logout_redirect_uri=${encodeURIComponent(
+			`${adminOrigin}/admin/auth/login`,
+		)}&client_id=admin-web`;
+
+		await page.goto(endSessionUrl);
+
+		// 확인 화면("로그아웃하시겠습니까?")이 아니라 자동 진행 후
+		// 최종 착지인 로그인 폼이 보여야 한다.
+		await expect(page.getByLabel("이메일")).toBeVisible({ timeout: 30000 });
+		await expect(
+			page.getByText("로그아웃하시겠습니까?"),
+		).toHaveCount(0);
+		await expect(page).not.toHaveURL(/dashboard/);
+	});
 });

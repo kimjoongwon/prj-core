@@ -68,11 +68,11 @@ export class OidcConfigurationService {
 				jwtUserinfo: { enabled: false },
 				rpInitiatedLogout: {
 					enabled: true,
-					// 검증된 id_token_hint를 가진 최초파티 로그아웃만 별도 확인 없이
-					// 폼을 자동 제출해 세션 종료 → post_logout_redirect_uri 복귀까지
-					// 한 번에 진행한다. 그 외 요청은 확인 화면을 렌더해 사용자가
-					// 직접 로그아웃을 확정하게 한다(RP-Initiated Logout은 id_token_hint가
-					// 없으면 사용자 확인이 필수다). provider 폼은 xsrf만 담고 있어
+					// 최초파티 클라이언트의 로그아웃은 별도 확인 없이 폼을 자동
+					// 제출해 세션 종료 → post_logout_redirect_uri 복귀까지 한 번에
+					// 진행한다(클라이언트가 전부 first-party인 폐쇄 시스템 신뢰).
+					// 서드파티 클라이언트의 요청은 확인 화면을 렌더해 사용자가 직접
+					// 로그아웃을 확정하게 한다. provider 폼은 xsrf만 담고 있어
 					// 그대로 제출하면 RP 전용 로그아웃(그랜트만 폐기, OP 세션 유지)으로
 					// 처리되므로 logout=yes를 추가해 OP 세션 전체를 종료하는 경로로 보낸다.
 					logoutSource: (ctx, form) =>
@@ -213,11 +213,14 @@ export class OidcConfigurationService {
 	}
 
 	/**
-	 * end_session 확인 화면. 검증된 id_token_hint를 가진 최초파티 클라이언트는
-	 * 사용자가 이미 로그아웃을 눌렀으므로 자동 제출하고, 그 외 요청은 전체
-	 * 로그아웃/유지 버튼이 있는 확인 화면을 렌더한다. 버튼은 provider 폼의
-	 * form id(op.logoutForm)를 참조해 제출하며, name=logout value=yes 제출이
-	 * OP 세션 전체 종료, 미지정 제출은 RP 전용 로그아웃(그랜트만 폐기)이다.
+	 * end_session 확인 화면. 최초파티 클라이언트는 사용자가 앱에서 이미
+	 * 로그아웃을 눌렀다고 신뢰해 id_token_hint 없이도 자동 제출한다(hint가
+	 * 없으면 사용자 확인이 권고(SHOULD)인데, 클라이언트가 전부 first-party인
+	 * 폐쇄 시스템이라 남는 위험은 강제 로그아웃 소음 수준이다). 서드파티
+	 * 클라이언트의 요청은 전체 로그아웃/유지 버튼이 있는 확인 화면을 렌더한다.
+	 * 버튼은 provider 폼의 form id(op.logoutForm)를 참조해 제출하며,
+	 * name=logout value=yes 제출이 OP 세션 전체 종료, 미지정 제출은 RP 전용
+	 * 로그아웃(그랜트만 폐기)이다.
 	 */
 	private renderLogoutConfirmation(
 		ctx: Parameters<
@@ -229,9 +232,8 @@ export class OidcConfigurationService {
 		firstPartyClientIds: Set<string>,
 	) {
 		const clientId = ctx.oidc?.client?.clientId;
-		const hasVerifiedIdTokenHint = Boolean(ctx.oidc?.entities?.IdTokenHint);
 		const isTrustedFirstPartyLogout = Boolean(
-			clientId && firstPartyClientIds.has(clientId) && hasVerifiedIdTokenHint,
+			clientId && firstPartyClientIds.has(clientId),
 		);
 
 		ctx.type = "html";

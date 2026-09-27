@@ -242,15 +242,17 @@ describe("OidcConfigurationService", () => {
 			expect(ctx.body).toContain("document.forms[0].submit()");
 		});
 
-		it("id_token_hint가 없는 요청은 자동 제출하지 않고 확인 버튼을 렌더한다", async () => {
+		it("최초파티 클라이언트는 id_token_hint가 없어도 전체 로그아웃 폼을 자동 제출한다", async () => {
 			const ctx = await renderLogoutConfirmationPage(
 				[buildClient("admin-web", true, true)],
 				{ client: { clientId: "admin-web" } },
 			);
 
-			expect(ctx.body).toContain('form="op.logoutForm"');
+			expect(ctx.type).toBe("html");
 			expect(ctx.body).toContain('name="logout" value="yes"');
-			expect(ctx.body).not.toContain("document.forms[0].submit()");
+			expect(ctx.body).toContain("document.forms[0].submit()");
+			// 확인 버튼 페이지가 아니어야 한다
+			expect(ctx.body).not.toContain('form="op.logoutForm"');
 		});
 
 		it("third-party 클라이언트는 id_token_hint가 있어도 확인 버튼을 렌더한다", async () => {
