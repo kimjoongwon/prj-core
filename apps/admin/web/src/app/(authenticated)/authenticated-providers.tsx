@@ -6,7 +6,7 @@ import {
 import { useVerifyToken } from "@cocrepo/api/idp/auth";
 import { isScopeKindAccessible, Token } from "@cocrepo/constant";
 import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
-import { useApp } from "@cocrepo/store";
+import { type AuthSession, useApp } from "@cocrepo/store";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ const ADMIN_WEB_LOGIN_PATH = "/admin/auth/login";
  * 401이 나면 쿠키 기반 token/refresh로 갱신 후 재시도하고, 갱신이 실패하면
  * 로그인 화면으로 보낸다. 로그인 UI(idp/web)는 이 정책을 설치하지 않는다.
  */
-function installAdminSessionRecovery() {
+function installAdminSessionRecovery(authSession: AuthSession) {
 	installCoreSessionRecovery({
 		refreshSession: async () => {
 			// 세션 표시(loggedIn)가 없는 방문자는 인증 쿠키도 없다는 뜻이므로
@@ -40,6 +40,14 @@ function installAdminSessionRecovery() {
 			}
 		},
 		onSessionExpired: () => {
+			// 의도적 로그아웃 중에는 만료 리다이렉트를 하지 않는다. 로그아웃
+			// API가 쿠키를 지운 직후 살아 있던 요청들의 401이 이 핸들러를
+			// 발동시키는데, 여기서 로그인 화면으로 보내면 로그아웃 버튼의
+			// OP end_session 이동이 대체되어 OP 세션이 남는다(로그인 화면이
+			// SSO 자동 재개로 곧바로 대시보드로 되돌려보낸다).
+			if (authSession.isLoggingOut) {
+				return;
+			}
 			window.location.href = ADMIN_WEB_LOGIN_PATH;
 		},
 	});
@@ -144,7 +152,7 @@ const SessionBootstrap = observer(function SessionBootstrap({
 	useEffect(() => {
 		let cancelled = false;
 
-		installAdminSessionRecovery();
+		installAdminSessionRecovery(authSession);
 
 		const bootstrapFromSessionCookies = async (): Promise<boolean> => {
 			if (authSession.refreshToken && authSession.sessionId) {

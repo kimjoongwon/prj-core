@@ -7,7 +7,9 @@ import { AccountLogoutButton } from "./AccountLogoutButton";
 
 const mocks = vi.hoisted(() => ({
 	account: {
+		beginLogout: vi.fn(),
 		clear: vi.fn(),
+		endLogout: vi.fn(),
 	},
 	fetch: vi.fn(),
 	router: {
@@ -54,7 +56,9 @@ function renderAccountLogoutButton() {
 
 describe("AccountLogoutButton", () => {
 	beforeEach(() => {
+		mocks.account.beginLogout.mockReset();
 		mocks.account.clear.mockReset();
+		mocks.account.endLogout.mockReset();
 		mocks.fetch.mockReset();
 		mocks.fetch.mockResolvedValue({ ok: true } as Response);
 		mocks.router.replace.mockReset();
@@ -72,6 +76,11 @@ describe("AccountLogoutButton", () => {
 				credentials: "include",
 			});
 		});
+		// 로그아웃 의도 표시가 fetch보다 먼저 세팅돼야 세션 만료 리다이렉트를
+		// 억제할 수 있다(늦은 401이 end_session 이동을 대체하는 회귀 방지).
+		expect(
+			mocks.account.beginLogout.mock.invocationCallOrder[0],
+		).toBeLessThan(mocks.fetch.mock.invocationCallOrder[0]);
 	});
 
 	it("로그아웃 후 account를 정리하고 login으로 이동한다", async () => {
@@ -82,6 +91,7 @@ describe("AccountLogoutButton", () => {
 
 		await waitFor(() => {
 			expect(mocks.account.clear).toHaveBeenCalledTimes(1);
+			expect(mocks.account.endLogout).toHaveBeenCalledTimes(1);
 			expect(mocks.router.replace).toHaveBeenCalledWith("/auth/login");
 		});
 	});

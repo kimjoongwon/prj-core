@@ -21,6 +21,10 @@ export const AccountLogoutButton = () => {
 	const account = useApp().account;
 
 	const onPress = async () => {
+		// 로그아웃 의도를 먼저 표시한다. 로그아웃 API가 인증 쿠키를 지운
+		// 직후 살아 있던 다른 요청의 401이 세션 만료 리다이렉트를 발동시켜
+		// 아래 endSessionUrl 이동을 대체하는 것을 막는다.
+		account.beginLogout();
 		// OIDC 세션의 HttpOnly 쿠키(access/session)를 서버에서 만료시킨다
 		let endSessionUrl: string | null = null;
 		try {
@@ -43,6 +47,8 @@ export const AccountLogoutButton = () => {
 			return;
 		}
 
+		// SPA가 그대로 살아있는 폴백 경로에서는 로그아웃 표시를 해제한다.
+		account.endLogout();
 		router.replace("/auth/login");
 	};
 

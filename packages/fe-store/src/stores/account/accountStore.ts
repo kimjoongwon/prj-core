@@ -144,6 +144,28 @@ export class AccountStore {
 		this.persistStorage.remove(ACCOUNT_PERSIST_SECTION);
 	}
 
+	/**
+	 * 의도적 로그아웃 시작을 표시한다.
+	 *
+	 * 로그아웃 API가 인증 쿠키를 지운 직후 살아 있던 다른 API 요청이 401로
+	 * 끝나면 세션 만료 핸들러가 로그인 화면으로 내비게이션할 수 있는데, 이
+	 * 표시가 있으면 로그아웃 버튼의 OP end_session 이동이 그 내비게이션으로
+	 * 대체되지 않는다. 대체되면 OP 세션이 남아 SSO 자동 재개로 곧바로
+	 * 대시보드로 돌아온다. end_session 이동 없이 앱 로그인 화면으로 되돌아
+	 * 가는 경로에서는 endLogout()으로 표시를 해제한다.
+	 */
+	beginLogout(): void {
+		this.authSession.isLoggingOut = true;
+	}
+
+	/**
+	 * 의도적 로그아웃 표시를 해제한다(로그인 화면 폴백 경로 등 SPA가
+	 * 계속 살아 있는 경우).
+	 */
+	endLogout(): void {
+		this.authSession.isLoggingOut = false;
+	}
+
 	private readPersistedAccountTenantSelection(): PersistedAccountTenantSelection | null {
 		const data = this.persistStorage.read<unknown>(ACCOUNT_PERSIST_SECTION);
 		if (data === null) {

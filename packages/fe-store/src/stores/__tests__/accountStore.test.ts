@@ -48,6 +48,20 @@ function createAccountStore(): AccountStore {
 }
 
 describe("AccountStore", () => {
+	describe("의도적 로그아웃 표시", () => {
+		it("beginLogout/endLogout이 세션 만료 리다이렉트 억제 플래그를 움직인다", () => {
+			const account = createAccountStore();
+
+			expect(account.authSession.isLoggingOut).toBe(false);
+
+			account.beginLogout();
+			expect(account.authSession.isLoggingOut).toBe(true);
+
+			account.endLogout();
+			expect(account.authSession.isLoggingOut).toBe(false);
+		});
+	});
+
 	let storage: ReturnType<typeof createStorageMock>;
 	let account: AccountStore;
 

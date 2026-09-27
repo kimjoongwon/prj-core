@@ -35,4 +35,55 @@ test.describe("로그아웃 플로우 @real", () => {
 		await page.goto("./dashboard");
 		await expect(page.getByLabel("이메일")).toBeVisible({ timeout: 30000 });
 	});
+
+	test("로그아웃 이후 늦게 도착하는 401이 end_session 이동을 대체하지 않는다", async ({
+		page,
+	}) => {
+		await loginToConsole(page);
+		await expect(
+			page.getByRole("button", { name: "사용자 메뉴" }),
+		).toBeVisible({ timeout: 20000 });
+
+		// 로그아웃 클릭 이후에야 응답이 도착하는 인증 API 요청을 만든다.
+		// 로그아웃이 인증 쿠키를 지운 뒤 401로 돌아오면 세션 만료 핸들러가
+		// 로그인 화면으로 내비게이션하려 하는데, 의도적 로그아웃 표시가 있으면
+		// 억제되고 OP end_session 체인이 완결돼야 한다(회귀: 억제가 없으면 SSO
+		// 자동 재개로 곧바로 대시보드로 돌아왔다).
+		let lateUsersResponseStatus = 0;
+		await page.route(/\/api\/v1\/users/, async (route) => {
+			// users 조회가 로그아웃 이후에 도착하도록 지연한다.
+			await new Promise((resolve) => setTimeout(resolve, 5000));
+			const response = await route.fetch();
+			lateUsersResponseStatus = response.status();
+			await route.fulfill({ response }).catch(() => {});
+		});
+		// end_session 문서 로딩을 지연시켜 구 페이지(로그아웃 버튼을 누른
+		// 페이지)가 살아 있는 동안 늦은 401이 도착하게 한다. 이 창 안에서
+		// 세션 만료 핸들러가 내비게이션을 대체하면 로그아웃이 취소된다.
+		await page.route(/\/oidc\/session\/end/, async (route) => {
+			await new Promise((resolve) => setTimeout(resolve, 4000));
+			await route.continue();
+		});
+
+		// 지연 중인 users 조회를 띄운 채 로그아웃한다.
+		await page.goto("./users");
+		await page.getByRole("button", { name: "사용자 메뉴" }).waitFor({
+			state: "visible",
+			timeout: 20000,
+		});
+		await page.getByRole("button", { name: "사용자 메뉴" }).click();
+		await page
+			.getByRole("menuitem", { name: "로그아웃" })
+			.waitFor({ state: "visible", timeout: 8000 });
+		await page.getByRole("menuitem", { name: "로그아웃" }).click();
+
+		await expect(page.getByLabel("이메일")).toBeVisible({ timeout: 30000 });
+
+		// 늦은 응답이 401로 도착했는지(경합 조건이 성립했는지) 확인한다.
+		await expect
+			.poll(() => lateUsersResponseStatus, { timeout: 10000 })
+			.toBe(401);
+		// 대시보드로 되돌아가지 않았는지가 이 회귀의 핵심 판정이다.
+		await expect(page).not.toHaveURL(/dashboard/);
+	});
 });
