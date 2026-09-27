@@ -97,7 +97,16 @@ pipeline {
 
                         printf '%s\\n' "${DEPLOY_SSH_KEY}" > "${KEYFILE}"
                         chmod 600 "${KEYFILE}"
-                        git -C "${DEPLOY_DIR}" remote set-url --push origin git@github.com:kimjoongwon/prj-deploy.git
+                        # push URL은 DEPLOY_REPOSITORY_URL에서 유도한다 — 하드코딩하면
+                        # 파라미터와 실제 push 대상이 어긋난다. https GitHub URL이
+                        # 아니면 유도 실패로 즉시 중단한다.
+                        normalized_deploy_repo="$(printf %s "${DEPLOY_REPO}" | sed -e 's:/*$::' -e 's:\\.git$::')"
+                        deploy_repo_slug="$(printf %s "${normalized_deploy_repo}" | sed -nE 's#^https://github\\.com/([^/]+)/([^/]+)$#\\1/\\2#p')"
+                        if [ -z "${deploy_repo_slug}" ]; then
+                            echo "DEPLOY_REPOSITORY_URL에서 push URL을 유도할 수 없습니다: ${DEPLOY_REPO}" >&2
+                            exit 1
+                        fi
+                        git -C "${DEPLOY_DIR}" remote set-url --push origin "git@github.com:${deploy_repo_slug}.git"
                         export GIT_SSH_COMMAND="ssh -i ${KEYFILE} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 
                         # yq 부트스트랩: prj-devops에 install-yq.sh가 있을 때만 수행
