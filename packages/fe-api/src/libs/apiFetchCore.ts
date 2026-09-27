@@ -68,7 +68,8 @@ export function setConfiguredApiBaseUrl(baseUrl: string) {
 const joinBaseUrl = (baseUrl: string, url: string) =>
 	`${baseUrl.replace(/\/+$/, "")}${url.startsWith("/") ? url : `/${url}`}`;
 
-const isAbsoluteUrl = (url: string) => /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(url);
+const isAbsoluteUrl = (url: string) =>
+	/^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(url);
 
 const resolveRequestUrl = (url: string) => {
 	if (isAbsoluteUrl(url)) {
@@ -89,18 +90,26 @@ const resolveRequestUrl = (url: string) => {
 /**
  * 호출 signal과 타임아웃을 합성한다. AbortSignal.any/timeout을 지원하지 않는
  * 런타임(RN/Hermes 구버전)에서도 동작하도록 수동 폴백을 둔다.
+ *
+ * dispose는 요청 완료 후 남은 타임아웃 타이머를 해제한다. 폴백 경로는
+ * 완료 시점에 타이머가 아직 살아 있어 해제하지 않으면 요청당 최대
+ * REQUEST_TIMEOUT_MS까지 타이머가 남는다. AbortSignal.any 경로는 네이티브
+ * 구현이라 no-op다.
  */
 const composeTimeoutSignal = (
 	upstreamSignal: AbortSignal | null | undefined,
 	timeoutMs: number,
-): AbortSignal => {
+): { signal: AbortSignal; dispose: () => void } => {
 	if (
 		typeof AbortSignal.any === "function" &&
 		typeof AbortSignal.timeout === "function"
 	) {
-		return upstreamSignal
-			? AbortSignal.any([upstreamSignal, AbortSignal.timeout(timeoutMs)])
-			: AbortSignal.timeout(timeoutMs);
+		return {
+			signal: upstreamSignal
+				? AbortSignal.any([upstreamSignal, AbortSignal.timeout(timeoutMs)])
+				: AbortSignal.timeout(timeoutMs),
+			dispose: () => {},
+		};
 	}
 
 	const composedController = new AbortController();
@@ -127,7 +136,7 @@ const composeTimeoutSignal = (
 			{ once: true },
 		);
 	}
-	return composedController.signal;
+	return { signal: composedController.signal, dispose: stopTimeout };
 };
 
 const isAbortFailure = (error: unknown) =>
@@ -169,11 +178,15 @@ export async function executeApiFetch<T>(
 	coreOptions: ApiFetchCoreOptions = {},
 ): Promise<T> {
 	const requestMethod = init.method ?? "GET";
+	const { signal: requestSignal, dispose } = composeTimeoutSignal(
+		init.signal,
+		REQUEST_TIMEOUT_MS,
+	);
 	try {
 		const response = await fetch(resolveRequestUrl(url), {
 			...init,
 			credentials: "include",
-			signal: composeTimeoutSignal(init.signal, REQUEST_TIMEOUT_MS),
+			signal: requestSignal,
 		});
 		const responseBody = await readResponseBody(response);
 		if (!response.ok) {
@@ -200,5 +213,7 @@ export async function executeApiFetch<T>(
 			throw new Error(`timeout of ${REQUEST_TIMEOUT_MS}ms exceeded`);
 		}
 		throw fetchError;
+	} finally {
+		dispose();
 	}
 }
