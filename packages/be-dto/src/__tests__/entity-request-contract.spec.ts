@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import { type Type, ValidationPipe } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
 import { describe, expect, it } from "vitest";
 import { CreateAbilityDto } from "../abilities/create-ability.dto";
 import { CreateAssetDto } from "../asset/create-asset.dto";
