@@ -133,11 +133,6 @@ export {
 	OidcClientListScreen,
 } from "./OidcClientListScreen/OidcClientListScreen";
 export type {
-	IdpInteractionClientInfo,
-	OidcInteractionScreenProps,
-} from "./OidcInteractionScreen/OidcInteractionScreen";
-export { OidcInteractionScreen } from "./OidcInteractionScreen/OidcInteractionScreen";
-export type {
 	OidcSessionListScreenProps,
 	OidcSessionListScreenQueryStates,
 	OidcSessionListScreenSetQueryStates,

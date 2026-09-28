@@ -586,7 +586,8 @@ if [[ " $SERVICES " == *" idp-web "* ]]; then
   (
     sleep 10
     curl -s -o /dev/null --max-time 60 "http://localhost:${IDP_WEB_PORT:-3008}/auth/forgot-password"
-    curl -s -o /dev/null --max-time 60 "http://localhost:${IDP_WEB_PORT:-3008}/auth/interaction/__prewarm__"
+    curl -s -o /dev/null --max-time 60 "http://localhost:${IDP_WEB_PORT:-3008}/auth/login/__prewarm__"
+    curl -s -o /dev/null --max-time 60 "http://localhost:${IDP_WEB_PORT:-3008}/auth/consent/__prewarm__"
   ) >/dev/null 2>&1 &
 fi
 
