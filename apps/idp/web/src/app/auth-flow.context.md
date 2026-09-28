@@ -12,35 +12,42 @@ flowchart TD
   C -- yes --> D["/error?error=... 이동"]
   C -- no --> E["/api/v1/auth/login?clientId=idp-web&returnTo=... 302"]
   E --> F["OIDC authorize"]
-  F --> G["/interaction/[uid]"]
-  G --> H["로그인 또는 Consent 화면"]
+  F --> G["prompt에 따라 /auth/login/[uid] 또는 /auth/consent/[uid]"]
+  G --> H["로그인 폼 또는 권한 동의 화면"]
 ```
 
 - `/auth/login`은 사용자가 머무르는 화면이 아니라 IDP Web의 로그인 진입 URL입니다.
 - `returnTo`는 같은 origin의 URL만 허용하고, 외부 origin은 `/dashboard`로 대체합니다.
 - callback 실패처럼 `error` query가 붙은 요청은 `/error` 화면으로 넘깁니다.
 
-## /interaction/[uid] 화면 전환
+## /auth/login/[uid] · /auth/consent/[uid] 라우팅과 렌더
 
 ```mermaid
 flowchart TD
-  A["/interaction/[uid]"] --> B{"interaction detail 로딩"}
-  B -- loading --> C["로그인 화면을 준비하고 있어요"]
-  C --> D{"약 4초 이상 유지?"}
-  D -- yes --> E["다시 시도 액션 노출"]
-  D -- no --> B
-  B -- error --> F["오류 화면 + 복구 액션"]
-  B -- loaded --> G{"인증 필요?"}
-  G -- yes --> H["로그인 폼"]
-  G -- no --> I{"Consent 필요?"}
-  I -- yes --> J["권한 동의 화면"]
-  I -- no --> K["callback 이동"]
-  H --> I
-  J --> K
+  A["provider interactions.url<br/>(prompt.name 기준 분기)"] --> B{"prompt"}
+  B -- login --> L["/auth/login/[uid] (서버 컴포넌트)"]
+  B -- consent --> C["/auth/consent/[uid] (서버 컴포넌트)"]
+  L --> LQ{"SSR interaction 조회<br/>(쿠키 포워딩, IDP_API_INTERNAL_URL)"}
+  C --> CQ{"SSR interaction 조회"}
+  LQ -- 만료/오류 --> F["실패 화면 + 복구 액션"]
+  CQ -- 만료/오류 --> F
+  LQ -- type 불일치 --> C
+  CQ -- type 불일치 --> L
+  LQ -- 성공 --> LF["로그인 폼 렌더<br/>(첫 페인트부터 폼 포함)"]
+  CQ -- 성공 --> CF["권한 동의 화면 렌더"]
+  LF --> S["POST /api/interaction/:uid/login (브라우저 XHR)"]
+  S --> R["redirectTo → /oidc/auth/:uid resume"]
+  R --> RC{"동의 필요?"}
+  RC -- yes --> A2["새 interaction uid로<br/>/auth/consent/[uid]"]
+  RC -- no --> K["callback 이동"]
+  CF --> CC["POST /api/interaction/:uid/confirm 또는 abort"]
+  CC --> K
+  A2 --> CF
 ```
 
-- 모바일 웹 공통 로그인 화면은 `/interaction/[uid]`가 소유합니다.
-- 준비 상태 문구는 "로그인 화면을 준비하고 있어요"와 "잠시 후 안전한 인증 화면으로 이동합니다."를 사용합니다.
+- 모바일 웹 공통 로그인 화면은 `/auth/login/[uid]`가, 권한 동의 화면은 `/auth/consent/[uid]`가 소유합니다.
+- 두 페이지 모두 서버 컴포넌트로 interaction을 조회(SSR)해 첫 페인트부터 폼/동의 화면을 렌더합니다. 제출(로그인·동의·취소)은 세션 쿠키가 브라우저에 심겨야 하므로 브라우저 XHR로만 수행합니다.
+- URL과 interaction type이 어긋나면 서버가 반대 라우트로 redirect합니다.
 - 작은 viewport에서도 입력, 권한 목록, 주요 CTA가 넘치지 않아야 합니다.
 
 ## Admin OIDC Client first-party 설정

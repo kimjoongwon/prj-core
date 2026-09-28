@@ -16,7 +16,7 @@ flowchart LR
     end
 
     subgraph idpweb["idp-web :3008 (Next dev) — 인증 origin"]
-        loginui["공용 로그인 UI\n/auth/interaction/[uid]"]
+        loginui["공용 로그인 UI\n/auth/login/[uid] · /auth/consent/[uid] (SSR)"]
         idpproxy["dev rewrites\n/oidc/* · /api/interaction/* → idp-api"]
     end
 
@@ -81,11 +81,12 @@ sequenceDiagram
     I-->>B: 302 http://localhost:3008/oidc/auth?…(PKCE S256)
     B->>I: GET /oidc/auth (idp-web origin 경유 rewrite)
     I->>R: interaction 저장
-    I-->>B: 302 /auth/interaction/{uid} (+ OP 세션 쿠키, 3008 origin)
-    B->>U: 로그인 폼 렌더
-    U->>I: GET /api/interaction/{uid} (같은 origin 3008 rewrite)
+    I-->>B: 302 /auth/login/{uid} (+ _interaction 쿠키, 3008 origin)
+    B->>U: GET /auth/login/{uid}
+    U->>I: GET /api/interaction/{uid} (SSR — idp-web 서버가 브라우저 쿠키를 전달해 내부 조회)
     I-->>U: 로그인 폼 데이터 (DEV 모드 admin@plate.com 자동입력)
-    U->>I: POST /api/interaction/{uid}/login {email, password}
+    U-->>B: 로그인 폼 렌더 (첫 페인트부터 폼 포함)
+    B->>I: POST /api/interaction/{uid}/login {email, password} (브라우저 XHR — Set-Cookie가 브라우저에 심겨야 함)
     I->>D: 사용자 조회·검증 (securityPolicy 잠금, auth_audit_logs 기록)
     I->>R: provider 세션/grant 저장 (first-party skip-consent 자동 승인)
     I-->>B: 200 {redirectTo}
@@ -109,7 +110,7 @@ sequenceDiagram
 |---|---|---|---|
 | admin-web | 3000 | 어드민 프론트엔드(Next.js dev) | basePath `/admin`. dev 전용 rewrites로 `/api/v1/auth`·`/api/v1/idp`·`/api/v1/oidc-*`는 idp-api로, 비밀번호 재설정과 나머지 `/api/v1/*`는 core-api로 프록시(배포 환경은 ingress가 같은 경로 계약을 담당) |
 | idp-api | 3007 | 발급자(oidc-provider) + 인증/IDP 관리 API | issuer `http://localhost:3008`(idp-web 오리진). 공유 DB/Redis 필요, 자체 `.env`(SMTP/OIDC 시크릿). `pnpm start` 선택지 7 — admin-web 선택 시 자동 포함 |
-| idp-web | 3008 | 공용 로그인 UI(모든 클라이언트) | `/auth/interaction/[uid]` 소유. `/oidc/*`·`/api/interaction/*`·`/api/v1/*`를 idp-api로 프록시. `pnpm start` 선택지 8 — admin-web 선택 시 자동 포함 |
+| idp-web | 3008 | 공용 로그인 UI(모든 클라이언트) | `/auth/login/[uid]`·`/auth/consent/[uid]` 소유(SSR — 서버가 `IDP_API_INTERNAL_URL`로 interaction 조회). `/oidc/*`·`/api/interaction/*`·`/api/v1/*`를 idp-api로 프록시. `pnpm start` 선택지 8 — admin-web 선택 시 자동 포함 |
 | core-api | 3006 | 백엔드 도메인 API + 비밀번호 재설정 | 발급자 없음 — `OIDC_JWKS_URI`로 idp 발급 토큰을 RS256 검증만 함 |
 | proposal-web | 3011 | 퍼블릭 제안 랜딩 | 선택 실행 |
 | Redis | 6379 | OIDC 어댑터(interaction/grant/session/code), rate limit, 세션 저장소 | native Homebrew. 여러 세션에서 공유 |

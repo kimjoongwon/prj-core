@@ -42,11 +42,9 @@ sequenceDiagram
     Note over U,DB: 2단계: IDP 인증
     U->>I: GET /oidc/auth?response_type=code&client_id=...&scope=openid+profile+email+roles
     I->>I: Interaction 생성 (uid)
-    I-->>U: 302 Redirect → /interaction/{uid}
-    U->>I: GET /interaction/{uid}
-    I->>I: InteractionService.getInteractionDetails()
-    I-->>U: 로그인 폼 (login.ejs)
-    U->>I: POST /interaction/{uid}/login (email, password)
+    I-->>U: 302 Redirect → /auth/login/{uid} (동의 필요 시 /auth/consent/{uid})
+    U->>I: GET /auth/login/{uid} (idp-web이 SSR로 interaction 조회 후 폼 렌더)
+    U->>I: POST /api/interaction/{uid}/login (email, password)
     I->>I: InteractionService.validateUser()
     I->>DB: 사용자 조회 (DirectUserRepository.findByEmailForAuth)
     I->>I: bcrypt 비밀번호 검증 (HashedPassword.compare)
@@ -77,7 +75,7 @@ sequenceDiagram
 | Authorization URL 생성 | `packages/be-usecase/src/auth/get-auth-login-redirect.usecase.ts` | `GetAuthLoginRedirectUseCase` - scope: `openid profile email roles` |
 | State 저장 (Redis) | `packages/be-service/src/auth/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
 | IDP 리다이렉트 | `packages/be-controller/src/auth/auth.controller.ts` | `login()` - Authorization URL로 redirect |
-| Interaction 화면 | `packages/be-controller/src/interaction/interaction.controller.ts` | prompt에 따라 login/consent 분기 |
+| Interaction 화면 | `apps/idp/web/src/app/auth/(flow)/login|consent/[uid]/page.tsx` | SSR로 interaction 조회 후 로그인/동의 폼 렌더 (API는 `interaction.controller.ts`) |
 | 사용자 인증 | `packages/be-service/src/idp/interaction.service.ts` | bcrypt 비밀번호 검증 |
 | 로그인 완료 | `packages/be-service/src/idp/interaction.service.ts` | interactionResult 호출 |
 | 동의 처리 | `packages/be-service/src/idp/interaction.service.ts` | Grant 생성/업데이트 |
