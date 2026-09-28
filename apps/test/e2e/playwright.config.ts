@@ -303,6 +303,19 @@ export default defineConfig({
 			},
 		},
 
+		// ── IDP interaction 화면 ──
+		// 로그인/동의 페이지 스펙은 admin origin의 OIDC 시작 URL을 통해 새 인증
+		// 흐름을 여니 사전 세션(setup/storageState)이 필요 없다.
+		{
+			name: "idp-chromium",
+			testMatch: "**/apps/idp/web/src/**/*.e2e.ts",
+			use: {
+				...devices["Desktop Chrome"],
+				baseURL: adminBaseUrl,
+				launchOptions: chromiumLaunchOptions,
+			},
+		},
+
 		// ── Storybook ──
 		{
 			name: "storybook-chromium",
