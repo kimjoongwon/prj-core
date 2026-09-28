@@ -258,16 +258,26 @@ bootstrap_database() {
     return
   fi
 
-  log "Prisma schema push 를 실행합니다."
+  # start:e2e와 같은 유도 규칙(라우트 DB명 → plate_e2e)으로 부트스트랩 대상을
+  # 맞춘다 — idp-api가 이 DB를 보므로 dev DB에 시드할 필요가 없다.
+  local e2e_database_url
+  e2e_database_url="$(DATABASE_URL="$DATABASE_URL" node <<'NODE'
+const url = new URL(process.env.DATABASE_URL);
+url.pathname = "/plate_e2e";
+process.stdout.write(url.toString());
+NODE
+)"
+
+  log "Prisma schema push 를 실행합니다. (${e2e_database_url})"
   (
     cd "$ROOT_DIR"
-    pnpm --filter=@cocrepo/prisma db:push
+    DATABASE_URL="$e2e_database_url" DIRECT_URL="$e2e_database_url" pnpm --filter=@cocrepo/prisma db:push
   )
 
   log "Prisma seed 를 실행합니다."
   (
     cd "$ROOT_DIR"
-    pnpm --filter=@cocrepo/prisma db:seed
+    DATABASE_URL="$e2e_database_url" DIRECT_URL="$e2e_database_url" pnpm --filter=@cocrepo/prisma db:seed
   )
 }
 
@@ -303,7 +313,10 @@ start_idp_api() {
     # shellcheck disable=SC1090
     source "$ENV_FILE"
     set +a
-    pnpm --filter=idp-api start:dev
+    # start:e2e는 .env 로드, e2e 토폴로지 보정(issuer/UI=idp-web origin)과
+    # AUTH_JWT_*/CORS 폴백, plate_e2e 유도를 스스로 처리한다. start:dev를 raw로
+    # 돌리면 OpenBao 병합 전 .env의 빈 값에서 config 검증이 실패한다.
+    pnpm --filter=idp-api start:e2e
   ) >"$IDP_API_LOG_FILE" 2>&1 &
 
   IDP_API_PID=$!
@@ -358,7 +371,12 @@ main() {
   log "IDP E2E 테스트를 실행합니다."
   (
     cd "$ROOT_DIR"
-    pnpm --filter=test-e2e exec playwright test --project="$PLAYWRIGHT_PROJECT" "$@"
+    # idp 스펙은 admin origin의 OIDC 시작 URL로 진입하므로 4서버 스택이면 충분하다.
+    # E2E_TARGET 미지정 시 storybook 서버까지 기다리며 타임아웃된다.
+    # ensure:browsers가 내려받은 브라우저 경로를 playwright에도 전달한다.
+    E2E_TARGET=admin \
+      PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-$ROOT_DIR/apps/test/e2e/browsers}" \
+      pnpm --filter=test-e2e exec playwright test --project="$PLAYWRIGHT_PROJECT" "$@"
   )
 }
 
