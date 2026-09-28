@@ -266,7 +266,7 @@ export interface OidcConfiguration {
 	jwks?: { keys: Array<Record<string, unknown>> };
 	ttl?: Record<string, number>;
 	interactions?: {
-		url: (ctx: unknown, interaction: { uid: string }) => string;
+		url: (ctx: unknown, interaction: Pick<Interaction, "uid" | "prompt">) => string;
 	};
 	pkce?: {
 		required: (

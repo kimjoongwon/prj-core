@@ -121,9 +121,14 @@ export class OidcConfigurationService {
 				Session: 86400 * 14,
 				Grant: 86400 * 14,
 			},
+			// 로그인과 동의는 idp-web의 별도 라우트가 소유한다. provider는 보류 중인
+			// 프롬프트 이름을 interaction에 실어 주므로 같은 uid로 알맞은 화면으로
+			// 보낸다(로그인 완료 후 동의가 남으면 새 uid로 이 콜백이 다시 불린다).
 			interactions: {
 				url: (_ctx, interaction) =>
-					`${interactionBaseUrl}/auth/interaction/${interaction.uid}`,
+					interaction.prompt.name === "consent"
+						? `${interactionBaseUrl}/auth/consent/${interaction.uid}`
+						: `${interactionBaseUrl}/auth/login/${interaction.uid}`,
 			},
 			// PKCE 설정 - Public Client(token_endpoint_auth_method=none)는 PKCE 필수
 			pkce: {

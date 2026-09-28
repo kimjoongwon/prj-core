@@ -207,6 +207,25 @@ describe("OidcConfigurationService", () => {
 		).resolves.toBe(false);
 	});
 
+	it("login 프롬프트와 consent 프롬프트를 각각 전용 화면 경로로 보내야 한다", async () => {
+		const service = buildService([buildClient("admin-web", true, true)]);
+		const configuration = await service.buildConfiguration();
+		const buildInteractionUrl = configuration.interactions?.url;
+
+		expect(
+			await buildInteractionUrl?.({} as never, {
+				uid: "interaction-1",
+				prompt: { name: "login" },
+			} as never),
+		).toBe("http://localhost:3000/admin/auth/login/interaction-1");
+		expect(
+			await buildInteractionUrl?.({} as never, {
+				uid: "interaction-2",
+				prompt: { name: "consent" },
+			} as never),
+		).toBe("http://localhost:3000/admin/auth/consent/interaction-2");
+	});
+
 	describe("rpInitiatedLogout", () => {
 		const providerLogoutForm =
 			'<form id="op.logoutForm" method="post" action="/oidc/session/end/confirm"><input type="hidden" name="xsrf" value="xsrf-secret"/></form>';
