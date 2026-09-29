@@ -22,7 +22,8 @@ description: "CQRS Command와 Query 메시지 클래스를 만듭니다."
 ## 운영
 
 - ZCode는 시작 시(및 파일 감시) 이 디렉터리를 읽습니다. 추가·변경 후 바로 안 보이면 ZCode를 재시작하세요.
-- 원본 `.codex/agents/*.toml`과 동일하게 유지하려면 양쪽을 함께 고쳐 커밋합니다. Codex 사용을 종료하면 `.codex/agents/`는 삭제합니다.
+- 이 repo의 정의는 전부 자가완결 지시문입니다. 정의문 밖의 외부 지침 파일(스킬 등)을 참조하지 않습니다.
+- 원본 `.codex/agents/*.toml`의 `developer_instructions`과 md 본문이 동일 텍스트여야 합니다. 변경 시 양쪽을 함께 고쳐 커밋하고 `pnpm agents:contracts:check`가 동기화를 검사합니다. Codex 사용을 종료하면 `.codex/agents/`는 삭제합니다.
 - 원본 TOML의 `model`, `model_reasoning_effort`는 이관하지 않았습니다. 필요하면 frontmatter의 `model`, `thoughtLevel`로 지정할 수 있습니다.
 
 ## 주의

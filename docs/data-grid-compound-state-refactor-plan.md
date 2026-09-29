@@ -248,7 +248,7 @@ export const Table = {
 
 ## 구현 단계
 
-1. 기존 `fe-data-grid-agent`의 최소 custom agent 정의와 `fe-data-grid-builder` skill 갱신을 먼저 반영한다.
+1. 기존 `fe-data-grid-agent` 정의의 최소 갱신을 먼저 반영한다.
 2. `DataGridState`의 canonical 상태와 하위 facade state의 책임을 먼저 확정한다.
 3. `DataGridToolbarState`, `DataGridGroupPanelState`, `DataGridTableState`, `DataGridTableHeaderState`, `DataGridTableBodyState`, `DataGridTableFooterState`, `DataGridPaginationState`, `DataGridActionBarState`를 추가하거나 기존 상태를 이 책임으로 이동한다.
 4. `DataGrid.Container`, `DataGrid.Toolbar`, `DataGrid.GroupPanel`, `DataGrid.Pagination`, `DataGrid.ActionBar`를 state prop 계약에 맞춰 정리한다.
@@ -258,16 +258,16 @@ export const Table = {
 8. 기존 소비 화면을 새 compound 계약 또는 완성형 wrapper로 한 번에 전환한다. 두 API가 동일한 일을 서로 다르게 구현하지 않게 한다.
 9. 공개 export, Storybook, 단위 테스트를 새 상태 경계와 조립 계약에 맞춰 갱신한다.
 
-## 기존 fe-data-grid-agent와 skill 최소 갱신
+## 기존 fe-data-grid-agent 정의 최소 갱신
 
 ### 갱신 대상
 
 ```text
 .codex/agents/fe-data-grid-agent.toml
-.agents/skills/fe-data-grid-builder/SKILL.md
+.zcode/agents/fe-data-grid-agent.md
 ```
 
-기존 `fe-data-grid-agent`는 `fe-data-grid-builder`를 필수 skill으로 읽는 웹 전용 worker다. 현재 runtime 등록 위치인 `.codex/agents/fe-data-grid-agent.toml`의 기존 정의를 최소 갱신하며 새 agent를 생성하지 않는다. 이 단계에서는 agent를 여러 역할로 나누거나 agent 간 호출을 추가하지 않는다.
+기존 `fe-data-grid-agent`는 자기 정의문의 역할 지시문을 따르는 웹 전용 worker다. 현재 runtime 등록 위치인 `.codex/agents/fe-data-grid-agent.toml`(과 미러 `.zcode/agents/fe-data-grid-agent.md`)의 기존 정의를 최소 갱신하며 새 agent를 생성하지 않는다. 이 단계에서는 agent를 여러 역할로 나누거나 agent 간 호출을 추가하지 않는다.
 
 ### agent 역할과 ownership
 
@@ -277,9 +277,9 @@ export const Table = {
 - 리팩터링 계획 문서가 승인된 입력일 때만 구조 이동과 공개 계약 변경을 수행한다.
 - 결과는 프로젝트의 Worker 최종 보고 형식으로 변경 경로, 공개 계약, 검증 결과를 남긴다.
 
-### skill 최소 갱신 범위
+### 정의문 최소 갱신 범위
 
-`fe-data-grid-builder`에는 다음 확정 규칙만 추가하거나 기존 규칙을 교체한다.
+정의문에는 다음 확정 규칙만 추가하거나 기존 규칙을 교체한다.
 
 - `DataGridState` 하나를 root state로 사용하고, child state는 facade이며 상태 복제본이 아님을 명시한다.
 - `DataGrid.Container`와 `Table.Container`는 state를 받지 않는 UI 구조 컴포넌트로 명시한다.

@@ -6,6 +6,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
 const read = (path) => readFileSync(path, "utf8");
 const rel = (path) => relative(root, path);
+const AGENT_COUNT = 37;
 
 function walk(dir, predicate) {
 	if (!existsSync(dir)) return [];
@@ -23,32 +24,44 @@ function field(source, name) {
 	return source.match(new RegExp("^" + name + '\\s*=\\s*"([^"]+)"', "m"))?.[1];
 }
 
+function instructions(source) {
+	return source.match(/developer_instructions\s*=\s*'''?\r?\n([\s\S]*?)\r?\n'''/)?.[1];
+}
+
 function headingCount(source, heading) {
 	return source.split(/\r?\n/).filter((line) => line.trim() === heading).length;
 }
 
+// ── 스킬 디렉터리는 완전히 제거되어야 한다 ──
+if (existsSync(join(root, ".agents"))) {
+	errors.push(".agents/: 스킬 디렉터리가 존재해서는 안 됩니다. 역할 지시문은 에이전트 정의에 인라인되어야 합니다.");
+}
+
+// ── Codex 정의(.codex/agents/*.toml) ──
 const agentFiles = walk(join(root, ".codex", "agents"), (path) => path.endsWith(".toml"));
 const agentNames = new Set();
 const descriptions = new Set();
-const skillOwners = new Map();
 
-if (agentFiles.length !== 39) {
-	errors.push("custom agent는 39개여야 합니다. 현재 " + agentFiles.length + "개입니다.");
+if (agentFiles.length !== AGENT_COUNT) {
+	errors.push("custom agent는 " + AGENT_COUNT + "개여야 합니다. 현재 " + agentFiles.length + "개입니다.");
 }
+
+const forbidden = [/next\s+subagent/i, /handoff\s+key/i, /none-final/i, /none-blocked/i];
 
 for (const path of agentFiles) {
 	const source = read(path);
 	const name = field(source, "name");
 	const description = field(source, "description");
 	const model = field(source, "model");
+	const effort = field(source, "model_reasoning_effort");
+	const body = instructions(source);
 
 	if (/^\d{2}-/.test(basename(path))) errors.push(rel(path) + ": 숫자 접두사를 사용할 수 없습니다.");
 	if (!name) errors.push(rel(path) + ": name 필드가 없습니다.");
 	if (!description) errors.push(rel(path) + ": description 필드가 없습니다.");
 	if (!model) errors.push(rel(path) + ": model 필드가 없습니다.");
-	if (!/^developer_instructions\s*=\s*(?:"""|''')/m.test(source)) {
-		errors.push(rel(path) + ": developer_instructions 필드가 없습니다.");
-	}
+	if (!effort) errors.push(rel(path) + ": model_reasoning_effort 필드가 없습니다.");
+	if (!body) errors.push(rel(path) + ": developer_instructions 필드가 없습니다.");
 	if (name === "orch-delivery") errors.push(rel(path) + ": orch-delivery는 custom agent가 될 수 없습니다.");
 	if (name && basename(path, ".toml") !== name) {
 		errors.push(rel(path) + ': 파일명은 name 필드 "' + name + '"와 일치해야 합니다.');
@@ -64,23 +77,102 @@ for (const path of agentFiles) {
 	}
 	if (description) descriptions.add(description);
 
-	const refs = [
-		...new Set(
-			[...source.matchAll(/\.agents\/skills\/[a-z0-9-]+\/SKILL\.md/g)].map(
-				(match) => match[0],
-			),
-		),
-	];
-	if (refs.length !== 1) errors.push(rel(path) + ": repository skill 경로는 정확히 하나여야 합니다.");
-	for (const ref of refs) {
-		if (!existsSync(join(root, ref))) errors.push(rel(path) + ": skill 경로가 존재하지 않습니다: " + ref);
-		const skillName = ref.split("/").at(-2);
-		const owners = skillOwners.get(skillName) ?? [];
-		owners.push(name);
-		skillOwners.set(skillName, owners);
+	if (!body) continue;
+
+	// 자가완결: 정의문 밖 지침 파일 참조 금지
+	if (/\.agents\/skills|SKILL\.md/i.test(body)) {
+		errors.push(rel(path) + ": 정의문이 외부 스킬 파일을 참조합니다. 역할 지시문을 정의문 안에 인라인해야 합니다.");
+	}
+	if (/\bskill\b|스킬/i.test(body)) {
+		errors.push(rel(path) + ": 정의문에 스킬 참조 표현이 남아 있습니다.");
+	}
+
+	for (const pattern of forbidden) {
+		if (pattern.test(body)) {
+			errors.push(rel(path) + ': 이전 orchestration 표현 "' + pattern.source + '"이 남아 있습니다.');
+		}
+	}
+	if (/\.spec\.md/.test(body)) errors.push(rel(path) + ": 삭제된 *.spec.md 참조가 남아 있습니다.");
+
+	for (const heading of [
+		"## 입력 계약",
+		"### 요청에서 확인할 정보",
+		"### 저장소에서 직접 찾을 정보",
+		"### 구현 전 필수 조건",
+		"### 입력 필요 조건",
+		"## 단독 실행 계약",
+	]) {
+		if (headingCount(body, heading) !== 1) {
+			errors.push(rel(path) + ': "' + heading + '"은 정확히 하나여야 합니다.');
+		}
+	}
+
+	for (const line of body.split(/\r?\n/)) {
+		const directsWorker = /(다른|다음|후속).{0,30}(custom agent|subagent|에이전트).{0,20}(호출|실행|선택)/i.test(
+			line,
+		);
+		if (directsWorker && !/(않|금지)/.test(line)) {
+			errors.push(rel(path) + ": worker 간 실행 지시가 남아 있습니다: " + line.trim());
+		}
 	}
 }
 
+// ── ZCode 정의(.zcode/agents/*.md)와 Codex 정의 동기화 ──
+const zcodeFiles = walk(join(root, ".zcode", "agents"), (path) => /\.md$/.test(path) && basename(path) !== "README");
+const zcodeNames = new Set();
+
+if (zcodeFiles.length !== AGENT_COUNT) {
+	errors.push(".zcode/agents 정의는 " + AGENT_COUNT + "개여야 합니다. 현재 " + zcodeFiles.length + "개입니다.");
+}
+
+for (const path of zcodeFiles) {
+	const source = read(path);
+	const name = source.match(/^name:\s*(.+)$/m)?.[1]?.trim();
+	const description = source.match(/^description:\s*"(.+)"$/m)?.[1];
+	const body = source.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n\r?\n([\s\S]*)$/)?.[1];
+
+	if (!name || !description || body === undefined) {
+		errors.push(rel(path) + ": frontmatter(name, description)와 본문이 모두 있어야 합니다.");
+		continue;
+	}
+	if (basename(path, ".md") !== name) {
+		errors.push(rel(path) + ': 파일명은 name 필드 "' + name + '"과 일치해야 합니다.');
+	}
+	if (zcodeNames.has(name)) errors.push(rel(path) + ': 중복 agent name "' + name + '"입니다.');
+	if (name) zcodeNames.add(name);
+
+	const frontmatterBlock = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "";
+	const frontmatterKeys = frontmatterBlock
+		.split(/\r?\n/)
+		.filter((line) => line.trim())
+		.map((line) => line.slice(0, line.indexOf(":")).trim());
+	for (const key of frontmatterKeys) {
+		if (!["name", "description"].includes(key)) {
+			errors.push(rel(path) + ': 허용되지 않은 frontmatter 필드 "' + key + '"입니다.');
+		}
+	}
+
+	const tomlPath = join(root, ".codex", "agents", name + ".toml");
+	if (!existsSync(tomlPath)) {
+		errors.push(rel(path) + ": 대응하는 .codex/agents/" + name + ".toml이 없습니다.");
+		continue;
+	}
+	const tomlBody = instructions(read(tomlPath));
+	const tomlDescription = field(read(tomlPath), "description");
+	if (body.replace(/\n$/, "") !== tomlBody) {
+		errors.push(rel(path) + ": 본문이 .codex/agents/" + name + ".toml의 developer_instructions와 다릅니다.");
+	}
+	if (description !== tomlDescription) {
+		errors.push(rel(path) + ": description이 .codex/agents/" + name + ".toml과 다릅니다.");
+	}
+}
+
+const missingInZcode = [...agentNames].filter((name) => !zcodeNames.has(name));
+const missingInCodex = [...zcodeNames].filter((name) => !agentNames.has(name));
+for (const name of missingInZcode) errors.push(".zcode/agents/" + name + ".md: 대응 정의가 없습니다.");
+for (const name of missingInCodex) errors.push(".codex/agents/" + name + ".toml: 대응 정의가 없습니다.");
+
+// ── Codex 설정 ──
 const codexConfig = read(join(root, ".codex", "config.toml"));
 if (!/^max_concurrent_threads_per_session\s*=\s*8\s*$/m.test(codexConfig)) {
 	errors.push(".codex/config.toml: agents.max_concurrent_threads_per_session = 8 설정이 필요합니다.");
@@ -89,6 +181,7 @@ if (/^max_threads\s*=/m.test(codexConfig)) {
 	errors.push(".codex/config.toml: legacy agents.max_threads를 사용할 수 없습니다.");
 }
 
+// ── 루트 계약(AGENTS.md) ──
 const rootContract = read(join(root, "AGENTS.md"));
 for (const heading of [
 	"## 작업 결과",
@@ -104,104 +197,21 @@ for (const heading of [
 if (/COMMON\.md/.test(rootContract)) {
 	errors.push("AGENTS.md: 존재하지 않는 COMMON.md를 참조할 수 없습니다.");
 }
-if (!rootContract.includes("독립적인 write 작업은 기본 최대 4개")) {
-	errors.push("AGENTS.md: write worker 병렬 상한 계약이 없습니다.");
+if (/SKILL\.md|\.agents\/skills|스킬/.test(rootContract)) {
+	errors.push("AGENTS.md: 스킬 체계 참조가 남아 있습니다.");
 }
-
-const forbidden = [/next\s+subagent/i, /handoff\s+key/i, /none-final/i, /none-blocked/i];
-const skillFiles = walk(join(root, ".agents", "skills"), (path) => path.endsWith("SKILL.md"));
-const workerSkills = skillFiles.filter((path) => basename(dirname(path)) !== "orch-delivery");
-
-if (skillFiles.length !== 37) {
-	errors.push("skill은 orch-delivery 포함 37개여야 합니다. 현재 " + skillFiles.length + "개입니다.");
-}
-if (workerSkills.length !== 36) {
-	errors.push("worker skill은 36개여야 합니다. 현재 " + workerSkills.length + "개입니다.");
-}
-
-for (const path of skillFiles) {
-	const source = read(path);
-	const isOrchestrator = basename(dirname(path)) === "orch-delivery";
-	const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-	if (!frontmatter) {
-		errors.push(rel(path) + ": YAML frontmatter가 없습니다.");
-	} else {
-		const entries = frontmatter[1]
-			.split(/\r?\n/)
-			.filter((line) => line.trim())
-			.map((line) => {
-				const separator = line.indexOf(":");
-				return separator < 0
-					? [line.trim(), ""]
-					: [line.slice(0, separator).trim(), line.slice(separator + 1).trim()];
-			});
-		const metadata = new Map(entries);
-		const skillName = metadata.get("name")?.replace(/^["']|["']$/g, "");
-		if (!skillName) errors.push(rel(path) + ": skill name이 없습니다.");
-		if (!metadata.get("description")) errors.push(rel(path) + ": skill description이 없습니다.");
-		for (const [key] of entries) {
-			if (!["name", "description"].includes(key)) {
-				errors.push(rel(path) + ': 허용되지 않은 frontmatter 필드 "' + key + '"입니다.');
-			}
-		}
-		if (skillName && skillName !== basename(dirname(path))) {
-			errors.push(rel(path) + ": skill name은 폴더명과 일치해야 합니다.");
-		}
-	}
-
-	for (const pattern of forbidden) {
-		if (pattern.test(source)) {
-			errors.push(rel(path) + ': 이전 orchestration 표현 "' + pattern.source + '"이 남아 있습니다.');
-		}
-	}
-	if (/\.spec\.md/.test(source)) errors.push(rel(path) + ": 삭제된 *.spec.md 참조가 남아 있습니다.");
-
-	if (!isOrchestrator) {
-		for (const heading of [
-			"## 입력 계약",
-			"### 요청에서 확인할 정보",
-			"### 저장소에서 직접 찾을 정보",
-			"### 구현 전 필수 조건",
-			"### 입력 필요 조건",
-			"## 단독 실행 계약",
-		]) {
-			if (headingCount(source, heading) !== 1) {
-				errors.push(rel(path) + ': "' + heading + '"은 정확히 하나여야 합니다.');
-			}
-		}
-		for (const line of source.split(/\r?\n/)) {
-			const directsWorker = /(다른|다음|후속).{0,30}(custom agent|subagent|에이전트).{0,20}(호출|실행|선택)/i.test(
-				line,
-			);
-			if (directsWorker && !/(않|금지)/.test(line)) {
-				errors.push(rel(path) + ": worker 간 실행 지시가 남아 있습니다: " + line.trim());
-			}
-		}
+for (const required of [
+	"독립적인 write 작업은 기본 최대 4개",
+	"결과 capsule",
+	"재작업은 같은 owner에게",
+	"루트 세션",
+]) {
+	if (!rootContract.includes(required)) {
+		errors.push('AGENTS.md: 루트 조율 필수 계약 "' + required + '"이 없습니다.');
 	}
 }
 
-for (const [skillName, owners] of skillOwners) {
-	if (owners.length < 2) continue;
-	const source = read(join(root, ".agents", "skills", skillName, "SKILL.md"));
-	for (const owner of owners) {
-		if (!source.includes(owner)) {
-			errors.push(".agents/skills/" + skillName + '/SKILL.md: 공유 역할 "' + owner + '" 구분이 없습니다.');
-		}
-	}
-}
-
-const orchestrator = read(join(root, ".agents", "skills", "orch-delivery", "SKILL.md"));
-for (const pattern of [/실행 원장/, /prompt renderer/i, /custom DAG/i, /spec 갱신/i, /승인된 spec/i]) {
-	if (pattern.test(orchestrator)) {
-		errors.push('.agents/skills/orch-delivery/SKILL.md: 제거 대상 표현 "' + pattern.source + '"이 남아 있습니다.');
-	}
-}
-for (const required of ["기본 최대 4개", "모든 결과를 기다립니다", "결과 capsule"]) {
-	if (!orchestrator.includes(required)) {
-		errors.push('.agents/skills/orch-delivery/SKILL.md: 필수 조율 계약 "' + required + '"이 없습니다.');
-	}
-}
-
+// ── logging-only Hook ──
 const hooksPath = join(root, ".codex", "hooks.json");
 if (!existsSync(hooksPath)) {
 	errors.push(".codex/hooks.json: logging-only Hook 설정이 없습니다.");
@@ -262,8 +272,8 @@ if (!/^\.codex\/logs\/$/m.test(ignore)) {
 	errors.push(".gitignore: .codex/logs/ 제외 규칙이 없습니다.");
 }
 
+// ── 삭제된 체계의 잔여 참조 ──
 const stalePaths = [
-	...skillFiles,
 	...walk(join(root, "docs"), (path) => path.endsWith(".md")),
 	join(root, "apps", "mobile", "src", "app", "app.context.md"),
 	join(root, "package.json"),
@@ -280,6 +290,9 @@ for (const file of ["spec-audit.js", "spec-generate.js", "check-mobile-screen-ta
 }
 
 const packageJson = JSON.parse(read(join(root, "package.json")));
+if (packageJson.scripts["agents:contracts:check"] !== "node scripts/check-agent-contracts.mjs") {
+	errors.push("package.json: agents:contracts:check 명령이 없습니다.");
+}
 if (packageJson.scripts["agents:flow:test"] !== "node scripts/test-subagent-log-hook.mjs") {
 	errors.push("package.json: agents:flow:test 명령이 없습니다.");
 }
@@ -298,7 +311,5 @@ if (errors.length) {
 console.log(
 	"Agent contract check passed: " +
 		agentFiles.length +
-		" agents, " +
-		workerSkills.length +
-		" worker skills, logging-only Hooks.",
+		" self-contained agents (codex toml + zcode md sync), logging-only Hooks.",
 );

@@ -3,18 +3,134 @@ name: be-query-dto-builder
 description: "목록 조회의 검색, 정렬, 페이지네이션 Query DTO를 만듭니다."
 ---
 
-## 필수 문서
-- `be-query-dto-builder`: `.agents/skills/be-query-dto-builder/SKILL.md`
-
 ## 기준 문서
 - 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행
 
 ## 소유 / 비소유 범위
 - 이 subagent는 다음 일만 맡습니다: 목록 조회의 검색, 정렬, 페이지네이션 Query DTO를 만듭니다.
 
+## 재사용 우선 점검
+
+- 작업을 시작하기 전에 기존 Query DTO, Command/Query input, Controller, Repository mapper를 먼저 검색합니다.
+- 새 Query DTO를 만들기 전에 기존 wire shape와 `@cocrepo/input`의 `*QueryInput`을 재사용할 수 있는지 확인합니다.
+- 동일 endpoint intent에 대해 중복 Query DTO를 만들지 않습니다.
+
+
+Query DTO는 API edge의 목록 조회 요청 shape, validation, Swagger metadata만 소유합니다.
+
+## Owns
+
+- `packages/be-dto/src/query/*.dto.ts`
+- 도메인 폴더의 목록 조회 Query DTO 파일
+- `packages/be-dto/src/query/query.dto.ts`
+- 필요한 barrel export
+
+## Does Not Own
+
+- Prisma `WhereInput`, `OrderByInput`, create/update input
+- `toPrismaWhere()`, `toPrismaOrderBy()` 같은 변환 메서드
+- Repository mapper/helper
+- Command/Query message class
+
+## 핵심 규칙
+
+- Query DTO class는 class당 하나의 파일을 가집니다.
+- Query DTO는 `QueryDto`를 직접 상속하거나, 실제로 `QueryDto`를 상속하는 `EntityQueryType(Entity, filterKeys)`에서 파생합니다. `PrismaQueryDto`는 사용하지 않습니다.
+- 공통 `skip/take`는 상속하고, Entity와 같은 의미의 boolean/enum/ID 필터는 helper로 선택합니다. 검색어·정렬 등 API 전용 wire field만 직접 선언합니다.
+- Query DTO field는 대응되는 `@cocrepo/input`의 `*QueryInput`과 같은 wire shape를 유지합니다.
+- Controller는 DTO가 QueryInput과 구조적으로 호환되면 `new XxxQuery(dto)`로 그대로 전달할 수 있습니다.
+- Query DTO는 Command, Query message, Repository를 import하지 않습니다. Entity의 exact equality 필드 metadata를 재사용할 때는 `EntityQueryType`을 사용하며, 검색·정렬·날짜범위·null sentinel·wire 이름 변환 필드는 Query DTO에 직접 선언합니다.
+- Query DTO는 `Prisma.*WhereInput`, `Prisma.*OrderByInput`, Prisma create/update input을 import하지 않습니다.
+- Prisma enum은 API validation/Swagger에 필요한 경우만 `@cocrepo/prisma`에서 import할 수 있습니다.
+- 필터/정렬을 Prisma shape로 변환하는 로직은 `packages/be-repository/src/*-query.mapper.ts`가 소유합니다.
+
+## QueryDto 기본 계약
+
+- `QueryDto`는 `skip?: number`, `take?: number`, `toPageMetaDto(totalCount)`만 제공합니다.
+- `sort?: string[]`은 필요한 하위 Query DTO에서 선언합니다.
+- `sort`는 JSON:API 컨벤션을 사용합니다.
+  - `name` → ASC
+  - `-createdAt` → DESC
+  - 배열 순서가 정렬 우선순위입니다.
+
+## Entity 필터 메타데이터 재사용
+
+```typescript
+import { StringFieldOptional } from "@cocrepo/decorator/field";
+import { Template } from "@cocrepo/entity";
+import { EntityQueryType } from "./entity-query-type";
+
+export class QueryTemplateDto extends EntityQueryType(Template, [
+  "type", "isActive",
+] as const) {
+  @StringFieldOptional({ description: "코드 또는 이름 통합 검색" })
+  readonly search?: string;
+}
+```
+
+helper는 Swagger `PickType/PartialType`으로 선택한 검증·변환·문서 메타데이터를
+`QueryDto`의 실제 하위 클래스에 복사합니다. Entity 메서드와 property initializer는
+복사하지 않고, 선택 필드의 Swagger `default`도 제거하여 저장 기본값이 검색
+기본 필터처럼 표시되지 않게 합니다. API가 실제 기본 필터를 갖는 경우에는
+해당 Query DTO에서 그 계약을 명시합니다.
+
+부분 이메일·이름 검색, 기간·정렬·관계 검색, null 특수값, wire 이름 변경은
+Entity 필드와 의미가 다르므로 기존 Query 전용 선언을 유지합니다. 테스트에서는
+`instanceof QueryDto`, `skip/take/toPageMetaDto()`, 변환·필터 동작, Entity 초기값과
+Swagger 기본값의 비유입을 확인합니다.
+
+## 구현 절차
+
+1. Controller endpoint가 받는 query parameter를 확인합니다.
+2. 대응되는 `@cocrepo/input`의 `*QueryInput`을 확인하거나 생성 owner에게 필요성을 보고합니다.
+3. 동일한 의미의 필터는 `EntityQueryType`으로 선택하고 API 전용 필드만 직접 선언합니다.
+4. DTO에 변환 메서드나 Prisma type import가 생기지 않았는지 확인합니다.
+5. Repository mapper가 해당 QueryInput을 Prisma where/orderBy로 변환하는지 확인하고, mapper가 없으면 루트에 repository owner와 필요한 입력·산출물 경로를 보고합니다.
+
+## 체크리스트
+
+- [ ] `QueryDto`를 직접 상속하거나 `EntityQueryType`을 통해 실제 상속합니다.
+- [ ] `skip/take/toPageMetaDto()`를 유지하고 Entity 기본값·메서드 및 선택 필드의 Swagger `default`가 유입되지 않습니다.
+- [ ] `PrismaQueryDto`, `excludeFromAutoMap`, `toPrismaWhere`, `toPrismaOrderBy`가 없습니다.
+- [ ] DTO가 Command/UseCase/Aggregate/Repository를 import하지 않습니다.
+- [ ] EntityQueryType에는 exact equality 필드만 전달하고 Entity initializer/domain method를 Query DTO에 노출하지 않습니다.
+- [ ] DTO와 QueryInput의 wire shape가 일치합니다.
+- [ ] Prisma 변환은 repository 인접 mapper에 있습니다.
+
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 에이전트가 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
+## 단독 실행 계약
+
+- 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 에이전트의 단위 작업을 수행한다.
+- 입력 경로가 명시되지 않으면 현재 프로젝트에서 관련 모델, spec, 타입, 기존 구현과 선행 산출물을 먼저 찾는다.
+- 필수 입력을 구현 전에 확인하고 자신의 소유 범위에서 만들 수 있는 입력은 직접 만든다.
+- 다른 owner의 필수 산출물이나 제품 결정이 없으면 구현을 시작하지 않고 변경 없이 `입력 필요`로 보고한다.
+- 다른 custom agent나 subagent를 호출하거나 실행 순서를 결정하지 않는다.
+- 이 지시문에 정의된 기본 검증을 실제로 실행하고 요청의 추가 완료 기준까지 확인한다.
+- 구현 후 검증을 통과하지 못하면 변경 산출물과 실패 근거를 포함해 `검증 실패`로 보고한다.
+- 최종 메시지는 `AGENTS.md`의 Worker 최종 보고 Markdown 계약을 따른다.
+
 공식 worker 실행 계약:
-- custom agent와 skill의 연결은 runtime binding이 아니라 developer instruction이다.
-- 매 작업에서 `.agents/skills/be-query-dto-builder/SKILL.md`를 읽고 해당 단위 구현과 기본 검증을 끝낸다.
+- 이 정의문 전체가 해당 단위 작업의 실행 계약이다. 매 작업에서 정의문을 기준으로 단위 구현과 기본 검증을 끝낸다.
 - 다른 custom agent나 subagent를 호출하거나 후속 owner를 선택하지 않는다.
 - 필수 입력은 구현 전에 프로젝트에서 찾고, 다른 owner의 산출물이나 제품 결정이 없으면 변경 없이 입력 필요로 보고한다.
 - 최종 메시지는 AGENTS.md의 Worker 최종 보고 Markdown 계약을 따른다.

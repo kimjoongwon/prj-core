@@ -305,7 +305,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 ## Agent Prompt Guide
 
-`orch-delivery`와 UI builder role은 화면 spec과 구현에서 이 문서를 기준으로 디자인 판단을 합니다.
+루트 조율(AGENTS.md)과 UI builder 역할 에이전트는 화면 spec과 구현에서 이 문서를 기준으로 디자인 판단을 합니다.
 
 ### Spec 작성 시
 
@@ -354,4 +354,4 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 - 이 문서는 디자인 언어 v1입니다. 2026-09-11 갱신: mobile surface 램프를 등간격(3%p)으로 재설계하고(Surface Ladder 참조), rhythm preset을 `VStack`/`HStack`의 `gap` prop으로 구현했습니다.
 - 구체적인 typography size 규칙은 현재 구현을 기준으로 별도 작업에서 맞춥니다.
 - 개별 화면 리디자인은 sidecar spec 단위로 진행합니다.
-- 디자인 원칙을 `AGENTS.md`와 `orch-delivery`에 연결하는 작업은 후속 변경으로 다룹니다.
+- 디자인 원칙을 `AGENTS.md` 루트 조율과 UI builder 역할 에이전트 정의에 연결하는 작업은 후속 변경으로 다룹니다.

@@ -1,32 +1,38 @@
-# Agent·Skill 실행 관계
+# Agent 실행 관계
 
 ## 목적
 
-이 문서는 기본 Codex, custom agent와 builder skill의 실행 관계를 설명하고 공식 Codex 기능과 프로젝트 지침을 구분합니다.
+이 문서는 루트 세션, custom agent 정의와 실행 도구의 관계를 설명하고 공식 도구 기능과 프로젝트 지침을 구분합니다.
+
+## 정의 구조
+
+Custom agent 정의는 자가완결입니다. 역할별 절차·기술 계약이 정의문 안에 역할 지시문과 참고 계약으로 모두 들어 있고, 정의문 밖의 외부 지침 파일을 읽지 않습니다.
+
+- Codex는 `.codex/agents/*.toml`(`name`, `description`, `model`, `model_reasoning_effort`, `developer_instructions`)을 자동 발견합니다.
+- ZCode는 `.zcode/agents/*.md`(YAML frontmatter `name`, `description` + 본문 system prompt)을 자동 발견합니다.
+- 두 정의는 같은 에이전트 집합(37개)을 이루며, TOML의 `developer_instructions`과 md 본문이 동일 텍스트여야 합니다. 변경 시 양쪽을 함께 고쳐 커밋하고 `scripts/check-agent-contracts.mjs`(`pnpm agents:contracts:check`)가 동기화를 검사합니다.
+- 루트 조율 규칙은 별도 에이전트나 지침 파일이 아니라 AGENTS.md의 '루트 조율' 섹션이 소유합니다.
 
 ## 공식 실행 모델
 
 ```mermaid
 flowchart TD
-  U["사용자"] --> R["기본 Codex"]
+  U["사용자"] --> R["루트 세션"]
   R --> A1["custom agent A"]
   R --> A2["custom agent B"]
-  A1 --> K1["소유 builder skill"]
-  A2 --> K2["소유 builder skill"]
+  A1 --> D1["자기 정의문 적용"]
+  A2 --> D2["자기 정의문 적용"]
   A1 --> R
   A2 --> R
 ```
 
-- Skill은 Codex가 읽고 따르는 지침입니다.
 - Custom agent는 별도 agent thread에서 모델과 도구 작업을 수행합니다.
-- 기본 Codex가 subagent를 호출하고 결과를 기다린 뒤 하나의 응답으로 통합합니다.
-- Custom agent와 skill의 관계는 runtime binding이 아니라 `developer_instructions`입니다.
+- 루트 세션이 subagent를 호출하고 결과를 기다린 뒤 하나의 응답으로 통합합니다.
 - Subagent 작업 메시지와 최종 결과는 일반 텍스트입니다.
 - 상세 탐색과 명령 출력은 agent thread에 두고 메인 thread에는 요약을 반환합니다.
 
 공식 문서:
 
-- https://learn.chatgpt.com/docs/build-skills
 - https://learn.chatgpt.com/docs/agent-configuration/subagents
 - https://learn.chatgpt.com/docs/hooks
 
@@ -34,7 +40,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  U["사용자 요청"] --> R["얇은 루트 Codex"]
+  U["사용자 요청"] --> R["얇은 루트 세션"]
   R --> O["owner 분할과 agent 선택"]
   O --> W1["worker A"]
   O --> W2["worker B"]
@@ -52,17 +58,17 @@ flowchart TD
 
 | 주체 | 책임 |
 |---|---|
-| 기본 Codex | 작업 분할, agent 선택, 의존성, 병렬 호출, 전체 결과 대기와 최종 판정 |
-| Custom agent | 자기 skill 확인, 상세 저장소 탐색, owner 단위 구현과 기본 검증 |
-| Builder skill | 역할별 입력 탐색, 구현 절차, 완료 기준과 검증 |
+| 루트 세션 | 작업 분할, agent 선택, 의존성, 병렬 호출, 전체 결과 대기와 최종 판정 (AGENTS.md '루트 조율') |
+| Custom agent 정의 | 역할별 입력 계약, 구현 절차, 완료 기준과 검증 |
+| Custom agent 실행 | 자기 정의문 적용, 상세 저장소 탐색, owner 단위 구현과 기본 검증 |
 | Hook | Agent 경계 raw 이벤트의 로컬 기록 |
 | 실제 코드와 테스트 | 후속 worker가 읽는 산출물의 source of truth |
 
-루트는 worker 대신 상세 코드를 탐색하거나 선택된 `SKILL.md` 전체 내용을 prompt에 복사하지 않습니다. Worker는 다른 worker를 호출하거나 후속 순서를 선택하지 않습니다.
+루트는 worker 대신 상세 코드를 탐색하거나 worker 정의문의 역할 지시문을 대신 수행하지 않습니다. Worker는 다른 worker를 호출하거나 후속 순서를 선택하지 않습니다.
 
 ## 단일 실행
 
-명시적으로 custom agent 하나를 요청하면 루트는 해당 worker만 호출합니다. Worker는 자기 skill을 읽고 저장소에서 입력을 찾습니다. 다른 owner의 필수 산출물이 없으면 변경 없이 `입력 필요`를 반환합니다.
+명시적으로 custom agent 하나를 요청하면 루트는 해당 worker만 호출합니다. Worker는 자기 정의문을 적용하고 저장소에서 입력을 찾습니다. 다른 owner의 필수 산출물이 없으면 변경 없이 `입력 필요`를 반환합니다.
 
 ## 다중 실행
 
