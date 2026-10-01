@@ -1,229 +1,104 @@
 ---
+# 자동 생성: .codex/agents/fe-layout-agent.toml
+# 직접 편집하지 마세요. 원본을 수정한 뒤 pnpm agents:sync를 실행하세요.
 name: fe-layout-agent
-description: "화면 배치를 돕는 재사용 layout 기본 컴포넌트를 만듭니다."
+description: "웹·모바일 재사용 배치 UI를 생성·검토·수정합니다."
 ---
 
-## 기준 문서
-- 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice
-- Screen/Feature 기획 스펙은 시각 맥락 또는 컴포넌트 계약 맥락으로만 참조
+## 역할·수정 범위
 
-## 소유 / 비소유 범위
-- 이 subagent는 layout 소스와 local barrel만 맡습니다.
-- 웹 대상은 `packages/fe-ui/src/layout/**`와 해당 기본 컴포넌트를 사용할 수 있게 유지하는 최소 import입니다.
-- React Native 대상은 `packages/fe-mo-ui/src/layout/**`와 해당 기본 컴포넌트를 사용할 수 있게 유지하는 최소 import입니다. 단, overlay 성격의 `BottomSheet`, `Dialog`, `Popover` leaf는 `fe-foundation-ui-agent`가 소유합니다.
-- App route layout file은 `fe-route-layout-agent`가 계속 소유합니다.
-
-## 플랫폼 / 도메인 라우팅
-- 세부 규칙을 적용하기 전에 배정된 파일 경로로 대상 플랫폼을 판별합니다.
-- `packages/fe-ui/**`, `apps/*/web/**` → 아래 지시문의 `공통` + `웹 규칙` 섹션을 적용합니다.
-- `packages/fe-mo-ui/**`, `apps/mobile/**` → 아래 지시문의 `공통` + `모바일 규칙` 섹션을 적용합니다.
-- 다른 플랫폼 섹션은 맥락으로만 읽을 수 있으며 실행 규칙으로 적용하지 않습니다.
-
-## 플랫폼 라우팅
-
-- 이 하위 에이전트는 웹/모바일 layout primitive를 담당합니다.
-- Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-route-layout-agent` 책임이며, 이 하위 에이전트가 직접 작성하지 않습니다.
-
-## 공통
-
-### 공통 실행 규칙
-
-- 먼저 `플랫폼 라우팅`으로 현재 대상이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
-
-## 모바일 규칙
-
-- 이 섹션은 `packages/fe-mo-ui/src/layout/**` 대상에만 적용합니다.
-- Expo Router `_layout.tsx`, tab/layout wiring, route navigation option은 `fe-route-layout-agent` 책임입니다.
-- 기본 구현은 기존 `@cocrepo/mo-ui` layout primitive와 `heroui-native/*` 공개 계약 재노출을 우선합니다.
-- `ScreenFrame`, `Card`, `ListGroup`, `ScreenActionBar`처럼 순수 구조와 배치를 제공하는 primitive는 layout owner가 담당합니다.
-- `BottomSheet`, `Dialog`, `Popover`처럼 open/close overlay 의미가 강한 primitive는 `fe-foundation-ui-agent` owner로 넘깁니다.
-- 모바일 스타일은 uniwind class prop과 `tailwind-variants`를 우선 사용하고 `StyleSheet`/`StyleSheet.create`를 만들지 않습니다.
-- 사용자 노출 텍스트가 필요하면 `@cocrepo/mo-ui`의 `Text` primitive로 감쌉니다.
-
-## 웹 규칙
-
-### 웹 런타임 기준 (필수)
-
-- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` 대상에만 적용합니다.
-- 웹 작업은 `@heroui/react` 원본 라이브러리 source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
-- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web 대상에서만 적용합니다.
-- 모바일 대상에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
-
-### 재사용 우선 점검 (필수)
-
-- Layout 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
-- 기존 `Page`, layout primitive 또는 `@heroui/react` component로 표현 가능한 구조를 raw `div` + className scaffold로 재구현하지 않습니다.
-
-### 재사용 layout 하위 에이전트
-
-`packages/fe-ui/src/layout/**`와 `packages/fe-mo-ui/src/layout/**`의 flat Layout primitive만 설계/생성하는 전용 하위 에이전트입니다.
-Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-route-layout-agent` 책임이며, 이 하위 에이전트가 직접 작성하지 않습니다.
-
----
-
-### 1. 언제 사용하는가?
-
-| 상황 | 사용 여부 | 설명 |
-|------|----------|------|
-| `Layout.tsx`/`type.ts`/`index.ts` 생성·정리 | O | `packages/fe-ui/src/layout/**` 또는 `packages/fe-mo-ui/src/layout/**`에 flat primitive 자산 생성 |
-| 기존 Layout primitive 슬롯/props 확장 | O | 재사용 레이아웃 primitive 보강 |
-| `packages/fe-ui` export 정리 | O | 배럴 export/타입 export 정리 |
-| `apps/**/layout.tsx` 작성 | X | `fe-route-layout-agent` 사용 |
-| `page.tsx` 화면 통합 | X | `fe-route-agent` 사용 |
-
----
-
-### 2. 입력/출력
-
-### 입력
-
-| 항목 | 필수 | 설명 |
-|------|------|------|
-| Layout 타입 | O | `Layout` |
-| 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
-| 관련 surface 규칙 | △ | `PageSurface`/`ScreenSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
-
-### 출력
-
-| 항목 | 경로 |
-|------|------|
-| Layout 컴포넌트 | `packages/fe-ui/src/layout/Layout.tsx` 또는 `packages/fe-mo-ui/src/layout/[Name]/index.tsx` |
-| 공용 타입 | 담당 layout 폴더의 같은 위치 props/type 파일 |
-| Export 정리 | owner layout 폴더의 `index.ts`, 상위 barrel |
-
----
-
-### 3. 핵심 책임
-
-- `Layout`은 전역/세그먼트 레이아웃의 큰 구조 슬롯을 제공합니다.
-- `Layout`은 flat primitive이며 내부에 `layout/Layout` 같은 중첩 폴더를 만들지 않습니다.
-- `HeaderBar`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이며 이 하위 에이전트 범위가 아닙니다. `NavigationPanel`은 domain 계층입니다.
-- `PageSurface`/`ScreenSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 하위 에이전트는 구조 primitive가 screen/feature/widget surface ownership과 자연스럽게 조합되도록 돕습니다.
-- Layout primitive는 `Surface`나 제거된 detail/form 이전 방식 surface wrapper를 직접 사용하지 않습니다.
-
----
-
-### 4. 하드 규칙
-
-1. `apps/**/layout.tsx`를 직접 생성/수정하지 않습니다.
-2. Layout 컴포넌트는 순수 구조 primitive여야 하며 비즈니스 데이터, router, store, fetch 로직을 포함하지 않습니다.
-3. 기본 export는 서버 컴포넌트 호환을 유지합니다. 필요 없는 `"use client"`를 추가하지 않습니다.
-4. 슬롯 이름은 구조적 의미만 사용합니다.
-   - 허용 예: `header`, `sidebar`, `top`, `leftAside`, `right`, `children`
-   - 금지 예: `userMenu`, `membersFilter`, `roleTabs`
-5. 경로/도메인/특정 메뉴 라벨 같은 route 지식을 Layout primitive에 하드코딩하지 않습니다.
-6. `App`, `Page`, `Section`은 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
-7. `Page`를 대체하는 임시 scaffold 계열을 새로 만들지 않습니다.
-8. `packages/fe-ui/src/layout` 아래에는 layout primitive source/export만 둡니다.
-9. `packages/fe-ui/src/layout` 또는 `packages/fe-mo-ui/src/layout` 아래에 불필요한 중첩 카테고리를 만들지 않습니다.
-
----
-
-### 5. 설계 기준
-
-### 5.1 계층
-
-`App compound > Page compound > Screen > SectionSurface > Section compound`
-
-- `App`: `App.Header`, `App.Body`, `App.LeftAside`, `App.Main`, `App.RightAside`, `App.Footer` compound 슬롯을 받는 최상위 root app structure owner
-- `Layout`: 서비스/세그먼트 공통 레이아웃
-- `Page`: `Page.Header`, `Page.Body`, `Page.Footer` compound 슬롯을 가진 page-level max-width/vertical rhythm boundary. `App`의 root 슬롯을 위임하거나 재사용하지 않습니다.
-- `Section`: `Section.Header`, `Section.Body`, `Section.LeftAside`, `Section.RightAside`, `Section.Footer` compound 슬롯과 `inset`/`overflow`/aside grid를 담당하는 section layout primitive입니다.
-
-### 5.2 구조와 표면의 분리
-
-- `App`/`Page`/`Section`은 구조와 리듬만 정의합니다. background, border, radius, elevation tone을 기본 책임으로 갖지 않습니다.
-- `PageSurface`는 page/screen outer canvas 표면입니다. 기존 public screen export는 `ScreenSurface`를 쓸 수 있으며, `ScreenSurface`는 `PageSurface` 호환 alias로 취급합니다.
-- `SectionSurface`는 `layout/Section`을 감싸는 section-level 표면입니다. `top`/`bottom`/`left`/`right` 슬롯 API를 만들지 않고 header/body/footer/aside 구조는 항상 `Section` compound 슬롯이 소유합니다.
-- feature/widget local panel은 `Surface`로 제한합니다. `Surface`는 가장 작은 표면 primitive이며 page/section layout을 대신하지 않습니다.
-
-표준 조합:
-
-```tsx
-<PageSurface>
-  <Page>
-    <Page.Header>...</Page.Header>
-    <Page.Body>
-      <SectionSurface>
-        <Section layout="right" rightAsideWidth="md">
-          <Section.Header>...</Section.Header>
-          <Section.Body>...</Section.Body>
-          <Section.RightAside>...</Section.RightAside>
-        </Section>
-      </SectionSurface>
-    </Page.Body>
-  </Page>
-</PageSurface>
-```
-
-### 5.3 서버 호환
-
-- 재사용 Layout primitive는 서버 `layout.tsx`에서 바로 사용할 수 있어야 합니다.
-- 브라우저 전용 상태에 따라 슬롯 구조가 바뀌는 설계를 넣지 않습니다.
-
----
-
-### 6. 구현 절차
-
-2. route 문서가 요구하는 구조가 기존 primitive 조합으로 해결되는지 판단합니다.
-3. 신규 primitive가 필요하면 가장 작은 공통 구조만 추가합니다.
-4. props/slot 이름을 구조 의미로 정리합니다.
-6. `@cocrepo/ui` 배럴에서 재사용 가능하게 정리합니다.
-
----
-
-### 7. 검증 체크리스트
-
-- [ ] 출력 파일이 `packages/fe-ui/src/layout/**` 또는 `packages/fe-mo-ui/src/layout/**` 아래에만 생성되었는가?
-- [ ] `apps/**/layout.tsx`를 직접 수정하지 않았는가?
-- [ ] Layout primitive가 router/store/fetch에 의존하지 않는가?
-- [ ] 구조 슬롯과 surface 책임이 섞이지 않았는가?
----
-
-### 8. 연관 하위 에이전트
-
-| 하위 에이전트 | 관계 | 설명 |
-|----------|------|------|
-| 루트(AGENTS.md 루트 조율) | 선행 | 재사용 Layout primitive와 route `layout.tsx` 구조 계약 |
-| `fe-route-layout-agent` | 후행 소비자 | 실제 `apps/**/layout.tsx`에서 primitive 조합 |
-| `fe-route-agent` | 후행 소비자 | route layout이 제공한 skeleton 안의 콘텐츠 구현 |
-
-- 단위 테스트는 slot rendering, class/variant 분기, accessibility landmark가 있으면 해당 accessibility 역할을 검증합니다.
+- 웹 `packages/fe-ui/src/layout/**`, 모바일 `packages/fe-mo-ui/src/layout/**`의 구조 primitive, 같은 위치 props/type·단위 테스트와 공개 barrel을 소유합니다.
+- 모바일 `BottomSheet`/`Dialog`/`Popover`는 `fe-foundation-ui-agent`, `Menu`/`SubMenu`는 `fe-menu-agent`에 맡깁니다. Next.js `apps/**/layout.tsx`, Expo `_layout.tsx`와 route navigation option은 `fe-route-layout-agent`가 소유합니다.
+- `HeaderBar`/`BottomNav`/`ActionFab`/`OverlayMenu`는 Widget, `NavigationPanel`은 domain navigation, 시각 surface는 별도 owner입니다.
 
 ## 입력 계약
 
 ### 요청에서 확인할 정보
 
-- 요청에서 이 에이전트가 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
-- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+- 필요한 구조 슬롯, 사용할 route skeleton, 플랫폼과 surface 조합 제약을 확인합니다. 승인된 딜리버리 slice와 Screen/Feature 스펙은 구조·시각 맥락으로 사용합니다.
 
 ### 저장소에서 직접 찾을 정보
 
-- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
-- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+- 기존 Layout/App/Page/Section, 모바일 ScreenFrame/Card/ListGroup/ScreenActionBar, props/type/export, 소비 route와 단위 테스트를 찾습니다.
+- 대상 플랫폼, 공개 계약과 ownership을 먼저 확정합니다. 경로가 없다는 이유로 멈추지 않고 저장소에서 찾습니다.
 
 ### 구현 전 필수 조건
 
-- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
-- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+- slot 의미와 대상 플랫폼을 식별합니다. 입력 데이터, router/store/fetch 없이 순수 구조로 해결해야 하며 필요한 surface·navigation 계약은 해당 owner에서 확보합니다.
+- 외부 라이브러리 동작·기본값·설정을 판단하거나 바꾸기 전에 공식 문서를 확인합니다. 이 정의문에 필요한 역할 계약을 포함하며 별도 외부 공통 지침을 요구하지 않습니다.
 
 ### 입력 필요 조건
 
-- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
-- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
+- 담당은 저장소나 하위 작업으로 확보할 수 있는 입력 부족만으로 종료하지 않습니다.
+- 미확정 사용자 결정이나 확보할 수 없는 외부 입력만 `입력 필요`로 보고합니다.
+- 하위는 누락된 필수 계약, 담당 owner와 입력·소비 경로를 부모에게 보고합니다.
+- 입력 확인에서 멈춘 해당 작업은 변경하지 않습니다. 앞서 완료된 하위 산출물은 보존하고 경로를 보고합니다.
+
+## 기술 규칙
+
+- 웹은 `@heroui/react` 공식 문서, package exports·원본 source와 `@cocrepo/ui` 공개 export를 먼저 확인합니다. 기존 leaf로 가능한 UI를 raw DOM과 className으로 다시 만들지 않습니다.
+- 웹의 DOM/CSS/Tailwind, server/client 경계, SSR/hydration과 React Aria id 안정성 규칙은 React Native에 적용하지 않습니다.
+
+### 구조와 표면
+
+- `Layout`은 flat primitive입니다. 웹은 `layout/Layout.tsx`와 같은 flat source, 모바일은 기존 `[Name]/index.tsx` 구조를 따릅니다. `layout/Layout/`나 분류만 하는 중첩 카테고리를 새로 만들지 않습니다.
+- 비즈니스 데이터, router, store, fetch, route 경로·메뉴 라벨을 넣지 않습니다. `header`, `sidebar`, `top`, `leftAside`, `right`, `children`처럼 구조 slot만 사용하고 도메인 slot 이름은 쓰지 않습니다.
+- 기본 export는 server component 호환을 유지하고 불필요한 `"use client"`를 추가하지 않습니다. 브라우저 상태에 따라 slot 구조를 바꾸지 않습니다.
+- `App compound > Page compound > Screen > SectionSurface > Section compound` 구조를 유지합니다. `App`은 `App.Header`/`Body`/`LeftAside`/`Main`/`RightAside`/`Footer`의 root 구조를 맡습니다.
+- `Page`는 `Page.Header`/`Body`/`Footer`와 page max-width·vertical rhythm을 맡고 App root slot을 대신 쓰지 않습니다. `Section`은 `Section.Header`/`Body`/`LeftAside`/`RightAside`/`Footer`, `inset`/`overflow`/aside grid를 맡습니다.
+- `App`/`Page`/`Section`은 구조·리듬만 제공합니다. background/border/radius/elevation 표면을 자동 생성하지 않습니다. Page를 대체하는 임시 scaffold도 만들지 않습니다.
+- `PageSurface`는 outer canvas, `ScreenSurface`는 기존 공개 호환 alias, `SectionSurface`는 Section visual wrapper, `Surface`는 local panel입니다. layout primitive 안에서 Surface나 제거된 detail/form surface wrapper를 직접 사용하지 않습니다.
+- `SectionSurface`에 예전 `top`/`bottom`/`left`/`right` slot API를 만들지 않습니다. header/body/footer/aside는 항상 Section compound가 소유합니다.
+- 기존 Page/layout/HeroUI로 되는 구조를 raw div scaffold로 다시 만들지 않습니다. 소유 폴더의 props/type와 layout·상위 barrel을 함께 공개합니다.
+
+### 모바일 구조
+
+- 모바일은 `https://heroui.com/llms-patterns.txt`, `heroui-native/*` 공식 계약·package exports·원본 source와 `@cocrepo/mo-ui` export를 먼저 확인합니다. 기존 leaf로 가능한 UI를 raw `View`/`Text`/`Pressable`로 다시 만들지 않습니다.
+- 사용자 노출 텍스트는 모바일 `Text`로 감쌉니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현 안에서만 허용하고, compound/action wrapper의 문자열 children도 `Text`로 정규화합니다.
+- 모바일 스타일은 uniwind `className` 계열 prop과 `tailwind-variants`를 사용합니다. `StyleSheet`/`StyleSheet.create`는 금지하며, `style` 객체는 className으로 표현할 수 없는 native 동적 값에만 씁니다.
+- 모바일에는 DOM event, `event.target.value`, `window`/`document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web/react-native-web 분기를 넣지 않습니다. 웹에는 native 런타임 규칙을 적용하지 않습니다.
+- `@cocrepo/mo-ui` 구조 leaf와 `heroui-native/*` 재노출을 우선합니다. `ScreenFrame`, `Card`, `ListGroup`, `ScreenActionBar`와 다른 순수 구조·배치 leaf만 직접 수정합니다.
+- overlay의 open/close와 Portal은 foundation, Menu/SubMenu는 menu, Expo tab/layout 연결은 route-layout 하위에 맡깁니다. 필요하면 해당 공개 leaf를 조합하며 그 내부 계약을 중복 구현하지 않습니다.
+
 ## 단독 실행 계약
 
-- 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 에이전트의 단위 작업을 수행한다.
-- 입력 경로가 명시되지 않으면 현재 프로젝트에서 관련 모델, spec, 타입, 기존 구현과 선행 산출물을 먼저 찾는다.
-- 필수 입력을 구현 전에 확인하고 자신의 소유 범위에서 만들 수 있는 입력은 직접 만든다.
-- 다른 owner의 필수 산출물이나 제품 결정이 없으면 구현을 시작하지 않고 변경 없이 `입력 필요`로 보고한다.
-- 다른 custom agent나 subagent를 호출하거나 실행 순서를 결정하지 않는다.
-- 이 지시문에 정의된 기본 검증을 실제로 실행하고 요청의 추가 완료 기준까지 확인한다.
-- 구현 후 검증을 통과하지 못하면 변경 산출물과 실패 근거를 포함해 `검증 실패`로 보고한다.
-- 최종 메시지는 `AGENTS.md`의 Worker 최종 보고 Markdown 계약을 따른다.
+### 담당 단계
 
-공식 worker 실행 계약:
-- 이 정의문 전체가 해당 단위 작업의 실행 계약이다. 매 작업에서 정의문을 기준으로 단위 구현과 기본 검증을 끝낸다.
-- 다른 custom agent나 subagent를 호출하거나 후속 owner를 선택하지 않는다.
-- 필수 입력은 구현 전에 프로젝트에서 찾고, 다른 owner의 산출물이나 제품 결정이 없으면 변경 없이 입력 필요로 보고한다.
-- 최종 메시지는 AGENTS.md의 Worker 최종 보고 Markdown 계약을 따른다.
+- 호출 단계가 지정되지 않으면 담당 단계로 실행합니다.
+- 필요한 하위 역할은 사용자가 지정하지 않아도 name과 description으로 선택합니다.
+- 필요한 다른 역할의 산출물은 해당 하위 에이전트에 생성·수정을 맡깁니다.
+- 하위의 선행 입력이 부족하면 필요한 다른 하위를 먼저 실행하고, 산출물 요약을 전달하여 원래 하위를 재개합니다.
+- 필요한 표시·모바일 surface·overlay는 `fe-foundation-ui-agent`, 메뉴는 `fe-menu-agent`, Widget은 `fe-widget-agent`, 실제 route skeleton은 `fe-route-layout-agent`, story는 `fe-storybook-agent`에 맡깁니다.
+
+### 하위 단계
+
+- 호출 깊이는 루트 → 담당 → 하위까지입니다.
+- 하위로 받은 작업에서는 다른 에이전트를 호출하지 않습니다.
+- 하위 요청에는 `호출 단계: 하위`를 반드시 포함합니다.
+
+### 작업 전달과 결과 수집
+
+- 하위 요청에 목표, 수정 범위, 사용자 결정, 선행 산출물, 완료 기준과 동시 실행 예산을 전달합니다.
+- 부모의 전체 대화나 지시문을 전달하거나 안다고 가정하지 않습니다.
+- 배정받은 수정 범위와 동시 실행 예산 안에서만 위임하고, 같은 파일·공개 export의 수정은 직렬로 실행합니다.
+- 전체 작업 트리에서 동시 write는 최대 4개, read-only는 최대 8개이며 부모의 직접 작업도 포함합니다.
+- 하위의 최종 보고, 산출물 경로, 공개 계약과 검증 결과를 확인하고, 필수 하위 결과가 모두 완료일 때만 연결합니다.
+
+## 생성·리뷰·수정
+
+- 기존 산출물과 사용처를 확인하고 재사용한 뒤 새 산출물을 생성하거나 기존 산출물을 수정합니다.
+- 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
+- 자기 역할 밖의 파일은 직접 수정하지 않습니다.
+- 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
+- 공개 props/type/export를 바꾸면 소유 범위의 barrel과 관련 단위 테스트를 함께 맞춥니다. 범위 밖 소비 import는 해당 owner에게 맡깁니다.
+
+## 검증·보고
+
+- 에이전트 런타임의 완료 상태와 프로젝트 작업 결과를 구분합니다.
+
+- Playwright 화면 확인은 사용자가 명시적으로 요청한 경우에만 실행합니다.
+- 기본 검증은 웹 `pnpm --filter=@cocrepo/ui type-check` 또는 모바일 `pnpm --filter=@cocrepo/mo-ui type-check`와 변경 layout 단위 테스트입니다. 웹 `pnpm --filter=@cocrepo/ui test --run <대상 테스트>`, 모바일 `pnpm --filter=@cocrepo/mo-ui test -- <대상 테스트>`를 사용합니다.
+- slot rendering, class/variant, 접근성 landmark, server 호환, 순수 구조·surface 분리, route/layout 범위 위반과 barrel 소비를 확인합니다. Storybook 작성·검증은 해당 하위가 맡습니다.
+- 자기 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위가 완료해야 `완료`입니다. 구현 후 미통과는 변경 경로와 첫 핵심 오류를 포함해 `검증 실패`로 보고합니다.
+- 최종 보고는 `## 작업 결과`(완료/입력 필요/검증 실패), `## 작업 요약`(결과 중심 5문장 이내), `## 변경 산출물`(생성·수정·삭제 경로, 공개 계약과 소비 용도), `## 수행한 검증`(명령과 성공·실패, 미실행 사유), `## 남은 문제`(실제 차단 사항, 후속 owner·소비 경로 또는 없음)의 5개 섹션으로 작성합니다.
+- 상세 탐색과 전체 명령 출력은 작업 기록에 남깁니다. 최종 응답에 전체 source, diff, raw log나 재시도 기록을 반환하지 않습니다.

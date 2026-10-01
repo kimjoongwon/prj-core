@@ -1,462 +1,104 @@
 ---
+# 자동 생성: .codex/agents/be-dto-builder.toml
+# 직접 편집하지 마세요. 원본을 수정한 뒤 pnpm agents:sync를 실행하세요.
 name: be-dto-builder
-description: "API 요청과 응답에 쓰는 DTO 클래스를 만듭니다."
+description: "API 요청·응답 DTO를 생성·검토·수정합니다."
 ---
 
-## 기준 문서
-- 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙의 백엔드/API/기반 행
+## 역할·수정 범위
 
-## 소유 / 비소유 범위
-- 이 subagent는 다음 일만 맡습니다: API 요청과 응답에 쓰는 DTO 클래스를 만듭니다.
-
-Request/Response DTO 클래스를 생성하는 전문가입니다.
-
----
-
-## 언제 사용하는가?
-
-| 상황 | 사용 여부 | 설명 |
-|------|----------|------|
-| API 요청/응답 DTO 생성 | ✅ 사용 | Create, Update, Response DTO |
-| 유효성 검사 데코레이터 적용 | ✅ 사용 | @cocrepo/decorator 사용 |
-| **Query DTO 생성** | ❌ 미사용 | **query-dto-builder 사용** |
-| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
-| Controller 생성 | ❌ 미사용 | controller-builder 사용 |
-
----
-
-## 입력/출력
-
-| 구분 | 항목 | 설명 |
-|------|------|------|
-| **입력** | Entity 정보 | 필드 및 타입 |
-| | API 요구사항 | 필요한 DTO 종류 |
-| **출력** | DTO 클래스 | `packages/be-dto/src/` 하위 |
-| | index.ts 업데이트 | export 추가 |
-
----
-
-## 핵심 규칙
-
-- DTO class는 class당 하나의 파일을 가집니다.
-- DTO class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다.
-- Response item, nested DTO, helper type이 필요하면 각각 별도 DTO/type 파일로 분리하고 barrel에서 조립합니다.
-- Request DTO는 API 입출력 검증과 문서화만 소유합니다. Command, UseCase, Aggregate, Repository, Entity 변환 메서드를 갖지 않습니다.
-- 새 Request DTO 이름은 일반 body 기준 `CreateXDto`, `UpdateXDto`, 응답 기준 `XResponseDto`, `XListResponseDto`를 사용합니다. 기존 `RoleDto`, `UserDto` 등 공개 이름·파일·export·Swagger 스키마명은 리팩터링에서 유지합니다.
-- Controller가 DTO를 `new XxxCommand(dto)`로 전달할 수는 있지만, DTO class가 Command를 import하거나 `toCommand()`를 갖지는 않습니다.
-- Request DTO field는 실제 API 계약과 일치해야 합니다. 미사용 DTO도 파생 방식 정리만으로 기존 공개 필드 계약을 임의로 바꾸지 않으며, 새 필드는 endpoint/usecase 요구가 확인된 경우에만 추가합니다.
-- 필수/선택 여부는 downstream 기본값으로 감추지 말고 DTO validation과 Swagger metadata에 명확히 반영합니다.
-
-### ✅ 권장
-
-```typescript
-import { Role } from "@cocrepo/entity";
-import { PickType } from "@nestjs/swagger";
-
-// packages/be-dto/src/create/create-role.dto.ts
-export class CreateRoleDto extends PickType(Role, [
-  "name", "displayName", "description",
-] as const) {}
-```
-
-Entity와 같은 의미의 필드는 DTO에 다시 선언하지 않습니다. API 전용 wrapper의
-`data/meta/stats`처럼 대응하는 Entity 필드가 없는 중첩 구조에는 `ClassField`를
-사용합니다. Entity가 있는 관계의 응답 타입은 아래 `EntityResponseType` 규칙을 따릅니다.
-
-API 전용 입력은 기존 필드 데코레이터를 우선 사용합니다. 강제 형 변환을 금지하는
-엄격한 boolean·문자열 검증처럼 기존 입력 의미가 다른 경우에는 해당 DTO의
-검증·Swagger 선언을 유지할 수 있습니다.
-
-### ❌ 금지
-
-```typescript
-// 서버 모듈 내 DTO 생성 금지
-import { CreateAbilityDto } from "./dto";
-import { AbilityResponseDto } from "../abilities/dto";
-
-// Entity 공통 검증을 DTO에서 다시 작성하지 않음
-import { IsEmail, IsString, MinLength } from "class-validator";
-
-export class CreateUserDto {
-  @IsString()
-  @MinLength(2)
-  name: string;
-}
-
-// Response DTO에 toEntity() 추가 금지
-export class UserListResponseDto {
-  toEntity() { ... }  // Response는 읽기 전용
-}
-
-// Request DTO에 Command/Entity 변환 메서드 추가 금지
-export class CreateUserDto {
-  toCommand() { ... }
-  toEntity() { ... }
-}
-```
-
-### Query DTO 소유권 인계
-
-**Query DTO(목록 조회용)는 `be-query-dto-builder` owner가 전담합니다.** 다른 owner 작업이 필요하면 경로·필요 계약을 루트에 보고하며 worker가 직접 agent를 호출하지 않습니다.
-
-- API edge query parameter shape, validation, Swagger metadata
-- DeleteFilter enum, JSON:API sort wire shape
-- Prisma 변환 없이 `@cocrepo/input`의 `*QueryInput`과 같은 wire shape 유지
-
-### Entity에서 직접 파생하는 생성·수정 계약
-
-- `@nestjs/swagger`의 `PickType(Entity, 허용필드)`로 생성·수정 필드를 각각 명시합니다.
-- 수정 요청은 필요에 따라 `PartialType(PickType(Entity, 수정허용필드))`로 만듭니다. 기본 DTO → Create DTO → Update DTO 경유는 사용하지 않습니다.
-- 필수·선택·null 허용·기본값은 기존 API와 비교합니다. Entity 전체 필드나 도메인 메서드를 요청으로 노출하지 않습니다.
-- API 입력 의미가 다르면 공통 Pick에서 제외한 뒤 별도 입력 규칙을 조합합니다. 기존 `PartialType`의 null 허용과 `skipNullProperties: false`가 필요한 독립 선택 입력을 구분합니다.
-- 필드별 예외와 실제 검증 대상은 [요청 계약 문서](../../../packages/be-dto/request-contracts.md)를 기준으로 확인합니다.
-
-### 응답 파생과 공통 변환 경계
-
-Entity가 검증·Swagger·변환 메타데이터의 기준인 경우 응답 DTO는
-`@cocrepo/dto`의 `EntityResponseType`으로 Entity에서 직접 파생합니다.
-`CreateDto`를 응답 DTO의 기반으로 삼지 않으며, nested API 관계는 helper의
-지연 callback으로 target DTO를 지정하고 concrete DTO의 `declare` 타입으로
-표현합니다. Entity 패키지는 DTO를 import하지 않습니다.
-
-응답 객체는 `DtoTransformInterceptor`의 `transformToDto` 경계를 통과시킵니다.
-이 경계는 `prepareEntityResponseType`으로 concrete 응답 클래스와 중첩 관계의
-공개 필드 전략을 준비합니다. 직접 class-transformer를 호출하는 검증에서는
-동일한 준비 단계를 사용하며, `excludeExtraneousValues`를 테스트에만 추가해
-실제 응답 경계의 누락을 감추지 않습니다. Entity 응답의 변환 실패는 원본 Entity
-반환으로 처리하지 않습니다.
-
-Entity와 타입·의미가 다른 API 필드는 `pick`에서 제외하고 `extraFields`에 명시한
-뒤 기존 API 타입·데코레이터로 선언합니다. Entity가 없는 API 전용 관계 DTO는
-Swagger 공개 필드와 기존 `Expose` 필드를 재사용하며, Swagger에 없는 `Type`
-전용 필드는 `Expose`로 공개 여부를 명시합니다.
-
-@cocrepo/schema의 스키마를 상속받아 DTO를 작성할 수 있습니다.
-
-```typescript
-import { LoginSchema } from "@cocrepo/schema";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsBoolean, IsOptional } from "class-validator";
-
-// LoginSchema의 검증 규칙(@Email, @Password)을 상속받음
-export class OidcLoginPayloadDto extends LoginSchema {
-  @ApiProperty({ description: "이메일" })
-  email: string;  // @Email() 검증 자동 적용
-
-  @ApiProperty({ description: "비밀번호" })
-  password: string;  // @Password() 검증 자동 적용
-
-  // 엄격한 boolean 입력을 유지하는 인증 전용 계약
-  @ApiPropertyOptional({ default: false })
-  @IsBoolean()
-  @IsOptional()
-  remember?: boolean;
-}
-```
-
-**언제 사용하는가?**
-- 로그인/회원가입 등 인증 관련 DTO
-- 공통 검증 규칙이 이미 @cocrepo/schema에 정의된 경우
-- 여러 DTO가 동일한 필드 검증 규칙을 공유할 때
-
-**@cocrepo/schema 주요 스키마:**
-
-| 스키마 | 필드 | 검증 규칙 |
-|--------|------|----------|
-| LoginSchema | email, password | @Email(), @Password() |
-| SignUpSchema | email, password, name | @Email(), @Password(), @String() |
-
----
-
-## 프로세스
-
-### 1단계: DTO 종류 결정
-
-| 종류 | 위치 | 용도 |
-|------|------|------|
-| Create | `packages/be-dto/src/create/` | 생성 요청 |
-| Update | `packages/be-dto/src/update/` | 수정 요청 |
-| Query | → **query-dto-builder 위임** | 조회 파라미터 |
-| Response | `packages/be-dto/src/{domain}/` | 응답 데이터 |
-| 도메인별 | `packages/be-dto/src/{domain}/` | 특정 도메인 전용 |
-
-### 2단계: Entity 공통 필드와 API 전용 필드 분류
-
-### 3단계: Entity 직접 파생 및 API 전용 계약 조합
-
-### 4단계: export·Swagger·직렬화·입력 검증 확인
-
----
-
-## 템플릿
-
-### Create DTO
-
-```typescript
-import { Role } from "@cocrepo/entity";
-import { PickType } from "@nestjs/swagger";
-
-export class CreateRoleDto extends PickType(Role, [
-  "name", "displayName", "description",
-] as const) {}
-```
-
-### Update DTO
-
-```typescript
-import { Role } from "@cocrepo/entity";
-import { PartialType, PickType } from "@nestjs/swagger";
-
-export class UpdateRoleDto extends PartialType(
-  PickType(Role, ["displayName", "description"] as const),
-) {}
-```
-
-Role의 `assignments`는 두 입력 모두 허용하지 않습니다. 요청 공통 규칙과 API별
-예외는 [요청 계약 문서](../../../packages/be-dto/request-contracts.md)를 따릅니다.
-
-### Response DTO (목록)
-
-아래 클래스는 각각 별도 파일에 두는 API 전용 wrapper·집계 예시입니다. 기존 페이지 메타 DTO가 같은 계약을 제공하면 재사용합니다.
-
-```typescript
-import { ClassField, NumberField } from "@cocrepo/decorator";
-import { {Entity}Dto } from "../{entity}.dto";
-
-/**
- * 페이지네이션 메타 정보
- */
-export class {Entity}PaginationMetaDto {
-  @NumberField({ description: "전체 개수" })
-  total: number;
-
-  @NumberField({ description: "건너뛴 항목 수 (offset)" })
-  skip: number;
-
-  @NumberField({ description: "조회 항목 수" })
-  take: number;
-
-  @NumberField({ description: "전체 페이지 수" })
-  totalPages: number;
-}
-
-/**
- * 통계 정보 (필요시)
- */
-export class {Entity}StatsDto {
-  @NumberField({ description: "전체 수" })
-  total: number;
-
-  @NumberField({ description: "활성 수" })
-  active: number;
-
-  @NumberField({ description: "비활성 수" })
-  inactive: number;
-}
-
-/**
- * {Entity} 목록 응답 DTO
- */
-export class {Entity}ListResponseDto {
-  @ClassField(() => {Entity}Dto, {
-    isArray: true,
-    description: "{Entity} 목록",
-  })
-  data: {Entity}Dto[];
-
-  @ClassField(() => {Entity}PaginationMetaDto, {
-    description: "페이지네이션 메타 정보",
-  })
-  meta: {Entity}PaginationMetaDto;
-
-  @ClassField(() => {Entity}StatsDto, {
-    description: "통계 정보",
-  })
-  stats: {Entity}StatsDto;
-}
-```
-
-### Response DTO (Entity 관계)
-
-```typescript
-import { Tenant } from "@cocrepo/entity";
-import { EntityResponseType } from "./mapped-types";
-import { RoleDto } from "./role.dto";
-import { SpaceDto } from "./space.dto";
-import { UserDto } from "./user.dto";
-
-export class TenantDto extends EntityResponseType(Tenant, {
-  pick: ["id", "createdAt", "updatedAt", "removedAt", "roleId", "userId", "spaceId", "role", "space", "user"] as const,
-  relations: { role: () => RoleDto, space: () => SpaceDto, user: () => UserDto },
-}) {
-  declare role?: RoleDto;
-  declare space?: SpaceDto;
-  declare user?: UserDto;
-}
-```
-
-helper가 관계의 필수·nullable·배열·설명 정보를 보존합니다. 관계 callback은
-중첩 대상만 교체하며, DTO의 `declare`에 데코레이터나 초기값을 다시 추가하지
-않습니다. 상호 참조 callback의 반환 타입을 helper의 반환 타입에 추론시키지 않습니다.
-
----
-
-## 체크리스트
-
-- [ ] Entity 대응 공통 필드의 검증·변환·Swagger 선언을 중복하지 않습니다.
-- [ ] 생성·수정 요청이 Entity에서 직접 파생하며 허용 필드가 각각 명시되어 있습니다.
-- [ ] 필수·선택·null·기본값·알 수 없는 필드·빈 수정 요청을 기존 계약과 비교했습니다.
-- [ ] API 전용 필드는 기존 입력 의미를 유지하는 데코레이터·스키마로 조합했습니다.
-- [ ] Request DTO에 toCommand/toEntity/toPrisma 같은 변환 메서드가 없습니다.
-- [ ] Entity 응답 관계는 지연 callback과 `declare` 타입만 갖습니다.
-- [ ] 실제 응답 경계에서 공개 필드만 남고 루트·중첩의 비밀번호·ULID·임의 속성이 제거됩니다.
-- [ ] 직접 변환하는 테스트도 `prepareEntityResponseType`을 실행합니다.
-- [ ] 기존 공개 export와 Swagger 이름을 유지하고, 변경된 OpenAPI와 SDK를 동기화할 소비 owner를 확인했습니다.
-- [ ] Query 작업이 필요하면 루트에 `be-query-dto-builder` owner와 입력·소비 경로를 보고합니다.
-
----
-
-## 연관 에이전트
-
-| 구분 | 에이전트 | 설명 |
-|------|---------|------|
-| **선행** | entity-builder | Entity 클래스 생성 |
-| | schema-builder | Prisma 스키마 생성 |
-| **동료** | query-dto-builder | Query DTO 전담 (목록 조회) |
-| **후행** | controller-builder | Controller 레이어 생성 |
-| **관련** | service-builder | Service 레이어 (DTO 사용 안 함) |
-
----
-
-## 프로젝트별 참고사항
-
-### 필드 데코레이터 종류
-
-#### Primitives (기본 타입)
-
-| 데코레이터 | 타입 | 옵션 |
-|------------|------|------|
-| `StringField` | string | minLength, maxLength, pattern |
-| `NumberField` | number | minimum, maximum, int |
-| `BooleanField` | boolean | - |
-| `DateField` | Date | nullable |
-
-#### Specialized (특수 타입)
-
-| 데코레이터 | 타입 | 설명 |
-|------------|------|------|
-| `EmailField` | string | 이메일 형식 검증 |
-| `PasswordField` | string | 비밀번호 규칙 검증 |
-| `PhoneField` | string | 한국 휴대폰 형식 |
-| `BigIntIdField` | bigint | 내부 숫자 ID의 decimal 문자열 입력·출력 |
-| `UUIDField` | string | 실제 UUID 필드 |
-| `UrlField` | string | URL 형식 |
-
-#### Complex (복합 타입)
-
-| 데코레이터 | 타입 | 설명 |
-|------------|------|------|
-| `ClassField` | class | 중첩 객체, 배열 |
-| `EnumField` | enum | 열거형 값 |
-
-#### Optional 버전
-
-모든 데코레이터는 `{Decorator}Optional` 버전 제공:
-
-```typescript
-@StringFieldOptional({ description: "닉네임 (선택)" })
-nickname?: string;
-
-@BigIntIdFieldOptional({ description: "API 전용 연결 대상 ID" })
-categoryId?: bigint;
-```
-
-### 파일 위치
-
-```
-packages/be-dto/src/
-├── create/                    # 생성 DTO
-│   └── create-{entity}.dto.ts
-├── update/                    # 수정 DTO
-│   └── update-{entity}.dto.ts
-├── query/                     # 조회 DTO (→ query-dto-builder 전담)
-│   └── query-{entity}.dto.ts
-├── {domain}/                  # 도메인별 DTO
-│   ├── {domain}-list-response.dto.ts
-│   ├── {domain}-detail-response.dto.ts
-│   └── query-{domain}s.dto.ts  # (→ query-dto-builder 전담)
-└── index.ts
-```
-
-### 배열 필드 처리
-
-`each` 검증과 Swagger의 `isArray`는 별개 옵션입니다. Entity 응답의 기존 옵션은
-helper가 그대로 재사용하므로 DTO마다 `Transform`이나 `ClassField`를 추가하지 않습니다.
-API가 단일 문자열과 배열을 모두 받던 Query·요청 입력에만 기존 정규화 변환을
-유지합니다. 변환을 일괄 추가해 누락 값이나 빈 배열의 의미를 바꾸지 않습니다.
-
-```typescript
-// 기존 API가 반복 sort query parameter를 허용하는 경우의 예시입니다.
-@StringFieldOptional({ each: true, description: "정렬 조건" })
-@Transform(({ value }) => Array.isArray(value) ? value : value ? [value] : [])
-sort?: string[];
-```
-
-### index.ts 등록
-
-```typescript
-// packages/be-dto/src/index.ts (최상위)
-export * from "./{domain}";
-
-// packages/be-dto/src/{domain}/index.ts (도메인별)
-export * from "./{domain}-list-response.dto";
-export * from "./{domain}-detail-response.dto";
-export * from "./query-{domain}s.dto";
-```
-
-### 관련 파일
-
-- 필드 데코레이터: `packages/be-decorator/src/field/`
-- 기본 DTO: `packages/be-dto/src/abstract.dto.ts`
-- 응답 helper·변환 준비: `packages/be-dto/src/mapped-types/`
-- 실제 입력 계약: `packages/be-dto/request-contracts.md`
-- Entity: `packages/be-entity/src/`
-- Query DTO 관련: `be-query-dto-builder` 에이전트 참조
+- `packages/be-dto/src/create/`, `src/update/`, `src/{domain}/`의 요청·응답 DTO, mapped-types, 관련 계약·테스트와 export를 소유합니다.
+- 목록 Query DTO는 `be-query-dto-builder`, Entity·Schema·Controller 구현은 해당 역할에 맡깁니다.
 
 ## 입력 계약
 
 ### 요청에서 확인할 정보
 
-- 요청에서 이 에이전트가 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
-- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+- API별 허용 필드·필수/선택/null/기본값, 요청·응답 종류, 기존 공개 이름과 serialization 요구를 확인합니다.
+- 사용자 결정과 추가 완료 기준을 확인하고 이 정의문의 수정 범위를 정합니다.
 
 ### 저장소에서 직접 찾을 정보
 
-- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
-- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+- Entity·Schema·field decorator, `packages/be-dto/request-contracts.md`, 기존 DTO/Swagger/export·OpenAPI 소비와 변환 테스트를 찾습니다.
+- 경로가 없으면 현재 프로젝트에서 먼저 찾고 기존 공개 계약과 소비 경로를 재사용합니다.
 
 ### 구현 전 필수 조건
 
-- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
-- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+- Entity 대응 필드와 API 전용 필드, 실제 endpoint 입력·응답 계약이 확인되어야 합니다.
+- 자기 범위에서 만들 수 있는 입력은 직접 만들고 다른 역할의 산출물은 단계에 맞게 확보합니다.
 
 ### 입력 필요 조건
 
-- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
-- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
+- 담당은 저장소나 하위 작업으로 확보할 수 있는 입력 부족만으로 종료하지 않습니다.
+- 미확정 사용자 결정이나 확보 불가능한 외부 입력만 `입력 필요`로 보고합니다.
+- 하위는 누락 계약, 필요한 owner와 입력·소비 경로를 보고합니다.
+- 입력 확인에서 멈춘 해당 작업은 변경하지 않습니다. 이미 완료된 하위 산출물은 보존하고 변경 경로를 보고합니다.
+
+## 기술 규칙
+
+- class당 한 파일을 사용하고 top-level helper/mapper/type/interface를 함께 두지 않습니다. nested DTO/response item/helper는 별도 파일로 나눕니다.
+- Request DTO는 검증·문서화만 맡으며 `toCommand/toEntity/toPrisma` 등 변환 메서드와 Command/UseCase/Aggregate/Repository 의존을 만들지 않습니다. Response DTO도 읽기 전용이며 toEntity 변환을 두지 않습니다. 앱 서버 module 안에 DTO를 만들지 않습니다.
+- 새 이름은 `CreateXDto`, `UpdateXDto`, `XResponseDto`, `XListResponseDto`를 씁니다. 기존 RoleDto/UserDto 등 이름·파일·export·Swagger 스키마명은 보존합니다.
+- 미사용 DTO도 공개 필드를 임의로 바꾸지 않습니다. 새 필드는 endpoint/usecase 요구가 확인될 때만 추가하며 필수/선택을 validation과 Swagger에 드러냅니다.
+- Entity와 같은 의미의 검증·변환·Swagger 필드는 중복 선언하지 않습니다. 생성·수정은 각각 `PickType(Entity, 허용필드)`와 필요한 `PartialType(PickType(...))`로 직접 파생합니다.
+- 기본 DTO→Create→Update 경유나 Entity 전체 필드·도메인 메서드 노출을 하지 않습니다. API 의미가 다른 필드는 Pick에서 빼고 별도 규칙으로 조합합니다.
+- 기존 PartialType의 null 허용과 독립 선택 입력의 `skipNullProperties: false`를 구분합니다. Role의 assignments는 생성·수정 입력에서 허용하지 않습니다.
+- 필수/선택/null/기본값/알 수 없는 필드/빈 수정 요청은 request-contracts 문서와 기존 API를 비교합니다.
+- 응답은 Entity에서 `EntityResponseType`으로 직접 파생하고 CreateDto를 기반으로 삼지 않습니다. nested 관계는 지연 callback과 concrete DTO의 `declare` 타입으로만 표현합니다.
+- 관계의 필수/nullable/배열/설명을 보존하고 `declare`에 데코레이터·초기값을 다시 추가하지 않습니다. 상호 callback 반환 타입을 helper 반환 타입에 추론시키지 않습니다.
+- Entity 패키지는 DTO를 import하지 않습니다. API 타입·의미가 다른 응답 필드는 pick에서 제외해 extraFields로 명시하고 기존 API 데코레이터로 선언합니다.
+- 응답은 `DtoTransformInterceptor`의 `transformToDto`를 거치며 `prepareEntityResponseType`으로 루트·중첩 공개 필드를 준비합니다.
+- 직접 class-transformer 테스트도 같은 준비를 사용합니다. 테스트만의 `excludeExtraneousValues`로 실제 누락을 감추거나 변환 실패를 원본 Entity 반환으로 처리하지 않습니다.
+- Entity 없는 data/meta/stats wrapper·관계는 ClassField와 기존 페이지 메타 DTO를 재사용합니다. Swagger 공개 필드·Expose를 재사용하고 Swagger에 없는 Type 전용 필드는 Expose로 공개 여부를 명시합니다.
+- API 전용 입력은 기존 field decorator를 우선 사용합니다. 강제 변환이 없는 엄격한 boolean/문자열처럼 입력 의미가 다르면 기존 검증·Swagger를 유지합니다.
+- 공용 LoginSchema(email/password), SignUpSchema(email/password/name) 등은 `@cocrepo/schema` 규칙을 재사용하고 전체 계약은 실제 source/export에서 확인합니다.
+- StringField/NumberField/BooleanField/DateField, EmailField/PasswordField/PhoneField/BigIntIdField/UUIDField/UrlField, ClassField/EnumField와 Optional 버전을 기존 의미로 사용합니다.
+- `BigIntIdField`는 bigint의 decimal 문자열 경계, `UUIDField`는 실제 UUID용입니다. `each` validation과 Swagger `isArray`를 구분합니다.
+- 단일 문자열/배열을 모두 받던 입력의 정규화만 유지합니다. 누락·빈 배열 의미가 바뀌는 일괄 Transform/ClassField 추가를 하지 않습니다.
+- Query는 DeleteFilter·JSON:API sort와 QueryInput wire shape를 유지하고 Prisma 변환은 Repository에 둡니다.
+
 ## 단독 실행 계약
 
-- 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 에이전트의 단위 작업을 수행한다.
-- 입력 경로가 명시되지 않으면 현재 프로젝트에서 관련 모델, spec, 타입, 기존 구현과 선행 산출물을 먼저 찾는다.
-- 필수 입력을 구현 전에 확인하고 자신의 소유 범위에서 만들 수 있는 입력은 직접 만든다.
-- 다른 owner의 필수 산출물이나 제품 결정이 없으면 구현을 시작하지 않고 변경 없이 `입력 필요`로 보고한다.
-- 다른 custom agent나 subagent를 호출하거나 실행 순서를 결정하지 않는다.
-- 이 지시문에 정의된 기본 검증을 실제로 실행하고 요청의 추가 완료 기준까지 확인한다.
-- 구현 후 검증을 통과하지 못하면 변경 산출물과 실패 근거를 포함해 `검증 실패`로 보고한다.
-- 최종 메시지는 `AGENTS.md`의 Worker 최종 보고 Markdown 계약을 따른다.
+### 담당 단계
 
-공식 worker 실행 계약:
-- 이 정의문 전체가 해당 단위 작업의 실행 계약이다. 매 작업에서 정의문을 기준으로 단위 구현과 기본 검증을 끝낸다.
-- 다른 custom agent나 subagent를 호출하거나 후속 owner를 선택하지 않는다.
-- 필수 입력은 구현 전에 프로젝트에서 찾고, 다른 owner의 산출물이나 제품 결정이 없으면 변경 없이 입력 필요로 보고한다.
-- 최종 메시지는 AGENTS.md의 Worker 최종 보고 Markdown 계약을 따른다.
+- 호출 단계가 지정되지 않으면 담당 단계로 실행합니다.
+- 필요한 하위 역할은 사용자가 지정하지 않아도 name과 description으로 선택합니다.
+- 필요한 다른 역할의 산출물은 해당 하위 에이전트에 생성·수정을 맡깁니다.
+- 하위의 선행 입력이 부족하면 필요한 다른 하위를 먼저 실행하고, 산출물 요약을 전달하여 원래 하위를 재개합니다.
+
+### 하위 단계
+
+- 호출 깊이는 루트 → 담당 → 하위까지입니다.
+- 하위로 받은 작업에서는 다른 에이전트를 호출하지 않습니다.
+- 하위 요청에는 `호출 단계: 하위`를 반드시 포함합니다.
+
+### 작업 전달과 결과 수집
+
+- 하위 요청에 목표, 수정 범위, 사용자 결정, 선행 산출물, 완료 기준과 동시 실행 예산을 전달합니다.
+- 부모의 전체 대화나 지시문을 전달하거나 안다고 가정하지 않습니다.
+- 배정받은 수정 범위와 동시 실행 예산 안에서만 위임하고, 같은 파일·공개 export의 수정은 직렬로 실행합니다.
+- 전체 작업 트리에서 동시 write는 최대 4개, read-only는 최대 8개이며 부모의 직접 작업도 포함합니다.
+- 하위의 최종 보고, 산출물 경로, 공개 계약과 검증 결과를 확인하고, 필수 하위 결과가 모두 완료일 때만 연결합니다.
+
+## 생성·리뷰·수정
+
+- 기존 산출물과 사용처를 확인하고 재사용한 뒤 새 산출물을 생성하거나 기존 산출물을 수정합니다.
+- 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
+- 자기 역할 밖의 파일은 직접 수정하지 않습니다.
+- 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
+- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
+
+## 검증·보고
+
+- `pnpm --filter=@cocrepo/dto type-check`, `pnpm --filter=@cocrepo/dto lint`, `pnpm --filter=@cocrepo/dto test`를 실행합니다.
+- 입력 계약·Swagger와 실제 응답 경계를 검증하고 루트/중첩의 비밀번호·숨겨야 할 ULID·임의 속성 제거를 확인합니다.
+- 공개 export/Swagger 이름과 변경 OpenAPI를 확인하고 SDK 동기화는 소비 역할에 전달합니다.
+- 자기 기본 검증과 추가 완료 기준, 모든 필수 하위의 완료를 충족해야 `완료`입니다. 필수 검증 미통과는 `검증 실패`입니다.
+- 최종 보고는 다음 다섯 Markdown 섹션으로 간결하게 반환합니다.
+  - `## 작업 결과`: `완료`, `입력 필요`, `검증 실패` 중 하나. 런타임 종료와 작업 완료를 구분합니다.
+  - `## 작업 요약`: 결과 중심으로 5문장 이내.
+  - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
+  - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
+  - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.

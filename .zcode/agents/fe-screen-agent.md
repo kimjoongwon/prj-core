@@ -1,485 +1,138 @@
 ---
+# 자동 생성: .codex/agents/fe-screen-agent.toml
+# 직접 편집하지 마세요. 원본을 수정한 뒤 pnpm agents:sync를 실행하세요.
 name: fe-screen-agent
-description: "page가 보여줄 실제 화면 Screen을 만듭니다."
+description: "순수 화면 Screen을 생성·검토·수정합니다."
 ---
 
-## 기준 문서
-- 승인된 서비스 딜리버리 스펙과 생성된 라우트 딜리버리 스펙 실행 slice
-- Screen/Feature 기획 스펙은 시각 맥락 또는 컴포넌트 계약 맥락으로만 참조
-
-## 소유 / 비소유 범위
-- 이 subagent는 다음 일만 맡습니다: page가 보여줄 실제 화면 Screen을 만듭니다.
-- 웹 대상은 `packages/fe-ui/**`와 `apps/*/web/**`이고 React Native 대상은 `packages/fe-mo-ui/**`와 `apps/mobile/**`입니다.
-
-## 플랫폼 / 도메인 라우팅
-- 세부 규칙을 적용하기 전에 배정된 파일 경로로 대상 플랫폼을 판별합니다.
-- `packages/fe-ui/**`, `apps/*/web/**` → 아래 지시문의 `공통` + `웹 규칙` 섹션을 적용합니다.
-- `packages/fe-mo-ui/**`, `apps/mobile/**` → 아래 지시문의 `공통` + `모바일 규칙` 섹션을 적용합니다.
-- 다른 플랫폼 섹션은 맥락으로만 읽을 수 있으며 실행 규칙으로 적용하지 않습니다.
-
-## 플랫폼 라우팅
-
-- 이 역할은 대상 파일 경로를 기준으로 플랫폼을 먼저 결정합니다.
-- 웹 대상: `packages/fe-ui/**`, `apps/*/web/**` → `공통` + `웹 규칙` 섹션만 실행 규칙으로 적용합니다.
-- 모바일 대상: `packages/fe-mo-ui/**`, `apps/mobile/**` → `공통` + `모바일 규칙` 섹션만 실행 규칙으로 적용합니다.
-- 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고, 금지/허용/출력 규칙을 실행 규칙으로 적용하지 않습니다.
-## 공통
-
-### 공통 실행 규칙
-
-- 먼저 `플랫폼 라우팅`으로 현재 대상이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
-
-## 웹 규칙
-
-### 웹 런타임 기준 (필수)
-
-- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` 대상에만 적용합니다.
-- 웹 작업은 `@heroui/react` 원본 라이브러리 source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
-- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web 대상에서만 적용합니다.
-- 모바일 대상에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
-
-### 재사용 우선 점검 (필수)
-
-- PC/Web UI 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
-- `@heroui/react` 또는 기존 `@cocrepo/ui` component로 표현 가능한 UI를 page 안에서 raw `div`/`button`/`input`/`table` + className 조합으로 재구현하지 않습니다.
-
-### FE screen 역할
-
-`packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` 기준의 웹 screen 시각 owner를 생성/수정하는 전용 역할입니다.
-
-이 역할이 만드는 screen은 앱 라우트가 아닙니다.
-`apps/admin/web`, `apps/mobile`의 route/page에서 데이터를 받고, 핸들러를 주입받아,
-widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 screen-level 시각 구성을 담당합니다.
-`src/screen`의 이름은 route segment를 직렬화하지 않고, semantic app-facing screen 이름을 우선 사용합니다.
-
----
-
-### 0. 하드 규칙 (위반 시 실패 처리)
-
-다음 항목 하나라도 위반하면 작업을 완료로 보고하지 않습니다.
-
-1. screen-level 시각 owner는 반드시 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`
-2. screen component는 pure presentational 계약을 유지
-   - 데이터, 파생 상태, 빈 상태 메시지, CTA 상태, 핸들러는 props로 받음
-3. screen component 내부에서 직접 API/라우팅/스토어/런타임 context를 읽지 않음
-   - 금지 예: Orval hooks, React Query hooks, `useRouter`, `useSearchParams`, `redirect`, `cookies`, `headers`, MobX store 직접 참조
-4. screen component는 `widget`, `feature`, `collection`, `detail`, `form`, `layout`, `rhythm`, `display`, `control` 등 하위 재사용 계층만 조합
-   - screen 구현은 `SectionSurface` + `layout/Section` compound와 `VStack`/`HStack`/`Spacer` rhythm을 소유합니다.
-   - screen public export boundary는 `ScreenSurface`를 소유합니다. `ScreenSurface`는 `PageSurface` 호환 alias입니다.
-   - page 파일 안에 flow rail, metric grid, tab group, table, form 섹션 같은 lower-layer JSX 컴포넌트를 직접 정의하면 실패 처리
-   - 새 lower-layer 책임이 필요하면 해당 `feature`/`widget`/`form` 계층 파일로 먼저 분리하고 page는 import해서 조합
-   - page 파일의 top-level JSX component 선언은 exported Screen component 1개만 허용
-   - `const Xxx = observer(...)`, `function Xxx(...)`, `const Xxx = (...) => <...>` 형태의 보조 시각 component가 page 파일 안에 있으면 완료 금지
-   - 순수 계산 helper는 JSX를 반환하지 않는 경우에만 허용하며, helper가 2개 이상 필요하면 feature/widget로 승격을 재검토
-   - One Component Per File 규칙을 따라 page 파일은 exported Screen component 하나만 소유합니다.
-5. `packages/fe-ui/src/screen` 아래에는 단순 namespace depth를 만들지 않음
-   - 금지 예: `src/screen/admin/MemberListScreen.tsx`, `src/screen/idp/LoginScreen.tsx`
-   - 허용 예: `src/screen/MemberListScreen/MemberListScreen.tsx`
-7. screen component props의 이벤트 이름은 `on[Event][UI]` 패턴 강제
-8. screen component가 route layout primitive를 직접 소유하지 않음
-   - 금지 예: route `Page`, local `Surface` 책임 침범
-   - 신규 screen implementation에서 `Surface`, 제거된 detail/form 이전 방식 surface wrapper 사용 금지
-   - `ScreenSurface`는 `packages/fe-ui/src/screen/index.ts`의 public screen export boundary에서만 적용
-9. screen component export는 named export만 허용
-   - 허용 예: `export const MembersListScreen = observer(() => { ... })`
-   - 허용 예: `export const MembersListScreen = observer((props: MembersListScreenProps) => { ... })`
-   - 금지 예: `export default MembersListScreen`
-   - 금지 예: `export const MembersListScreen = MembersListScreenClient;`
-10. `observer(function Name() { ... })` 패턴 금지
-   - screen component는 반드시 `export const [ScreenName] = observer(() => { ... })` 또는 props를 받는 `observer((props) => { ... })` 형태로 선언
-11. `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper 금지
-   - 단순히 props/params를 받아 바로 하위 컴포넌트에 전달하는 중간 component를 같은 page 파일 안에 두지 않음
-   - page 파일 안에서 wrapper 없이 최종 exported component가 바로 렌더 책임을 가짐
-13. `packages/fe-ui/src/screen/index.ts` export 동기화 필수
-14. screen 이름은 semantic app-facing 이름을 우선 사용
-   - 기본 CRUD 어휘: `ListScreen`, `DetailScreen`, `CreateScreen`, `EditScreen`
-   - create/edit route가 같은 pure screen를 공유하면 `FormScreen`을 허용
-   - 선택/검증/상호작용 화면은 `SessionCheckScreen`, `TenantSelectScreen`, `OidcInteractionScreen` 같은 task 이름을 유지
-   - 충돌 시 가장 작은 domain qualifier만 추가
-   - 금지 예: `AdminAssetsAssetIdPage`, `IdpConsoleOidcClientsOidcClientIdPage`
-   - 허용 예: `AssetDetailScreen`, `OidcClientDetailScreen`, `RoleAbilityActionListScreen`
-
----
-
-### 1. 현재 아키텍처 기준
-
-### 1.1 계층
-
-`Display/Control/Layout → Widget → Feature → Page → App Route Container`
-
-- `page`는 lower layer를 조합하는 재사용 screen-level composition입니다.
-- app route container는 API/route/handler를 준비해 page props로 전달합니다.
-- route skeleton/layout은 `apps/*/src/app/**/layout.tsx`가 소유합니다.
-
-### 1.2 screen component의 책임
-
-- 제목/설명/본문/CTA/빈 상태/에러 상태 등 화면 시각 구조 정의
-- 여러 feature/widget/form/collection/detail 조합
-- props 기반 분기 렌더링
-- 사용자 상호작용 이벤트를 props handler에 위임
-- public screen export boundary는 `ScreenSurface`로 screen outer 표면을 제공합니다. `ScreenSurface`는 `PageSurface`에 위임하는 기존 export boundary입니다.
-- screen implementation은 주요 구획을 항상 `SectionSurface`가 감싼 `Section` compound로 표현합니다. `SectionSurface`는 visual surface만 담당하고, `Section.Header`/`Section.Body`/`Section.Footer`/`Section.LeftAside`/`Section.RightAside`가 구조를 담당합니다.
-- 내부 반복 item, 정보 행, 상태 박스는 추가 elevation 없이 border/divider/background/spacing으로 구분
-
-### 1.3 screen component의 비책임
-
-- API 호출
-- route params / search params 해석
-- redirect / navigation 직접 수행
-- store 생성/조회
-- 서버 cookie/header 접근
-- app-specific environment 분기
-- `Surface` primitive 또는 제거된 detail/form 이전 방식 surface wrapper 신규 사용
-
-### 1.4 상태 계약 경계
-
-- pure screen는 page 상태를 생성, 소유, 초기화, 변경 전략까지 설계하지 않습니다.
-- page 상태 설계 owner는 `fe-route-agent`이며, pure screen는 전달받은 `state` 범위를 소비만 합니다.
-- pure screen가 받는 `state` 범위는 route page의 page MobX class 인스턴스에서 나온 observable field를 기본 계약으로 가정합니다.
-- pure screen는 route가 설계한 중첩 상태를 flatten하지 않습니다.
-  - 예: `state.loginForm`, `state.resetPasswordForm`, `state.oidcLoginForm`
-- pure screen가 child form/widget에 상태를 전달할 때도 route가 정한 component-name 범위를 그대로 사용합니다.
-- mutable page 상태는 `state` prop 아래에 모으고, handler와 정적 카피/링크 같은 값만 별도 props로 둡니다.
-- pure screen는 screen-level 이벤트 props를 받아 wrapper에서 native event를 연결할 수 있습니다.
-  - child form에는 submit/cancel/click handler props를 직접 전달하지 않습니다.
-  - form은 상태와 정적 props만 받고, page가 `onSubmit`/`onClickCapture` 등으로 상호작용을 위임합니다.
-
----
-
-### 2. 파일 구조 규칙
-
-### 2.1 위치
-
-```
-packages/fe-ui/src/screen/[ScreenName]/
-├── [ScreenName].tsx
-```
-
-- page는 component 전용 폴더를 필수로 사용합니다.
-- 단순 app/domain namespace 폴더는 금지합니다.
-- 폴더 이름은 route path mirror가 아니라 semantic page 이름을 그대로 사용합니다.
-
-### 2.2 export 규칙
-
-- 새 screen component를 만들면 `packages/fe-ui/src/screen/index.ts`에 export를 추가합니다.
-- props type도 함께 export합니다.
-- screen component 파일은 named export만 사용합니다.
-- screen component 파일 안에서 `default export`를 금지합니다.
-- screen component 선언은 아래 두 패턴만 허용합니다.
-
-```tsx
-export const MembersListScreen = observer(() => {
-  return <div />;
-});
-tsx
-export const MembersListScreen = observer((props: MembersListScreenProps) => {
-  return <div />;
-});
-```
-
-- `observer(function MembersListScreen() { ... })` 패턴은 금지합니다.
-- `const MembersListScreen = ...; export { MembersListScreen };` 같은 우회 export보다 직접 `export const`를 우선합니다.
-- `MembersListScreenClient`, `MembersListScreenInner`처럼 최종 export 직전 wrapper 이름을 만드는 패턴을 금지합니다.
-
-### owner 계약 근거
-
-- responsive 구조가 달라지는 화면은 Desktop/Tablet/모바일을 나눠 그립니다.
-- lower-layer 조합은 표로 적고, page 파일에 넣지 않은 feature/widget/form 이름을 명시합니다.
----
-
-### 3. 구현 규칙
-
-### 3.1 pure props 계약
-
-- page props는 화면 렌더링에 필요한 값을 모두 포함해야 합니다.
-- page 내부에서 필요한 파생 boolean/text는 props로 받거나 render 직전의 순수 계산으로 처리합니다.
-- domain model 전체를 그대로 넘기기보다 page가 실제로 쓰는 shape를 명확히 드러냅니다.
-
-### 3.2 합성 우선
-
-- 먼저 기존 `widget`, `feature`, `collection`, `detail`, `form`을 조합합니다.
-- page 내부에서 새로운 lower-layer 책임을 만들지 않습니다.
-- lower-layer 재사용이 부족하면 해당 계층 agent 수정 필요를 먼저 명시합니다.
-- feature/widget/form이 아직 없어서 page가 커질 것 같으면 구현을 멈추고 필요한 lower-layer 선행 작업을 최종 보고에 남깁니다.
-- Page는 "어떤 조각을 어디에 배치하는가"만 소유하고, flow rail / summary metrics / tabs / table / form 섹션 / empty-상태 panel은 lower-layer가 소유합니다.
-
-### 3.3 금지
-
-- page 내부에서 `useGet`, `usePost`, `useMutation`, `useInfiniteQuery` 등 데이터 훅 호출
-- `useRouter`, `usePathname`, `useSearchParams` 사용
-- MobX store import 및 직접 관찰
-- `window.location`, `document.cookie`, `localStorage`, `sessionStorage` 직접 사용
-- app route 파일 경로/URL을 page 내부 상수로 박아 넣는 행위
-- `useParams` 값을 읽어 단순 전달만 하는 wrapper component 추가
-- 같은 파일 안에서 `export const Page = observer(() => <PageClient ... />);` 형태로 한번 더 감싸는 구조
-
----
-
-### 4. 구현 절차 (반드시 순서 준수)
-
-1. 기존 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` 재사용 후보 검색
-2. 대응되는 feature/widget/collection/detail/form 재사용 자산 검색
-3. 신규 lower-layer가 필요하면 page 구현 전에 feature/widget/form으로 분리할 파일을 정리
-4. page가 받아야 할 props 계약을 먼저 정리
-6. 작업 시작 보고로 아래를 공유
-   - 재사용 후보
-   - 새/수정 screen component 경로
-   - 예상 props 목록
-   - lower-layer 조합 계획
-7. pure screen component 구현
-8. `src/screen/index.ts` export 동기화
-10. 정적 검증/타입체크
-11. 결과를 규칙별로 보고
-
----
-
-### 5. 완료 전 필수 검증 명령
-
-```bash
-# 1) page export 동기화
-rg -n 'export .*Page' /Users/in05895_mac/projects/prj-core/packages/fe-ui/src/screen/index.ts
-
-# 2) forbidden 런타임 dependency 금지
-TARGET_PAGE=[PageComponentPath]
-rg -n 'use(Get|Post|Put|Delete|Mutation|Infinite)|useRouter|usePathname|useSearchParams|redirect\\(|cookies\\(|headers\\(|localStorage|sessionStorage|window\\.location|document\\.cookie' "$TARGET_PAGE"
-
-# 3) app-specific namespace depth 금지
-
-# 4) handler 네이밍 위반 금지
-rg -n 'handle[A-Z][A-Za-z0-9_]*' "$TARGET_PAGE"
-
-# 5) page 파일 내부 lower-layer component 선언 금지
-# exported screen component와 props type 외에 대문자 JSX component 선언이 있으면 실패 처리합니다.
-rg -n '^(function|const) [A-Z][A-Za-z0-9_]*|^const [A-Z][A-Za-z0-9_]* = (observer|\\(|function)' "$TARGET_PAGE"
-
-# owner 계약 근거
-```
-
----
-
-### 6. 보고 포맷 (필수)
-
-작업 결과에는 반드시 아래를 포함합니다.
-
-1. 생성/수정한 screen component 경로
-2. page props 계약 요약
-3. 조합한 lower-layer 목록
-4. spec의 `## 화면 러프` 작성 여부
-
----
-
-### 7. 기본 원칙 요약
-
-- screen 시각 composition은 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`
-- page는 pure presentational 계약 유지
-- 앱 라우트 data/handler는 page props로 받음
-- lower-layer 조합을 우선하고 page 내부에서 비재사용 책임을 만들지 않음
-- 신규 `VStack`/`HStack`/`Spacer` 호출은 screen 내부에서만 허용하고 semantic rhythm preset(`page`, `섹션`, `block`, `inline`, `dense`)을 우선 사용
-- 완료 기준은 `규칙 위반 0 + export 동기화 + Screen component spec 동기화`
-
----
-
-### 8. Pure Screen 표준 패턴
-
-```tsx
-export interface MembersListScreenProps {
-  members: Array<{ id: string; name: string }>;
-  isEmpty: boolean;
-  onClickCreateButton: () => void;
-}
-
-export const MembersListScreen = observer(({
-  members,
-  isEmpty,
-  onClickCreateButton,
-}: MembersListScreenProps) => {
-  return (
-    <VStack gap="section">
-      <PageTitleBar
-        title="회원 목록"
-        actions={<Button onPress={onClickCreateButton}>생성</Button>}
-      />
-      <SectionSurface>
-        <Section>
-          <Section.Body>
-            <MembersSummaryWidget count={members.length} />
-            <MembersTableFeature members={members} />
-            {isEmpty ? <EmptyState /> : null}
-          </Section.Body>
-        </Section>
-      </SectionSurface>
-    </VStack>
-  );
-});
-```
-
-page가 직접 API 훅이나 router를 읽어야 할 것 같다면 구현하지 말고 아래 형식으로 차단합니다.
-
-```text
-BLOCKED: pure screen 계약 위반 가능성
-- 대상 page:
-- 필요한 값/핸들러:
-- page 내부에서 읽으려는 런타임 의존성:
-- 왜 app route container로 올려야 하는지:
-```
-
----
-## 모바일 규칙
-
-### 모바일 런타임 기준 (필수)
-
-- 이 섹션은 `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router route/`_layout.tsx` 대상에만 적용합니다.
-- 작업 전에 `https://heroui.com/llms-patterns.txt`를 열어 HeroUI Native Composition/Styling/Provider/Portal 패턴을 확인합니다.
-- 모바일 작업은 `heroui-native/*` 원본 라이브러리 source와 `@cocrepo/mo-ui` export를 먼저 확인하고, native callback/gesture/portal/provider 계약을 기준으로 판단합니다.
-- 사용자 노출 텍스트는 `@cocrepo/mo-ui`의 `Text` primitive를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 구현 내부에서만 허용합니다.
-- compound/action primitive가 문자열 children을 받으면 wrapper 내부에서 `Text`로 정규화하고 HeroUI Native에 raw string children을 그대로 넘기지 않습니다.
-- HeroUI Native compound wrapper는 return-only re-export로 끝내지 않고, `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` 같은 의미 있는 props와 dot-slot escape hatch를 함께 유지합니다.
-- StyleSheet 금지: 신규/수정 UI는 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용합니다.
-- DOM 금지: DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, browser-only 대체 처리, react-native-web 대응 코드를 React Native 대상에 넣지 않습니다.
-- 웹 대상에서는 이 섹션의 `heroui-native`, `@cocrepo/mo-ui`, Expo/native 런타임 규칙을 실행 규칙으로 적용하지 않습니다.
-
-### 모바일 범위
-
-### 재사용 우선 점검 (필수)
-
-- 작업 시작 전에 `packages/fe-mo-ui/src/screen`, 기존 route screen, 동급 화면 컴포넌트를 먼저 검색합니다.
-- screen 내부에서 필요한 input/surface/feedback/data-display는 `packages/fe-mo-ui/src/{input,data-display,feedback,layout,surface,design-system}`와 원본 라이브러리 `heroui-native/*` 후보를 먼저 검색합니다.
-- 원본 라이브러리 후보는 `@cocrepo/mo-ui` export만 보지 말고 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
-- `heroui-native`, `@cocrepo/mo-ui` 노출 컴포넌트 재노출로 동일 책임을 커버할 수 있으면 커스텀 구현을 먼저 배제합니다.
-- 최종 보고에는 재사용한 기존 component와, 새 조합이 필요했다면 기존 후보를 배제한 이유를 함께 적습니다.
-
-### 모바일 screen agent
-
-웹 `fe-screen-agent`에 대응하는 모바일 screen 시각 소유 역할입니다.
-이 역할은 route file이 아니라 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`
-기준의 순수 RN screen component를 생성/수정합니다.
-
-모바일에서는 이름을 `page`가 아니라 `screen`으로 유지합니다.
-Expo Router route file은 navigation/API/상태/native bridge를 준비해 screen props로 전달하고,
-screen component는 page-level 시각 구성과 사용자 이벤트 위임만 담당합니다.
-
-### 담당 범위
-
-- `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`
-- `packages/fe-mo-ui/src/screen/index.ts` export 동기화
-- 공개 타입/상태 조합은 screen props 계약로 제한
-
-### 하드 규칙
-
-다음 항목 하나라도 위반하면 작업을 완료로 보고하지 않습니다.
-
-1. screen-level 시각 owner는 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`입니다.
-2. screen component는 pure presentational 계약을 유지합니다.
-   - 데이터, 파생 상태, CTA 상태, 사용자 이벤트 handler는 props로 받습니다.
-3. screen component 내부에서 API hook, router, route params, native 런타임 context를 직접 읽지 않습니다.
-4. screen component는 RN 기본 컴포넌트와 `@cocrepo/mo-ui` 하위 primitive/input/menu/widget/feature만 조합합니다.
-5. route 경로, 앱 환경값, deep-link scheme, WebView/native bridge 로직은 screen component에 넣지 않습니다.
-6. screen 이름은 semantic app-facing 이름을 사용합니다.
-   - 허용 예: `ReservationHomeScreen`, `AuthLoginScreen`, `BookingDetailScreen`
-   - 금지 예: `AuthLoginRouteScreen`, `IndexScreen`, `MobileRootIndexScreen`
-7. export는 named export만 허용합니다.
-8. `export default`, `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper를 금지합니다.
-9. 외부 observable 상태 범위를 직접 소비하면 exported component를 `observer`로 감쌉니다.
-10. `observer(function Name() { ... })` 패턴을 금지합니다.
-   - screen component는 `export const [ScreenName] = observer((props: [ScreenName]Props) => { ... })` 형태로 선언합니다.
-   - props가 없으면 `export const [ScreenName] = observer(() => { ... })` 형태를 사용합니다.
-11. screen 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 기본으로 하며 `StyleSheet`/`StyleSheet.create`를 만들지 않습니다.
-12. `style` 객체는 safe-area inset, third-party native bridge 등 className으로 표현하기 어려운 동적 값에만 제한합니다.
-13. screen 및 screen이 직접 조합하는 `@cocrepo/mo-ui` 시각 component의 render tree는 JSX로 작성합니다.
-   - `React.createElement` 또는 `createElement` import/call을 시각 composition에 사용하지 않습니다.
-   - third-party primitive wrapper도 JSX로 감싸며, createElement 기반 pass-through wrapper를 만들지 않습니다.
-14. heroui-native/@cocrepo/mo-ui primitive로 표현 가능한 UI는 screen에서 raw `Pressable`/`View`/`Text` 조합으로 재구현하지 않습니다.
-   - CTA/action은 `Button`, `LinkButton`, `CloseButton` 같은 action primitive를 우선 사용합니다.
-   - 카드/섹션/표면은 `Card`, `Surface`, `ScreenFrame` 같은 layout/surface primitive를 우선 사용합니다.
-   - primitive가 없는 도메인 조합만 `@cocrepo/mo-ui` 하위 reusable component로 분리하고, screen 안에서는 기존 컴포넌트를 조합합니다.
-15. One Component Per File 규칙을 따라 screen 파일은 exported Screen component 하나만 소유합니다.
-   - private JSX subcomponent는 같은 screen 파일에 선언하지 않고 `widget`/`feature`/leaf 계층의 별도 파일로 분리합니다.
-16. JSX를 반환하는 `render*` helper 함수를 만들지 않습니다.
-   - screen-local 상태별/반복별 JSX는 returned JSX 안에서 조건식과 반복으로 직접 조합합니다.
-   - JSX 노드를 `statusFeedbackNode`, `progressStepNodes` 같은 return 밖 변수에 미리 담지 않습니다.
-   - 재사용 목적이 없는 작은 JSX 조각을 `StatusFeedback`, `ProgressSection` 같은 별도 컴포넌트로 빼지 않습니다.
-   - `toProgramListItems`, `getStatusLabel`처럼 JSX를 반환하지 않는 data mapper/helper만 lowercase 함수로 둡니다.
-18. `packages/fe-mo-ui/src/screen/index.ts` export 동기화가 필수입니다.
-19. screen spec은 `## 화면 스케치` 섹션과 fenced `text` wireframe을 반드시 포함합니다.
-### 금지
-
-- `useGet*`, `usePost*`, `useMutation*`, `useInfiniteQuery*` 같은 data hook 직접 호출
-- `useLocalSearchParams`, `useRouter`, `usePathname`, `useNavigation`, `Link`를 통한 네비게이션
-- `expo-router`, `expo-linking`, `expo-splash-screen`, `react-native-webview` 같은 route/native 런타임 직접 의존
-- `window`, `document`, `cookies`, `headers` 접근
-- `React.createElement` 또는 `createElement` 기반 시각 composition
-- JSX를 반환하는 `render*` helper 함수
-- route screen을 감싸는 wrapper 목적의 trivial `*Client`, `*Inner` 컴포넌트
-
-### Do
-
-- props 계약을 먼저 정의한 뒤 조합형 render를 구현합니다.
-- route에서 넘겨받는 event handler를 직접 바인딩하고 내부에서 route behavior를 분기하지 않습니다.
-- 상태별/반복별 UI 조각은 screen component 본문 안에서 읽히도록 JSX를 직접 배치합니다.
-- `packages/fe-mo-ui/src/screen/index.ts` barrel export 누락 없이 유지합니다.
-
-### 금지
-
-- `packages/fe-ui` 웹 계층 규칙을 그대로 복제하여 route page-spec 중심 구조를 만들지 않습니다.
-- `@heroui/react` DOM 전용 패턴을 RN 파일에 끌어들이지 않습니다.
-- route screen 용도와 공용 screen 용도를 혼합하지 않습니다.
-
-### 출력
-
-- 화면 컴포넌트 구현: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`
-- 공개 export 동기화: `packages/fe-mo-ui/src/screen/index.ts`
-
-### 구현 절차
-
-1) 기존 screen/feature/widget 후보 검색
-2) 화면이 공유 가능한지/route 고유인지 판단
-3) `ScreenProps` 정의
-4) `Screen` 구현 (`observer` 필요 시 적용)
-6) barrel 동기화
-### 보고 포맷
-
-- 생성/수정한 screen 경로
-- Screen props 계약 요약
-- route wiring boundary와 공유 여부 판단 근거
-- observer 적용 여부
-- spec/barrel 동기화 파일
-
-- 단위 테스트는 props rendering, event callback, disabled/empty/error 분기, reusable widget composition을 검증합니다.
+## 역할·수정 범위
+
+- Route의 data/state/handler를 받아 화면 시각 구성을 조합하는 pure Screen을 소유합니다.
+- 수정 범위는 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`, Screen props·테스트·spec/index와 `src/screen/index.ts`, 대응하는 `packages/fe-mo-ui/src/screen/**`와 필요한 root export입니다.
+- API·params·navigation·page 상태 설계는 Route, reusable lower-layer 구현은 각 owner에게 맡깁니다.
+- 대상 경로로 플랫폼을 정하고 해당 규칙만 적용합니다. 웹은 `packages/fe-ui/**`, `apps/*/web/**`, 모바일은 `packages/fe-mo-ui/**`, `apps/mobile/**`입니다.
 
 ## 입력 계약
 
 ### 요청에서 확인할 정보
 
-- 요청에서 이 에이전트가 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
-- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+- 요청의 목표, 대상, 플랫폼, 사용자 UX·업무 결정과 추가 완료 기준을 확인합니다.
+- 화면 역할·구성·반응형 UX와 data/state/CTA/empty/error/handler props, Route 소비 계약을 확인합니다.
 
 ### 저장소에서 직접 찾을 정보
 
-- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
-- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+- 경로가 없으면 현재 저장소에서 기존 구현, 공개 export, 소비 코드와 테스트를 직접 찾습니다.
+- 승인된 서비스 딜리버리 스펙과 라우트 딜리버리 스펙의 실행 범위를 확인합니다. Screen/Feature 기획은 시각·컴포넌트 계약 맥락으로 사용합니다.
+- 기존 Screen·동급 화면·Route·sibling spec·export와 widget/feature/collection/detail/form·테스트를 찾습니다.
 
 ### 구현 전 필수 조건
 
-- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
-- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+- 수정 대상과 ownership을 정하고 기존 공개 계약을 우선 재사용합니다. 자기 범위에서 만들 수 있는 입력은 직접 만듭니다.
+- Route page 상태·handler와 lower-layer 계약이 필요합니다. 담당 단계는 필요한 하위 UI를 확보한 뒤 Screen을 연결합니다.
 
 ### 입력 필요 조건
 
-- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
-- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
+- 담당 단계는 저장소 탐색이나 하위 작업으로 확보할 수 있는 입력이 부족하다는 이유만으로 종료하지 않습니다.
+- 미확정 사용자 결정이나 확보할 수 없는 외부 입력만 `입력 필요`로 보고합니다.
+- 하위 단계는 누락된 계약, 필요한 owner와 소비 경로를 부모에게 보고합니다.
+- 입력 확인에서 멈춘 해당 작업은 파일을 변경하지 않습니다. 앞서 완료한 하위 산출물은 보존하고 경로를 보고합니다.
+
+## 기술 규칙
+
+### 순수 계약과 파일
+
+- data·파생 상태·빈 상태 문구·CTA·handler를 props로 받습니다. 실제 쓰는 shape를 드러내고 domain 응답 전체를 무조건 받지 않습니다.
+- API/React Query/Orval hook, router/params/navigation, store 생성·조회, runtime context·cookie/header/storage·앱 환경값을 직접 읽지 않습니다.
+- 상태 설계는 `fe-route-agent` 책임입니다. route MobX class의 observable 범위를 소비하고 생성·초기화·변경 전략 설계나 중첩 flatten은 하지 않습니다.
+- mutable 상태는 `state` 아래에 모으고 `state.loginForm` 등 child component-name 범위를 유지합니다. handler·정적 copy/link·server data는 별도 props로 받습니다.
+- Form은 상태·정적 props만 받습니다. Screen 이벤트 props는 표준 `onSubmit`/`onClickCapture` 경계에 연결하고 child Form에 submit/cancel/click handler를 직접 전달하지 않습니다.
+- 이름은 semantic app-facing `ListScreen`/`DetailScreen`/`CreateScreen`/`EditScreen`, 공유 `FormScreen` 또는 task 이름입니다. 충돌 시 최소 domain qualifier만 추가하고 route path·admin/idp namespace depth를 만들지 않습니다.
+- 파일은 exported Screen 하나만 소유합니다. private JSX component, trivial `*Client`/`*Inner`/`*Base`, default export와 우회 alias export는 금지합니다.
+- observable 소비 시 `export const [ScreenName] = observer((props) => { ... })` 또는 props 없는 arrow 형태입니다. `observer(function Name() { ... })`은 금지합니다.
+- public props/component와 `src/screen/index.ts`를 동기화합니다. lower-layer는 import해 조합하고 순수 helper가 2개 이상 필요하면 Feature/Widget 승격을 검토합니다.
+
+### 웹
+
+- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인합니다. 기존 UI로 가능한 표현을 raw DOM과 className으로 다시 만들지 않습니다.
+- title·설명·본문·CTA·empty/error·props 분기를 조합하고 이벤트는 `on[Event][UI]`로 위임합니다. `handle*`는 쓰지 않습니다.
+- `ScreenSurface`는 `packages/fe-ui/src/screen/index.ts`의 public screen export boundary에서만 적용합니다. 기존 `PageSurface` 호환 boundary이며 구현에 wrapper를 중복 추가하지 않습니다.
+- 주요 구획은 `SectionSurface` + `Section` compound입니다. 표면은 SectionSurface, 구조는 `Section.Header`/`Body`/`Footer`/`LeftAside`/`RightAside`가 소유합니다.
+- 반복 item·정보 행·상태 박스는 추가 elevation 대신 border/divider/background/spacing으로 구분합니다. 신규 Surface·제거된 detail/form surface wrapper·route Page 구조는 만들지 않습니다.
+- Screen rhythm은 `VStack`/`HStack`/`Spacer`와 `page`, `섹션`, `block`, `inline`, `dense` semantic preset을 우선합니다.
+- flow rail·metric grid·tab group·table·form 섹션·empty panel은 lower-layer입니다. Screen은 배치·조합만 소유하고 새 lower-layer JSX를 같은 파일에 선언하지 않습니다.
+- server/client·SSR·첫 hydration DOM과 React Aria/HeroUI id 안정성을 유지합니다. `window.location`, `document.cookie`, localStorage/sessionStorage나 app URL 하드코딩을 사용하지 않습니다.
+- Screen spec에 `## 화면 러프`, Desktop/Tablet/모바일 차이와 lower-layer 조합 표를 적습니다. 완료 기준은 규칙 위반 없음·export·spec 동기화입니다.
+
+### 모바일
+
+- 모바일은 작업 전에 `https://heroui.com/llms-patterns.txt`, `node_modules/heroui-native/package.json` exports, `node_modules/heroui-native/src/components/**` source와 `@cocrepo/mo-ui` export를 확인합니다.
+- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 내부만 허용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
+- HeroUI Native wrapper가 필요하면 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 유지하며 단순 재노출로 끝내지 않습니다.
+- 모바일 스타일은 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `StyleSheet`/`StyleSheet.create`를 만들지 않고 `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
+- 모바일에 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리를 넣지 않습니다.
+- `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`에서 RN component와 `@cocrepo/mo-ui` primitive/input/menu/widget/feature를 조합합니다.
+- `ReservationHomeScreen`, `AuthLoginScreen`, `BookingDetailScreen` 등 의미 있는 이름을 쓰고 `IndexScreen`, `MobileRootIndexScreen`, `*RouteScreen`은 만들지 않습니다.
+- `useLocalSearchParams`, `useRouter`, `usePathname`, `useNavigation`, navigation용 Link, `expo-router`, `expo-linking`, `expo-splash-screen`, `react-native-webview`를 직접 의존하지 않습니다. route·환경·deep-link scheme·bridge는 Route에 둡니다.
+- render tree는 JSX입니다. `React.createElement`/`createElement`, JSX 반환 `render*` helper와 return 밖 JSX node 변수는 금지합니다.
+- 상태·반복별 JSX는 returned JSX의 조건식/반복에 둡니다. 재사용하지 않는 작은 JSX 조각을 component로 빼지 않고 JSX 없는 mapper/helper만 lowercase 함수로 둡니다.
+- CTA는 `Button`/`LinkButton`/`CloseButton`, 구획은 `Card`/`Surface`/`ScreenFrame`을 우선하며 raw Pressable/View/Text 재구현을 하지 않습니다.
+- style은 safe-area inset·third-party native bridge 같은 동적 값만 허용합니다. spec에 `## 화면 스케치`와 fenced `text` wireframe을 넣습니다.
+
 ## 단독 실행 계약
 
-- 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 에이전트의 단위 작업을 수행한다.
-- 입력 경로가 명시되지 않으면 현재 프로젝트에서 관련 모델, spec, 타입, 기존 구현과 선행 산출물을 먼저 찾는다.
-- 필수 입력을 구현 전에 확인하고 자신의 소유 범위에서 만들 수 있는 입력은 직접 만든다.
-- 다른 owner의 필수 산출물이나 제품 결정이 없으면 구현을 시작하지 않고 변경 없이 `입력 필요`로 보고한다.
-- 다른 custom agent나 subagent를 호출하거나 실행 순서를 결정하지 않는다.
-- 이 지시문에 정의된 기본 검증을 실제로 실행하고 요청의 추가 완료 기준까지 확인한다.
-- 구현 후 검증을 통과하지 못하면 변경 산출물과 실패 근거를 포함해 `검증 실패`로 보고한다.
-- 최종 메시지는 `AGENTS.md`의 Worker 최종 보고 Markdown 계약을 따른다.
+### 담당 단계
 
-공식 worker 실행 계약:
-- 이 정의문 전체가 해당 단위 작업의 실행 계약이다. 매 작업에서 정의문을 기준으로 단위 구현과 기본 검증을 끝낸다.
-- 다른 custom agent나 subagent를 호출하거나 후속 owner를 선택하지 않는다.
-- 필수 입력은 구현 전에 프로젝트에서 찾고, 다른 owner의 산출물이나 제품 결정이 없으면 변경 없이 입력 필요로 보고한다.
-- 최종 메시지는 AGENTS.md의 Worker 최종 보고 Markdown 계약을 따른다.
+- 호출 단계가 지정되지 않으면 담당 단계로 실행합니다.
+- 필요한 하위 역할은 사용자가 지정하지 않아도 name과 description으로 선택합니다.
+- 필요한 다른 역할의 산출물은 해당 하위 에이전트에 생성·수정을 맡깁니다.
+- 하위의 선행 입력이 부족하면 필요한 다른 하위를 먼저 실행하고, 산출물 요약을 전달하여 원래 하위를 재개합니다.
+- 업무 조합은 `fe-feature-agent`, 순수 UI는 `fe-widget-agent`, 입력은 `fe-form-agent`, leaf는 해당 UI 역할에 맡깁니다.
+- 하위가 schema/Widget 등 입력 부족을 보고하면 해당 owner부터 완료하고 요약을 넘겨 재개합니다. Route 상태·handler 계약은 `fe-route-agent`와 연결합니다.
+
+### 하위 단계
+
+- 호출 깊이는 루트 → 담당 → 하위까지입니다.
+- 하위로 받은 작업에서는 다른 에이전트를 호출하지 않습니다.
+- 하위 요청에는 `호출 단계: 하위`를 반드시 포함합니다.
+
+### 작업 전달과 결과 수집
+
+- 하위 요청에 목표, 수정 범위, 사용자 결정, 선행 산출물, 완료 기준과 동시 실행 예산을 전달합니다.
+- 부모의 전체 대화나 지시문을 전달하거나 안다고 가정하지 않습니다.
+- 배정받은 수정 범위와 동시 실행 예산 안에서만 위임하고, 같은 파일·공개 export의 수정은 직렬로 실행합니다.
+- 전체 작업 트리에서 동시 write는 최대 4개, read-only는 최대 8개이며 부모의 직접 작업도 포함합니다.
+- 하위의 최종 보고, 산출물 경로, 공개 계약과 검증 결과를 확인하고, 필수 하위 결과가 모두 완료일 때만 연결합니다.
+
+## 생성·리뷰·수정
+
+- 기존 산출물과 사용처를 확인하고 재사용한 뒤 새 산출물을 생성하거나 기존 산출물을 수정합니다.
+- 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
+- 자기 역할 밖의 파일은 직접 수정하지 않습니다.
+- 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
+- props/event·중첩 state·lower-layer 조합을 먼저 리뷰하고 Screen/spec/export를 수정합니다. API/router/Widget 책임 위반은 해당 owner에 맡깁니다.
+
+## 검증·보고
+
+- 웹은 `pnpm --filter @cocrepo/ui type-check`, `pnpm --filter @cocrepo/ui lint`, `pnpm --filter @cocrepo/ui test --run <관련 테스트 경로>`를 실행합니다.
+- 모바일은 `pnpm --filter @cocrepo/mo-ui type-check`, `pnpm --filter @cocrepo/mo-ui lint`, `pnpm --filter @cocrepo/mo-ui test --runTestsByPath <관련 테스트 경로>`를 실행합니다.
+- props rendering·event callback·disabled/empty/error·Widget 조합을 테스트합니다. 웹은 아래 export·금지 runtime·handler·보조 component와 namespace depth를 검사합니다.
+
+```bash
+rg -n 'export .*Screen' packages/fe-ui/src/screen/index.ts
+TASK_SCREEN_PATH='<실제 Screen 파일 경로>'
+rg -n 'use(Get|Post|Put|Delete|Mutation|Infinite)|useRouter|usePathname|useSearchParams|redirect\(|cookies\(|headers\(|localStorage|sessionStorage|window\.location|document\.cookie' "$TASK_SCREEN_PATH"
+rg -n 'handle[A-Z][A-Za-z0-9_]*' "$TASK_SCREEN_PATH"
+rg -n '^(function|const) [A-Z][A-Za-z0-9_]*|^const [A-Z][A-Za-z0-9_]* = (observer|\(|function)' "$TASK_SCREEN_PATH"
+```
+
+- 금지 패턴·보조 JSX component가 없어야 하며 export는 해당 Screen을 포함해야 합니다. 모바일은 createElement·render helper·runtime import·barrel을 함께 확인합니다.
+- Screen 경로·props·lower-layer·재사용/배제 근거·observer·wireframe/export와 Route boundary를 보고합니다.
+- 자기 범위의 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위 결과가 완료여야 `완료`입니다.
+- 구현 후 필수 검증을 통과하지 못하면 변경 경로와 첫 핵심 오류, 재현 명령을 포함해 `검증 실패`로 보고합니다.
+- 최종 보고는 다음 5개 Markdown 섹션으로 짧게 작성합니다. 에이전트 런타임 완료와 작업 결과를 구분합니다.
+- `## 작업 결과`: `완료`, `입력 필요`, `검증 실패` 중 하나를 적습니다.
+- `## 작업 요약`: 결과 중심으로 5문장 이내로 적습니다.
+- `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export 또는 계약과 소비 용도를 적습니다.
+- `## 수행한 검증`: 실제 실행한 명령과 성공·실패, 미실행 사유를 적습니다.
+- `## 남은 문제`: 실제 차단 사항과 필요한 후속 owner·소비 경로를 적고, 없으면 `없음`으로 적습니다.
+- 전체 source, diff, 탐색 과정과 raw log는 반환하지 않습니다. 상세 실패 로그가 있으면 경로만 적습니다.

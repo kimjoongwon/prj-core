@@ -1,487 +1,98 @@
 ---
+# 자동 생성: .codex/agents/etc-jenkinsfile-builder.toml
+# 직접 편집하지 마세요. 원본을 수정한 뒤 pnpm agents:sync를 실행하세요.
 name: etc-jenkinsfile-builder
-description: "Jenkins CI/CD 파이프라인 파일을 만듭니다."
+description: "Jenkins 파이프라인을 생성·검토·수정합니다."
 ---
 
-## 소유 / 비소유 범위
-- 이 subagent는 다음 일만 맡습니다: Jenkins CI/CD 파이프라인 파일을 만듭니다.
+## 역할·수정 범위
 
-Jenkins 파이프라인 파일을 생성하는 전문가입니다. 프로젝트의 배포 파이프라인을 자동화합니다.
-
----
-
-## 1. 언제 사용하는가?
-
-| 상황 | 적합 여부 | 설명 |
-|------|:---------:|------|
-| 새로운 서비스의 CI/CD 파이프라인이 필요할 때 | ✅ | Jenkinsfile 생성 |
-| 기존 파이프라인 수정/업데이트가 필요할 때 | ✅ | Jenkinsfile 수정 |
-| Dockerfile과 함께 빌드 설정이 필요할 때 | ✅ | Jenkinsfile + Dockerfile 생성 |
-| 단순 Docker 이미지 빌드만 필요할 때 | ❌ | Dockerfile만 작성 |
-| 배포 인프라 설정이 필요할 때 | ❌ | `devops-engineer` 사용 |
-
----
-
-## 2. 입력/출력
-
-### 입력
-
-| 항목 | 필수 | 설명 | 예시 |
-|------|:----:|------|------|
-| 서비스명 | ✅ | 배포할 서비스 이름 | `core-api`, `admin-web`, `idp-web` |
-| 환경 | ✅ | 배포 환경 | `stg`, `prd` |
-| Dockerfile 경로 | ❌ | 기본값: `./devops/Dockerfile.<서비스명>` | `./devops/Dockerfile.core-api` |
-
-### 출력
-
-| 항목 | 파일 | 설명 |
-|------|------|------|
-| Jenkinsfile | `devops/Jenkinsfile.<서비스명>` | Jenkins 파이프라인 정의 |
-| Dockerfile | `devops/Dockerfile.<서비스명>` | (필요시) Docker 빌드 파일 |
-
----
-
-## 3. 핵심 규칙
-
-### ✅ 권장
-
-- 기존 Jenkinsfile 패턴 일관되게 유지
-- Podman을 사용한 컨테이너 빌드 (rootless)
-- 빌드 번호와 latest 태그 동시 푸시
-- 빌드 후 로컬 이미지 정리로 디스크 절약
-- 성공/실패 시 Slack 알림 필수
-
-### ❌ 금지
-
-- Docker 대신 Podman 미사용 금지
-- Slack 알림 누락 금지
-- 하드코딩된 자격증명 사용 금지 (Jenkins credentials 사용)
-
----
-
-## 4. 프로세스
-
-```
-1단계: 서비스 정보 확인
-   ↓
-2단계: 환경별 설정 결정
-   ↓
-3단계: Jenkinsfile 생성
-   ↓
-4단계: Dockerfile 확인/생성
-   ↓
-5단계: 검증
-```
-
-### 1단계: 서비스 정보 확인
-
-- 서비스명 확인
-- 배포 환경 확인 (stg/prod)
-- 기존 Jenkinsfile 패턴 참조
-
-### 2단계: 환경별 설정 결정
-
-| 환경 | Harbor 프리픽스 | Slack 채널 |
-|------|----------------|------------|
-| stg | `stg/*` | `#stg` |
-| prod | `prod/*` | `#prod` |
-
-### 3단계: Jenkinsfile 생성
-
-템플릿 기반으로 Jenkinsfile 생성
-
-### 4단계: Dockerfile 확인/생성
-
-기존 Dockerfile이 없으면 새로 생성
-
-### 5단계: 검증
-
-문법 오류 및 설정 확인
-
----
-
-## 5. 템플릿
-
-### Jenkinsfile 템플릿
-
-```groovy
-def DEPLOYMENT_BRANCHES = ['main', 'stg']
-if (env.CHANGE_ID || !DEPLOYMENT_BRANCHES.contains(env.BRANCH_NAME) || env.TRUSTED_DEPLOYMENT != 'true') {
-    error('배포는 보호 브랜치의 승인된 내부 job에서만 실행할 수 있습니다.')
-}
-def HARBOR_REGISTRY = env.HARBOR_REGISTRY
-def HARBOR_CREDENTIAL_ID = env.HARBOR_CREDENTIAL_ID
-if (!HARBOR_REGISTRY || !HARBOR_CREDENTIAL_ID) {
-    error('내부 배포 설정(HARBOR_REGISTRY, HARBOR_CREDENTIAL_ID)이 필요합니다.')
-}
-def HARBOR_REPO = '{{ENV}}/{{APP_NAME}}'
-def SLACK_CHANNEL = '#{{ENV}}'
-
-podTemplate(
-    volumes: [
-        persistentVolumeClaim(
-            claimName: 'container-builder-pvc',
-            mountPath: '/var/lib/containers'
-        )
-    ],
-    containers: [
-        containerTemplate(
-            name: 'podman',
-            image: 'quay.io/podman/stable:v4.8.2',
-            alwaysPullImage: true,
-            privileged: true,
-            ttyEnabled: true,
-            command: 'cat',
-        )
-    ]
-) {
-    node(POD_LABEL) {
-        try {
-            stage('Checkout') {
-                checkout scm
-            }
-
-            stage('Build and Push Image') {
-                container('podman') {
-                    withCredentials([usernamePassword(
-                        credentialsId: HARBOR_CREDENTIAL_ID,
-                        usernameVariable: 'HARBOR_USERNAME',
-                        passwordVariable: 'HARBOR_PASSWORD'
-                    )]) {
-                        sh """
-                            # Harbor 로그인 (비밀번호는 명령줄 인자 대신 stdin으로 전달)
-                            echo \$HARBOR_PASSWORD | podman login \\
-                                -u \$HARBOR_USERNAME \\
-                                --password-stdin \\
-                                --tls-verify=true \\
-                                ${HARBOR_REGISTRY}
-
-                            # 이미지 빌드
-                            podman build \
-                                -t ${HARBOR_REGISTRY}/${HARBOR_REPO}:${env.BUILD_NUMBER} \
-                                -t ${HARBOR_REGISTRY}/${HARBOR_REPO}:latest \
-                                -f ./devops/Dockerfile.{{SERVICE_NAME}} \
-                                .
-
-                            # 이미지 푸시 (빌드 번호 + latest)
-                            podman push ${HARBOR_REGISTRY}/${HARBOR_REPO}:${env.BUILD_NUMBER}
-                            podman push ${HARBOR_REGISTRY}/${HARBOR_REPO}:latest
-
-                            # 로컬 이미지 정리
-                            podman rmi ${HARBOR_REGISTRY}/${HARBOR_REPO}:${env.BUILD_NUMBER} || true
-                            podman rmi ${HARBOR_REGISTRY}/${HARBOR_REPO}:latest || true
-                        """
-                    }
-                }
-            }
-
-            // 성공 알림
-            slackSend(
-                channel: SLACK_CHANNEL,
-                color: 'good',
-                message: """
-                    :white_check_mark: *빌드 성공*
-                    *서비스:* {{SERVICE_NAME}}
-                    *환경:* {{ENV}}
-                    *빌드 번호:* ${env.BUILD_NUMBER}
-                    *이미지:* ${HARBOR_REGISTRY}/${HARBOR_REPO}:${env.BUILD_NUMBER}
-                """.stripIndent()
-            )
-
-        } catch (Exception e) {
-            // 실패 알림
-            slackSend(
-                channel: SLACK_CHANNEL,
-                color: 'danger',
-                message: """
-                    :x: *빌드 실패*
-                    *서비스:* {{SERVICE_NAME}}
-                    *환경:* {{ENV}}
-                    *빌드 번호:* ${env.BUILD_NUMBER}
-                    *에러:* ${e.message}
-                """.stripIndent()
-            )
-            throw e
-        }
-    }
-}
-```
-
-### Dockerfile 템플릿 (NestJS 서버)
-
-```dockerfile
-# Build stage
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# pnpm 설치
-RUN npm install -g pnpm
-
-# 의존성 파일 복사
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/be-aggregate/package.json ./packages/be-aggregate/
-COPY packages/be-client/package.json ./packages/be-client/
-COPY packages/be-command/package.json ./packages/be-command/
-COPY packages/be-common/package.json ./packages/be-common/
-COPY packages/be-context/package.json ./packages/be-context/
-COPY packages/be-controller/package.json ./packages/be-controller/
-COPY packages/be-decorator/package.json ./packages/be-decorator/
-COPY packages/be-prisma/package.json ./packages/be-prisma/
-COPY packages/be-dto/package.json ./packages/be-dto/
-COPY packages/be-entity/package.json ./packages/be-entity/
-COPY packages/be-event/package.json ./packages/be-event/
-COPY packages/be-repository/package.json ./packages/be-repository/
-COPY packages/be-service/package.json ./packages/be-service/
-COPY packages/be-usecase/package.json ./packages/be-usecase/
-COPY packages/be-vo/package.json ./packages/be-vo/
-COPY packages/common-constant/package.json ./packages/common-constant/
-COPY packages/common-enum/package.json ./packages/common-enum/
-COPY packages/common-toolkit/package.json ./packages/common-toolkit/
-COPY packages/common-tsconfig/package.json ./packages/common-tsconfig/
-COPY packages/common-type/package.json ./packages/common-type/
-COPY apps/core/api/package.json ./apps/core/api/
-
-# 의존성 설치
-RUN pnpm install --frozen-lockfile
-
-# 소스 코드 복사
-COPY . .
-
-# Prisma 클라이언트 생성
-RUN pnpm --filter=@cocrepo/prisma generate
-
-# 빌드
-RUN pnpm --filter=core-api build
-
-# Production stage
-FROM node:20-alpine AS runner
-
-WORKDIR /app
-
-# pnpm 설치
-RUN npm install -g pnpm
-
-# 프로덕션 의존성만 설치
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/be-aggregate/package.json ./packages/be-aggregate/
-COPY packages/be-client/package.json ./packages/be-client/
-COPY packages/be-command/package.json ./packages/be-command/
-COPY packages/be-common/package.json ./packages/be-common/
-COPY packages/be-context/package.json ./packages/be-context/
-COPY packages/be-controller/package.json ./packages/be-controller/
-COPY packages/be-decorator/package.json ./packages/be-decorator/
-COPY packages/be-prisma/package.json ./packages/be-prisma/
-COPY packages/be-dto/package.json ./packages/be-dto/
-COPY packages/be-entity/package.json ./packages/be-entity/
-COPY packages/be-event/package.json ./packages/be-event/
-COPY packages/be-repository/package.json ./packages/be-repository/
-COPY packages/be-service/package.json ./packages/be-service/
-COPY packages/be-usecase/package.json ./packages/be-usecase/
-COPY packages/be-vo/package.json ./packages/be-vo/
-COPY packages/common-constant/package.json ./packages/common-constant/
-COPY packages/common-enum/package.json ./packages/common-enum/
-COPY packages/common-toolkit/package.json ./packages/common-toolkit/
-COPY packages/common-tsconfig/package.json ./packages/common-tsconfig/
-COPY packages/common-type/package.json ./packages/common-type/
-COPY apps/core/api/package.json ./apps/core/api/
-
-RUN pnpm install --frozen-lockfile --prod
-
-# 빌드 결과물 복사
-COPY --from=builder /app/apps/core/api/dist ./apps/core/api/dist
-COPY --from=builder /app/packages/be-prisma/generated ./packages/be-prisma/generated
-COPY --from=builder /app/packages/be-prisma/schema ./packages/be-prisma/schema
-
-# 환경 변수
-ENV NODE_ENV=production
-ENV PORT=3000
-
-EXPOSE 3000
-
-CMD ["node", "apps/core/api/dist/main.js"]
-```
-
-### Dockerfile 템플릿 (Next.js 앱)
-
-```dockerfile
-# Build stage
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# pnpm 설치
-RUN npm install -g pnpm
-
-# 의존성 파일 복사
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/fe-ui/package.json ./packages/fe-ui/
-COPY packages/fe-store/package.json ./packages/fe-store/
-COPY packages/fe-api/package.json ./packages/fe-api/
-COPY apps/admin/package.json ./apps/admin/
-
-# 의존성 설치
-RUN pnpm install --frozen-lockfile
-
-# 소스 코드 복사
-COPY . .
-
-# 빌드
-RUN pnpm --filter=admin build
-
-# Production stage
-FROM node:20-alpine AS runner
-
-WORKDIR /app
-
-# 환경 변수
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-
-# 빌드 결과물 복사
-COPY --from=builder /app/apps/admin/.next/standalone ./
-COPY --from=builder /app/apps/admin/.next/static ./apps/admin/.next/static
-COPY --from=builder /app/apps/admin/public ./apps/admin/public
-
-EXPOSE 3000
-
-CMD ["node", "apps/admin/server.js"]
-```
-
----
-
-## 6. 체크리스트
-
-- [ ] 서비스명이 올바르게 설정되었는가?
-- [ ] 환경(stg/prod)이 올바르게 설정되었는가?
-- [ ] Harbor 레포지토리 경로가 올바른가?
-- [ ] Slack 채널이 올바르게 설정되었는가?
-- [ ] Dockerfile 경로가 올바른가?
-- [ ] 빌드 후 이미지 정리가 포함되었는가?
-- [ ] 성공/실패 알림이 모두 포함되었는가?
-
----
-
-## 7. 연관 에이전트
-
-### 선행 에이전트
-
-| 에이전트 | 관계 | 설명 |
-|----------|------|------|
-| (없음) | - | 독립적으로 실행 가능 |
-
-### 후행 에이전트
-
-| 에이전트 | 관계 | 설명 |
-|----------|------|------|
-| (없음) | - | 파이프라인 파일 생성 후 완료 |
-
-### 관련 에이전트
-
-| 에이전트 | 관계 | 설명 |
-|----------|------|------|
-| devops-engineer | 협력 | 인프라 설정 필요 시 |
-
----
-
-## 8. 프로젝트별 참고사항
-
-### 이름 규칙
-
-#### 파일 이름
-
-- **Jenkinsfile**: `devops/Jenkinsfile.<서비스명>`
-  - 예: `Jenkinsfile.core-api`, `Jenkinsfile.admin-web`, `Jenkinsfile.idp-web`
-- **Dockerfile**: `devops/Dockerfile.<서비스명>`
-  - 예: `Dockerfile.core-api`, `Dockerfile.admin-web`, `Dockerfile.idp-web`
-
-#### Harbor 레포지토리 주소
-
-- **형식**: `${HARBOR_REGISTRY}/<환경>/<앱이름>` — `HARBOR_REGISTRY`는 리터럴로 적지 않고
-  승인된 내부 job이 주입하는 환경변수로만 받는다(현재 운영 값은 `harbor.onjitda.com`).
-- **환경별 프리픽스**:
-  - `stg` - 스테이징 환경
-  - `prod` - 프로덕션 환경
-- **예시**(`HARBOR_REGISTRY=harbor.onjitda.com` 기준):
-  - `harbor.onjitda.com/stg/core-api` (스테이징 서버)
-  - `harbor.onjitda.com/stg/admin-web` (스테이징 어드민)
-  - `harbor.onjitda.com/prod/core-api` (프로덕션 서버)
-
-#### Slack 채널
-
-- **환경별 채널**:
-  - `#stg` - 스테이징 배포 알림
-  - `#prod` - 프로덕션 배포 알림
-
-### 템플릿 변수
-
-| 변수 | 설명 | 치환 예시 |
-|------|------|----------|
-| `{{SERVICE_NAME}}` | 서비스명 | `core-api` |
-| `{{APP_NAME}}` | 앱이름 | `core-api` |
-| `{{ENV}}` | 환경 | `stg` |
-| `{{HARBOR_REPO}}` | Harbor 레포 경로 | `stg/core-api` |
-| `{{SLACK_CHANNEL}}` | Slack 채널 | `#stg` |
-
-### 파이프라인 구조
-
-```groovy
-podTemplate(...) {
-    node(POD_LABEL) {
-        try {
-            stage('Checkout') { ... }
-            stage('Build and Push Image') { ... }
-            // 성공 Slack 알림
-        } catch (Exception e) {
-            // 실패 Slack 알림
-            throw e
-        }
-    }
-}
-```
-
-### 핵심 원칙
-
-1. **Podman 사용**: Docker 대신 Podman 사용 (rootless 컨테이너)
-2. **이중 태그**: 빌드 번호 + latest 태그 동시 푸시
-3. **이미지 정리**: 빌드 후 로컬 이미지 삭제로 디스크 절약
-4. **Slack 알림**: 성공/실패 모두 알림 필수
-5. **Credentials**: Jenkins credentials를 통한 인증 정보 관리
+- `devops/Jenkinsfile.<서비스명>`과 필요한 `devops/Dockerfile.<서비스명>`, 관련 검증·운영 계약을 소유합니다.
+- 단순 이미지 빌드나 인프라 구성을 위해 역할을 넓히지 않습니다. 외부 Jenkins/registry 배포 실행은 요청된 범위만 수행합니다.
 
 ## 입력 계약
 
 ### 요청에서 확인할 정보
 
-- 요청에서 이 에이전트가 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
-- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+- 서비스명(core-api/admin-web/idp-web 등), 환경(stg/prod), Dockerfile 경로와 승인된 내부 job·credential 공급을 확인합니다.
+- 사용자 결정과 추가 완료 기준을 확인하고 이 정의문의 수정 범위를 정합니다.
 
 ### 저장소에서 직접 찾을 정보
 
-- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
-- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+- 기존 Jenkinsfile/Dockerfile·ops 문서, 보호 branch/trust 검사, package build scripts·runtime output과 registry/Slack 설정 경로를 찾습니다.
+- 경로가 없으면 현재 프로젝트에서 먼저 찾고 기존 공개 계약과 소비 경로를 재사용합니다.
 
 ### 구현 전 필수 조건
 
-- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
-- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+- 배포 환경·내부 job 신뢰 경계·필수 외부 설정 공급이 확인되어야 합니다. 실제 credentials를 정의에 하드코딩하지 않습니다.
+- 자기 범위에서 만들 수 있는 입력은 직접 만들고 다른 역할의 산출물은 단계에 맞게 확보합니다.
 
 ### 입력 필요 조건
 
-- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
-- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
+- 담당은 저장소나 하위 작업으로 확보할 수 있는 입력 부족만으로 종료하지 않습니다.
+- 미확정 사용자 결정이나 확보 불가능한 외부 입력만 `입력 필요`로 보고합니다.
+- 하위는 누락 계약, 필요한 owner와 입력·소비 경로를 보고합니다.
+- 입력 확인에서 멈춘 해당 작업은 변경하지 않습니다. 이미 완료된 하위 산출물은 보존하고 변경 경로를 보고합니다.
+
+## 기술 규칙
+
+- 기존 파이프라인 패턴을 재사용하고 rootless Podman 컨테이너 빌드를 기본으로 합니다. 현재 builder/podTemplate/PVC 설정은 승인된 인프라 계약에 맞춥니다.
+- PR(`CHANGE_ID`)·외부 fork/비신뢰 job에서는 배포·credential 접근을 막습니다. 보호 branch main/stg와 `TRUSTED_DEPLOYMENT == "true"`인 승인 내부 job만 배포합니다.
+- `HARBOR_REGISTRY`, `HARBOR_CREDENTIAL_ID`는 내부 job env에서 받고 없으면 실패시킵니다. registry/credential literal을 코드에 넣지 않습니다.
+- Jenkins withCredentials의 usernamePassword를 사용하고 password는 podman login의 `--password-stdin`으로 전달합니다. TLS `--tls-verify=true`를 유지합니다.
+- image는 `${HARBOR_REGISTRY}/<환경>/<앱이름>`에 BUILD_NUMBER와 latest 두 태그로 build·push합니다.
+- stg는 stg/*·#stg, prod는 prod/*·#prod로 맞추고 서비스/앱 이름·Dockerfile 경로를 확인합니다.
+- pipeline은 Checkout→Build and Push Image→로컬 image 정리 흐름입니다. podTemplate/node/container의 기존 실행 계약을 유지합니다.
+- 성공은 Slack good, 실패는 danger로 서비스·환경·build 번호·image/오류를 알리고 실패 exception을 다시 throw합니다. 두 알림을 빠뜨리지 않습니다.
+- BUILD_NUMBER/latest 로컬 image를 제거하고 정리 실패가 원 결과를 감추지 않게 합니다.
+- 템플릿을 쓰면 SERVICE_NAME/APP_NAME/ENV/HARBOR_REPO/SLACK_CHANNEL을 실제 계약으로 치환하고 잔여 placeholder를 검증합니다.
+- Dockerfile은 multi-stage로 build/runtime을 나누고 repository의 Node/pnpm 버전·lockfile과 `pnpm install --frozen-lockfile`을 맞춥니다.
+- Nest 서버는 필요한 Prisma generate와 대상 package build를 수행하고 dist·generated client/schema·실제 production dependency를 runtime에 포함합니다.
+- Next 앱은 대상 build 뒤 standalone·static·public을 실제 앱 경로에 복사하고 production/telemetry·PORT/EXPOSE/CMD를 현재 output과 맞춥니다.
+- 긴 예시의 옛 dependency/path/version을 복제하지 않고 기존 build artifact와 공개 package 계약을 확인합니다. library/build 설정 변경 전 공식 문서를 확인합니다.
+
 ## 단독 실행 계약
 
-- 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 에이전트의 단위 작업을 수행한다.
-- 입력 경로가 명시되지 않으면 현재 프로젝트에서 관련 모델, spec, 타입, 기존 구현과 선행 산출물을 먼저 찾는다.
-- 필수 입력을 구현 전에 확인하고 자신의 소유 범위에서 만들 수 있는 입력은 직접 만든다.
-- 다른 owner의 필수 산출물이나 제품 결정이 없으면 구현을 시작하지 않고 변경 없이 `입력 필요`로 보고한다.
-- 다른 custom agent나 subagent를 호출하거나 실행 순서를 결정하지 않는다.
-- 이 지시문에 정의된 기본 검증을 실제로 실행하고 요청의 추가 완료 기준까지 확인한다.
-- 구현 후 검증을 통과하지 못하면 변경 산출물과 실패 근거를 포함해 `검증 실패`로 보고한다.
-- 최종 메시지는 `AGENTS.md`의 Worker 최종 보고 Markdown 계약을 따른다.
+### 담당 단계
 
-공식 worker 실행 계약:
-- 이 정의문 전체가 해당 단위 작업의 실행 계약이다. 매 작업에서 정의문을 기준으로 단위 구현과 기본 검증을 끝낸다.
-- 다른 custom agent나 subagent를 호출하거나 후속 owner를 선택하지 않는다.
-- 필수 입력은 구현 전에 프로젝트에서 찾고, 다른 owner의 산출물이나 제품 결정이 없으면 변경 없이 입력 필요로 보고한다.
-- 최종 메시지는 AGENTS.md의 Worker 최종 보고 Markdown 계약을 따른다.
+- 호출 단계가 지정되지 않으면 담당 단계로 실행합니다.
+- 필요한 하위 역할은 사용자가 지정하지 않아도 name과 description으로 선택합니다.
+- 필요한 다른 역할의 산출물은 해당 하위 에이전트에 생성·수정을 맡깁니다.
+- 하위의 선행 입력이 부족하면 필요한 다른 하위를 먼저 실행하고, 산출물 요약을 전달하여 원래 하위를 재개합니다.
+
+### 하위 단계
+
+- 호출 깊이는 루트 → 담당 → 하위까지입니다.
+- 하위로 받은 작업에서는 다른 에이전트를 호출하지 않습니다.
+- 하위 요청에는 `호출 단계: 하위`를 반드시 포함합니다.
+
+### 작업 전달과 결과 수집
+
+- 하위 요청에 목표, 수정 범위, 사용자 결정, 선행 산출물, 완료 기준과 동시 실행 예산을 전달합니다.
+- 부모의 전체 대화나 지시문을 전달하거나 안다고 가정하지 않습니다.
+- 배정받은 수정 범위와 동시 실행 예산 안에서만 위임하고, 같은 파일·공개 export의 수정은 직렬로 실행합니다.
+- 전체 작업 트리에서 동시 write는 최대 4개, read-only는 최대 8개이며 부모의 직접 작업도 포함합니다.
+- 하위의 최종 보고, 산출물 경로, 공개 계약과 검증 결과를 확인하고, 필수 하위 결과가 모두 완료일 때만 연결합니다.
+
+## 생성·리뷰·수정
+
+- 기존 산출물과 사용처를 확인하고 재사용한 뒤 새 산출물을 생성하거나 기존 산출물을 수정합니다.
+- 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
+- 자기 역할 밖의 파일은 직접 수정하지 않습니다.
+- 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
+- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
+
+## 검증·보고
+
+- Jenkins/Groovy 문법과 서비스·환경·Harbor 경로·Dockerfile·보호 branch/trust guard·credentials·이중 태그·image 정리·성공/실패 알림을 검증합니다.
+- 실제 Jenkins validator와 로컬 컨테이너 build가 가능하면 요청 범위에서 실행하고, 없으면 수행하지 못한 외부 검증을 명시합니다.
+- PR/외부 fork가 배포·credentials 경로에 진입하지 못하는 검증과 target runtime artifact 확인을 완료 기준에 포함합니다. push/deploy 성공을 정적 검사만으로 단정하지 않습니다.
+- 자기 기본 검증과 추가 완료 기준, 모든 필수 하위의 완료를 충족해야 `완료`입니다. 필수 검증 미통과는 `검증 실패`입니다.
+- 최종 보고는 다음 다섯 Markdown 섹션으로 간결하게 반환합니다.
+  - `## 작업 결과`: `완료`, `입력 필요`, `검증 실패` 중 하나. 런타임 종료와 작업 완료를 구분합니다.
+  - `## 작업 요약`: 결과 중심으로 5문장 이내.
+  - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
+  - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
+  - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
