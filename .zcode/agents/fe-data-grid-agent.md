@@ -19,7 +19,7 @@ description: "DataGrid·Table·Column·Cell을 생성·검토·수정합니다."
 ### 저장소에서 직접 찾을 정보
 
 - `DataGrid`, `DataGridState`, `Table`, `columns`, `cell`, 공용 `table.ts`, 공개 export, 소비 코드와 단위 테스트를 `rg`로 찾습니다. 기존 owner 문서와 Screen/Feature 스펙은 화면 맥락으로 확인합니다.
-- 대상 플랫폼, 공개 계약과 ownership을 먼저 확정합니다. 경로가 없다는 이유로 멈추지 않고 저장소에서 찾습니다.
+- 대상 플랫폼, 공개 계약과 ownership을 먼저 확정합니다. 모르는 경로는 저장소에서 직접 찾아 확정합니다.
 
 ### 구현 전 필수 조건
 
@@ -35,49 +35,49 @@ description: "DataGrid·Table·Column·Cell을 생성·검토·수정합니다."
 
 ## 기술 규칙
 
-- 웹은 `@heroui/react` 공식 문서, package exports·원본 source와 `@cocrepo/ui` 공개 export를 먼저 확인합니다. 기존 leaf로 가능한 UI를 raw DOM과 className으로 다시 만들지 않습니다.
-- 웹의 DOM/CSS/Tailwind, server/client 경계, SSR/hydration과 React Aria id 안정성 규칙은 React Native에 적용하지 않습니다.
-- 로컬 상태가 필요하면 파일 상단의 `[ComponentName]State` 클래스에 상태와 동작을 함께 두고 `useLocalObservable(() => new [ComponentName]State())`로 생성합니다. `useState`/`useReducer`는 쓰지 않습니다. observable을 렌더링하는 컴포넌트는 `observer`로 감싸고 `memo`를 함께 쓰지 않습니다.
+- 웹은 `@heroui/react` 공식 문서, package exports·원본 source와 `@cocrepo/ui` 공개 export를 먼저 확인하고 UI는 기존 leaf 조합으로 구현합니다.
+- 웹의 DOM/CSS/Tailwind, server/client 경계, SSR/hydration과 React Aria id 안정성 규칙은 웹 DataGrid에만 적용합니다.
+- 로컬 상태가 필요하면 파일 상단의 `[ComponentName]State` 클래스에 상태와 동작을 함께 두고 `useLocalObservable(() => new [ComponentName]State())`로 생성하며 이 계약만 사용합니다. observable을 렌더링하는 컴포넌트는 `observer`로 감싸고 최적화는 `observer` 하나로 완결합니다.
 
 ### 단일 root와 렌더링
 
-- `DataGridState`만 query, columns, selection, changes의 canonical 값을 소유합니다. child `DataGrid...State`는 root 또는 canonical model을 참조하는 책임별 facade이며 같은 값을 복제·동기화하지 않습니다. root가 facade를 한 번 생성하고 인스턴스를 유지합니다.
-- `index.tsx`의 compound 조립이 표준입니다. `DataGrid.tsx`를 유지하면 같은 조립·state를 쓰는 thin wrapper로만 둡니다. 별도 `DataTable`, display/data-display 하위 DataGrid/Table, 삭제된 grid composition 계층은 만들지 않습니다.
-- `DataGrid.Container`와 `Table.Container`는 state를 받지 않습니다. 상태 leaf는 전체 root 대신 자기 facade만 `state` prop으로 받습니다. `config`, `rows`, `totalCount`, TanStack model, callback은 별도 render prop이며 state로 복제하지 않습니다.
-- `Table.Container`, `Table.Header`, `Table.Body`, `Table.Footer`는 독립 namespace입니다. `DataGrid.Table`을 만들지 않고 pagination은 `Table.Footer` 밖에 둡니다.
+- `DataGridState`만 query, columns, selection, changes의 canonical 값을 소유합니다. child `DataGrid...State`는 root 또는 canonical model을 참조하는 책임별 facade로 유지합니다. root가 facade를 한 번 생성하고 인스턴스를 유지합니다.
+- `index.tsx`의 compound 조립이 표준입니다. `DataGrid.tsx`를 유지하면 같은 조립·state를 쓰는 thin wrapper로만 둡니다. 별도 `DataTable`, display/data-display 하위 DataGrid/Table, 삭제된 grid composition 계층 대신 표준 compound 조합과 현행 계약을 재사용합니다.
+- `DataGrid.Container`와 `Table.Container`는 배치 역할만 하고 state prop은 상태 leaf 전용입니다. 상태 leaf는 전체 root 대신 자기 facade만 `state` prop으로 받습니다. `config`, `rows`, `totalCount`, TanStack model, callback은 별도 render prop으로 전달합니다.
+- Table 조립은 `DataGrid.Table` 대신 독립 `Table` namespace(`Table.Container`/`Table.Header`/`Table.Body`/`Table.Footer`)로 수행하고 pagination은 `Table.Footer` 밖에 둡니다.
 - `DataGrid.Toolbar`, `GroupPanel`, `Pagination`, `ActionBar`와 Table leaf가 자기 책임을 소유합니다. `DataGridConfig`는 `toolbar`, `groupPanel`, `table`별 선언입니다. standalone Table은 `DataGridTableConfig` 하나, Toolbar/GroupPanel은 자기 config와 공유 `table.columns`만 받습니다.
 - TanStack 행 model과 HeroUI Table 렌더링을 사용합니다. visibility/order/sizing/resize, sort/filter/pagination/selection, loading/empty/dark mode, group panel, inline edit·changes·row move 동작을 유지합니다.
-- 행 key는 duplicate-safe 공개 helper `getDataGridRowKey`를 재사용합니다. 공개 component/state/helper/type은 `data-grid/index.ts`, column은 `columns/index.ts`와 `data-grid/index.ts`, Cell은 `cell/index.ts`로 노출합니다. 소비자는 공개 경로를 사용하며 `columns/internal/**`을 직접 import하지 않습니다.
-- `useMemo`/`useCallback`을 새로 추가하지 않습니다. page-level `SectionSurface`는 Screen이 결정하고 DataGrid가 암묵적으로 만들지 않습니다. feature/widget local panel은 `Surface`를 쓰며 제거된 detail/form surface wrapper를 되살리지 않습니다.
+- 행 key는 duplicate-safe 공개 helper `getDataGridRowKey`를 재사용합니다. 공개 component/state/helper/type은 `data-grid/index.ts`, column은 `columns/index.ts`와 `data-grid/index.ts`, Cell은 `cell/index.ts`로 노출하고 소비자는 공개 경로로만 import합니다.
+- `useMemo`/`useCallback`은 기존 사용처만 유지합니다. page-level `SectionSurface`는 Screen이 결정하고 DataGrid는 grid 영역만 렌더링합니다. feature/widget local panel은 `Surface`를 쓰며 제거된 detail/form surface wrapper 대신 현행 surface 계약을 사용합니다.
 
 ### Query·snapshot·grouping·hierarchy
 
-- 현재 조회 URL은 DataGrid가 `nuqs`로 동기화합니다. route에 같은 상태 handler를 중복 작성하지 않습니다. `query.sort: string[]`, 검색/header/data filter, `query.groupBy: string[]`, `skip`/`take`를 반영하고 sort/filter/group 변경 시 `skip = 0`으로 초기화합니다.
-- visibility/order/sizing/selection은 URL query에 넣지 않습니다. URL은 현재 조회 상태, `DataGridState.toJSON()`은 preference·편집 저장 snapshot입니다. backend 요청 grouping 기준은 항상 `query.groupBy`입니다.
-- 서버에는 `toJSON()`의 plain snapshot만 저장하고 같은 계약으로 restore합니다. 함수, `ReactNode`, row 객체, `Set`, DOM/React event나 class instance는 저장하지 않습니다. selection UI는 선택 개수·가능 action을 보여주고 내부 row key 목록을 화면 계약으로 노출하지 않습니다.
-- 일반 조회와 grouped 조회의 backend row는 leaf row입니다. backend는 group tree를 만들지 않으며, grouped 응답은 선택된 group의 flat leaf row이고 DataGrid가 client group을 구성합니다.
+- 현재 조회 URL은 DataGrid가 `nuqs`로 단일 소유해 동기화합니다. `query.sort: string[]`, 검색/header/data filter, `query.groupBy: string[]`, `skip`/`take`를 반영하고 sort/filter/group 변경 시 `skip = 0`으로 초기화합니다.
+- visibility/order/sizing/selection은 `DataGridState.toJSON()` snapshot으로 저장합니다. URL은 현재 조회 상태, `DataGridState.toJSON()`은 preference·편집 저장 snapshot입니다. backend 요청 grouping 기준은 항상 `query.groupBy`입니다.
+- 서버에는 `toJSON()`의 직렬화 가능한 plain 값만 저장하고 같은 계약으로 restore합니다. 함수, `ReactNode`, row 객체, `Set`, DOM/React event, class instance는 runtime·화면 계약에 둡니다. selection UI는 선택 개수·가능 action만 화면 계약으로 노출합니다.
+- 일반 조회와 grouped 조회의 backend row는 leaf row입니다. grouped 응답은 선택된 group의 flat leaf row이고 group tree는 DataGrid가 client에서 구성합니다.
 - `groupBy`가 없으면 `skip`/`take`/`totalCount`는 row 기준입니다. 있으면 모두 첫 group level 기준이며 `totalCount`는 leaf 수가 아닌 첫 level group 수입니다. 여러 groupBy도 같은 기준입니다.
-- 실제 hierarchy는 상위 계층이 nested row를 만들고 `getSubRows`로 연결합니다. `query.groupBy`를 쓰거나 가상 grouping과 한 tree로 섞지 않습니다. DataGrid는 parent 식별자·`sortOrder`·중첩 재구성을 추론하지 않습니다.
+- 실제 hierarchy는 상위 계층이 nested row를 만들고 `getSubRows`로 연결하며 `query.groupBy` 가상 grouping은 별도 tree로 다룹니다. parent 식별자·`sortOrder`·중첩 재구성은 상위 계층 계약에서 받습니다.
 - `rowGroupPanelShow`는 `never`/`always`/`onlyWhenGrouping`, `columns[].rowGroup`은 초기 참여, `enableRowGroup`은 사용 가능 column, `rowExpander`는 hierarchy 확장 column, `editable`은 편집 허용, `onRowMove`는 상위 반영 callback 의미를 유지합니다.
 
 ### 편집·변경 추적
 
 - `DataGridState.changes`의 `created`, `updated`, `deleted`를 유지합니다. 새 row 편집은 created만 갱신하고 삭제하면 created에서 제거합니다. 기존 row를 원래 값으로 되돌리면 해당 updated field를 제거하고, 삭제하면 식별자를 deleted에 넣습니다.
-- inline edit는 callback으로 우회하지 않고 changes에 반영합니다. draft는 내부에 두고 validator 성공 후에만 `state.changes.setValue()`로 commit합니다.
+- inline edit 결과는 changes에 직접 반영합니다. draft는 내부에 두고 validator 성공 후에만 `state.changes.setValue()`로 commit합니다.
 - `editable`의 editor type `text`, `number`, `date`, `date-time`, `select`, `multi-select`, `boolean`, `autocomplete`, `custom`과 trigger `click`, `doubleClick`, `enter`, `f2`를 유지합니다.
 - 동기·비동기 validator를 지원하고 실패하면 편집을 유지하며 editor/cell에 오류 접근성 상태를 전달합니다. `editable.render` custom editor는 draft만 갱신하고 commit/cancel lifecycle은 DataGrid가 소유합니다.
-- editor는 native `input`/`select`/`datalist` adapter를 우선 사용합니다. HeroUI form wrapper를 기본 editor로 바꾸지 않습니다. 다른 공용 Button/Input/Select/Checkbox/Pagination/Skeleton/EmptyState는 재사용합니다.
+- editor는 native `input`/`select`/`datalist` adapter를 기본으로 유지합니다. 다른 공용 Button/Input/Select/Checkbox/Pagination/Skeleton/EmptyState는 재사용합니다.
 - row move UI만 DataGrid가 담당하고 `parentId`, `sortOrder`, nested row 재구성은 `onRowMove`를 받은 상위 계층이 반영합니다.
 
 ### Column·Input·Cell
 
-- `ColumnFilterInput`, `ColumnSortInput`, `ColumnResizerInput`은 `data-grid/input/**`, `EditorCell`, `SelectionCell`, `HierarchyCell`은 `data-grid/cell/**`에 둡니다. Cell에는 필요한 값과 handler만 주고 `row.original` 전체를 넘기지 않습니다.
+- `ColumnFilterInput`, `ColumnSortInput`, `ColumnResizerInput`은 `data-grid/input/**`, `EditorCell`, `SelectionCell`, `HierarchyCell`은 `data-grid/cell/**`에 둡니다. Cell에는 필요한 값과 handler만 전달합니다.
 - column은 field/label/size/align/accessorKey 및 공개 Cell 조합만 선언합니다. `columns/data-grid/**`는 `DataGridColumnConfig` 조합, `columns/internal/**`은 내부 preset/helper입니다. 새 helper/factory에는 짧은 한글 역할 주석을 둡니다.
-- column 안에 `div`/`span`/`p`/`button` 또는 `Button`/`Chip`/`Badge`/`Switch`/`Link` 마크업을 직접 만들지 않습니다. 여러 element, status/variant 매핑, action, className 또는 반복 렌더링은 Cell로 옮깁니다. `createPresetColumn`, `createCreatedAtColumn`, `createActionsColumn` 같은 선언 조합과 기존 Cell 호출만 남깁니다.
-- raw 전용 columns/helper를 새로 만들지 않습니다. 마지막 raw 소비자 전환은 소비 owner에 맡기고 완료 후 `columns/raw/**`, `internal/rawFactory.*`와 관련 export를 제거합니다. 공용 DataGrid 내부에 도메인 전용 field/Cell/hierarchy 정책을 넣지 않습니다.
+- column은 선언만 소유하고 여러 element, status/variant 매핑, action, className 또는 반복 렌더링은 공개 Cell로 옮깁니다. `createPresetColumn`, `createCreatedAtColumn`, `createActionsColumn` 같은 선언 조합과 기존 Cell 호출로 column을 완성합니다.
+- 새 column은 공개 Cell·preset 조합으로 만들고 raw 전용 columns/helper는 기존 것의 정리 대상으로 둡니다. 마지막 raw 소비자 전환은 소비 owner에 맡기고 완료 후 `columns/raw/**`, `internal/rawFactory.*`와 관련 export를 제거합니다. 공용 DataGrid는 범용 grid 계약만 소유하고 도메인 전용 field/Cell/hierarchy 정책은 소비 계층에 둡니다.
 - Cell은 Pure UI → Widget → Feature 계층을 지킵니다. Pure UI는 `[데이터타입]Cell`로 단순 값 포맷만, Widget은 `[기능][UI형태]Cell`로 조합·상태 매핑만, Feature는 `[위치/역할][기능]Cell`로 주입받은 action handler만 처리합니다. 실제 API/store/route 연결은 Screen/Feature/Page owner에 맡깁니다.
-- 기존 `DefaultCell`, `BooleanCell`, `DateTimeCell`, `ActionButtonCell` 등을 먼저 재사용합니다. null/undefined는 `value ?? "-"` 또는 빈 상태로 처리하고 짧은 값은 중앙 정렬합니다. Tailwind를 쓰고 inline style, `createContext`/`useContext`, Chip 내부 Text wrapper는 금지합니다.
-- Storybook은 `data-grid/index.stories.tsx` 한 파일에 주요 compound 상태를 모으고 leaf story를 새로 만들지 않습니다. 작성은 Storybook 하위가 담당합니다.
+- 기존 `DefaultCell`, `BooleanCell`, `DateTimeCell`, `ActionButtonCell` 등을 먼저 재사용합니다. null/undefined는 `value ?? "-"` 또는 빈 상태로 처리하고 짧은 값은 중앙 정렬합니다. 스타일은 Tailwind로만 작성하고 상태·값 전달은 props로 유지하며 Chip 문구는 leaf 자체 children/label 계약으로 전달합니다.
+- Storybook은 `data-grid/index.stories.tsx` 한 파일에 주요 compound 상태를 모으고 leaf story는 기존 파일을 유지합니다. 작성은 Storybook 하위가 담당합니다.
 
 ## 단독 실행 계약
 
@@ -118,8 +118,8 @@ description: "DataGrid·Table·Column·Cell을 생성·검토·수정합니다."
 - Playwright 화면 확인은 사용자가 명시적으로 요청한 경우에만 실행합니다.
 - 기본 검증: `pnpm --filter=@cocrepo/ui type-check`, `pnpm --filter=@cocrepo/ui test -- DataGrid`, `pnpm exec tsc -p packages/fe-ui/tsconfig.json --noEmit --pretty false`. 변경 파일은 `biome format`으로 형식을 확인합니다.
 - 검색 검증: `rg "Meta.*DataGrid|Meta.*DataGridState" packages/fe-ui/src packages/common-type/src`, `rg "from .*display.*/.*DataGrid|from .*display.*/.*Table" packages/fe-ui/src`.
-- Column 검색 검증: `rg -n "<(div|span|p|button)\b|<(Button|Chip|Badge|Switch|Link)\b" packages/fe-ui/src/data-grid/columns`, `rg -n 'data-grid/columns/raw|columns/raw|rawFactory|from "\./raw"' packages/fe-ui apps/admin/web`. 금지 경로·마크업이 없는지 판정하고 검색의 no-match를 실패로 오해하지 않습니다.
+- Column 검색 검증: `rg -n "<(div|span|p|button)\b|<(Button|Chip|Badge|Switch|Link)\b" packages/fe-ui/src/data-grid/columns`, `rg -n 'data-grid/columns/raw|columns/raw|rawFactory|from "\./raw"' packages/fe-ui apps/admin/web`. 금지 경로·마크업 검색은 매치 0건을 통과로 판정하고 no-match 종료 코드를 통과 신호로 읽습니다.
 - 행 key, column/input rendering, loading/empty, event callback과 Cell formatting/null/action/접근성을 단위 테스트로 확인합니다. snapshot/restore, query 초기화·URL 제외 항목, grouped pagination, hierarchy 분리, created/updated/deleted·되돌리기, editor 오류·row move·dark mode 계약도 검증합니다.
 - 자기 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위가 완료해야 `완료`입니다. 구현 후 미통과는 변경 경로와 첫 핵심 오류를 포함해 `검증 실패`로 보고합니다.
 - 최종 보고는 `## 작업 결과`(완료/입력 필요/검증 실패), `## 작업 요약`(결과 중심 5문장 이내), `## 변경 산출물`(생성·수정·삭제 경로, 공개 계약과 소비 용도), `## 수행한 검증`(명령과 성공·실패, 미실행 사유), `## 남은 문제`(실제 차단 사항, 후속 owner·소비 경로 또는 없음)의 5개 섹션으로 작성합니다.
-- 상세 탐색과 전체 명령 출력은 작업 기록에 남깁니다. 최종 응답에 전체 source, diff, raw log나 재시도 기록을 반환하지 않습니다.
+- 상세 탐색과 전체 명령 출력은 작업 기록에 남기고 최종 응답은 결과 요약으로 구성합니다.

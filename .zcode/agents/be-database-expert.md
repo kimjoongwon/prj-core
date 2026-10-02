@@ -37,18 +37,18 @@ description: "PostgreSQL·Prisma 구조와 성능을 설계·검토·수정합�
 ## 기술 규칙
 
 - PostgreSQL, 저장소의 Prisma 버전과 Redis 사용을 확인합니다. 라이브러리·DB 동작을 판단하기 전에 공식 문서를 확인합니다.
-- 3NF를 기본으로 정규화하고 성능상 비정규화가 필요하면 데이터 일관성 전략을 명시합니다. 중복 데이터를 무분별하게 늘리지 않습니다.
+- 3NF를 기본으로 정규화하고 성능상 비정규화가 필요하면 데이터 일관성 전략을 명시합니다. 중복 데이터는 명시한 일관성 전략으로 정당화되는 경우에만 늘립니다.
 - PK/FK, NOT NULL, UNIQUE, 기본값과 Soft Delete의 `removedAt`을 검토합니다.
 - 공통 `id`는 `String @unique @default(ulid()) @db.VarChar(26)` 공개 ULID이며 API/URL/event/외부 연동에 사용합니다.
-- `seq`는 `Int @id @default(autoincrement())` 내부 PK/FK join 값입니다. 외부 계약에 노출하지 않습니다.
+- `seq`는 `Int @id @default(autoincrement())` 내부 PK/FK join 값으로 내부 조인에만 사용하고 외부 계약은 공개 ULID `id`를 사용합니다.
 - `createdAt @default(now())`, nullable `updatedAt @updatedAt`, nullable `removedAt`과 DB snake_case mapping을 유지합니다.
 - 테이블/model은 PascalCase, Prisma 필드는 camelCase, DB 컬럼은 `@map`의 snake_case, FK는 `{relation}Seq`를 기본으로 합니다.
 - schema 배치와 메타데이터·관계 표현은 Prisma owner 계약을 따릅니다. 현재 테넌트 필드를 확인하고 모든 tenant 조회에 해당 필터를 적용합니다.
 - FK와 주요 조회 조건에 필요한 인덱스를 검토하고 복합 컬럼 순서를 query 패턴에 맞춥니다. 쓰기 비용·저장 공간·중복 인덱스도 비교합니다.
 - N+1은 필요한 relation include/select로 줄이고 필요한 필드만 조회합니다. SELECT *와 무제한 목록 대신 select·페이지네이션을 사용합니다.
-- transaction에는 필요한 작업만 포함해 lock 대기·deadlock 위험을 줄입니다. 거대 transaction을 만들지 않습니다.
+- transaction에는 필요한 작업만 포함해 lock 대기·deadlock 위험을 줄이고 범위는 최소 작업 단위로 유지합니다.
 - migration은 nullable 추가→데이터 변환·검증→소비 코드 배포→제약·구필드 제거 순서를 검토하고 단계별 rollback/백업/무중단 가능 여부를 기록합니다.
-- 설계 결과에 현재 구조·병목·제안·근거·영향·migration 단계를 담고 과거 agent 이름이나 모델 목록을 복제하지 않습니다.
+- 설계 결과에 현재 구조·병목·제안·근거·영향·migration 단계를 담고 역할·모델 구성은 현재 저장소 상태 기준으로만 기술합니다.
 
 ## 단독 실행 계약
 
@@ -79,7 +79,7 @@ description: "PostgreSQL·Prisma 구조와 성능을 설계·검토·수정합�
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -94,4 +94,4 @@ description: "PostgreSQL·Prisma 구조와 성능을 설계·검토·수정합�
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.

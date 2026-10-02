@@ -36,11 +36,11 @@ developer_instructions = '''
 
 - 타입 interface와 seed/mapping/export를 함께 맞추며 데이터 추가가 쉬운 패턴을 사용합니다.
 - 회사-1/테스트 같은 추상명 대신 현실적인 브랜드·장소·합성 이름을 사용하고 지역/주소·지점 관계를 일치시킵니다.
-- 이메일·한국 전화번호·주소·사업자번호(XXX-XX-XXXXX) 형식을 확인합니다. 실제 개인의 정보를 사용하지 않으며 브랜드는 내부 테스트 용도를 명시합니다.
-- 모든 FK를 연결하고 고아 데이터를 만들지 않습니다. ADMIN은 담당 Space, USER는 가입 Space와 연결하며 역할·권한을 맞춥니다.
-- FitnessCenter는 Company/Space에 각각 하나씩 연결하고 Space당 둘 이상을 두지 않습니다. Task 하위 exercise에 root가 있어야 합니다.
+- 이메일·한국 전화번호·주소·사업자번호(XXX-XX-XXXXX) 형식을 확인합니다. 개인 정보는 합성 값으로 만들고 브랜드는 내부 테스트 용도를 명시합니다.
+- 모든 FK를 연결해 고아 없는 관계를 완성합니다. ADMIN은 담당 Space, USER는 가입 Space와 연결하며 역할·권한을 맞춥니다.
+- FitnessCenter는 Company/Space에 각각 하나씩만 연결합니다. Task 하위 exercise는 root를 포함합니다.
 - 필수 약관 동의와 각 역할 로그인·권한 허용/거부·CRUD·목록/페이지네이션·검색·1:N/N:M·선택 동의 없음·다중 Space 등 edge case를 포함합니다.
-- reference-data definitions는 앱 기준/권한 seed와 이전 prune 대상을 소유합니다. 공유 catalog에서 제거한 menu/page subject는 current seed로 복원하지 않고 prune 대상에만 둡니다.
+- reference-data definitions는 앱 기준/권한 seed와 이전 prune 대상을 소유합니다. 공유 catalog에서 제거한 menu/page subject는 prune 대상으로만 유지합니다.
 - 인접 *.test.ts는 current catalog 포함과 이전 catalog 제외를 검증합니다.
 - 기본 권장 수량은 SUPER_ADMIN 1, ADMIN 3, USER 6, Space 3~5, Task 5~10, Agreement 4~5입니다. Category는 실제 enum/요구에 맞춥니다.
 - 각 역할별 로그인 가능 사용자 1명 이상, 수정/삭제 데이터 1개 이상과 pagination 목록 3개 이상을 확보합니다.
@@ -74,7 +74,7 @@ developer_instructions = '''
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -88,5 +88,5 @@ developer_instructions = '''
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.
 '''

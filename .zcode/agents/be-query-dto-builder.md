@@ -36,18 +36,18 @@ description: "목록 Query DTO를 생성·검토·수정합니다."
 
 ## 기술 규칙
 
-- 같은 endpoint intent의 DTO를 중복 생성하지 않습니다. class당 한 파일을 사용합니다.
-- QueryDto를 직접 상속하거나 실제 QueryDto 하위인 `EntityQueryType(Entity, filterKeys)`에서 파생합니다. PrismaQueryDto를 사용하지 않습니다.
+- 같은 endpoint intent는 기존 DTO를 재사용·확장하고 class당 한 파일을 사용합니다.
+- QueryDto를 직접 상속하거나 실제 QueryDto 하위인 `EntityQueryType(Entity, filterKeys)`에서 파생합니다. PrismaQueryDto 대신 이 상속 체계를 사용합니다.
 - QueryDto는 `skip?: number`, `take?: number`, `toPageMetaDto(totalCount)`만 제공합니다. sort는 필요한 하위 DTO가 선언합니다.
 - sort는 JSON:API `string[]`이며 name은 ASC, -createdAt은 DESC, 배열 순서는 정렬 우선순위입니다.
 - 공통 skip/take를 상속하고 동일 의미의 boolean/enum/ID exact equality만 EntityQueryType으로 선택합니다.
 - 검색·정렬·날짜범위·관계 검색·null sentinel·wire 이름 변경은 API 전용으로 직접 선언합니다. DeleteFilter와 기존 정규화를 보존합니다.
 - Query DTO와 대응 `@cocrepo/input` *QueryInput은 같은 wire shape를 유지합니다. Controller는 호환되면 `new XxxQuery(dto)`로 전달할 수 있습니다.
-- Command/Query message, UseCase/Aggregate/Repository와 Prisma WhereInput/OrderByInput/create/update input을 import하지 않습니다.
+- Query DTO는 QueryDto/EntityQueryType과 검증에 필요한 공개 계약만 import하고 Command/Query message, UseCase/Aggregate/Repository, Prisma WhereInput/OrderByInput/create/update input은 해당 역할이 소유합니다.
 - Prisma enum은 validation/Swagger가 필요할 때만 `@cocrepo/prisma`의 실제 공개 export에서 사용합니다.
-- Prisma 변환은 `packages/be-repository/src/*-query.mapper.ts`에 둡니다. toPrismaWhere/toPrismaOrderBy/excludeFromAutoMap을 만들지 않습니다.
+- Prisma 변환은 `packages/be-repository/src/*-query.mapper.ts`에 둡니다. toPrismaWhere/toPrismaOrderBy/excludeFromAutoMap은 Repository owner에 맡깁니다.
 - EntityQueryType은 Swagger PickType/PartialType의 검증·변환·문서 metadata를 실제 QueryDto 하위에 복사합니다.
-- Entity 메서드/property initializer와 선택 field의 Swagger default는 복사하지 않습니다. 실제 기본 필터는 해당 Query DTO에서 명시합니다.
+- Swagger metadata는 검증·변환·문서 항목만 복사하고 Entity 메서드/property initializer·선택 field의 Swagger default는 제외합니다. 실제 기본 필터는 해당 Query DTO에서 명시합니다.
 
 ## 단독 실행 계약
 
@@ -78,13 +78,13 @@ description: "목록 Query DTO를 생성·검토·수정합니다."
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
 
 - `pnpm --filter=@cocrepo/dto type-check`, `pnpm --filter=@cocrepo/dto lint`, `pnpm --filter=@cocrepo/dto test`를 실행합니다.
-- instanceof QueryDto, skip/take/toPageMetaDto, 변환·필터·sort와 Entity initializer/Swagger default 비유입을 확인합니다.
+- instanceof QueryDto, skip/take/toPageMetaDto, 변환·필터·sort와 Entity initializer/Swagger default 미포함을 확인합니다.
 - QueryInput 구조 호환과 Repository mapper 소비 계약을 확인합니다.
 - 자기 기본 검증과 추가 완료 기준, 모든 필수 하위의 완료를 충족해야 `완료`입니다. 필수 검증 미통과는 `검증 실패`입니다.
 - 최종 보고는 다음 다섯 Markdown 섹션으로 간결하게 반환합니다.
@@ -93,4 +93,4 @@ description: "목록 Query DTO를 생성·검토·수정합니다."
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.

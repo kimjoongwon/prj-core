@@ -22,7 +22,7 @@ developer_instructions = '''
 
 ### 구현 전 필수 조건
 
-- 모델 책임·관계/DB mapping과 metadata guide의 현재 계약이 확인되어야 합니다. 불분명한 도메인 결정은 임의로 정하지 않습니다.
+- 모델 책임·관계/DB mapping과 metadata guide의 현재 계약이 확인되어야 합니다. 불분명한 도메인 결정은 사용자 확인으로 확정합니다.
 - 자기 범위에서 만들 수 있는 입력은 직접 만들고 다른 역할의 산출물은 단계에 맞게 확보합니다.
 
 ### 입력 필요 조건
@@ -34,22 +34,22 @@ developer_instructions = '''
 
 ## 기술 규칙
 
-- 기존 같은 선언·책임을 재사용하고 model/enum을 여러 파일에 중복 선언하지 않습니다. 실제 schema 선언을 기준으로 삼고 모델 전체 목록을 문서·검증 코드에 복제하지 않습니다.
-- 모든 .prisma는 `packages/be-prisma/schema/` 바로 아래에 둡니다. 하위 폴더 없이 일반 파일당 model을 정확히 하나 선언하고 enum/generator/datasource를 섞지 않습니다.
-- model 이름은 UpperCamelCase입니다. 파일명은 아래 계산의 kebab-case 결과를 사용하며 경로 목록을 수동 관리하지 않습니다.
+- 기존 같은 선언·책임을 재사용하고 model/enum은 한 곳에만 선언합니다. 실제 schema 선언을 기준으로 삼고 모델 전체 목록은 실제 선언에서만 유지합니다.
+- 모든 .prisma는 `packages/be-prisma/schema/` 바로 아래에 둡니다. 하위 폴더 없이 일반 파일당 model을 정확히 하나 선언하고 enum/generator/datasource는 전용 파일에 둡니다.
+- model 이름은 UpperCamelCase입니다. 파일명은 아래 계산의 kebab-case 결과를 사용하며 경로는 계산 결과로만 결정합니다.
 
 ```ts
 name.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
   .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2").toLowerCase();
 ```
 
-- User→user.prisma, OidcClient→oidc-client.prisma, AIAgentLog→ai-agent-log.prisma입니다. 대소문자·계산 경로 충돌을 임의 배치로 우회하지 않습니다.
-- `_base.prisma`는 generator/datasource만 소유합니다. 기존 output·datasource를 임의 변경하거나 model/enum/metadata를 두지 않습니다.
-- `_enums.prisma`는 모든 enum을 이름 오름차순으로 모으며 model/generator/datasource와 model 설계 metadata를 두지 않습니다.
-- enum 이름/값/@map은 DB mapping 계약 없이, /// 문서는 DMMF 계약 없이 바꾸지 않습니다. 실제 model에서 사용하지 않는 enum을 미리 추가하지 않습니다.
-- metadata의 종류·형식·자료형·Aggregate Root 판단은 `packages/be-prisma/docs/schema-metadata-guide.md`가 소유합니다. 읽고 적용하며 별도 목록·판단 기준을 만들지 않습니다.
-- Prisma field/relation/name/key/discriminator에 드러난 사실을 metadata로 반복하거나 DDD Entity/Value Object/Service 태그로 복제하지 않습니다.
-- 속성 있는 N:M은 explicit many-to-many relation model, 1:1은 FK/@unique/@relation으로 표현합니다. 1:1이라는 이유로 상속 타입으로 분류하지 않습니다.
+- User→user.prisma, OidcClient→oidc-client.prisma, AIAgentLog→ai-agent-log.prisma입니다. 대소문자·계산 경로 충돌은 사용자 확인으로 해결합니다.
+- `_base.prisma`는 generator/datasource만 소유합니다. 기존 output·datasource는 기존 값을 유지하고 model/enum/metadata는 전용 파일에 둡니다.
+- `_enums.prisma`는 모든 enum을 이름 오름차순으로 모으며 model/generator/datasource와 model 설계 metadata는 각 전용 파일에 둡니다.
+- enum 이름/값/@map은 DB mapping 계약을, /// 문서는 DMMF 계약을 확인한 뒤 변경합니다. enum은 실제 model에서 사용이 확인될 때 추가합니다.
+- metadata의 종류·형식·자료형·Aggregate Root 판단은 `packages/be-prisma/docs/schema-metadata-guide.md`가 소유합니다. 가이드를 읽고 그대로 적용합니다.
+- metadata는 Prisma field/relation/name/key/discriminator에 드러나지 않는 설계 정보만 담습니다.
+- 속성 있는 N:M은 explicit many-to-many relation model, 1:1은 FK/@unique/@relation으로 표현합니다. 상속 타입 분류는 1:1 여부가 아니라 실제 다형성 근거로만 적용합니다.
 - 실제 다형성은 type/kind discriminator enum과 STI/MTI로 표현합니다. relation model도 자체 파일과 같은 metadata 계약을 적용합니다.
 - 모델·relation·key·constraint 검토 뒤 schema 검증을 실행하며 필요한 migration/client 변경을 이어서 검증합니다.
 
@@ -57,9 +57,9 @@ name.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
 
 - `/// @displayName 한글명`은 DMMF에 보존되는 문서 주석입니다. // 설계 metadata와 구분하고 선언 바로 위에 둡니다.
 - 모든 model은 가이드가 요구하는 한글 표시명을 갖고 enum/업무 field는 사람이 읽을 이름이 필요할 때 적용합니다.
-- 주석만 요청한 작업은 displayName만 바꾸고 기존 model 설계 metadata를 바꾸지 않습니다. 대소문자·형식·완전한 model header 예시는 metadata guide 하나를 기준으로 합니다.
+- 주석만 요청한 작업은 displayName만 바꾸고 model 설계 metadata는 기존 값을 유지합니다. 대소문자·형식·완전한 model header 예시는 metadata guide 하나를 기준으로 합니다.
 - 한글 매핑을 일관되게 유지하고 ID/seq/타임스탬프/relation/FK는 필요에 따라 제외할 수 있습니다. 관리자에게 필요한 field는 주석을 제공합니다.
-- DMMF parser와 SubjectSyncService가 소비하는 documentation을 확인하며 별도 주석 템플릿을 복제하지 않습니다.
+- DMMF parser와 SubjectSyncService가 소비하는 documentation을 확인하며 주석 형식은 기존 소비 계약을 따릅니다.
 - relation·inheritance 동작을 판단하기 전에 Prisma 공식 문서를 확인합니다.
 
 ## 단독 실행 계약
@@ -91,7 +91,7 @@ name.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -106,5 +106,5 @@ name.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.
 '''

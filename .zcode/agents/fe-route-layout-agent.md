@@ -41,40 +41,40 @@ description: "Next.js·Expo 공통 layout을 생성·검토·수정합니다."
 
 ### 웹 구조와 provider
 
-- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인합니다. 기존 UI로 가능한 표현을 raw DOM과 className으로 다시 만들지 않습니다.
-- 기본 출력은 root 서버 `layout.tsx`입니다. 사용자 승인 없이 `"use client"`로 승격하지 않고 Next.js server/client·SSR·hydration을 유지합니다.
-- root는 `Providers > App`을 조립합니다. `App.Header`, `App.Body`, `App.LeftAside`, `App.Main`, `App.RightAside`, `App.Footer` compound 슬롯을 사용하고 이전 prop-slot API를 쓰지 않습니다.
-- App이 배치·aside visibility/width·main scroll/background/padding을 소유합니다. root slot을 Tailwind wrapper로 감싸지 않습니다.
-- Providers는 auth refresh·i18n·ability·Space bootstrap/guard·navigation scope checker·overlay의 전역 side effect를 소유합니다. layout은 page data fetch·event binding을 하지 않습니다.
+- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인하고 기존 UI 조합으로 표현합니다.
+- 기본 출력은 root 서버 `layout.tsx`입니다. Next.js server/client·SSR·hydration을 유지하고 `"use client"` 승격은 사용자 승인이 있을 때만 합니다.
+- root는 `Providers > App`을 조립합니다. 이전 prop-slot API 대신 `App.Header`, `App.Body`, `App.LeftAside`, `App.Main`, `App.RightAside`, `App.Footer` compound 슬롯을 사용합니다.
+- App이 배치·aside visibility/width·main scroll/background/padding을 소유하므로 root slot은 `App` 계약 그대로 조립합니다.
+- Providers는 auth refresh·i18n·ability·Space bootstrap/guard·navigation scope checker·overlay의 전역 side effect를 소유합니다. layout은 구조·provider 조립만 담당하고 page data fetch·event binding은 Route/Feature owner에 둡니다.
 - root에서 navigation/action/guard·모바일 action Feature를 직접 조립하고 client 탭/navigation은 client Feature/Widget을 slot에 둡니다.
-- group/domain/auth layout을 기본 생성하지 않습니다. 기존 구조는 root로 흡수하되 surface/rhythm은 Screen owner에게 맡깁니다. pathname으로 layout을 고르는 `RouteFrame` Feature는 만들지 않습니다.
-- layout은 구조·slot topology만 소유합니다. `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`를 사용하지 않습니다.
-- `Page.Header`, `Page.Body`, `Page.Footer`는 콘텐츠 boundary입니다. App slot을 Page로 복제하거나 slot frame을 위해 되살리지 않습니다. 추가 slot frame은 package Feature owner에게 맡깁니다.
+- group/domain/auth layout은 기존 구조를 root로 흡수해 정리하고 surface/rhythm은 Screen owner에게 맡깁니다. pathname 기반 layout 선택은 `RouteFrame` Feature 대신 root 공통 틀과 named slot 계약으로 해결합니다.
+- layout은 구조·slot topology만 소유하고 `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`는 Screen/surface 소비 계층 계약으로 둡니다.
+- `Page.Header`, `Page.Body`, `Page.Footer`는 콘텐츠 boundary입니다. Page는 콘텐츠 boundary 역할만 하고 App slot은 `App`이 소유하며 추가 slot frame은 package Feature owner에게 맡깁니다.
 - page는 children/slot의 thin container입니다. 중복 `App`/`Page`/`Layout`·surface/rhythm은 Route owner에게 수정 요청합니다.
 - primitive는 `packages/fe-ui/src/layout`, `src/domain/navigation`에서 소비합니다. `HeaderBar`/`BottomNav`/`ActionFab`/`OverlayMenu`는 `src/widget/[Name]`, `NavigationPanel`은 `domain/navigation`에서 직접 사용합니다.
-- `src/display/layout`의 임의 디렉터리와 `src/widget`의 layout 전용 하위 카테고리를 만들지 않습니다.
+- layout primitive 배치는 `packages/fe-ui/src/layout`과 `src/domain/navigation`의 현행 폴더 구조를 유지합니다.
 
 ### 웹 named slot
 
 - 기본은 children 단일 구조입니다. slot은 목록 유지+독립 detail/inspector, deep-link modal/drawer, 독립 탭·보조 패널, 권한/조건별 병렬 영역 교체에만 사용합니다.
-- slot은 layout prop으로 받고 URL segment로 취급하지 않습니다. children은 implicit slot입니다.
-- 이름은 `detail`, `aside`, `modal`, `toolbar`, `tabs` 등 구조 의미이며 `userPanel`/`roleEditor`/`memberStats` 같은 도메인 이름은 쓰지 않습니다.
+- slot은 layout prop으로 취급하고 URL segment는 route 파일 구조가 소유합니다. children은 implicit slot입니다.
+- 이름은 `detail`, `aside`, `modal`, `toolbar`, `tabs` 등 구조 의미로 짓습니다.
 - 모든 `@slot`에 `default.tsx`와 hard reload unmatched fallback을 둡니다. 필요한 modal은 intercepting route와 함께 사용합니다.
-- 같은 segment의 한 slot이 dynamic이면 그 level 전체를 같은 렌더링 제약으로 다루고 일부를 static/prerender로 나누지 않습니다.
+- 같은 segment의 한 slot이 dynamic이면 그 level 전체를 같은 렌더링 제약으로 다룹니다.
 
 ### 모바일
 
 - 모바일은 작업 전에 `https://heroui.com/llms-patterns.txt`, `node_modules/heroui-native/package.json` exports, `node_modules/heroui-native/src/components/**` source와 `@cocrepo/mo-ui` export를 확인합니다.
-- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 내부만 허용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
-- HeroUI Native wrapper가 필요하면 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 유지하며 단순 재노출로 끝내지 않습니다.
-- 모바일 스타일은 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `StyleSheet`/`StyleSheet.create`를 만들지 않고 `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
-- 모바일에 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리를 넣지 않습니다.
+- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현에 두고 layout은 공개 `Text`를 사용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
+- HeroUI Native wrapper가 필요하면 단순 재노출 대신 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 갖춘 wrapper로 완결합니다.
+- 모바일 스타일은 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
+- 모바일 layout은 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리는 웹 layout 계약으로 둡니다.
 - Expo Router `Stack`/`Tabs`/`Drawer`/`Slot` 중 필요한 navigator만 조립하고 상위 중복 navigator·gesture/provider 중첩을 제거합니다.
 - root provider는 `apps/mobile/src/app/_layout.tsx`에 두고 하위에는 필요한 navigator만 추가합니다. 직접 `heroui-native/provider` 대신 `@cocrepo/mo-ui`의 DesignSystemProvider를 우선합니다.
-- header/layout은 `CustomHeader`, `Tabs`, `ScreenFrame`과 native options를 재사용하고 raw View/Text/Pressable header를 만들지 않습니다.
+- header/layout은 `CustomHeader`, `Tabs`, `ScreenFrame`과 native options를 재사용합니다.
 - `screenOptions`, `presentation`, `headerShown` 등 native 규칙을 적용합니다. style 객체는 className으로 표현하기 어려운 React Navigation option에만 제한합니다.
-- observable 구독 시 `const [LayoutName] = observer(() => { ... })` 후 `export default [LayoutName]`을 사용하고 `observer(function Name() { ... })`은 금지합니다.
-- `_layout.tsx`에 fetch·API mutation·Screen 본문을 넣지 않습니다. Next.js named slot/intercepting route, URL tab/split-view와 웹 surface 규칙은 적용하지 않습니다.
+- observable 구독 시 `const [LayoutName] = observer(() => { ... })` 후 `export default [LayoutName]` 형태를 사용하고 named function observer 대신 이 arrow 계약을 따릅니다.
+- `_layout.tsx`는 navigator·provider boundary만 담당하고 fetch·API mutation·Screen 본문은 Route/Screen owner에 둡니다. Next.js named slot/intercepting route, URL tab/split-view와 웹 surface 규칙은 웹 layout이 사용합니다.
 
 ## 단독 실행 계약
 
@@ -112,7 +112,7 @@ description: "Next.js·Expo 공통 layout을 생성·검토·수정합니다."
 ## 검증·보고
 
 - 실제 app package 이름으로 `pnpm --filter <app package> type-check`, `pnpm --filter <app package> lint`와 관련 layout 테스트를 실행합니다. 모바일은 `pnpm --filter mobile-app test --runTestsByPath <layout 테스트 경로>`를 실행합니다.
-- 웹은 아래 client 승격·금지 primitive·_layout 폴더·slot 누락·중복 skeleton 검사를 실행합니다. 미승인·금지 패턴과 MISSING 출력이 없어야 합니다.
+- 웹은 아래 client 승격·규칙 위반 primitive·_layout 폴더·slot 누락·중복 skeleton 검사를 실행합니다. 미승인 패턴과 MISSING 출력이 없어야 합니다.
 
 ```bash
 TASK_ROUTE_DIR='<실제 route 경로>'
@@ -133,4 +133,4 @@ find "$TASK_ROUTE_DIR" -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -ex
 - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export 또는 계약과 소비 용도를 적습니다.
 - `## 수행한 검증`: 실제 실행한 명령과 성공·실패, 미실행 사유를 적습니다.
 - `## 남은 문제`: 실제 차단 사항과 필요한 후속 owner·소비 경로를 적고, 없으면 `없음`으로 적습니다.
-- 전체 source, diff, 탐색 과정과 raw log는 반환하지 않습니다. 상세 실패 로그가 있으면 경로만 적습니다.
+- 전체 source, diff, 탐색 과정과 raw log는 작업 기록에 남기고 최종 응답은 결과 요약으로 구성합니다. 상세 실패 로그가 있으면 경로만 적습니다.

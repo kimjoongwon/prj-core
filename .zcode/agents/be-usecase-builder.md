@@ -36,24 +36,24 @@ description: "CQRS UseCase·EventHandler·Saga를 생성·검토·수정합니�
 
 ## 기술 규칙
 
-- Command/Query는 immutable intent로 @cocrepo/command, Event는 발생 사실로 @cocrepo/event에서 import합니다. UseCase package에 *.command.ts/*.query.ts를 만들지 않습니다.
-- Handler/EventHandler/Saga는 class당 한 파일입니다. 같은 파일에 decorator class를 둘 이상 두거나 top-level type/helper/mapper를 섞지 않습니다.
-- core/idp namespace에 handler를 평면으로 모으지 않고 {namespace}/{domain} bounded context로 묶습니다. provider arrays와 barrel은 domain index.ts에서만 조립합니다.
+- Command/Query는 immutable intent로 @cocrepo/command, Event는 발생 사실로 @cocrepo/event에서 import합니다. 메시지 정의는 해당 owner package에 둡니다.
+- Handler/EventHandler/Saga는 class당 한 파일입니다. top-level type/helper/mapper는 별도 전용 파일에 둡니다.
+- handler는 {namespace}/{domain} bounded context로 묶습니다. provider arrays와 barrel은 domain index.ts에서만 조립합니다.
 - 클래스 이름은 `{Verb}{Domain}UseCase`, write/read는 @CommandHandler/@QueryHandler, side effect는 @EventsHandler, Event→Command는 @Saga를 사용합니다.
-- 여러 Aggregate/Service/Client의 application 흐름을 조율하고 도메인 규칙은 `{Domain}Aggregate`/Entity에 맡깁니다. 다른 root의 규칙·persistence 입력을 흡수하지 않습니다.
-- transaction-critical 작업만 CommandHandler에 직접 둡니다. 실패가 원 command 성공을 막으면 안 되는 후속 작업은 EventBus로 나눕니다.
-- EventHandler는 email/audit/notification/cache invalidation/외부 통지를 맡고 CommandBus를 주입·실행하지 않습니다.
-- Saga는 Event→Command 변환만 맡고 도메인 Service를 직접 조합하지 않습니다.
-- Handler는 Repository/Prisma에 직접 접근하거나 Prisma create/update input을 만들지 않습니다. persistence 변환은 Aggregate/Repository owner에 맡깁니다.
-- DTO를 import하거나 dependency에 넘기지 않습니다. write Command·read Query 자체를 input으로 취급하고 command.input 중첩 접근을 만들지 않습니다.
+- 여러 Aggregate/Service/Client의 application 흐름을 조율하고 도메인 규칙은 `{Domain}Aggregate`/Entity에 맡깁니다. 다른 root의 규칙·persistence 입력은 그 root의 handler·Aggregate 경계에 둡니다.
+- transaction-critical 작업만 CommandHandler에 직접 둡니다. 후속 작업은 EventBus 이벤트로 원 command 성공과 분리합니다.
+- EventHandler는 email/audit/notification/cache invalidation/외부 통지를 맡으며 Command→Command 연결은 Saga가 소유합니다.
+- Saga는 Event→Command 변환만 맡고 도메인 Service 조합은 UseCase/Aggregate 흐름에 둡니다.
+- Handler는 Aggregate/Service의 공개 메서드로 데이터에 접근하고 persistence 변환은 Aggregate/Repository owner에 맡깁니다.
+- write Command·read Query 자체를 input으로 취급하고 DTO는 Controller 변환 계약에 둡니다. Command 필드는 최상위로 접근합니다.
 - 메시지가 Aggregate/Service/Client input과 호환되면 그대로 위임합니다. 여러 출처·field rename·policy 보정·복잡한 결과 조립이 필요할 때만 별도 {handler}.input/result/mapper 파일로 변환합니다.
 - 둘 이상의 handler가 공유하는 context/mapper/helper는 {domain}.context/mapper/support 파일로 나눕니다. 여러 package/domain 공용 타입은 @cocrepo/type, 순수 runtime utility는 @cocrepo/toolkit에 둡니다.
-- pagination 공용 계약/빌더를 be-usecase/src/common에 만들지 않습니다.
-- DI/ConfigService/env/Request/Response/Service/Repository/Client/time/random/외부 protocol에 닿는 exported free function/arrow helper를 새로 만들지 않습니다. support Service/Client/Aggregate/domain object에 맡깁니다.
+- pagination 공용 계약·빌더는 기존 공용 package 계약을 재사용합니다.
+- DI/ConfigService/env/Request/Response/Service/Repository/Client/time/random/외부 protocol에 닿는 동작은 support Service/Client/Aggregate/domain object에 맡깁니다.
 - 순수 local mapper/normalizer/parser는 전용 파일만 사용합니다. 기존 exported helper를 수정할 때도 Service/toolkit/mapper로 정리하거나 차단 이유를 보고합니다.
-- @Inject(TOKEN) 파라미터도 owner package의 실제 Service/Client/Aggregate class 타입을 사용합니다. *Port 메서드 목록·타입 alias를 복제하지 않습니다.
-- 여러 출처를 합칠 때 `const input = command` 같은 출처명 alias까지만 사용하고 deep destructuring을 남발하지 않습니다.
-- 이전 app/boundary/external 명칭을 새로 만들지 않습니다. Controller는 handler 직접 주입 대신 bus로 호출합니다.
+- @Inject(TOKEN) 파라미터도 owner package의 실제 Service/Client/Aggregate class 타입을 사용합니다. DI 계약은 이 실제 class 타입으로 표현합니다.
+- 여러 출처를 합칠 때 `const input = command` 같은 출처명 alias로 값의 원천을 보존합니다.
+- 폴더·파일 명칭은 현행 {namespace}/{domain} 체계를 따르고 Controller는 bus로 handler를 호출합니다.
 - handler arrays를 공개해 Module provider 등록에 전달합니다.
 
 ## 단독 실행 계약
@@ -85,13 +85,13 @@ description: "CQRS UseCase·EventHandler·Saga를 생성·검토·수정합니�
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
 
 - `pnpm --filter=@cocrepo/usecase type-check`, `pnpm --filter=@cocrepo/usecase lint`와 관련 handler/EventHandler/Saga 테스트를 실행합니다.
-- root 경계·critical/후속 작업·DTO/Prisma 비의존·최상위 input·실제 provider 타입·domain arrays를 확인합니다.
+- root 경계·critical/후속 작업·DTO/Prisma 소유 경계 준수·최상위 input·실제 provider 타입·domain arrays를 확인합니다.
 - 자기 기본 검증과 추가 완료 기준, 모든 필수 하위의 완료를 충족해야 `완료`입니다. 필수 검증 미통과는 `검증 실패`입니다.
 - 최종 보고는 다음 다섯 Markdown 섹션으로 간결하게 반환합니다.
   - `## 작업 결과`: `완료`, `입력 필요`, `검증 실패` 중 하나. 런타임 종료와 작업 완료를 구분합니다.
@@ -99,4 +99,4 @@ description: "CQRS UseCase·EventHandler·Saga를 생성·검토·수정합니�
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.

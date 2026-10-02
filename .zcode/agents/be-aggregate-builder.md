@@ -37,13 +37,13 @@ description: "도메인 Aggregate 서비스를 생성·검토·수정합니다."
 ## 기술 규칙
 
 - 클래스명은 `{Domain}Aggregate`, 파일은 `{domain}.aggregate.ts`, Nest `@Injectable()` provider로 만듭니다.
-- class당 한 파일을 사용하고 top-level type/helper/mapper/constant를 넣지 않습니다. Input/Payload/Result/helper는 같은 domain의 별도 파일에 둡니다.
+- class당 한 파일을 사용하고 top-level Input/Payload/Result/type/helper/mapper/constant는 같은 domain의 별도 파일에 둡니다.
 - Entity는 `@cocrepo/entity`에 둡니다. Repository로 로드하고 Entity 메서드로 상태를 바꾼 뒤 저장합니다.
 - public method는 aggregate가 소유한 `CreateXInput`, `UpdateXInput`, `{Domain}Input/Payload`를 받고 인자명은 `input`을 기본으로 합니다.
-- DTO, Command/Query class, Request/Response/Express 객체와 Prisma create/update input을 public signature로 받지 않습니다.
-- `TransactionHost`, `PrismaClient`, Prisma `where/orderBy/select/include`를 직접 소유하지 않습니다. DB 접근과 persistence 변환은 Repository 또는 인접 mapper에 맡깁니다.
+- DTO, Command/Query class, Request/Response/Express 객체와 Prisma create/update input은 각 owner 경계에서 변환하며 public signature는 자기 입력 타입으로 완결합니다.
+- DB 접근과 persistence 변환은 Repository 또는 인접 mapper에 맡기고 `TransactionHost`, `PrismaClient`, Prisma `where/orderBy/select/include` 소유도 해당 범위에 둡니다.
 - 여러 Repository 호출이 한 업무 단위이면 Aggregate public method에 `@Transactional()`을 적용하고 Repository의 CLS `TransactionHost.tx`로 같은 transaction을 사용합니다.
-- Controller에서 직접 주입하지 않고 UseCase handler가 호출합니다.
+- Aggregate는 UseCase handler가 호출하고 Controller는 bus→UseCase 흐름으로 연결합니다.
 - 하나의 root 내부 규칙, 종속 모델 변경 진입점과 저장 흐름을 맡습니다. 여러 aggregate/service/client의 작업 흐름은 UseCase에 둡니다.
 - 여러 domain/package가 공유하는 응답 타입은 `@cocrepo/type`, 순수 런타임 builder는 `@cocrepo/toolkit`에 둡니다.
 
@@ -77,7 +77,7 @@ description: "도메인 Aggregate 서비스를 생성·검토·수정합니다."
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -91,4 +91,4 @@ description: "도메인 Aggregate 서비스를 생성·검토·수정합니다."
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.

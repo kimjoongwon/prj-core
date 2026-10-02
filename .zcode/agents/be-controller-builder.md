@@ -36,20 +36,20 @@ description: "NestJS REST Controller를 생성·검토·수정합니다."
 
 ## 기술 규칙
 
-- Controller는 `@cocrepo/controller`에 두고 앱 module은 그 class를 import합니다. 앱 module 폴더에 Controller를 만들지 않습니다.
+- Controller는 `@cocrepo/controller`에 두고 앱 module은 그 class를 import하는 연결만 담당합니다.
 - class당 한 파일을 사용하고 top-level helper/mapper/type/interface는 인접 파일로 분리합니다.
 - endpoint의 진입점은 write의 `CommandBus.execute(command)` 또는 read의 `QueryBus.execute(query)` 하나입니다.
-- Service/Repository/Client/UseCase handler/Aggregate를 직접 주입하지 않습니다. 흐름은 Controller→bus→UseCase→Aggregate/Service/Client입니다.
+- Controller는 CommandBus/QueryBus만 주입하고 Service/Repository/Client/UseCase handler/Aggregate는 흐름 뒤의 UseCase가 사용합니다. 흐름은 Controller→bus→UseCase→Aggregate/Service/Client입니다.
 - 작업 흐름·조건 분기·외부 연동과 응답 조립/read model shaping은 UseCase에 둡니다.
 - 구조가 호환되는 단일 body/query DTO는 필드 재복사 없이 `new XxxCommand(dto)`/`new XxxQuery(dto)`로 전달합니다.
 - route/user/header를 합칠 때만 얇은 객체를 만들고 값의 출처를 보존합니다. default/null 보정·field rename·persistence 변환은 해당 입력/UseCase/Aggregate/Repository에 둡니다.
-- Command의 body 필드는 class 최상위 readonly 속성입니다. 중첩 `command.input` 계약을 만들지 않습니다.
+- Command의 body 필드는 class 최상위 readonly 속성으로 선언하고 입력 계약은 이 단일 구조로 완결합니다.
 - Query DTO의 wire shape·검증은 `be-query-dto-builder`, Prisma 변환은 Repository 인접 mapper 범위입니다.
 - `@ApiTags()`, 경로가 빈 `@Controller()`를 사용하고 경로는 RouterModule에서 관리합니다.
 - 각 메서드에 이름과 같은 `@ApiOperation({ operationId: "메서드명" })`, `@HttpCode(HttpStatus.OK)`, `@ApiResponseEntity()`를 둡니다.
-- URL param은 `:{entity}Id`로 명명합니다. `plainToInstance` 응답 변환과 private helper method를 두지 않습니다.
+- URL param은 `:{entity}Id`로 명명합니다. 응답 변환은 `plainToInstance` 호출과 private helper method 대신 response DTO 타입 선언으로 완결합니다.
 - Logger는 로깅이 필요한 protocol 분기·예외 처리에만 사용합니다.
-- domain 폴더는 aggregate root 기준입니다. page Controller는 query/bootstrap/BFF 용도로만 사용하며 child resource를 top-level module 기준으로 만들지 않습니다.
+- domain 폴더는 aggregate root 기준입니다. page Controller는 query/bootstrap/BFF 용도로 사용하고 child resource도 aggregate root 기준 구조에 둡니다.
 
 ### Form bootstrap
 
@@ -89,7 +89,7 @@ description: "NestJS REST Controller를 생성·검토·수정합니다."
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -104,4 +104,4 @@ description: "NestJS REST Controller를 생성·검토·수정합니다."
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.

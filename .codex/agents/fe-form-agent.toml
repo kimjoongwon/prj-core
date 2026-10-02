@@ -39,25 +39,25 @@ developer_instructions = '''
 
 ### 모델과 필드
 
-- 모델이 직접 가진 문자열·숫자·Boolean·enum 중 이번 사용자가 입력할 필드만 고르고 다른 모델의 필드는 가져오지 않습니다.
+- 모델이 직접 가진 문자열·숫자·Boolean·enum 중 이번 사용자가 입력할 필드만 선택합니다.
 - `id`, `seq`, 생성·수정·삭제일, 서버 계산 필드, `@relation` 내부 조인 값, 모델 타입·배열 관계 필드는 제외합니다. 관계 모델은 그 모델의 Form이 담당합니다.
 - Prisma `?`는 DB nullable입니다. 화면 필수·선택은 요구사항과 validation schema로 정합니다.
-- 최종 Create/Update DTO는 여러 Form의 조합입니다. DTO 전체를 기준으로 Form 필드를 정하거나 Form state로 사용하지 않습니다.
+- 최종 Create/Update DTO는 여러 Form의 조합이며 Form 필드와 state는 자기 입력 필드 기준으로만 정의합니다.
 
 ### 상태와 schema
 
-- 입력값은 외부 `state`로 받습니다. `XXXXFormState extends FormSchemaStateContract<XXXXSchema>`에 자기 필드를 하나씩 선언하고 조회 응답 전체를 state로 사용하지 않습니다.
-- Form 안에서 `useState`, `useReducer`, `useLocalObservable`로 입력값을 만들지 않습니다.
+- 입력값은 외부 `state`로 받습니다. `XXXXFormState extends FormSchemaStateContract<XXXXSchema>`에 자기 필드를 하나씩 선언하고 조회 응답은 자기 필드만 매핑해 state로 연결합니다.
+- Form은 외부 `state`로 받은 입력값만 다룹니다.
 - 검증의 원천은 `XXXXSchema`입니다. `<Form state={state} schema={XXXXSchema}>`, input의 `path`, state와 schema 필드 이름을 정확히 맞춥니다.
-- Form은 상태·정적 props만 받고 API·저장·취소·route 이동을 처리하지 않습니다. 저장 버튼은 `type="submit"` 등 외부가 알아볼 표준 속성을 사용합니다.
+- Form은 상태·정적 props만 받고 API·저장·취소·route 이동은 소비 Route/Feature에 맡깁니다. 저장 버튼은 `type="submit"` 등 외부가 알아볼 표준 속성을 사용합니다.
 - 최종 submit payload와 저장 handler는 소비 Route/Feature가 조합합니다. Form은 자기 필드 validation·오류 표시와 표준 submit 전달을 검증합니다.
 
 ### 입력과 공개 계약
 
 - input을 재사용합니다. 짧은 문자열·이메일·전화·비밀번호는 `TextField`, 긴 문자열은 `TextArea`, Boolean은 `Checkbox`/`Switch`, enum·선택은 `Select`/`RadioGroup`을 우선합니다.
 - 문자열 목록은 `StringListInput`, HTML은 `HtmlEditor`를 우선합니다. `/// @displayName`이 있으면 기본 label로 사용합니다.
-- input을 Form 내부에서 새로 만들지 않습니다. Form·state/props 타입은 `packages/fe-ui/src/form/index.ts`에서 export하고 소비 import를 확인합니다.
-- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인합니다. 기존 UI로 가능한 표현을 raw DOM과 className으로 다시 만들지 않습니다.
+- input은 기존 공개 input을 재사용합니다. Form·state/props 타입은 `packages/fe-ui/src/form/index.ts`에서 export하고 소비 import를 확인합니다.
+- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인하고 UI는 기존 leaf 조합으로 구현합니다.
 
 ## 단독 실행 계약
 
@@ -67,7 +67,7 @@ developer_instructions = '''
 - 필요한 하위 역할은 사용자가 지정하지 않아도 name과 description으로 선택합니다.
 - 필요한 다른 역할의 산출물은 해당 하위 에이전트에 생성·수정을 맡깁니다.
 - 하위의 선행 입력이 부족하면 필요한 다른 하위를 먼저 실행하고, 산출물 요약을 전달하여 원래 하위를 재개합니다.
-- `XXXXSchema`가 없거나 필드가 다르면 `common-schema-builder`에 맡깁니다. schema 생성·public export·검증 완료 뒤 Form을 재개하고 schema 확보만으로 완료 처리하지 않습니다.
+- `XXXXSchema`가 없거나 필드가 다르면 `common-schema-builder`에 맡깁니다. schema 생성·public export·검증 완료 뒤 Form을 재개하고 완료 판정은 Form 연결까지 마친 뒤 내립니다.
 - schema 요청에 Form/Prisma 모델 이름·Prisma 경로·필드·주석/공용 검증 근거·소비 경로를 전달합니다.
 - input은 `fe-input-agent`, 필요한 Storybook은 `fe-storybook-agent`에 맡깁니다. 하위 단계에서는 누락 계약과 소비 경로를 부모에게 보고합니다.
 
@@ -106,5 +106,5 @@ developer_instructions = '''
 - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export 또는 계약과 소비 용도를 적습니다.
 - `## 수행한 검증`: 실제 실행한 명령과 성공·실패, 미실행 사유를 적습니다.
 - `## 남은 문제`: 실제 차단 사항과 필요한 후속 owner·소비 경로를 적고, 없으면 `없음`으로 적습니다.
-- 전체 source, diff, 탐색 과정과 raw log는 반환하지 않습니다. 상세 실패 로그가 있으면 경로만 적습니다.
+- 상세 탐색과 전체 source/diff·raw log는 작업 기록에 남기고 최종 응답은 결과 요약과 상세 로그 경로로 구성합니다.
 '''

@@ -35,18 +35,18 @@ developer_instructions = '''
 
 ## 기술 규칙
 
-- 모든 project Command/Query를 `@cocrepo/command`에서 export하고 동일 intent의 중복 메시지를 만들지 않습니다.
-- `packages/be-usecase` 안의 `*.command.ts`/`*.query.ts`, `apps/*/api/src/module/**/*.cqrs.ts`나 app-local CQRS message를 새로 만들지 않습니다.
+- 모든 project Command/Query를 `@cocrepo/command`에서 export하고 동일 intent는 기존 메시지를 재사용합니다.
+- 메시지 소유 경로는 `@cocrepo/command`이며 `packages/be-usecase` 안의 `*.command.ts`/`*.query.ts`, `apps/*/api/src/module/**/*.cqrs.ts` 같은 app-local CQRS message는 package 메시지로 대체합니다.
 - class당 한 파일을 사용하고 Input/Result/interface/type은 별도 계약 파일에 둡니다.
-- 메시지는 request intent와 routing context만 담는 immutable input이며 Service/Repository/Client/ConfigService dependency를 갖지 않습니다.
-- write Command는 DTO, Prisma create/update input, Repository params와 persistence DTO를 import하지 않습니다. body DTO와 호환되는 `{Verb}{Domain}CommandInput`을 `@cocrepo/input`에 둡니다.
-- read Query는 DTO를 import하지 않고 대응 `*QueryInput`을 사용합니다. sort/skip/take/검색·필터 wire shape를 공유하며 Prisma 변환은 Repository 인접 mapper에 둡니다.
+- 메시지는 request intent와 routing context만 담는 immutable input으로 완결하고 Service/Repository/Client/ConfigService dependency는 소비 UseCase 계층이 소유합니다.
+- write Command의 입력은 body DTO와 호환되는 `{Verb}{Domain}CommandInput`을 `@cocrepo/input`에 두고 DTO, Prisma create/update input, Repository params와 persistence DTO는 각 owner 경계에 둡니다.
+- read Query는 대응 `*QueryInput`을 사용합니다. sort/skip/take/검색·필터 wire shape를 공유하며 Prisma 변환은 Repository 인접 mapper에 둡니다.
 - Command/Query는 `*CommandInput`/`*QueryInput`을 `implements`하고 필드를 class 최상위 readonly 속성으로 노출합니다.
-- 생성자는 `constructor(input: XxxInput) { Object.assign(this, input); }`을 기본으로 하며 `readonly input`으로 중첩하지 않습니다.
-- route/user/header context는 `xId`, `actorId`, `spaceId` 같은 명시적 생성자 인자로 두고 body/query 필드는 최상위로 펼칩니다. body 이름으로 `params`나 `dto`를 쓰지 않습니다.
+- 생성자는 `constructor(input: XxxInput) { Object.assign(this, input); }`을 기본으로 하고 필드는 class 최상위로 펼칩니다.
+- route/user/header context는 `xId`, `actorId`, `spaceId` 같은 명시적 생성자 인자로 두고 body/query 필드는 각각의 의미를 드러내는 이름으로 최상위에 펼칩니다.
 - 단일 body는 `new XxxCommand(dto)`로 전달할 수 있게 설계합니다. 여러 출처를 합칠 때만 얇은 조합 객체를 씁니다.
 - 이전 protocol bridge의 Express/Koa request/response가 꼭 필요하면 최소 타입 alias만 `@cocrepo/command`에 둡니다.
-- handler array는 `@cocrepo/usecase` 범위이며 command package는 provider를 export하지 않습니다.
+- handler array는 `@cocrepo/usecase` 범위이며 command package는 메시지 계약만 export합니다.
 
 ## 단독 실행 계약
 
@@ -77,7 +77,7 @@ developer_instructions = '''
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -92,5 +92,5 @@ developer_instructions = '''
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.
 '''

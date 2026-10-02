@@ -35,16 +35,16 @@ developer_instructions = '''
 ## 기술 규칙
 
 - support/domain helper 또는 Client 조합 Service를 만들고 root service는 `@cocrepo/aggregate`의 `{Domain}Aggregate`에 둡니다.
-- 같은 root의 종속/명시적 관계 모델 변경은 그 root Aggregate 진입점을 사용합니다. Controller pass-through를 이유로 경계를 넓히지 않습니다.
-- input은 SendEmailInput/PutObjectInput 같은 capability 이름과 기본 인자명 input을 사용합니다. DTO/Command/Query class를 public 입력 타입으로 받지 않습니다.
+- 같은 root의 종속/명시적 관계 모델 변경은 그 root Aggregate 진입점으로 처리합니다.
+- input은 SendEmailInput/PutObjectInput 같은 capability 이름과 기본 인자명 input을 사용합니다. public 입력 타입은 Service 전용 Input interface로 선언합니다.
 - 메서드는 업무 목적을 드러내며 getMy/ForAuth/search/Details/check/Report 등 실제 역할에 맞는 이름을 사용합니다.
-- Repository/Entity/Aggregate를 사용하고 Prisma 쿼리를 직접 작성하지 않습니다. 필요한 context는 ClsService로 확인합니다.
+- Repository/Entity/Aggregate를 통해 데이터에 접근하며 Prisma 쿼리는 Repository owner가 소유합니다. 필요한 context는 ClsService로 확인합니다.
 - 여러 출처를 target input으로 조합할 때 출처명 alias까지만 사용하고 값의 원천을 보존합니다.
-- @Injectable() class당 한 파일을 사용하고 top-level type/helper/mapper/constant를 함께 두지 않습니다. Input/Result/Options/Provider interface/helper는 같은 domain의 별도 파일에 둡니다.
-- 루트 flat *.service.ts나 xxx.service/index.ts 폴더형 Service를 만들지 않습니다. 보조 provider/module은 domain 안에서 파일별 책임을 나눕니다.
-- 실제 Service/Client/Aggregate class 타입을 재사용합니다. 메서드 목록을 복제한 *Port interface/type/file/export나 새 Port 접미사를 만들지 않습니다.
+- @Injectable() class당 한 파일을 사용합니다. Input/Result/Options/Provider interface/helper는 같은 domain의 별도 파일에 둡니다.
+- Service는 `{domain}/{domain}.service.ts` 경로 구조를 따릅니다. 보조 provider/module은 domain 안에서 파일별 책임을 나눕니다.
+- 실제 Service/Client/Aggregate class 타입을 재사용하고 DI·소비 계약은 이 실제 class 타입으로 표현합니다.
 - 별도 추상 계약은 승인된 spec에 이유·owner·소비 범위가 있고 실제 class 재사용이 불가능할 때만 사용합니다. DI token은 runtime provider 선택만 맡습니다.
-- be-service/src에 service behavior를 담은 export function/exported arrow helper를 새로 만들지 않습니다.
+- be-service/src의 service behavior는 @Injectable Service class가 소유합니다.
 - DI/ConfigService/env/Repository/Client/time/random/외부 protocol 동작은 @Injectable Service class로 만듭니다.
 - 순수 runtime helper는 @cocrepo/toolkit 재사용·이동을 우선합니다. service-local 순수 mapper/normalizer/parser만 인접 파일에 두고 provider/환경 의존이 생기면 Service로 옮깁니다.
 - barrel과 소비 import·provider 타입을 함께 맞춥니다.
@@ -78,13 +78,13 @@ developer_instructions = '''
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
 
 - `pnpm --filter=@cocrepo/service type-check`, `pnpm --filter=@cocrepo/service lint`와 관련 Service 테스트를 실행합니다.
-- context·root 변경 진입점·업무 동작을 확인하고 DTO/Prisma 쿼리·중복 Port·환경 의존 free function이 없는지 리뷰합니다.
+- context·root 변경 진입점·업무 동작을 확인하고 입력·데이터 접근·DI 타입·동작 위치가 전용 Input·Repository 경유·실제 class 타입·@Injectable Service 계약을 따르는지 리뷰합니다.
 - 자기 기본 검증과 추가 완료 기준, 모든 필수 하위의 완료를 충족해야 `완료`입니다. 필수 검증 미통과는 `검증 실패`입니다.
 - 최종 보고는 다음 다섯 Markdown 섹션으로 간결하게 반환합니다.
   - `## 작업 결과`: `완료`, `입력 필요`, `검증 실패` 중 하나. 런타임 종료와 작업 완료를 구분합니다.
@@ -92,5 +92,5 @@ developer_instructions = '''
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.
 '''

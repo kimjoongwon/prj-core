@@ -39,41 +39,41 @@ developer_instructions = '''
 
 ### 순수 계약과 파일
 
-- data·파생 상태·빈 상태 문구·CTA·handler를 props로 받습니다. 실제 쓰는 shape를 드러내고 domain 응답 전체를 무조건 받지 않습니다.
-- API/React Query/Orval hook, router/params/navigation, store 생성·조회, runtime context·cookie/header/storage·앱 환경값을 직접 읽지 않습니다.
-- 상태 설계는 `fe-route-agent` 책임입니다. route MobX class의 observable 범위를 소비하고 생성·초기화·변경 전략 설계나 중첩 flatten은 하지 않습니다.
+- data·파생 상태·빈 상태 문구·CTA·handler를 props로 받고 props는 실제 쓰는 shape만 선언합니다.
+- Screen은 데이터·상태·handler를 props로 소비하고 API/React Query/Orval hook, router/params/navigation, store 생성·조회, runtime context·cookie/header/storage·앱 환경값은 Route/Store 계약에서 주입받습니다.
+- 상태 설계는 `fe-route-agent` 책임입니다. Screen은 route MobX class의 observable 범위를 소비하고 생성·초기화·변경 전략·중첩 flatten은 Route 계약에 둡니다.
 - mutable 상태는 `state` 아래에 모으고 `state.loginForm` 등 child component-name 범위를 유지합니다. handler·정적 copy/link·server data는 별도 props로 받습니다.
-- Form은 상태·정적 props만 받습니다. Screen 이벤트 props는 표준 `onSubmit`/`onClickCapture` 경계에 연결하고 child Form에 submit/cancel/click handler를 직접 전달하지 않습니다.
-- 이름은 semantic app-facing `ListScreen`/`DetailScreen`/`CreateScreen`/`EditScreen`, 공유 `FormScreen` 또는 task 이름입니다. 충돌 시 최소 domain qualifier만 추가하고 route path·admin/idp namespace depth를 만들지 않습니다.
-- 파일은 exported Screen 하나만 소유합니다. private JSX component, trivial `*Client`/`*Inner`/`*Base`, default export와 우회 alias export는 금지합니다.
-- observable 소비 시 `export const [ScreenName] = observer((props) => { ... })` 또는 props 없는 arrow 형태입니다. `observer(function Name() { ... })`은 금지합니다.
+- Form은 상태·정적 props만 받습니다. Screen 이벤트 props는 표준 `onSubmit`/`onClickCapture` 경계에 연결하고 submit/cancel/click handler는 Form 경계 내부에 둡니다.
+- 이름은 semantic app-facing `ListScreen`/`DetailScreen`/`CreateScreen`/`EditScreen`, 공유 `FormScreen` 또는 task 이름이며 충돌 시 최소 domain qualifier만 추가합니다.
+- 파일은 exported Screen 하나만 소유합니다. 화면 구성은 returned JSX와 lower-layer 조합으로 완결하고 private JSX component·trivial `*Client`/`*Inner`/`*Base`·default export·우회 alias는 lower-layer 공개 계약으로 대체합니다.
+- observable 소비 시 `export const [ScreenName] = observer((props) => { ... })` 또는 props 없는 arrow 형태를 사용하고 named function observer 대신 이 arrow 계약을 따릅니다.
 - public props/component와 `src/screen/index.ts`를 동기화합니다. lower-layer는 import해 조합하고 순수 helper가 2개 이상 필요하면 Feature/Widget 승격을 검토합니다.
 
 ### 웹
 
-- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인합니다. 기존 UI로 가능한 표현을 raw DOM과 className으로 다시 만들지 않습니다.
-- title·설명·본문·CTA·empty/error·props 분기를 조합하고 이벤트는 `on[Event][UI]`로 위임합니다. `handle*`는 쓰지 않습니다.
-- `ScreenSurface`는 `packages/fe-ui/src/screen/index.ts`의 public screen export boundary에서만 적용합니다. 기존 `PageSurface` 호환 boundary이며 구현에 wrapper를 중복 추가하지 않습니다.
+- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인하고 기존 UI 조합으로 표현합니다.
+- title·설명·본문·CTA·empty/error·props 분기를 조합하고 이벤트는 `on[Event][UI]` 이름으로 위임합니다.
+- `ScreenSurface`는 `packages/fe-ui/src/screen/index.ts`의 public screen export boundary에서만 적용합니다. 기존 `PageSurface` 호환 boundary 계약을 그대로 사용합니다.
 - 주요 구획은 `SectionSurface` + `Section` compound입니다. 표면은 SectionSurface, 구조는 `Section.Header`/`Body`/`Footer`/`LeftAside`/`RightAside`가 소유합니다.
-- 반복 item·정보 행·상태 박스는 추가 elevation 대신 border/divider/background/spacing으로 구분합니다. 신규 Surface·제거된 detail/form surface wrapper·route Page 구조는 만들지 않습니다.
+- 반복 item·정보 행·상태 박스는 추가 elevation 대신 border/divider/background/spacing으로 구분하고 표면은 현행 `SectionSurface`·`Surface` 계약을 재사용합니다. route Page 구조는 Route owner가 소유합니다.
 - Screen rhythm은 `VStack`/`HStack`/`Spacer`와 `page`, `섹션`, `block`, `inline`, `dense` semantic preset을 우선합니다.
-- flow rail·metric grid·tab group·table·form 섹션·empty panel은 lower-layer입니다. Screen은 배치·조합만 소유하고 새 lower-layer JSX를 같은 파일에 선언하지 않습니다.
-- server/client·SSR·첫 hydration DOM과 React Aria/HeroUI id 안정성을 유지합니다. `window.location`, `document.cookie`, localStorage/sessionStorage나 app URL 하드코딩을 사용하지 않습니다.
-- Screen spec에 `## 화면 러프`, Desktop/Tablet/모바일 차이와 lower-layer 조합 표를 적습니다. 완료 기준은 규칙 위반 없음·export·spec 동기화입니다.
+- flow rail·metric grid·tab group·table·form 섹션·empty panel은 lower-layer입니다. Screen은 배치·조합만 소유하고 lower-layer JSX는 해당 owner 산출물을 import해 조합합니다.
+- server/client·SSR·첫 hydration DOM과 React Aria/HeroUI id 안정성을 유지합니다. 브라우저 전역 값·저장소·app URL은 Route/환경 계약이 props로 전달합니다.
+- Screen spec에 `## 화면 러프`, Desktop/Tablet/모바일 차이와 lower-layer 조합 표를 적습니다. 완료 기준은 계약 준수·export·spec 동기화입니다.
 
 ### 모바일
 
 - 모바일은 작업 전에 `https://heroui.com/llms-patterns.txt`, `node_modules/heroui-native/package.json` exports, `node_modules/heroui-native/src/components/**` source와 `@cocrepo/mo-ui` export를 확인합니다.
-- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 내부만 허용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
-- HeroUI Native wrapper가 필요하면 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 유지하며 단순 재노출로 끝내지 않습니다.
-- 모바일 스타일은 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `StyleSheet`/`StyleSheet.create`를 만들지 않고 `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
-- 모바일에 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리를 넣지 않습니다.
+- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현에 두고 Screen은 공개 `Text`를 사용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
+- HeroUI Native wrapper가 필요하면 단순 재노출 대신 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 갖춘 wrapper로 완결합니다.
+- 모바일 스타일은 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
+- 모바일 Screen은 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리는 웹 Screen 계약으로 둡니다.
 - `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`에서 RN component와 `@cocrepo/mo-ui` primitive/input/menu/widget/feature를 조합합니다.
-- `ReservationHomeScreen`, `AuthLoginScreen`, `BookingDetailScreen` 등 의미 있는 이름을 쓰고 `IndexScreen`, `MobileRootIndexScreen`, `*RouteScreen`은 만들지 않습니다.
-- `useLocalSearchParams`, `useRouter`, `usePathname`, `useNavigation`, navigation용 Link, `expo-router`, `expo-linking`, `expo-splash-screen`, `react-native-webview`를 직접 의존하지 않습니다. route·환경·deep-link scheme·bridge는 Route에 둡니다.
-- render tree는 JSX입니다. `React.createElement`/`createElement`, JSX 반환 `render*` helper와 return 밖 JSX node 변수는 금지합니다.
-- 상태·반복별 JSX는 returned JSX의 조건식/반복에 둡니다. 재사용하지 않는 작은 JSX 조각을 component로 빼지 않고 JSX 없는 mapper/helper만 lowercase 함수로 둡니다.
-- CTA는 `Button`/`LinkButton`/`CloseButton`, 구획은 `Card`/`Surface`/`ScreenFrame`을 우선하며 raw Pressable/View/Text 재구현을 하지 않습니다.
+- 모바일 Screen은 `ReservationHomeScreen`, `AuthLoginScreen`, `BookingDetailScreen`처럼 화면 책임을 드러내는 의미 있는 이름을 사용합니다.
+- route·환경·deep-link scheme·bridge는 Route에 둡니다. Screen은 `useLocalSearchParams`, `useRouter`, `usePathname`, `useNavigation`, navigation용 Link, `expo-router`, `expo-linking`, `expo-splash-screen`, `react-native-webview` 대신 Route가 전달한 props·handler를 소비합니다.
+- render tree는 JSX입니다. 화면 선언은 returned JSX로 완결하고 `React.createElement`/`createElement`, JSX 반환 `render*` helper, return 밖 JSX node 변수 대신 returned JSX를 사용합니다.
+- 상태·반복별 JSX는 returned JSX의 조건식/반복에 두고 재사용되는 조합만 lower-layer로 분리합니다. JSX 없는 mapper/helper는 lowercase 함수로 둡니다.
+- CTA는 `Button`/`LinkButton`/`CloseButton`, 구획은 `Card`/`Surface`/`ScreenFrame` 계약을 우선 사용합니다.
 - style은 safe-area inset·third-party native bridge 같은 동적 값만 허용합니다. spec에 `## 화면 스케치`와 fenced `text` wireframe을 넣습니다.
 
 ## 단독 실행 계약
@@ -113,7 +113,7 @@ developer_instructions = '''
 
 - 웹은 `pnpm --filter @cocrepo/ui type-check`, `pnpm --filter @cocrepo/ui lint`, `pnpm --filter @cocrepo/ui test --run <관련 테스트 경로>`를 실행합니다.
 - 모바일은 `pnpm --filter @cocrepo/mo-ui type-check`, `pnpm --filter @cocrepo/mo-ui lint`, `pnpm --filter @cocrepo/mo-ui test --runTestsByPath <관련 테스트 경로>`를 실행합니다.
-- props rendering·event callback·disabled/empty/error·Widget 조합을 테스트합니다. 웹은 아래 export·금지 runtime·handler·보조 component와 namespace depth를 검사합니다.
+- props rendering·event callback·disabled/empty/error·Widget 조합을 테스트합니다. 웹은 아래 export·규칙 위반 runtime·handler·보조 component와 namespace depth를 검사합니다.
 
 ```bash
 rg -n 'export .*Screen' packages/fe-ui/src/screen/index.ts
@@ -123,7 +123,7 @@ rg -n 'handle[A-Z][A-Za-z0-9_]*' "$TASK_SCREEN_PATH"
 rg -n '^(function|const) [A-Z][A-Za-z0-9_]*|^const [A-Z][A-Za-z0-9_]* = (observer|\(|function)' "$TASK_SCREEN_PATH"
 ```
 
-- 금지 패턴·보조 JSX component가 없어야 하며 export는 해당 Screen을 포함해야 합니다. 모바일은 createElement·render helper·runtime import·barrel을 함께 확인합니다.
+- 규칙 위반 패턴·보조 JSX component가 없어야 하며 export는 해당 Screen을 포함해야 합니다. 모바일은 createElement·render helper·runtime import·barrel을 함께 확인합니다.
 - Screen 경로·props·lower-layer·재사용/배제 근거·observer·wireframe/export와 Route boundary를 보고합니다.
 - 자기 범위의 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위 결과가 완료여야 `완료`입니다.
 - 구현 후 필수 검증을 통과하지 못하면 변경 경로와 첫 핵심 오류, 재현 명령을 포함해 `검증 실패`로 보고합니다.
@@ -133,5 +133,5 @@ rg -n '^(function|const) [A-Z][A-Za-z0-9_]*|^const [A-Z][A-Za-z0-9_]* = (observe
 - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export 또는 계약과 소비 용도를 적습니다.
 - `## 수행한 검증`: 실제 실행한 명령과 성공·실패, 미실행 사유를 적습니다.
 - `## 남은 문제`: 실제 차단 사항과 필요한 후속 owner·소비 경로를 적고, 없으면 `없음`으로 적습니다.
-- 전체 source, diff, 탐색 과정과 raw log는 반환하지 않습니다. 상세 실패 로그가 있으면 경로만 적습니다.
+- 전체 source, diff, 탐색 과정과 raw log는 작업 기록에 남기고 최종 응답은 결과 요약으로 구성합니다. 상세 실패 로그가 있으면 경로만 적습니다.
 '''

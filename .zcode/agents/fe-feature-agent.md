@@ -9,7 +9,7 @@ description: "Widget과 업무 로직을 연결한 Feature를 생성·검토·�
 
 - 웹 Feature는 Widget에 app 상태·API·업무 이벤트·router를 연결합니다. 모바일 Feature는 props로 받은 상태·handler로 재사용 상호작용을 조합합니다.
 - 수정 범위는 `packages/fe-ui/src/feature/[Name]/{[Name].tsx,types.ts,index.ts}`, `src/feature/index.ts`, 대응하는 `packages/fe-mo-ui/src/feature/**`와 필요한 package root export·테스트·spec입니다.
-- 앱 내부 `src/feature`는 만들지 않습니다. Hook·Store·순수 Widget·Screen·Route·leaf 구현은 각 owner에게 맡깁니다.
+- Feature는 `packages/fe-ui`·`packages/fe-mo-ui`의 feature 소유 경로에 만들고 Hook·Store·순수 Widget·Screen·Route·leaf 구현은 각 owner에게 맡깁니다.
 - 대상 경로로 플랫폼을 정하고 해당 규칙만 적용합니다. 웹은 `packages/fe-ui/**`, `apps/*/web/**`, 모바일은 `packages/fe-mo-ui/**`, `apps/mobile/**`입니다.
 
 ## 입력 계약
@@ -41,35 +41,35 @@ description: "Widget과 업무 로직을 연결한 Feature를 생성·검토·�
 
 ### 공통
 
-- 기존 Feature와 하위 조합을 먼저 확장하고 새 이름의 복제를 만들지 않습니다. 모바일은 기존 조합이 80% 이상 맞으면 확장합니다.
+- 기존 Feature와 하위 조합을 먼저 확장하고 새 Feature는 기존 조합으로 표현할 수 없을 때만 만듭니다. 모바일은 기존 조합이 80% 이상 맞으면 확장합니다.
 - Feature 파일은 exported component 하나만 소유합니다. private JSX component, table/card/tabs/flow rail/폼 섹션의 순수 UI는 Widget·leaf 별도 파일로 맡깁니다.
 - 전체 화면은 Screen, page title/action/layout은 Page 책임입니다. 두 개 이상 재사용 블록의 업무 흐름은 Feature가 조합하고 Route는 Screen에 연결합니다.
 - Props는 기반 라이브러리 타입의 `extends`/`Omit`/`Pick`으로 설계합니다. observable 구독 시 `observer`를 사용하고 `displayName`, component·상위 barrel export를 동기화합니다.
-- 로컬 상태는 `[ComponentName]State` 클래스와 `useLocalObservable(() => new [ComponentName]State())`로 관리합니다. `useState`/`useReducer`는 쓰지 않습니다.
-- 공용 layout/slot/hook에 불필요한 `Admin`/`Management`를 붙이지 않습니다. 명확한 admin 전용 업무 Feature에만 `Admin`을 허용합니다.
-- component 아래 `hooks/`, `utils/`, `inputs/`를 만들지 않습니다. Hook은 `packages/fe-hook/src`, UI helper는 package `src/utils` owner, 공용 순수 helper는 toolkit, input은 package `src/input` owner에 맡깁니다.
+- 로컬 상태는 `[ComponentName]State` 클래스와 `useLocalObservable(() => new [ComponentName]State())`로만 관리합니다.
+- 공용 layout/slot/hook 이름은 역할을 그대로 드러내고 `Admin`/`Management` 접두는 명확한 admin 전용 업무 Feature에만 붙입니다.
+- Hook은 `packages/fe-hook/src`, UI helper는 package `src/utils` owner, 공용 순수 helper는 toolkit, input은 package `src/input` owner에 맡기고 component 폴더는 이 공개 경로를 소비합니다.
 
 ### 웹
 
-- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인합니다. 기존 UI로 가능한 표현을 raw DOM과 className으로 다시 만들지 않습니다.
+- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인하고 UI는 기존 UI 조합으로 구현합니다.
 - 직접 `fetch` 대신 Orval `@cocrepo/api`, 이동은 `next/navigation`의 `useRouter`를 사용하고 loading/error를 표현합니다.
-- `packages/fe-ui`에서 `createContext`/`useContext`를 쓰지 않고 props로 전달합니다. app 상태는 `useApp()`의 `app.navigation`, `app.account`, `app.account.authSession` 같은 의미 경로를 사용합니다.
-- HeroUI·Widget·`HStack`/`VStack`/`Spacer`를 조합하고 직접 className·inline style을 쓰지 않습니다. Button/Chip 문자열 children을 `Text`로 감싸지 않습니다.
-- Feature는 기본적으로 별도 표면 없이 조합합니다. 독립 작업 덩어리에만 local `Surface`를 허용하고 `ScreenSurface`, `SectionSurface`, 제거된 detail/form surface wrapper는 사용하지 않습니다.
-- 첫 서버·클라이언트 DOM 구조를 유지합니다. render/constructor에서 storage hydrate, `window`, `Date.now()`, `Math.random()`으로 구조를 바꾸지 않고 provider/effect에서 hydrate합니다.
+- `packages/fe-ui`의 상태 전달은 props 흐름으로 완결합니다. app 상태는 `useApp()`의 `app.navigation`, `app.account`, `app.account.authSession` 같은 의미 경로를 사용합니다.
+- HeroUI·Widget·`HStack`/`VStack`/`Spacer`와 leaf props/variant 계약으로 스타일을 구성합니다. Button/Chip 문구는 leaf 자체 children/label 계약으로 전달합니다.
+- Feature는 기본적으로 별도 표면 없이 조합하고 독립 작업 덩어리에만 local `Surface`를 사용합니다. `ScreenSurface`·`SectionSurface`는 Screen/route 계층 계약이고 제거된 detail/form surface wrapper 대신 현행 surface 계약을 사용합니다.
+- 첫 서버·클라이언트 DOM 구조를 동일하게 유지하고 storage hydrate·`window`·`Date.now()`·`Math.random()` 의존 처리는 provider/effect에서 수행합니다.
 - React Aria/HeroUI id mismatch는 앞선 형제 슬롯의 서버·클라이언트 조건 분기를 먼저 확인합니다. Form 검증 메시지는 `@cocrepo/schema`의 `VALIDATION_MESSAGES`를 사용합니다.
 
 ### 모바일
 
 - 모바일은 작업 전에 `https://heroui.com/llms-patterns.txt`, `node_modules/heroui-native/package.json` exports, `node_modules/heroui-native/src/components/**` source와 `@cocrepo/mo-ui` export를 확인합니다.
 - 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 내부만 허용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
-- HeroUI Native wrapper가 필요하면 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 유지하며 단순 재노출로 끝내지 않습니다.
-- 모바일 스타일은 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `StyleSheet`/`StyleSheet.create`를 만들지 않고 `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
-- 모바일에 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리를 넣지 않습니다.
+- HeroUI Native wrapper가 필요하면 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 갖춘 wrapper로 완성합니다.
+- 모바일 스타일은 uniwind `className`과 `tailwind-variants` slot/variant로 작성하고 `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 사용합니다.
+- 모바일 Feature는 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web 분기는 웹 계약에 둡니다.
 - Widget·leaf를 조합하고 상태 범위·handler를 props로 받습니다. 이벤트는 `onPress*`, `onChange*`처럼 RN 대상이 드러나게 짓습니다.
-- API query/mutation·params·navigation·invalidation·native bridge·storage hydrate는 Route 책임입니다. 모바일 Feature는 `@cocrepo/api`, `expo-router`, native module을 직접 import하지 않습니다.
-- 기존 Widget·leaf로 가능한 UI를 raw `View`/`Text`/`Pressable` + `tv`로 재구현하거나 화면 전체 시각 구성을 대신하지 않습니다.
-- `HeaderBar`, `BottomNav`, `ActionFab`, `OverlayMenu`는 Widget, `NavigationPanel`은 `domain/navigation` 소유입니다. Feature wrapper를 만들지 않습니다.
+- API query/mutation·params·navigation·invalidation·native bridge·storage hydrate는 Route 책임이므로 모바일 Feature는 Route가 전달한 계약만 소비합니다.
+- UI는 기존 Widget·leaf 조합으로 구현하고 화면 전체 시각 구성은 Screen에 맡깁니다.
+- `HeaderBar`, `BottomNav`, `ActionFab`, `OverlayMenu`는 Widget, `NavigationPanel`은 `domain/navigation` 소유이며 Feature는 이 공개 조합을 재사용합니다.
 
 ## 단독 실행 계약
 
@@ -118,4 +118,4 @@ description: "Widget과 업무 로직을 연결한 Feature를 생성·검토·�
 - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export 또는 계약과 소비 용도를 적습니다.
 - `## 수행한 검증`: 실제 실행한 명령과 성공·실패, 미실행 사유를 적습니다.
 - `## 남은 문제`: 실제 차단 사항과 필요한 후속 owner·소비 경로를 적고, 없으면 `없음`으로 적습니다.
-- 전체 source, diff, 탐색 과정과 raw log는 반환하지 않습니다. 상세 실패 로그가 있으면 경로만 적습니다.
+- 상세 탐색과 전체 source/diff·raw log는 작업 기록에 남기고 최종 응답은 결과 요약과 상세 로그 경로로 구성합니다.

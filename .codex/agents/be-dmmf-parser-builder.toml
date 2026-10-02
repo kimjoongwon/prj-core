@@ -34,11 +34,11 @@ developer_instructions = '''
 
 ## 기술 규칙
 
-- `DmmfParser`는 생성 시 DMMF model을 읽는 순수 파서입니다. DB 접근·동기화·비즈니스 로직을 넣지 않습니다.
+- `DmmfParser`는 생성 시 DMMF model을 읽는 순수 파서이며 DB 접근·동기화·비즈니스 로직은 Service 범위에 둡니다.
 - `ModelInfo`는 `name: string`, `displayName: string | null`, `FieldInfo`는 여기에 `modelName: string`을 갖습니다.
 - `parseModels(): ModelInfo[]`, `parseFields(): FieldInfo[]`, `parseFieldsByModel(modelName): FieldInfo[]`를 제공합니다. 없는 모델은 빈 배열을 반환합니다.
-- `field.kind === "object" || field.relationName`인 관계 필드만 제외합니다. id/createdAt 등 시스템 필드는 필터링하지 않고 소비 Service가 판단합니다.
-- DMMF `documentation`의 `/// @displayName 한글명`을 추출합니다. `//` 모델 설계 메타데이터는 DMMF 문서 입력으로 취급하지 않습니다.
+- `field.kind === "object" || field.relationName`인 관계 필드만 제외하고 id/createdAt 등 시스템 필드는 그대로 반환해 소비 Service가 판단합니다.
+- DMMF `documentation`의 `/// @displayName 한글명`을 추출하고 문서 입력은 `documentation`만 취급합니다. `//` 모델 설계 메타데이터는 추출 대상에서 제외합니다.
 - private `extractDisplayName`은 문서가 없거나 태그가 없으면 null을 반환하고 `@displayName` 뒤 한 줄을 trim합니다.
 - `getDmmfParser()`는 지연 생성한 하나의 parser instance를 재사용하는 싱글톤 팩토리입니다.
 - class·반환 타입은 기존 파일/export 계약을 확인하며 독립 책임은 인접 파일로 나눕니다. `@cocrepo/prisma` 공개 export를 갱신합니다.
@@ -72,7 +72,7 @@ developer_instructions = '''
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -86,5 +86,5 @@ developer_instructions = '''
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.
 '''

@@ -36,21 +36,21 @@ description: "Prisma Repository를 생성·검토·수정합니다."
 
 ## 기술 규칙
 
-- 기존 root Repository 확장을 우선하고 중복 Repository를 만들지 않습니다. 인벤토리 행/root 근거가 없으면 계약-gap의 누락 owner·소비 경로를 확인합니다.
-- Profile/FitnessCenter/Exercise/RoleAssociation/InquiryMessage 같은 종속 모델은 독립 Repository로 만들지 않습니다. root의 include/select/relation filter/query 메서드로 접근합니다.
+- 기존 root Repository 확장을 우선하고 새 Repository는 기존 확장으로 표현할 수 없을 때만 만듭니다. 인벤토리 행/root 근거가 없으면 계약-gap의 누락 owner·소비 경로를 확인합니다.
+- Profile/FitnessCenter/Exercise/RoleAssociation/InquiryMessage 같은 종속 모델은 root의 include/select/relation filter/query 메서드로 접근합니다.
 - Profile은 UsersRepository, FitnessCenter는 SpacesRepository, Exercise는 TasksRepository 같은 실제 root 계약에 포함합니다.
 - class당 한 파일을 사용하고 top-level interface/type/enum/helper/mapper는 인접 파일로 나눕니다.
 - Repository는 Prisma where/orderBy/select/include와 CLS TransactionHost.tx를 소유하는 persistence 경계입니다.
-- 넘어온 application/domain Input은 인접 mapper에서 Prisma shape로 바꿉니다. 여러 출처 mapping에 deep destructuring으로 원천 없는 변수를 남기지 않습니다.
-- 생성·수정은 Prisma 타입을 사용하되 Repository/인접 mapper 경계에서만 노출합니다. Controller/Command/UseCase/Aggregate public method로 역류시키지 않습니다.
+- 넘어온 application/domain Input은 인접 mapper에서 Prisma shape로 바꿉니다. 여러 출처 mapping은 출처명 alias로 값의 원천을 보존합니다.
+- 생성·수정은 Prisma 타입을 사용하되 Repository/인접 mapper 경계에서만 노출합니다. Controller/Command/UseCase/Aggregate 공개 영역은 application/domain 타입을 유지합니다.
 - 메서드는 가져올 데이터를 설명하고 find/count/create/createMany/updateById/removeById/deleteById/exists를 기본 prefix로 씁니다.
-- get/ForAuth/Accessible/Valid/Crud/Visibility 등 도메인 목적 이름을 Repository에 붙이지 않습니다.
+- Repository 메서드 이름은 persistence 조회·변경을 드러내고 get/ForAuth/Accessible/Valid/Crud/Visibility 같은 도메인 목적 이름은 Aggregate/UseCase에 맡깁니다.
 - 반환은 내부 `src/to-domain-entity.ts`의 `toDomainEntity(EntityClass, persistedValue)`로 Entity를 복원합니다. 기존 단일·배열 overload를 유지합니다.
 - toDomainEntity는 toDomainData를 거쳐 공개 `@cocrepo/entity` hydrateEntity를 호출하며 class가 필요 없는 projection은 toDomainData를 사용합니다.
-- 이메일 대소문자/저장 비밀번호/ULID/bigint/Date를 보존합니다. plainToInstance(Entity, record), ignoreDecorators로 API 변환을 우회하지 않습니다.
+- 이메일 대소문자/저장 비밀번호/ULID/bigint/Date를 보존합니다. Entity 복원은 toDomainEntity 공개 계약으로만 수행합니다.
 - Entity README의 복원 계약에 따라 Policy.entries, Policy.roleAssignments, PolicyEntry.ability, RoleAssignment.policy와 공유·순환 참조를 유지합니다.
-- 나머지 관계를 일괄 변환하지 않고 projection·이미 복원한 객체를 보존합니다. JWT 캐시는 Repository 의존 없이 같은 공개 hydrateEntity를 사용합니다.
-- API 공개 필드 필터링은 DTO 변환 경계에 맡기고 Repository에서 API DTO를 생성하지 않습니다.
+- 나머지 관계는 projection·이미 복원한 객체를 그대로 보존합니다. JWT 캐시는 Repository 의존 없이 같은 공개 hydrateEntity를 사용합니다.
+- API 공개 필드 필터링은 DTO 변환 경계에 맡기고 Repository 반환은 domain Entity 복원 결과로 완결합니다.
 - package export와 Repository 계약을 함께 갱신합니다.
 
 ## 단독 실행 계약
@@ -82,7 +82,7 @@ description: "Prisma Repository를 생성·검토·수정합니다."
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -96,4 +96,4 @@ description: "Prisma Repository를 생성·검토·수정합니다."
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.

@@ -34,11 +34,11 @@ developer_instructions = '''
 
 ## 기술 규칙
 
-- 기존 타입을 재사용하거나 소폭 개선하며 같은 책임의 type·재export 우회를 중복하지 않습니다.
+- 기존 타입을 재사용하거나 소폭 개선하고 같은 책임의 type·재export 우회 대신 원본 공개 경로를 사용합니다.
 - pagination meta/response처럼 여러 패키지가 공유하는 response shape의 원본은 @cocrepo/type에 둡니다.
 - 소비자는 @cocrepo/type에서 직접 import하도록 맞추고 source/index.ts/package export를 함께 정리합니다.
-- DTO/schema/Entity/VO를 type alias로 대체하지 않습니다. 런타임 동작·validation을 공용 type에 넣지 않습니다.
-- 단일 component/class의 props/helper type은 해당 owner의 가까운 타입 파일에 둡니다. class/component 파일에 top-level type/interface를 함께 두지 않습니다.
+- DTO/schema/Entity/VO는 해당 역할의 원본 구현을 유지하고 공용 type은 순수 타입 계약만 소유합니다.
+- 단일 component/class의 props/helper type은 해당 owner의 가까운 타입 파일에 두고 class/component 파일은 구현만 소유합니다.
 
 ## 단독 실행 계약
 
@@ -69,7 +69,7 @@ developer_instructions = '''
 - 생성·수정 과정에서 역할 규칙, 공개 계약과 사용처를 리뷰하고, 자기 역할 범위의 위반을 직접 고칩니다.
 - 자기 역할 밖의 파일은 직접 수정하지 않습니다.
 - 하위 산출물의 규칙 위반이나 검증 실패는 같은 담당 에이전트에 핵심 오류와 재현 명령을 전달하여 수정·재검증합니다.
-- 사용자 작업을 되돌리지 않고 요청과 관련 없는 리팩터링·포맷·metadata 변경을 피합니다.
+- 사용자 작업은 그대로 유지하고 요청 범위의 변경만 수행합니다.
 - 외부 라이브러리 동작·기본값·설정 변경은 공식 문서를 먼저 확인합니다. Playwright 화면 확인은 사용자가 명시한 경우에만 실행합니다.
 
 ## 검증·보고
@@ -83,5 +83,5 @@ developer_instructions = '''
   - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export/계약과 소비 용도.
   - `## 수행한 검증`: 실행 명령과 성공·실패, 미실행 사유. 실패는 첫 핵심 오류와 재현 명령만 남깁니다.
   - `## 남은 문제`: 실제 차단 사항·위험, 필요한 owner와 소비 경로. 없으면 `없음`.
-- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 반환하지 않습니다. 상세 로그가 있으면 경로만 남깁니다.
+- raw log, 전체 source/diff, 읽은 파일 목록과 탐색·재시도 기록은 작업 기록에 남기고 상세 로그 경로로 대체합니다.
 '''

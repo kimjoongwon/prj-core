@@ -17,7 +17,7 @@ developer_instructions = '''
 ### 저장소에서 직접 찾을 정보
 
 - 기존 input leaf, upstream HeroUI/HeroUI Native composition, `InputStateProps`, 공개 export와 소비 테스트를 찾습니다. 경로가 없으면 대상 패키지에서 직접 찾고 기존 leaf 확장을 먼저 검토합니다.
-- 대상 플랫폼, 공개 계약과 ownership을 먼저 확정합니다. 경로가 없다는 이유로 멈추지 않고 저장소에서 찾습니다.
+- 대상 플랫폼, 공개 계약과 ownership을 먼저 확정합니다. 경로가 없어도 저장소에서 직접 찾아 확정합니다.
 
 ### 구현 전 필수 조건
 
@@ -33,25 +33,25 @@ developer_instructions = '''
 
 ## 기술 규칙
 
-- 웹은 `@heroui/react` 공식 문서, package exports·원본 source와 `@cocrepo/ui` 공개 export를 먼저 확인합니다. 기존 leaf로 가능한 UI를 raw DOM과 className으로 다시 만들지 않습니다.
-- 웹의 DOM/CSS/Tailwind, server/client 경계, SSR/hydration과 React Aria id 안정성 규칙은 React Native에 적용하지 않습니다.
-- 로컬 상태가 필요하면 파일 상단의 `[ComponentName]State` 클래스에 상태와 동작을 함께 두고 `useLocalObservable(() => new [ComponentName]State())`로 생성합니다. `useState`/`useReducer`는 쓰지 않습니다. observable을 렌더링하는 컴포넌트는 `observer`로 감싸고 `memo`를 함께 쓰지 않습니다.
+- 웹은 `@heroui/react` 공식 문서, package exports·원본 source와 `@cocrepo/ui` 공개 export를 먼저 확인하고 UI는 기존 leaf 조합으로 구현합니다.
+- 웹의 DOM/CSS/Tailwind, server/client 경계, SSR/hydration과 React Aria id 안정성 규칙은 웹 input leaf에만 적용합니다.
+- 로컬 상태가 필요하면 파일 상단의 `[ComponentName]State` 클래스에 상태와 동작을 함께 두고 `useLocalObservable(() => new [ComponentName]State())`로 생성합니다. `useState`/`useReducer` 대신 이 계약으로 관리합니다. observable을 렌더링하는 컴포넌트는 `observer`로 감싸고 최적화는 `observer` 하나로 완결합니다.
 
 ### 공통 input 계약
 
-- 기존 leaf를 재사용하고 input에 API, 비즈니스 로직, route 결정이나 app-specific 이름을 넣지 않습니다. 이벤트는 props callback으로 전달합니다.
-- 공통 상태는 `@cocrepo/type`의 `InputStateProps`를 조합합니다. `isDisabled`, `isInvalid`, `isReadOnly`, `isRequired`를 컴포넌트마다 다시 선언하지 않습니다. upstream에서 타입을 파생할 수 있어도 소비 계약은 `InputStateProps`와 `isReadOnly`를 사용합니다.
+- 기존 leaf를 재사용하고 input은 입력·선택·액션 UI 책임만 가지며 API, 비즈니스 로직, route 결정은 상위 계층 계약에 둡니다. 이벤트는 props callback으로 전달합니다.
+- 공통 상태는 `@cocrepo/type`의 `InputStateProps`를 조합하고 `isDisabled`, `isInvalid`, `isReadOnly`, `isRequired`는 `InputStateProps` 조합으로 한 번에 선언합니다. upstream에서 타입을 파생할 수 있어도 소비 계약은 `InputStateProps`와 `isReadOnly`를 사용합니다.
 - 컴포넌트는 `[Name]/` 안에 두고 `input/index.ts`와 package `src/index.ts`에 공개합니다. 필요한 MobX wrapper는 같은 폴더에서 순수 component와 상태 보유 wrapper를 분리합니다.
-- React Web의 `Label`, `Description`, `FieldError`, `ErrorMessage`, `Fieldset`처럼 프로젝트 동작 없는 metadata/composition primitive는 `@cocrepo/ui` wrapper를 새로 만들지 않고 `@heroui/react`에서 직접 사용합니다.
+- React Web의 `Label`, `Description`, `FieldError`, `ErrorMessage`, `Fieldset`처럼 프로젝트 동작 없는 metadata/composition primitive는 `@heroui/react`에서 직접 사용하고 `@cocrepo/ui` wrapper는 프로젝트 동작이 필요할 때 만듭니다.
 
 ### 모바일 input 계약
 
-- 모바일은 `https://heroui.com/llms-patterns.txt`, `heroui-native/*` 공식 계약·package exports·원본 source와 `@cocrepo/mo-ui` export를 먼저 확인합니다. 기존 leaf로 가능한 UI를 raw `View`/`Text`/`Pressable`로 다시 만들지 않습니다.
-- 사용자 노출 텍스트는 모바일 `Text`로 감쌉니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현 안에서만 허용하고, compound/action wrapper의 문자열 children도 `Text`로 정규화합니다.
-- 모바일 스타일은 uniwind `className` 계열 prop과 `tailwind-variants`를 사용합니다. `StyleSheet`/`StyleSheet.create`는 금지하며, `style` 객체는 className으로 표현할 수 없는 native 동적 값에만 씁니다.
-- 모바일에는 DOM event, `event.target.value`, `window`/`document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web/react-native-web 분기를 넣지 않습니다. 웹에는 native 런타임 규칙을 적용하지 않습니다.
+- 모바일은 `https://heroui.com/llms-patterns.txt`, `heroui-native/*` 공식 계약·package exports·원본 source와 `@cocrepo/mo-ui` export를 먼저 확인하고 UI는 기존 leaf 조합으로 구현합니다.
+- 사용자 노출 텍스트는 모바일 `Text`로 감쌉니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현에 두고 input leaf·wrapper는 공개 `Text`를 사용하며, compound/action wrapper의 문자열 children도 `Text`로 정규화합니다.
+- 모바일 스타일은 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className` 계열 prop과 `tailwind-variants`로 작성합니다. `style` 객체는 className으로 표현할 수 없는 native 동적 값에만 사용합니다.
+- 모바일 input leaf는 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`/`document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web/react-native-web는 웹 input 계약으로 둡니다. 웹 input leaf는 DOM/SSR 계약을 따르고 native 런타임 계약은 모바일 input leaf가 사용합니다.
 - custom field/control/navigation 연결 전에 upstream `TextField`, `Button`, `Checkbox`, `Radio`, `Select`, `Switch`, `Slider`, `Tabs`, `Label`, `Description`, `FieldError`, `InputGroup` 조합을 먼저 사용합니다.
-- input leaf의 값·selected·pressed·callback은 native 계약에 맞추고 웹 DOM event 방식으로 바꾸지 않습니다. 필요한 프로젝트 compound wrapper의 의미 props와 dot-slot API를 유지합니다.
+- input leaf의 값·selected·pressed·callback은 native 계약에 맞추고 웹 DOM event 계약은 웹 input leaf가 사용합니다. 필요한 프로젝트 compound wrapper의 의미 props와 dot-slot API를 유지합니다.
 
 ## 단독 실행 계약
 
@@ -91,8 +91,8 @@ developer_instructions = '''
 
 - Playwright 화면 확인은 사용자가 명시적으로 요청한 경우에만 실행합니다.
 - 기본 검증은 웹 `pnpm --filter=@cocrepo/ui type-check` 또는 모바일 `pnpm --filter=@cocrepo/mo-ui type-check`입니다. 웹 `pnpm --filter=@cocrepo/ui test --run <대상 테스트>`, 모바일 `pnpm --filter=@cocrepo/mo-ui test -- <대상 테스트>`로 변경 input 단위 테스트를 실행합니다.
-- value change, selected/current/active page, disabled/read-only/error/helper, pressed/action callback, link target 및 native callback guard를 확인합니다. Storybook은 필요한 상태를 하위에 맡기며 자기 검증을 대신하지 않습니다.
+- value change, selected/current/active page, disabled/read-only/error/helper, pressed/action callback, link target 및 native callback guard를 확인합니다. Storybook 검증은 하위에 두고 자기 검증은 type-check·단위 테스트로 수행합니다.
 - 자기 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위가 완료해야 `완료`입니다. 구현 후 미통과는 변경 경로와 첫 핵심 오류를 포함해 `검증 실패`로 보고합니다.
 - 최종 보고는 `## 작업 결과`(완료/입력 필요/검증 실패), `## 작업 요약`(결과 중심 5문장 이내), `## 변경 산출물`(생성·수정·삭제 경로, 공개 계약과 소비 용도), `## 수행한 검증`(명령과 성공·실패, 미실행 사유), `## 남은 문제`(실제 차단 사항, 후속 owner·소비 경로 또는 없음)의 5개 섹션으로 작성합니다.
-- 상세 탐색과 전체 명령 출력은 작업 기록에 남깁니다. 최종 응답에 전체 source, diff, raw log나 재시도 기록을 반환하지 않습니다.
+- 상세 탐색과 전체 명령 출력은 작업 기록에 남기고 최종 응답은 결과 요약으로 구성합니다.
 '''

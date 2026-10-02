@@ -27,7 +27,7 @@ description: "공용 MobX store를 생성·검토·수정합니다."
 ### 구현 전 필수 조건
 
 - 수정 대상과 ownership을 정하고 기존 공개 계약을 우선 재사용합니다. 자기 범위에서 만들 수 있는 입력은 직접 만듭니다.
-- 두 개 이상 페이지/도메인 재사용 근거, 상태/생명주기 owner와 필수 config·adapter·runtime binder 계약이 필요합니다. 단일 Route 상태를 공용 Store로 만들지 않습니다.
+- 두 개 이상 페이지/도메인 재사용 근거, 상태/생명주기 owner와 필수 config·adapter·runtime binder 계약이 필요합니다. 단일 Route 상태는 `fe-route-agent` 소비 범위로 둡니다.
 
 ### 입력 필요 조건
 
@@ -41,35 +41,35 @@ description: "공용 MobX store를 생성·검토·수정합니다."
 ### 상태와 ownership
 
 - constructor 마지막에 `makeAutoObservable(this)`를 호출하고 관찰하지 않을 주입 참조·port를 명시합니다. action은 자기 상태 변경만, computed는 동기 순수 getter만 담당합니다.
-- API는 runtime에서 호출하여 결과를 전달합니다. Store는 직접 API/UI/router/native를 import하지 않고 앱 하드코딩·Admin/Coin 등 앱 이름을 쓰지 않습니다.
-- 파일은 종류별 `models/`/`domains/`/`adapters/`가 아니라 가장 가까운 생명주기 owner 폴더에 둡니다. 여러 owner가 공유하지 않는 객체를 분산하지 않습니다.
+- API는 runtime에서 호출하여 결과를 전달합니다. Store는 순수 상태 계약만 소유하고 API/UI/router/native는 주입 adapter로, 앱 하드코딩·Admin/Coin 등 앱 이름은 runtime binder가 전달하는 값으로 다룹니다.
+- 파일은 종류별 `models/`/`domains/`/`adapters/` 대신 가장 가까운 생명주기 owner 폴더에 두고 공유 범위가 확인된 객체만 owner 폴더에 분리합니다.
 - RootStore/AppStore와 직속 AccountStore/AccessControlStore/LanguageStore/NavigationStore class/file은 `Store` 접미사입니다. public property는 `app.account`, `app.accessControl`, `app.language`, `app.navigation`입니다.
-- AuthSession/NavItem/Navigator/PersistStorage 등 하위 상태·adapter/port는 Store 접미사가 없습니다. AuthSession은 `account/`, NavItem/Navigator는 `navigation/`에 둡니다.
+- AuthSession/NavItem/Navigator/PersistStorage 등 하위 상태·adapter/port는 `Store` 접미사 대신 도메인 이름을 사용합니다. AuthSession은 `account/`, NavItem/Navigator는 `navigation/`에 둡니다.
 - 상태 트리 소유와 생성은 구분합니다. RootStore가 persistence/adapter/하위 객체를 먼저 생성하고 완성된 의존성을 Store constructor에 주입한 뒤 AppStore를 조립합니다.
 - 의존성은 `AccountStoreDependencies`, 설정은 `NavigationStoreOptions`로 구분하여 해당 Store와 export합니다. JSDoc·필요한 `@example`·barrel을 동기화합니다.
 
 ### RootStore 생명주기
 
-- constructor → `initialize(bindings)` → `start()` 순서입니다. constructor는 저장소/platform runtime을 읽지 않고 상태 그래프만 조립합니다.
+- constructor → `initialize(bindings)` → `start()` 순서입니다. constructor는 상태 그래프만 조립하고 저장소/platform runtime 접근은 initialize·start 단계에 둡니다.
 - initialize에서 cross-store 관계·session scope/language runtime binder를 한 번 연결합니다. 등록·중복 방지는 RootStore 책임입니다.
 - start는 initialize 뒤 browser mount 이후 persisted state를 hydrate합니다. Web/Native adapter 실제 실행은 소비 runtime이 주입합니다.
-- 조립 때 확정 가능한 `appName`, App storage key, storage adapter, runtime binder 배열은 필수입니다. RootStore/Store constructor에서 `??` fallback으로 누락을 숨기지 않습니다.
-- SSR/외부 persisted data/생명주기 중복 등 runtime 조건에는 guard를 유지합니다. RootStore가 React·Next.js router·DOM·API client를 직접 import하지 않습니다.
+- 조립 때 확정 가능한 `appName`, App storage key, storage adapter, runtime binder 배열은 필수입니다. 누락은 `??` fallback 대신 필수 인자 계약으로 명시합니다.
+- SSR/외부 persisted data/생명주기 중복 등 runtime 조건에는 guard를 유지합니다. React·Next.js router·DOM·API client는 Provider runtime bridge가 공급합니다.
 - Provider는 React/router/DOM/API 값과 lifecycle trigger를 공급하는 runtime bridge입니다. React Query account/ability/i18n bootstrap은 post-root runtime으로 유지합니다.
 
 ### Persistence와 첫 렌더
 
-- constructor에서 localStorage/sessionStorage/window/document를 읽지 않습니다. 첫 렌더를 바꾸는 상태는 서버 snapshot이 아니면 render에 사용하지 않습니다.
+- constructor는 상태 그래프 조립만 담당하고 localStorage/sessionStorage/window/document 접근은 PersistStorage·Provider 단계에 둡니다. 첫 렌더를 바꾸는 상태는 서버 snapshot만 render에 사용합니다.
 - RootStore가 App storage key와 adapter를 결합한 PersistStorage 하나를 만들어 persisted state 전체에 공유합니다. Store는 key/browser fallback 대신 자기 section 이름만 압니다.
 - storage 가용성과 App 문서 최초 1회 로드는 PersistStorage 책임입니다. hydrate는 Provider/Hook의 useEffect에서 명시적으로 시작합니다.
 - `isHydrated` 등 guard는 hydration 완료 후 동작해야 합니다. 저장·clear·runtime binding cleanup도 검증합니다.
 
 ### App 진입점과 Route
 
-- Component/공용 Hook은 `useApp()` 하나로 AppStore를 가져옵니다. `useNavigation` 같은 selector Hook을 새로 만들거나 사용하지 않습니다.
+- Component/공용 Hook은 `useApp()` 하나로 AppStore를 가져오고 세부 접근은 의미 경로 직접 참조로 해결합니다.
 - UI 위치별 중간 상태 없이 `app.account.authSession`, `app.accessControl`, `app.navigation`, `app.language`를 직접 참조합니다.
 - navigation은 `app.navigation.items`, `selectedNavItem`, `selectedSubNavItem`, `expandedNavItemIds`를 읽고 `selectNavItem`, `selectSubNavItem`, `toggleNavItem`을 직접 호출합니다.
-- 페이지 전용 `_stores/`, `_client.tsx`, `hooks/`는 이 역할에서 만들지 않습니다. 검색/필터 queryParams·리소스 pathParams·임시 데이터 navigation은 Route가 처리합니다.
+- 검색/필터 queryParams·리소스 pathParams·임시 데이터 navigation은 Route가 처리합니다. 페이지 전용 상태 파일은 소비 owner의 route 파일 내 계약으로 둡니다.
 - 단일 page/component는 소비 owner의 `[ComponentName]State`·useLocalObservable입니다. route-local hook/util/type/상태는 별도 spec 없이 Route 기반 계약·테스트에 둡니다.
 
 ## 단독 실행 계약
@@ -107,9 +107,9 @@ description: "공용 MobX store를 생성·검토·수정합니다."
 
 ## 검증·보고
 
-- 공유 Store 생성·행동 수정은 단위 테스트를 작성/갱신합니다. observable/action/computed, constructor runtime 접근 없음, 주입, initialize 중복 방지, start/hydration/persistence/guard를 확인합니다.
+- 공유 Store 생성·행동 수정은 단위 테스트를 작성/갱신합니다. observable/action/computed, constructor의 순수 상태 그래프 경계, 주입, initialize 중복 방지, start/hydration/persistence/guard를 확인합니다.
 - `pnpm --filter @cocrepo/store type-check`, `pnpm --filter @cocrepo/store lint`, `pnpm --filter @cocrepo/store test --run <관련 테스트 경로>`를 실행합니다.
-- source·public/constructor 타입·barrel, useApp 접근·runtime import 없음과 소비 계약을 보고하고 Route 상태 테스트는 해당 owner에게 맡깁니다.
+- source·public/constructor 타입·barrel, useApp 접근·runtime 의존성 주입 경계와 소비 계약을 보고하고 Route 상태 테스트는 해당 owner에게 맡깁니다.
 - 자기 범위의 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위 결과가 완료여야 `완료`입니다.
 - 구현 후 필수 검증을 통과하지 못하면 변경 경로와 첫 핵심 오류, 재현 명령을 포함해 `검증 실패`로 보고합니다.
 - 최종 보고는 다음 5개 Markdown 섹션으로 짧게 작성합니다. 에이전트 런타임 완료와 작업 결과를 구분합니다.
@@ -118,4 +118,4 @@ description: "공용 MobX store를 생성·검토·수정합니다."
 - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export 또는 계약과 소비 용도를 적습니다.
 - `## 수행한 검증`: 실제 실행한 명령과 성공·실패, 미실행 사유를 적습니다.
 - `## 남은 문제`: 실제 차단 사항과 필요한 후속 owner·소비 경로를 적고, 없으면 `없음`으로 적습니다.
-- 전체 source, diff, 탐색 과정과 raw log는 반환하지 않습니다. 상세 실패 로그가 있으면 경로만 적습니다.
+- 전체 source, diff, 탐색 과정과 raw log는 작업 기록에 남기고 최종 응답은 결과 요약으로 구성합니다. 상세 실패 로그가 있으면 경로만 적습니다.

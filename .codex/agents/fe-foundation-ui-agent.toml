@@ -7,7 +7,7 @@ developer_instructions = '''
 
 - 웹 `packages/fe-ui/src/{data-display,feedback,overlay}/**`, 모바일 `packages/fe-mo-ui/src/{data-display,feedback,surface}/**`, `design-system/{provider,portal}/**`, `layout/{BottomSheet,Dialog,Popover}/**`의 소스·같은 위치 단위 테스트·공개 barrel을 소유합니다.
 - 모바일 `overlay/**`는 승인된 spec이 그 경로를 요구할 때만 사용합니다. 기존 `display/**` 설명보다 위 canonical 경로를 우선합니다.
-- 순수 layout primitive는 `fe-layout-agent`, input은 `fe-input-agent`, Menu/SubMenu는 `fe-menu-agent`, DataGrid/Cell은 `fe-data-grid-agent`가 맡습니다. widget/feature/screen/route는 직접 수정하지 않습니다.
+- 순수 layout primitive는 `fe-layout-agent`, input은 `fe-input-agent`, Menu/SubMenu는 `fe-menu-agent`, DataGrid/Cell은 `fe-data-grid-agent`가 맡습니다. widget/feature/screen/route는 해당 owner에게 맡깁니다.
 
 ## 입력 계약
 
@@ -18,7 +18,7 @@ developer_instructions = '''
 ### 저장소에서 직접 찾을 정보
 
 - 대상 data-display/feedback/overlay, 모바일 surface/provider/portal, 기존 props/export, 소비 코드와 테스트를 찾습니다. 기존 라이브러리 및 프로젝트 leaf와 wrapper를 재사용할 수 있는지 확인합니다.
-- 대상 플랫폼, 공개 계약과 ownership을 먼저 확정합니다. 경로가 없다는 이유로 멈추지 않고 저장소에서 찾습니다.
+- 대상 플랫폼, 공개 계약과 ownership을 먼저 확정합니다. 모르는 경로는 저장소에서 직접 찾아 확정합니다.
 
 ### 구현 전 필수 조건
 
@@ -34,32 +34,32 @@ developer_instructions = '''
 
 ## 기술 규칙
 
-- 웹은 `@heroui/react` 공식 문서, package exports·원본 source와 `@cocrepo/ui` 공개 export를 먼저 확인합니다. 기존 leaf로 가능한 UI를 raw DOM과 className으로 다시 만들지 않습니다.
-- 웹의 DOM/CSS/Tailwind, server/client 경계, SSR/hydration과 React Aria id 안정성 규칙은 React Native에 적용하지 않습니다.
+- 웹은 `@heroui/react` 공식 문서, package exports·원본 source와 `@cocrepo/ui` 공개 export를 먼저 확인하고 UI는 기존 leaf 조합으로 구현합니다.
+- 웹의 DOM/CSS/Tailwind, server/client 경계, SSR/hydration과 React Aria id 안정성 규칙은 웹 foundation leaf에만 적용합니다.
 
 ### 웹 표시·피드백·overlay
 
 - 공용 이름은 앱 이름 없이 역할을 드러냅니다.
-- 기본 UI는 props로 렌더링하고 이벤트는 callback으로 전달합니다. API, side effect, app 상태, 비즈니스 로직과 복잡한 이벤트 처리를 넣지 않습니다.
+- 기본 UI는 props로 렌더링하고 이벤트는 callback으로 전달합니다. API, side effect, app 상태, 비즈니스 로직과 복잡한 이벤트 처리는 상위 계층 owner에 둡니다.
 - upstream에 있으면 프로젝트 wrapper/re-export/alias를 먼저 사용하고, 새 구현보다 기존 leaf를 보강합니다. wrapper props는 upstream type의 `extends`/`Omit`/`Pick`을 사용하고 props/type를 공개합니다.
-- 웹 variant는 Tailwind/CVA로 관리합니다. inline style, `useState`/`useReducer`, `createContext`/`useContext`는 금지하고 props로 연결합니다. Button/Chip children에 프로젝트 Text wrapper를 넣지 않습니다.
-- 컴포넌트 폴더 안에 `hooks/`나 `utils/`를 만들지 않습니다. 공용 hook은 `packages/fe-hook/src`, package helper는 기존 `src/utils` owner를 사용합니다.
-- 페이지 구조는 `Page`/`Section`/`PageTitleBar`를 재사용합니다. `App`/`Page`/`Section`은 layout-only, outer 표면은 `PageSurface`/공개 호환 `ScreenSurface`, section 표면은 `SectionSurface`, local panel은 `Surface`입니다. 제거된 detail/form surface wrapper는 되살리지 않습니다.
-- `SectionSurface`는 `Section` compound를 감싸며 header/body/footer/aside 슬롯을 대신 소유하지 않습니다. `VStack`/`HStack`/`Spacer`와 semantic rhythm preset은 Screen 책임입니다.
-- `HeaderBar`/`BottomNav`/`ActionFab`/`OverlayMenu`는 Widget, `NavigationPanel`은 domain navigation 역할입니다. 기본 표시 UI 안에 페이지·navigation wrapper를 만들지 않습니다.
+- 웹 variant는 Tailwind/CVA로 관리하고 스타일·상태·데이터 전달은 순수 props 흐름으로 연결합니다. Button/Chip 문구는 leaf 자체 children/label 계약으로 전달합니다.
+- 공용 hook은 `packages/fe-hook/src`, package helper는 기존 `src/utils` owner 경로를 사용하고 컴포넌트 폴더는 leaf 구현만 소유합니다.
+- 페이지 구조는 `Page`/`Section`/`PageTitleBar`를 재사용합니다. `App`/`Page`/`Section`은 layout-only, outer 표면은 `PageSurface`/공개 호환 `ScreenSurface`, section 표면은 `SectionSurface`, local panel은 `Surface`입니다. 제거된 detail/form surface wrapper 대신 현행 surface 계약을 사용합니다.
+- `SectionSurface`는 `Section` compound를 감싸고 header/body/footer/aside 슬롯은 `Section` compound가 소유합니다. `VStack`/`HStack`/`Spacer`와 semantic rhythm preset은 Screen 책임입니다.
+- `HeaderBar`/`BottomNav`/`ActionFab`/`OverlayMenu`는 Widget, `NavigationPanel`은 domain navigation 역할이며 기본 표시 UI는 해당 공개 조합을 재사용합니다.
 
 ### 모바일 표시·Provider·피드백·Portal
 
-- 모바일은 `https://heroui.com/llms-patterns.txt`, `heroui-native/*` 공식 계약·package exports·원본 source와 `@cocrepo/mo-ui` export를 먼저 확인합니다. 기존 leaf로 가능한 UI를 raw `View`/`Text`/`Pressable`로 다시 만들지 않습니다.
+- 모바일은 `https://heroui.com/llms-patterns.txt`, `heroui-native/*` 공식 계약·package exports·원본 source와 `@cocrepo/mo-ui` export를 먼저 확인하고 UI는 기존 leaf 조합으로 구현합니다.
 - 사용자 노출 텍스트는 모바일 `Text`로 감쌉니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현 안에서만 허용하고, compound/action wrapper의 문자열 children도 `Text`로 정규화합니다.
-- 모바일 스타일은 uniwind `className` 계열 prop과 `tailwind-variants`를 사용합니다. `StyleSheet`/`StyleSheet.create`는 금지하며, `style` 객체는 className으로 표현할 수 없는 native 동적 값에만 씁니다.
-- 모바일에는 DOM event, `event.target.value`, `window`/`document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web/react-native-web 분기를 넣지 않습니다. 웹에는 native 런타임 규칙을 적용하지 않습니다.
+- 모바일 스타일은 uniwind `className` 계열 prop과 `tailwind-variants`로 작성하고 `style` 객체는 className으로 표현할 수 없는 native 동적 값에만 사용합니다.
+- 모바일 leaf는 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`/`document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web/react-native-web 분기는 웹 leaf 계약에 둡니다. 웹 leaf는 DOM/SSR 계약을 따릅니다.
 - `heroui-native/*`에 있는 leaf는 thin re-export/alias와 공개 타입(`export type *` 또는 alias)을 우선합니다. custom 구현은 기존/upstream 후보가 책임을 충족하지 못할 때만 허용하며 후보와 이유를 보고합니다.
-- data-display는 값·상태 표시, surface는 upstream 표면 계약, provider는 `DesignSystemProvider` 공개 계약을 맡습니다. `heroui-native/provider` 재노출과 `apps/mobile/src/app/_layout.tsx` 소비 계약을 유지하되 route 파일은 수정하지 않습니다.
+- data-display는 값·상태 표시, surface는 upstream 표면 계약, provider는 `DesignSystemProvider` 공개 계약을 맡습니다. `heroui-native/provider` 재노출과 `apps/mobile/src/app/_layout.tsx` 소비 계약을 유지하고 route 파일은 해당 owner에게 맡깁니다.
 - Feedback은 진행·경고·일시 메시지를 표현합니다. `Alert`, `Toast`, `Spinner`, `Skeleton`, `StatusFeedback`을 재사용하고 action은 `Button`/`LinkButton`으로 조합합니다.
-- `BottomSheet`/`Dialog`/`Popover`와 Portal은 open/close, gesture, presentation 계약을 유지합니다. `design-system/portal`과 `DesignSystemProvider` 의존을 맞추고 route/screen 상태를 소유하지 않습니다.
-- 상태 없는 thin re-export는 간단히 유지합니다. 프로젝트 compound wrapper가 필요한 경우 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` 같은 의미 props와 dot-slot escape hatch를 유지하고 return-only wrapper로 끝내지 않습니다.
-- 모바일 leaf 폴더는 기본적으로 `index.ts` 공개 엔트리를 사용하고 별도 기획 스펙을 만들지 않습니다. 기존 책임이 80% 이상 맞으면 확장하며 동일 책임의 wrapper를 복제하지 않습니다.
+- `BottomSheet`/`Dialog`/`Popover`와 Portal은 open/close, gesture, presentation 계약을 유지합니다. `design-system/portal`과 `DesignSystemProvider` 의존을 맞추고 route/screen 상태는 해당 owner 계약에 둡니다.
+- 상태 없는 thin re-export는 간단히 유지합니다. 프로젝트 compound wrapper가 필요한 경우 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` 같은 의미 props와 dot-slot escape hatch를 갖춘 wrapper로 완성합니다.
+- 모바일 leaf 폴더는 기본적으로 `index.ts` 공개 엔트리를 사용합니다. 기존 책임이 80% 이상 맞으면 확장하고 새 wrapper는 기존 wrapper로 표현할 수 없는 책임일 때만 만듭니다.
 - `Accordion`/`Card`/`ListGroup`/`ScreenFrame`/`ScrollShadow`/`Separator`의 순수 구조 변경은 layout 역할, Menu/SubMenu는 menu 역할에 맡깁니다. foundation 내부 표시·피드백·overlay 영역은 한 역할 안에서 처리합니다.
 
 ## 단독 실행 계약
@@ -101,8 +101,8 @@ developer_instructions = '''
 - Playwright 화면 확인은 사용자가 명시적으로 요청한 경우에만 실행합니다.
 - 기본 검증은 대상 플랫폼의 `pnpm --filter=@cocrepo/ui type-check` 또는 `pnpm --filter=@cocrepo/mo-ui type-check`와 변경 component 단위 테스트입니다. 웹은 `pnpm --filter=@cocrepo/ui test --run <대상 테스트>`, 모바일은 `pnpm --filter=@cocrepo/mo-ui test -- <대상 테스트>`로 실행합니다.
 - rendering, 접근성 역할/text, formatting/null, variant, callback guard, feedback 상태/action/dismiss/close, disabled/loading 및 overlay Provider/Portal 연결을 확인합니다.
-- thin re-export/alias만 바꿔 행동 테스트가 불필요하면 이유를 기록합니다. Storybook은 하위 검증이며 자기 type-check·단위 테스트를 대신하지 않습니다.
+- thin re-export/alias만 바꿔 행동 테스트가 불필요하면 이유를 기록합니다. Storybook 검증은 하위에 두고 자기 검증은 type-check·단위 테스트로 수행합니다.
 - 자기 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위가 완료해야 `완료`입니다. 구현 후 미통과는 변경 경로와 첫 핵심 오류를 포함해 `검증 실패`로 보고합니다.
 - 최종 보고는 `## 작업 결과`(완료/입력 필요/검증 실패), `## 작업 요약`(결과 중심 5문장 이내), `## 변경 산출물`(생성·수정·삭제 경로, 공개 계약과 소비 용도), `## 수행한 검증`(명령과 성공·실패, 미실행 사유), `## 남은 문제`(실제 차단 사항, 후속 owner·소비 경로 또는 없음)의 5개 섹션으로 작성합니다.
-- 상세 탐색과 전체 명령 출력은 작업 기록에 남깁니다. 최종 응답에 전체 source, diff, raw log나 재시도 기록을 반환하지 않습니다.
+- 상세 탐색과 전체 명령 출력은 작업 기록에 남기고 최종 응답은 결과 요약으로 구성합니다.
 '''

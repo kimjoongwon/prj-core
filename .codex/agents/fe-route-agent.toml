@@ -8,7 +8,7 @@ developer_instructions = '''
 - 전체 페이지 요청의 진입점입니다. Screen과 필요한 하위 UI를 확보한 뒤 API·상태·navigation·handler를 thin route container에 연결합니다.
 - 웹은 `apps/*/web/src/app/**/page.tsx`, `@slot/**/page.tsx`, 같은 segment의 `route.meta.ts`, route 테스트·딜리버리 spec을 수정합니다.
 - 모바일은 `apps/mobile/src/app/**/*.tsx` 중 route screen, `+not-found.tsx`, modal route와 API/native bridge wiring·테스트를 수정합니다. `layout.tsx`/`_layout.tsx`·`@slot/default.tsx`는 layout owner입니다.
-- Screen·Widget·Feature·Form·reusable Hook·공유 Store는 각 owner에게 맡기고 직접 수정하지 않습니다.
+- Screen·Widget·Feature·Form·reusable Hook·공유 Store는 각 owner에게 맡깁니다.
 - 대상 경로로 플랫폼을 정하고 해당 규칙만 적용합니다. 웹은 `packages/fe-ui/**`, `apps/*/web/**`, 모바일은 `packages/fe-mo-ui/**`, `apps/mobile/**`입니다.
 
 ## 입력 계약
@@ -40,38 +40,38 @@ developer_instructions = '''
 
 ### 공통
 
-- route는 params, query/mutation/invalidation, redirect/navigation, page 로컬 상태, handler와 loading/fetching/error props만 소유하고 화면 시각 tree·runtime 구조를 다시 만들지 않습니다.
-- server data는 MobX state로 복제하지 않고 실제 API 응답 계약의 별도 props로 전달합니다. page 범위와 child component-name 중첩 상태를 유지합니다.
-- 로컬 상태는 `[ComponentName]State`와 `useLocalObservable(() => new [ComponentName]State())`로 관리하고 `useState`/`useReducer`는 쓰지 않습니다.
-- route-local `hooks/`, `_components/`, `components`, 공유 `_stores/`는 만들지 않습니다. 일회성 상태/helper는 route 파일에 두고 reusable Hook은 `@cocrepo/hook`, UI는 플랫폼 package에서 import합니다.
+- route는 params, query/mutation/invalidation, redirect/navigation, page 로컬 상태, handler와 loading/fetching/error props만 소유하고 화면 시각 tree·runtime 구조는 Screen·UI 계약을 재사용합니다.
+- server data는 실제 API 응답 계약의 별도 props로 전달합니다. page 범위와 child component-name 중첩 상태를 유지합니다.
+- 로컬 상태는 `[ComponentName]State`와 `useLocalObservable(() => new [ComponentName]State())`로 관리합니다. `useState`/`useReducer` 대신 이 계약을 사용합니다.
+- route-local `hooks/`, `_components/`, `components`, 공유 `_stores/` 대신 일회성 상태/helper는 route 파일에 두고 reusable Hook은 `@cocrepo/hook`, UI는 플랫폼 package에서 import합니다.
 - Form submit/click owner를 확인합니다. Form은 상태·정적 props만 받고 route handler를 Screen의 표준 `onSubmit`/`onClickCapture` 경계에 연결합니다.
 
 ### 웹
 
-- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인합니다. 기존 UI로 가능한 표현을 raw DOM과 className으로 다시 만들지 않습니다.
+- 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인하고 기존 UI 조합으로 표현합니다.
 - `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` pure Screen을 가능하면 `@cocrepo/ui`에서 한 개 import해 props만 전달합니다. Feature도 Screen을 경유합니다.
 - `page 역할`은 `collection | detail | form`, `reusable 대상`은 `data-grid | collection/list | collection/grid | detail/view | form`입니다. DataGrid는 기본 `collection` + `data-grid`입니다.
 - 목록·검색·필터·페이지네이션·탭은 `useQuery`/`useInfiniteQuery`, `isLoading`/`isFetching`으로 제어합니다. `loading.tsx`나 국소 `<Suspense>`와 허용된 전체 fallback UX가 있을 때만 suspense query를 사용합니다.
-- root `app/layout.tsx`가 `Providers > App` 공통 틀을 소유합니다. route는 `App`, `Layout`, `Page`, `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`, 제거된 detail/form surface wrapper를 직접 import/use하지 않습니다.
-- group/domain/auth layout이나 pathname selector Feature를 만들지 않습니다. named slot page도 같은 thin container 규칙을 적용합니다.
+- root `app/layout.tsx`가 `Providers > App` 공통 틀을 소유합니다. route는 `App`, `Layout`, `Page`, `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`와 제거된 detail/form surface wrapper 대신 root 공통 틀과 Screen·lower-layer 조합을 재사용합니다.
+- route는 root `app/layout.tsx` 공통 틀을 그대로 소비하고 추가 group/domain/auth layout·pathname selector는 `fe-route-layout-agent` 범위로 둡니다. named slot page도 같은 thin container 규칙을 적용합니다.
 - `route.meta.ts` 변경은 `packages/common-constant/src/routing/generated/admin-route-catalog.generated.ts` 재생성과 admin menu/page access 동기화를 확인하여 해당 owner에게 맡깁니다.
-- `_client.tsx`, `_prefetch.ts`, `HydrationBoundary`, `dehydrate`, 서버 `QueryClient` prefetch는 기본 패턴이 아닙니다. 미승인 예외가 필요하면 이유·서버 의존성·변경 파일을 보고하여 사용자 결정을 받습니다.
-- 모든 `"use client"` route page/container에 `useMemo`/`useCallback`을 쓰지 않습니다. server/client·SSR·첫 hydration DOM과 React Aria/HeroUI id 안정성을 유지합니다.
-- handler는 `on[Event][UI]`입니다. `onClickCreateButton`, `onChangeSearchKeywordInput`처럼 쓰고 `handle*`·의미 없는 축약은 금지합니다.
-- `Route / Screen Mapping`에 page 역할·reusable 대상·screen component path와 승인 SSR/prefetch 근거·추가 파일을 기록합니다. page만 바꾸고 spec을 누락하면 실패입니다.
-- hook/util/e2e·`_client.tsx`·`_prefetch.ts`에 신규 spec을 만들지 않습니다. route wiring unit/E2E는 인벤토리·Acceptance·배정 매트릭스에 route owner로 기록합니다.
+- `_client.tsx`, `_prefetch.ts`, `HydrationBoundary`, `dehydrate`, 서버 `QueryClient` prefetch는 예외 계약으로 분류합니다. 미승인 예외가 필요하면 이유·서버 의존성·변경 파일을 보고하여 사용자 결정을 받습니다.
+- `"use client"` route page/container는 `useMemo`/`useCallback` 대신 컴포넌트 계약 그대로 작성하고 server/client·SSR·첫 hydration DOM과 React Aria/HeroUI id 안정성을 유지합니다.
+- handler는 `on[Event][UI]`입니다. `onClickCreateButton`, `onChangeSearchKeywordInput`처럼 대상과 이벤트를 드러내는 이름을 사용합니다.
+- `Route / Screen Mapping`에 page 역할·reusable 대상·screen component path와 승인 SSR/prefetch 근거·추가 파일을 기록하고 spec 동기화까지 완료해야 통과합니다.
+- hook/util/e2e·`_client.tsx`·`_prefetch.ts`는 별도 신규 spec 대신 기반 계약 문서의 해당 행에 기록합니다. route wiring unit/E2E는 인벤토리·Acceptance·배정 매트릭스에 route owner로 기록합니다.
 
 ### 모바일
 
 - 모바일은 작업 전에 `https://heroui.com/llms-patterns.txt`, `node_modules/heroui-native/package.json` exports, `node_modules/heroui-native/src/components/**` source와 `@cocrepo/mo-ui` export를 확인합니다.
-- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 내부만 허용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
-- HeroUI Native wrapper가 필요하면 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 유지하며 단순 재노출로 끝내지 않습니다.
-- 모바일 스타일은 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `StyleSheet`/`StyleSheet.create`를 만들지 않고 `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
-- 모바일에 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리를 넣지 않습니다.
-- `@cocrepo/mo-ui`에서 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` shared Screen을 import해 props를 전달하고 본문을 route에서 조립하지 않습니다.
-- Expo Router params/navigation, API·상태·mutation/invalidation과 WebView·딥링크·splash bridge는 Route가 소유합니다. header는 layout/native navigator의 `CustomHeader`를 확인하고 중복 생성하지 않습니다.
-- observable을 소비하면 `const [RouteName] = observer(() => { ... })` 후 `export default [RouteName]`을 사용합니다. `observer(function Name() { ... })`은 금지합니다.
-- iOS/Android native만 대상이며 SSR·prefetch·hydration·server component와 웹 `page.tsx`/`@slot` 규칙을 적용하지 않습니다.
+- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현에 두고 route는 공개 `Text`를 사용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
+- HeroUI Native wrapper가 필요하면 단순 재노출 대신 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 갖춘 wrapper로 완결합니다.
+- 모바일 스타일은 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
+- 모바일 route는 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리는 웹 route 계약으로 둡니다.
+- `@cocrepo/mo-ui`에서 `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx` shared Screen을 import해 props를 전달하고 화면 본문은 Screen 계약으로 완결합니다.
+- Expo Router params/navigation, API·상태·mutation/invalidation과 WebView·딥링크·splash bridge는 Route가 소유합니다. header는 layout/native navigator의 `CustomHeader`를 재사용합니다.
+- observable을 소비하면 `const [RouteName] = observer(() => { ... })` 후 `export default [RouteName]` 형태를 사용하고 named function observer 대신 이 arrow 계약을 따릅니다.
+- iOS/Android native만 대상으로 native 규칙을 적용하고 SSR·prefetch·hydration·server component와 웹 `page.tsx`/`@slot` 규칙은 웹 route가 사용합니다.
 - 동적 style은 navigator option·WebView/native bridge 등에만 제한하고 이벤트는 `onPress[UI]`, `onChange[UI]`를 우선합니다.
 - route-local hook/util/type/상태는 별도 spec 없이 `기반 계약`의 `fe-route-agent` 행에 기록합니다.
 
@@ -112,7 +112,7 @@ developer_instructions = '''
 ## 검증·보고
 
 - 실제 app package 이름으로 `pnpm --filter <app package> type-check`, `pnpm --filter <app package> lint`와 route unit 검증을 실행합니다. 모바일은 `pnpm --filter mobile-app test --runTestsByPath <route 테스트 경로>`를 실행합니다.
-- 웹은 아래 명령으로 미승인 예외·금지 패턴을 확인합니다. `TASK_ROUTE_DIR`는 실제 route로 지정하며 금지 패턴은 결과가 없어야 합니다.
+- 웹은 아래 명령으로 미승인 예외와 규칙 위반 패턴을 확인합니다. `TASK_ROUTE_DIR`는 실제 route로 지정하며 위반 패턴은 결과가 없어야 합니다.
 
 ```bash
 TASK_ROUTE_DIR='<실제 route 경로>'
@@ -134,5 +134,5 @@ find "$TASK_ROUTE_DIR" -maxdepth 1 -type f \( -name 'page.tsx' -o -name '_client
 - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export 또는 계약과 소비 용도를 적습니다.
 - `## 수행한 검증`: 실제 실행한 명령과 성공·실패, 미실행 사유를 적습니다.
 - `## 남은 문제`: 실제 차단 사항과 필요한 후속 owner·소비 경로를 적고, 없으면 `없음`으로 적습니다.
-- 전체 source, diff, 탐색 과정과 raw log는 반환하지 않습니다. 상세 실패 로그가 있으면 경로만 적습니다.
+- 전체 source, diff, 탐색 과정과 raw log는 작업 기록에 남기고 최종 응답은 결과 요약으로 구성합니다. 상세 실패 로그가 있으면 경로만 적습니다.
 '''

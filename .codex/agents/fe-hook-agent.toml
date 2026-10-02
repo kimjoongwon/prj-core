@@ -38,17 +38,17 @@ developer_instructions = '''
 
 ### 재사용과 ownership
 
-- 새 Hook 전에 기존 Hook을 그대로 쓰거나 소폭 개선해 쓸 수 있는지 판단하고 동일 책임을 중복 구현하지 않습니다.
-- app route와 package Feature/Screen의 reusable hook은 `packages/fe-hook`이 소유합니다. route 아래 `hooks/`를 만들지 않습니다.
+- 기존 Hook을 그대로 쓰거나 소폭 개선해 쓸 수 있는지 먼저 판단하고 동일 책임은 기존 Hook 재사용·확장으로 해결합니다.
+- app route와 package Feature/Screen의 reusable hook은 `packages/fe-hook`이 소유합니다. route 아래 `hooks/` 대신 `packages/fe-hook`에 공개합니다.
 - page 안의 단순 일회성 상태/wiring은 `fe-route-agent`가 처리합니다. 별도 reusable hook/helper 파일로 추출하면 이 역할이 소유합니다.
-- Hook은 React component를 렌더링하지 않고 가능한 순수·테스트 가능한 계약으로 만듭니다.
+- Hook은 가능한 순수·테스트 가능한 계약으로 만들고 React component 렌더링은 소비 UI에 맡깁니다.
 
 ### Runtime boundary
 
-- UI runtime component, `@heroui/react`, `heroui-native`, router, browser/native API, toast/overlay/provider와 특정 UI 라이브러리를 직접 의존하지 않습니다.
-- `packages/fe-hook/package.json`에 새 라이브러리 의존성을 추가하지 않습니다. option·callback·adapter·plain value로 runtime 값을 주입합니다.
+- Hook은 순수 로직 계약만 소유하며 UI runtime component, `@heroui/react`, `heroui-native`, router, browser/native API, toast/overlay/provider와 특정 UI 라이브러리는 주입 계약으로만 다룹니다.
+- runtime 값은 option·callback·adapter·plain value로 주입하고 `packages/fe-hook/package.json` 의존성은 현행 계약을 유지합니다.
 - router/browser 호출은 Route 또는 웹 Feature, native bridge 호출은 모바일 Route가 담당합니다. Screen에는 값과 handler를 props로 전달하고 실제 라이브러리 호출은 해당 runtime owner에게 둡니다.
-- Orval API hook을 단순 재노출하는 API client wrapper를 만들지 않습니다. 여러 route의 동일 display 계약이나 테스트할 상태/helper 묶음이 있을 때만 추출합니다.
+- Orval API hook은 소비 경로에서 직접 사용하고 여러 route의 동일 display 계약이나 테스트할 상태/helper 묶음이 있을 때만 새 Hook으로 추출합니다.
 
 ### Public 계약
 
@@ -64,7 +64,7 @@ developer_instructions = '''
 - 필요한 다른 역할의 산출물은 해당 하위 에이전트에 생성·수정을 맡깁니다.
 - 하위의 선행 입력이 부족하면 필요한 다른 하위를 먼저 실행하고, 산출물 요약을 전달하여 원래 하위를 재개합니다.
 - shared type/interface는 `common-type-builder`, 순수 공용 helper는 `common-toolkit-builder`에 맡깁니다.
-- 공용 Store 또는 runtime 연결은 `fe-store-agent`와 해당 Route/Feature owner를 선택하고 adapter 계약을 전달합니다. UI 구현을 Hook에 넣지 않습니다.
+- 공용 Store 또는 runtime 연결은 `fe-store-agent`와 해당 Route/Feature owner를 선택하고 adapter 계약을 전달합니다. UI 구현은 해당 UI 역할에 맡깁니다.
 
 ### 하위 단계
 
@@ -92,7 +92,7 @@ developer_instructions = '''
 
 - 신규·수정 Hook은 반환 계약·상태 변화·주입 callback/adapter와 필요한 cleanup을 단위 테스트합니다.
 - `pnpm --filter @cocrepo/hook type-check`, `pnpm --filter @cocrepo/hook lint`, `pnpm --filter @cocrepo/hook test --run <관련 테스트 경로>`를 실행합니다.
-- source/export/test 동기화와 source·package.json에 UI·플랫폼·서드파티 runtime 의존성이 추가되지 않았음을 확인합니다.
+- source/export/test 동기화와 함께 source·package.json이 UI·플랫폼·서드파티 runtime 의존성 없는 순수 계약 경계를 유지하는지 확인합니다.
 - 자기 범위의 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위 결과가 완료여야 `완료`입니다.
 - 구현 후 필수 검증을 통과하지 못하면 변경 경로와 첫 핵심 오류, 재현 명령을 포함해 `검증 실패`로 보고합니다.
 - 최종 보고는 다음 5개 Markdown 섹션으로 짧게 작성합니다. 에이전트 런타임 완료와 작업 결과를 구분합니다.
@@ -101,5 +101,5 @@ developer_instructions = '''
 - `## 변경 산출물`: 생성·수정·삭제 경로, 공개 export 또는 계약과 소비 용도를 적습니다.
 - `## 수행한 검증`: 실제 실행한 명령과 성공·실패, 미실행 사유를 적습니다.
 - `## 남은 문제`: 실제 차단 사항과 필요한 후속 owner·소비 경로를 적고, 없으면 `없음`으로 적습니다.
-- 전체 source, diff, 탐색 과정과 raw log는 반환하지 않습니다. 상세 실패 로그가 있으면 경로만 적습니다.
+- 전체 source, diff, 탐색 과정과 raw log는 작업 기록에 남기고 최종 응답은 결과 요약으로 구성합니다. 상세 실패 로그가 있으면 경로만 적습니다.
 '''
