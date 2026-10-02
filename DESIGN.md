@@ -33,7 +33,7 @@ Admin web은 운영자가 예약, 결제, 공간, 사용자, 권한, 템플릿�
 색상값을 새로 정의하거나 외부 브랜드 색을 가져오지 않습니다.
 
 - 기존 theme token을 사용합니다.
-- 색상은 `canvas`, `surface`, `primary`, `muted`, `success`, `warning`, `danger`, `border` 같은 역할로 설명합니다.
+- 색상은 `background`, `surface`, `overlay`, `accent`, `muted`, `success`, `warning`, `danger`, `border` 같은 역할로 설명합니다.
 - 임의 hex, 임의 gradient, 장식용 색 남용을 피합니다.
 
 ### 4. 컴포넌트보다 위계를 먼저 정한다
@@ -46,31 +46,37 @@ Admin web은 운영자가 예약, 결제, 공간, 사용자, 권한, 템플릿�
 
 ## Colors
 
-색상은 기존 프로젝트 theme에서 가져오며, 이 문서는 색상값 대신 역할을 정의합니다.
+색상은 HeroUI v3 theme token에서 가져오며, 이 문서는 색상값 대신 역할을 정의합니다.
 
-| 역할 | 의미 | 주 사용처 | 금지 |
-|------|------|-----------|------|
-| `canvas` | 앱의 기본 바탕 | page/screen background | 장식용 색면으로 남용하지 않음 |
-| `surface` | 정보가 올라가는 부드러운 면 | card, section, form group | 같은 elevation surface 중첩 |
-| `surface-muted` | 덜 중요한 정보 묶음 | secondary panel, empty background | 본문 대비를 낮춰 읽기 어렵게 만들지 않음 |
-| `primary` | 가장 중요한 행동 | create, confirm, continue, save | 한 화면에 primary CTA를 과도하게 반복하지 않음 |
-| `secondary` | 보조 행동 | cancel, back, secondary navigation | primary와 같은 시각 무게로 만들지 않음 |
-| `success` | 완료, 정상, 가능 | confirmed, paid, active | 장식용 강조색으로 사용하지 않음 |
-| `warning` | 주의, 대기, 확인 필요 | pending, waitlist, review needed | danger와 혼동되게 사용하지 않음 |
-| `danger` | 삭제, 실패, 취소, 위험 | delete, cancel reservation, failed | 일반 강조색으로 사용하지 않음 |
-| `muted` | 보조 설명 | metadata, hint, timestamp | 핵심 정보에 사용하지 않음 |
-| `border` | 낮은 구분 | table row, card edge, input | section을 과하게 조각내지 않음 |
+| 역할 | 의미 | 주 사용처 | 가이드 |
+|------|------|-----------|--------|
+| `background` / `foreground` | 앱의 기본 바탕과 본문 전경 | page/screen 배경, 기본 텍스트 | 화면 바탕 역할 하나로만 사용합니다 |
+| `surface` | 정보가 올라가는 기본 면 | card, section, form group | 중첩 표현에는 아래 계층 surface를 사용합니다 |
+| `surface-secondary` / `surface-tertiary` | 중첩·덜 중요한 정보 묶음 | 섹션 배경, inset, 코드 블록 | 본문 대비를 유지해 읽기 쉽게 둡니다 |
+| `overlay` | floating 표면 | tooltip, popover, dropdown, menu, bottom sheet, dialog/modal | 임시 조작과 집중 작업 표면으로만 사용합니다 |
+| `accent` | 가장 중요한 행동 | create, confirm, continue, save | 한 화면의 핵심 CTA에 집중해 사용합니다 |
+| `default` | 보조 행동 | cancel, back, 보조 navigation | `accent`보다 낮은 시각 무게를 유지합니다 |
+| `success` | 완료, 정상, 가능 | confirmed, paid, active | 색상과 아이콘·텍스트를 함께 표기합니다 |
+| `warning` | 주의, 대기, 확인 필요 | pending, waitlist, review needed | `danger`와 구분되는 문구·아이콘을 함께 둡니다 |
+| `danger` | 삭제, 실패, 취소, 위험 | delete, cancel reservation, failed | 위험 행동 전용으로 의미를 지킵니다 |
+| `muted` | 보조 설명 | metadata, hint, timestamp | 핵심 정보는 `foreground`로 표기합니다 |
+| `border` / `separator` | 낮은 구분 | table row, card edge, list divider | 구분은 낮게 유지하고 section 조각내기를 줄입니다 |
+| `focus` | 키보드 포커스 링 | focus ring | 커스텀 색 없이 token의 링을 그대로 사용합니다 (`accent` 계열) |
 
 ### Color Rules
 
-- 새 색상 token을 만들기 전에 기존 theme 역할로 표현 가능한지 먼저 확인합니다.
+- 새 색상 token을 만들기 전에 기존 HeroUI theme 역할로 표현 가능한지 먼저 확인합니다.
+- hover 상태는 각 색의 `*-hover` 파생 token을, 강조 배경은 `*-soft`/`*-soft-foreground` 파생 token을 사용합니다. 파생 상태를 임의 hex로 새로 만들지 않습니다.
+- form field는 `--field-background`, `--field-foreground`, `--field-placeholder`, `--field-border`를 사용합니다. 필드 테두리 두께 등 기본값은 theme이 소유합니다(웹 HeroUI 기본은 무테두리, mobile 오버라이드는 1px).
 - 상태 UI는 색상, 아이콘, 텍스트를 함께 사용합니다.
-- gradient, blur background, decorative orb는 기본 디자인 언어가 아닙니다.
-- dark theme에서도 역할은 동일해야 합니다. 단, 대비와 surface 단계는 theme token이 담당합니다.
+- 계층과 상태는 token 역할로 표현하며, 장식용 gradient, blur background, decorative orb는 이 체계의 표현 수단이 아닙니다.
+- dark theme에서도 역할은 동일합니다. HeroUI v3는 dark에서 `--surface-shadow`가 투명해지므로, 위계는 shadow가 아닌 surface 계층 대비로 유지합니다.
 
 ### Surface Ladder (mobile theme token 값)
 
-계층 색은 OKLCH 명도(L) 기준 **등간격 3%p 램프**입니다. 인접 계층이 지각적으로 구분되어야 위계가 명확해지며, 선 토큰도 램프 바로 아래에 정렬합니다. 값의 canonical owner는 `apps/mobile/src/global.css`입니다(웹은 HeroUI 기본 테마 + accent 오버라이드).
+계층 색은 OKLCH 명도(L) 기준 **등간격 3%p 램프**입니다. 인접 계층이 지각적으로 구분되어야 위계가 명확해지며, 선 토큰도 램프 바로 아래에 정렬합니다.
+
+Mobile 램프는 `heroui-native` 색 token명을 그대로 쓰는 OKLCH 오버라이드(hue 260 light / 270 dark)이고, 웹(admin)은 HeroUI 기본 테마에 `--accent` 오버라이드만 사용합니다. 두 플랫폼 모두 위 Colors 표의 역할 체계를 따릅니다. 값의 canonical owner는 `apps/mobile/src/global.css`입니다.
 
 | 토큰 | light (hue 260) | dark (hue 270) | 역할 |
 |------|-----------------|----------------|------|
@@ -118,7 +124,7 @@ Admin은 스캔성과 반복 작업 효율이 중요합니다.
 
 - 기본 구조는 `상태 요약 -> 필터/액션 -> 목록/테이블 -> 보조 정보` 순서를 우선합니다.
 - 테이블 중심 화면은 카드 여러 개보다 table, filter, summary 조합을 우선합니다.
-- create/update 화면은 form group을 명확히 나누고, primary action은 하단 또는 상단 action area에 일관되게 둡니다.
+- create/update 화면은 form group을 명확히 나누고, 주요 action은 하단 또는 상단 action area에 일관되게 둡니다.
 - ScreenSurface와 SectionSurface는 필요한 곳에만 사용합니다. 모든 작은 요소를 카드로 감싸지 않습니다.
 
 ### Mobile
@@ -166,40 +172,42 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 | 계층 | 역할 | 사용처 | 표현 |
 |------|------|--------|------|
-| Page background | 전체 바탕 | app page, screen | `canvas` |
-| ScreenSurface | 화면의 주 내용 묶음 | Admin page body | 부드러운 surface, 낮은 shadow |
-| SectionSurface | 독립 섹션 | table wrapper, form section | border 또는 약한 elevation |
-| Card | 반복 정보 단위 | mobile reservation card, summary card | 12~16px radius |
-| Floating | 임시 조작 | popover, dropdown, bottom sheet | 더 높은 surface와 명확한 z-index |
-| Overlay | 집중 작업 | dialog, modal | scrim과 focus management |
+| Page background | 전체 바탕 | app page, screen | `background` |
+| ScreenSurface | 화면의 주 내용 묶음 | Admin page body | `surface` + 낮은 `--surface-shadow` |
+| SectionSurface | 독립 섹션 | table wrapper, form section | `surface-secondary`/`surface-tertiary` 또는 `border` |
+| Card | 반복 정보 단위 | mobile reservation card, summary card | `surface` + 기본 `--radius` |
+| Floating | 임시 조작 | popover, dropdown, bottom sheet, tooltip, menu | `overlay`/`overlay-foreground` + `--overlay-shadow` |
+| Overlay | 집중 작업 | dialog, modal | `overlay`/`overlay-foreground` + `--backdrop` scrim, focus management |
 
 ### Surface Rules
 
-- 같은 elevation의 surface를 중첩하지 않습니다.
+- 중첩 표현은 같은 계층 surface 대신 `surface-secondary`/`surface-tertiary` 한 단계 아래 면을 사용합니다.
 - ScreenSurface는 Page가 소유하고, Layout에서 남용하지 않습니다.
 - 테이블은 surface 안에 넣되, 각 row를 카드처럼 과하게 분리하지 않습니다.
 - Mobile card는 정보가 한 덩어리로 읽힐 때만 사용합니다.
-- shadow는 낮고 조용해야 합니다. 깊이를 만들기 위해 강한 그림자를 반복하지 않습니다.
+- shadow는 낮고 조용하게 유지합니다. dark theme에서는 `--surface-shadow`가 투명해지므로, 위계를 surface 대비로 표현합니다.
 
 ## Shapes
 
-형태는 따뜻함과 업무 효율 사이의 균형을 잡습니다.
+형태는 따뜻함과 업무 효율 사이의 균형을 잡습니다. radius는 임의 px 값 대신 HeroUI 구조 token을 기준으로 합니다. 기본 `--radius`(8px), form field `--field-radius`(12px, `--radius`의 1.5배), 원형·pill은 `rounded-full`입니다. 컴포넌트 기본 radius는 HeroUI 컴포넌트 테마가 소유하고, 화면 구현은 이 token 기준 안에서 형태를 지정합니다.
 
 | 요소 | 기본 형태 | 이유 |
 |------|-----------|------|
-| Primary CTA | pill 또는 충분히 둥근 버튼 | 서비스의 부드러운 행동 신호 |
-| Table toolbar action | compact rounded button | Admin 밀도 유지 |
-| Card | 12~16px radius | 따뜻하지만 과하지 않음 |
-| Input | 8~12px radius | form 안정감 |
-| Badge/Chip | pill | 상태 label 가독성 |
-| Icon button | circle 또는 compact rounded | 터치/클릭 target 명확화 |
-| Modal/BottomSheet | 16px 이상 radius | overlay의 분리감 |
+| 주요 CTA | HeroUI Button 테마 radius | 서비스의 부드러운 행동 신호 |
+| Table toolbar action | HeroUI Button compact size | Admin 밀도 유지 |
+| Card / Section | `--radius` 기본값 | 따뜻하지만 과하지 않음 |
+| Input / form field | `--field-radius` | form 안정감 |
+| Chip (상태 라벨) | `rounded-full` (pill) | 상태 라벨 가독성 |
+| Badge (위치 마커) | `rounded-full` | 아이콘 모서리 마커 인식 |
+| Icon button | `rounded-full` 또는 compact rounded | 터치/클릭 target 명확화 |
+| Modal / BottomSheet | HeroUI overlay 테마 radius | overlay의 분리감 |
 
 ### Shape Rules
 
+- 새 radius 값을 만들기 전에 `--radius`, `--field-radius`, `rounded-full`로 표현 가능한지 먼저 확인합니다.
+- 컴포넌트 기본 radius는 HeroUI 컴포넌트 테마가 소유합니다. 개별 컴포넌트에 임의 px를 지정하는 대신 token을 따릅니다.
 - 주요 CTA는 부드럽게, 보조 조작은 컴팩트하게 둡니다.
-- 모든 버튼을 pill로 만들지 않습니다. 테이블 row action, toolbar, dense filter는 작고 명확해야 합니다.
-- radius scale을 임의로 계속 늘리지 않습니다.
+- 테이블 row action, toolbar, dense filter는 작고 명확한 형태를 유지합니다.
 - 형태 차이는 정보 위계를 설명해야 합니다.
 
 ## Components
@@ -212,22 +220,23 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 ### Button
 
-- primary action은 한 화면에서 가장 중요한 다음 행동 하나를 가리킵니다.
-- secondary action은 primary와 같은 무게를 가지면 안 됩니다.
-- destructive action은 색상, 문구, 위치를 모두 사용해 위험성을 드러냅니다.
+- 가장 중요한 행동(주요 CTA)은 한 화면의 다음 행동 하나를 가리키고 `accent` 색 역할로 표현합니다.
+- 보조 행동은 `default` 색 역할로 주요 CTA보다 낮은 무게를 유지합니다.
+- destructive action은 `danger` 색, 문구, 위치를 모두 사용해 위험성을 드러냅니다.
 - loading, disabled, pressed 상태를 반드시 고려합니다.
 
 ### Status
 
-- status는 badge, icon, label, helper text의 조합으로 표현합니다.
-- 상태 색상만 보고 의미를 알아야 하는 UI를 만들지 않습니다.
+- 상태 라벨은 HeroUI `Chip`으로 표기합니다. 색상 역할과 아이콘·텍스트를 함께 사용합니다.
+- 아이콘 모서리의 개수·위치 마커는 HeroUI `Badge`로 표기합니다. 상태 문구 표기에는 `Badge` 대신 `Chip`을 사용합니다.
+- 상태는 label, icon, helper text의 조합으로 표현해 색상 이외의 단서를 함께 제공합니다.
 - `success`, `warning`, `danger`, `muted`의 의미를 임의로 바꾸지 않습니다.
 
 ### Empty / Error / Loading
 
 | 상태 | 구성 | 원칙 |
 |------|------|------|
-| Loading | 짧은 label 또는 skeleton | 기다리는 이유를 과하게 설명하지 않음 |
+| Loading | 짧은 label 또는 `Spinner`/`Skeleton` | 기다리는 이유를 과하게 설명하지 않음 |
 | Empty | 빈 이유 + 다음 행동 | 사용자가 무엇을 할 수 있는지 보여줌 |
 | Error | 실패 이유 + 복구 행동 | `다시 시도`, `목록으로 이동` 같은 action 제공 |
 | Success | 완료 상태 + 다음 이동 | toast만으로 중요한 완료를 숨기지 않음 |
@@ -235,7 +244,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 ### Table / DataGrid
 
 - Admin 목록의 기본 표현은 table 또는 DataGrid입니다.
-- 상단에는 상태 요약, 검색, 필터, primary action을 배치합니다.
+- 상단에는 상태 요약, 검색, 필터, 주요 action을 배치합니다.
 - row action은 작고 반복 가능해야 합니다.
 - 중요한 상태는 별도 cell/badge로 드러냅니다.
 
@@ -243,7 +252,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 - form은 그룹 단위로 읽혀야 합니다.
 - label, helper, error message는 같은 field 근처에 둡니다.
-- create/update flow에서는 primary action과 cancel/back action의 위치를 일관되게 유지합니다.
+- create/update flow에서는 주요 action과 cancel/back action의 위치를 일관되게 유지합니다.
 - AI form 또는 자동 채우기 기능은 일반 form action과 시각적으로 구분합니다.
 
 ### Navigation
@@ -264,7 +273,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 - 작은 화면에서 텍스트가 버튼이나 카드 밖으로 넘치지 않아야 합니다.
 - touch target은 mobile 기준 최소 44px 이상을 유지합니다.
-- 상태와 primary action은 좁은 화면에서도 가까이 있어야 합니다.
+- 상태와 주요 action은 좁은 화면에서도 가까이 있어야 합니다.
 - 중요한 데이터 table은 mobile에서 card/list 또는 horizontal strategy를 명확히 정합니다.
 
 ### Admin Web
@@ -313,7 +322,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 - `Visual Snapshot`은 장식 설명보다 화면의 밀도와 첫 인상을 보여줍니다.
 - `Annotated Wireframe`은 `Text`, `Button`, `Surface`, `Feature`, `Widget`, `Input`, `Action`, `DataDisplay`, `Feedback` 계층을 구분합니다.
 - `Rhythm / Layout Contract`에는 web/mobile `VStack`, `HStack`, web `Spacer`, 예외적 `View/tv slots`와 `page`, `section`, `block`, `inline`, `dense`, `roomy` gap preset을 기록합니다.
-- 색상은 값이 아니라 역할로 씁니다. 예: `surface`, `primary`, `danger`, `muted`.
+- 색상은 값이 아니라 역할로 씁니다. 예: `surface`, `accent`, `danger`, `muted`.
 - 큰 섹션은 auth, dashboard intro, mobile home, empty state처럼 핵심 인상이 필요한 경우에만 계획합니다.
 
 ### Component 작성 시
@@ -352,6 +361,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 ## Known Gaps
 
 - 이 문서는 디자인 언어 v1입니다. 2026-09-11 갱신: mobile surface 램프를 등간격(3%p)으로 재설계하고(Surface Ladder 참조), rhythm preset을 `VStack`/`HStack`의 `gap` prop으로 구현했습니다.
+- 2026-10-02 갱신: 색·형태·컴포넌트 어휘를 HeroUI v3 토큰 체계에 맞춰 정리했습니다(`accent`/`default`/`surface` 계층/`overlay`/radius token, `Chip`·`Badge` 역할 구분).
 - 구체적인 typography size 규칙은 현재 구현을 기준으로 별도 작업에서 맞춥니다.
 - 개별 화면 리디자인은 sidecar spec 단위로 진행합니다.
 - 디자인 원칙을 `AGENTS.md` 루트 조율과 UI builder 역할 에이전트 정의에 연결하는 작업은 후속 변경으로 다룹니다.
