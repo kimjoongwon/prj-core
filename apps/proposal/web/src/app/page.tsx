@@ -1,6 +1,13 @@
 "use client";
 
-import { Button, Chip, Container, useDesignSystemTheme } from "@cocrepo/ui";
+import {
+	Button,
+	Chip,
+	Container,
+	HStack,
+	useDesignSystemTheme,
+	VStack,
+} from "@cocrepo/ui";
 import { Card, Separator } from "@heroui/react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
@@ -92,21 +99,18 @@ const ITEM_VARIANTS = {
 } as const;
 
 const SECTION_TITLE_CLASS =
-	"font-display text-3xl font-semibold text-slate-950 md:text-5xl dark:text-white";
+	"font-display text-3xl font-semibold text-foreground md:text-5xl";
 const SECTION_DESCRIPTION_CLASS =
-	"mt-5 text-base leading-8 text-slate-600 md:text-lg md:leading-9 dark:text-white/68";
-const SURFACE_CARD_CLASS =
-	"h-full border border-slate-200/80 bg-white/88 shadow-[0_24px_80px_rgba(148,163,184,0.16)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none";
-const SURFACE_CARD_ELEVATED_CLASS =
-	"h-full border border-slate-200/80 bg-white/82 shadow-[0_24px_80px_rgba(148,163,184,0.14)] dark:border-white/10 dark:bg-content1/70 dark:shadow-[0_24px_80px_rgba(0,0,0,0.28)]";
+	"mt-5 text-base leading-8 text-muted md:text-lg md:leading-9";
+const SURFACE_CARD_CLASS = "h-full border border-border bg-surface";
 const NAVIGATION_BUTTON_CLASS =
-	"border border-slate-200/80 bg-white/80 text-slate-700 shadow-sm transition-colors hover:bg-white dark:border-white/10 dark:bg-white/6 dark:text-white/72 dark:hover:bg-white/10";
-const MUTED_TEXT_CLASS = "text-slate-600 dark:text-white/64";
-const SOFT_TEXT_CLASS = "text-slate-500 dark:text-white/62";
-const STRONG_TEXT_CLASS = "text-slate-700 dark:text-white/82";
-const PANEL_DIVIDER_CLASS = "border-slate-200/80 dark:border-white/10";
+	"border border-border bg-surface text-foreground transition-colors hover:bg-surface-hover";
+const MUTED_TEXT_CLASS = "text-muted";
+const SOFT_TEXT_CLASS = "text-muted";
+const STRONG_TEXT_CLASS = "text-foreground";
+const PANEL_DIVIDER_CLASS = "border-border";
 const PANEL_ICON_CLASS =
-	"flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary dark:bg-white/6 dark:text-primary";
+	"flex h-11 w-11 items-center justify-center rounded-2xl bg-accent-soft text-accent-soft-foreground";
 
 const ICONS: Record<ProposalIconKey, LucideIcon> = {
 	workflow: Workflow,
@@ -151,12 +155,12 @@ const SECTION_ACTIONS: Record<SectionId, () => void> = {
 function SectionHeading({ eyebrow, title, description }: SectionHeadingProps) {
 	return (
 		<div className="max-w-4xl">
-			<div className="mb-5 flex items-center gap-4">
-				<span className="h-px w-12 bg-gradient-to-r from-primary to-secondary" />
-				<span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-primary-700 dark:text-primary-300">
+			<HStack alignItems="center" gap="section" className="mb-5">
+				<span className="h-px w-12 bg-separator" />
+				<span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-accent">
 					{eyebrow}
 				</span>
-			</div>
+			</HStack>
 			<h2 className={SECTION_TITLE_CLASS}>{title}</h2>
 			<p className={SECTION_DESCRIPTION_CLASS}>{description}</p>
 		</div>
@@ -223,12 +227,12 @@ function ThemeToggle({
 			variant="secondary"
 			onPress={onToggleTheme}
 			aria-label={theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
-			className="border border-slate-200/80 bg-white/84 px-3 text-slate-800 shadow-sm transition-colors hover:bg-white dark:border-white/10 dark:bg-white/8 dark:text-white"
+			className="border border-border bg-surface px-3 text-foreground transition-colors hover:bg-surface-hover"
 			startContent={
 				isThemeReady ? (
 					<Icon className="h-4 w-4" />
 				) : (
-					<span className="h-4 w-4 rounded-full bg-current/20" />
+					<span className="h-4 w-4 rounded-full bg-foreground/20" />
 				)
 			}
 		>
@@ -242,12 +246,8 @@ function renderMetricCard(item: ProposalMetric) {
 		<motion.div key={item.label} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_CLASS}>
 				<Card.Content className="gap-4 p-6 md:p-7">
-					<p className="text-sm font-semibold text-slate-900 dark:text-white">
-						{item.label}
-					</p>
-					<p className="text-sm leading-6 text-slate-600 dark:text-white/60">
-						{item.description}
-					</p>
+					<p className="text-sm font-semibold text-foreground">{item.label}</p>
+					<p className="text-sm leading-6 text-muted">{item.description}</p>
 				</Card.Content>
 			</Card>
 		</motion.div>
@@ -259,16 +259,16 @@ function renderNarrativeCard(item: ProposalNarrativeCard) {
 
 	return (
 		<motion.div key={item.title} variants={ITEM_VARIANTS}>
-			<Card className={SURFACE_CARD_ELEVATED_CLASS}>
+			<Card className={SURFACE_CARD_CLASS}>
 				<Card.Header className="items-start gap-4 pb-0">
 					<div className={PANEL_ICON_CLASS}>
 						<Icon className="h-5 w-5" />
 					</div>
-					<div className="space-y-1">
-						<h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+					<VStack gap="dense">
+						<h3 className="text-lg font-semibold text-foreground">
 							{item.title}
 						</h3>
-					</div>
+					</VStack>
 				</Card.Header>
 				<Card.Content className={`pt-4 text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
 					{item.description}
@@ -280,12 +280,11 @@ function renderNarrativeCard(item: ProposalNarrativeCard) {
 
 function renderProcessOutput(output: string) {
 	return (
-		<li
-			key={output}
-			className={`flex items-start gap-3 text-sm ${MUTED_TEXT_CLASS}`}
-		>
-			<BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-			<span>{output}</span>
+		<li key={output} className={`text-sm ${MUTED_TEXT_CLASS}`}>
+			<HStack alignItems="start" gap="block">
+				<BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+				<span>{output}</span>
+			</HStack>
 		</li>
 	);
 }
@@ -297,25 +296,27 @@ function renderProcessCard(step: ProposalProcessStep) {
 		<motion.div key={step.step} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_CLASS}>
 				<Card.Header className="items-start justify-between gap-4">
-					<div className="space-y-3">
+					<VStack gap="block">
 						<Chip
-							variant="flat"
-							color="primary"
+							variant="soft"
+							color="accent"
 							className="text-[11px] uppercase tracking-[0.24em]"
 						>
 							Step {step.step}
 						</Chip>
-						<h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+						<h3 className="text-lg font-semibold text-foreground">
 							{step.title}
 						</h3>
-					</div>
+					</VStack>
 					<div className={PANEL_ICON_CLASS}>
 						<Icon className="h-5 w-5" />
 					</div>
 				</Card.Header>
 				<Card.Content className={`gap-6 text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
 					<p>{step.description}</p>
-					<ul className="space-y-2">{step.outputs.map(renderProcessOutput)}</ul>
+					<ul className="flex flex-col gap-2">
+						{step.outputs.map(renderProcessOutput)}
+					</ul>
 				</Card.Content>
 			</Card>
 		</motion.div>
@@ -324,24 +325,22 @@ function renderProcessCard(step: ProposalProcessStep) {
 
 function renderCostLine(item: string) {
 	return (
-		<li
-			key={item}
-			className={`flex items-start gap-3 text-sm leading-7 ${MUTED_TEXT_CLASS}`}
-		>
-			<BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-primary" />
-			<span>{item}</span>
+		<li key={item} className={`text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
+			<HStack alignItems="start" gap="block">
+				<BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-accent" />
+				<span>{item}</span>
+			</HStack>
 		</li>
 	);
 }
 
 function renderCareerLine(item: string) {
 	return (
-		<li
-			key={item}
-			className={`flex items-start gap-3 text-sm leading-7 ${MUTED_TEXT_CLASS}`}
-		>
-			<BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-secondary" />
-			<span>{item}</span>
+		<li key={item} className={`text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
+			<HStack alignItems="start" gap="block">
+				<BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-accent" />
+				<span>{item}</span>
+			</HStack>
 		</li>
 	);
 }
@@ -349,14 +348,12 @@ function renderCareerLine(item: string) {
 function renderResumeFactCard(item: ProposalResumeFact) {
 	return (
 		<motion.div key={item.label} variants={ITEM_VARIANTS}>
-			<Card className={SURFACE_CARD_ELEVATED_CLASS}>
+			<Card className={SURFACE_CARD_CLASS}>
 				<Card.Content className="gap-3 p-6">
-					<p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-primary-700 dark:text-primary-300">
+					<p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-accent">
 						{item.label}
 					</p>
-					<p className="text-lg font-semibold text-slate-950 dark:text-white">
-						{item.value}
-					</p>
+					<p className="text-lg font-semibold text-foreground">{item.value}</p>
 					<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
 						{item.description}
 					</p>
@@ -368,11 +365,7 @@ function renderResumeFactCard(item: ProposalResumeFact) {
 
 function renderToolChip(tool: string) {
 	return (
-		<Chip
-			key={tool}
-			variant="flat"
-			className="border border-slate-200/80 bg-slate-50/90 text-slate-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/78"
-		>
+		<Chip key={tool} variant="soft" color="default">
 			{tool}
 		</Chip>
 	);
@@ -391,22 +384,22 @@ function renderCareerCard(entry: ProposalCareerEntry) {
 					className={`flex-col items-start gap-5 border-b ${PANEL_DIVIDER_CLASS}`}
 				>
 					<div className="flex w-full items-start justify-between gap-4">
-						<div className="space-y-3">
-							<Chip variant="flat" color="secondary">
+						<VStack gap="block">
+							<Chip variant="soft" color="default">
 								{entry.period}
 							</Chip>
-							<div className="space-y-2">
-								<h3 className="text-xl font-semibold text-slate-950 dark:text-white">
+							<VStack gap="inline">
+								<h3 className="text-xl font-semibold text-foreground">
 									{entry.organization}
 								</h3>
-								<p className="text-sm font-semibold text-primary-700 dark:text-primary-300">
+								<p className="text-sm font-semibold text-accent">
 									{entry.role}
 								</p>
 								<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
 									{entry.headline}
 								</p>
-							</div>
-						</div>
+							</VStack>
+						</VStack>
 						<div className={PANEL_ICON_CLASS}>
 							<Icon className="h-5 w-5" />
 						</div>
@@ -416,12 +409,12 @@ function renderCareerCard(entry: ProposalCareerEntry) {
 					<p className={`text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
 						{entry.description}
 					</p>
-					<ul className="space-y-3">
+					<ul className="flex flex-col gap-3">
 						{entry.highlights.map(renderCareerLine)}
 					</ul>
-					<div className="flex flex-row flex-wrap gap-2">
+					<HStack gap="inline" className="flex-wrap">
 						{entry.tools.map(renderToolChip)}
-					</div>
+					</HStack>
 				</Card.Content>
 			</Card>
 		</motion.div>
@@ -438,20 +431,22 @@ function renderPortfolioCard(item: ProposalPortfolioItem) {
 					<div className={PANEL_ICON_CLASS}>
 						<Icon className="h-5 w-5" />
 					</div>
-					<div className="space-y-2">
-						<h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+					<VStack gap="inline">
+						<h3 className="text-lg font-semibold text-foreground">
 							{item.title}
 						</h3>
 						<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
 							{item.description}
 						</p>
-					</div>
+					</VStack>
 				</Card.Header>
 				<Card.Content className="gap-5 pt-5">
-					<ul className="space-y-3">{item.highlights.map(renderCareerLine)}</ul>
-					<div className="flex flex-row flex-wrap gap-2">
+					<ul className="flex flex-col gap-3">
+						{item.highlights.map(renderCareerLine)}
+					</ul>
+					<HStack gap="inline" className="flex-wrap">
 						{item.tools.map(renderToolChip)}
-					</div>
+					</HStack>
 				</Card.Content>
 			</Card>
 		</motion.div>
@@ -461,21 +456,21 @@ function renderPortfolioCard(item: ProposalPortfolioItem) {
 function renderStackCard(group: ProposalStackGroup) {
 	return (
 		<motion.div key={group.title} variants={ITEM_VARIANTS}>
-			<Card className={SURFACE_CARD_ELEVATED_CLASS}>
+			<Card className={SURFACE_CARD_CLASS}>
 				<Card.Header className="flex-col items-start gap-3">
-					<Chip variant="flat" color="secondary">
+					<Chip variant="soft" color="default">
 						{group.title}
 					</Chip>
-					<div className="space-y-2">
-						<h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+					<VStack gap="inline">
+						<h3 className="text-lg font-semibold text-foreground">
 							{group.title}
 						</h3>
 						<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
 							{group.description}
 						</p>
-					</div>
+					</VStack>
 				</Card.Header>
-				<Card.Content className="flex flex-row flex-wrap gap-2 pt-0">
+				<Card.Content className="flex-row flex-wrap gap-2 pt-0">
 					{group.tools.map(renderToolChip)}
 				</Card.Content>
 			</Card>
@@ -485,12 +480,11 @@ function renderStackCard(group: ProposalStackGroup) {
 
 function renderClosingBullet(bullet: string) {
 	return (
-		<li
-			key={bullet}
-			className={`flex items-center gap-3 text-sm font-medium ${STRONG_TEXT_CLASS}`}
-		>
-			<BadgeCheck className="h-4 w-4 text-primary" />
-			<span>{bullet}</span>
+		<li key={bullet} className="text-sm font-medium">
+			<HStack alignItems="center" gap="block" className={STRONG_TEXT_CLASS}>
+				<BadgeCheck className="h-4 w-4 text-accent" />
+				<span>{bullet}</span>
+			</HStack>
 		</li>
 	);
 }
@@ -508,25 +502,25 @@ function TopNavigation({
 }) {
 	return (
 		<div className="mx-auto w-full max-w-[90rem] px-5 pt-5 md:px-8 md:pt-8">
-			<div className="sticky top-4 z-40 rounded-[28px] border border-slate-200/70 bg-white/72 px-5 py-5 shadow-[0_24px_80px_rgba(148,163,184,0.14)] backdrop-blur-xl md:px-8 dark:border-white/10 dark:bg-black/45 dark:shadow-none">
+			<div className="sticky top-4 z-40 rounded-3xl border border-border bg-surface px-5 py-5 shadow-surface md:px-8">
 				<div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-					<div className="flex items-center gap-3">
-						<div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary font-display text-lg font-semibold text-white dark:text-black">
+					<HStack alignItems="center" gap="inline">
+						<div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-accent font-display text-lg font-semibold text-accent-foreground">
 							O
 						</div>
 						<div>
-							<p className="font-display text-lg font-semibold text-slate-950 dark:text-white">
+							<p className="font-display text-lg font-semibold text-foreground">
 								온짓다
 							</p>
-							<p className="text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-white/46">
+							<p className="text-xs uppercase tracking-[0.22em] text-muted">
 								AI-centered delivery studio
 							</p>
 						</div>
-					</div>
+					</HStack>
 					<div className="flex flex-col gap-4 md:items-end">
-						<div className="flex flex-wrap gap-3">
+						<HStack gap="block" className="flex-wrap">
 							{navigation.map(renderNavigationButton)}
-						</div>
+						</HStack>
 						<ThemeToggle
 							theme={theme}
 							isThemeReady={isThemeReady}
@@ -554,23 +548,23 @@ function HeroSection({
 			variants={SECTION_VARIANTS}
 			className="grid gap-14 md:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] md:items-start md:gap-16"
 		>
-			<div className="space-y-12">
+			<VStack className="gap-12">
 				<Chip
-					variant="flat"
-					color="primary"
-					className="border border-primary/20 bg-primary/10 px-3 py-5 text-[11px] font-semibold tracking-[0.32em] text-primary-700 dark:text-primary-200"
+					variant="soft"
+					color="accent"
+					className="px-3 py-5 text-[11px] font-semibold tracking-[0.32em]"
 				>
 					{hero.eyebrow}
 				</Chip>
-				<div className="space-y-7">
-					<h1 className="font-display max-w-5xl text-5xl font-semibold leading-none text-slate-950 md:text-7xl dark:text-white">
+				<VStack gap="roomy">
+					<h1 className="font-display max-w-5xl text-5xl font-semibold leading-none text-foreground md:text-7xl">
 						{hero.title}
 					</h1>
-					<p className="max-w-3xl text-base leading-8 text-slate-600 md:text-lg dark:text-white/70">
+					<p className="max-w-3xl text-base leading-8 text-muted md:text-lg">
 						{hero.description}
 					</p>
-				</div>
-				<div className="flex flex-wrap gap-5">
+				</VStack>
+				<HStack gap="section" className="flex-wrap">
 					<Button
 						size="lg"
 						variant="primary"
@@ -583,12 +577,12 @@ function HeroSection({
 						size="lg"
 						variant="secondary"
 						onPress={secondaryAction}
-						className="border border-slate-200 bg-white px-6 text-slate-900 shadow-sm hover:bg-slate-50 dark:border-white/12 dark:bg-white/6 dark:text-white dark:hover:bg-white/10"
+						className="border border-border bg-surface px-6 text-foreground transition-colors hover:bg-surface-hover"
 					>
 						{hero.secondaryAction.label}
 					</Button>
-				</div>
-				<Separator className="bg-slate-200/80 dark:bg-white/10" />
+				</HStack>
+				<Separator className="bg-separator" />
 				<motion.div
 					className="grid gap-6 md:grid-cols-4"
 					initial="hidden"
@@ -597,24 +591,22 @@ function HeroSection({
 				>
 					{hero.metrics.map(renderMetricCard)}
 				</motion.div>
-			</div>
+			</VStack>
 			<motion.div initial="hidden" animate="show" variants={GRID_VARIANTS}>
-				<Card className="overflow-hidden border border-slate-200/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.82))] shadow-[0_40px_120px_rgba(148,163,184,0.2)] dark:border-white/10 dark:bg-[linear-gradient(160deg,rgba(255,255,255,0.09),rgba(255,255,255,0.02))] dark:shadow-[0_40px_120px_rgba(0,0,0,0.34)]">
-					<Card.Header
-						className={`flex-col items-start gap-3 border-b bg-slate-950/[0.02] dark:bg-black/18 ${PANEL_DIVIDER_CLASS}`}
-					>
-						<Chip variant="flat" color="secondary">
+				<Card className="overflow-hidden border border-border bg-surface">
+					<Card.Header className="flex-col items-start gap-3 border-b border-border bg-surface-secondary">
+						<Chip variant="soft" color="default">
 							Execution board
 						</Chip>
-						<div className="space-y-2">
-							<h2 className="font-display text-2xl font-semibold text-slate-950 dark:text-white">
+						<VStack gap="inline">
+							<h2 className="font-display text-2xl font-semibold text-foreground">
 								기획에서 코드까지 같은 리듬으로 움직입니다
 							</h2>
 							<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
 								화면, 스펙, 구현이 서로를 기다리지 않도록 실행 레이어를 촘촘하게
 								맞춥니다.
 							</p>
-						</div>
+						</VStack>
 					</Card.Header>
 					<Card.Content className="gap-6 p-6 md:p-8">
 						{previewSteps.map(renderProcessCard)}
@@ -648,11 +640,9 @@ export default observer(function ProposalPage() {
 				isThemeReady={isThemeReady}
 				onToggleTheme={onClickThemeToggleButton}
 			/>
-			<main className="relative mx-auto w-full max-w-[90rem] px-5 pb-20 pt-8 md:px-8 md:pb-28 md:pt-10">
-				<div className="pointer-events-none fixed bottom-0 left-0 h-[500px] w-[500px] -translate-x-1/2 translate-y-1/2 rounded-full bg-primary/16 blur-3xl dark:bg-primary/25" />
-				<div className="pointer-events-none fixed right-0 top-0 h-[420px] w-[420px] translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary/14 blur-3xl opacity-80 dark:bg-secondary/20" />
-				<div className="relative overflow-hidden rounded-[32px] border border-slate-200/70 bg-white/64 px-6 py-10 shadow-[0_40px_140px_rgba(148,163,184,0.16)] backdrop-blur-xl md:px-14 md:py-14 dark:border-white/10 dark:bg-black/42 dark:shadow-[0_40px_140px_rgba(0,0,0,0.4)]">
-					<Container className="mx-auto max-w-7xl gap-28 py-8 md:gap-36 md:py-12">
+			<main className="mx-auto w-full max-w-[90rem] px-5 pb-20 pt-8 md:px-8 md:pb-28 md:pt-10">
+				<div className="rounded-3xl border border-border bg-surface px-6 py-10 shadow-surface md:px-14 md:py-14">
+					<Container className="mx-auto max-w-7xl gap-24 py-8 md:gap-32 md:py-12">
 						<HeroSection hero={pageData.hero} process={pageData.process} />
 						<LandingSection
 							id="problem"
@@ -718,32 +708,32 @@ export default observer(function ProposalPage() {
 								{pageData.costModel.benefits.map(renderNarrativeCard)}
 							</motion.div>
 							<div className="grid gap-6 md:grid-cols-2">
-								<Card className="border border-danger/20 bg-danger/5 shadow-none">
+								<Card className="border border-danger/30 bg-danger/10 shadow-none">
 									<Card.Header className="flex-col items-start gap-3">
-										<Chip variant="flat" color="danger">
+										<Chip variant="soft" color="danger">
 											줄이는 비용
 										</Chip>
-										<h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+										<h3 className="text-xl font-semibold text-foreground">
 											없애도 되는 레이어
 										</h3>
 									</Card.Header>
 									<Card.Content>
-										<ul className="space-y-4">
+										<ul className="flex flex-col gap-4">
 											{pageData.costModel.removed.map(renderCostLine)}
 										</ul>
 									</Card.Content>
 								</Card>
-								<Card className="border border-success/20 bg-success/5 shadow-none">
+								<Card className="border border-success/30 bg-success/10 shadow-none">
 									<Card.Header className="flex-col items-start gap-3">
-										<Chip variant="flat" color="success">
+										<Chip variant="soft" color="success">
 											남겨야 하는 비용
 										</Chip>
-										<h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+										<h3 className="text-xl font-semibold text-foreground">
 											사람이 붙잡아야 하는 레이어
 										</h3>
 									</Card.Header>
 									<Card.Content>
-										<ul className="space-y-4">
+										<ul className="flex flex-col gap-4">
 											{pageData.costModel.focused.map(renderCostLine)}
 										</ul>
 									</Card.Content>
@@ -781,19 +771,19 @@ export default observer(function ProposalPage() {
 							>
 								{pageData.projectFits.map(renderNarrativeCard)}
 							</motion.div>
-							<Card className="border border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-primary/5 shadow-[0_30px_90px_rgba(148,163,184,0.18)] dark:border-white/10 dark:bg-gradient-to-br dark:from-white/10 dark:via-white/[0.05] dark:to-transparent dark:shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
+							<Card className="border border-border bg-surface">
 								<Card.Content className="gap-7 p-6 md:p-9">
-									<div className="space-y-4">
-										<Chip variant="flat" color="primary">
+									<VStack gap="section">
+										<Chip variant="soft" color="accent">
 											Closing note
 										</Chip>
-										<h3 className="font-display text-3xl font-semibold text-slate-950 md:text-4xl dark:text-white">
+										<h3 className="font-display text-3xl font-semibold text-foreground md:text-4xl">
 											{pageData.closing.title}
 										</h3>
-										<p className="max-w-3xl text-base leading-8 text-slate-600 dark:text-white/68">
+										<p className="max-w-3xl text-base leading-8 text-muted">
 											{pageData.closing.description}
 										</p>
-									</div>
+									</VStack>
 									<ul className="grid gap-4 md:grid-cols-3">
 										{pageData.closing.bullets.map(renderClosingBullet)}
 									</ul>
@@ -834,35 +824,35 @@ export default observer(function ProposalPage() {
 								>
 									{pageData.career.credentials.map(renderResumeFactCard)}
 								</motion.div>
-								<Card className="border border-slate-200/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88))] shadow-[0_24px_80px_rgba(148,163,184,0.16)] dark:border-white/10 dark:bg-[linear-gradient(160deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] dark:shadow-none">
+								<Card className="border border-border bg-surface">
 									<Card.Header
 										className={`flex-col items-start gap-3 border-b ${PANEL_DIVIDER_CLASS}`}
 									>
-										<Chip variant="flat" color="primary">
+										<Chip variant="soft" color="accent">
 											Resume note
 										</Chip>
-										<div className="space-y-2">
-											<h3 className="text-xl font-semibold text-slate-950 dark:text-white">
+										<VStack gap="inline">
+											<h3 className="text-xl font-semibold text-foreground">
 												{pageData.career.statement.title}
 											</h3>
 											<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
 												{pageData.career.statement.description}
 											</p>
-										</div>
+										</VStack>
 									</Card.Header>
 									<Card.Content>
-										<ul className="space-y-4">
+										<ul className="flex flex-col gap-4">
 											{pageData.career.statement.bullets.map(renderCareerLine)}
 										</ul>
 									</Card.Content>
 								</Card>
 							</div>
-							<div className="space-y-6">
-								<div className="space-y-3">
-									<Chip variant="flat" color="secondary">
+							<VStack gap="page">
+								<VStack gap="block">
+									<Chip variant="soft" color="default">
 										Portfolio
 									</Chip>
-									<h3 className="font-display text-2xl font-semibold text-slate-950 dark:text-white">
+									<h3 className="font-display text-2xl font-semibold text-foreground">
 										이력서에 포함된 개인 포트폴리오와 학습 프로젝트
 									</h3>
 									<p
@@ -872,7 +862,7 @@ export default observer(function ProposalPage() {
 										프로젝트도 함께 노출합니다. 실무 경력 외에 어떤 방향으로
 										역량을 확장하고 있는지도 보이도록 구성했습니다.
 									</p>
-								</div>
+								</VStack>
 								<motion.div
 									className="grid gap-6 md:grid-cols-2"
 									initial="hidden"
@@ -882,7 +872,7 @@ export default observer(function ProposalPage() {
 								>
 									{pageData.career.portfolio.map(renderPortfolioCard)}
 								</motion.div>
-							</div>
+							</VStack>
 						</LandingSection>
 					</Container>
 				</div>

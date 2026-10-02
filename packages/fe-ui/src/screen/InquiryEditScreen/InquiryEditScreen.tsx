@@ -135,11 +135,11 @@ export interface InquiryEditScreenProps {
 }
 const inquiryPriorityColors: Record<
 	string,
-	"danger" | "warning" | "primary" | "default"
+	"danger" | "warning" | "accent" | "default"
 > = {
 	URGENT: "danger",
 	HIGH: "warning",
-	NORMAL: "primary",
+	NORMAL: "accent",
 	LOW: "default",
 };
 const findOptionText = (options: InquiryEditScreenOption[], value: string) => {
@@ -197,137 +197,139 @@ function InquiryMetaPanel({
 	};
 	return (
 		<Card className={`bg-surface ${className}`}>
-			<Card.Content className="gap-4 p-4">
-				<h3 className="text-sm font-semibold text-muted">메타 정보</h3>
+			<Card.Content className="p-4">
+				<VStack gap="section">
+					<h3 className="text-sm font-semibold text-muted">메타 정보</h3>
 
-				<div className="flex flex-col gap-1">
-					<label className="text-xs text-muted">상태</label>
-					{isEditable ? (
-						<Select
-							size="sm"
-							variant="bordered"
-							options={statusOptions}
-							value={status}
-							onChange={(value) => onStatusChange(String(value ?? ""))}
-						/>
-					) : (
-						<Chip size="sm" variant="flat">
-							{findOptionText(statusOptions, status)}
-						</Chip>
-					)}
-				</div>
-
-				<div className="flex flex-col gap-1">
-					<label className="text-xs text-muted">우선순위</label>
-					{isEditable ? (
-						<Select
-							size="sm"
-							variant="bordered"
-							options={priorityOptions}
-							value={priority}
-							onChange={(value) => onPriorityChange(String(value ?? ""))}
-						/>
-					) : (
-						<Chip
-							size="sm"
-							variant="flat"
-							color={inquiryPriorityColors[priority] || "default"}
-						>
-							{findOptionText(priorityOptions, priority)}
-						</Chip>
-					)}
-				</div>
-
-				<div className="flex flex-col gap-1">
-					<label className="text-xs text-muted">카테고리</label>
-					{isEditable ? (
-						<Select
-							size="sm"
-							variant="bordered"
-							options={categoryOptions}
-							value={category}
-							onChange={(value) => onCategoryChange(String(value ?? ""))}
-						/>
-					) : (
-						<Chip size="sm" variant="flat" color="primary">
-							{findOptionText(categoryOptions, category)}
-						</Chip>
-					)}
-				</div>
-
-				<div className="flex flex-col gap-1">
-					<label className="text-xs text-muted">담당자</label>
-					{isEditable ? (
-						<Select
-							size="sm"
-							variant="bordered"
-							options={assigneeOptions}
-							value={assigneeId || ""}
-							onChange={(value) => onAssigneeChange(String(value ?? ""))}
-							placeholder="담당자 선택"
-						/>
-					) : (
-						<span className="text-sm text-foreground">
-							{assigneeName || "미배정"}
-						</span>
-					)}
-				</div>
-
-				<div className="flex flex-col gap-2">
-					<label className="text-xs text-muted">태그</label>
-					<div className="flex flex-wrap gap-1">
-						{tags.map((tag) => (
-							<Chip
-								key={tag}
+					<VStack gap="dense">
+						<label className="text-xs text-muted">상태</label>
+						{isEditable ? (
+							<Select
 								size="sm"
-								variant="flat"
-								color="primary"
-								onClose={isEditable ? () => onTagRemove?.(tag) : undefined}
-							>
-								#{tag}
+								variant="bordered"
+								options={statusOptions}
+								value={status}
+								onChange={(value) => onStatusChange(String(value ?? ""))}
+							/>
+						) : (
+							<Chip size="sm" variant="soft">
+								{findOptionText(statusOptions, status)}
 							</Chip>
-						))}
-						{isEditable && !isAddingTag ? (
-							<Button
+						)}
+					</VStack>
+
+					<VStack gap="dense">
+						<label className="text-xs text-muted">우선순위</label>
+						{isEditable ? (
+							<Select
 								size="sm"
-								variant="tertiary"
-								startContent={<Plus className="size-3" />}
-								onPress={() => setIsAddingTag(true)}
-								className="h-6 min-w-0 px-2"
+								variant="bordered"
+								options={priorityOptions}
+								value={priority}
+								onChange={(value) => onPriorityChange(String(value ?? ""))}
+							/>
+						) : (
+							<Chip
+								size="sm"
+								variant="soft"
+								color={inquiryPriorityColors[priority] || "default"}
 							>
-								추가
-							</Button>
-						) : null}
-					</div>
-					{isEditable && isAddingTag ? (
-						<TextField
-							size="sm"
-							placeholder="태그 입력..."
-							value={newTag}
-							onValueChange={setNewTag}
-							onKeyDown={(event) => {
-								if (event.key === "Enter") {
-									handleAddTag();
-								}
-								if (event.key === "Escape") {
+								{findOptionText(priorityOptions, priority)}
+							</Chip>
+						)}
+					</VStack>
+
+					<VStack gap="dense">
+						<label className="text-xs text-muted">카테고리</label>
+						{isEditable ? (
+							<Select
+								size="sm"
+								variant="bordered"
+								options={categoryOptions}
+								value={category}
+								onChange={(value) => onCategoryChange(String(value ?? ""))}
+							/>
+						) : (
+							<Chip size="sm" variant="soft" color="accent">
+								{findOptionText(categoryOptions, category)}
+							</Chip>
+						)}
+					</VStack>
+
+					<VStack gap="dense">
+						<label className="text-xs text-muted">담당자</label>
+						{isEditable ? (
+							<Select
+								size="sm"
+								variant="bordered"
+								options={assigneeOptions}
+								value={assigneeId || ""}
+								onChange={(value) => onAssigneeChange(String(value ?? ""))}
+								placeholder="담당자 선택"
+							/>
+						) : (
+							<span className="text-sm text-foreground">
+								{assigneeName || "미배정"}
+							</span>
+						)}
+					</VStack>
+
+					<VStack gap="block">
+						<label className="text-xs text-muted">태그</label>
+						<HStack gap="dense" className="flex-wrap">
+							{tags.map((tag) => (
+								<Chip
+									key={tag}
+									size="sm"
+									variant="soft"
+									color="accent"
+									onClose={isEditable ? () => onTagRemove?.(tag) : undefined}
+								>
+									#{tag}
+								</Chip>
+							))}
+							{isEditable && !isAddingTag ? (
+								<Button
+									size="sm"
+									variant="tertiary"
+									startContent={<Plus className="size-3" />}
+									onPress={() => setIsAddingTag(true)}
+									className="h-6 min-w-0 px-2"
+								>
+									추가
+								</Button>
+							) : null}
+						</HStack>
+						{isEditable && isAddingTag ? (
+							<TextField
+								size="sm"
+								placeholder="태그 입력..."
+								value={newTag}
+								onValueChange={setNewTag}
+								onKeyDown={(event) => {
+									if (event.key === "Enter") {
+										handleAddTag();
+									}
+									if (event.key === "Escape") {
+										setIsAddingTag(false);
+										setNewTag("");
+									}
+								}}
+								onBlur={() => {
+									if (newTag.trim()) {
+										handleAddTag();
+										return;
+									}
 									setIsAddingTag(false);
-									setNewTag("");
-								}
-							}}
-							onBlur={() => {
-								if (newTag.trim()) {
-									handleAddTag();
-									return;
-								}
-								setIsAddingTag(false);
-							}}
-							startContent={<Tag className="size-3 text-muted" />}
-							classNames={{
-								input: "text-sm",
-							}}
-						/>
-					) : null}
-				</div>
+								}}
+								startContent={<Tag className="size-3 text-muted" />}
+								classNames={{
+									input: "text-sm",
+								}}
+							/>
+						) : null}
+					</VStack>
+				</VStack>
 			</Card.Content>
 		</Card>
 	);
@@ -358,46 +360,51 @@ function InquiryInfoPanel({
 	}[sentiment.type];
 	return (
 		<Card className="bg-surface">
-			<Card.Content className="gap-3 p-4">
-				<h3 className="text-sm font-semibold text-muted">문의 정보</h3>
-				<div className="flex items-center gap-2">
-					<Hash className="size-4 text-muted" />
-					<span className="text-sm text-muted">문의번호:</span>
-					<span className="font-mono text-sm font-medium text-foreground">
-						{inquiryNumber}
-					</span>
-				</div>
-				<div>
-					<span className="text-sm text-muted">제목: </span>
-					<span className="font-semibold text-foreground">{title}</span>
-				</div>
-				<div className="flex items-center gap-2">
-					<MessageSquare className="size-4 text-muted" />
-					<span className="text-sm text-muted">채널:</span>
-					<span className="text-sm text-foreground">{channel}</span>
-				</div>
-				<div className="flex items-center gap-2">
-					<Clock className="size-4 text-muted" />
-					<span className="text-sm text-muted">접수일:</span>
-					<span className="text-sm text-foreground">{createdAt}</span>
-				</div>
-				<div className="flex items-center gap-2 rounded-lg bg-surface-secondary p-2">
-					<span className="text-sm">감정 분석:</span>
-					<span className="text-lg">{sentimentTone}</span>
-					<span className="text-sm font-medium">{sentiment.label}</span>
-					<span className="text-xs text-muted">
-						(신뢰도 {sentiment.confidence}%)
-					</span>
-				</div>
-				{onlineParticipants.length > 0 ? (
-					<div className="flex items-center gap-2">
-						<User className="size-4 text-success" />
-						<span className="text-sm text-success">온라인:</span>
-						<span className="text-sm text-foreground">
-							{onlineParticipants.join(", ")}
+			<Card.Content className="p-4">
+				<VStack gap="block">
+					<h3 className="text-sm font-semibold text-muted">문의 정보</h3>
+					<HStack alignItems="center">
+						<Hash className="size-4 text-muted" />
+						<span className="text-sm text-muted">문의번호:</span>
+						<span className="font-mono text-sm font-medium text-foreground">
+							{inquiryNumber}
 						</span>
+					</HStack>
+					<div>
+						<span className="text-sm text-muted">제목: </span>
+						<span className="font-semibold text-foreground">{title}</span>
 					</div>
-				) : null}
+					<HStack alignItems="center">
+						<MessageSquare className="size-4 text-muted" />
+						<span className="text-sm text-muted">채널:</span>
+						<span className="text-sm text-foreground">{channel}</span>
+					</HStack>
+					<HStack alignItems="center">
+						<Clock className="size-4 text-muted" />
+						<span className="text-sm text-muted">접수일:</span>
+						<span className="text-sm text-foreground">{createdAt}</span>
+					</HStack>
+					<HStack
+						alignItems="center"
+						className="rounded-lg bg-surface-secondary p-2"
+					>
+						<span className="text-sm">감정 분석:</span>
+						<span className="text-lg">{sentimentTone}</span>
+						<span className="text-sm font-medium">{sentiment.label}</span>
+						<span className="text-xs text-muted">
+							(신뢰도 {sentiment.confidence}%)
+						</span>
+					</HStack>
+					{onlineParticipants.length > 0 ? (
+						<HStack alignItems="center">
+							<User className="size-4 text-success" />
+							<span className="text-sm text-success">온라인:</span>
+							<span className="text-sm text-foreground">
+								{onlineParticipants.join(", ")}
+							</span>
+						</HStack>
+					) : null}
+				</VStack>
 			</Card.Content>
 		</Card>
 	);
@@ -417,35 +424,39 @@ function CustomerInfoPanel({
 }) {
 	return (
 		<Card className="bg-surface">
-			<Card.Content className="gap-3 p-4">
-				<h3 className="text-sm font-semibold text-muted">고객 정보</h3>
-				<div className="flex items-center gap-2">
-					<User className="size-4 text-muted" />
-					<span className="font-semibold text-foreground">{name}</span>
-					{email ? <span className="text-sm text-muted">({email})</span> : null}
-				</div>
-				{phone ? (
-					<div className="flex items-center gap-2">
-						<Phone className="size-4 text-muted" />
-						<span className="text-sm text-foreground">{phone}</span>
-					</div>
-				) : null}
-				{joinedAt ? (
-					<div className="flex items-center gap-2">
-						<Calendar className="size-4 text-muted" />
-						<span className="text-sm text-muted">가입일:</span>
-						<span className="text-sm text-foreground">{joinedAt}</span>
-					</div>
-				) : null}
-				{inquiryCount !== undefined ? (
-					<div className="flex items-center gap-2">
-						<Mail className="size-4 text-muted" />
-						<span className="text-sm text-muted">문의 이력:</span>
-						<span className="text-sm font-medium text-foreground">
-							{inquiryCount}건
-						</span>
-					</div>
-				) : null}
+			<Card.Content className="p-4">
+				<VStack gap="block">
+					<h3 className="text-sm font-semibold text-muted">고객 정보</h3>
+					<HStack alignItems="center">
+						<User className="size-4 text-muted" />
+						<span className="font-semibold text-foreground">{name}</span>
+						{email ? (
+							<span className="text-sm text-muted">({email})</span>
+						) : null}
+					</HStack>
+					{phone ? (
+						<HStack alignItems="center">
+							<Phone className="size-4 text-muted" />
+							<span className="text-sm text-foreground">{phone}</span>
+						</HStack>
+					) : null}
+					{joinedAt ? (
+						<HStack alignItems="center">
+							<Calendar className="size-4 text-muted" />
+							<span className="text-sm text-muted">가입일:</span>
+							<span className="text-sm text-foreground">{joinedAt}</span>
+						</HStack>
+					) : null}
+					{inquiryCount !== undefined ? (
+						<HStack alignItems="center">
+							<Mail className="size-4 text-muted" />
+							<span className="text-sm text-muted">문의 이력:</span>
+							<span className="text-sm font-medium text-foreground">
+								{inquiryCount}건
+							</span>
+						</HStack>
+					) : null}
+				</VStack>
 			</Card.Content>
 		</Card>
 	);
@@ -453,7 +464,7 @@ function CustomerInfoPanel({
 const participantRoleConfig = {
 	customer: {
 		label: "고객",
-		color: "primary" as const,
+		color: "accent" as const,
 	},
 	agent: {
 		label: "담당자",
@@ -477,51 +488,54 @@ function ParticipantPanel({
 	);
 	return (
 		<Card className="bg-surface">
-			<Card.Content className="gap-3 p-4">
-				<div className="flex items-center justify-between">
-					<h3 className="text-sm font-semibold text-muted">
-						참여자 ({participants.length})
-					</h3>
-					{onlineParticipants.length > 0 ? (
-						<span className="text-xs text-success">
-							{onlineParticipants.length}명 온라인
-						</span>
-					) : null}
-				</div>
-				<div className="flex flex-col gap-2">
-					{participants.map((participant) => {
-						const roleInfo = participantRoleConfig[participant.role];
-						return (
-							<div
-								key={participant.id}
-								className="flex w-full items-center gap-2 rounded-lg p-2"
-							>
-								<span
-									className={`size-2 rounded-full ${participant.isOnline ? "bg-success" : "bg-default"}`}
-								/>
-								<span className="flex-1 text-sm text-foreground">
-									{participant.name}
-								</span>
-								<Chip size="sm" variant="flat" color={roleInfo.color}>
-									{roleInfo.label}
-								</Chip>
-								{participant.isTyping ? (
-									<span className="text-xs text-accent">작성 중...</span>
-								) : null}
-							</div>
-						);
-					})}
-				</div>
-				{typingParticipants.length > 0 ? (
-					<div className="rounded-lg bg-accent-soft p-2">
-						<span className="text-xs text-accent">
-							{typingParticipants
-								.map((participant) => participant.name)
-								.join(", ")}
-							님이 타이핑 중입니다...
-						</span>
+			<Card.Content className="p-4">
+				<VStack gap="block">
+					<div className="flex items-center justify-between">
+						<h3 className="text-sm font-semibold text-muted">
+							참여자 ({participants.length})
+						</h3>
+						{onlineParticipants.length > 0 ? (
+							<span className="text-xs text-success">
+								{onlineParticipants.length}명 온라인
+							</span>
+						) : null}
 					</div>
-				) : null}
+					<VStack gap="block">
+						{participants.map((participant) => {
+							const roleInfo = participantRoleConfig[participant.role];
+							return (
+								<HStack
+									alignItems="center"
+									key={participant.id}
+									className="w-full rounded-lg p-2"
+								>
+									<span
+										className={`size-2 rounded-full ${participant.isOnline ? "bg-success" : "bg-default"}`}
+									/>
+									<span className="flex-1 text-sm text-foreground">
+										{participant.name}
+									</span>
+									<Chip size="sm" variant="soft" color={roleInfo.color}>
+										{roleInfo.label}
+									</Chip>
+									{participant.isTyping ? (
+										<span className="text-xs text-accent">작성 중...</span>
+									) : null}
+								</HStack>
+							);
+						})}
+					</VStack>
+					{typingParticipants.length > 0 ? (
+						<div className="rounded-lg bg-accent-soft p-2">
+							<span className="text-xs text-accent">
+								{typingParticipants
+									.map((participant) => participant.name)
+									.join(", ")}
+								님이 타이핑 중입니다...
+							</span>
+						</div>
+					) : null}
+				</VStack>
 			</Card.Content>
 		</Card>
 	);
@@ -554,12 +568,12 @@ function SlaMetricRow({ metric }: { metric: SlaMetric }) {
 		<Clock className="size-4 text-accent" />
 	);
 	return (
-		<div className="flex flex-col gap-2">
+		<VStack gap="block">
 			<div className="flex items-center justify-between">
-				<div className="flex items-center gap-2">
+				<HStack alignItems="center">
 					{icon}
 					<span className="text-sm text-foreground">{metric.label}</span>
-				</div>
+				</HStack>
 				<span className={`text-xs font-medium ${color}`}>{status}</span>
 			</div>
 			<div className="flex items-center justify-between text-xs text-muted">
@@ -575,7 +589,7 @@ function SlaMetricRow({ metric }: { metric: SlaMetric }) {
 				size="sm"
 				className="h-2"
 			/>
-		</div>
+		</VStack>
 	);
 }
 function SlaTrackerPanel({
@@ -587,12 +601,14 @@ function SlaTrackerPanel({
 }) {
 	return (
 		<Card className="bg-surface">
-			<Card.Content className="gap-4 p-4">
-				<h3 className="text-sm font-semibold text-muted">SLA 추적</h3>
-				<div className="flex flex-col gap-4">
-					<SlaMetricRow metric={firstResponse} />
-					<SlaMetricRow metric={resolution} />
-				</div>
+			<Card.Content className="p-4">
+				<VStack gap="section">
+					<h3 className="text-sm font-semibold text-muted">SLA 추적</h3>
+					<VStack gap="section">
+						<SlaMetricRow metric={firstResponse} />
+						<SlaMetricRow metric={resolution} />
+					</VStack>
+				</VStack>
 			</Card.Content>
 		</Card>
 	);

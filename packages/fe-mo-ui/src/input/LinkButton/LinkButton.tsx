@@ -12,14 +12,23 @@ import { getTextContent, Text } from "../../data-display/Text";
 
 type HeroLinkButtonProps = ComponentPropsWithoutRef<typeof HeroLinkButton>;
 export type LinkButtonProps = HeroLinkButtonProps & {};
+
+// 링크는 텍스트 높이로만 렌더링되므로 hit slop으로 44px 터치 영역을 보장합니다.
+const LINK_BUTTON_HIT_SLOP = { bottom: 12, left: 8, right: 8, top: 12 };
+
 const LinkButtonComponent = forwardRef<
 	ComponentRef<typeof HeroLinkButton>,
 	LinkButtonProps
->(({ children, size = "md", ...props }, ref) => {
+>(({ children, hitSlop, size = "md", ...props }, ref) => {
 	const label = getTextContent(children);
 
 	return (
-		<HeroLinkButton {...props} ref={ref} size={size}>
+		<HeroLinkButton
+			{...props}
+			hitSlop={hitSlop ?? LINK_BUTTON_HIT_SLOP}
+			ref={ref}
+			size={size}
+		>
 			{label === null ? (
 				children
 			) : (

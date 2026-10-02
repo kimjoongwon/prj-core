@@ -1,5 +1,22 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import { type ReactNode } from "react";
+import { DesignSystemProvider } from "../../design-system/provider";
 import { BookingClassCard, type BookingClassFeedItem } from "./index";
+
+const renderWithDesignSystem = (children: ReactNode) =>
+	render(
+		<DesignSystemProvider
+			config={{
+				animation: "disable-all",
+				devInfo: {
+					stylingPrinciples: false,
+				},
+				toast: false,
+			}}
+		>
+			{children}
+		</DesignSystemProvider>,
+	);
 
 describe("BookingClassCard", () => {
 	it("예약 피드 카드 정보를 렌더링하고 CTA 클릭 시 item을 전달해야 한다", () => {
@@ -24,7 +41,9 @@ describe("BookingClassCard", () => {
 			waitlistCount: 1,
 		};
 
-		render(<BookingClassCard item={item} onPressCta={onPressCta} />);
+		renderWithDesignSystem(
+			<BookingClassCard item={item} onPressCta={onPressCta} />,
+		);
 
 		// When
 		fireEvent.press(screen.getByLabelText("예약하기"));
@@ -42,7 +61,7 @@ describe("BookingClassCard", () => {
 		// Given
 		const onPressCta = jest.fn();
 
-		render(
+		renderWithDesignSystem(
 			<BookingClassCard
 				item={{
 					id: "class-closed",

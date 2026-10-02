@@ -1,13 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { type ReactNode } from "react";
-import {
-	Pressable,
-	type PressableProps,
-	ScrollView,
-	View,
-	type ViewProps,
-} from "react-native";
+import { ScrollView, View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
+import { Chip } from "../../data-display/Chip";
 import { Text } from "../../data-display/Text";
 import { BookingPolicySheet } from "../../feature/BookingPolicySheet";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
@@ -17,6 +12,7 @@ import {
 	type DateStripOption,
 } from "../../input/DateStrip";
 import { ScreenFrame } from "../../layout/ScreenFrame";
+import { HStack, VStack } from "../../rhythm";
 import {
 	BookingClassCard,
 	type BookingClassFeedItem,
@@ -101,30 +97,22 @@ export const ReservationHomeScreen = observer(
 
 		for (const option of filterOptions) {
 			const isSelected = option.value === selectedFilter;
-			const filterClassNames = reservationHomeScreenClassNames({
-				selected: isSelected,
-			});
 
 			filterChipNodes.push(
-				<Pressable
+				<Chip
 					accessibilityLabel={`filter-${option.value}`}
 					accessibilityRole="button"
 					accessibilityState={{
 						selected: isSelected,
 					}}
-					className={filterClassNames.filterChip()}
+					className="min-h-11"
+					color={isSelected ? "accent" : "default"}
 					key={option.value}
-					onPress={
-						createFilterPressHandler(
-							option,
-							onPressFilter,
-						) as PressableProps["onPress"]
-					}
+					onPress={createFilterPressHandler(option, onPressFilter)}
+					variant={isSelected ? "primary" : "soft"}
 				>
-					<Text className={filterClassNames.filterChipText()}>
-						{option.label}
-					</Text>
-				</Pressable>,
+					{option.label}
+				</Chip>,
 			);
 		}
 
@@ -189,54 +177,66 @@ export const ReservationHomeScreen = observer(
 					contentContainerClassName={classNames.contentContainer()}
 					showsVerticalScrollIndicator={false}
 				>
-					<View className={classNames.tabContent()}>
-						<View className={classNames.overview()} key="overview">
-							<View className={classNames.overviewHeader()} key="header">
+					<VStack gap="page">
+						<VStack
+							className={classNames.overview()}
+							gap="section"
+							key="overview"
+						>
+							<VStack gap="dense" key="header">
 								<Text className={classNames.eyebrow()} key="eyebrow">
 									예약 현황
 								</Text>
 								<Text className={classNames.overviewTitle()} key="title">
 									{selectedDateLabel ?? "선택한 날짜"}
 								</Text>
-							</View>
+							</VStack>
 							<Text
 								className={classNames.overviewDescription()}
 								key="description"
 							>
 								예약 가능한 수업과 내 예약 상태를 한 화면에서 확인합니다.
 							</Text>
-							<View className={classNames.summaryGrid()} key="summary">
+							<HStack
+								className={classNames.summaryGrid()}
+								gap="dense"
+								key="summary"
+							>
 								<View className={classNames.summaryCard()} key="window">
-									<View className={classNames.summaryHeader()} key="label">
+									<HStack key="label">
 										<Icon name="calendarRange" size="xs" tone="muted" />
-										<Text className={classNames.summaryLabel()}>조회 기간</Text>
-									</View>
+										<Text className={classNames.summaryLabel()}>
+											조회 기간
+										</Text>
+									</HStack>
 									<Text className={classNames.summaryValue()} key="value">
 										{bookingWindowDays}일
 									</Text>
 								</View>
 								<View className={classNames.summaryCard()} key="reserved">
-									<View className={classNames.summaryHeader()} key="label">
+									<HStack key="label">
 										<Icon name="ticketCheck" size="xs" tone="muted" />
 										<Text className={classNames.summaryLabel()}>내 예약</Text>
-									</View>
+									</HStack>
 									<Text className={classNames.summaryValue()} key="value">
 										{reservedCount}
 									</Text>
 								</View>
 								<View className={classNames.summaryCard()} key="visible">
-									<View className={classNames.summaryHeader()} key="label">
+									<HStack key="label">
 										<Icon name="listChecks" size="xs" tone="muted" />
-										<Text className={classNames.summaryLabel()}>표시 수업</Text>
-									</View>
+										<Text className={classNames.summaryLabel()}>
+											표시 수업
+										</Text>
+									</HStack>
 									<Text className={classNames.summaryValue()} key="value">
 										{cardItems.length}개
 									</Text>
 								</View>
-							</View>
-						</View>
-						<View className={classNames.section()} key="dates">
-							<View className={classNames.sectionHeader()} key="header">
+							</HStack>
+						</VStack>
+						<VStack gap="block" key="dates">
+							<VStack gap="dense" key="header">
 								<Text className={classNames.sectionTitle()} key="title">
 									예약 날짜
 								</Text>
@@ -246,16 +246,16 @@ export const ReservationHomeScreen = observer(
 								>
 									오늘부터 14일간의 예약 가능 수업입니다.
 								</Text>
-							</View>
+							</VStack>
 							<DateStrip
 								key="strip"
 								onSelect={onSelectDate}
 								options={dateOptions}
 								selectedValue={selectedDate}
 							/>
-						</View>
-						<View className={classNames.section()} key="feed">
-							<View className={classNames.sectionHeader()} key="header">
+						</VStack>
+						<VStack gap="block" key="feed">
+							<VStack gap="dense" key="header">
 								<Text className={classNames.sectionTitle()} key="title">
 									수업 목록
 								</Text>
@@ -266,17 +266,17 @@ export const ReservationHomeScreen = observer(
 									{selectedDateLabel ?? "선택한 날짜"} 기준으로 예약 상태를
 									보여줍니다.
 								</Text>
-							</View>
-							<View className={classNames.filterRow()} key="filters">
+							</VStack>
+							<HStack className="flex-wrap" gap="inline" key="filters">
 								{filterChipNodes}
-							</View>
+							</HStack>
 							{isFetching ? (
 								<Text className={classNames.sessionLabel()} key="fetching">
 									최신 예약 상태를 확인 중입니다.
 								</Text>
 							) : null}
 							{feedContent}
-						</View>
+						</VStack>
 						{reservationSuccessDescription ? (
 							<StatusFeedback
 								description={reservationSuccessDescription}
@@ -310,7 +310,7 @@ export const ReservationHomeScreen = observer(
 								title="예약 요청에 실패했습니다"
 							/>
 						) : null}
-					</View>
+					</VStack>
 				</ScrollView>
 			</ScreenFrame>
 		);
@@ -321,39 +321,19 @@ const reservationHomeScreenClassNames = tv({
 	slots: {
 		contentContainer: "px-4 pb-8 pt-3",
 		eyebrow: "text-xs font-bold uppercase text-accent",
-		filterChip: "rounded-full border border-border bg-surface px-3 py-2",
-		filterChipText: "text-[13px] font-bold leading-4 text-foreground",
-		filterRow: "flex-row flex-wrap gap-2",
-		overview: "gap-4 rounded-lg border border-border bg-surface px-4 py-4",
+		overview: "rounded-lg border border-border bg-surface px-4 py-4",
 		overviewDescription: "text-[13px] leading-5 text-muted",
-		overviewHeader: "gap-1",
 		overviewTitle: "text-[22px] font-bold leading-7 text-foreground",
 		root: "flex-1 bg-background",
 		screenFrame: "bg-background",
-		section: "gap-2.5",
 		sectionDescription: "text-[13px] leading-5 text-muted",
-		sectionHeader: "gap-1",
 		sectionTitle: "text-base font-bold leading-6 text-foreground",
 		sessionLabel: "text-[13px] leading-5 text-muted",
 		summaryCard:
-			"min-h-14 flex-1 justify-between rounded-md bg-background px-3 py-2",
-		summaryGrid: "flex-row gap-1 rounded-lg bg-background p-1",
-		summaryHeader: "flex-row items-center gap-1.5",
+			"min-h-14 flex-1 justify-between rounded-lg bg-background px-3 py-2",
+		summaryGrid: "rounded-lg bg-background p-1",
 		summaryLabel: "text-[11px] font-semibold uppercase leading-4 text-muted",
 		summaryValue: "text-[19px] font-bold leading-6 text-foreground",
-		tabContent: "gap-5",
-	},
-	variants: {
-		selected: {
-			false: {},
-			true: {
-				filterChip: "border-accent bg-accent",
-				filterChipText: "text-accent-foreground",
-			},
-		},
-	},
-	defaultVariants: {
-		selected: false,
 	},
 });
 const classNames = reservationHomeScreenClassNames();

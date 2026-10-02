@@ -1,11 +1,13 @@
 import { observer } from "mobx-react-lite";
-import { ScrollView, View } from "react-native";
+import { ScrollView } from "react-native";
 import { tv } from "tailwind-variants";
+import { Chip, chipClassNames } from "../../data-display/Chip";
 import { Text } from "../../data-display/Text";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
 import { Button } from "../../input/Button";
 import { ScreenFrame } from "../../layout/ScreenFrame";
+import { VStack } from "../../rhythm";
 import type { SpaceListItemInfo } from "../../widget/SpaceListItem";
 import { SpaceSelectionList } from "../../widget/SpaceSelectionList";
 
@@ -94,39 +96,50 @@ export const SpaceSelectScreen = observer(function SpaceSelectScreen({
 				contentContainerClassName={classNames.container()}
 				showsVerticalScrollIndicator={false}
 			>
-				<View className={classNames.header()}>
-					<View className={classNames.badge()}>
-						<Icon name="mapPin" size="xs" tone="accent" />
-						<Text className={classNames.badgeText()}>Branch</Text>
-					</View>
-					<Text className={classNames.title()}>
-						이용할 지점을 선택해 주세요
-					</Text>
-					<Text className={classNames.description()}>
-						선택한 지점으로 예약 목록과 알림 설정이 연결됩니다.
-					</Text>
-				</View>
-				{selectionErrorDescription ? (
-					<StatusFeedback
-						status="error"
-						title="지점을 적용하지 못했습니다"
-						description={selectionErrorDescription}
+				<VStack gap="page">
+					<VStack gap="block">
+						<Chip color="accent" size="sm" variant="soft">
+							<Icon name="mapPin" size="xs" tone="accent" />
+							<Text
+								className={chipClassNames.label({
+									color: "accent",
+									size: "sm",
+									variant: "soft",
+									className: "font-bold uppercase",
+								})}
+							>
+								Branch
+							</Text>
+						</Chip>
+						<Text className={classNames.title()}>
+							이용할 지점을 선택해 주세요
+						</Text>
+						<Text className={classNames.description()}>
+							선택한 지점으로 예약 목록과 알림 설정이 연결됩니다.
+						</Text>
+					</VStack>
+					{selectionErrorDescription ? (
+						<StatusFeedback
+							status="error"
+							title="지점을 적용하지 못했습니다"
+							description={selectionErrorDescription}
+						/>
+					) : null}
+					<SpaceSelectBody
+						errorDescription={errorDescription}
+						isBusy={isBusy}
+						onPressRetry={onPressRetry}
+						onSelectSpace={onSelectSpace}
+						selectedSpaceId={selectedSpaceId}
+						spaces={spaces}
+						status={status}
 					/>
-				) : null}
-				<SpaceSelectBody
-					errorDescription={errorDescription}
-					isBusy={isBusy}
-					onPressRetry={onPressRetry}
-					onSelectSpace={onSelectSpace}
-					selectedSpaceId={selectedSpaceId}
-					spaces={spaces}
-					status={status}
-				/>
-				{isSubmitting ? (
-					<Button className="rounded-lg" isDisabled variant="primary">
-						지점 적용 중
-					</Button>
-				) : null}
+					{isSubmitting ? (
+						<Button isDisabled variant="primary">
+							지점 적용 중
+						</Button>
+					) : null}
+				</VStack>
 			</ScrollView>
 		</ScreenFrame>
 	);
@@ -136,13 +149,8 @@ SpaceSelectScreen.displayName = "SpaceSelectScreen";
 
 const spaceSelectScreenClassNames = tv({
 	slots: {
-		badge:
-			"self-start flex-row items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-1",
-		badgeText:
-			"text-[11px] font-bold uppercase leading-4 text-accent-soft-foreground",
-		container: "gap-5 px-4 pb-8 pt-8",
+		container: "px-4 pb-8 pt-8",
 		description: "text-sm font-medium leading-5 text-muted",
-		header: "gap-2",
 		screenFrame: "bg-background",
 		scroll: "flex-1",
 		title: "text-[26px] font-extrabold leading-8 text-foreground",

@@ -40,13 +40,16 @@ const meta = {
 		layout: "centered",
 	},
 	render: (args) => (
-		<HStack {...args} className="w-[280px] rounded-xl bg-content1 p-4">
+		<HStack
+			{...args}
+			className="w-[280px] rounded-xl bg-surface-secondary p-4"
+		>
 			<View>
 				<Text className="text-base font-bold text-foreground">내 예약</Text>
 				<Text className="text-xs text-muted">오늘 확인할 항목</Text>
 			</View>
-			<View className="rounded-full bg-primary px-3 py-1">
-				<Text className="text-xs font-bold text-primary-foreground">3건</Text>
+			<View className="rounded-full bg-accent px-3 py-1">
+				<Text className="text-xs font-bold text-accent-foreground">3건</Text>
 			</View>
 		</HStack>
 	),
@@ -74,7 +77,10 @@ export const GapScale: Story = {
 			).map(([gap, label]) => (
 				<View key={gap}>
 					<Text className="mb-2 text-sm font-bold text-foreground">{label}</Text>
-					<HStack gap={gap} className="rounded-xl bg-content1 p-3">
+					<HStack
+						gap={gap}
+						className="rounded-xl bg-surface-secondary p-3"
+					>
 						<Text className="text-sm text-foreground">항목 A</Text>
 						<Text className="text-sm text-foreground">항목 B</Text>
 					</HStack>

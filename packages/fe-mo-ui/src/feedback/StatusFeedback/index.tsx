@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
+import { Chip, chipClassNames, type ChipProps } from "../../data-display/Chip";
 import { Text } from "../../data-display/Text";
 import { Icon, type IconTone, type MobileIconName } from "../../icon";
 import { Button } from "../../input/Button";
@@ -42,6 +43,17 @@ const STATUS_ICON_TONES: Record<StatusFeedbackStatus, IconTone> = {
 	empty: "muted",
 	error: "danger",
 	idle: "muted",
+	loading: "accent",
+	submitting: "warning",
+	success: "success",
+};
+const STATUS_CHIP_COLORS: Record<
+	StatusFeedbackStatus,
+	NonNullable<ChipProps["color"]>
+> = {
+	empty: "default",
+	error: "danger",
+	idle: "default",
 	loading: "accent",
 	submitting: "warning",
 	success: "success",
@@ -123,6 +135,7 @@ const StatusFeedbackComponent = observer((props: StatusFeedbackProps) => {
 		...rest
 	} = props;
 	const isBusy = status === "loading" || status === "submitting";
+	const statusChipColor = STATUS_CHIP_COLORS[status];
 	const slotClassNames = statusFeedbackClassNames({
 		status,
 	});
@@ -137,16 +150,22 @@ const StatusFeedbackComponent = observer((props: StatusFeedbackProps) => {
 			style={style}
 		>
 			<View className={slotClassNames.header()}>
-				<View className={slotClassNames.badge()} key="badge">
+				<Chip color={statusChipColor} key="badge" size="sm" variant="soft">
 					<Icon
 						name={STATUS_ICONS[status]}
 						size="xs"
 						tone={STATUS_ICON_TONES[status]}
 					/>
-					<Text className={slotClassNames.badgeText()}>
+					<Text
+						className={chipClassNames.label({
+							color: statusChipColor,
+							size: "sm",
+							variant: "soft",
+						})}
+					>
 						{STATUS_LABELS[status]}
 					</Text>
-				</View>
+				</Chip>
 				<Text className={slotClassNames.title()} key="title">
 					{title}
 				</Text>
@@ -167,9 +186,6 @@ const statusFeedbackClassNames = tv({
 	slots: {
 		action: "rounded-lg",
 		actions: "flex-row flex-wrap gap-2",
-		badge:
-			"self-start flex-row items-center gap-1.5 rounded-full border border-border px-2 py-0.5",
-		badgeText: "text-xs font-semibold leading-4 text-foreground",
 		description: "text-[13px] leading-5 text-muted",
 		header: "gap-2",
 		root: "gap-3 rounded-lg border border-border bg-surface px-4 py-3",
@@ -182,31 +198,21 @@ const statusFeedbackClassNames = tv({
 		},
 		status: {
 			empty: {
-				badge: "bg-default",
 				root: "border-border",
 			},
 			error: {
-				badge: "border-danger bg-danger-soft",
-				badgeText: "text-danger-soft-foreground",
 				root: "border-danger bg-surface",
 			},
 			idle: {
-				badge: "bg-surface-secondary",
 				root: "border-border",
 			},
 			loading: {
-				badge: "border-accent bg-accent-soft",
-				badgeText: "text-accent-soft-foreground",
 				root: "border-accent",
 			},
 			submitting: {
-				badge: "border-warning bg-warning-soft",
-				badgeText: "text-warning-soft-foreground",
 				root: "border-warning",
 			},
 			success: {
-				badge: "border-success bg-success-soft",
-				badgeText: "text-success-soft-foreground",
 				root: "border-success",
 			},
 		},

@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
+import { HStack, VStack } from "../../rhythm";
 
 export type PolicyFormField =
 	| "name"
@@ -48,7 +49,7 @@ export const PolicyForm = observer(
 		};
 
 		return (
-			<div className="space-y-8">
+			<VStack gap="roomy">
 				<section>
 					<h2 className="mb-4 text-lg font-semibold">기본 정보</h2>
 					<div className="grid gap-4 md:grid-cols-2">
@@ -97,7 +98,11 @@ export const PolicyForm = observer(
 										key={ability.id}
 										className="rounded-xl border border-border bg-background p-4"
 									>
-										<div className="flex items-start justify-between gap-4">
+										<HStack
+											alignItems="start"
+											justifyContent="between"
+											gap="section"
+										>
 											<div>
 												<p className="font-semibold">{ability.label}</p>
 												<p className="mt-1 text-sm text-muted">
@@ -111,7 +116,7 @@ export const PolicyForm = observer(
 													toggleAbility(ability.id);
 												}}
 											/>
-										</div>
+										</HStack>
 									</div>
 								);
 							})
@@ -122,7 +127,7 @@ export const PolicyForm = observer(
 						)}
 					</div>
 				</section>
-			</div>
+			</VStack>
 		);
 	},
 );

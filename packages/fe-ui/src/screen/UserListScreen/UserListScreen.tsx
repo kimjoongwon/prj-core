@@ -7,18 +7,19 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	buildUserListTableColumns,
 	DataGrid,
 	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
+	VStack,
 } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { Search } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ComponentType, useEffect } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { buildUserListTableColumns } from "../../data-grid/columns";
 import { TextField } from "../../input/TextField/TextField";
 export interface UserListScreenQueryStates extends DataGridQueryStates {
 	take: number;
@@ -39,23 +40,26 @@ const SEARCH_PLACEHOLDER = "이름, 이메일, 전화번호로 검색...";
 const userListTableColumns = buildUserListTableColumns<UserDto>();
 function UsersDirectoryHeader({ totalCount }: { totalCount: number }) {
 	return (
-		<div className="mb-5 flex flex-col gap-3 border-b border-border/80 pb-4 md:flex-row md:items-end md:justify-between">
-			<div className="space-y-1">
+		<VStack
+			gap="block"
+			className="mb-5 border-b border-border/80 pb-4 md:flex-row md:items-end md:justify-between"
+		>
+			<VStack gap="dense">
 				<h2 className="text-base font-semibold tracking-tight text-foreground">
 					회원 디렉터리
 				</h2>
 				<p className="text-sm text-muted">
 					등록된 이용자를 빠르게 검색하고 상태를 확인할 수 있습니다.
 				</p>
-			</div>
+			</VStack>
 			<Chip
 				className="h-8 px-2 text-sm font-medium"
-				color="primary"
-				variant="flat"
+				color="accent"
+				variant="soft"
 			>
 				총 {totalCount.toLocaleString()}명
 			</Chip>
-		</div>
+		</VStack>
 	);
 }
 const UsersScreenFallback = observer(() => {

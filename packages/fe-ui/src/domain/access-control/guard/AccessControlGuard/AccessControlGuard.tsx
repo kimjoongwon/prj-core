@@ -96,7 +96,7 @@ export const AccessControlGuard = observer(function AccessControlGuard({
 
 	return (
 		<div className="mx-auto flex w-full max-w-[1440px] flex-col gap-4">
-			<div className="min-w-0 border-b border-[#d7e4f2] pb-4 dark:border-white/10">
+			<div className="min-w-0 border-separator border-b pb-4">
 				<Typography.Heading
 					className="text-2xl font-semibold leading-8"
 					level={1}
@@ -109,7 +109,7 @@ export const AccessControlGuard = observer(function AccessControlGuard({
 			</div>
 			<Surface>
 				<div className="flex min-h-[280px] flex-col items-center justify-center gap-4 px-6 py-10 text-center">
-					<div className="flex h-14 w-14 items-center justify-center rounded-full bg-danger-50 text-danger dark:bg-danger-900/20">
+					<div className="flex h-14 w-14 items-center justify-center rounded-full bg-danger-soft text-danger-soft-foreground">
 						<LockKeyhole className="h-6 w-6" />
 					</div>
 					<div className="space-y-2">
@@ -130,12 +130,7 @@ export const AccessControlGuard = observer(function AccessControlGuard({
 						<Button variant="tertiary" onPress={onClickBackButton}>
 							{t("이전 화면")}
 						</Button>
-						<Button
-
-
-							variant="tertiary"
-							onPress={onClickDashboardButton}
-						>
+						<Button variant="tertiary" onPress={onClickDashboardButton}>
 							{t("대시보드로 이동")}
 						</Button>
 					</div>

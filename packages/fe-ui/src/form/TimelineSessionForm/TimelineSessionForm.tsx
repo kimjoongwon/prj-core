@@ -11,7 +11,7 @@ import { Select } from "../../input/Select";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
 import { Section } from "../../layout";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 export type TimelineSessionFormSessionType =
 	| "ONE_TIME"
 	| "ONE_TIME_RANGE"
@@ -162,8 +162,8 @@ export const TimelineSessionForm = observer(
 								actions={
 									<Chip
 										size="sm"
-										variant="flat"
-										color={languageCode ? "primary" : "warning"}
+										variant="soft"
+										color={languageCode ? "accent" : "warning"}
 									>
 										{languageLabel}
 									</Chip>
@@ -264,7 +264,7 @@ export const TimelineSessionForm = observer(
 							) : null}
 							{state.type === "RECURRING" ? (
 								<>
-									<div className="flex gap-4">
+									<HStack gap="section">
 										<Select
 											label="반복 요일"
 											state={state}
@@ -293,7 +293,7 @@ export const TimelineSessionForm = observer(
 												delete state.errors.repeatCycleType;
 											}}
 										/>
-									</div>
+									</HStack>
 									<TextField
 										label="시작 일시 (선택)"
 										type="datetime-local"

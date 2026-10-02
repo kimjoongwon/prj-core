@@ -4,6 +4,7 @@ import { useCreateTimeline } from "@cocrepo/api/core/timelines";
 import { useApp } from "@cocrepo/store";
 import {
 	Button,
+	HStack,
 	TimelineEditScreen,
 	type TimelineFormState,
 } from "@cocrepo/ui";
@@ -78,7 +79,7 @@ const AdminTimelinesNewRoute = observer(() => {
 			state={state}
 			contentLanguageCode={app.contentLanguageCode}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -97,7 +98,7 @@ const AdminTimelinesNewRoute = observer(() => {
 					>
 						등록
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

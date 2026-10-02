@@ -9,12 +9,14 @@ import {
 	type AbilityFormOption,
 	type AbilityFormState,
 	Button,
+	HStack,
+	InfoList,
+	Section,
 } from "@cocrepo/ui";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import type { ReactNode } from "react";
 
 export default observer(function AbilityDetailRoute() {
 	const abilityId = useParams().abilityId as string;
@@ -85,7 +87,7 @@ export default observer(function AbilityDetailRoute() {
 				</Button>
 			}
 			pageActions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -118,49 +120,36 @@ export default observer(function AbilityDetailRoute() {
 							</Button>
 						</>
 					) : null}
-				</div>
+				</HStack>
 			}
 		>
 			{ability ? (
-				<SectionLike title="메타 정보">
-					<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<Info
-							label="생성일"
-							value={new Date(ability.createdAt).toLocaleString("ko-KR")}
+				<Section>
+					<Section.Header title="메타 정보" />
+					<Section.Body>
+						<InfoList
+							items={[
+								{
+									key: "createdAt",
+									label: "생성일",
+									value: new Date(ability.createdAt).toLocaleString("ko-KR"),
+								},
+								...(ability.updatedAt
+									? [
+											{
+												key: "updatedAt",
+												label: "수정일",
+												value: new Date(ability.updatedAt).toLocaleString(
+													"ko-KR",
+												),
+											},
+										]
+									: []),
+							]}
 						/>
-						{ability.updatedAt ? (
-							<Info
-								label="수정일"
-								value={new Date(ability.updatedAt).toLocaleString("ko-KR")}
-							/>
-						) : null}
-					</dl>
-				</SectionLike>
+					</Section.Body>
+				</Section>
 			) : null}
 		</AbilityEditScreen>
 	);
 });
-
-function SectionLike({
-	title,
-	children,
-}: {
-	title: string;
-	children: ReactNode;
-}) {
-	return (
-		<section>
-			<h3 className="mb-4 text-lg font-semibold">{title}</h3>
-			{children}
-		</section>
-	);
-}
-
-function Info({ label, value }: { label: string; value: string }) {
-	return (
-		<div className="rounded-lg border border-border bg-background/60 p-3">
-			<dt className="text-xs text-muted">{label}</dt>
-			<dd className="mt-1 break-all text-sm font-medium">{value}</dd>
-		</div>
-	);
-}

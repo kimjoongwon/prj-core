@@ -19,8 +19,8 @@ import {
 	getColumnConfigId,
 	getRowGroupableColumnConfigs,
 } from "../columns/columnConfig";
-import type { Key } from "../Table/rowKeys";
 import type { DataGridGroupPanelState } from "../state/DataGridGroupPanelState";
+import type { Key } from "../Table/rowKeys";
 
 type RowGroupPanelShow = NonNullable<DataGridGroupPanelConfig["show"]>;
 
@@ -144,16 +144,16 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 	};
 
 	return (
-		<div className="mb-2 rounded border border-dashed border-[#cbd5e1] bg-[#f8fafc] px-2.5 py-2 dark:border-white/15 dark:bg-neutral-900/80">
+		<div className="mb-2 rounded border border-dashed border-border bg-surface-secondary px-2.5 py-2">
 			<div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
 				<div className="flex min-w-0 flex-1 items-center gap-2">
 					<Group className="size-4 shrink-0 text-muted" aria-hidden />
-					<span className="shrink-0 text-xs font-semibold text-[#475569] dark:text-slate-300">
+					<span className="shrink-0 text-xs font-semibold text-foreground">
 						{t("그룹")}
 					</span>
 					<ul
 						aria-label={t("그룹 기준")}
-						className="flex min-h-8 min-w-0 flex-1 list-none flex-wrap items-center gap-1.5 rounded border border-[#d6dde7] bg-white px-2 py-1 dark:border-white/10 dark:bg-neutral-950"
+						className="flex min-h-8 min-w-0 flex-1 list-none flex-wrap items-center gap-1.5 rounded border border-border bg-surface px-2 py-1"
 						onDragOver={(event) => event.preventDefault()}
 						onDrop={(event) => handleDrop(event)}
 					>
@@ -169,7 +169,7 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 										onDragStart={(event) => handleDragStart(event, columnId)}
 										onDragOver={(event) => event.preventDefault()}
 										onDrop={(event) => handleDrop(event, index)}
-										className="inline-flex h-6 items-center gap-1 rounded border border-[#b6c2d2] bg-[#edf3fb] px-1.5 text-xs font-medium text-[#334155] shadow-sm dark:border-white/15 dark:bg-neutral-800 dark:text-slate-100"
+										className="inline-flex h-6 items-center gap-1 rounded border border-accent/20 bg-accent-soft px-1.5 text-xs font-medium text-accent-soft-foreground"
 									>
 										<GripVertical className="size-3.5 text-muted" aria-hidden />
 										<span>{t(label)}</span>

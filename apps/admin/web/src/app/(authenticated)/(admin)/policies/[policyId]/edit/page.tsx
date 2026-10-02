@@ -11,7 +11,12 @@ import {
 	useSyncPolicyEntries,
 	useUpdatePolicy,
 } from "@cocrepo/api/core/policies";
-import { Button, PolicyEditScreen, type PolicyEntryOption } from "@cocrepo/ui";
+import {
+	Button,
+	HStack,
+	PolicyEditScreen,
+	type PolicyEntryOption,
+} from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -120,7 +125,7 @@ export default observer(function PolicyEditScreenRoute() {
 				</Button>
 			}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -138,7 +143,7 @@ export default observer(function PolicyEditScreenRoute() {
 					>
 						저장
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

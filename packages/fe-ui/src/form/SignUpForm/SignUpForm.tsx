@@ -7,6 +7,7 @@ import { useT } from "../../i18n";
 import { Button, Link, TextArea, TextField } from "../../input";
 import { Select } from "../../input/Select/Select";
 import { Auth } from "../../layout/Auth";
+import { VStack } from "../../rhythm";
 
 export type SignUpFormField =
 	| "spaceId"
@@ -102,7 +103,7 @@ export const SignUpForm = observer(
 				/>
 
 				{state.isSubmitted ? (
-					<div className="space-y-5">
+					<VStack gap="page">
 						<div className="text-center">
 							<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
 								<CheckCircle className="h-8 w-8 text-success" />
@@ -139,9 +140,9 @@ export const SignUpForm = observer(
 								{t("다른 이메일로 가입하기")}
 							</Button>
 						</div>
-					</div>
+					</VStack>
 				) : (
-					<div className="space-y-5">
+					<VStack gap="page">
 						{state.errorMessage && (
 							<Alert status="danger" description={t(state.errorMessage)} />
 						)}
@@ -256,15 +257,19 @@ export const SignUpForm = observer(
 						>
 							{t("인증 메일 보내기")}
 						</Button>
-					</div>
+					</VStack>
 				)}
 
-				<div className="mt-6 flex flex-col items-center gap-2 text-center text-sm text-muted">
+				<VStack
+					gap="block"
+					alignItems="center"
+					className="mt-6 text-center text-sm text-muted"
+				>
 					<span>{t("이미 계정이 있으신가요?")}</span>
 					<Link href={loginHref} className="text-muted hover:text-muted">
 						{t("로그인으로 돌아가기")}
 					</Link>
-				</div>
+				</VStack>
 			</Auth.Panel>
 		);
 	},

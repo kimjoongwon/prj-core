@@ -19,7 +19,7 @@ import {
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { Screen } from "../../layout/Screen";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 
 export type {
@@ -37,7 +37,7 @@ export type TimelineSessionEditScreenMetadata = Pick<
 	"createdAt"
 > & {
 	typeLabel?: string;
-	typeColor?: "primary" | "secondary" | "success";
+	typeColor?: "accent" | "default" | "success";
 	recurringDayLabel?: string;
 	repeatCycleLabel?: string;
 	timelineName?: string | null;
@@ -109,9 +109,13 @@ export const TimelineSessionEditScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex items-center justify-center gap-2 p-8">
+								<HStack
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<span className="text-muted">{loadingMessage}</span>
-								</div>
+								</HStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -125,10 +129,17 @@ export const TimelineSessionEditScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<VStack
+									gap="section"
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<p className="text-muted">{notFoundMessage}</p>
-									{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
-								</div>
+									{notFoundAction ?? (
+										<Button variant="tertiary">목록으로</Button>
+									)}
+								</VStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -162,7 +173,7 @@ export const TimelineSessionEditScreen = observer(
 														<div className="mt-1">
 															<Chip
 																color={metadata.typeColor}
-																variant="flat"
+																variant="soft"
 																size="sm"
 															>
 																{metadata.typeLabel}
@@ -304,7 +315,7 @@ export const TimelineSessionEditScreen = observer(
 																	{program.isConnectionResolved ? (
 																		<Chip
 																			color="success"
-																			variant="flat"
+																			variant="soft"
 																			size="sm"
 																		>
 																			정상
@@ -312,7 +323,7 @@ export const TimelineSessionEditScreen = observer(
 																	) : (
 																		<Chip
 																			color="warning"
-																			variant="flat"
+																			variant="soft"
 																			size="sm"
 																		>
 																			확인필요
@@ -322,7 +333,7 @@ export const TimelineSessionEditScreen = observer(
 																<Table.Cell>{program.capacityLabel}</Table.Cell>
 																<Table.Cell>{program.levelLabel}</Table.Cell>
 																<Table.Cell>
-																	<div className="flex justify-center gap-1">
+																	<HStack justifyContent="center" gap="dense">
 																		{onClickEditProgramButton ? (
 																			<Button
 																				size="sm"
@@ -338,8 +349,6 @@ export const TimelineSessionEditScreen = observer(
 																		{onClickDeleteProgramButton ? (
 																			<Button
 																				size="sm"
-
-
 																				variant="ghost"
 																				isIconOnly
 																				onPress={() =>
@@ -349,7 +358,7 @@ export const TimelineSessionEditScreen = observer(
 																				<Trash2 className="h-4 w-4" />
 																			</Button>
 																		) : null}
-																	</div>
+																	</HStack>
 																</Table.Cell>
 															</Table.Row>
 														)}

@@ -342,8 +342,10 @@ export const StaticTranslationListScreen = observer(
 						<Modal.Container size="lg">
 							<Modal.Dialog>
 								<form onSubmit={handleSubmitForm}>
-									<Modal.Header className="flex flex-col gap-1">
-										{t(isEditMode ? "번역 수정" : "번역 등록")}
+									<Modal.Header>
+										<VStack gap="dense">
+											{t(isEditMode ? "번역 수정" : "번역 등록")}
+										</VStack>
 									</Modal.Header>
 									<Modal.Body>
 										<VStack>

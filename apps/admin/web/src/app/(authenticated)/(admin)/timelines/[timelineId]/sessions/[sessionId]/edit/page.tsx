@@ -8,6 +8,7 @@ import {
 import { useApp } from "@cocrepo/store";
 import {
 	Button,
+	HStack,
 	TimelineSessionEditScreen,
 	type TimelineSessionFormState,
 	type TimelineSessionScreenCycleType,
@@ -203,7 +204,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			isLoading={isLoading && !state.isInitialized}
 			notFound={!isLoading && !session}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -224,7 +225,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 					>
 						저장
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

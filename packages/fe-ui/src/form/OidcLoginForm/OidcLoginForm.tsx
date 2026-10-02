@@ -3,10 +3,12 @@
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import { LockKeyhole } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../data-display/Chip/Chip";
 import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Checkbox, Link, TextField } from "../../input";
 import { Auth } from "../../layout/Auth";
+import { HStack, VStack } from "../../rhythm";
 
 export interface LoginRecoveryAction {
 	type: string;
@@ -164,16 +166,14 @@ export const OidcLoginForm = observer(
 			<Auth.Panel>
 				{brandLabel && (
 					<div className="mb-4 flex justify-center">
-						<span
-							className="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent"
-							style={
-								brandColor
-									? { borderColor: brandColor, color: brandColor }
-									: undefined
-							}
+						<Chip
+							size="sm"
+							color="accent"
+							variant="soft"
+							style={brandColor ? { color: brandColor } : undefined}
 						>
 							{t(brandLabel)}
-						</span>
+						</Chip>
 					</div>
 				)}
 				<Auth.PanelHeader
@@ -210,7 +210,7 @@ export const OidcLoginForm = observer(
 						}
 						actions={
 							actionsToRender.length > 0 ? (
-								<div className="flex flex-wrap gap-3 text-sm">
+								<HStack gap="block" className="flex-wrap text-sm">
 									{actionsToRender.map((action) =>
 										action.href ? (
 											<Link
@@ -229,60 +229,66 @@ export const OidcLoginForm = observer(
 											</span>
 										),
 									)}
-								</div>
+								</HStack>
 							) : undefined
 						}
 					/>
 				)}
 
-				<form className="space-y-5">
-					<TextField
-						path="email"
-						state={state}
-						label="이메일"
-						placeholder="your@email.com"
-						isRequired
-						autoComplete="email"
-						variant="bordered"
-						autoFocus={!isDev}
-					/>
+				<form>
+					<VStack gap="page">
+						<TextField
+							path="email"
+							state={state}
+							label="이메일"
+							placeholder="your@email.com"
+							isRequired
+							autoComplete="email"
+							variant="bordered"
+							autoFocus={!isDev}
+						/>
 
-					<TextField
-						path="password"
-						state={state}
-						label="비밀번호"
-						placeholder="********"
-						isRequired
-						type="password"
-						autoComplete="current-password"
-						variant="bordered"
-					/>
+						<TextField
+							path="password"
+							state={state}
+							label="비밀번호"
+							placeholder="********"
+							isRequired
+							type="password"
+							autoComplete="current-password"
+							variant="bordered"
+						/>
 
-					<div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-						<Checkbox path="remember" state={state}>
-							{t("로그인 상태 유지")}
-						</Checkbox>
-
-						<Link
-							href={forgotPasswordHref}
-							className="text-sm text-muted hover:text-accent"
+						<HStack
+							gap="section"
+							alignItems="start"
+							className="flex-col sm:flex-row sm:items-center sm:justify-between"
 						>
-							{t("비밀번호를 잊으셨나요?")}
-						</Link>
-					</div>
+							<Checkbox path="remember" state={state}>
+								{t("로그인 상태 유지")}
+							</Checkbox>
 
-					<Button
-						type="submit"
-						variant="primary"
-						className="w-full font-semibold"
-						size="lg"
-						isLoading={state.isSubmitting}
-					>
-						{t("로그인")}
-					</Button>
+							<Link
+								href={forgotPasswordHref}
+								className="text-sm text-muted hover:text-accent"
+							>
+								{t("비밀번호를 잊으셨나요?")}
+							</Link>
+						</HStack>
+
+						<Button
+							type="submit"
+							variant="primary"
+							className="w-full font-semibold"
+							size="lg"
+							isLoading={state.isSubmitting}
+						>
+							{t("로그인")}
+						</Button>
+					</VStack>
 				</form>
 
-				<div className="mt-6 flex flex-col items-center gap-2 text-center">
+				<VStack gap="block" alignItems="center" className="mt-6 text-center">
 					<div className="text-sm text-muted">
 						{t("계정이 없으신가요?")}{" "}
 						<Link href={signUpHref} className="font-medium text-accent">
@@ -296,7 +302,7 @@ export const OidcLoginForm = observer(
 					>
 						{t("취소하고 돌아가기")}
 					</button>
-				</div>
+				</VStack>
 			</Auth.Panel>
 		);
 	},

@@ -87,7 +87,7 @@ export const TemplatePreviewModal = observer(function TemplatePreviewModal({
 											key={variableName}
 											color="warning"
 											size="sm"
-											variant="flat"
+											variant="soft"
 										>
 											{variableName}
 										</Chip>

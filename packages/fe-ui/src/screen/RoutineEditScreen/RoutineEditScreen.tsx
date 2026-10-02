@@ -16,7 +16,7 @@ import {
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { Screen } from "../../layout/Screen";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 
 export type {
@@ -79,10 +79,14 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<div className="flex items-center justify-center gap-2 p-8">
+							<HStack
+								alignItems="center"
+								justifyContent="center"
+								className="p-8"
+							>
 								<Spinner size="sm" />
 								<span className="text-muted">{loadingMessage}</span>
-							</div>
+							</HStack>
 						</Section.Body>
 					</Section>
 				</SectionSurface>
@@ -96,10 +100,15 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<VStack
+								gap="section"
+								alignItems="center"
+								justifyContent="center"
+								className="p-8"
+							>
 								<p className="text-muted">{notFoundMessage}</p>
 								{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
-							</div>
+							</VStack>
 						</Section.Body>
 					</Section>
 				</SectionSurface>
@@ -156,7 +165,7 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 										</div>
 										{unresolvedActivities > 0 ? (
 											<div className="mt-3">
-												<Chip size="sm" variant="flat" color="warning">
+												<Chip size="sm" variant="soft" color="warning">
 													확인 필요 {unresolvedActivities}개
 												</Chip>
 											</div>
@@ -168,7 +177,7 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 								<Section>
 									<Section.Header title="사용 중인 프로그램" />
 									<Section.Body>
-										<div className="flex flex-col gap-2">
+										<VStack gap="block">
 											{programs.map((program) => (
 												<div
 													key={program.id}
@@ -177,7 +186,7 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 													<p className="font-medium">{program.name}</p>
 												</div>
 											))}
-										</div>
+										</VStack>
 									</Section.Body>
 								</Section>
 							) : null}

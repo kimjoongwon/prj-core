@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
 import { Text } from "../../data-display/Text";
+import { VStack } from "../../rhythm";
 import { PressableFeedback } from "./index";
 
 const meta = {
@@ -29,17 +30,20 @@ export const Default: Story = {
 
 export const Composition: Story = {
 	render: () => (
-		<View className="w-[280px] gap-3 rounded-xl border border-border bg-surface p-4">
+		<VStack
+			className="w-[280px] rounded-xl border border-border bg-surface p-4"
+			gap="block"
+		>
 			<PressableFeedback className="relative rounded-xl border border-border bg-surface-secondary p-4">
 				<PressableFeedback.Highlight />
 				<PressableFeedback.Ripple />
 				<PressableFeedback.Scale>
-					<View className="gap-1">
+					<VStack gap="dense">
 						<Text variant="label">복합 피드백</Text>
 						<Text tone="muted">
 							Highlight, Ripple, Scale slot을 함께 조합합니다.
 						</Text>
-					</View>
+					</VStack>
 				</PressableFeedback.Scale>
 			</PressableFeedback>
 			<PressableFeedback
@@ -50,6 +54,6 @@ export const Composition: Story = {
 					비활성 상태
 				</Text>
 			</PressableFeedback>
-		</View>
+		</VStack>
 	),
 };

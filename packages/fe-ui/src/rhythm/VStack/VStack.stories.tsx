@@ -62,7 +62,9 @@ const SampleItem = ({
 	children: React.ReactNode;
 	className?: string;
 }) => (
-	<div className={`rounded border bg-blue-200 p-2 ${className}`}>
+	<div
+		className={`rounded border border-border bg-surface-secondary p-2 ${className}`}
+	>
 		{children}
 	</div>
 );
@@ -103,7 +105,7 @@ export const GapScale: Story = {
 			).map(([gap, label]) => (
 				<div key={gap}>
 					<h4 className="mb-2 font-semibold text-sm">{label}</h4>
-					<VStack gap={gap} className="w-full border border-gray-300 p-2">
+					<VStack gap={gap} className="w-full border border-border p-2">
 						<SampleItem>항목 A</SampleItem>
 						<SampleItem>항목 B</SampleItem>
 					</VStack>
@@ -126,10 +128,7 @@ export const AlignItems: Story = {
 		<div className="w-full max-w-md space-y-4">
 			<div>
 				<h4 className="mb-2 font-semibold text-sm">Align Start</h4>
-				<VStack
-					alignItems="start"
-					className="w-full border border-gray-300 p-2"
-				>
+				<VStack alignItems="start" className="w-full border border-border p-2">
 					<SampleItem className="w-16">Short</SampleItem>
 					<SampleItem className="w-24">Medium</SampleItem>
 					<SampleItem className="w-32">Long Content</SampleItem>
@@ -138,10 +137,7 @@ export const AlignItems: Story = {
 
 			<div>
 				<h4 className="mb-2 font-semibold text-sm">Align Center</h4>
-				<VStack
-					alignItems="center"
-					className="w-full border border-gray-300 p-2"
-				>
+				<VStack alignItems="center" className="w-full border border-border p-2">
 					<SampleItem className="w-16">Short</SampleItem>
 					<SampleItem className="w-24">Medium</SampleItem>
 					<SampleItem className="w-32">Long Content</SampleItem>
@@ -150,7 +146,7 @@ export const AlignItems: Story = {
 
 			<div>
 				<h4 className="mb-2 font-semibold text-sm">Align End</h4>
-				<VStack alignItems="end" className="w-full border border-gray-300 p-2">
+				<VStack alignItems="end" className="w-full border border-border p-2">
 					<SampleItem className="w-16">Short</SampleItem>
 					<SampleItem className="w-24">Medium</SampleItem>
 					<SampleItem className="w-32">Long Content</SampleItem>
@@ -161,7 +157,7 @@ export const AlignItems: Story = {
 				<h4 className="mb-2 font-semibold text-sm">Align Stretch</h4>
 				<VStack
 					alignItems="stretch"
-					className="w-full border border-gray-300 p-2"
+					className="w-full border border-border p-2"
 				>
 					<SampleItem>Short</SampleItem>
 					<SampleItem>Medium</SampleItem>
@@ -187,7 +183,7 @@ export const JustifyContent: Story = {
 				<h4 className="mb-2 font-semibold text-sm">Justify Start</h4>
 				<VStack
 					justifyContent="start"
-					className="h-40 border border-gray-300 p-2"
+					className="h-40 border border-border p-2"
 				>
 					<SampleItem>A</SampleItem>
 					<SampleItem>B</SampleItem>
@@ -199,7 +195,7 @@ export const JustifyContent: Story = {
 				<h4 className="mb-2 font-semibold text-sm">Justify Center</h4>
 				<VStack
 					justifyContent="center"
-					className="h-40 border border-gray-300 p-2"
+					className="h-40 border border-border p-2"
 				>
 					<SampleItem>A</SampleItem>
 					<SampleItem>B</SampleItem>
@@ -209,10 +205,7 @@ export const JustifyContent: Story = {
 
 			<div>
 				<h4 className="mb-2 font-semibold text-sm">Justify End</h4>
-				<VStack
-					justifyContent="end"
-					className="h-40 border border-gray-300 p-2"
-				>
+				<VStack justifyContent="end" className="h-40 border border-border p-2">
 					<SampleItem>A</SampleItem>
 					<SampleItem>B</SampleItem>
 					<SampleItem>C</SampleItem>
@@ -223,7 +216,7 @@ export const JustifyContent: Story = {
 				<h4 className="mb-2 font-semibold text-sm">Justify Between</h4>
 				<VStack
 					justifyContent="between"
-					className="h-40 border border-gray-300 p-2"
+					className="h-40 border border-border p-2"
 				>
 					<SampleItem>A</SampleItem>
 					<SampleItem>B</SampleItem>
@@ -246,14 +239,14 @@ export const FormLayoutExample: Story = {
 	render: () => (
 		<VStack
 			alignItems="stretch"
-			className="mx-auto max-w-sm rounded-lg border bg-white p-6 shadow"
+			className="mx-auto max-w-sm rounded-lg border border-border bg-surface p-6 shadow-surface"
 		>
 			<h3 className="text-center font-semibold text-lg">Contact Form</h3>
 
 			<VStack alignItems="stretch">
 				<label
 					htmlFor="contact-name"
-					className="font-medium text-gray-700 text-sm"
+					className="font-medium text-foreground text-sm"
 				>
 					Name
 				</label>
@@ -261,14 +254,14 @@ export const FormLayoutExample: Story = {
 					id="contact-name"
 					type="text"
 					placeholder="Enter your name"
-					className="w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+					className="w-full rounded border border-field-border bg-field p-2 focus:border-field-border-focus focus:ring-2 focus:ring-focus"
 				/>
 			</VStack>
 
 			<VStack alignItems="stretch">
 				<label
 					htmlFor="contact-email"
-					className="font-medium text-gray-700 text-sm"
+					className="font-medium text-foreground text-sm"
 				>
 					Email
 				</label>
@@ -276,14 +269,14 @@ export const FormLayoutExample: Story = {
 					id="contact-email"
 					type="email"
 					placeholder="Enter your email"
-					className="w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+					className="w-full rounded border border-field-border bg-field p-2 focus:border-field-border-focus focus:ring-2 focus:ring-focus"
 				/>
 			</VStack>
 
 			<VStack alignItems="stretch">
 				<label
 					htmlFor="contact-message"
-					className="font-medium text-gray-700 text-sm"
+					className="font-medium text-foreground text-sm"
 				>
 					Message
 				</label>
@@ -291,13 +284,13 @@ export const FormLayoutExample: Story = {
 					id="contact-message"
 					placeholder="Enter your message"
 					rows={4}
-					className="w-full resize-none rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+					className="w-full resize-none rounded border border-field-border bg-field p-2 focus:border-field-border-focus focus:ring-2 focus:ring-focus"
 				/>
 			</VStack>
 
 			<button
 				type="button"
-				className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+				className="w-full rounded bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover focus:ring-2 focus:ring-focus focus:ring-offset-2"
 			>
 				Send Message
 			</button>
@@ -316,16 +309,16 @@ export const FormLayoutExample: Story = {
 export const CardExample: Story = {
 	args: {},
 	render: () => (
-		<VStack className="max-w-sm overflow-hidden rounded-lg border bg-white shadow">
-			<div className="h-32 w-full bg-gradient-to-r from-blue-400 to-purple-500"></div>
+		<VStack className="max-w-sm overflow-hidden rounded-lg border border-border bg-surface shadow-surface">
+			<div className="h-32 w-full bg-surface-tertiary"></div>
 
 			<VStack className="px-6 pb-6">
 				<VStack alignItems="center">
-					<h3 className="font-bold text-gray-900 text-xl">Product Title</h3>
-					<p className="font-bold text-2xl text-blue-600">$99.99</p>
+					<h3 className="font-bold text-foreground text-xl">Product Title</h3>
+					<p className="font-bold text-2xl text-accent">$99.99</p>
 				</VStack>
 
-				<p className="text-center text-gray-600">
+				<p className="text-center text-muted">
 					This is a sample product description that demonstrates how VStack can
 					be used for card layouts.
 				</p>
@@ -333,13 +326,13 @@ export const CardExample: Story = {
 				<VStack alignItems="stretch">
 					<button
 						type="button"
-						className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						className="w-full rounded bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover"
 					>
 						Add to Cart
 					</button>
 					<button
 						type="button"
-						className="w-full rounded border border-gray-300 px-4 py-2 hover:bg-gray-50"
+						className="w-full rounded border border-border px-4 py-2 hover:bg-surface-secondary"
 					>
 						Add to Wishlist
 					</button>
@@ -360,26 +353,41 @@ export const CardExample: Story = {
 export const NavigationSidebarExample: Story = {
 	args: {},
 	render: () => (
-		<VStack alignItems="stretch" className="h-64 w-48 border-r bg-gray-50 p-4">
-			<h4 className="mb-2 font-semibold text-gray-900">Navigation</h4>
+		<VStack
+			alignItems="stretch"
+			className="h-64 w-48 border-r border-border bg-surface-secondary p-4"
+		>
+			<h4 className="mb-2 font-semibold text-foreground">Navigation</h4>
 
-			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">
+			<a
+				href="#"
+				className="rounded px-3 py-2 text-muted hover:bg-surface-tertiary hover:text-foreground"
+			>
 				Dashboard
 			</a>
-			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">
+			<a
+				href="#"
+				className="rounded px-3 py-2 text-muted hover:bg-surface-tertiary hover:text-foreground"
+			>
 				Projects
 			</a>
-			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">
+			<a
+				href="#"
+				className="rounded px-3 py-2 text-muted hover:bg-surface-tertiary hover:text-foreground"
+			>
 				Team
 			</a>
-			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">
+			<a
+				href="#"
+				className="rounded px-3 py-2 text-muted hover:bg-surface-tertiary hover:text-foreground"
+			>
 				Settings
 			</a>
 
 			<div className="mt-auto border-t pt-4">
 				<a
 					href="#"
-					className="rounded px-3 py-2 text-gray-700 hover:bg-red-100"
+					className="rounded px-3 py-2 text-muted hover:bg-danger-soft hover:text-danger-soft-foreground"
 				>
 					Logout
 				</a>

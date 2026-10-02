@@ -13,6 +13,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -47,7 +48,7 @@ export interface TemplateListScreenProps {
 }
 function TemplatesScreenFallback() {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<Screen.Header
 				title="메시지 템플릿"
 				description="시스템에 등록된 메시지 템플릿을 관리합니다."
@@ -57,7 +58,7 @@ function TemplatesScreenFallback() {
 					<Section.Body>{null}</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 }
 export const TemplateListScreen = observer(
@@ -90,7 +91,7 @@ export const TemplateListScreen = observer(
 			return <TemplatesScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="메시지 템플릿"
 					description="시스템에 등록된 메시지 템플릿을 관리합니다."
@@ -125,7 +126,7 @@ export const TemplateListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-			</div>
+			</VStack>
 		);
 	},
 );

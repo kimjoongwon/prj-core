@@ -8,6 +8,7 @@ import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	Button,
 	buildOidcClientLoginUi,
+	HStack,
 	isValidOidcLoginUiBrandColor,
 	OidcClientEditScreen,
 	type OidcClientFormState,
@@ -152,7 +153,7 @@ export default observer(function OidcClientEditRoute() {
 				</Button>
 			}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -172,7 +173,7 @@ export default observer(function OidcClientEditRoute() {
 					>
 						저장
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

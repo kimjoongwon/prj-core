@@ -11,7 +11,7 @@ import { TimelineForm, type TimelineFormState } from "../../form/TimelineForm";
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { Screen } from "../../layout/Screen";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 
 export type {
@@ -24,7 +24,7 @@ export type TimelineEditScreenSessionRow = Pick<
 	"id" | "name" | "createdAt"
 > & {
 	typeLabel: string;
-	typeColor: "primary" | "secondary" | "success";
+	typeColor: "accent" | "default" | "success";
 	programCount: number;
 	isConnected: boolean;
 	startDateTime?: SessionDto["startDateTime"] | null;
@@ -88,9 +88,13 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<div className="flex items-center justify-center gap-2 p-8">
+							<HStack
+								alignItems="center"
+								justifyContent="center"
+								className="p-8"
+							>
 								<span className="text-muted">{loadingMessage}</span>
-							</div>
+							</HStack>
 						</Section.Body>
 					</Section>
 				</SectionSurface>
@@ -104,10 +108,15 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<div className="flex flex-col items-center justify-center gap-4 p-8">
+							<VStack
+								gap="section"
+								alignItems="center"
+								justifyContent="center"
+								className="p-8"
+							>
 								<p className="text-muted">{notFoundMessage}</p>
 								{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
-							</div>
+							</VStack>
 						</Section.Body>
 					</Section>
 				</SectionSurface>
@@ -230,7 +239,7 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 															<Table.Cell>
 																<Chip
 																	color={session.typeColor}
-																	variant="flat"
+																	variant="soft"
 																	size="sm"
 																>
 																	{session.typeLabel}
@@ -241,7 +250,7 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 																{session.isConnected ? (
 																	<Chip
 																		color="success"
-																		variant="flat"
+																		variant="soft"
 																		size="sm"
 																	>
 																		연결됨
@@ -249,7 +258,7 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 																) : (
 																	<Chip
 																		color="warning"
-																		variant="flat"
+																		variant="soft"
 																		size="sm"
 																	>
 																		미연결
@@ -273,7 +282,7 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 																<DateTimeCell value={session.createdAt} />
 															</Table.Cell>
 															<Table.Cell>
-																<div className="flex justify-center gap-1">
+																<HStack justifyContent="center" gap="dense">
 																	{onClickCreateProgramButton ? (
 																		<Button
 																			size="sm"
@@ -288,8 +297,6 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 																	{onClickDeleteSessionButton ? (
 																		<Button
 																			size="sm"
-
-
 																			variant="ghost"
 																			isIconOnly
 																			onPress={() =>
@@ -299,7 +306,7 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 																			<Trash2 className="h-4 w-4" />
 																		</Button>
 																	) : null}
-																</div>
+																</HStack>
 															</Table.Cell>
 														</Table.Row>
 													)}

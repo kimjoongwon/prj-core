@@ -12,6 +12,7 @@ import {
 import { useGetUsers } from "@cocrepo/api/core/users";
 import {
 	Button,
+	HStack,
 	TimelineSessionEditScreen,
 	type TimelineSessionFormState,
 } from "@cocrepo/ui";
@@ -37,16 +38,16 @@ const getSessionTypeLabel = (type: string) => {
 
 const getSessionTypeColor = (
 	type: string,
-): "primary" | "secondary" | "success" => {
+): "accent" | "default" | "success" => {
 	switch (type) {
 		case "ONE_TIME":
-			return "primary";
+			return "accent";
 		case "ONE_TIME_RANGE":
-			return "secondary";
+			return "default";
 		case "RECURRING":
 			return "success";
 		default:
-			return "primary";
+			return "accent";
 	}
 };
 
@@ -234,7 +235,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			resolvedPrograms={resolvedPrograms}
 			unresolvedPrograms={unresolvedPrograms}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<Edit className="h-4 w-4" />}
@@ -250,7 +251,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 					>
 						삭제
 					</Button>
-				</div>
+				</HStack>
 			}
 			onClickCreateProgramButton={onClickCreateProgramButton}
 			onClickEditProgramButton={onClickEditProgramButton}

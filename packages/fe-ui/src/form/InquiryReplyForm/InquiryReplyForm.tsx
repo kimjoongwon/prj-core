@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { HStack, VStack } from "../../rhythm";
 
 export interface Attachment {
 	/** 파일 ID */
@@ -153,7 +154,7 @@ export const InquiryReplyForm = observer(
 		const isLoading = isSending;
 
 		return (
-			<div className={`flex flex-col gap-3 ${className}`}>
+			<VStack gap="block" className={className}>
 				{/* 텍스트 영역 */}
 				<TextArea
 					placeholder={placeholder}
@@ -171,12 +172,14 @@ export const InquiryReplyForm = observer(
 				{/* 첨부 파일 목록 */}
 				{(selectedFiles.length > 0 ||
 					(attachments && attachments.length > 0)) && (
-					<div className="flex flex-wrap gap-2">
+					<HStack className="flex-wrap">
 						{/* 새로 선택한 파일 */}
 						{selectedFiles.map((file, index) => (
-							<div
+							<HStack
 								key={`new-${index}`}
-								className="flex items-center gap-1 rounded-lg bg-surface-secondary px-2 py-1"
+								alignItems="center"
+								gap="dense"
+								className="rounded-lg bg-surface-secondary px-2 py-1"
 							>
 								<FileText className="size-4 text-muted" />
 								<span className="text-xs text-foreground">{file.name}</span>
@@ -192,14 +195,16 @@ export const InquiryReplyForm = observer(
 								>
 									<X className="size-3" />
 								</Button>
-							</div>
+							</HStack>
 						))}
 
 						{/* 기존 첨부 파일 */}
 						{attachments?.map((attachment) => (
-							<div
+							<HStack
 								key={attachment.id}
-								className="flex items-center gap-1 rounded-lg bg-surface-secondary px-2 py-1"
+								alignItems="center"
+								gap="dense"
+								className="rounded-lg bg-surface-secondary px-2 py-1"
 							>
 								<FileText className="size-4 text-muted" />
 								<span className="text-xs text-foreground">
@@ -219,9 +224,9 @@ export const InquiryReplyForm = observer(
 										<X className="size-3" />
 									</Button>
 								)}
-							</div>
+							</HStack>
 						))}
-					</div>
+					</HStack>
 				)}
 
 				<Separator />
@@ -229,7 +234,7 @@ export const InquiryReplyForm = observer(
 				{/* 액션 버튼 */}
 				<div className="flex items-center justify-between">
 					{/* 왼쪽: 보조 기능 */}
-					<div className="flex items-center gap-2">
+					<HStack alignItems="center">
 						{/* 파일 첨부 */}
 						<input
 							ref={fileInputRef}
@@ -270,7 +275,7 @@ export const InquiryReplyForm = observer(
 								<Tooltip.Content>지식베이스 검색</Tooltip.Content>
 							</Tooltip>
 						)}
-					</div>
+					</HStack>
 
 					{/* 오른쪽: 전송 버튼 */}
 					<Tooltip>
@@ -294,7 +299,7 @@ export const InquiryReplyForm = observer(
 				<span className="text-xs text-muted">
 					Ctrl + Enter로 빠르게 전송할 수 있습니다
 				</span>
-			</div>
+			</VStack>
 		);
 	},
 );

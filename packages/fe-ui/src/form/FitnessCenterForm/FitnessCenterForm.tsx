@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { CONTENT_LANGUAGE_OPTIONS } from "../../data-display/content-language";
 import { Select } from "../../input/Select";
 import { TextField } from "../../input/TextField";
+import { VStack } from "../../rhythm";
 import type {
 	FitnessCenterFormField,
 	FitnessCenterFormState,
@@ -35,7 +36,7 @@ function clearFieldError(
 export const FitnessCenterForm = observer(
 	({ state, readOnly = false }: FitnessCenterFormProps) => {
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				<TextField
 					label="센터명"
 					placeholder="센터명을 입력하세요"
@@ -117,7 +118,7 @@ export const FitnessCenterForm = observer(
 					errorMessage={state.errors.contentLanguageCode}
 					onValueChange={() => clearFieldError(state, "contentLanguageCode")}
 				/>
-			</div>
+			</VStack>
 		);
 	},
 );
@@ -129,7 +130,7 @@ export const FitnessCenterForm = observer(
 export const FitnessCenterCreateCompanyFields = observer(
 	({ state, readOnly = false }: FitnessCenterCreateCompanyFieldsProps) => {
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				<TextField
 					label="사업자등록번호"
 					placeholder="사업자등록번호를 입력하세요"
@@ -152,7 +153,7 @@ export const FitnessCenterCreateCompanyFields = observer(
 					errorMessage={state.errors.logoImageFileId}
 					onValueChange={() => clearFieldError(state, "logoImageFileId")}
 				/>
-			</div>
+			</VStack>
 		);
 	},
 );

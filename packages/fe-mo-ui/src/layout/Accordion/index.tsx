@@ -62,6 +62,7 @@ const AccordionTrigger = forwardRef<
 			{label === null ? (
 				children
 			) : (
+				// 저수준 layout 예외: heroui-native Accordion.Trigger slot에 끼워 넣는 label 행이라 raw gap을 유지합니다.
 				<View className="flex-row items-center justify-between gap-3">
 					<Text className="flex-1" variant="label">
 						{label}

@@ -22,7 +22,7 @@ function DataGridTableRoot({
 
 	return (
 		<div className="relative">
-			<div className="overflow-hidden rounded border border-[#d6dde7] bg-surface dark:border-white/10 dark:bg-neutral-900">
+			<div className="overflow-hidden rounded border border-border bg-surface">
 				<div className="overflow-x-auto">
 					<table
 						aria-label={ariaLabel}

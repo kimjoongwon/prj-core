@@ -14,6 +14,7 @@ import { Alert } from "../../feedback/Alert/Alert";
 import { Button } from "../../input/Button/Button";
 import { TextField } from "../../input/TextField";
 import { Section } from "../../layout";
+import { HStack, VStack } from "../../rhythm";
 export type RoutineFormField =
 	| "name"
 	| "label"
@@ -90,9 +91,9 @@ const RoutineMediaThumbnail = ({
 					playsInline
 					preload="metadata"
 				/>
-				<div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+				<div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-backdrop via-transparent to-transparent" />
 				<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-					<PlayCircle className="h-8 w-8 text-white/90" />
+					<PlayCircle className="h-8 w-8 text-accent-foreground" />
 				</div>
 			</Card>
 		);
@@ -101,10 +102,10 @@ const RoutineMediaThumbnail = ({
 		<Card
 			className={`flex items-center justify-center rounded-xl border border-dashed border-border bg-surface-secondary text-muted ${className ?? ""}`}
 		>
-			<div className="flex flex-col items-center gap-2">
+			<VStack gap="block" alignItems="center">
 				<ImageIcon className="h-7 w-7" />
 				<span className="text-xs">미리보기 없음</span>
-			</div>
+			</VStack>
 		</Card>
 	);
 };
@@ -118,7 +119,7 @@ const CandidateTaskCard = observer(
 	}) => {
 		return (
 			<div className="rounded-2xl border border-border bg-surface p-3">
-				<div className="flex gap-3">
+				<HStack gap="block">
 					<RoutineMediaThumbnail
 						title={task.exerciseName}
 						imageAssetUrl={task.imageAssetUrl}
@@ -126,7 +127,7 @@ const CandidateTaskCard = observer(
 						className="aspect-video w-28 shrink-0"
 					/>
 					<div className="min-w-0 flex-1">
-						<div className="flex items-start justify-between gap-2">
+						<HStack alignItems="start" justifyContent="between" gap="inline">
 							<div className="min-w-0">
 								<p className="line-clamp-2 font-medium">{task.exerciseName}</p>
 								<p className="mt-1 text-xs text-muted">
@@ -135,12 +136,12 @@ const CandidateTaskCard = observer(
 							</div>
 							<Chip
 								size="sm"
-								variant="flat"
+								variant="soft"
 								color={task.isSchedulable ? "success" : "warning"}
 							>
 								{task.isSchedulable ? "가능" : "불가"}
 							</Chip>
-						</div>
+						</HStack>
 						<div className="mt-3 flex justify-end">
 							<Button
 								size="sm"
@@ -151,7 +152,7 @@ const CandidateTaskCard = observer(
 							</Button>
 						</div>
 					</div>
-				</div>
+				</HStack>
 			</div>
 		);
 	},
@@ -178,8 +179,12 @@ const ActivityCard = observer(
 	}) => {
 		return (
 			<div className="rounded-2xl border border-border bg-surface p-4">
-				<div className="flex flex-col gap-4 md:flex-row">
-					<div className="flex items-start gap-3 md:w-44 md:flex-col md:items-center">
+				<VStack className="md:flex-row">
+					<HStack
+						alignItems="start"
+						gap="block"
+						className="md:w-44 md:flex-col md:items-center"
+					>
 						<div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
 							{index + 1}
 						</div>
@@ -192,9 +197,12 @@ const ActivityCard = observer(
 							videoAssetUrl={activity.videoAssetUrl}
 							className="aspect-video w-full max-w-40"
 						/>
-					</div>
+					</HStack>
 					<div className="flex-1">
-						<div className="mb-3 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+						<VStack
+							gap="block"
+							className="mb-3 md:flex-row md:items-start md:justify-between"
+						>
 							<div>
 								<p className="font-medium">{activity.exerciseName}</p>
 								<p className="mt-1 text-sm text-muted">
@@ -203,11 +211,11 @@ const ActivityCard = observer(
 										: `루틴 순서 ${index + 1}`}
 								</p>
 							</div>
-							<div className="flex items-center gap-2">
+							<HStack alignItems="center">
 								<Chip
 									color={activity.isSchedulable ? "success" : "warning"}
 									size="sm"
-									variant="flat"
+									variant="soft"
 								>
 									{activity.isSchedulable ? "비디오 연결" : "비디오 필요"}
 								</Chip>
@@ -220,8 +228,8 @@ const ActivityCard = observer(
 										제거
 									</Button>
 								) : null}
-							</div>
-						</div>
+							</HStack>
+						</VStack>
 						{!activity.isSchedulable ? (
 							<p className="mb-3 text-sm text-warning">
 								영상이 없어 Program 생성에 사용할 수 없는 운동입니다.
@@ -262,7 +270,7 @@ const ActivityCard = observer(
 							/>
 						</div>
 					</div>
-				</div>
+				</VStack>
 			</div>
 		);
 	},
@@ -348,19 +356,19 @@ export const RoutineForm = observer(
 			state.activities = nextActivities;
 		};
 		return (
-			<div className="flex flex-col gap-6">
+			<VStack gap="page">
 				<Section>
 					<Section.Header title="기본 정보" />
 					<Section.Body>
-						<div className="flex flex-col gap-4">
+						<VStack>
 							<Alert
 								status={languageCode ? "accent" : "warning"}
 								title="현재 Space 콘텐츠 언어"
 								actions={
 									<Chip
 										size="sm"
-										variant="flat"
-										color={languageCode ? "primary" : "warning"}
+										variant="soft"
+										color={languageCode ? "accent" : "warning"}
 									>
 										{languageLabel}
 									</Chip>
@@ -400,13 +408,13 @@ export const RoutineForm = observer(
 									}
 								}}
 							/>
-						</div>
+						</VStack>
 					</Section.Body>
 				</Section>
 				<Section>
 					<Section.Header title="활동 구성" />
 					<Section.Body>
-						<div className="flex flex-col gap-4">
+						<VStack>
 							{!readOnly ? (
 								<>
 									<TextField
@@ -427,10 +435,13 @@ export const RoutineForm = observer(
 											</p>
 										</div>
 										{isTasksLoading ? (
-											<div className="flex items-center gap-2 text-sm text-muted">
+											<HStack
+												alignItems="center"
+												className="text-sm text-muted"
+											>
 												<Spinner size="sm" />
 												<span>운동 목록을 불러오는 중...</span>
-											</div>
+											</HStack>
 										) : candidateTasks.length === 0 ? (
 											<p className="text-sm text-muted">
 												조건에 맞는 스케줄 가능 운동이 없습니다.
@@ -450,7 +461,12 @@ export const RoutineForm = observer(
 								</>
 							) : null}
 							<div className="rounded-2xl border border-border p-4">
-								<div className="mb-3 flex items-center justify-between gap-3">
+								<HStack
+									alignItems="center"
+									justifyContent="between"
+									gap="block"
+									className="mb-3"
+								>
 									<div>
 										<p className="font-medium">추가된 활동</p>
 										<p className="text-sm text-muted">
@@ -459,10 +475,10 @@ export const RoutineForm = observer(
 												: "루틴에 연결된 활동입니다."}
 										</p>
 									</div>
-									<Chip size="sm" variant="flat" color="primary">
+									<Chip size="sm" variant="soft" color="accent">
 										{visibleActivities.length}개
 									</Chip>
-								</div>
+								</HStack>
 								{state.errors.activities ? (
 									<p className="mb-3 text-sm text-danger">
 										{state.errors.activities}
@@ -473,6 +489,7 @@ export const RoutineForm = observer(
 										아직 추가된 활동이 없습니다.
 									</p>
 								) : !readOnly ? (
+									// raw gap 예외: DraggableSortableList가 자체 flex 간격을 className으로만 조절 가능
 									<DraggableSortableList
 										items={visibleActivities.map((activity, index) => ({
 											...activity,
@@ -492,7 +509,7 @@ export const RoutineForm = observer(
 										className="gap-3"
 									/>
 								) : (
-									<div className="flex flex-col gap-3">
+									<VStack gap="block">
 										{visibleActivities.map((activity, index) => (
 											<ActivityCard
 												key={`${activity.taskId}:${index}`}
@@ -503,13 +520,13 @@ export const RoutineForm = observer(
 												onClickRemoveActivityButton={removeActivity}
 											/>
 										))}
-									</div>
+									</VStack>
 								)}
 							</div>
-						</div>
+						</VStack>
 					</Section.Body>
 				</Section>
-			</div>
+			</VStack>
 		);
 	},
 );

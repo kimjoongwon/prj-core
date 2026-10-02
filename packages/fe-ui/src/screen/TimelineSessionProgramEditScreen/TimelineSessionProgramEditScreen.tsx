@@ -14,7 +14,7 @@ import {
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { Screen } from "../../layout/Screen";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 
 export type {
@@ -76,10 +76,14 @@ export const TimelineSessionProgramEditScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex items-center justify-center gap-2 p-8">
+								<HStack
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<Spinner size="sm" />
 									<span className="text-muted">{loadingMessage}</span>
-								</div>
+								</HStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -93,10 +97,17 @@ export const TimelineSessionProgramEditScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<VStack
+									gap="section"
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<p className="text-muted">{notFoundMessage}</p>
-									{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
-								</div>
+									{notFoundAction ?? (
+										<Button variant="tertiary">목록으로</Button>
+									)}
+								</VStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>

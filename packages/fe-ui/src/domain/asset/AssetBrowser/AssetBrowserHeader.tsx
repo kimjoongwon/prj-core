@@ -14,7 +14,7 @@ export const AssetBrowserHeader = ({
 	actions,
 }: AssetBrowserHeaderProps) => {
 	return (
-		<div className="min-w-0 border-b border-[#d7e4f2] pb-4 dark:border-white/10">
+		<div className="border-b border-separator min-w-0 pb-4">
 			<div className="flex items-start justify-between gap-4">
 				<div className="min-w-0 flex-1">
 					<Typography.Heading

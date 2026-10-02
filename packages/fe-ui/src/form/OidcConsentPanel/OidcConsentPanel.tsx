@@ -12,6 +12,7 @@ import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button } from "../../input";
 import { Auth } from "../../layout/Auth";
+import { HStack } from "../../rhythm";
 
 export interface OidcConsentPanelState {
 	errorMessage: string | null;
@@ -57,10 +58,11 @@ export const OidcConsentPanel = observer(
 				)}
 
 				{/* 요청된 권한 목록 */}
-				<div className="mb-6 rounded-xl border border-slate-200/70 bg-slate-100/80 p-4 dark:border-white/10 dark:bg-white/[0.04]">
-					<h3 className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+				<div className="mb-6 rounded-xl border border-border bg-surface-secondary p-4">
+					<h3 className="mb-3 text-sm font-medium text-foreground">
 						{t("요청된 권한")}
 					</h3>
+					{/* raw space-y 예외: 시맨틱 ul/li 목록 구조를 유지해야 해서 VStack(div)으로 대체하지 않음 */}
 					<ul className="space-y-3">
 						{missingScopes.map((scope) => (
 							<li key={scope} className="flex min-w-0 items-center">
@@ -88,7 +90,7 @@ export const OidcConsentPanel = observer(
 				</div>
 
 				{/* 액션 버튼 */}
-				<div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+				<HStack gap="section" className="flex-col sm:flex-row">
 					<Button
 						type="button"
 						data-action="confirm-consent"
@@ -108,7 +110,7 @@ export const OidcConsentPanel = observer(
 					>
 						거부
 					</Button>
-				</div>
+				</HStack>
 
 				{/* 개인정보 안내 */}
 				<p className="text-center text-muted text-xs mt-6">

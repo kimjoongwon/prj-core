@@ -16,6 +16,7 @@ import { Checkbox } from "../../input/Checkbox/Checkbox";
 import { Select } from "../../input/Select/Select";
 import { StringListInput } from "../../input/StringListInput/StringListInput";
 import { TextField } from "../../input/TextField/TextField";
+import { VStack } from "../../rhythm";
 
 export const OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS: Array<{
 	label: string;
@@ -166,10 +167,10 @@ export const OidcClientForm = observer(
 		};
 
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				{/* 기본 정보 */}
 				<section>
-					<div className="space-y-6 p-6">
+					<VStack gap="page" className="p-6">
 						<h3 className="text-lg font-semibold">기본 정보</h3>
 						<TextField
 							label="Client ID"
@@ -208,7 +209,7 @@ export const OidcClientForm = observer(
 							isReadOnly={readOnly}
 							isDisabled={readOnly}
 						/>
-						<div className="space-y-2">
+						<VStack gap="block">
 							<TextField
 								label="Client Secret"
 								placeholder={
@@ -248,12 +249,12 @@ export const OidcClientForm = observer(
 							>
 								Public 클라이언트 (Secret 없음)
 							</Checkbox>
-						</div>
-					</div>
+						</VStack>
+					</VStack>
 				</section>
 				{/* 인증 설정 */}
 				<section>
-					<div className="space-y-6 p-6">
+					<VStack gap="page" className="p-6">
 						<h3 className="text-lg font-semibold">인증 설정</h3>
 						<Select
 							label="인증 방식"
@@ -371,11 +372,11 @@ export const OidcClientForm = observer(
 								</p>
 							</div>
 						</div>
-					</div>
+					</VStack>
 				</section>
 				{/* Redirect URIs */}
 				<section>
-					<div className="space-y-4 p-6">
+					<VStack className="p-6">
 						<h3 className="text-lg font-semibold">Redirect URIs</h3>
 						{state.errors.redirectUris && (
 							<p className="text-sm text-danger">{state.errors.redirectUris}</p>
@@ -394,10 +395,10 @@ export const OidcClientForm = observer(
 							addLabel="URI 추가"
 							removeLabel="URI 삭제"
 						/>
-					</div>
+					</VStack>
 				</section>
 				<section>
-					<div className="space-y-6 p-6">
+					<VStack gap="page" className="p-6">
 						<h3 className="text-lg font-semibold">앱 복귀 설정 (선택)</h3>
 						<TextField
 							label="로그인 화면 URL"
@@ -427,10 +428,10 @@ export const OidcClientForm = observer(
 							isDisabled={readOnly}
 							description="callback에 returnTo가 없을 때 사용할 기본 복귀 경로입니다."
 						/>
-					</div>
+					</VStack>
 				</section>
 				<section>
-					<div className="space-y-6 p-6">
+					<VStack gap="page" className="p-6">
 						<div>
 							<h3 className="text-lg font-semibold">로그인 화면 설정</h3>
 							<p className="mt-1 text-sm text-muted">
@@ -546,11 +547,11 @@ export const OidcClientForm = observer(
 								</Checkbox>
 							</div>
 						)}
-					</div>
+					</VStack>
 				</section>
 				{/* 추가 정보 */}
 				<section>
-					<div className="space-y-6 p-6">
+					<VStack gap="page" className="p-6">
 						<h3 className="text-lg font-semibold">추가 정보 (선택)</h3>
 						<TextField
 							label="로고 URI"
@@ -591,9 +592,9 @@ export const OidcClientForm = observer(
 							isReadOnly={readOnly}
 							isDisabled={readOnly}
 						/>
-					</div>
+					</VStack>
 				</section>
-			</div>
+			</VStack>
 		);
 	},
 );

@@ -139,7 +139,7 @@ export const ProgramPicker = observer(function ProgramPicker({
 									state.close();
 								}}
 								aria-pressed={programPicker.selectedId === option.id}
-								className={`rounded-md px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+								className={`rounded-md px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
 									programPicker.selectedId === option.id
 										? "bg-accent/15 text-accent"
 										: "bg-surface-secondary hover:bg-surface-tertiary"

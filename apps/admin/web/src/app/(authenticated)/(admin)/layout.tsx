@@ -2,6 +2,7 @@ import {
 	AccessControlGuard,
 	AccountTenantSelect,
 	AccountUserMenu,
+	HStack,
 	LanguageSelectButton,
 	NavigationPanel,
 	ThemeToggleButton,
@@ -11,7 +12,7 @@ import { AdminCopyrightFooter } from "./AdminCopyrightFooter";
 import { PlateBrand } from "./PlateBrand";
 
 const utilityButtonClassName =
-	"h-10 w-10 rounded-xl border border-border bg-surface text-foreground shadow-none hover:bg-default/70";
+	"h-10 w-10 rounded-lg border border-border bg-surface text-foreground shadow-none hover:bg-default/70";
 
 /**
  * 인증 이후 관리자 route shell입니다.
@@ -26,12 +27,12 @@ export default function AdminLayout({
 		<Admin>
 			<Admin.Header>
 				<PlateBrand />
-				<div className="flex items-center gap-2">
+				<HStack alignItems="center">
 					<LanguageSelectButton />
 					<ThemeToggleButton compact className={utilityButtonClassName} />
 					<AccountTenantSelect />
 					<AccountUserMenu />
-				</div>
+				</HStack>
 			</Admin.Header>
 			<Admin.Body>
 				<Admin.LeftAside>

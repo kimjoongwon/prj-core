@@ -19,7 +19,7 @@ export interface PlanningSessionBarProps {
 
 const spaceSelectClassNames = {
 	trigger:
-		"inline-flex h-11 w-40 shrink-0 flex-nowrap items-center justify-start gap-2 rounded-2xl border border-border bg-surface px-3 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary sm:w-52 lg:w-60",
+		"inline-flex h-11 w-40 shrink-0 flex-nowrap items-center justify-start gap-2 rounded-2xl border border-border bg-surface px-3 text-foreground shadow-sm hover:bg-surface-hover sm:w-52 lg:w-60",
 	value: "min-w-0 flex-1 truncate text-left text-sm text-foreground",
 	indicator: "h-4 w-4 shrink-0 text-muted",
 	popover: "min-w-40 sm:min-w-52 lg:min-w-60",
@@ -158,11 +158,11 @@ export function PlanningSessionBar({
 							<Chip
 								color={isAuthenticated ? "success" : "warning"}
 								size="sm"
-								variant="flat"
+								variant="soft"
 							>
 								{isAuthenticated ? "Mock 로그인" : "Mock 로그아웃"}
 							</Chip>
-							<Chip color="primary" size="sm" variant="bordered">
+							<Chip color="accent" size="sm" variant="tertiary">
 								{context.realm}
 							</Chip>
 							<span className="text-xs font-medium text-muted">

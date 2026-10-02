@@ -2,10 +2,12 @@ import { observer } from "mobx-react-lite";
 import { type ReactNode } from "react";
 import { ScrollView, View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
+import { Chip, chipClassNames } from "../../data-display/Chip";
 import { Text } from "../../data-display/Text";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
 import { ScreenFrame } from "../../layout/ScreenFrame";
+import { HStack, VStack } from "../../rhythm";
 export type MyReservationsScreenStatus =
 	| "loading"
 	| "error"
@@ -73,20 +75,30 @@ export const MyReservationsScreen = observer(
 
 			for (const item of items) {
 				reservationCards.push(
-					<View className={classNames.reservationCard()} key={item.id}>
+					<VStack
+						className={classNames.reservationCard()}
+						gap="block"
+						key={item.id}
+					>
 						<View className={classNames.reservationHeader()} key="header">
-							<View className={classNames.reservationDateRow()} key="date">
+							<HStack alignItems="center" gap="dense" key="date">
 								<Icon name="calendarCheck" size="xs" tone="success" />
 								<Text className={classNames.reservationDate()}>
 									{item.dateLabel}
 								</Text>
-							</View>
-							<View className={classNames.statusBadge()} key="status">
+							</HStack>
+							<Chip color="warning" key="status" size="sm" variant="soft">
 								<Icon name="badgeCheck" size="xs" tone="warning" />
-								<Text className={classNames.statusText()}>
+								<Text
+									className={chipClassNames.label({
+										color: "warning",
+										size: "sm",
+										variant: "soft",
+									})}
+								>
 									{item.statusLabel}
 								</Text>
-							</View>
+							</Chip>
 						</View>
 						<Text className={classNames.reservationTitle()} key="title">
 							{item.title}
@@ -101,7 +113,7 @@ export const MyReservationsScreen = observer(
 								{item.memo}
 							</Text>
 						) : null}
-					</View>,
+					</VStack>,
 				);
 			}
 
@@ -120,8 +132,8 @@ export const MyReservationsScreen = observer(
 					contentContainerClassName={classNames.contentContainer()}
 					showsVerticalScrollIndicator={false}
 				>
-					<View className={classNames.tabContent()}>
-						<View className={classNames.sectionHeader()} key="header">
+					<VStack gap="section">
+						<VStack gap="dense" key="header">
 							<Text className={classNames.sectionTitle()} key="title">
 								내 예약
 							</Text>
@@ -132,9 +144,9 @@ export const MyReservationsScreen = observer(
 								예약 확정과 대기 상태를 실제 Reservation API 기준으로
 								확인합니다.
 							</Text>
-						</View>
+						</VStack>
 						{reservationsContent}
-					</View>
+					</VStack>
 				</ScrollView>
 			</ScreenFrame>
 		);
@@ -144,21 +156,15 @@ MyReservationsScreen.displayName = "MyReservationsScreen";
 const myReservationsScreenClassNames = tv({
 	slots: {
 		contentContainer: "px-4 pb-8 pt-4",
-		reservationCard: "gap-2 rounded-lg border border-border bg-surface p-4",
+		reservationCard: "rounded-lg border border-border bg-surface p-4",
 		reservationDate: "text-[13px] font-extrabold leading-5 text-success",
-		reservationDateRow: "flex-row items-center gap-1.5",
 		reservationHeader: "flex-row items-center justify-between",
 		reservationMeta: "text-[13px] leading-5 text-surface-foreground",
 		reservationTitle: "text-base font-extrabold leading-6 text-foreground",
 		root: "flex-1 bg-background",
 		screenFrame: "bg-background",
 		sectionDescription: "text-[13px] leading-5 text-muted",
-		sectionHeader: "gap-1",
 		sectionTitle: "text-xl font-extrabold leading-7 text-foreground",
-		statusBadge:
-			"flex-row items-center gap-1 overflow-hidden rounded-full border border-warning bg-warning-soft px-2 py-1",
-		statusText: "text-xs font-extrabold leading-4 text-warning-soft-foreground",
-		tabContent: "gap-4",
 	},
 });
 const classNames = myReservationsScreenClassNames();

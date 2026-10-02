@@ -6,6 +6,7 @@ import {
 } from "@cocrepo/api/core/templates";
 import {
 	Button,
+	HStack,
 	TemplateEditScreen,
 	type TemplateFormState,
 } from "@cocrepo/ui";
@@ -79,7 +80,7 @@ const AdminTemplatesNewRoute = observer(() => {
 			description="새로운 메시지 Template을 등록합니다."
 			state={state}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -97,7 +98,7 @@ const AdminTemplatesNewRoute = observer(() => {
 					>
 						등록
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

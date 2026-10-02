@@ -108,6 +108,7 @@ export const ScreenActionBar = ScreenActionBarComponent;
 const screenActionBarClassNames = tv({
 	slots: {
 		action: "min-h-11 rounded-lg",
+		// 저수준 layout 예외: 배치 방향이 variant로 결정되는 저수준 액션 바 래퍼라 tv slot raw gap을 유지합니다.
 		actions: "gap-2",
 		description: "text-center text-xs leading-4 text-muted",
 		root: "gap-2 border-t border-border bg-surface px-4 pb-3 pt-3",

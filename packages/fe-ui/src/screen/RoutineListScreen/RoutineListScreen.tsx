@@ -13,6 +13,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -63,7 +64,7 @@ export interface RoutineListScreenProps {
 }
 function RoutinesScreenFallback() {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<Screen.Header
 				title="루틴"
 				description="운동 루틴(커리큘럼)을 관리합니다."
@@ -73,7 +74,7 @@ function RoutinesScreenFallback() {
 					<Section.Body>{null}</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 }
 export const RoutineListScreen = observer(
@@ -109,7 +110,7 @@ export const RoutineListScreen = observer(
 			return <RoutinesScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="루틴"
 					description="운동 루틴(커리큘럼)을 관리합니다."
@@ -144,7 +145,7 @@ export const RoutineListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-			</div>
+			</VStack>
 		);
 	},
 );

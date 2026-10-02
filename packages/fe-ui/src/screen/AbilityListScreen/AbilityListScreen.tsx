@@ -5,13 +5,7 @@ import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,
 } from "@cocrepo/type";
-import {
-	buildAbilityListTableColumns,
-	DataGrid,
-	DataGridState,
-	Screen,
-	SectionSurface,
-} from "@cocrepo/ui";
+import { DataGrid, DataGridState, Screen, SectionSurface } from "@cocrepo/ui";
 import { Card, ListBox, Spinner } from "@heroui/react";
 import {
 	Ban,
@@ -25,11 +19,12 @@ import {
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ReactNode, useEffect } from "react";
 import { Chip } from "../../data-display";
+import { buildAbilityListTableColumns } from "../../data-grid/columns";
 import { Button } from "../../input/Button/Button";
 import { Select } from "../../input/Select/Select";
 import { TextField } from "../../input/TextField/TextField";
 import { Section } from "../../layout";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 export interface AbilityListScreenOption {
 	id: bigint;
 	label: string;
@@ -78,9 +73,9 @@ export interface AbilityListScreenProps {
 const abilityListTableColumns =
 	buildAbilityListTableColumns<AbilityResponseDto>();
 const metricCardColorStyles = {
-	primary: {
-		icon: "text-primary",
-		value: "text-primary",
+	accent: {
+		icon: "text-accent",
+		value: "text-accent",
 	},
 	success: {
 		icon: "text-success",
@@ -113,23 +108,25 @@ function MetricCard({
 	const styles = metricCardColorStyles[color];
 	return (
 		<Card className={`bg-surface ${className}`}>
-			<Card.Content className="flex flex-row items-center gap-4 p-4">
-				{icon ? (
-					<div
-						className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${styles.icon}`}
-					>
-						{icon}
-					</div>
-				) : null}
-				<div className="flex flex-1 flex-col">
-					<span className="text-sm text-muted">{title}</span>
-					<span className={`text-2xl font-bold ${styles.value}`}>
-						{typeof value === "number" ? value.toLocaleString() : value}
-					</span>
-					{description ? (
-						<span className="text-xs text-muted">{description}</span>
+			<Card.Content className="p-4">
+				<HStack alignItems="center" gap="section">
+					{icon ? (
+						<div
+							className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${styles.icon}`}
+						>
+							{icon}
+						</div>
 					) : null}
-				</div>
+					<div className="flex flex-1 flex-col">
+						<span className="text-sm text-muted">{title}</span>
+						<span className={`text-2xl font-bold ${styles.value}`}>
+							{typeof value === "number" ? value.toLocaleString() : value}
+						</span>
+						{description ? (
+							<span className="text-xs text-muted">{description}</span>
+						) : null}
+					</div>
+				</HStack>
 			</Card.Content>
 		</Card>
 	);
@@ -156,28 +153,28 @@ function hasActiveFilters(filters: AbilityListScreenFilters) {
 }
 const AbilityListScreenFallback = observer(() => {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>
-						<div className="flex items-center justify-center gap-2">
+						<HStack alignItems="center" justifyContent="center">
 							<Spinner size="sm" />
 							<span className="text-muted">로딩 중...</span>
-						</div>
+						</HStack>
 					</Section.Body>
 				</Section>
 			</SectionSurface>
 			<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>
-						<div className="flex items-center justify-center gap-2">
+						<HStack alignItems="center" justifyContent="center">
 							<Spinner size="sm" />
 							<span className="text-muted">로딩 중...</span>
-						</div>
+						</HStack>
 					</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 });
 export const AbilityListScreen = observer(
@@ -210,7 +207,9 @@ export const AbilityListScreen = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const abilityRows = abilities ?? [];
-		const subjectOptionIds = new Set(subjects.map((subject) => String(subject.id)));
+		const subjectOptionIds = new Set(
+			subjects.map((subject) => String(subject.id)),
+		);
 		const actionOptionIds = new Set(actions.map((action) => String(action.id)));
 		const selectedSubjectLabel = getOptionLabel(
 			subjects,
@@ -241,7 +240,7 @@ export const AbilityListScreen = observer(
 			return <AbilityListScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="권한 정의"
 					description="대상과 행동을 조합해 운영 권한 규칙을 확인합니다."
@@ -259,7 +258,7 @@ export const AbilityListScreen = observer(
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
 						<MetricCard
 							className="h-full border border-accent/10 bg-accent/5"
-							color="primary"
+							color="accent"
 							description={`허용 ${summary.allow.toLocaleString()}건`}
 							icon={<ListChecks className="size-5" />}
 							title="전체"
@@ -322,8 +321,8 @@ export const AbilityListScreen = observer(
 									>
 										{subjects.map((subject) => (
 											<ListBox.Item
-											key={String(subject.id)}
-											id={String(subject.id)}
+												key={String(subject.id)}
+												id={String(subject.id)}
 												textValue={subject.label}
 											>
 												{subject.label}
@@ -343,8 +342,8 @@ export const AbilityListScreen = observer(
 									>
 										{actions.map((action) => (
 											<ListBox.Item
-											key={String(action.id)}
-											id={String(action.id)}
+												key={String(action.id)}
+												id={String(action.id)}
 												textValue={action.label}
 											>
 												{action.label}
@@ -370,27 +369,30 @@ export const AbilityListScreen = observer(
 										</ListBox.Item>
 									</Select>
 								</div>
-								<div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-									<div className="flex min-h-8 flex-wrap items-center gap-2">
+								<VStack
+									gap="block"
+									className="mt-4 md:flex-row md:items-center md:justify-between"
+								>
+									<HStack alignItems="center" className="flex-wrap min-h-8">
 										{filters.searchTerm ? (
-											<Chip size="sm" variant="flat" color="primary">
+											<Chip size="sm" variant="soft" color="accent">
 												검색: {filters.searchTerm}
 											</Chip>
 										) : null}
 										{selectedSubjectLabel ? (
-											<Chip size="sm" variant="flat" color="secondary">
+											<Chip size="sm" variant="soft" color="default">
 												대상: {selectedSubjectLabel}
 											</Chip>
 										) : null}
 										{selectedActionLabel ? (
-											<Chip size="sm" variant="flat" color="secondary">
+											<Chip size="sm" variant="soft" color="default">
 												행동: {selectedActionLabel}
 											</Chip>
 										) : null}
 										{selectedRuleTypeLabel ? (
 											<Chip
 												size="sm"
-												variant="flat"
+												variant="soft"
 												color={
 													filters.selectedInverted === "true"
 														? "danger"
@@ -405,7 +407,7 @@ export const AbilityListScreen = observer(
 												적용된 필터가 없습니다.
 											</span>
 										) : null}
-									</div>
+									</HStack>
 									<Button
 										size="sm"
 										variant="tertiary"
@@ -415,7 +417,7 @@ export const AbilityListScreen = observer(
 									>
 										필터 초기화
 									</Button>
-								</div>
+								</VStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -436,9 +438,9 @@ export const AbilityListScreen = observer(
 											columns: abilityListTableColumns,
 											onRowClick: handleAbilityRowClick,
 											emptyMessage:
-											totalCount === 0
-												? "등록된 권한이 없습니다."
-												: "검색 조건에 맞는 권한이 없습니다.",
+												totalCount === 0
+													? "등록된 권한이 없습니다."
+													: "검색 조건에 맞는 권한이 없습니다.",
 										},
 									}}
 									rows={abilityRows}
@@ -449,7 +451,7 @@ export const AbilityListScreen = observer(
 						</Section>
 					</SectionSurface>
 				</VStack>
-			</div>
+			</VStack>
 		);
 	},
 );

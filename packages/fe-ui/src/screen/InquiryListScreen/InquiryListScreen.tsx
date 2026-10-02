@@ -11,6 +11,7 @@ import {
 	buildInquiryTableColumns,
 	DataGrid,
 	DataGridState,
+	HStack,
 	Screen,
 	Section,
 	SectionSurface,
@@ -109,20 +110,22 @@ function MetricCard({
 			onClick={onPress}
 			className={`bg-surface ${onPress ? "cursor-pointer" : ""} ${className}`}
 		>
-			<Card.Content className="flex flex-row items-center gap-4 p-4">
-				{icon ? (
-					<div
-						className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${styles.icon}`}
-					>
-						{icon}
+			<Card.Content className="p-4">
+				<HStack alignItems="center" gap="section">
+					{icon ? (
+						<div
+							className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${styles.icon}`}
+						>
+							{icon}
+						</div>
+					) : null}
+					<div className="flex flex-1 flex-col">
+						<span className="text-sm text-muted">{title}</span>
+						<span className={`text-2xl font-bold ${styles.value}`}>
+							{typeof value === "number" ? value.toLocaleString() : value}
+						</span>
 					</div>
-				) : null}
-				<div className="flex flex-1 flex-col">
-					<span className="text-sm text-muted">{title}</span>
-					<span className={`text-2xl font-bold ${styles.value}`}>
-						{typeof value === "number" ? value.toLocaleString() : value}
-					</span>
-				</div>
+				</HStack>
 			</Card.Content>
 		</Card>
 	);
@@ -188,7 +191,7 @@ function InquiryStatsGrid({
 					icon={card.icon}
 					color={card.color}
 					onPress={() => onStatusClick(card.status)}
-					className={`cursor-pointer transition-all ${activeStatus === card.status ? "ring-2 ring-primary" : ""}`}
+					className={`cursor-pointer transition-all ${activeStatus === card.status ? "ring-2 ring-focus" : ""}`}
 				/>
 			))}
 		</div>
@@ -196,13 +199,13 @@ function InquiryStatsGrid({
 }
 function InquiriesScreenFallback() {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>{null}</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 }
 export const InquiryListScreen = observer(
@@ -245,7 +248,7 @@ export const InquiryListScreen = observer(
 			return <InquiriesScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="문의 관리"
 					description="고객 문의를 접수/처리/해결합니다."
@@ -289,8 +292,8 @@ export const InquiryListScreen = observer(
 											entity: "Inquiry",
 											columns,
 											onRowClick: (inquiry) => {
-											onClickInquiryRow(inquiry.id);
-										},
+												onClickInquiryRow(inquiry.id);
+											},
 											emptyMessage: "표시할 문의가 없습니다.",
 										},
 									}}
@@ -302,7 +305,7 @@ export const InquiryListScreen = observer(
 						</Section>
 					</SectionSurface>
 				</VStack>
-			</div>
+			</VStack>
 		);
 	},
 );

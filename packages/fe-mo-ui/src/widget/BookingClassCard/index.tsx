@@ -7,8 +7,9 @@ import {
 	type ViewProps,
 } from "react-native";
 import { tv } from "tailwind-variants";
+import { Chip, chipClassNames, type ChipProps } from "../../data-display/Chip";
 import { Text } from "../../data-display/Text";
-import { Icon, type MobileIconName } from "../../icon";
+import { Icon, type IconTone, type MobileIconName } from "../../icon";
 export type BookingAvailabilityStatus =
 	| "AVAILABLE"
 	| "FEW_LEFT"
@@ -62,6 +63,24 @@ const STATUS_ICONS: Record<BookingAvailabilityStatus, MobileIconName> = {
 	RESERVED: "ticketCheck",
 	WAITLISTED: "hourglass",
 	WAITLIST_OPEN: "hourglass",
+};
+type BookingStatusChipColor = NonNullable<ChipProps["color"]>;
+const STATUS_CHIP_COLORS: Record<BookingAvailabilityStatus, BookingStatusChipColor> =
+	{
+		AVAILABLE: "success",
+		BOOKING_CLOSED: "default",
+		FEW_LEFT: "warning",
+		RESERVED: "success",
+		WAITLISTED: "success",
+		WAITLIST_OPEN: "accent",
+	};
+const STATUS_ICON_TONES: Record<BookingAvailabilityStatus, IconTone> = {
+	AVAILABLE: "success",
+	BOOKING_CLOSED: "muted",
+	FEW_LEFT: "warning",
+	RESERVED: "success",
+	WAITLISTED: "success",
+	WAITLIST_OPEN: "accent",
 };
 const isActionDisabled = (item: BookingClassFeedItem, onPressCta?: unknown) =>
 	!onPressCta ||
@@ -208,7 +227,6 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
 	const disabled = isActionDisabled(item, onPressCta);
 	const slotClassNames = bookingClassCardClassNames({
 		disabled,
-		status: item.status,
 	});
 	return (
 		<View {...rest} className={slotClassNames.root()} style={style}>
@@ -224,26 +242,27 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
 						<Text className={slotClassNames.program()} key="program">
 							{item.programName}
 						</Text>
-						<View className={slotClassNames.statusBadge()} key="status">
+						<Chip
+							color={STATUS_CHIP_COLORS[item.status]}
+							key="status"
+							size="sm"
+							variant="soft"
+						>
 							<Icon
 								name={STATUS_ICONS[item.status]}
 								size="xs"
-								tone={
-									item.status === "AVAILABLE" ||
-									item.status === "RESERVED" ||
-									item.status === "WAITLISTED"
-										? "success"
-										: item.status === "FEW_LEFT"
-											? "warning"
-											: item.status === "WAITLIST_OPEN"
-												? "accent"
-												: "muted"
-								}
+								tone={STATUS_ICON_TONES[item.status]}
 							/>
-							<Text className={slotClassNames.statusText()}>
+							<Text
+								className={chipClassNames.label({
+									color: STATUS_CHIP_COLORS[item.status],
+									size: "sm",
+									variant: "soft",
+								})}
+							>
 								{item.statusLabel ?? STATUS_LABELS[item.status]}
 							</Text>
-						</View>
+						</Chip>
 					</View>
 					<OptionalText
 						className={slotClassNames.session()}
@@ -300,13 +319,9 @@ const bookingClassCardClassNames = tv({
 		metaText: "text-[13px] leading-[18px] text-muted",
 		myStatus: "text-[13px] font-bold leading-[18px] text-success",
 		program: "flex-1 text-base font-extrabold leading-6 text-foreground",
-		root: "gap-3 rounded-lg border border-border bg-surface p-4",
-		session: "text-sm font-bold leading-5 text-surface-foreground",
-		statusBadge:
-			"flex-row items-center gap-1 self-start rounded-full border border-border bg-surface-secondary px-2 py-1",
-		statusText:
-			"text-[11px] font-extrabold leading-[14px] text-surface-secondary-foreground",
-		tag: "rounded-full border border-border bg-surface-secondary px-2 py-1",
+			root: "gap-3 rounded-lg border border-border bg-surface p-4",
+			session: "text-sm font-bold leading-5 text-surface-foreground",
+			tag: "rounded-full border border-border bg-surface-secondary px-2 py-1",
 		tagText: "text-xs font-bold leading-4 text-surface-secondary-foreground",
 		tags: "flex-row flex-wrap gap-2",
 		time: "text-center text-[15px] font-black leading-6 text-foreground",
@@ -323,28 +338,6 @@ const bookingClassCardClassNames = tv({
 			true: {
 				action: "border border-border bg-surface-secondary opacity-75",
 				actionText: "text-surface-secondary-foreground",
-			},
-		},
-		status: {
-			AVAILABLE: {},
-			BOOKING_CLOSED: {
-				statusBadge: "bg-default",
-			},
-			FEW_LEFT: {
-				statusBadge: "border-warning bg-warning-soft",
-				statusText: "text-warning-soft-foreground",
-			},
-			RESERVED: {
-				statusBadge: "border-success bg-success-soft",
-				statusText: "text-success-soft-foreground",
-			},
-			WAITLISTED: {
-				statusBadge: "border-success bg-success-soft",
-				statusText: "text-success-soft-foreground",
-			},
-			WAITLIST_OPEN: {
-				statusBadge: "border-accent bg-accent-soft",
-				statusText: "text-accent-soft-foreground",
 			},
 		},
 	},

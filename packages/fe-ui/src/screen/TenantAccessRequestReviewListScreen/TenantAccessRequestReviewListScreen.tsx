@@ -79,7 +79,7 @@ function TenantAccessRequestStatusChip({
 	status: TenantAccessRequestStatus;
 }) {
 	return (
-		<Chip color={STATUS_COLORS[status]} size="sm" variant="flat">
+		<Chip color={STATUS_COLORS[status]} size="sm" variant="soft">
 			{STATUS_LABELS[status]}
 		</Chip>
 	);
@@ -96,20 +96,20 @@ function RequestSummaryCell({
 	requesterEmail?: string;
 }) {
 	return (
-		<div className="flex flex-col gap-1">
-			<div className="flex flex-wrap items-center gap-2">
+		<VStack gap="dense">
+			<HStack alignItems="center" className="flex-wrap">
 				<span className="font-medium text-foreground">{spaceName}</span>
-				<Chip size="sm" variant="flat">
+				<Chip size="sm" variant="soft">
 					{roleName}
 				</Chip>
-			</div>
+			</HStack>
 			{requesterName || requesterEmail ? (
 				<span className="text-sm text-muted">
 					{requesterName ?? requesterEmail}
 					{requesterName && requesterEmail ? ` · ${requesterEmail}` : ""}
 				</span>
 			) : null}
-		</div>
+		</VStack>
 	);
 }
 export const TenantAccessRequestReviewListScreen = observer(
@@ -151,7 +151,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 													<span className="text-2xl font-semibold text-foreground">
 														{pendingCount.toLocaleString("ko-KR")}
 													</span>
-													<Chip color="warning" variant="flat" size="sm">
+													<Chip color="warning" variant="soft" size="sm">
 														PENDING
 													</Chip>
 												</HStack>

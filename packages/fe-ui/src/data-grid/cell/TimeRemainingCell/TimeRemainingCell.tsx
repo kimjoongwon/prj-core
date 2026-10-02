@@ -48,7 +48,7 @@ export const TimeRemainingCell = ({
 				<Chip
 					size="sm"
 					color="danger"
-					variant="flat"
+					variant="soft"
 					startContent={<AlertTriangle className="h-3 w-3" />}
 				>
 					{breachLabel}
@@ -63,7 +63,7 @@ export const TimeRemainingCell = ({
 				<Chip
 					size="sm"
 					color="warning"
-					variant="flat"
+					variant="soft"
 					startContent={<Clock className="h-3 w-3" />}
 				>
 					{remainingMinutes !== null && remainingMinutes !== undefined

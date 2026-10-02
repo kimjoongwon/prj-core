@@ -86,7 +86,7 @@ export const TextSkeletons: Story = {
 
 export const CardSkeleton: Story = {
 	render: () => (
-		<div className="max-w-sm space-y-4 rounded-lg border bg-white p-6 shadow">
+		<div className="max-w-sm space-y-4 rounded-lg border border-border bg-surface p-6 shadow-surface">
 			<Skeleton className="h-32 w-full rounded-lg" />
 			<div className="space-y-2">
 				<Skeleton className="h-6 w-3/4 rounded-lg" />
@@ -112,7 +112,7 @@ export const CardSkeleton: Story = {
 
 export const ProfileSkeleton: Story = {
 	render: () => (
-		<div className="flex max-w-md items-center space-x-4 rounded-lg border bg-white p-4 shadow">
+		<div className="flex max-w-md items-center space-x-4 rounded-lg border border-border bg-surface p-4 shadow-surface">
 			<Skeleton className="h-12 w-12 rounded-full" />
 			<div className="flex-1 space-y-2">
 				<Skeleton className="h-4 w-24 rounded-lg" />
@@ -141,7 +141,7 @@ export const ListSkeleton: Story = {
 				return (
 					<div
 						key={uniqueKey}
-						className="flex items-center space-x-3 rounded-lg border bg-white p-3"
+						className="flex items-center space-x-3 rounded-lg border border-border bg-surface p-3"
 					>
 						<Skeleton className="h-8 w-8 rounded-full" />
 						<div className="flex-1 space-y-1">
@@ -173,12 +173,12 @@ export const LoadingStates: Story = {
 		}, []);
 
 		return (
-			<div className="max-w-sm rounded-lg border bg-white p-6 shadow">
+			<div className="max-w-sm rounded-lg border border-border bg-surface p-6 shadow-surface">
 				<Skeleton
 					animationType={isLoaded ? "none" : "pulse"}
 					className="mb-4 h-40 w-full rounded-lg"
 				>
-					<div className="h-40 w-full rounded-lg bg-gradient-to-r from-blue-400 to-purple-500" />
+					<div className="h-40 w-full rounded-lg bg-surface-tertiary" />
 				</Skeleton>
 
 				<div className="space-y-2">
@@ -193,7 +193,7 @@ export const LoadingStates: Story = {
 						animationType={isLoaded ? "none" : "pulse"}
 						className="h-4 w-full rounded-lg"
 					>
-						<p className="text-gray-600">
+						<p className="text-muted">
 							This is a detailed product description that explains all the
 							features.
 						</p>
@@ -203,7 +203,7 @@ export const LoadingStates: Story = {
 						animationType={isLoaded ? "none" : "pulse"}
 						className="h-6 w-1/3 rounded-lg"
 					>
-						<div className="font-bold text-blue-600 text-xl">$99.99</div>
+						<div className="font-bold text-accent text-xl">$99.99</div>
 					</Skeleton>
 				</div>
 
@@ -214,7 +214,7 @@ export const LoadingStates: Story = {
 					>
 						<button
 							type="button"
-							className="w-full rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+							className="w-full rounded-lg bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover"
 						>
 							Add to Cart
 						</button>

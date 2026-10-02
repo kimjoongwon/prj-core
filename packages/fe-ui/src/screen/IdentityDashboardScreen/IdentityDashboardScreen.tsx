@@ -1,6 +1,6 @@
 "use client";
 
-import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { HStack, Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import {
 	Activity,
 	CheckCircle,
@@ -160,40 +160,34 @@ export const IdentityDashboardScreen = observer(
 												{t("로그인 추이 데이터가 없습니다.")}
 											</p>
 										) : (
-											<div className="flex flex-col gap-4">
-												<div className="flex items-center gap-4">
-													<div className="flex items-center gap-1.5">
+											<VStack gap="section">
+												<HStack alignItems="center" gap="section">
+													<HStack alignItems="center" gap="dense">
 														<div className="h-3 w-3 rounded-sm bg-success" />
 														<span className="text-sm text-muted">
 															{t("성공")}
 														</span>
-													</div>
-													<div className="flex items-center gap-1.5">
+													</HStack>
+													<HStack alignItems="center" gap="dense">
 														<div className="h-3 w-3 rounded-sm bg-danger" />
 														<span className="text-sm text-muted">
 															{t("실패")}
 														</span>
-													</div>
-												</div>
-												<div
-													className="flex items-end gap-3"
-													style={{
-														height: 200,
-													}}
-												>
+													</HStack>
+												</HStack>
+												<HStack alignItems="end" gap="block" className="h-50">
 													{trendItems.map((item, index) => (
-														<div
+														<VStack
 															key={`${item.date}:${index}`}
-															className="flex flex-1 flex-col items-center gap-1"
-															style={{
-																height: "100%",
-															}}
+															gap="dense"
+															alignItems="center"
+															className="flex-1 h-full"
 														>
-															<div
-																className="flex flex-1 items-end gap-1 w-full justify-center"
-																style={{
-																	height: "100%",
-																}}
+															<HStack
+																alignItems="end"
+																justifyContent="center"
+																gap="dense"
+																className="flex-1 h-full w-full"
 															>
 																<div
 																	className="flex flex-col items-center justify-end"
@@ -233,14 +227,14 @@ export const IdentityDashboardScreen = observer(
 																		}}
 																	/>
 																</div>
-															</div>
+															</HStack>
 															<span className="mt-1 text-xs text-muted">
 																{formatShortDate(item.date)}
 															</span>
-														</div>
+														</VStack>
 													))}
-												</div>
-											</div>
+												</HStack>
+											</VStack>
 										)}
 									</Section.Body>
 								</Section>

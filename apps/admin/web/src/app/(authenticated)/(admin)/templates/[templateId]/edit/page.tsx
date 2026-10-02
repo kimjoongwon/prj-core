@@ -8,6 +8,7 @@ import {
 } from "@cocrepo/api/core/templates";
 import {
 	Button,
+	HStack,
 	TemplateEditScreen,
 	type TemplateFormState,
 } from "@cocrepo/ui";
@@ -141,7 +142,7 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 				</Button>
 			}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -159,7 +160,7 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 					>
 						저장
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

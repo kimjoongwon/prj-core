@@ -27,7 +27,7 @@ export const Open: Story = {
 			</View>
 			<Dialog isOpen onOpenChange={() => undefined}>
 				<Dialog.Portal>
-					<Dialog.Overlay className="bg-foreground/25" />
+					<Dialog.Overlay className="bg-backdrop" />
 					<Dialog.Content className="mx-5 gap-4 rounded-xl border border-border bg-surface p-4">
 						<View className="flex-row items-start justify-between gap-3">
 							<View className="flex-1 gap-1">

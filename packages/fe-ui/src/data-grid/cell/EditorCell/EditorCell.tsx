@@ -13,7 +13,7 @@ interface EditorCellProps<TData, TValue> {
 }
 
 const EDITOR_CLASS_NAME =
-	"box-border h-9 min-w-0 w-full overflow-x-auto rounded-none border border-[#3b82f6] bg-white px-2 text-[13px] text-[#111827] outline-none ring-2 ring-[#bfdbfe] dark:bg-neutral-950 dark:text-slate-100";
+	"box-border h-9 min-w-0 w-full overflow-x-auto rounded-none border border-field-border-focus bg-field px-2 text-[13px] text-field-foreground outline-none focus-field-ring";
 
 function getOptions(config: DataGridEditorConfig) {
 	return config.options ?? [];
@@ -25,7 +25,7 @@ function getDatalistId(field: string) {
 
 function EditorError({ message }: { message?: string }) {
 	return message ? (
-		<div className="absolute left-0 top-full z-20 mt-1 whitespace-nowrap rounded bg-red-600 px-2 py-1 text-xs text-white shadow">
+		<div className="absolute left-0 top-full z-20 mt-1 whitespace-nowrap rounded bg-danger px-2 py-1 text-xs text-danger-foreground shadow-overlay">
 			{message}
 		</div>
 	) : null;
@@ -83,7 +83,7 @@ export function EditorCell<TData, TValue>({
 			<input
 				aria-label={label}
 				aria-invalid={ariaInvalid}
-				className="mx-auto size-4 accent-blue-600"
+				className="mx-auto size-4 accent-current text-accent"
 				type="checkbox"
 				checked={Boolean(value)}
 				disabled={isValidating}

@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { Button } from "../../input/Button/Button";
 import { Switch } from "../../input/Switch/Switch";
 import { TextField } from "../../input/TextField/TextField";
+import { VStack } from "../../rhythm";
 
 /** 변수 편집 항목 */
 export interface VariableEditItem {
@@ -145,8 +146,6 @@ export const VariableEditTable = observer(
 				<Button
 					isIconOnly
 					variant="ghost"
-
-
 					size="sm"
 					isDisabled={readOnly}
 					onPress={() => handleDeleteRow(index)}
@@ -170,7 +169,7 @@ export const VariableEditTable = observer(
 		};
 
 		return (
-			<div className="flex flex-col gap-3">
+			<VStack gap="block">
 				<Table aria-label="변수 편집 테이블">
 					<Table.Content>
 						<Table.Header>
@@ -261,7 +260,7 @@ export const VariableEditTable = observer(
 						변수 추가
 					</Button>
 				)}
-			</div>
+			</VStack>
 		);
 	},
 );

@@ -1,7 +1,12 @@
 "use client";
 
 import { type CreateRoleDto, useCreateRole } from "@cocrepo/api/core/roles";
-import { Button, RoleEditScreen, type RoleFormState } from "@cocrepo/ui";
+import {
+	Button,
+	HStack,
+	RoleEditScreen,
+	type RoleFormState,
+} from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -74,7 +79,7 @@ const AdminRolesNewRoute = observer(() => {
 			description="새로운 Role을 등록합니다."
 			state={state}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -92,7 +97,7 @@ const AdminRolesNewRoute = observer(() => {
 					>
 						Role 등록
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

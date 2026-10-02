@@ -16,20 +16,13 @@ const meta = {
 	argTypes: {
 		variant: {
 			control: "select",
-			options: ["solid", "bordered", "light", "flat", "faded", "shadow", "dot"],
+			options: ["primary", "secondary", "soft", "tertiary"],
 			description: "칩의 시각적 스타일 변형",
-			defaultValue: "solid",
+			defaultValue: "secondary",
 		},
 		color: {
 			control: "select",
-			options: [
-				"default",
-				"primary",
-				"secondary",
-				"success",
-				"warning",
-				"danger",
-			],
+			options: ["accent", "danger", "default", "success", "warning"],
 			description: "칩의 색상 테마",
 			defaultValue: "default",
 		},
@@ -62,15 +55,15 @@ export const 기본: Story = {
 	},
 };
 
-export const 주요: Story = {
+export const 강조: Story = {
 	args: {
-		children: "주요",
-		color: "primary",
+		children: "강조",
+		color: "accent",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "주요 색상의 칩입니다.",
+				story: "강조 색상의 칩입니다.",
 			},
 		},
 	},
@@ -118,16 +111,31 @@ export const 위험: Story = {
 	},
 };
 
-export const 경계선: Story = {
+export const 외곽선: Story = {
 	args: {
-		children: "경계선 칩",
-		variant: "bordered",
-		color: "primary",
+		children: "외곽선 칩",
+		variant: "tertiary",
+		color: "accent",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "경계선이 있는 칩입니다.",
+				story: "외곽선 스타일의 칩입니다.",
+			},
+		},
+	},
+};
+
+export const 부드러운배경: Story = {
+	args: {
+		children: "부드러운 배경 칩",
+		variant: "soft",
+		color: "accent",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "부드러운 배경색을 가진 칩입니다.",
 			},
 		},
 	},
@@ -137,7 +145,7 @@ export const 작은크기: Story = {
 	args: {
 		children: "작은 칩",
 		size: "sm",
-		color: "primary",
+		color: "accent",
 	},
 	parameters: {
 		docs: {
@@ -152,7 +160,7 @@ export const 큰크기: Story = {
 	args: {
 		children: "큰 칩",
 		size: "lg",
-		color: "primary",
+		color: "accent",
 	},
 	parameters: {
 		docs: {
@@ -166,8 +174,8 @@ export const 큰크기: Story = {
 export const 플레이그라운드: Story = {
 	args: {
 		children: "플레이그라운드 칩",
-		color: "primary",
-		variant: "solid",
+		color: "accent",
+		variant: "primary",
 		size: "md",
 	},
 	parameters: {

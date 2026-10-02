@@ -8,6 +8,7 @@ import {
 import { useApp } from "@cocrepo/store";
 import {
 	Button,
+	HStack,
 	TimelineSessionProgramEditScreen,
 	type TimelineSessionProgramFormState,
 } from "@cocrepo/ui";
@@ -157,7 +158,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 				routinePreview={routinePreview}
 				hasUnschedulableRoutine={hasUnschedulableRoutine}
 				actions={
-					<div className="flex gap-2">
+					<HStack>
 						<Button
 							variant="tertiary"
 							startContent={<ArrowLeft className="h-4 w-4" />}
@@ -184,7 +185,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 						>
 							등록
 						</Button>
-					</div>
+					</HStack>
 				}
 			/>
 		);

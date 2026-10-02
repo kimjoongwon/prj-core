@@ -13,6 +13,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -44,7 +45,7 @@ export interface TimelineListScreenProps {
 }
 function TimelinesScreenFallback() {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<Screen.Header
 				title="타임라인"
 				description="학기/시즌 단위 타임라인을 관리합니다."
@@ -54,7 +55,7 @@ function TimelinesScreenFallback() {
 					<Section.Body>{null}</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 }
 export const TimelineListScreen = observer(
@@ -88,7 +89,7 @@ export const TimelineListScreen = observer(
 			return <TimelinesScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="타임라인"
 					description="학기/시즌 단위 타임라인을 관리합니다."
@@ -123,7 +124,7 @@ export const TimelineListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-			</div>
+			</VStack>
 		);
 	},
 );

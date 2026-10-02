@@ -74,13 +74,13 @@ export const ScreenSections: Story = {
 					<Section.Header title="검색 조건" />
 					<Section.Body>
 						<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-							<div className="rounded-lg border border-border/70 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-neutral-600">
+							<div className="rounded-lg border border-border/70 bg-surface-secondary px-3 py-2 text-sm">
 								전체 상태
 							</div>
-							<div className="rounded-lg border border-border/70 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-neutral-600">
+							<div className="rounded-lg border border-border/70 bg-surface-secondary px-3 py-2 text-sm">
 								최근 30일
 							</div>
-							<div className="rounded-lg border border-border/70 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-neutral-600">
+							<div className="rounded-lg border border-border/70 bg-surface-secondary px-3 py-2 text-sm">
 								예약자 검색
 							</div>
 						</div>
@@ -98,7 +98,7 @@ export const ScreenSections: Story = {
 				<Section overflow="hidden">
 					<Section.Body>
 						<div className="divide-y divide-border">
-							<div className="grid grid-cols-4 gap-4 bg-neutral-50 px-4 py-3 text-xs text-muted dark:bg-neutral-600">
+							<div className="grid grid-cols-4 gap-4 bg-surface-secondary px-4 py-3 text-xs text-muted">
 								<span>예약자</span>
 								<span>상태</span>
 								<span>수업</span>

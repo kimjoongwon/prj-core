@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { View } from "react-native";
-import { tv } from "tailwind-variants";
+import { VStack } from "../../rhythm";
 import { Button } from "./index";
 
 const meta = {
@@ -42,20 +41,12 @@ export const Default: Story = {};
 
 export const Variants: Story = {
 	render: () => (
-		<View className={classNames.stack()}>
+		<VStack className="min-w-[220px]" gap="block">
 			<Button variant="primary">Primary</Button>
 			<Button variant="secondary">Secondary</Button>
 			<Button variant="outline">Outline</Button>
 			<Button variant="ghost">Ghost</Button>
 			<Button variant="danger">Danger</Button>
-		</View>
+		</VStack>
 	),
 };
-
-const storyClassNames = tv({
-	slots: {
-		stack: "min-w-[220px] gap-3",
-	},
-});
-
-const classNames = storyClassNames();

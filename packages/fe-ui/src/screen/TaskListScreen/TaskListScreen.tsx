@@ -7,13 +7,14 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildTaskTableColumns,
-	type TaskTableRow,
 	DataGrid,
 	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
+	type TaskTableRow,
 	useT,
+	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -64,7 +65,7 @@ export interface TaskListScreenProps {
 }
 function TasksScreenFallback() {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<Screen.Header
 				title="태스크 목록"
 				description="시스템에 등록된 태스크와 운동 detail을 관리합니다."
@@ -74,7 +75,7 @@ function TasksScreenFallback() {
 					<Section.Body>{null}</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 }
 export const TaskListScreen = observer(
@@ -111,7 +112,7 @@ export const TaskListScreen = observer(
 			return <TasksScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="태스크 목록"
 					description="시스템에 등록된 태스크와 운동 detail을 관리합니다."
@@ -146,7 +147,7 @@ export const TaskListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-			</div>
+			</VStack>
 		);
 	},
 );

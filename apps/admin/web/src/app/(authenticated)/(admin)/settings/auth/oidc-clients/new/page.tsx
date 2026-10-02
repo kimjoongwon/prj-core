@@ -4,6 +4,7 @@ import { useCreateOidcClient } from "@cocrepo/api/idp/oidc-clients";
 import {
 	Button,
 	buildOidcClientLoginUi,
+	HStack,
 	isValidOidcLoginUiBrandColor,
 	OidcClientEditScreen,
 	type OidcClientFormState,
@@ -84,7 +85,7 @@ export default observer(function OidcClientNewPageRoute() {
 			description="새 OIDC Client를 등록합니다."
 			state={state}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -102,7 +103,7 @@ export default observer(function OidcClientNewPageRoute() {
 					>
 						등록
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

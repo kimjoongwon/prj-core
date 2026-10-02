@@ -1,9 +1,17 @@
-import { Button, Icon, ScreenFrame, Spinner } from "@cocrepo/mo-ui";
+import {
+	Button,
+	HStack,
+	Icon,
+	LinkButton,
+	ScreenFrame,
+	Spinner,
+	Text,
+	VStack,
+} from "@cocrepo/mo-ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import type { Href } from "expo-router";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
 import { tv } from "tailwind-variants";
 import {
 	getAuthenticatedHomePath,
@@ -77,17 +85,19 @@ const AuthLoginRoute = observer(() => {
 			className={classNames.screenFrame()}
 			contentClassName={classNames.container()}
 		>
-			<View className={classNames.centerView()}>
-				<View className={classNames.header()}>
-					<Text className={classNames.eyebrow()}>PLATE</Text>
+			<VStack className={classNames.centerView()} justifyContent="center">
+				<VStack className={classNames.header()} gap="block">
+					<Text tone="accent" variant="eyebrow" weight="extrabold">
+						PLATE
+					</Text>
 					<Text className={classNames.title()}>로그인</Text>
-					<Text className={classNames.description()}>
+					<Text tone="muted" variant="body">
 						로그인은 IDP(onjitda)를 통해 진행됩니다. 시트에서 계정에
 						로그인하면 앱으로 자동으로 돌아옵니다.
 					</Text>
-				</View>
+				</VStack>
 
-				<View className={classNames.form()}>
+				<VStack gap="section">
 					{errorMessage ? (
 						<Text accessibilityRole="alert" className={classNames.errorText()}>
 							{errorMessage}
@@ -96,41 +106,61 @@ const AuthLoginRoute = observer(() => {
 
 					<Button
 						accessibilityLabel="oidc-login-submit"
-						className="rounded-lg"
 						isDisabled={isSubmitting}
 						onPress={onPressOidcLoginButton}
 						variant="primary"
 					>
 						{isSubmitting ? (
-							<View className={classNames.buttonContent()}>
+							<HStack
+								alignItems="center"
+								gap="inline"
+								justifyContent="center"
+							>
 								<Spinner color="default" size="sm" />
-								<Text className={classNames.buttonText()}>로그인 중</Text>
-							</View>
+								<Text className="text-accent-foreground" variant="label">
+									로그인 중
+								</Text>
+							</HStack>
 						) : (
-							<View className={classNames.buttonContent()}>
+							<HStack
+								alignItems="center"
+								gap="inline"
+								justifyContent="center"
+							>
 								<Icon name="logIn" size="sm" tone="accentForeground" />
-								<Text className={classNames.buttonText()}>IDP로 로그인</Text>
-							</View>
+								<Text className="text-accent-foreground" variant="label">
+									IDP로 로그인
+								</Text>
+							</HStack>
 						)}
 					</Button>
 
-					<View className={classNames.auxLinks()}>
-						<Pressable
+					<HStack
+						alignItems="center"
+						className={classNames.auxLinks()}
+						gap="block"
+						justifyContent="center"
+					>
+						<LinkButton
 							accessibilityLabel="open-idp-sign-up"
 							onPress={() => openOidcAuthPage("/auth/sign-up")}
 						>
-							<Text className={classNames.auxLinkText()}>회원가입</Text>
-						</Pressable>
+							<Text className="text-accent" variant="label">
+								회원가입
+							</Text>
+						</LinkButton>
 						<Text className={classNames.auxLinkDivider()}>·</Text>
-						<Pressable
+						<LinkButton
 							accessibilityLabel="open-idp-forgot-password"
 							onPress={() => openOidcAuthPage("/auth/forgot-password")}
 						>
-							<Text className={classNames.auxLinkText()}>비밀번호 찾기</Text>
-						</Pressable>
-					</View>
-				</View>
-			</View>
+							<Text className="text-accent" variant="label">
+								비밀번호 찾기
+							</Text>
+						</LinkButton>
+					</HStack>
+				</VStack>
+			</VStack>
 		</ScreenFrame>
 	);
 });
@@ -139,19 +169,13 @@ export default AuthLoginRoute;
 
 const loginRouteClassNames = tv({
 	slots: {
-		buttonContent: "flex-row items-center justify-center gap-2",
-		buttonText: "text-sm font-semibold text-accent-foreground",
-		centerView: "flex-1 justify-center",
+		auxLinks: "pt-2",
+		auxLinkDivider: "text-[13px] text-muted",
+		centerView: "flex-1",
 		container: "flex-1 bg-background px-4 py-6",
-		description: "text-sm leading-5 text-muted",
 		errorText:
 			"rounded-lg border border-danger bg-danger-soft px-3 py-2 text-[13px] font-medium leading-5 text-danger",
-		eyebrow: "text-xs font-extrabold uppercase tracking-[0px] text-accent",
-		form: "gap-4",
-		header: "gap-2 border-b border-border pb-6 pt-8",
-		auxLinks: "flex-row items-center justify-center gap-3 pt-2",
-		auxLinkText: "text-[13px] font-semibold text-accent",
-		auxLinkDivider: "text-[13px] text-muted",
+		header: "border-b border-border pb-6 pt-8",
 		screenFrame: "bg-background",
 		title: "text-[28px] font-extrabold leading-8 text-foreground",
 	},

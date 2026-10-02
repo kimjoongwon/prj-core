@@ -76,11 +76,11 @@ export const SearchInput = observer(
 			<div className="relative w-full min-w-0">
 				<Search
 					size={13}
-					className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-[#64748b] dark:text-slate-400"
+					className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 text-muted"
 				/>
 				<input
 					aria-label={config.label ? t(config.label) : t("검색")}
-					className="h-7 w-full rounded-sm border border-[#cbd5e1] bg-white pl-7 pr-6 text-[12px] font-normal text-[#1f2937] outline-none transition-colors placeholder:text-[#94a3b8] hover:border-[#94a3b8] focus:border-[#3b82f6] focus:ring-1 focus:ring-[#93c5fd] dark:border-white/10 dark:bg-neutral-950/70 dark:text-slate-100 dark:placeholder:text-slate-500 dark:hover:border-white/20 dark:focus:border-sky-400 dark:focus:ring-sky-500/40"
+					className="h-7 w-full rounded-sm border border-field-border bg-field pl-7 pr-6 text-[12px] font-normal text-field-foreground outline-none transition-colors placeholder:text-field-placeholder hover:border-field-border-hover focus:border-field-border-focus focus-field-ring"
 					onChange={(event) =>
 						state.changeInputValue(event.currentTarget.value)
 					}
@@ -91,7 +91,7 @@ export const SearchInput = observer(
 				{state.inputValue ? (
 					<button
 						aria-label={t("검색어 지우기")}
-						className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[13px] leading-none text-[#64748b] hover:text-[#1f2937] dark:text-slate-400 dark:hover:text-slate-100"
+						className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[13px] leading-none text-muted hover:text-foreground"
 						onClick={handleClear}
 						type="button"
 					>

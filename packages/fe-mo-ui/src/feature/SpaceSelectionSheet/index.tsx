@@ -3,6 +3,7 @@ import { ScrollView, View } from "react-native";
 import { tv } from "tailwind-variants";
 import { Text } from "../../data-display/Text";
 import { BottomSheet } from "../../layout/BottomSheet";
+import { HStack, VStack } from "../../rhythm";
 import {
 	SpaceSelectionList,
 	type SpaceSelectionListProps,
@@ -37,17 +38,21 @@ export const SpaceSelectionSheet = observer(function SpaceSelectionSheet({
 					className={classNames.content()}
 					snapPoints={["72%"]}
 				>
-					<View className={classNames.header()}>
-						<View className={classNames.titleBlock()}>
+					<HStack
+						alignItems="start"
+						gap="block"
+						justifyContent="between"
+					>
+						<VStack className={classNames.titleBlock()} gap="dense">
 							<BottomSheet.Title className={classNames.title()}>
 								{title}
 							</BottomSheet.Title>
 							<BottomSheet.Description className={classNames.description()}>
 								{description}
 							</BottomSheet.Description>
-						</View>
+						</VStack>
 						<BottomSheet.Close accessibilityLabel="지점 변경 닫기" />
-					</View>
+					</HStack>
 					<ScrollView
 						className={classNames.scroll()}
 						contentContainerClassName={classNames.scrollContent()}
@@ -83,12 +88,11 @@ const spaceSelectionSheetClassNames = tv({
 		empty:
 			"min-h-24 items-center justify-center rounded-lg border border-border bg-surface px-4 py-6",
 		emptyText: "text-center text-sm font-semibold leading-5 text-muted",
-		header: "flex-row items-start justify-between gap-3",
-		overlay: "bg-foreground/20",
+		overlay: "bg-backdrop",
 		scroll: "max-h-full",
-		scrollContent: "gap-2 pb-4",
+		scrollContent: "pb-4",
 		title: "text-lg font-bold leading-6 text-foreground",
-		titleBlock: "min-w-0 flex-1 gap-1",
+		titleBlock: "min-w-0 flex-1",
 	},
 });
 

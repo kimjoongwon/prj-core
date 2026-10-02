@@ -10,6 +10,7 @@ import { useGetUserById } from "@cocrepo/api/core/users";
 import { useApp } from "@cocrepo/store";
 import {
 	Button,
+	HStack,
 	TimelineSessionProgramEditScreen,
 	type TimelineSessionProgramFormState,
 } from "@cocrepo/ui";
@@ -222,7 +223,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 				isLoading={isLoading && !state.isInitialized}
 				notFound={!isLoading && !program}
 				actions={
-					<div className="flex gap-2">
+					<HStack>
 						<Button
 							variant="tertiary"
 							startContent={<ArrowLeft className="h-4 w-4" />}
@@ -250,7 +251,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 						>
 							저장
 						</Button>
-					</div>
+					</HStack>
 				}
 			/>
 		);

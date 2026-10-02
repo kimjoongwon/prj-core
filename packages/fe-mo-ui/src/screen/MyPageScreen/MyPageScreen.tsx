@@ -76,12 +76,16 @@ export const MyPageScreen = observer(function MyPageScreen({
 						onPress={onPressLogout}
 						variant="danger-soft"
 					>
-						<View className={classNames.logoutContent()}>
+						<HStack
+							alignItems="center"
+							gap="inline"
+							justifyContent="center"
+						>
 							<Icon name="logOut" size="sm" tone="danger" />
 							<Text className={classNames.dangerButtonText()}>
 								{isLogoutPending ? "로그아웃 중" : "로그아웃"}
 							</Text>
-						</View>
+						</HStack>
 					</Button>
 				</VStack>
 			</ScrollView>

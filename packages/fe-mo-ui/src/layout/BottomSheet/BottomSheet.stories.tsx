@@ -30,7 +30,7 @@ export const Open: Story = {
 			</View>
 			<BottomSheet isOpen onOpenChange={() => undefined}>
 				<BottomSheet.Portal>
-					<BottomSheet.Overlay className="bg-foreground/20" />
+					<BottomSheet.Overlay className="bg-backdrop" />
 					<BottomSheet.Content
 						className="gap-4 rounded-t-2xl bg-background px-4 pb-6 pt-4"
 						snapPoints={["42%"]}

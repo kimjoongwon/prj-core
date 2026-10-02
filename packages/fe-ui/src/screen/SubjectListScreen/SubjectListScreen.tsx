@@ -7,7 +7,6 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	buildSubjectTableColumns,
 	DataGrid,
 	DataGridState,
 	Screen,
@@ -19,6 +18,7 @@ import {
 import { Tabs } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type Key, useEffect } from "react";
+import { buildSubjectTableColumns } from "../../data-grid/columns";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -202,7 +202,7 @@ export const SubjectListScreen = observer(
 			return <SubjectsScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="권한 대상 목록"
 					description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
@@ -235,13 +235,13 @@ export const SubjectListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-			</div>
+			</VStack>
 		);
 	},
 );
 const SubjectsScreenFallback = observer(function SubjectsScreenFallback() {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<Screen.Header
 				title="권한 대상 목록"
 				description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
@@ -251,6 +251,6 @@ const SubjectsScreenFallback = observer(function SubjectsScreenFallback() {
 					<Section.Body>{null}</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 });

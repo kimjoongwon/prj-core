@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { ScrollView, View } from "react-native";
+import { ScrollView } from "react-native";
 import { Text } from "../../data-display/Text";
+import { VStack } from "../../rhythm";
 import { PureDateStrip as DateStrip, type DateStripOption } from "./index";
 
 const options: DateStripOption[] = [
@@ -46,20 +47,22 @@ type Story = StoryObj;
 
 export const Default: Story = {
 	render: () => (
-		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
-			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">
-					DateStrip
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
-					예약 가능한 날짜와 날짜별 클래스 수를 가로 목록으로 보여줍니다.
-				</Text>
-			</View>
-			<DateStrip
-				onSelect={() => undefined}
-				options={options}
-				selectedValue="2026-05-13"
-			/>
+		<ScrollView contentContainerClassName="px-4 py-5">
+			<VStack gap="block">
+				<VStack gap="block">
+					<Text className="text-lg font-extrabold text-foreground">
+						DateStrip
+					</Text>
+					<Text className="text-sm leading-5 text-muted">
+						예약 가능한 날짜와 날짜별 클래스 수를 가로 목록으로 보여줍니다.
+					</Text>
+				</VStack>
+				<DateStrip
+					onSelect={() => undefined}
+					options={options}
+					selectedValue="2026-05-13"
+				/>
+			</VStack>
 		</ScrollView>
 	),
 };

@@ -46,7 +46,7 @@ export const NavigationPanelItem = observer(function NavigationPanelItem({
 					"group flex w-full items-start text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus/40",
 					density === "compact"
 						? "gap-2 rounded-xl px-2.5 py-2"
-						: "gap-3 rounded-[22px] px-3 py-3",
+						: "gap-3 rounded-3xl px-3 py-3",
 					isSelected
 						? "bg-accent-soft text-accent-soft-foreground shadow-none"
 						: isActiveBranch

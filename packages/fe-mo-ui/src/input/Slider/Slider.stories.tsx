@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { observable } from "mobx";
-import { ScrollView, View } from "react-native";
+import { ScrollView } from "react-native";
 import { Text } from "../../data-display/Text";
+import { VStack } from "../../rhythm";
 import { Slider } from "./index";
 
 const state = observable({
@@ -22,20 +23,24 @@ type Story = StoryObj;
 
 export const Default: Story = {
 	render: () => (
-		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
-			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">Slider</Text>
-				<Text className="text-sm leading-5 text-muted">
-					강도, 거리, 비율처럼 연속적인 수치를 조절합니다.
-				</Text>
-			</View>
-			<Slider
-				maxValue={100}
-				minValue={0}
-				path="intensity"
-				state={state}
-				step={1}
-			/>
+		<ScrollView contentContainerClassName="px-4 py-5">
+			<VStack gap="block">
+				<VStack gap="block">
+					<Text className="text-lg font-extrabold text-foreground">
+						Slider
+					</Text>
+					<Text className="text-sm leading-5 text-muted">
+						강도, 거리, 비율처럼 연속적인 수치를 조절합니다.
+					</Text>
+				</VStack>
+				<Slider
+					maxValue={100}
+					minValue={0}
+					path="intensity"
+					state={state}
+					step={1}
+				/>
+			</VStack>
 		</ScrollView>
 	),
 };

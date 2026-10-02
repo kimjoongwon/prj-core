@@ -18,7 +18,7 @@ export function ColumnSortInput({
 	onToggle,
 }: ColumnSortInputProps) {
 	const t = useT();
-	const iconClassName = "size-3.5 text-[#64748b] dark:text-slate-400";
+	const iconClassName = "size-3.5 text-muted";
 	const icon =
 		sortDirection === "asc" ? (
 			<ArrowUp className={iconClassName} />
@@ -32,7 +32,7 @@ export function ColumnSortInput({
 		<Button
 			size="sm"
 			variant="ghost"
-			className="h-auto min-h-0 min-w-0 justify-start gap-1 rounded px-0 py-0 text-[13px] font-semibold text-[#374151] hover:bg-transparent dark:text-slate-200"
+			className="h-auto min-h-0 min-w-0 justify-start gap-1 rounded px-0 py-0 text-[13px] font-semibold text-foreground hover:bg-transparent"
 			onPress={onToggle}
 			aria-label={t("정렬 변경")}
 		>

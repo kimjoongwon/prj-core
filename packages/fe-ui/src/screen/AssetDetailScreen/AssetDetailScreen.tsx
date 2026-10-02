@@ -5,6 +5,7 @@ import {
 	AssetPreviewDialog,
 	DateTimeCell,
 	getAssetPreviewUrl,
+	HStack,
 	Screen,
 	Section,
 	SectionSurface,
@@ -88,12 +89,12 @@ const getStatusColor = (
 };
 const getKindColor = (
 	kind: AssetDetailScreenAsset["kind"],
-): "secondary" | "primary" | "default" => {
+): "default" | "accent" => {
 	switch (kind) {
 		case "IMAGE":
-			return "secondary";
+			return "default";
 		case "VIDEO":
-			return "primary";
+			return "accent";
 		case "DOCUMENT":
 			return "default";
 		default:
@@ -151,12 +152,17 @@ export const AssetDetailScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<VStack
+									gap="section"
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<p className="text-muted">에셋을 찾을 수 없습니다.</p>
 									<Button variant="tertiary" onPress={onClickBackButton}>
 										목록으로
 									</Button>
-								</div>
+								</VStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -170,7 +176,7 @@ export const AssetDetailScreen = observer(
 					title={asset.originalName ?? "에셋 상세"}
 					description="에셋 상세 정보"
 					actions={
-						<div className="flex gap-2">
+						<HStack>
 							<Button
 								variant="ghost"
 								startContent={<ArrowLeft className="h-4 w-4" />}
@@ -198,7 +204,7 @@ export const AssetDetailScreen = observer(
 							>
 								삭제
 							</Button>
-						</div>
+						</HStack>
 					}
 				/>
 				<SectionSurface>
@@ -208,7 +214,7 @@ export const AssetDetailScreen = observer(
 								<Section>
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.4fr)_340px]">
-											<div className="space-y-4">
+											<VStack gap="section">
 												<Section.Header
 													title="미리보기"
 													description={
@@ -233,32 +239,32 @@ export const AssetDetailScreen = observer(
 													showInfo={false}
 													className="min-h-[420px]"
 												/>
-											</div>
-											<div className="rounded-[1.5rem] border border-border/70 bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(248,250,252,0.92))] p-5 shadow-sm">
-												<div className="flex flex-wrap gap-2">
+											</VStack>
+											<div className="rounded-3xl border border-border/70 bg-surface-secondary p-5 shadow-sm">
+												<HStack className="flex-wrap">
 													<Chip
 														size="sm"
-														variant="flat"
+														variant="soft"
 														color={getKindColor(asset.kind)}
 													>
 														{getKindLabel(asset.kind)}
 													</Chip>
 													<Chip
 														size="sm"
-														variant="flat"
+														variant="soft"
 														color={getStatusColor(asset.status)}
 													>
 														{getStatusLabel(asset.status)}
 													</Chip>
 													<Chip
 														size="sm"
-														variant="bordered"
+														variant="tertiary"
 														color={previewUrl ? "success" : "warning"}
 													>
 														{previewUrl ? "즉시 보기 가능" : "프리뷰 제한"}
 													</Chip>
-												</div>
-												<div className="mt-4 space-y-2">
+												</HStack>
+												<VStack gap="block" className="mt-4">
 													<p className="text-lg font-semibold text-foreground">
 														{asset.originalName}
 													</p>
@@ -267,7 +273,7 @@ export const AssetDetailScreen = observer(
 															? "브라우저 안에서 바로 검토하고, 필요하면 원본 파일을 새 탭으로 열 수 있습니다."
 															: "업로드가 완료되지 않았거나 브라우저가 인라인 렌더링을 지원하지 않는 형식이면 안내 카드로 폴백됩니다."}
 													</p>
-												</div>
+												</VStack>
 												<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-1">
 													<div className="rounded-2xl bg-default/80 px-4 py-3">
 														<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
@@ -381,8 +387,6 @@ export const AssetDetailScreen = observer(
 											</Select>
 											<div className="flex items-end">
 												<Button
-
-
 													variant="tertiary"
 													isLoading={isMoving}
 													startContent={<FolderInput className="h-4 w-4" />}

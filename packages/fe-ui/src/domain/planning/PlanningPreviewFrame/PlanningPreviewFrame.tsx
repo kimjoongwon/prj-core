@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactElement } from "react";
+import { Chip } from "../../../data-display/Chip/Chip";
 import { ThemeToggleButton } from "../../theme/ThemeToggleButton";
 import { PlanningSessionBar } from "./PlanningSessionBar";
 import { formatPlanningStatus } from "./planningPreviewFormat";
@@ -26,7 +27,7 @@ export const PlanningPreviewFrame = (({
 				<header className="rounded-lg border border-border bg-surface p-4 xl:col-span-2">
 					<div className="flex flex-wrap items-start justify-between gap-3">
 						<div className="grid min-w-0 gap-1">
-							<p className="text-xs font-semibold uppercase text-primary">
+							<p className="text-xs font-semibold uppercase text-accent">
 								Planning Preview
 							</p>
 							<h1 className="break-words text-2xl font-semibold">
@@ -39,17 +40,17 @@ export const PlanningPreviewFrame = (({
 							) : null}
 						</div>
 						<div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
-							<span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted">
+							<Chip size="sm" color="default" variant="soft">
 								{formatPlanningStatus(scenario.status)}
-							</span>
+							</Chip>
 							<ThemeToggleButton />
 						</div>
 					</div>
 				</header>
 
-			<main className="w-full min-w-0 overflow-x-auto rounded-lg border border-border bg-background p-4">
-				{children}
-			</main>
+				<main className="w-full min-w-0 overflow-x-auto rounded-lg border border-border bg-background p-4">
+					{children}
+				</main>
 			</div>
 		</div>
 	);

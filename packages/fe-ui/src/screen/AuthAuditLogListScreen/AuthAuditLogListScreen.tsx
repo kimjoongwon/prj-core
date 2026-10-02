@@ -7,9 +7,9 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	buildAuthAuditLogTableColumns,
 	DataGrid,
 	DataGridState,
+	HStack,
 	Screen,
 	Section,
 	SectionSurface,
@@ -19,6 +19,7 @@ import { Card } from "@heroui/react";
 import { CheckCircle, Lock, XCircle } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ReactNode, useEffect } from "react";
+import { buildAuthAuditLogTableColumns } from "../../data-grid/columns";
 
 /** 좌측 입력 정의 */
 const leftInputs: InputConfig[] = [
@@ -83,23 +84,25 @@ function MetricCard({
 	const styles = metricCardColorStyles[color];
 	return (
 		<Card className={`bg-surface ${className}`}>
-			<Card.Content className="flex flex-row items-center gap-4 p-4">
-				{icon ? (
-					<div
-						className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${styles.icon}`}
-					>
-						{icon}
-					</div>
-				) : null}
-				<div className="flex flex-1 flex-col">
-					<span className="text-sm text-muted">{title}</span>
-					<span className={`text-2xl font-bold ${styles.value}`}>
-						{typeof value === "number" ? value.toLocaleString() : value}
-					</span>
-					{description ? (
-						<span className="text-xs text-muted">{description}</span>
+			<Card.Content className="p-4">
+				<HStack alignItems="center" gap="section">
+					{icon ? (
+						<div
+							className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${styles.icon}`}
+						>
+							{icon}
+						</div>
 					) : null}
-				</div>
+					<div className="flex flex-1 flex-col">
+						<span className="text-sm text-muted">{title}</span>
+						<span className={`text-2xl font-bold ${styles.value}`}>
+							{typeof value === "number" ? value.toLocaleString() : value}
+						</span>
+						{description ? (
+							<span className="text-xs text-muted">{description}</span>
+						) : null}
+					</div>
+				</HStack>
 			</Card.Content>
 		</Card>
 	);

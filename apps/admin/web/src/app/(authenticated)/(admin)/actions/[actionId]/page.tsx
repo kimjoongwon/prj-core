@@ -5,12 +5,18 @@ import {
 	useDeleteAction,
 	useGetActionById,
 } from "@cocrepo/api/core/actions";
-import { ActionEditScreen, type ActionFormState, Button } from "@cocrepo/ui";
+import {
+	ActionEditScreen,
+	type ActionFormState,
+	Button,
+	HStack,
+	InfoList,
+	Section,
+} from "@cocrepo/ui";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import type { ReactNode } from "react";
 
 export default observer(function ActionDetailRoute() {
 	const actionId = useParams<{ actionId: string }>().actionId;
@@ -58,7 +64,7 @@ export default observer(function ActionDetailRoute() {
 				</Button>
 			}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -91,47 +97,46 @@ export default observer(function ActionDetailRoute() {
 							</Button>
 						</>
 					) : null}
-				</div>
+				</HStack>
 			}
 		>
 			{action?.config !== null && action?.config !== undefined ? (
-				<SectionLike title="설정 (Config)">
-					<pre className="overflow-x-auto rounded-lg bg-default p-4 text-sm dark:bg-default/5">
-						{JSON.stringify(action.config, null, 2)}
-					</pre>
-				</SectionLike>
+				<Section>
+					<Section.Header title="설정 (Config)" />
+					<Section.Body>
+						<pre className="overflow-x-auto rounded-lg bg-default p-4 text-sm dark:bg-default/5">
+							{JSON.stringify(action.config, null, 2)}
+						</pre>
+					</Section.Body>
+				</Section>
 			) : null}
 			{action ? (
-				<SectionLike title="추가 정보">
-					<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<dt className="mb-1 text-sm text-muted">생성일</dt>
-							<dd>{new Date(action.createdAt).toLocaleString("ko-KR")}</dd>
-						</div>
-						{action.updatedAt ? (
-							<div>
-								<dt className="mb-1 text-sm text-muted">수정일</dt>
-								<dd>{new Date(action.updatedAt).toLocaleString("ko-KR")}</dd>
-							</div>
-						) : null}
-					</dl>
-				</SectionLike>
+				<Section>
+					<Section.Header title="추가 정보" />
+					<Section.Body>
+						<InfoList
+							items={[
+								{
+									key: "createdAt",
+									label: "생성일",
+									value: new Date(action.createdAt).toLocaleString("ko-KR"),
+								},
+								...(action.updatedAt
+									? [
+											{
+												key: "updatedAt",
+												label: "수정일",
+												value: new Date(action.updatedAt).toLocaleString(
+													"ko-KR",
+												),
+											},
+										]
+									: []),
+							]}
+						/>
+					</Section.Body>
+				</Section>
 			) : null}
 		</ActionEditScreen>
 	);
 });
-
-function SectionLike({
-	title,
-	children,
-}: {
-	title: string;
-	children: ReactNode;
-}) {
-	return (
-		<section>
-			<h3 className="mb-4 text-lg font-semibold">{title}</h3>
-			{children}
-		</section>
-	);
-}

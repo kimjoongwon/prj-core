@@ -31,7 +31,7 @@ type AuthFooterProps = ComponentPropsWithoutRef<"footer"> & {
 export interface AuthPanelProps {
 	children: ReactNode;
 	className?: string;
-	variant?: "primary" | "danger";
+	variant?: "default" | "danger";
 }
 
 export interface AuthPanelHeaderProps {
@@ -165,17 +165,17 @@ export const AuthFooter = ({
 export const AuthPanel = ({
 	children,
 	className,
-	variant = "primary",
+	variant = "default",
 }: AuthPanelProps) => {
 	const toneClass =
 		variant === "danger"
-			? "border-danger/35 bg-white/92 text-slate-950 ring-1 ring-danger/10 shadow-[0_20px_60px_-32px_rgba(220,38,38,0.20)] dark:border-danger/40 dark:bg-slate-950/92 dark:text-slate-50 dark:ring-danger/15 dark:shadow-[0_24px_72px_-36px_rgba(248,113,113,0.22)]"
-			: "border-slate-200/80 bg-white/92 text-slate-950 shadow-[0_24px_80px_-36px_rgba(15,23,42,0.18)] dark:border-white/10 dark:bg-slate-950/92 dark:text-slate-50 dark:shadow-[0_24px_72px_-40px_rgba(0,0,0,0.72)]";
+			? "border-danger/35 bg-surface text-surface-foreground ring-1 ring-danger/20 shadow-surface"
+			: "border-border bg-surface text-surface-foreground shadow-surface";
 
 	return (
 		<Card
 			className={joinClassNames(
-				"w-full rounded-[28px] border p-6 backdrop-blur-xl sm:p-8",
+				"w-full rounded-3xl border p-6 sm:p-8",
 				toneClass,
 				className,
 			)}
@@ -200,15 +200,15 @@ export const AuthPanelHeader = ({
 	const t = useT();
 	const translatedTitle = translateNode(title, t);
 	const translatedSubtitle = subtitle ? translateNode(subtitle, t) : null;
-	const titleToneClass = titleClassName ?? "text-slate-950 dark:text-slate-50";
+	const titleToneClass = titleClassName ?? "text-foreground";
 	const visual = logoUri ? (
 		<img
 			src={logoUri}
 			alt={logoAlt ?? String(translatedTitle)}
-			className="h-12 w-12 rounded-2xl border border-slate-200/80 bg-white/70 object-cover shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
+			className="h-12 w-12 rounded-2xl border border-border bg-surface-secondary object-cover shadow-sm"
 		/>
 	) : icon ? (
-		<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-white/70 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+		<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-surface-secondary shadow-sm">
 			{icon}
 		</div>
 	) : null;
@@ -223,7 +223,7 @@ export const AuthPanelHeader = ({
 					{translatedTitle}
 				</h1>
 				{translatedSubtitle ? (
-					<p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+					<p className="mt-2 text-sm leading-6 text-muted">
 						{translatedSubtitle}
 					</p>
 				) : null}

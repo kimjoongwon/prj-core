@@ -9,7 +9,9 @@ import {
 	type ViewStyle,
 } from "react-native";
 import { tv } from "tailwind-variants";
+import { Chip, chipClassNames, type ChipProps } from "../../data-display/Chip";
 import { Text } from "../../data-display/Text";
+import { HStack, VStack } from "../../rhythm";
 export interface DateStripOption {
 	badge?: ReactNode;
 	count?: number;
@@ -47,6 +49,7 @@ const createSelectHandler = (
 		onSelect?.(option.value, option);
 	};
 };
+type DateBadgeChipColor = NonNullable<ChipProps["color"]>;
 const DateBadge = ({
 	isSelected,
 	option,
@@ -61,10 +64,28 @@ const DateBadge = ({
 	if (badge === undefined || badge === null || badge === false) {
 		return null;
 	}
+	const chipColor: DateBadgeChipColor = isSelected ? "accent" : "default";
+	const chipVariant = isSelected ? "primary" : "soft";
 	return (
-		<View className={slotClassNames.badge()}>
-			<Text className={slotClassNames.badgeText()}>{badge}</Text>
-		</View>
+		// 날짜 셀 전체가 선택 Pressable이므로 badge chip이 터치를 가로채지 않도록 합니다.
+		<Chip
+			className={slotClassNames.badge()}
+			color={chipColor}
+			disabled
+			size="sm"
+			variant={chipVariant}
+		>
+			<Text
+				className={chipClassNames.label({
+					className: slotClassNames.badgeText(),
+					color: chipColor,
+					size: "sm",
+					variant: chipVariant,
+				})}
+			>
+				{badge}
+			</Text>
+		</Chip>
 	);
 };
 const DateOption = ({
@@ -102,9 +123,11 @@ const DateOption = ({
 			}
 			className={slotClassNames.option()}
 		>
-			<Text className={slotClassNames.dayLabel()}>{option.dayLabel}</Text>
-			<Text className={slotClassNames.dateLabel()}>{option.dateLabel}</Text>
-			<DateBadge isSelected={isSelected} option={option} />
+			<VStack alignItems="center" gap="dense" justifyContent="center">
+				<Text className={slotClassNames.dayLabel()}>{option.dayLabel}</Text>
+				<Text className={slotClassNames.dateLabel()}>{option.dateLabel}</Text>
+				<DateBadge isSelected={isSelected} option={option} />
+			</VStack>
 		</Pressable>
 	);
 };
@@ -167,12 +190,14 @@ const PureDateStripComponent = (props: PureDateStripProps) => {
 				})}
 				contentContainerStyle={contentContainerStyle}
 			>
-				<DateOptions
-					disabled={disabled}
-					onSelect={onSelect}
-					options={options}
-					selectedValue={selectedValue}
-				/>
+				<HStack gap="inline">
+					<DateOptions
+						disabled={disabled}
+						onSelect={onSelect}
+						options={options}
+						selectedValue={selectedValue}
+					/>
+				</HStack>
 			</ScrollView>
 		</View>
 	);
@@ -183,30 +208,28 @@ export const DateStrip = PureDateStrip;
 export type DateStripProps = PureDateStripProps;
 const dateStripClassNames = tv({
 	slots: {
-		badge:
-			"min-w-6 items-center rounded-full bg-surface-secondary px-1.5 py-0.5",
-		badgeText:
-			"text-[11px] font-bold leading-[14px] text-surface-secondary-foreground",
-		content: "gap-2 px-0.5 py-0.5",
+		badge: "",
+		badgeText: "font-bold",
+		content: "px-0.5 py-0.5",
 		dateLabel: "text-[15px] font-bold leading-6 text-foreground",
 		dayLabel: "text-xs font-semibold uppercase leading-4 text-muted",
 		empty: "rounded-lg border border-border bg-surface-secondary p-4",
 		emptyText: "text-sm leading-5 text-muted",
 		option:
-			"min-h-[72px] min-w-[58px] items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-2 py-2",
+			"min-h-[72px] min-w-[58px] items-center justify-center rounded-lg border border-border bg-surface px-2 py-2",
 	},
 	variants: {
 		disabled: {
 			false: {},
 			true: {
-				option: "opacity-[0.45]",
+				option: "opacity-50",
 			},
 		},
 		selected: {
 			false: {},
 			true: {
-				badge: "border-accent-foreground bg-accent-foreground",
-				badgeText: "text-accent",
+				badge: "bg-accent-foreground",
+				badgeText: "font-bold text-accent",
 				dateLabel: "text-accent-foreground",
 				dayLabel: "text-accent-foreground",
 				option: "border-accent bg-accent",

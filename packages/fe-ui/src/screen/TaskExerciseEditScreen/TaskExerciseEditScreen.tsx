@@ -19,7 +19,7 @@ import {
 import { Button } from "../../input/Button/Button";
 import { Screen } from "../../layout/Screen";
 import { Section } from "../../layout/Section/Section";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 export interface ExerciseMediaAsset extends TaskExerciseMediaAsset {}
 export type TaskExerciseEditScreenRoutine = Pick<
@@ -111,7 +111,7 @@ export const TaskExerciseEditScreen = observer(
 		const resolvedActions =
 			actions ??
 			(readOnly ? undefined : (
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						onPress={onClickCancelButton}
@@ -126,7 +126,7 @@ export const TaskExerciseEditScreen = observer(
 					>
 						저장
 					</Button>
-				</div>
+				</HStack>
 			));
 		if (isLoading) {
 			return (
@@ -135,10 +135,14 @@ export const TaskExerciseEditScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex items-center justify-center gap-2 p-8">
+								<HStack
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<Spinner size="sm" />
 									<span className="text-muted">로딩 중...</span>
-								</div>
+								</HStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -155,12 +159,17 @@ export const TaskExerciseEditScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<VStack
+									gap="section"
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<p className="text-muted">운동 detail을 찾을 수 없습니다.</p>
 									<Button variant="tertiary" onPress={onClickCancelButton}>
 										목록으로
 									</Button>
-								</div>
+								</VStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -247,7 +256,7 @@ export const TaskExerciseEditScreen = observer(
 						<Section>
 							<Section.Header title="연관 루틴" />
 							<Section.Body>
-								<div className="flex flex-col gap-2">
+								<VStack gap="block">
 									{metadata.routines.map((routine, index) => (
 										<div
 											key={`${routine.id}:${index}`}
@@ -264,7 +273,7 @@ export const TaskExerciseEditScreen = observer(
 											</div>
 										</div>
 									))}
-								</div>
+								</VStack>
 							</Section.Body>
 						</Section>
 					) : null}

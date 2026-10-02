@@ -43,12 +43,12 @@ export interface SubjectDetailScreenProps {
  */
 function getGroupColor(
 	group?: string,
-): "primary" | "secondary" | "success" | "warning" | "default" {
+): "accent" | "success" | "warning" | "default" {
 	switch (group) {
 		case "entity":
-			return "primary";
+			return "accent";
 		case "menu":
-			return "secondary";
+			return "default";
 		case "feature":
 			return "success";
 		case "ui":
@@ -95,7 +95,7 @@ function SubjectInfoSection({
 									<Chip
 										color={getGroupColor(subject.group)}
 										size="sm"
-										variant="flat"
+										variant="soft"
 									>
 										{subject.group}
 									</Chip>
@@ -242,7 +242,12 @@ export const SubjectDetailScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<VStack
+									gap="section"
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<p className="text-muted">Subject를 찾을 수 없습니다.</p>
 									<Button
 										variant="tertiary"
@@ -251,7 +256,7 @@ export const SubjectDetailScreen = observer(
 									>
 										목록으로
 									</Button>
-								</div>
+								</VStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>

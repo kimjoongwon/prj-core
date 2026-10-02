@@ -234,7 +234,7 @@ CommunityScreen.displayName = "CommunityScreen";
 
 const communityScreenClassNames = tv({
 	slots: {
-		composer: "gap-4 pt-2",
+		composer: "pt-2",
 		contentContainer: "px-4 pb-8 pt-4",
 		description: "text-[13px] leading-5 text-muted",
 		error: "text-xs leading-4 text-danger",

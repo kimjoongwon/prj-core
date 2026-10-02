@@ -140,9 +140,9 @@ export interface AssetBrowserProps {
 const assetsLayoutClassName =
 	"grid min-h-[520px] grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-6";
 const assetsSidebarPanelClassName =
-	"overflow-hidden rounded-[1.25rem] border border-border/70 bg-default/70 shadow-sm";
+	"overflow-hidden rounded-2xl border border-border/70 bg-default/70 shadow-sm";
 const assetsGridPanelClassName =
-	"min-w-0 rounded-[1.25rem] border border-border/70 bg-surface px-4 py-4 shadow-sm sm:px-5 sm:py-5";
+	"min-w-0 rounded-2xl border border-border/70 bg-surface px-4 py-4 shadow-sm sm:px-5 sm:py-5";
 const getAssetEmptyMessage = (
 	folders: FolderTreeItem[],
 	selectedFolderId: string | null,
@@ -228,7 +228,7 @@ function AssetsGridFallback({
 }
 function AssetsSpaceEmptyState() {
 	return (
-		<div className="rounded-[1.25rem] border border-dashed border-border/70 bg-default/60 p-8 md:p-10">
+		<div className="rounded-2xl border border-dashed border-border/70 bg-default/60 p-8 md:p-10">
 			<EmptyState
 				title="Space를 선택하면 에셋을 조회할 수 있습니다"
 				description="상단 Space 선택기를 통해 관리하려는 공간을 먼저 선택해주세요."
@@ -449,7 +449,7 @@ export const AssetBrowser = observer(
 		const emptyMessage = getAssetEmptyMessage(folders, selectedFolderId, t);
 		const browserContent = (
 			<>
-				<Surface className="overflow-hidden rounded-[1.75rem] border-border/80 bg-surface">
+				<Surface className="overflow-hidden rounded-3xl border-border/80 bg-surface">
 					{!isSpaceReady ? (
 						<AssetsGridFallback
 							queryStates={queryStates}

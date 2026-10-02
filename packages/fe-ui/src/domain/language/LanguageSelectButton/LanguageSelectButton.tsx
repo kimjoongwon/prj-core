@@ -21,7 +21,7 @@ const LANGUAGE_OPTIONS: LanguageOption[] = [
 ];
 
 const languageSelectButtonClassName =
-	"h-10 min-w-0 rounded-2xl border border-slate-200/70 bg-white/72 px-3 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-md hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:hover:bg-white/10";
+	"h-10 min-w-0 rounded-2xl border border-border bg-surface px-3 text-xs font-semibold text-foreground shadow-sm hover:bg-surface-hover";
 
 /** 현재 앱 언어를 표시하고 선택한 언어를 전역 LanguageStore에 반영합니다. */
 export const LanguageSelectButton = observer(function LanguageSelectButton() {

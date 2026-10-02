@@ -85,9 +85,7 @@ describe("UserForm", () => {
 		fireEvent.blur(screen.getByLabelText("이메일"));
 
 		await waitFor(() => {
-			expect(state.fieldErrors.email).toBe(
-				"유효한 이메일 주소를 입력해주세요",
-			);
+			expect(state.fieldErrors.email).toBe("유효한 이메일 주소를 입력해주세요");
 		});
 		expect(state.email).toBe("  ONYU@EXAMPLE.COM  ");
 	});

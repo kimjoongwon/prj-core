@@ -5,6 +5,7 @@ import { Chip } from "../../data-display/Chip/Chip";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 import { Switch } from "../../input/Switch/Switch";
 import { TextField } from "../../input/TextField/TextField";
+import { HStack } from "../../rhythm";
 
 export interface AssignablePolicy {
 	id: string;
@@ -120,21 +121,21 @@ export const RoleAssignmentForm = observer(
 
 		return (
 			<div className="grid gap-3">
-				<div className="flex flex-wrap gap-2">
-					<Chip color="primary" variant="flat">
+				<HStack className="flex-wrap">
+					<Chip color="accent" variant="soft">
 						할당 {selectedPolicyIds.length}
 					</Chip>
 					{readOnly ? null : (
-						<Chip color="success" variant="flat">
+						<Chip color="success" variant="soft">
 							추가 {addedCount}
 						</Chip>
 					)}
 					{readOnly ? null : (
-						<Chip color="warning" variant="flat">
+						<Chip color="warning" variant="soft">
 							해제 {removedCount}
 						</Chip>
 					)}
-				</div>
+				</HStack>
 				{policies.length > 0 ? (
 					policies.map((policy) => {
 						const isSelected = selectedSet.has(policy.id);
@@ -145,27 +146,31 @@ export const RoleAssignmentForm = observer(
 								key={policy.id}
 								className="rounded-xl border border-border bg-background p-4"
 							>
-								<div className="flex items-start justify-between gap-4">
+								<HStack
+									alignItems="start"
+									justifyContent="between"
+									gap="section"
+								>
 									<div className="min-w-0">
-										<div className="flex flex-wrap items-center gap-2">
+										<HStack alignItems="center" className="flex-wrap">
 											<p className="font-semibold">{getPolicyLabel(policy)}</p>
 											<Chip
 												size="sm"
 												color={isSelected ? "success" : "default"}
-												variant="flat"
+												variant="soft"
 											>
 												{isSelected ? "할당됨" : "미할당"}
 											</Chip>
 											{assignment ? (
 												<Chip
 													size="sm"
-													color={assignment.isActive ? "primary" : "default"}
-													variant="flat"
+													color={assignment.isActive ? "accent" : "default"}
+													variant="soft"
 												>
 													{assignment.isActive ? "활성" : "비활성"}
 												</Chip>
 											) : null}
-										</div>
+										</HStack>
 										<p className="mt-1 text-sm text-muted">
 											{policy.description || policy.name}
 										</p>
@@ -174,7 +179,11 @@ export const RoleAssignmentForm = observer(
 											{policy.abilityCount ?? 0}개
 										</p>
 										{!readOnly && assignment ? (
-											<div className="mt-3 flex flex-wrap items-center gap-3">
+											<HStack
+												alignItems="center"
+												gap="block"
+												className="mt-3 flex-wrap"
+											>
 												<TextField
 													className="w-32"
 													label="우선순위"
@@ -198,7 +207,7 @@ export const RoleAssignmentForm = observer(
 												>
 													활성
 												</Switch>
-											</div>
+											</HStack>
 										) : null}
 									</div>
 									{readOnly ? null : (
@@ -209,7 +218,7 @@ export const RoleAssignmentForm = observer(
 											}}
 										/>
 									)}
-								</div>
+								</HStack>
 							</div>
 						);
 					})

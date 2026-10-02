@@ -95,8 +95,8 @@ function renderRoleName(value?: string | null) {
 }
 
 const INQUIRY_STATUS_CONFIG = {
-	NEW: { label: "신규", color: "primary" },
-	OPEN: { label: "열림", color: "secondary" },
+	NEW: { label: "신규", color: "accent" },
+	OPEN: { label: "열림", color: "default" },
 	IN_PROGRESS: { label: "처리 중", color: "warning" },
 	WAITING_CUSTOMER: { label: "고객 대기", color: "default" },
 	RESOLVED: { label: "해결됨", color: "success" },
@@ -126,7 +126,7 @@ const INQUIRY_CHANNEL_LABEL: Record<string, string> = {
 
 const INQUIRY_PRIORITY_CONFIG = {
 	LOW: { label: "낮음", color: "success" },
-	NORMAL: { label: "보통", color: "primary" },
+	NORMAL: { label: "보통", color: "accent" },
 	HIGH: { label: "높음", color: "warning" },
 	URGENT: { label: "긴급", color: "danger" },
 } as const;
@@ -149,9 +149,9 @@ function getRoleColor(roleName?: string) {
 	switch (roleName?.toUpperCase()) {
 		case "PLATFORM_ADMIN":
 		case "COMPANY_MANAGER":
-			return "primary";
+			return "accent";
 		case "PROJECT":
-			return "secondary";
+			return "default";
 		default:
 			return "default";
 	}
@@ -367,12 +367,12 @@ function getSubjectGroupLabel(group?: string | null) {
 
 function getSubjectGroupColor(
 	group?: string | null,
-): "default" | "primary" | "secondary" | "success" | "warning" {
+): "default" | "accent" | "success" | "warning" {
 	switch (group) {
 		case "entity":
-			return "primary";
+			return "accent";
 		case "menu":
-			return "secondary";
+			return "default";
 		case "page":
 			return "success";
 		case "feature":
@@ -622,7 +622,7 @@ export function buildAbilityListTableColumns<
 					)}
 					trueLabel="있음"
 					falseLabel="없음"
-					trueColor="primary"
+					trueColor="accent"
 					falseColor="default"
 				/>
 			),
@@ -632,10 +632,15 @@ export function buildAbilityListTableColumns<
 
 /** 태스크 목록에서 표시하는 필드만 사용하여 역방향 관계를 요구하지 않습니다. */
 export type TaskTableRow = Pick<TaskDto, "id" | "createdAt"> & {
- exercise: Pick<TaskDto["exercise"], "name" | "videoFileId" | "duration" | "count" | "description">;
+	exercise: Pick<
+		TaskDto["exercise"],
+		"name" | "videoFileId" | "duration" | "count" | "description"
+	>;
 };
 
-export function buildTaskTableColumns<TRow extends TaskTableRow = TaskTableRow>({
+export function buildTaskTableColumns<
+	TRow extends TaskTableRow = TaskTableRow,
+>({
 	onClickTaskName,
 	onClickDeleteButton,
 }: {
@@ -825,7 +830,7 @@ export function buildSpaceTableColumns<
 			size: 120,
 			align: "center",
 			cell: ({ row }) => (
-				<ChipCell label={row.original.fitnessCenter?.label} color="secondary" />
+				<ChipCell label={row.original.fitnessCenter?.label} color="default" />
 			),
 		}),
 		defineColumn<TRow, TRow["contentLanguageCode"]>({
@@ -835,7 +840,7 @@ export function buildSpaceTableColumns<
 			cell: ({ getValue }) => (
 				<ChipCell
 					label={contentLanguageLabels[String(getValue() ?? "")] ?? "미설정"}
-					color="primary"
+					color="accent"
 				/>
 			),
 		}),
@@ -946,7 +951,7 @@ export function buildAssetTableColumns<
 				cell: ({ row }) => (
 					<ChipCell
 						label={getAssetKindLabel(row.original.kind)}
-						color="secondary"
+						color="default"
 					/>
 				),
 			}),
@@ -1147,7 +1152,7 @@ export function buildInquiryTableColumns<
 				const unreadCount = Number(getValue() ?? 0);
 
 				return unreadCount > 0 ? (
-					<ChipCell label={unreadCount} color="primary" variant="solid" />
+					<ChipCell label={unreadCount} color="accent" variant="primary" />
 				) : (
 					<DefaultCell value={null} />
 				);
@@ -1211,17 +1216,17 @@ export function getStaticTranslationLanguageLabel(
 
 function getStaticTranslationCategoryColor(
 	category?: string | null,
-): "default" | "primary" | "secondary" | "success" | "warning" {
+): "default" | "accent" | "success" | "warning" {
 	switch (category) {
 		case "common":
 		case "공통":
-			return "primary";
+			return "accent";
 		case "error":
 		case "에러":
 			return "warning";
 		case "validation":
 		case "검증":
-			return "secondary";
+			return "default";
 		case "menu":
 		case "API 응답":
 			return "success";
@@ -1347,8 +1352,8 @@ const EMAIL_SEND_STATUS_CONFIG = {
 } as const;
 
 const AUTH_METHOD_CONFIG = {
-	client_secret_basic: { label: "Basic", color: "primary" },
-	client_secret_post: { label: "Post", color: "secondary" },
+	client_secret_basic: { label: "Basic", color: "accent" },
+	client_secret_post: { label: "Post", color: "default" },
 	none: { label: "None (Public)", color: "warning" },
 } as const;
 
@@ -1365,12 +1370,12 @@ const AUDIT_RESULT_CONFIG = {
 } as const;
 
 const MODEL_TYPE_CONFIG = {
-	AccessToken: { label: "Access Token", color: "primary" },
-	RefreshToken: { label: "Refresh Token", color: "secondary" },
+	AccessToken: { label: "Access Token", color: "accent" },
+	RefreshToken: { label: "Refresh Token", color: "default" },
 	AuthorizationCode: { label: "Auth Code", color: "warning" },
 	Session: { label: "Session", color: "success" },
 	Grant: { label: "Grant", color: "default" },
-	ClientCredentials: { label: "Client Cred", color: "primary" },
+	ClientCredentials: { label: "Client Cred", color: "accent" },
 	DeviceCode: { label: "Device Code", color: "warning" },
 	Interaction: { label: "Interaction", color: "success" },
 } as const;
@@ -1549,7 +1554,7 @@ export function buildOidcClientTableColumns<
 				return (
 					<ChipCell
 						label={isFirstParty ? "First-party" : "Third-party"}
-						color={isFirstParty ? "primary" : "default"}
+						color={isFirstParty ? "accent" : "default"}
 					/>
 				);
 			},
@@ -1671,7 +1676,7 @@ export function buildIdpAccountTableColumns<
 								confirmLabel="잠금 해제"
 								triggerLabel="잠금 해제"
 								status="accent"
-								triggerColor="primary"
+								triggerVariant="primary"
 								onConfirm={() => onClickUnlockAccount(account)}
 							/>
 						) : null}
@@ -1724,7 +1729,9 @@ export function buildEmailVerificationTableColumns<
 			align: "center",
 			cell: ({ getValue }) => {
 				const status = getValue();
-				const config = Object.keys(EMAIL_VERIFICATION_STATUS_CONFIG).includes(status)
+				const config = Object.keys(EMAIL_VERIFICATION_STATUS_CONFIG).includes(
+					status,
+				)
 					? EMAIL_VERIFICATION_STATUS_CONFIG[
 							status as keyof typeof EMAIL_VERIFICATION_STATUS_CONFIG
 						]
@@ -1784,7 +1791,7 @@ export function buildEmailVerificationTableColumns<
 						confirmLabel="재발송"
 						triggerLabel="재발송"
 						status="accent"
-						triggerColor="primary"
+						triggerVariant="primary"
 						startContent={<Send className="size-4" />}
 						isDisabled={!verification.canResend}
 						onConfirm={() => onClickResendEmailVerification(verification)}
@@ -1957,8 +1964,7 @@ export function buildOidcSessionTableColumns<
 							description="선택한 Grant의 모든 세션/토큰을 폐기합니다."
 							confirmLabel="폐기"
 							triggerLabel={`${grantId.slice(0, 8)}...`}
-							triggerVariant="light"
-							triggerColor="default"
+							triggerVariant="secondary"
 							className="font-mono text-sm"
 							tooltip={`${grantId}\n클릭하면 이 Grant의 모든 세션/토큰을 일괄 폐기합니다.`}
 							onConfirm={() => onClickGrantId(grantId)}
@@ -1980,7 +1986,6 @@ export function buildOidcSessionTableColumns<
 						description="선택한 OIDC 세션/토큰을 폐기합니다."
 						confirmLabel="폐기"
 						triggerLabel="폐기"
-						triggerColor="danger"
 						startContent={<Ban className="h-3 w-3" />}
 						onConfirm={() => onClickRevokeSession(row.original.key)}
 					/>

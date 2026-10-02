@@ -8,7 +8,12 @@ import {
 	useCreatePolicy,
 	useSyncPolicyEntries,
 } from "@cocrepo/api/core/policies";
-import { Button, PolicyEditScreen, type PolicyEntryOption } from "@cocrepo/ui";
+import {
+	Button,
+	HStack,
+	PolicyEditScreen,
+	type PolicyEntryOption,
+} from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -89,7 +94,7 @@ export default observer(function PolicyCreateRoute() {
 			state={state}
 			abilities={abilities}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -107,7 +112,7 @@ export default observer(function PolicyCreateRoute() {
 					>
 						등록
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

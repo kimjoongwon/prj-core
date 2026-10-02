@@ -12,14 +12,24 @@ import { getTextContent, Text } from "../../data-display/Text";
 
 type HeroButtonProps = ComponentPropsWithoutRef<typeof HeroButton>;
 export type ButtonProps = HeroButtonProps & {};
+
+// sm button 시각 높이는 40px(h-10)라 hit slop으로 44px 터치 영역을 보장합니다.
+const SMALL_BUTTON_HIT_SLOP = { bottom: 2, left: 2, right: 2, top: 2 };
+
 const ButtonComponent = forwardRef<
 	ComponentRef<typeof HeroButton>,
 	ButtonProps
->(({ children, size = "md", variant = "primary", ...props }, ref) => {
+>(({ children, hitSlop, size = "md", variant = "primary", ...props }, ref) => {
 	const label = getTextContent(children);
 
 	return (
-		<HeroButton {...props} ref={ref} size={size} variant={variant}>
+		<HeroButton
+			{...props}
+			hitSlop={hitSlop ?? (size === "sm" ? SMALL_BUTTON_HIT_SLOP : undefined)}
+			ref={ref}
+			size={size}
+			variant={variant}
+		>
 			{label === null ? (
 				children
 			) : (

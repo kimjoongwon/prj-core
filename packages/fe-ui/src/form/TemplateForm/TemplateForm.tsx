@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import { RadioGroup } from "../../input/RadioGroup/RadioGroup";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { TextField } from "../../input/TextField/TextField";
+import { HStack, VStack } from "../../rhythm";
 import { TemplateContentEditor } from "../TemplateContentEditor/TemplateContentEditor";
 import {
 	type VariableEditItem,
@@ -93,17 +94,17 @@ export const TemplateForm = observer(
 		};
 
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				{/* 기본 정보 섹션 */}
 				<section>
-					<div className="flex items-start justify-between gap-3">
-						<div className="flex items-start gap-2">
+					<HStack alignItems="start" justifyContent="between" gap="block">
+						<HStack alignItems="start" gap="inline">
 							<div>
 								<h2>{"기본 정보"}</h2>
 							</div>
-						</div>
-					</div>
-					<div className="space-y-6">
+						</HStack>
+					</HStack>
+					<VStack gap="page">
 						<RadioGroup
 							label="유형"
 							orientation="horizontal"
@@ -180,17 +181,17 @@ export const TemplateForm = observer(
 							isReadOnly={readOnly}
 							isDisabled={readOnly}
 						/>
-					</div>
+					</VStack>
 				</section>
 				{/* 콘텐츠 섹션 */}
 				<section>
-					<div className="flex items-start justify-between gap-3">
-						<div className="flex items-start gap-2">
+					<HStack alignItems="start" justifyContent="between" gap="block">
+						<HStack alignItems="start" gap="inline">
 							<div>
 								<h2>{"콘텐츠"}</h2>
 							</div>
-						</div>
-					</div>
+						</HStack>
+					</HStack>
 					<TemplateContentEditor
 						type={formData.type}
 						subject={formData.subject}
@@ -206,13 +207,13 @@ export const TemplateForm = observer(
 				</section>
 				{/* 변수 관리 섹션 */}
 				<section>
-					<div className="flex items-start justify-between gap-3">
-						<div className="flex items-start gap-2">
+					<HStack alignItems="start" justifyContent="between" gap="block">
+						<HStack alignItems="start" gap="inline">
 							<div>
 								<h2>{"변수 관리"}</h2>
 							</div>
-						</div>
-					</div>
+						</HStack>
+					</HStack>
 					<VariableEditTable
 						variables={state.variables}
 						onChange={(variables) => {
@@ -226,7 +227,7 @@ export const TemplateForm = observer(
 						readOnly={readOnly}
 					/>
 				</section>
-			</div>
+			</VStack>
 		);
 	},
 );

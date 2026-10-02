@@ -5,6 +5,7 @@ import { formatTextByteCount } from "../../data-display/text-byte";
 import { HtmlEditor } from "../../input/HtmlEditor";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { TextField } from "../../input/TextField/TextField";
+import { VStack } from "../../rhythm";
 
 type TemplateType = "EMAIL" | "SMS" | "PUSH";
 
@@ -123,7 +124,7 @@ const EmailEditor = observer(
 		readOnly = false,
 	}: EmailEditorProps) => {
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				<TextField
 					label="제목"
 					isRequired
@@ -139,7 +140,7 @@ const EmailEditor = observer(
 					onChange={onContentChange}
 					isDisabled={readOnly}
 				/>
-			</div>
+			</VStack>
 		);
 	},
 );
@@ -157,7 +158,7 @@ interface SmsEditorProps {
 const SmsEditor = observer(
 	({ content, onContentChange, errors, readOnly = false }: SmsEditorProps) => {
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				<TextArea
 					label="본문"
 					isRequired
@@ -170,7 +171,7 @@ const SmsEditor = observer(
 					isDisabled={readOnly}
 					description={formatTextByteCount(content)}
 				/>
-			</div>
+			</VStack>
 		);
 	},
 );
@@ -200,7 +201,7 @@ const PushEditor = observer(
 		const isContentExceeded = content.length > PUSH_CONTENT_MAX_LENGTH;
 
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				<TextField
 					label="제목"
 					isRequired
@@ -234,7 +235,7 @@ const PushEditor = observer(
 						</span>
 					}
 				/>
-			</div>
+			</VStack>
 		);
 	},
 );

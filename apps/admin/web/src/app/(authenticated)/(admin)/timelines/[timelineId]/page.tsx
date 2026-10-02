@@ -12,6 +12,7 @@ import {
 } from "@cocrepo/api/core/timelines";
 import {
 	Button,
+	HStack,
 	TimelineEditScreen,
 	type TimelineFormState,
 } from "@cocrepo/ui";
@@ -38,16 +39,16 @@ const getSessionTypeLabel = (type: string) => {
 
 const getSessionTypeColor = (
 	type: string,
-): "primary" | "secondary" | "success" => {
+): "accent" | "default" | "success" => {
 	switch (type) {
 		case "ONE_TIME":
-			return "primary";
+			return "accent";
 		case "ONE_TIME_RANGE":
-			return "secondary";
+			return "default";
 		case "RECURRING":
 			return "success";
 		default:
-			return "primary";
+			return "accent";
 	}
 };
 
@@ -205,7 +206,7 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 			connectedSessions={connectedSessions}
 			unconnectedSessions={unconnectedSessions}
 			actions={
-				<div className="flex flex-wrap gap-2">
+				<HStack className="flex-wrap">
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -223,8 +224,6 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 						수정
 					</Button>
 					<Button
-
-
 						variant="tertiary"
 						startContent={<Trash2 className="h-4 w-4" />}
 						isLoading={isDeletingTimeline}
@@ -232,7 +231,7 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 					>
 						삭제
 					</Button>
-				</div>
+				</HStack>
 			}
 			onClickCreateSessionButton={onClickCreateSessionButton}
 			onClickSessionNameButton={onClickSessionNameButton}

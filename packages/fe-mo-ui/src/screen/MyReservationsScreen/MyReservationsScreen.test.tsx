@@ -49,7 +49,7 @@ const renderWithDesignSystem = (children: ReactNode) =>
 	);
 
 describe("MyReservationsScreen", () => {
-	it("내 예약 카드 목록을 렌더링해야 한다", () => {
+	it("내 예약 카드 목록을 상태 Chip과 함께 렌더링해야 한다", () => {
 		renderWithDesignSystem(<MyReservationsScreen {...createProps()} />);
 
 		expect(screen.getByText("내 예약")).toBeTruthy();

@@ -16,7 +16,7 @@ import { Button } from "../../input/Button/Button";
 import { Select } from "../../input/Select";
 import { TextField } from "../../input/TextField";
 import { Section } from "../../layout";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 export type TimelineSessionProgramFormField =
 	| "name"
 	| "routineId"
@@ -139,8 +139,8 @@ export const TimelineSessionProgramForm = observer(
 							actions={
 								<Chip
 									size="sm"
-									variant="flat"
-									color={languageCode ? "primary" : "warning"}
+									variant="soft"
+									color={languageCode ? "accent" : "warning"}
 								>
 									{languageLabel}
 								</Chip>
@@ -204,7 +204,7 @@ export const TimelineSessionProgramForm = observer(
 							<p>강사: {state.instructorName || "-"}</p>
 						</div>
 						<div className="rounded-lg border border-border p-3">
-							<div className="flex items-center justify-between gap-3">
+							<HStack alignItems="center" justifyContent="between" gap="block">
 								<p className="font-medium text-foreground">실행 운동 preview</p>
 								<Chip
 									color={hasUnschedulableRoutine ? "warning" : "success"}
@@ -212,30 +212,34 @@ export const TimelineSessionProgramForm = observer(
 								>
 									{hasUnschedulableRoutine ? "저장 불가" : "저장 가능"}
 								</Chip>
-							</div>
+							</HStack>
 							{routinePreview.length === 0 ? (
 								<p className="mt-2 text-sm text-muted">
 									선택한 루틴에 등록된 운동이 없습니다.
 								</p>
 							) : (
-								<div className="mt-3 flex flex-col gap-2">
+								<VStack gap="block" className="mt-3">
 									{routinePreview.map((activity, index) => (
 										<div
 											key={`${activity.id}:${index}`}
 											className="rounded-md bg-surface-secondary px-3 py-2"
 										>
-											<div className="flex items-center justify-between gap-3">
+											<HStack
+												alignItems="center"
+												justifyContent="between"
+												gap="block"
+											>
 												<p className="font-medium">
 													{activity.order}. {activity.exerciseName}
 												</p>
 												<Chip
 													color={activity.isSchedulable ? "success" : "warning"}
 													size="sm"
-													variant="flat"
+													variant="soft"
 												>
 													{activity.isSchedulable ? "가능" : "불가"}
 												</Chip>
-											</div>
+											</HStack>
 											<p className="mt-1 text-muted text-sm">
 												반복 {activity.repetitions}회 · 휴식 {activity.restTime}
 												초
@@ -247,7 +251,7 @@ export const TimelineSessionProgramForm = observer(
 											) : null}
 										</div>
 									))}
-								</div>
+								</VStack>
 							)}
 							{hasUnschedulableRoutine ? (
 								<p className="mt-3 text-sm text-warning">

@@ -7,7 +7,6 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
-	buildOidcClientTableColumns,
 	DataGrid,
 	DataGridState,
 	Screen,
@@ -18,6 +17,7 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
+import { buildOidcClientTableColumns } from "../../data-grid/columns";
 import { Button } from "../../input/Button/Button";
 
 /**

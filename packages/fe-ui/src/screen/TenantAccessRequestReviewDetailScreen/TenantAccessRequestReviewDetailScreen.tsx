@@ -88,7 +88,7 @@ function TenantAccessRequestStatusChip({
 	status: TenantAccessRequestStatus;
 }) {
 	return (
-		<Chip color={STATUS_COLORS[status]} size="sm" variant="flat">
+		<Chip color={STATUS_COLORS[status]} size="sm" variant="soft">
 			{STATUS_LABELS[status]}
 		</Chip>
 	);
@@ -105,19 +105,19 @@ function RequestSummaryBlock({
 	requesterEmail?: string;
 }) {
 	return (
-		<div className="flex flex-col gap-1">
-			<div className="flex flex-wrap items-center gap-2">
+		<VStack gap="dense">
+			<HStack alignItems="center" className="flex-wrap">
 				<span className="font-medium text-foreground">{spaceName}</span>
-				<Chip size="sm" variant="flat">
+				<Chip size="sm" variant="soft">
 					{roleName}
 				</Chip>
-			</div>
+			</HStack>
 			<span className="text-sm text-muted">
 				{requesterName || requesterEmail
 					? `${requesterName ?? requesterEmail}${requesterName && requesterEmail ? ` · ${requesterEmail}` : ""}`
 					: "-"}
 			</span>
-		</div>
+		</VStack>
 	);
 }
 export const TenantAccessRequestReviewDetailScreen = observer(
@@ -224,8 +224,6 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 													닫기
 												</Button>
 												<Button
-
-
 													variant="tertiary"
 													startContent={<X className="size-4" />}
 													isLoading={isRejecting}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Auth, Button, useT } from "@cocrepo/ui";
+import { Alert, Auth, Button, HStack, useT } from "@cocrepo/ui";
 import { AlertTriangle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 
@@ -46,7 +46,7 @@ export const InteractionFailureScreen = observer(
 
 				<Alert status="danger" description={props.message} />
 
-				<div className="flex gap-3">
+				<HStack gap="block">
 					<Button
 						className="flex-1 font-semibold"
 						variant="primary"
@@ -54,7 +54,7 @@ export const InteractionFailureScreen = observer(
 					>
 						{props.isExpired ? t("다시 로그인") : t("돌아가기")}
 					</Button>
-				</div>
+				</HStack>
 			</Auth.Panel>
 		);
 	},

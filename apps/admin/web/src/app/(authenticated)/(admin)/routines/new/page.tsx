@@ -13,6 +13,7 @@ import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
 import { useApp } from "@cocrepo/store";
 import {
 	Button,
+	HStack,
 	type RoutineActivityFormItem,
 	RoutineEditScreen,
 	type RoutineFormState,
@@ -164,7 +165,7 @@ const AdminRoutinesNewRoute = observer(() => {
 			candidateTasks={candidateTasks}
 			isTasksLoading={isTasksLoading}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -182,7 +183,7 @@ const AdminRoutinesNewRoute = observer(() => {
 					>
 						저장
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

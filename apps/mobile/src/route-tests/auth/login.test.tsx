@@ -46,8 +46,35 @@ jest.mock("@cocrepo/mo-ui", () => {
 					? React.createElement(MockText, null, children)
 					: children,
 			),
+		HStack: ({
+			children,
+			...props
+		}: {
+			children?: React.ReactNode;
+			[key: string]: unknown;
+		}) => React.createElement(View, props, children),
 		Icon: ({ name }: { name: string }) =>
 			React.createElement(MockText, null, `icon:${name}`),
+		LinkButton: ({
+			children,
+			onPress,
+			...props
+		}: {
+			children?: React.ReactNode;
+			onPress?: () => void;
+			[key: string]: unknown;
+		}) =>
+			React.createElement(
+				Pressable,
+				{
+					...props,
+					accessibilityRole: "link",
+					onPress,
+				},
+				typeof children === "string"
+					? React.createElement(MockText, null, children)
+					: children,
+			),
 		ScreenFrame: ({ children }: { children?: React.ReactNode }) =>
 			React.createElement(
 				View,
@@ -55,6 +82,20 @@ jest.mock("@cocrepo/mo-ui", () => {
 				children,
 			),
 		Spinner: () => React.createElement(MockText, null, "loading-spinner"),
+		Text: ({
+			children,
+			...props
+		}: {
+			children?: React.ReactNode;
+			[key: string]: unknown;
+		}) => React.createElement(MockText, props, children),
+		VStack: ({
+			children,
+			...props
+		}: {
+			children?: React.ReactNode;
+			[key: string]: unknown;
+		}) => React.createElement(View, props, children),
 	};
 });
 

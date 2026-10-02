@@ -2,6 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { TextField } from "../../input/TextField/TextField";
+import { VStack } from "../../rhythm";
 
 /** 템플릿 변수 정보입니다. */
 export interface TemplateVariable {
@@ -55,7 +56,7 @@ export const VariableInputForm = observer(
 		};
 
 		return (
-			<div className="flex flex-col gap-3">
+			<VStack gap="block">
 				{variables.map((variable) => {
 					const label = variable.description ?? variable.name;
 					const displayLabel = variable.isRequired ? `${label} *` : label;
@@ -76,7 +77,7 @@ export const VariableInputForm = observer(
 						/>
 					);
 				})}
-			</div>
+			</VStack>
 		);
 	},
 );

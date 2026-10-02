@@ -13,7 +13,7 @@ const sessions = [
 		id: BigInt(1),
 		name: "오전 세션",
 		typeLabel: "일회성",
-		typeColor: "primary" as const,
+		typeColor: "accent" as const,
 		programCount: 2,
 		isConnected: true,
 		startDateTime: new Date("2026-04-14T09:00:00.000Z"),

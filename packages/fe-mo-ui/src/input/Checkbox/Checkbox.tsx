@@ -41,6 +41,7 @@ const PureCheckboxComponent = forwardRef<
 		<HeroCheckbox
 			{...(rest as HeroCheckboxProps)}
 			className={joinClassNames(
+				// 저수준 layout 예외: heroui-native Checkbox label 행 계약을 그대로 노출하는 래퍼라 raw gap을 유지합니다.
 				"h-auto w-full flex-row items-center gap-3 overflow-visible rounded-none bg-transparent shadow-none",
 				className,
 			)}

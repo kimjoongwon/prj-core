@@ -10,6 +10,7 @@ import {
 import { tv } from "tailwind-variants";
 import { Text } from "../../data-display/Text";
 import { Icon } from "../../icon";
+import { HStack, VStack } from "../../rhythm";
 import type { BookingClassFeedItem } from "../../widget/BookingClassCard";
 export interface BookingPolicySheetProps extends Omit<ViewProps, "children"> {
 	cancelLabel?: ReactNode;
@@ -80,14 +81,16 @@ const SheetAction = ({
 			onPress={onPress as PressableProps["onPress"]}
 			className={actionClassNames.action()}
 		>
-			{variant === "confirm" ? (
-				<Icon
-					name="shieldCheck"
-					size="sm"
-					tone={disabled ? "muted" : "accentForeground"}
-				/>
-			) : null}
-			<Text className={actionClassNames.actionText()}>{label}</Text>
+			<HStack alignItems="center" justifyContent="center" gap="inline">
+				{variant === "confirm" ? (
+					<Icon
+						name="shieldCheck"
+						size="sm"
+						tone={disabled ? "muted" : "accentForeground"}
+					/>
+				) : null}
+				<Text className={actionClassNames.actionText()}>{label}</Text>
+			</HStack>
 		</Pressable>
 	);
 };
@@ -114,17 +117,18 @@ const BookingPolicySheetComponent = observer(
 		}
 		const confirmDisabled = isLoading || !onConfirm;
 		return (
-			<View
+			<VStack
 				{...rest}
 				accessibilityRole="summary"
 				accessibilityState={{
 					busy: isLoading,
 				}}
 				className={classNames.root()}
+				gap="section"
 				style={style}
 			>
 				<View className={classNames.handle()} />
-				<View className={classNames.header()}>
+				<VStack gap="dense">
 					<Text className={classNames.title()} key="title">
 						{title}
 					</Text>
@@ -133,21 +137,21 @@ const BookingPolicySheetComponent = observer(
 						className={classNames.classMeta()}
 						value={item.sessionName}
 					/>
-				</View>
+				</VStack>
 				{cancellationPolicy ? (
-					<View className={classNames.policy()}>
-						<View className={classNames.policyHeader()} key="policy-label">
+					<VStack className={classNames.policy()} gap="dense">
+						<HStack alignItems="center" key="policy-label">
 							<Icon name="shieldCheck" size="xs" tone="accent" />
 							<Text className={classNames.policyLabel()}>
 								Cancellation policy
 							</Text>
-						</View>
+						</HStack>
 						<Text className={classNames.policyText()} key="policy-value">
 							{cancellationPolicy}
 						</Text>
-					</View>
+					</VStack>
 				) : null}
-				<View className={classNames.memo()}>
+				<VStack gap="block">
 					<Text className={classNames.memoLabel()} key="memo-label">
 						{memoLabel}
 					</Text>
@@ -164,8 +168,8 @@ const BookingPolicySheetComponent = observer(
 						}}
 						value={memoValue}
 					/>
-				</View>
-				<View className={classNames.actions()}>
+				</VStack>
+				<HStack gap="inline">
 					<SheetAction
 						disabled={isLoading || !onCancel}
 						label={cancelLabel}
@@ -183,8 +187,8 @@ const BookingPolicySheetComponent = observer(
 						})}
 						variant="confirm"
 					/>
-				</View>
-			</View>
+				</HStack>
+			</VStack>
 		);
 	},
 );
@@ -192,24 +196,19 @@ BookingPolicySheetComponent.displayName = "BookingPolicySheet";
 export const BookingPolicySheet = BookingPolicySheetComponent;
 const bookingPolicySheetClassNames = tv({
 	slots: {
-		action:
-			"min-h-11 flex-1 flex-row items-center justify-center gap-2 rounded-lg px-3 py-2.5",
+		action: "min-h-11 flex-1 items-center rounded-lg px-3 py-2.5",
 		actionText: "text-sm leading-[18px]",
-		actions: "flex-row gap-2",
 		classMeta: "text-[13px] leading-[18px] text-muted",
 		classTitle: "text-[15px] font-extrabold leading-5 text-surface-foreground",
 		handle: "h-1 w-11 self-center rounded-full bg-surface-tertiary",
-		header: "gap-1",
-		memo: "gap-2",
 		memoInput:
 			"min-h-20 rounded-lg border border-border bg-surface-secondary p-3 text-sm leading-5 text-foreground",
 		memoLabel:
 			"text-[13px] font-extrabold leading-[18px] text-surface-foreground",
-		policy: "gap-1 rounded-lg border border-border bg-surface-secondary p-3",
-		policyHeader: "flex-row items-center gap-1.5",
+		policy: "rounded-lg border border-border bg-surface-secondary p-3",
 		policyLabel: "text-xs font-extrabold uppercase leading-4 text-accent",
 		policyText: "text-[13px] leading-[18px] text-surface-foreground",
-		root: "gap-4 rounded-lg border border-border bg-surface p-4",
+		root: "rounded-lg border border-border bg-surface p-4",
 		title: "text-base font-black leading-6 text-foreground",
 	},
 	variants: {
@@ -226,7 +225,7 @@ const bookingPolicySheetClassNames = tv({
 		disabled: {
 			false: {},
 			true: {
-				action: "opacity-[0.55]",
+				action: "opacity-55",
 			},
 		},
 	},

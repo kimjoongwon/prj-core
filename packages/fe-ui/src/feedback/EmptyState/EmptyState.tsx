@@ -59,7 +59,7 @@ export const EmptyState = observer(
 					<div className="flex flex-col items-center justify-center py-16 text-center">
 						<div className="w-16 h-16 rounded-full bg-default flex items-center justify-center mb-4">
 							{icon ?? (
-								<Chip color="default" variant="flat" size="sm">
+								<Chip color="default" variant="soft" size="sm">
 									{t(statusLabel)}
 								</Chip>
 							)}

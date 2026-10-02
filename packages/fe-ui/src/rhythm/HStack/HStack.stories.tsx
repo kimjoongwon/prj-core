@@ -63,7 +63,9 @@ const 샘플아이템 = ({
 	children: React.ReactNode;
 	className?: string;
 }) => (
-	<div className={`rounded border bg-blue-200 p-2 ${className}`}>
+	<div
+		className={`rounded border border-border bg-surface-secondary p-2 ${className}`}
+	>
 		{children}
 	</div>
 );
@@ -104,7 +106,7 @@ export const 간격_스케일: Story = {
 			).map(([gap, label]) => (
 				<div key={gap}>
 					<h4 className="mb-2 font-semibold text-sm">{label}</h4>
-					<HStack gap={gap} className="border border-gray-300 p-2">
+					<HStack gap={gap} className="border border-border p-2">
 						<샘플아이템>항목 A</샘플아이템>
 						<샘플아이템>항목 B</샘플아이템>
 					</HStack>
@@ -131,7 +133,7 @@ export const 아이템_정렬: Story = {
 				<샘플아이템>김</샘플아이템>
 			</>
 		),
-		className: "border border-gray-300 p-2 h-20",
+		className: "border border-border p-2 h-20",
 	},
 	parameters: {
 		docs: {
@@ -153,7 +155,7 @@ export const 콘텐츠_배치: Story = {
 				<샘플아이템>다</샘플아이템>
 			</>
 		),
-		className: "border border-gray-300 p-2",
+		className: "border border-border p-2",
 	},
 	parameters: {
 		docs: {
@@ -171,11 +173,11 @@ export const 내비게이션_예시: Story = {
 		fullWidth: true,
 		children: (
 			<>
-				<div className="font-bold text-blue-600 text-xl">로고</div>
-				<div className="text-gray-600 text-sm">내비게이션 메뉴</div>
+				<div className="font-bold text-accent text-xl">로고</div>
+				<div className="text-muted text-sm">내비게이션 메뉴</div>
 			</>
 		),
-		className: "p-4 bg-white border-b",
+		className: "border-b border-border bg-surface p-4",
 	},
 	parameters: {
 		docs: {
@@ -192,8 +194,8 @@ export const 카드_액션_예시: Story = {
 		justifyContent: "end",
 		children: (
 			<>
-				<div className="rounded border border-gray-300 px-4 py-2">취소</div>
-				<div className="rounded bg-blue-500 px-4 py-2 text-white">
+				<div className="rounded border border-border px-4 py-2">취소</div>
+				<div className="rounded bg-accent px-4 py-2 text-accent-foreground">
 					장바구니 추가
 				</div>
 			</>
@@ -220,7 +222,7 @@ export const 플레이그라운드: Story = {
 				<샘플아이템>아이템 3</샘플아이템>
 			</>
 		),
-		className: "border border-gray-300 p-4",
+		className: "border border-border p-4",
 	},
 	parameters: {
 		docs: {

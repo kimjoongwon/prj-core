@@ -39,15 +39,15 @@ export const AdminScreenHierarchy: Story = {
 								/>
 								<Section.Body>
 									<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-										<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+										<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 											<p className="text-muted text-xs">운영 강좌</p>
 											<p className="mt-2 text-2xl font-semibold">24</p>
 										</div>
-										<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+										<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 											<p className="text-muted text-xs">신청 대기</p>
 											<p className="mt-2 text-2xl font-semibold">8</p>
 										</div>
-										<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+										<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 											<p className="text-muted text-xs">이번 달 매출</p>
 											<p className="mt-2 text-2xl font-semibold">₩12.8M</p>
 										</div>
@@ -64,7 +64,7 @@ export const AdminScreenHierarchy: Story = {
 								<Section.Body>
 									<div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_320px]">
 										<div className="divide-y divide-border overflow-hidden rounded-lg border border-border">
-											<div className="grid grid-cols-4 gap-4 bg-neutral-50 px-4 py-3 text-muted text-xs dark:bg-neutral-600">
+											<div className="grid grid-cols-4 gap-4 bg-surface-secondary px-4 py-3 text-muted text-xs">
 												<span>프로그램</span>
 												<span>상태</span>
 												<span>참여자</span>
@@ -98,7 +98,7 @@ export const AdminScreenHierarchy: Story = {
 														표면입니다.
 													</p>
 												</div>
-												<div className="rounded-lg border border-border/70 bg-white p-3 dark:border-white/10 dark:bg-neutral-600">
+												<div className="rounded-lg border border-border/70 bg-surface-secondary p-3">
 													<p className="text-muted text-xs">오늘 마감</p>
 													<p className="mt-2 text-lg font-semibold">5건</p>
 												</div>

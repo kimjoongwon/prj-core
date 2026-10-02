@@ -47,15 +47,15 @@ export const ScreenOwnedHierarchy: Story = {
 							/>
 							<Section.Body>
 								<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-									<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+									<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 										<p className="text-xs text-muted">대기</p>
 										<p className="mt-2 text-xl font-semibold">12개</p>
 									</div>
-									<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+									<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 										<p className="text-xs text-muted">완료</p>
 										<p className="mt-2 text-xl font-semibold">48개</p>
 									</div>
-									<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+									<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 										<p className="text-xs text-muted">실패</p>
 										<p className="mt-2 text-xl font-semibold">1개</p>
 									</div>
@@ -89,13 +89,13 @@ export const MultipleScreenSections: Story = {
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<label className="flex flex-col gap-2 text-sm">
 									<span className="text-muted">제목</span>
-									<span className="rounded-lg border border-border/70 bg-white px-3 py-2 dark:border-white/10 dark:bg-neutral-600">
+									<span className="rounded-lg border border-border/70 bg-surface-secondary px-3 py-2">
 										환불 요청 문의
 									</span>
 								</label>
 								<label className="flex flex-col gap-2 text-sm">
 									<span className="text-muted">분류</span>
-									<span className="rounded-lg border border-border/70 bg-white px-3 py-2 dark:border-white/10 dark:bg-neutral-600">
+									<span className="rounded-lg border border-border/70 bg-surface-secondary px-3 py-2">
 										예약
 									</span>
 								</label>
@@ -107,7 +107,7 @@ export const MultipleScreenSections: Story = {
 					<Section>
 						<Section.Header title="본문" />
 						<Section.Body>
-							<div className="min-h-28 rounded-lg border border-border/70 bg-white p-4 text-sm text-muted dark:border-white/10 dark:bg-neutral-600">
+							<div className="min-h-28 rounded-lg border border-border/70 bg-surface-secondary p-4 text-sm text-muted">
 								예약 취소 가능 시간을 확인하고 싶습니다.
 							</div>
 						</Section.Body>

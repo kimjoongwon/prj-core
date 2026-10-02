@@ -1,7 +1,12 @@
 "use client";
 
 import { useCreateAction } from "@cocrepo/api/core/actions";
-import { ActionEditScreen, type ActionFormState, Button } from "@cocrepo/ui";
+import {
+	ActionEditScreen,
+	type ActionFormState,
+	Button,
+	HStack,
+} from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -66,7 +71,7 @@ export default observer(function ActionNewPageRoute() {
 			description="새로운 Action을 등록합니다."
 			state={state}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -84,7 +89,7 @@ export default observer(function ActionNewPageRoute() {
 					>
 						Action 등록
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

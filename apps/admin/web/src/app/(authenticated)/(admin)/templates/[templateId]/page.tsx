@@ -10,6 +10,10 @@ import {
 import { useApp } from "@cocrepo/store";
 import {
 	Button,
+	Chip,
+	HStack,
+	InfoList,
+	Section,
 	TemplateActions,
 	TemplateEditScreen,
 	type TemplateFormState,
@@ -24,7 +28,6 @@ import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import type { ReactNode } from "react";
 
 type TemplateVariableLike = {
 	id: string;
@@ -160,7 +163,7 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 			}
 			actions={
 				template ? (
-					<div className="flex flex-wrap gap-2">
+					<HStack className="flex-wrap">
 						<Button
 							variant="ghost"
 							startContent={<ArrowLeft className="h-4 w-4" />}
@@ -181,40 +184,51 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 							onPreview={openPreviewModal}
 							onSendTest={openSendTestModal}
 						/>
-					</div>
+					</HStack>
 				) : null
 			}
 		>
 			{template ? (
-				<SectionLike title="상태 정보">
-					<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div className="rounded-lg border border-border bg-background/60 p-3">
-							<dt className="text-xs text-muted">활성 상태</dt>
-							<dd className="mt-2">
-								<Button
-									size="sm"
-									variant="tertiary"
-									isDisabled={isToggling}
-									onPress={onClickToggleButton}
-								>
-									{template.isActive ? "활성" : "비활성"}
-								</Button>
-							</dd>
-						</div>
-						<Info
-							label="생성일"
-							value={new Date(template.createdAt).toLocaleString("ko-KR")}
+				<Section>
+					<Section.Header title="상태 정보" />
+					<Section.Body>
+						<InfoList
+							items={[
+								{
+									key: "activeStatus",
+									label: "활성 상태",
+									value: (
+										<HStack>
+											<Chip color={template.isActive ? "success" : "default"}>
+												{template.isActive ? "활성" : "비활성"}
+											</Chip>
+											<Button
+												size="sm"
+												variant="tertiary"
+												isDisabled={isToggling}
+												onPress={onClickToggleButton}
+											>
+												상태 변경
+											</Button>
+										</HStack>
+									),
+								},
+								{
+									key: "createdAt",
+									label: "생성일",
+									value: new Date(template.createdAt).toLocaleString("ko-KR"),
+								},
+								{
+									key: "updatedAt",
+									label: "수정일",
+									value: template.updatedAt
+										? new Date(template.updatedAt).toLocaleString("ko-KR")
+										: "-",
+								},
+							]}
 						/>
-						<Info
-							label="수정일"
-							value={
-								template.updatedAt
-									? new Date(template.updatedAt).toLocaleString("ko-KR")
-									: "-"
-							}
-						/>
-					</dl>
-				</SectionLike>
+					</Section.Body>
+				</Section>
 			) : null}
 		</TemplateEditScreen>
 	);
@@ -241,30 +255,6 @@ function mapTemplateFormState(
 		})),
 		errors: {},
 	};
-}
-
-function SectionLike({
-	title,
-	children,
-}: {
-	title: string;
-	children: ReactNode;
-}) {
-	return (
-		<section>
-			<h3 className="mb-4 text-lg font-semibold">{title}</h3>
-			{children}
-		</section>
-	);
-}
-
-function Info({ label, value }: { label: string; value: string }) {
-	return (
-		<div className="rounded-lg border border-border bg-background/60 p-3">
-			<dt className="text-xs text-muted">{label}</dt>
-			<dd className="mt-1 break-all text-sm font-medium">{value}</dd>
-		</div>
-	);
 }
 
 export default AdminTemplatesTemplateIdRoute;

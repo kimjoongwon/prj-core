@@ -184,7 +184,7 @@ function AssetPreviewFallback({
 	mode: AssetPreviewMode;
 }) {
 	return (
-		<div className="flex min-h-[300px] w-full items-center justify-center rounded-[1.25rem] border border-dashed border-border/70 bg-white/65 p-6 text-center shadow-inner shadow-slate-900/5">
+		<div className="flex min-h-[300px] w-full items-center justify-center rounded-2xl border border-dashed border-border/70 bg-surface-secondary p-6 text-center">
 			<div className="max-w-sm space-y-4">
 				<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-default text-muted">
 					{mode === "unsupported" ? (
@@ -223,7 +223,7 @@ function AssetPreviewMedia({
 			<img
 				src={previewUrl}
 				alt={asset.originalName}
-				className="max-h-[560px] w-full rounded-[1.25rem] object-contain shadow-2xl shadow-slate-900/10"
+				className="max-h-[560px] w-full rounded-2xl object-contain shadow-surface"
 				loading="lazy"
 			/>
 		);
@@ -237,7 +237,7 @@ function AssetPreviewMedia({
 				controls
 				playsInline
 				preload="metadata"
-				className="max-h-[560px] w-full rounded-[1.25rem] bg-black shadow-2xl shadow-slate-900/20"
+				className="max-h-[560px] w-full rounded-2xl bg-backdrop shadow-surface"
 			/>
 		);
 	}
@@ -247,7 +247,7 @@ function AssetPreviewMedia({
 			<iframe
 				title={`${asset.originalName} PDF preview`}
 				src={`${previewUrl}#view=FitH`}
-				className="h-[560px] w-full rounded-[1.25rem] bg-white shadow-2xl shadow-slate-900/10"
+				className="h-[560px] w-full rounded-2xl bg-surface shadow-surface"
 			/>
 		);
 	}
@@ -265,20 +265,19 @@ export function AssetPreview({
 	return (
 		<div
 			className={cn(
-				"overflow-hidden rounded-[1.75rem] border border-border/70 bg-surface shadow-[0_28px_80px_-40px_rgba(15,23,42,0.45)]",
+				"overflow-hidden rounded-3xl border border-border/70 bg-surface shadow-surface",
 				className,
 			)}
 		>
-			<div className="relative overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.96),_rgba(219,234,254,0.82)_40%,_rgba(226,232,240,0.72))] px-4 py-4 sm:px-6 sm:py-6">
-				<div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/55 to-transparent" />
+			<div className="relative overflow-hidden bg-surface-secondary px-4 py-4 sm:px-6 sm:py-6">
 				<div className="absolute left-4 top-4 z-10 flex flex-wrap gap-2">
-					<Chip size="sm" color="secondary" variant="flat">
+					<Chip size="sm" color="default" variant="soft">
 						{getKindLabel(asset.kind)}
 					</Chip>
-					<Chip size="sm" color={getStatusColor(asset.status)} variant="flat">
+					<Chip size="sm" color={getStatusColor(asset.status)} variant="soft">
 						{getStatusLabel(asset.status)}
 					</Chip>
-					<Chip size="sm" color="default" variant="bordered">
+					<Chip size="sm" color="default" variant="tertiary">
 						{getPreviewBadgeLabel(previewMode)}
 					</Chip>
 				</div>
@@ -334,8 +333,6 @@ export function AssetPreviewDialog({
 						<Modal.Footer>
 							{previewUrl ? (
 								<Button
-
-
 									variant="tertiary"
 									onPress={() => {
 										window.open(previewUrl, "_blank", "noopener,noreferrer");

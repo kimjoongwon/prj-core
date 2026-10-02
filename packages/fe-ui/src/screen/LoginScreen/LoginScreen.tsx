@@ -3,6 +3,7 @@
 import { ArrowRight, ShieldCheck, TriangleAlert } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent } from "react";
+import { Chip } from "../../data-display/Chip/Chip";
 import { Typography } from "../../data-display/Typography";
 import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
 import { useT } from "../../i18n";
@@ -85,30 +86,22 @@ export const LoginScreen = observer(
 				className="w-full"
 				onSubmit={onSubmitLoginScreen}
 			>
-				<SectionSurface className="rounded-2xl border border-border bg-surface shadow-lg shadow-default-100/10">
+				<SectionSurface className="rounded-2xl border border-border bg-surface shadow-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<VStack fullWidth className="p-6 sm:p-7">
 								<VStack key="header" fullWidth className="text-left">
-									<HStack
+									<Chip
 										key="badge"
-										alignItems="center"
-										className="w-fit rounded-full border border-border bg-surface-secondary px-3 py-1 text-muted"
+										size="sm"
+										color="accent"
+										variant="soft"
+										startContent={
+											<ShieldCheck key="icon" aria-hidden className="size-4" />
+										}
 									>
-										<ShieldCheck
-											key="icon"
-											aria-hidden
-											className="size-4 text-accent"
-										/>
-										<Typography
-											key="text"
-											type="body-xs"
-											weight="medium"
-											className="font-medium !text-foreground opacity-70"
-										>
-											안전한 운영 세션
-										</Typography>
-									</HStack>
+										안전한 운영 세션
+									</Chip>
 									<Typography.Heading
 										key="title"
 										level={3}
@@ -187,7 +180,7 @@ export const LoginScreen = observer(
 										key="submit"
 										type="submit"
 										variant="primary"
-										className="h-12 w-full rounded-full shadow-md shadow-primary/15"
+										className="h-12 w-full rounded-full"
 										endContent={<ArrowRight aria-hidden className="size-4" />}
 										fullWidth
 										isDisabled={isLoading}

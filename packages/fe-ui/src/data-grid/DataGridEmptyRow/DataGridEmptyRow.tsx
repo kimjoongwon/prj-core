@@ -20,7 +20,7 @@ export function DataGridEmptyRow({
 		<tr>
 			<td
 				colSpan={Math.max(colSpan, 1)}
-				className="border-b border-[#e1e6ef] px-3 py-14 text-center text-muted dark:border-white/10"
+				className="border-b border-border px-3 py-14 text-center text-muted"
 			>
 				<div className="flex flex-col items-center justify-center gap-3">
 					<FileX size={40} />

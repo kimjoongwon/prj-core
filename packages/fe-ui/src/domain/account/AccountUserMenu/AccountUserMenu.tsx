@@ -22,7 +22,7 @@ export const AccountUserMenu = () => {
 		<Dropdown>
 			<Dropdown.Trigger
 				aria-label={t("사용자 메뉴")}
-				className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#d7e4f2] bg-white px-2 pr-3 text-foreground hover:bg-[#eef6ff] dark:border-white/10 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+				className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-surface px-2 pr-3 text-foreground hover:bg-surface-hover"
 			>
 				<Avatar size="sm" className="h-8 w-8 bg-foreground text-background">
 					{userInfo.avatarUrl ? (

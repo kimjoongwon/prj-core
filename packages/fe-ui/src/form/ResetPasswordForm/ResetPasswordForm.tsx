@@ -7,6 +7,7 @@ import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Link, TextField } from "../../input";
 import { Auth } from "../../layout/Auth";
+import { HStack, VStack } from "../../rhythm";
 
 export type ResetPasswordStep = "validating" | "invalid" | "form" | "complete";
 
@@ -133,77 +134,82 @@ export const ResetPasswordForm = observer(
 							<Alert status="danger" description={t(state.submitError)} />
 						)}
 
-						<form className="space-y-5">
-							<div>
+						<form>
+							<VStack gap="page">
+								<div>
+									<TextField
+										path="password"
+										state={state}
+										label="새 비밀번호"
+										placeholder="********"
+										isRequired
+										type="password"
+										autoComplete="new-password"
+										variant="bordered"
+										autoFocus
+									/>
+									{state.password ? (
+										<VStack gap="dense" className="mt-2">
+											{passwordRuleResults.map((rule) => (
+												<HStack
+													key={rule.rule}
+													alignItems="center"
+													className="text-sm"
+												>
+													{rule.passed ? (
+														<Check
+															className="size-4 shrink-0 text-success"
+															aria-hidden
+														/>
+													) : (
+														<X
+															className="size-4 shrink-0 text-muted"
+															aria-hidden
+														/>
+													)}
+													<span
+														className={
+															rule.passed ? "text-success" : "text-muted"
+														}
+													>
+														{t(rule.label)}
+													</span>
+												</HStack>
+											))}
+										</VStack>
+									) : null}
+								</div>
+
 								<TextField
-									path="password"
+									path="confirmPassword"
 									state={state}
-									label="새 비밀번호"
+									label="비밀번호 확인"
 									placeholder="********"
 									isRequired
 									type="password"
 									autoComplete="new-password"
 									variant="bordered"
-									autoFocus
+									isInvalid={
+										state.confirmPassword.length > 0 && !isPasswordMatch
+									}
+									errorMessage={
+										state.confirmPassword.length > 0 && !isPasswordMatch
+											? "비밀번호가 일치하지 않습니다"
+											: undefined
+									}
 								/>
-								{state.password ? (
-									<div className="mt-2 space-y-1.5">
-										{passwordRuleResults.map((rule) => (
-											<div
-												key={rule.rule}
-												className="flex items-center gap-2 text-sm"
-											>
-												{rule.passed ? (
-													<Check
-														className="size-4 shrink-0 text-success"
-														aria-hidden
-													/>
-												) : (
-													<X
-														className="size-4 shrink-0 text-muted"
-														aria-hidden
-													/>
-												)}
-												<span
-													className={
-														rule.passed ? "text-success" : "text-muted"
-													}
-												>
-													{t(rule.label)}
-												</span>
-											</div>
-										))}
-									</div>
-								) : null}
-							</div>
 
-							<TextField
-								path="confirmPassword"
-								state={state}
-								label="비밀번호 확인"
-								placeholder="********"
-								isRequired
-								type="password"
-								autoComplete="new-password"
-								variant="bordered"
-								isInvalid={state.confirmPassword.length > 0 && !isPasswordMatch}
-								errorMessage={
-									state.confirmPassword.length > 0 && !isPasswordMatch
-										? "비밀번호가 일치하지 않습니다"
-										: undefined
-								}
-							/>
-
-							<Button
-								type="submit"
-								variant="primary"
-								className="w-full font-semibold"
-								size="lg"
-								isLoading={state.isSubmitting}
-								isDisabled={!isPasswordValid || !isPasswordMatch}
-							>
-								{t("비밀번호 변경")}
-							</Button>
+								<Button
+									type="submit"
+									variant="primary"
+									className="w-full font-semibold"
+									size="lg"
+									isLoading={state.isSubmitting}
+									isDisabled={!isPasswordValid || !isPasswordMatch}
+								>
+									{t("비밀번호 변경")}
+								</Button>
+							</VStack>
 						</form>
 					</>
 				)}

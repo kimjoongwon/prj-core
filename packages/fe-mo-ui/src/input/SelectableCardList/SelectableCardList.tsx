@@ -7,7 +7,9 @@ import {
 	type ViewStyle,
 } from "react-native";
 import { tv } from "tailwind-variants";
+import { Chip, chipClassNames, type ChipProps } from "../../data-display/Chip";
 import { Icon, type MobileIconName } from "../../icon";
+import { HStack, VStack } from "../../rhythm";
 import { PureRadio } from "../Radio/Radio";
 export interface SelectableCardItem {
 	description?: ReactNode;
@@ -108,12 +110,12 @@ const SelectableTags = ({ item }: { item: SelectableCardItem }) => {
 		return null;
 	}
 	return (
-		<View className={classNames.tags()}>
+		<HStack className="flex-wrap" gap="inline">
 			{item.tags.map((tag, index) => {
 				const tagKey = getDisplayNodeKey("tag", item.value, tag, index);
 				return <SelectableTag key={tagKey} tag={tag} />;
 			})}
-		</View>
+		</HStack>
 	);
 };
 const SelectableMetaList = ({ item }: { item: SelectableCardItem }) => {
@@ -121,12 +123,12 @@ const SelectableMetaList = ({ item }: { item: SelectableCardItem }) => {
 		return null;
 	}
 	return (
-		<View className={classNames.meta()}>
+		<HStack className="flex-wrap" gap="inline">
 			{item.meta.map((meta, index) => {
 				const metaKey = getDisplayNodeKey("meta", item.value, meta, index);
 				return <SelectableMeta key={metaKey} meta={meta} />;
 			})}
-		</View>
+		</HStack>
 	);
 };
 const DisabledReasonText = ({ item }: { item: SelectableCardItem }) => {
@@ -137,6 +139,8 @@ const DisabledReasonText = ({ item }: { item: SelectableCardItem }) => {
 		<Text className={classNames.disabledReason()}>{item.disabledReason}</Text>
 	);
 };
+type SelectionChipColor = NonNullable<ChipProps["color"]>;
+type SelectionChipVariant = NonNullable<ChipProps["variant"]>;
 const SelectionIndicator = ({
 	config,
 	isDisabled,
@@ -150,15 +154,31 @@ const SelectionIndicator = ({
 		disabled: isDisabled,
 		selected: isSelected,
 	});
+	const chipColor: SelectionChipColor = isSelected ? "accent" : "default";
+	const chipVariant: SelectionChipVariant = isSelected ? "primary" : "soft";
 	return (
-		<View className={slotClassNames.indicator()}>
+		// 카드 전체가 선택 Pressable이므로 상태 chip이 터치를 가로채지 않도록 합니다.
+		<Chip
+			className={slotClassNames.indicator()}
+			color={chipColor}
+			disabled
+			size="sm"
+			variant={chipVariant}
+		>
 			<PureRadio.Indicator className={slotClassNames.radioIndicator()} />
-			<Text className={slotClassNames.indicatorText()}>
+			<Text
+				className={chipClassNames.label({
+					className: "font-bold",
+					color: chipColor,
+					size: "sm",
+					variant: chipVariant,
+				})}
+			>
 				{isSelected
 					? (config.selectedLabel ?? "Selected")
 					: (config.selectLabel ?? "Select")}
 			</Text>
-		</View>
+		</Chip>
 	);
 };
 const SelectableCard = ({
@@ -189,35 +209,40 @@ const SelectableCard = ({
 			style={[config.cardStyle, isSelected ? config.selectedCardStyle : null]}
 			variant="secondary"
 		>
-			<View className={slotClassNames.cardHeader()}>
-				<View className={slotClassNames.titleRow()} key="title">
-					<SelectableTitleIcon item={item} />
-					<View className={slotClassNames.titleStack()}>
-						<NodeText
-							className={slotClassNames.eyebrow()}
-							node={item.eyebrow}
-						/>
-						<NodeText
-							className={slotClassNames.cardTitle()}
-							node={item.title}
-						/>
-					</View>
-				</View>
-				<View key="indicator">
+			<VStack gap="block">
+				<HStack
+					alignItems="start"
+					gap="inline"
+					justifyContent="between"
+					key="header"
+				>
+					<HStack alignItems="start" className="flex-1" gap="inline" key="title">
+						<SelectableTitleIcon item={item} />
+						<VStack className="flex-1" gap="dense">
+							<NodeText
+								className={slotClassNames.eyebrow()}
+								node={item.eyebrow}
+							/>
+							<NodeText
+								className={slotClassNames.cardTitle()}
+								node={item.title}
+							/>
+						</VStack>
+					</HStack>
 					<SelectionIndicator
 						config={config}
 						isDisabled={isDisabled}
 						isSelected={isSelected}
 					/>
-				</View>
-			</View>
-			<NodeText
-				className={slotClassNames.cardDescription()}
-				node={item.description}
-			/>
-			<SelectableMetaList item={item} />
-			<SelectableTags item={item} />
-			<DisabledReasonText item={item} />
+				</HStack>
+				<NodeText
+					className={slotClassNames.cardDescription()}
+					node={item.description}
+				/>
+				<SelectableMetaList item={item} />
+				<SelectableTags item={item} />
+				<DisabledReasonText item={item} />
+			</VStack>
 		</PureRadio>
 	);
 };
@@ -282,21 +307,21 @@ const PureSelectableCardListComponent = (
 	};
 
 	return (
-		<View {...rest} className={classNames.root()} style={style}>
+		<VStack {...rest} gap="block" style={style}>
 			{title || description ? (
-				<View className={classNames.heading()}>
+				<VStack gap="dense">
 					<NodeText className={classNames.title()} node={title} />
 					<NodeText className={classNames.description()} node={description} />
-				</View>
+				</VStack>
 			) : null}
 			{items.length > 0 ? (
-				<View className={classNames.list()}>
+				<VStack gap="block">
 					<SelectableCards config={config} items={items} />
-				</View>
+				</VStack>
 			) : (
 				<EmptyContent emptyContent={emptyContent} emptyLabel={emptyLabel} />
 			)}
-		</View>
+		</VStack>
 	);
 };
 PureSelectableCardListComponent.displayName = "PureSelectableCardList";
@@ -305,40 +330,29 @@ export const SelectableCardList = PureSelectableCardList;
 export type SelectableCardListProps = PureSelectableCardListProps;
 const selectableCardListClassNames = tv({
 	slots: {
-		card: "flex-col items-stretch justify-start gap-2 rounded-lg border border-border bg-surface p-4",
+		card: "flex-col items-stretch justify-start rounded-lg border border-border bg-surface p-4",
 		cardDescription: "text-[13px] leading-5 text-muted",
-		cardHeader: "flex-row items-start justify-between gap-2",
 		cardTitle: "text-base font-bold leading-[22px] text-foreground",
 		description: "text-[13px] leading-5 text-muted",
 		disabledReason: "text-[13px] leading-[18px] text-warning",
 		empty: "rounded-lg border border-border bg-surface-secondary p-4",
 		emptyTitle: "text-sm leading-5 text-muted",
 		eyebrow: "text-xs font-bold uppercase leading-4 text-accent",
-		heading: "gap-1",
-		indicator:
-			"min-w-16 flex-row items-center justify-center gap-1.5 rounded-full border border-border bg-surface-secondary px-2 py-1",
-		indicatorText:
-			"text-xs font-bold leading-4 text-surface-secondary-foreground",
-		list: "gap-2",
-		meta: "flex-row flex-wrap gap-2",
+		indicator: "",
 		metaText: "text-[13px] leading-[18px] text-surface-foreground",
-		root: "gap-3",
 		radioIndicator: "size-4",
 		tag: "rounded-full border border-border bg-surface-secondary px-2 py-1",
 		tagText:
 			"text-xs font-semibold leading-4 text-surface-secondary-foreground",
-		tags: "flex-row flex-wrap gap-2",
 		title: "text-base font-extrabold leading-6 text-foreground",
 		titleIcon:
 			"mt-0.5 h-8 w-8 items-center justify-center rounded-lg border border-border bg-surface-secondary",
-		titleRow: "flex-1 flex-row items-start gap-2",
-		titleStack: "flex-1 gap-1",
 	},
 	variants: {
 		disabled: {
 			false: {},
 			true: {
-				card: "opacity-[0.55]",
+				card: "opacity-60",
 				indicator: "bg-surface-tertiary",
 			},
 		},
@@ -346,8 +360,6 @@ const selectableCardListClassNames = tv({
 			false: {},
 			true: {
 				card: "border-accent bg-accent-soft",
-				indicator: "border-accent bg-accent",
-				indicatorText: "text-accent-foreground",
 			},
 		},
 	},

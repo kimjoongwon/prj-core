@@ -7,6 +7,7 @@ import {
 } from "@cocrepo/api/core/timelines";
 import {
 	Button,
+	HStack,
 	TimelineSessionProgramEditScreen,
 	type TimelineSessionProgramFormState,
 	type TimelineSessionProgramRoutinePreviewItem,
@@ -128,7 +129,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 				isLoading={isLoading}
 				notFound={!isLoading && !program}
 				actions={
-					<div className="flex gap-2">
+					<HStack>
 						<Button
 							variant="tertiary"
 							startContent={<Edit className="h-4 w-4" />}
@@ -144,7 +145,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 						>
 							삭제
 						</Button>
-					</div>
+					</HStack>
 				}
 			/>
 		);

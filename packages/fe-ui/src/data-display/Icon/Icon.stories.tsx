@@ -57,10 +57,10 @@ export const DifferentSizes: StoryObj = {
 export const DifferentColors: StoryObj = {
 	render: () => (
 		<div className="flex gap-4 items-center">
-			<DogPawIcon size={32} color="#FF0000" />
-			<DogPawIcon size={32} color="#00FF00" />
-			<DogPawIcon size={32} color="#0000FF" />
-			<DogPawIcon size={32} color="#FFA500" />
+			<DogPawIcon size={32} color="var(--danger)" />
+			<DogPawIcon size={32} color="var(--success)" />
+			<DogPawIcon size={32} color="var(--accent)" />
+			<DogPawIcon size={32} color="var(--warning)" />
 		</div>
 	),
 };

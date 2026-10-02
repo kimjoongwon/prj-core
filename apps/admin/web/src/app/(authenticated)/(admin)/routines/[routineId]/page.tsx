@@ -5,6 +5,7 @@ import {
 	getAssetById,
 	getGetAssetByIdQueryKey,
 } from "@cocrepo/api/assets";
+import type { ApiClientError } from "@cocrepo/api/core/client";
 import {
 	getGetRoutinesQueryKey,
 	useDeleteRoutine,
@@ -12,13 +13,13 @@ import {
 } from "@cocrepo/api/core/routines";
 import {
 	Button,
+	HStack,
 	type RoutineActivityFormItem,
 	RoutineEditScreen,
 	type RoutineFormState,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
-import type { ApiClientError } from "@cocrepo/api/core/client";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -149,7 +150,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 			notFound={Boolean(errorTitle) || (!isLoading && !routine)}
 			notFoundMessage={errorTitle ?? "루틴을 찾을 수 없습니다."}
 			notFoundAction={
-				<div className="flex gap-2">
+				<HStack>
 					{error && !isNotFound ? (
 						<Button
 							variant="tertiary"
@@ -169,10 +170,10 @@ const AdminRoutinesDetailRoute = observer(() => {
 					>
 						목록으로
 					</Button>
-				</div>
+				</HStack>
 			}
 			actions={
-				<div className="flex flex-wrap gap-2">
+				<HStack className="flex-wrap">
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -199,7 +200,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 					>
 						삭제
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

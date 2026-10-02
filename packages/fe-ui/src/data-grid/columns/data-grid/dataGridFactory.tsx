@@ -306,11 +306,7 @@ export function createDescriptionColumn<TData>(
 		label = COLUMN_LABELS.description,
 		size = 250,
 		cell = ({ getValue }) => (
-			<DefaultCell
-				value={getValue()}
-				tone="muted"
-				lineClamp={1}
-			/>
+			<DefaultCell value={getValue()} tone="muted" lineClamp={1} />
 		),
 		...rest
 	} = overrides;
@@ -426,12 +422,12 @@ export function createActionsColumn<TData>(
 /** 액션 그룹 이름을 HeroUI Chip 색상으로 매핑합니다. */
 export function getActionGroupColor(
 	group?: string,
-): "primary" | "secondary" | "success" | "warning" | "danger" | "default" {
+): "accent" | "success" | "warning" | "danger" | "default" {
 	switch (group) {
 		case "crud":
-			return "primary";
+			return "accent";
 		case "visibility":
-			return "secondary";
+			return "default";
 		case "workflow":
 			return "success";
 		case "bulk":

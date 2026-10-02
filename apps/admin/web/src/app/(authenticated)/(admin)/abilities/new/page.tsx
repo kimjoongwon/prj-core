@@ -6,7 +6,12 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityEditScreen, type AbilityFormState, Button } from "@cocrepo/ui";
+import {
+	AbilityEditScreen,
+	type AbilityFormState,
+	Button,
+	HStack,
+} from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -93,7 +98,7 @@ export default observer(function AbilityNewPage() {
 			}))}
 			isLoading={isSubjectsLoading || isActionsLoading}
 			pageActions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -111,7 +116,7 @@ export default observer(function AbilityNewPage() {
 					>
 						등록
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

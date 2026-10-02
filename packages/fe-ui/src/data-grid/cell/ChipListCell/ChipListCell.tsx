@@ -19,7 +19,7 @@ export function ChipListCell({ labels }: ChipListCellProps) {
 	return (
 		<div className="flex flex-wrap gap-1">
 			{labels.map((label) => (
-				<Chip key={String(label)} size="sm" variant="flat">
+				<Chip key={String(label)} size="sm" variant="soft">
 					{typeof label === "string" ? t(label) : String(label)}
 				</Chip>
 			))}

@@ -96,8 +96,21 @@ describe("ReservationHomeScreen", () => {
 		expect(screen.getByText("F45 Strength")).toBeTruthy();
 		expect(screen.getByText("예약 가능")).toBeTruthy();
 
+		const allFilter = screen.getByLabelText("filter-all");
+		expect(allFilter.props.accessibilityState).toEqual(
+			expect.objectContaining({
+				selected: true,
+			}),
+		);
+		const waitlistFilter = screen.getByLabelText("filter-waitlist");
+		expect(waitlistFilter.props.accessibilityState).toEqual(
+			expect.objectContaining({
+				selected: false,
+			}),
+		);
+
 		fireEvent.press(screen.getByLabelText("토 오늘"));
-		fireEvent.press(screen.getByLabelText("filter-waitlist"));
+		fireEvent.press(waitlistFilter);
 		fireEvent.press(screen.getByLabelText("예약"));
 
 		expect(props.onSelectDate).toHaveBeenCalledWith(

@@ -8,14 +8,16 @@ import {
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	Button,
+	HStack,
+	InfoList,
 	OidcClientEditScreen,
 	type OidcClientFormState,
+	Section,
 } from "@cocrepo/ui";
 import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import type { ReactNode } from "react";
 
 export default observer(function OidcClientDetailRoute() {
 	const oidcClientId = useParams<{ oidcClientId: string }>().oidcClientId;
@@ -56,7 +58,7 @@ export default observer(function OidcClientDetailRoute() {
 				</Button>
 			}
 			actions={
-				<div className="flex flex-wrap gap-2">
+				<HStack className="flex-wrap">
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -107,22 +109,29 @@ export default observer(function OidcClientDetailRoute() {
 							</Button>
 						</>
 					) : null}
-				</div>
+				</HStack>
 			}
 		>
 			{client ? (
-				<SectionLike title="상태 정보">
-					<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<Info
-							label="활성 상태"
-							value={client.isActive ? "활성" : "비활성"}
+				<Section>
+					<Section.Header title="상태 정보" />
+					<Section.Body>
+						<InfoList
+							items={[
+								{
+									key: "activeStatus",
+									label: "활성 상태",
+									value: client.isActive ? "활성" : "비활성",
+								},
+								{
+									key: "createdAt",
+									label: "등록일",
+									value: new Date(client.createdAt).toLocaleString("ko-KR"),
+								},
+							]}
 						/>
-						<Info
-							label="등록일"
-							value={new Date(client.createdAt).toLocaleString("ko-KR")}
-						/>
-					</dl>
-				</SectionLike>
+					</Section.Body>
+				</Section>
 			) : null}
 		</OidcClientEditScreen>
 	);
@@ -177,28 +186,4 @@ function mapOidcClientFormState(client: {
 		errors: {},
 		redirectUriErrors: {},
 	};
-}
-
-function SectionLike({
-	title,
-	children,
-}: {
-	title: string;
-	children: ReactNode;
-}) {
-	return (
-		<section>
-			<h3 className="mb-4 text-lg font-semibold">{title}</h3>
-			{children}
-		</section>
-	);
-}
-
-function Info({ label, value }: { label: string; value: string }) {
-	return (
-		<div className="rounded-lg border border-border bg-background/60 p-3">
-			<dt className="text-xs text-muted">{label}</dt>
-			<dd className="mt-1 break-all text-sm font-medium">{value}</dd>
-		</div>
-	);
 }

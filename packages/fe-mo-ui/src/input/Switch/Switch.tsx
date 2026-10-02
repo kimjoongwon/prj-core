@@ -41,6 +41,7 @@ const PureSwitchComponent = forwardRef<
 	}
 
 	return (
+		// 저수준 layout 예외: heroui-native Switch label 행 계약을 그대로 노출하는 래퍼라 raw gap을 유지합니다.
 		<View className="w-full flex-row items-center justify-between gap-3">
 			<Text className="flex-1" variant="label">
 				{label}

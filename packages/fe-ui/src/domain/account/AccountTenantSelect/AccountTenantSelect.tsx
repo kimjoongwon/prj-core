@@ -7,7 +7,7 @@ import { useAccountTenantSelection } from "./useAccountTenantSelection";
 
 const accountTenantSelectClassNames = {
 	trigger:
-		"inline-flex h-10 w-40 shrink-0 flex-nowrap items-center justify-start gap-2 rounded-lg border border-[#d7e4f2] bg-white px-3 text-foreground hover:bg-[#eef6ff] sm:w-52 lg:w-60 dark:border-white/10 dark:bg-neutral-900 dark:hover:bg-neutral-800",
+		"inline-flex h-10 w-40 shrink-0 flex-nowrap items-center justify-start gap-2 rounded-lg border border-border bg-surface px-3 text-foreground hover:bg-surface-hover sm:w-52 lg:w-60",
 	value: "min-w-0 flex-1 truncate text-left text-sm text-foreground",
 	indicator: "h-4 w-4 shrink-0 text-muted",
 	popover: "min-w-40 sm:min-w-52 lg:min-w-60",

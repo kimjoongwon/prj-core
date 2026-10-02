@@ -38,7 +38,7 @@ export const Default: Story = {
 				<Surface className="gap-1 rounded-2xl p-4" variant="default">
 					<Text className="text-sm font-bold text-foreground">Default</Text>
 					<Text className="text-xs leading-5 text-muted">
-						가장 바깥쪽 카드에 쓰는 밝은 표면입니다.
+						가장 바깥쪽 카드에 쓰는 기본 표면 단계입니다.
 					</Text>
 				</Surface>
 				<Surface className="gap-1 rounded-2xl p-4" variant="secondary">
@@ -74,15 +74,14 @@ export const Hierarchy: Story = {
 					<Text className="text-sm font-bold text-foreground">
 						SectionSurface
 					</Text>
-					<View className="gap-2 rounded-lg border border-border bg-white p-3 dark:border-white/10 dark:bg-neutral-600">
+					<Surface className="gap-2 rounded-lg p-3" variant="tertiary">
 						<Text className="text-xs font-bold uppercase text-muted">
 							Local content
 						</Text>
 						<Text className="text-sm leading-5 text-foreground">
-							중첩된 내용 영역도 검게 가라앉지 않도록 밝은 neutral 단계로
-							보여줍니다.
+							중첩된 내용 영역은 tertiary 표면 단계로 구분합니다.
 						</Text>
-					</View>
+					</Surface>
 				</SectionSurface>
 			</ScreenSurface>
 		</ScrollView>

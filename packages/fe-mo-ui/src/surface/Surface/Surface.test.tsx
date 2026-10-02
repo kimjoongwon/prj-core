@@ -1,3 +1,4 @@
+import { Surface as HeroSurface } from "heroui-native";
 import type { ReactElement } from "react";
 import { Surface, type SurfaceProps } from "./index";
 
@@ -9,28 +10,21 @@ describe("Surface", () => {
 			}
 		).render(props, null) as ReactElement<SurfaceProps>;
 
-	it("기본 Surface를 깨끗한 light surface로 렌더링해야 한다", () => {
+	it("기본 Surface를 secondary variant로 heroui-native에 위임해야 한다", () => {
 		const surface = renderSurface({ children: "panel" });
-		const rootClassNames = surface.props.className?.split(/\s+/);
 
-		expect(rootClassNames).toEqual(
-			expect.arrayContaining([
-				"bg-white",
-				"border-border",
-				"dark:bg-neutral-700/95",
-			]),
-		);
+		expect(surface.type).toBe(HeroSurface);
 		expect(surface.props.variant).toBe("secondary");
+		expect(surface.props.className).toBeUndefined();
 	});
 
-	it("호출자 className override를 기본 surface palette보다 뒤에 적용해야 한다", () => {
+	it("호출자 className을 variant 토큰과 병합해 그대로 전달해야 한다", () => {
 		const surface = renderSurface({
 			children: "warning",
-			className: "bg-danger",
+			className: "gap-3 p-4",
 		});
-		const rootClassNames = surface.props.className?.split(/\s+/);
 
-		expect(rootClassNames).toEqual(expect.arrayContaining(["bg-danger"]));
-		expect(surface.props.className).not.toContain("bg-white");
+		expect(surface.props.className).toBe("gap-3 p-4");
+		expect(surface.props.variant).toBe("secondary");
 	});
 });

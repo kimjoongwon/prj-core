@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
+import { HStack, VStack } from "../../rhythm";
 import { Text } from "../Text";
 export type SummaryListItemState = "complete" | "missing" | "warning";
 export interface SummaryListItem {
@@ -54,13 +55,18 @@ const getSummaryItemKey = (item: SummaryListItem, position: number) => {
 const SummaryItem = ({ item }: { item: SummaryListItem }) => {
 	const state = item.state ?? (hasSummaryValue(item) ? "complete" : "missing");
 	return (
-		<View
+		<VStack
 			accessibilityState={{
 				disabled: state === "missing",
 			}}
 			className={classNames.item()}
+			gap="dense"
 		>
-			<View className={classNames.itemRow()}>
+			<HStack
+				alignItems="start"
+				gap="block"
+				justifyContent="between"
+			>
 				<Text className={classNames.itemLabel()} key="label">
 					{item.label}
 				</Text>
@@ -72,12 +78,12 @@ const SummaryItem = ({ item }: { item: SummaryListItem }) => {
 				>
 					{getDisplayedValue(item)}
 				</Text>
-			</View>
+			</HStack>
 			<OptionalText
 				className={classNames.helperText()}
 				node={item.helperText}
 			/>
-		</View>
+		</VStack>
 	);
 };
 const SummaryItems = ({ items }: { items: readonly SummaryListItem[] }) => (
@@ -91,21 +97,21 @@ const SummaryItems = ({ items }: { items: readonly SummaryListItem[] }) => (
 const SummaryListComponent = observer((props: SummaryListProps) => {
 	const { description, footer, items = [], style, title, ...rest } = props;
 	return (
-		<View {...rest} className={classNames.root()} style={style}>
+		<VStack {...rest} gap="block" style={style}>
 			{title || description ? (
-				<View className={classNames.heading()}>
+				<VStack gap="dense">
 					<OptionalText className={classNames.title()} node={title} />
 					<OptionalText
 						className={classNames.description()}
 						node={description}
 					/>
-				</View>
+				</VStack>
 			) : null}
 			<View className={classNames.items()}>
 				<SummaryItems items={items} />
 			</View>
 			{footer ? <View className={classNames.footer()}>{footer}</View> : null}
-		</View>
+		</VStack>
 	);
 });
 SummaryListComponent.displayName = "SummaryList";
@@ -114,15 +120,12 @@ const summaryListClassNames = tv({
 	slots: {
 		description: "text-[13px] leading-5 text-muted",
 		footer: "pt-1",
-		heading: "gap-1",
 		helperText: "text-xs leading-4 text-muted",
-		item: "gap-1.5 py-3",
+		item: "py-3",
 		itemLabel: "flex-1 text-[13px] leading-[18px] text-muted",
-		itemRow: "flex-row items-start justify-between gap-3",
 		itemValue:
 			"flex-[1.2] text-right text-sm font-bold leading-5 text-foreground",
 		items: "rounded-lg border border-border bg-surface px-3",
-		root: "gap-3",
 		title: "text-base font-extrabold leading-6 text-foreground",
 	},
 	variants: {

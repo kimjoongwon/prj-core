@@ -33,7 +33,7 @@ export interface RoleListScreenProps {
 }
 const RolesScreenFallback = observer(() => {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<Screen.Header
 				title="역할 목록"
 				description="시스템에 등록된 역할을 관리합니다."
@@ -43,7 +43,7 @@ const RolesScreenFallback = observer(() => {
 					<Section.Body>{null}</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 });
 export const RoleListScreen = observer(
@@ -71,7 +71,7 @@ export const RoleListScreen = observer(
 			return <RolesScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="역할 목록"
 					description="시스템에 등록된 역할을 관리합니다."
@@ -86,7 +86,7 @@ export const RoleListScreen = observer(
 					}
 				/>
 				<VStack>
-					<div className="space-y-3">
+					<VStack gap="block">
 						<Section.Header title="역할 목록 데이터" />
 						<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 							<Section overflow="hidden">
@@ -106,9 +106,9 @@ export const RoleListScreen = observer(
 								</Section.Body>
 							</Section>
 						</SectionSurface>
-					</div>
+					</VStack>
 				</VStack>
-			</div>
+			</VStack>
 		);
 	},
 );

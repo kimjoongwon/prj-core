@@ -5,6 +5,7 @@ import { Select } from "../../input/Select";
 import { Switch } from "../../input/Switch";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
+import { VStack } from "../../rhythm";
 
 export type AbilityFormField =
 	| "name"
@@ -53,7 +54,7 @@ function mapOptions(options: AbilityFormOption[]) {
 export const AbilityForm = observer(
 	({ state, subjects, actions, readOnly = false }: AbilityFormProps) => {
 		return (
-			<div className="space-y-8">
+			<VStack gap="roomy">
 				<section>
 					<h2 className="mb-4 text-lg font-semibold">기본 정보</h2>
 					<div className="grid grid-cols-1 gap-4">
@@ -143,7 +144,7 @@ export const AbilityForm = observer(
 						) : null}
 					</div>
 				</section>
-			</div>
+			</VStack>
 		);
 	},
 );

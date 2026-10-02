@@ -12,7 +12,7 @@ import { Select } from "../../input/Select";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
 import { Section } from "../../layout/Section/Section";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 export interface InquiryFormCustomerSearchResult {
 	id: string;
 	name: string;
@@ -101,7 +101,7 @@ export const InquiryForm = observer(
 					<Section.Body>
 						<VStack>
 							{showCustomerField && !isHidden("customerId") ? (
-								<div className="space-y-2">
+								<VStack gap="block">
 									<TextField
 										label="고객"
 										labelPlacement="outside"
@@ -119,7 +119,10 @@ export const InquiryForm = observer(
 										}}
 									/>
 									{state.searchResults.length > 0 && isEditable ? (
-										<div className="max-h-56 space-y-1 overflow-y-auto rounded-xl border border-border p-2">
+										<VStack
+											gap="dense"
+											className="max-h-56 overflow-y-auto rounded-xl border border-border p-2"
+										>
 											{state.searchResults.map((customer) => (
 												<button
 													key={customer.id}
@@ -135,14 +138,14 @@ export const InquiryForm = observer(
 													</div>
 												</button>
 											))}
-										</div>
+										</VStack>
 									) : null}
 									{state.customerId ? (
 										<div className="text-xs text-muted">
 											선택된 고객 ID: {state.customerId}
 										</div>
 									) : null}
-								</div>
+								</VStack>
 							) : null}
 							{!isHidden("title") ? (
 								<TextField
@@ -228,7 +231,7 @@ export const InquiryForm = observer(
 								) : null}
 							</div>
 							{readOnly ? null : (
-								<div className="flex justify-end gap-2">
+								<HStack justifyContent="end">
 									<Button
 										variant="ghost"
 										onPress={onClickCancelButton}
@@ -244,7 +247,7 @@ export const InquiryForm = observer(
 									>
 										{submitLabel}
 									</Button>
-								</div>
+								</HStack>
 							)}
 						</VStack>
 					</Section.Body>

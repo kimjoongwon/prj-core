@@ -2,6 +2,7 @@
 
 import {
 	Button,
+	HStack,
 	Screen,
 	Section,
 	SectionSurface,
@@ -137,7 +138,7 @@ export const SpaceCreateScreen = observer(
 										</VStack>
 									</Section.Body>
 								</Section>
-								<div className="mt-4 flex justify-end gap-2">
+								<HStack justifyContent="end" className="mt-4">
 									<Button
 										variant="tertiary"
 										onPress={onClickCancelButton}
@@ -152,7 +153,7 @@ export const SpaceCreateScreen = observer(
 									>
 										등록
 									</Button>
-								</div>
+								</HStack>
 							</VStack>
 						</Section.Body>
 					</Section>

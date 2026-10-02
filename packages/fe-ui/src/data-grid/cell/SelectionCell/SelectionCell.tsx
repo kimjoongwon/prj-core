@@ -23,11 +23,11 @@ export function SelectionCell({
 	const t = useT();
 
 	return (
-		<td className="w-10 border-r border-b border-[#e1e6ef] px-3 py-0 align-middle dark:border-white/10">
+		<td className="w-10 border-r border-b border-border px-3 py-0 align-middle">
 			<input
 				aria-label={t(DATA_GRID_SELECTION_COLUMN_LABEL)}
 				checked={isSelected}
-				className="size-3.5 border-[#9ca3af] text-accent accent-current dark:border-white/20"
+				className="size-3.5 border-border text-accent accent-current"
 				name={`data-grid-${entity}-selection`}
 				onChange={(event) =>
 					onSelectionChange(rowKey, event.currentTarget.checked)

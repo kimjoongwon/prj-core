@@ -5,7 +5,7 @@ import { ResponsiveFrame } from "./index";
 
 const FrameContent = ({ label }: { label: string }) => (
 	<View className="gap-2 rounded-xl border border-border bg-surface p-4">
-		<Text className="text-xs font-bold uppercase text-primary">{label}</Text>
+		<Text className="text-xs font-bold uppercase text-accent">{label}</Text>
 		<Text className="text-base font-extrabold text-foreground">
 			예약 카드 레이아웃
 		</Text>

@@ -10,7 +10,7 @@ import {
 import { Button } from "../../input/Button/Button";
 import { Screen } from "../../layout/Screen";
 import { Section } from "../../layout/Section/Section";
-import { VStack } from "../../rhythm";
+import { HStack, VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 
 export interface FitnessCenterEditScreenProps {
@@ -54,10 +54,14 @@ export const FitnessCenterEditScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex items-center justify-center gap-2 p-8">
+								<HStack
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<Spinner size="sm" />
 									<span className="text-muted">로딩 중...</span>
-								</div>
+								</HStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -74,14 +78,19 @@ export const FitnessCenterEditScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<VStack
+									gap="section"
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<p className="text-muted">
 										피트니스 센터 정보를 찾을 수 없습니다.
 									</p>
 									<Button variant="tertiary" onPress={onClickCancelButton}>
 										목록으로
 									</Button>
-								</div>
+								</VStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -102,7 +111,7 @@ export const FitnessCenterEditScreen = observer(
 							<VStack>
 								<FitnessCenterForm state={state} readOnly={readOnly} />
 								{readOnly ? null : (
-									<div className="flex justify-end gap-2 pt-4">
+									<HStack justifyContent="end" className="pt-4">
 										<Button variant="tertiary" onPress={onClickCancelButton}>
 											취소
 										</Button>
@@ -113,7 +122,7 @@ export const FitnessCenterEditScreen = observer(
 										>
 											저장
 										</Button>
-									</div>
+									</HStack>
 								)}
 							</VStack>
 						</Section.Body>

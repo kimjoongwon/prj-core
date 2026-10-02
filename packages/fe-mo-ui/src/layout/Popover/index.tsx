@@ -84,6 +84,7 @@ const PopoverComponent = forwardRef<
 							>
 								{showArrow && <HeroPopover.Arrow />}
 								{(title || description || showClose) && (
+									// 저수준 layout 예외: heroui-native Popover.Content slot에 끼워 넣는 헤더라 raw gap을 유지합니다.
 									<View className="flex-row items-start justify-between gap-3">
 										<View className="flex-1 gap-1">
 											{title && <PopoverTitle>{title}</PopoverTitle>}

@@ -5,7 +5,12 @@ import {
 	useGetActionById,
 	useUpdateAction,
 } from "@cocrepo/api/core/actions";
-import { ActionEditScreen, type ActionFormState, Button } from "@cocrepo/ui";
+import {
+	ActionEditScreen,
+	type ActionFormState,
+	Button,
+	HStack,
+} from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -65,7 +70,7 @@ export default observer(function ActionEditScreenRoute() {
 				</Button>
 			}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -91,7 +96,7 @@ export default observer(function ActionEditScreenRoute() {
 					>
 						저장
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

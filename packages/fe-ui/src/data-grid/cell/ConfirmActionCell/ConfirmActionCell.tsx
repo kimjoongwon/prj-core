@@ -14,8 +14,8 @@ export interface ConfirmActionCellProps {
 	confirmLabel?: string;
 	triggerLabel?: ReactNode;
 	status?: "accent" | "success" | "warning" | "danger";
-	triggerColor?: "default" | "primary" | "success" | "warning" | "danger";
-	triggerVariant?: "flat" | "light" | "bordered" | "solid";
+	/** trigger 버튼의 HeroUI v3 Button variant */
+	triggerVariant?: ActionButtonCellProps["variant"];
 	startContent?: ReactNode;
 	isDisabled?: boolean;
 	className?: string;
@@ -23,14 +23,8 @@ export interface ConfirmActionCellProps {
 	onConfirm: () => void | Promise<void>;
 }
 
-function getTriggerButtonVariant({
-	triggerColor,
-	triggerVariant,
-}: Pick<ConfirmActionCellProps, "triggerColor" | "triggerVariant">) {
-	if (triggerColor === "danger") return "danger-soft";
-	if (triggerVariant === "solid") return "primary";
-	if (triggerVariant === "bordered") return "outline";
-	return "ghost";
+function getConfirmButtonVariant(status: ConfirmActionCellProps["status"]) {
+	return status === "danger" ? "danger" : "primary";
 }
 
 /** 확인 후 실행해야 하는 row action을 일관된 AlertDialog로 표시합니다. */
@@ -40,8 +34,7 @@ export function ConfirmActionCell({
 	confirmLabel = "삭제",
 	triggerLabel = "삭제",
 	status = "danger",
-	triggerColor = "danger",
-	triggerVariant = "flat",
+	triggerVariant = "danger-soft",
 	startContent,
 	isDisabled,
 	className,
@@ -49,7 +42,7 @@ export function ConfirmActionCell({
 	onConfirm,
 }: ConfirmActionCellProps) {
 	const triggerButtonProps: ActionButtonCellProps = {
-		variant: getTriggerButtonVariant({ triggerColor, triggerVariant }),
+		variant: triggerVariant,
 		isDisabled,
 		className,
 		"aria-label": tooltip,
@@ -79,7 +72,7 @@ export function ConfirmActionCell({
 						<AlertDialog.Footer>
 							<Button variant="ghost">취소</Button>
 							<Button
-								variant={triggerColor === "danger" ? "danger" : "primary"}
+								variant={getConfirmButtonVariant(status)}
 								onPress={onConfirm}
 							>
 								{confirmLabel}

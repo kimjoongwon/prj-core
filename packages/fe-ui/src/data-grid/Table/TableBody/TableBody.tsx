@@ -1,9 +1,6 @@
 "use client";
 
-import type {
-	DataGridEditTrigger,
-	DataGridTableConfig,
-} from "@cocrepo/type";
+import type { DataGridEditTrigger, DataGridTableConfig } from "@cocrepo/type";
 import {
 	SortableContext,
 	useSortable,
@@ -13,35 +10,30 @@ import { CSS } from "@dnd-kit/utilities";
 import { flexRender, type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import {
-	type CSSProperties,
-	type KeyboardEvent,
-	useEffect,
-} from "react";
+import { type CSSProperties, type KeyboardEvent, useEffect } from "react";
 import { type Translate, translateNode } from "../../../i18n";
-import { DataGridEmptyRow } from "../../DataGridEmptyRow";
 import { EditorCell } from "../../cell/EditorCell";
 import { HierarchyCell } from "../../cell/HierarchyCell";
 import { SelectionCell } from "../../cell/SelectionCell";
 import { getColumnAlignClassName } from "../../columns/columnConfig";
-import { getColumnWidthStyle } from "../columnSizing";
-import type { DataGridBodyRow } from "../../state/grouping";
-import type { Key } from "../rowKeys";
-import type { DataGridSelectionMode } from "../../state/selection";
+import { DataGridEmptyRow } from "../../DataGridEmptyRow";
 import type {
 	DataGridEditingCell,
 	DataGridEditingState,
 	DataGridTableBodyState,
 } from "../../state/DataGridState";
+import type { DataGridBodyRow } from "../../state/grouping";
+import type { DataGridSelectionMode } from "../../state/selection";
+import { getColumnWidthStyle } from "../columnSizing";
+import type { Key } from "../rowKeys";
 
 const DATA_CELL_CLASS_NAME =
-	"border-r border-b border-[#e1e6ef] px-3 py-0 align-middle text-[13px] text-[#1f2937] dark:border-white/10 dark:text-slate-100";
+	"border-r border-b border-border px-3 py-0 align-middle text-[13px] text-foreground";
 const GROUP_CELL_CLASS_NAME =
-	"border-r border-b border-[#d6dde7] bg-[#f8fafc] px-0 py-0 text-[13px] text-[#1f2937] dark:border-white/10 dark:bg-neutral-800/80 dark:text-slate-100";
+	"border-r border-b border-border bg-surface-secondary px-0 py-0 text-[13px] text-foreground";
 const CLICKABLE_ROW_CLASS_NAME =
-	"cursor-pointer hover:bg-[#f3f7fb] focus-within:bg-[#f3f7fb] dark:hover:bg-white/[0.04] dark:focus-within:bg-white/[0.04]";
-const DEFAULT_ROW_HOVER_CLASS_NAME =
-	"hover:bg-[#f8fafc] dark:hover:bg-white/[0.03]";
+	"cursor-pointer hover:bg-surface-hover focus-within:bg-surface-hover";
+const DEFAULT_ROW_HOVER_CLASS_NAME = "hover:bg-surface-hover";
 
 export interface TableBodyProps<T extends { id: Key }> {
 	state: DataGridTableBodyState;
@@ -122,18 +114,21 @@ function DataGridGroupRow<T extends { id: Key }>({
 					aria-label={`${groupLabelText} ${groupValue} 그룹 ${
 						row.getIsExpanded() ? "접기" : "펼치기"
 					}`}
-					className="flex h-10 w-full items-center gap-2 px-3 text-left font-medium hover:bg-[#eef3f8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#93c5fd] dark:hover:bg-white/[0.05]"
+					className="flex h-10 w-full items-center gap-2 px-3 text-left font-medium hover:bg-surface-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus/40"
 					onClick={row.getToggleExpandedHandler()}
 					style={{ paddingLeft: `${12 + row.depth * 18}px` }}
 				>
 					<ChevronRight
-						className={["size-4 shrink-0 text-[#64748b] transition-transform dark:text-slate-400", row.getIsExpanded() && "rotate-90"].filter(Boolean).join(" ")}
+						className={[
+							"size-4 shrink-0 text-muted transition-transform",
+							row.getIsExpanded() && "rotate-90",
+						]
+							.filter(Boolean)
+							.join(" ")}
 					/>
-					<span className="text-[#334155] dark:text-slate-100">
-						{groupLabel}
-					</span>
-					<span className="text-[#0f172a] dark:text-white">{groupValue}</span>
-					<span className="text-xs font-normal text-[#64748b] dark:text-slate-400">
+					<span className="text-foreground">{groupLabel}</span>
+					<span className="text-foreground">{groupValue}</span>
+					<span className="text-xs font-normal text-muted">
 						({leafRowCount})
 					</span>
 				</button>
@@ -144,7 +139,11 @@ function DataGridGroupRow<T extends { id: Key }>({
 
 interface DataGridDataRowProps<T extends { id: Key }> {
 	config: DataGridTableConfig<T>;
-	onCellValueChange?: <TField extends keyof T>(row: T, field: TField, value: T[TField]) => void;
+	onCellValueChange?: <TField extends keyof T>(
+		row: T,
+		field: TField,
+		value: T[TField],
+	) => void;
 	row: Row<T>;
 	isSelected: boolean;
 	selectionMode: DataGridSelectionMode;
@@ -223,7 +222,15 @@ function DataGridDataRowView<T extends { id: Key }>({
 		<tr
 			ref={sortableRow?.setNodeRef}
 			aria-selected={selectionMode ? isSelected : undefined}
-			className={["h-10 transition-colors", isSelected && "bg-[#eef6ff] dark:bg-sky-500/15", config.onRowClick ? CLICKABLE_ROW_CLASS_NAME : DEFAULT_ROW_HOVER_CLASS_NAME].filter(Boolean).join(" ")}
+			className={[
+				"h-10 transition-colors",
+				isSelected && "bg-accent-soft",
+				config.onRowClick
+					? CLICKABLE_ROW_CLASS_NAME
+					: DEFAULT_ROW_HOVER_CLASS_NAME,
+			]
+				.filter(Boolean)
+				.join(" ")}
 			style={rowStyle}
 			{...getRowInteractionProps(config, row)}
 		>
@@ -267,9 +274,7 @@ function DataGridDataRowView<T extends { id: Key }>({
 					});
 				};
 				const field = cell.column.id as keyof T;
-				const finishEditing = async (
-					direction?: "next" | "previous",
-				) => {
+				const finishEditing = async (direction?: "next" | "previous") => {
 					if (!editingCell || !editable || editingCell.isValidating) {
 						return;
 					}
@@ -326,23 +331,24 @@ function DataGridDataRowView<T extends { id: Key }>({
 					);
 				};
 				const content =
-					isEditing && editable
-						? editable.editor && editable.editor.type !== "custom" ? (
-								<EditorCell
-									config={editable.editor}
-									context={{
-										row: row.original,
-										field: String(field),
-										value: editingCell.draftValue,
-										initialValue: editingCell.initialValue,
-										errorMessage: editingCell.errorMessage,
-										isValidating: editingCell.isValidating,
-										onValueChange: updateDraftValue,
+					isEditing && editable ? (
+						editable.editor && editable.editor.type !== "custom" ? (
+							<EditorCell
+								config={editable.editor}
+								context={{
+									row: row.original,
+									field: String(field),
+									value: editingCell.draftValue,
+									initialValue: editingCell.initialValue,
+									errorMessage: editingCell.errorMessage,
+									isValidating: editingCell.isValidating,
+									onValueChange: updateDraftValue,
 									onFinish: (direction) => void finishEditing(direction),
-										onCancel: () => void cancelEditing(),
-									}}
-								/>
-							) : editable.render?.({
+									onCancel: () => void cancelEditing(),
+								}}
+							/>
+						) : (
+							editable.render?.({
 								row: row.original,
 								value: editingCell.draftValue,
 								initialValue: editingCell.initialValue,
@@ -353,7 +359,10 @@ function DataGridDataRowView<T extends { id: Key }>({
 								onFinish: (direction) => void finishEditing(direction),
 								onCancel: () => void cancelEditing(),
 							})
-						: flexRender(cell.column.columnDef.cell, cell.getContext());
+						)
+					) : (
+						flexRender(cell.column.columnDef.cell, cell.getContext())
+					);
 				const renderedContent = cell.column.columnDef.meta?.rowExpander ? (
 					<HierarchyCell
 						rowLabel={String(cell.getValue() ?? row.original.id)}
@@ -389,7 +398,15 @@ function DataGridDataRowView<T extends { id: Key }>({
 								: undefined
 						}
 						aria-invalid={isEditing && Boolean(editingCell.errorMessage)}
-						className={[DATA_CELL_CLASS_NAME, !cell.column.columnDef.meta?.rowExpander && "overflow-hidden whitespace-nowrap text-ellipsis", alignClassName, isEditable && !isEditing && "cursor-text"].filter(Boolean).join(" ")}
+						className={[
+							DATA_CELL_CLASS_NAME,
+							!cell.column.columnDef.meta?.rowExpander &&
+								"overflow-hidden whitespace-nowrap text-ellipsis",
+							alignClassName,
+							isEditable && !isEditing && "cursor-text",
+						]
+							.filter(Boolean)
+							.join(" ")}
 						style={getColumnWidthStyle(cell.column.columnDef)}
 						tabIndex={isEditable && !isEditing ? 0 : undefined}
 						onClick={
@@ -399,7 +416,7 @@ function DataGridDataRowView<T extends { id: Key }>({
 										startEditing();
 									}
 								: undefined
-					}
+						}
 						onDoubleClick={
 							isEditable && !isEditing && triggers.includes("doubleClick")
 								? (event) => {
@@ -411,10 +428,10 @@ function DataGridDataRowView<T extends { id: Key }>({
 						onKeyDown={
 							isEditable && !isEditing
 								? (event) => {
-									if (
-										(event.key === "Enter" && triggers.includes("enter")) ||
-										(event.key === "F2" && triggers.includes("f2"))
-									) {
+										if (
+											(event.key === "Enter" && triggers.includes("enter")) ||
+											(event.key === "F2" && triggers.includes("f2"))
+										) {
 											event.preventDefault();
 											event.stopPropagation();
 											startEditing();
@@ -483,24 +500,22 @@ function TableBodyView<T extends { id: Key }>({
 			row.getIsGrouped()
 				? []
 				: row.getVisibleCells().flatMap((cell) => {
-					const editable = cell.column.columnDef.meta?.editable;
-					if (
-						!onCellValueChange ||
-						!editable ||
-						!(editable.isEnabled?.(row.original) ?? true)
-					) {
-						return [];
-					}
+						const editable = cell.column.columnDef.meta?.editable;
+						if (
+							!onCellValueChange ||
+							!editable ||
+							!(editable.isEnabled?.(row.original) ?? true)
+						) {
+							return [];
+						}
 
-					return [{ row, cell }];
-				}),
+						return [{ row, cell }];
+					}),
 		);
 		const currentIndex = editableCells.findIndex(
 			({ row, cell }) => row.id === rowId && cell.column.id === columnId,
 		);
-		const next = editableCells[
-			currentIndex + (direction === "next" ? 1 : -1)
-		];
+		const next = editableCells[currentIndex + (direction === "next" ? 1 : -1)];
 		if (!next) {
 			return;
 		}

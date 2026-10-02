@@ -129,7 +129,7 @@ const PLATFORM_OPTIONS: Array<{
 const STATUS_OPTIONS: Array<{
 	value: ServiceDocumentStatusValue;
 	label: string;
-	color: "default" | "primary" | "warning";
+	color: "default" | "accent" | "warning";
 }> = [
 	{
 		value: "DRAFT",
@@ -139,7 +139,7 @@ const STATUS_OPTIONS: Array<{
 	{
 		value: "PUBLISHED",
 		label: "게시",
-		color: "primary",
+		color: "accent",
 	},
 	{
 		value: "ARCHIVED",
@@ -417,7 +417,7 @@ export const ServiceDocumentListScreen = observer(
 																const canPublish =
 																	document.status !== "PUBLISHED";
 																return (
-											<Table.Row key={String(document.id)}>
+																	<Table.Row key={String(document.id)}>
 																		<Table.Cell>
 																			<VStack>
 																				<HStack alignItems="center">
@@ -445,7 +445,7 @@ export const ServiceDocumentListScreen = observer(
 																			<Chip
 																				color={status.color}
 																				size="sm"
-																				variant="flat"
+																				variant="soft"
 																			>
 																				{status.label}
 																			</Chip>
@@ -474,8 +474,6 @@ export const ServiceDocumentListScreen = observer(
 																					isIconOnly
 																					size="sm"
 																					variant="ghost"
-
-
 																					aria-label="문서 게시"
 																					isDisabled={!canPublish}
 																					onPress={() =>
@@ -501,8 +499,6 @@ export const ServiceDocumentListScreen = observer(
 																					isIconOnly
 																					size="sm"
 																					variant="ghost"
-
-
 																					aria-label="문서 삭제"
 																					onPress={() =>
 																						onClickDeleteButton(document.id)

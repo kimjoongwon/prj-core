@@ -24,14 +24,14 @@ export function DataGridActionBarView({
 
 	return (
 		<div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
-			<div className="flex items-center gap-4 rounded-full border border-border bg-surface-secondary px-6 py-3 shadow-lg">
+			<div className="flex items-center gap-4 rounded-full border border-border bg-overlay px-6 py-3 shadow-overlay">
 				{showCount ? (
-					<span className="text-sm font-medium text-foreground">
+					<span className="text-sm font-medium text-overlay-foreground">
 						{selectedCount}
 						{t("개 선택됨")}
 					</span>
 				) : null}
-				<div className="h-6 w-px bg-border" />
+				<div className="h-6 w-px bg-separator" />
 				<div className="flex items-center gap-2">{actions}</div>
 			</div>
 		</div>

@@ -1,37 +1,20 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
+import type { ChipProps } from "../../../data-display/Chip/Chip";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { useT } from "../../../i18n";
 import { DefaultCell } from "../DefaultCell/DefaultCell";
-
-type ChipCellColor =
-	| "default"
-	| "primary"
-	| "secondary"
-	| "success"
-	| "warning"
-	| "danger";
-
-type ChipCellVariant =
-	| "solid"
-	| "bordered"
-	| "light"
-	| "flat"
-	| "faded"
-	| "shadow"
-	| "dot";
-type ChipCellSize = "sm" | "md" | "lg";
 
 export interface ChipCellProps {
 	/** 표시 라벨 */
 	label?: string | number | null;
 	/** 칩 색상 */
-	color?: ChipCellColor;
+	color?: ChipProps["color"];
 	/** 칩 variant */
-	variant?: ChipCellVariant;
+	variant?: ChipProps["variant"];
 	/** 칩 크기 */
-	size?: ChipCellSize;
+	size?: ChipProps["size"];
 	/** 값이 없을 때 대체 텍스트 */
 	placeholder?: string;
 	/** 추가 클래스 */
@@ -52,7 +35,7 @@ const ALIGN_CLASS_NAME: Record<NonNullable<ChipCellProps["align"]>, string> = {
 export const ChipCell = observer(function ChipCell({
 	label,
 	color = "default",
-	variant = "flat",
+	variant = "soft",
 	size = "sm",
 	placeholder = "-",
 	className,

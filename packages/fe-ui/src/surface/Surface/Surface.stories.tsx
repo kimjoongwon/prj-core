@@ -33,15 +33,15 @@ export const FeaturePanel: Story = {
 					</Button>
 				</div>
 				<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-					<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+					<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 						<p className="text-xs text-muted">예약</p>
 						<p className="mt-2 text-xl font-semibold">128건</p>
 					</div>
-					<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+					<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 						<p className="text-xs text-muted">확정</p>
 						<p className="mt-2 text-xl font-semibold">112건</p>
 					</div>
-					<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
+					<div className="rounded-lg border border-border/70 bg-surface-secondary p-4">
 						<p className="text-xs text-muted">취소</p>
 						<p className="mt-2 text-xl font-semibold">3건</p>
 					</div>

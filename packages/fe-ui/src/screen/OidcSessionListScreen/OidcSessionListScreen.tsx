@@ -11,6 +11,7 @@ import {
 	buildOidcSessionTableColumns,
 	DataGrid,
 	DataGridState,
+	HStack,
 	Screen,
 	Section,
 	SectionSurface,
@@ -86,23 +87,25 @@ function MetricCard({
 	const iconColor = color === "primary" ? "text-accent" : "text-muted";
 	return (
 		<Card className={`bg-surface ${className}`}>
-			<Card.Content className="flex flex-row items-center gap-4 p-4">
-				{icon ? (
-					<div
-						className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${iconColor}`}
-					>
-						{icon}
-					</div>
-				) : null}
-				<div className="flex flex-1 flex-col">
-					<span className="text-sm text-muted">{title}</span>
-					<span className={`text-2xl font-bold ${valueColor}`}>
-						{typeof value === "number" ? value.toLocaleString() : value}
-					</span>
-					{description ? (
-						<span className="text-xs text-muted">{description}</span>
+			<Card.Content className="p-4">
+				<HStack alignItems="center" gap="section">
+					{icon ? (
+						<div
+							className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${iconColor}`}
+						>
+							{icon}
+						</div>
 					) : null}
-				</div>
+					<div className="flex flex-1 flex-col">
+						<span className="text-sm text-muted">{title}</span>
+						<span className={`text-2xl font-bold ${valueColor}`}>
+							{typeof value === "number" ? value.toLocaleString() : value}
+						</span>
+						{description ? (
+							<span className="text-xs text-muted">{description}</span>
+						) : null}
+					</div>
+				</HStack>
 			</Card.Content>
 		</Card>
 	);
@@ -155,8 +158,6 @@ export const OidcSessionListScreen = observer(
 					actions={
 						isRevokeAllDisabled ? (
 							<Button
-
-
 								variant="tertiary"
 								startContent={<Trash2 className="h-4 w-4" />}
 								isDisabled
@@ -168,8 +169,6 @@ export const OidcSessionListScreen = observer(
 							<AlertDialog>
 								<AlertDialog.Trigger>
 									<Button
-
-
 										variant="tertiary"
 										startContent={<Trash2 className="h-4 w-4" />}
 										isLoading={isRevokingAll}

@@ -11,6 +11,7 @@ import {
 } from "@cocrepo/api/core/policies";
 import {
 	Button,
+	HStack,
 	PolicyEditScreen,
 	type PolicyEntryOption,
 	type PolicyFormState,
@@ -64,7 +65,7 @@ export default observer(function PolicyDetailRoute() {
 				</Button>
 			}
 			actions={
-				<div className="flex flex-wrap gap-2">
+				<HStack className="flex-wrap">
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -94,7 +95,7 @@ export default observer(function PolicyDetailRoute() {
 					>
 						삭제
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

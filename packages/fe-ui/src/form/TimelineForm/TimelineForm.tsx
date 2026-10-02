@@ -9,6 +9,7 @@ import {
 import { Alert } from "../../feedback/Alert/Alert";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
+import { VStack } from "../../rhythm";
 
 export type TimelineFormField = "name" | "description";
 
@@ -34,15 +35,15 @@ export const TimelineForm = observer(
 		const languageLabel = getContentLanguageLabel(contentLanguageCode);
 
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				<Alert
 					status={languageCode ? "accent" : "warning"}
 					title="현재 Space 콘텐츠 언어"
 					actions={
 						<Chip
 							size="sm"
-							variant="flat"
-							color={languageCode ? "primary" : "warning"}
+							variant="soft"
+							color={languageCode ? "accent" : "warning"}
 						>
 							{languageLabel}
 						</Chip>
@@ -81,7 +82,7 @@ export const TimelineForm = observer(
 						}
 					}}
 				/>
-			</div>
+			</VStack>
 		);
 	},
 );

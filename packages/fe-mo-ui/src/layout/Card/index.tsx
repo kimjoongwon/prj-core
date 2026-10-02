@@ -37,6 +37,7 @@ const CardComponent = forwardRef<ComponentRef<typeof HeroCard>, CardProps>(
 						{hasHeader && (
 							<HeroCard.Header>
 								{header ?? (
+									// 저수준 layout 예외: heroui-native Card.Header slot에 끼워 넣는 제목 블록이라 raw gap을 유지합니다.
 									<View className="flex-1 gap-1">
 										{title && <CardTitle>{title}</CardTitle>}
 										{description && (

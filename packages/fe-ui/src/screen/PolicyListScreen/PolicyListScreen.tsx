@@ -1,7 +1,7 @@
 "use client";
 
 import type { PolicyResponseDto } from "@cocrepo/api/core/policies";
-import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { HStack, Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner, Table } from "@heroui/react";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -30,7 +30,7 @@ export const PolicyListScreen = observer(
 	}: PolicyListScreenProps) => {
 		const policyRows = policies ?? [];
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="정책 목록"
 					description="역할과 사용자에 할당할 정책 기반 인가 규칙을 관리합니다."
@@ -49,10 +49,14 @@ export const PolicyListScreen = observer(
 						<Section overflow="hidden">
 							<Section.Body>
 								{isLoading ? (
-									<div className="flex items-center justify-center gap-2 p-8">
+									<HStack
+										alignItems="center"
+										justifyContent="center"
+										className="p-8"
+									>
 										<Spinner size="sm" />
 										<span className="text-muted">정책을 불러오는 중...</span>
-									</div>
+									</HStack>
 								) : (
 									<Table aria-label="정책 목록">
 										<Table.Content>
@@ -92,7 +96,7 @@ export const PolicyListScreen = observer(
 																: "-"}
 														</Table.Cell>
 														<Table.Cell>
-															<div className="flex gap-1">
+															<HStack gap="dense">
 																<Button
 																	isIconOnly
 																	size="sm"
@@ -126,7 +130,7 @@ export const PolicyListScreen = observer(
 																>
 																	<Trash2 className="h-4 w-4" />
 																</Button>
-															</div>
+															</HStack>
 														</Table.Cell>
 													</Table.Row>
 												))}
@@ -139,7 +143,7 @@ export const PolicyListScreen = observer(
 					</SectionSurface>
 					<p className="text-xs text-muted">총 {totalCount}개 정책</p>
 				</VStack>
-			</div>
+			</VStack>
 		);
 	},
 );

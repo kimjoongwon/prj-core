@@ -13,6 +13,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	VStack,
 } from "@cocrepo/ui";
 import { Building2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -82,7 +83,7 @@ function filterRows(
 }
 function SpacesScreenFallback() {
 	return (
-		<div className="space-y-5">
+		<VStack gap="page">
 			<Screen.Header
 				title="공간 목록"
 				description="시스템에 등록된 공간과 피트니스 센터 정보를 관리합니다."
@@ -92,7 +93,7 @@ function SpacesScreenFallback() {
 					<Section.Body>{null}</Section.Body>
 				</Section>
 			</SectionSurface>
-		</div>
+		</VStack>
 	);
 }
 export const SpaceListScreen = observer(
@@ -131,7 +132,7 @@ export const SpaceListScreen = observer(
 			return <SpacesScreenFallback />;
 		}
 		return (
-			<div className="space-y-5">
+			<VStack gap="page">
 				<Screen.Header
 					title="공간 목록"
 					description="시스템에 등록된 공간과 피트니스 센터 정보를 관리합니다."
@@ -166,7 +167,7 @@ export const SpaceListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-			</div>
+			</VStack>
 		);
 	},
 );

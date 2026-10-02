@@ -1,3 +1,4 @@
+import { HStack } from "@cocrepo/ui";
 import { Auth, AuthBody, AuthHeader, AuthMain } from "@cocrepo/ui/layout";
 import Image from "next/image";
 
@@ -13,7 +14,10 @@ export default function AuthLayout({
 	return (
 		<Auth>
 			<AuthHeader className="px-6 pt-6 sm:px-10 sm:pt-8">
-				<div className="flex items-center gap-2 text-xl font-extrabold tracking-[-0.035em]">
+				<HStack
+					alignItems="center"
+					className="text-xl font-extrabold tracking-[-0.035em]"
+				>
 					<Image
 						src="/admin/brand/plate-mark.svg"
 						alt=""
@@ -22,7 +26,7 @@ export default function AuthLayout({
 						unoptimized
 					/>
 					<span>Plate</span>
-				</div>
+				</HStack>
 			</AuthHeader>
 			<AuthBody>
 				<AuthMain>{children}</AuthMain>

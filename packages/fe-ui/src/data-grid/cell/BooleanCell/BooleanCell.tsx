@@ -1,17 +1,10 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
+import type { ChipProps } from "../../../data-display/Chip/Chip";
 import { Chip } from "../../../data-display/Chip/Chip";
 import { useT } from "../../../i18n";
 import { DefaultCell } from "../DefaultCell/DefaultCell";
-
-type BooleanCellColor =
-	| "default"
-	| "primary"
-	| "secondary"
-	| "success"
-	| "warning"
-	| "danger";
 
 export interface BooleanCellProps {
 	/** 불린 값 */
@@ -21,9 +14,9 @@ export interface BooleanCellProps {
 	/** 값이 false일 때 라벨 */
 	falseLabel?: string;
 	/** 값이 true일 때 칩 색상 */
-	trueColor?: BooleanCellColor;
+	trueColor?: ChipProps["color"];
 	/** 값이 false일 때 칩 색상 */
-	falseColor?: BooleanCellColor;
+	falseColor?: ChipProps["color"];
 	/** 값이 없을 때 대체 텍스트 */
 	placeholder?: string;
 }
@@ -56,7 +49,7 @@ export const BooleanCell = observer(function BooleanCell({
 	const boolValue = Boolean(value);
 
 	return (
-		<Chip color={boolValue ? trueColor : falseColor} size="sm" variant="flat">
+		<Chip color={boolValue ? trueColor : falseColor} size="sm" variant="soft">
 			{t(boolValue ? trueLabel : falseLabel)}
 		</Chip>
 	);

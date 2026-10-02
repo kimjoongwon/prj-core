@@ -1,6 +1,6 @@
 "use client";
 
-import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { HStack, Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ListBox, Separator } from "@heroui/react";
 import {
 	ArrowLeft,
@@ -147,12 +147,17 @@ export const AccountDetailScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<VStack
+									gap="section"
+									alignItems="center"
+									justifyContent="center"
+									className="p-8"
+								>
 									<p className="text-muted">계정을 찾을 수 없습니다.</p>
 									<Button variant="tertiary" onPress={onClickBackButton}>
 										목록으로
 									</Button>
-								</div>
+								</VStack>
 							</Section.Body>
 						</Section>
 					</SectionSurface>
@@ -193,7 +198,7 @@ export const AccountDetailScreen = observer(
 											<div>
 												<dt className="text-sm text-muted mb-1">활성 상태</dt>
 												<dd>
-													<div className="flex items-center gap-2">
+													<HStack alignItems="center">
 														<Switch
 															size="sm"
 															isSelected={account.isActive}
@@ -202,21 +207,21 @@ export const AccountDetailScreen = observer(
 														/>
 														<Chip
 															size="sm"
-															variant="flat"
+															variant="soft"
 															color={account.isActive ? "success" : "danger"}
 														>
 															{account.isActive ? "활성" : "비활성"}
 														</Chip>
-													</div>
+													</HStack>
 												</dd>
 											</div>
 											<div>
 												<dt className="text-sm text-muted mb-1">잠금 상태</dt>
 												<dd>
-													<div className="flex items-center gap-2">
+													<HStack alignItems="center">
 														<Chip
 															size="sm"
-															variant="flat"
+															variant="soft"
 															color={isLocked ? "danger" : "success"}
 															startContent={
 																isLocked ? (
@@ -242,7 +247,7 @@ export const AccountDetailScreen = observer(
 																잠금 해제
 															</Button>
 														)}
-													</div>
+													</HStack>
 													{account.lockedUntil &&
 														!account.isPermanentlyLocked && (
 															<p className="text-xs text-muted mt-1">
@@ -256,7 +261,7 @@ export const AccountDetailScreen = observer(
 													로그인 실패 횟수
 												</dt>
 												<dd>
-													<div className="flex items-center gap-2">
+													<HStack alignItems="center">
 														<span
 															className={`font-mono text-lg ${account.failedLoginAttempts > 0 ? "text-warning" : "text-muted"}`}
 														>
@@ -273,10 +278,10 @@ export const AccountDetailScreen = observer(
 																초기화
 															</Button>
 														)}
-													</div>
+													</HStack>
 												</dd>
 											</div>
-												<div>
+											<div>
 												<dt className="text-sm text-muted mb-1">
 													마지막 로그인 시간
 												</dt>
@@ -307,7 +312,7 @@ export const AccountDetailScreen = observer(
 									<Section.Header title="관리 액션" />
 									<Section.Body>
 										<Separator className="mb-4" />
-										<div className="flex flex-wrap gap-3">
+										<HStack gap="block" className="flex-wrap">
 											<Button
 												variant="tertiary"
 												startContent={<LockOpen className="h-4 w-4" />}
@@ -333,7 +338,7 @@ export const AccountDetailScreen = observer(
 											>
 												세션 무효화
 											</Button>
-										</div>
+										</HStack>
 									</Section.Body>
 								</Section>
 								<Section>
@@ -359,7 +364,7 @@ export const AccountDetailScreen = observer(
 															</p>
 														</div>
 														<div className="flex items-center">
-															<Chip size="sm" variant="flat" color="primary">
+															<Chip size="sm" variant="soft" color="accent">
 																{grant.roleDisplayName ?? grant.roleName}
 															</Chip>
 														</div>

@@ -8,6 +8,7 @@ import { useApp } from "@cocrepo/store";
 import { requireDecimalId } from "@cocrepo/type";
 import {
 	Button,
+	HStack,
 	TimelineSessionEditScreen,
 	type TimelineSessionFormState,
 	type TimelineSessionScreenCycleType,
@@ -143,7 +144,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 			state={state}
 			contentLanguageCode={app.contentLanguageCode}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -162,7 +163,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 					>
 						등록
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

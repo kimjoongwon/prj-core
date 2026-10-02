@@ -13,6 +13,7 @@ import { Alert } from "../../feedback/Alert/Alert";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
+import { HStack, VStack } from "../../rhythm";
 
 export interface TaskExerciseMediaAsset extends AssetBrowserAsset {}
 
@@ -94,9 +95,9 @@ function MediaPreview({
 					playsInline
 					preload="metadata"
 				/>
-				<div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+				<div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-backdrop via-transparent to-transparent" />
 				<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-					<PlayCircle className="h-8 w-8 text-white/90" />
+					<PlayCircle className="h-8 w-8 text-accent-foreground" />
 				</div>
 			</Card>
 		);
@@ -106,10 +107,10 @@ function MediaPreview({
 		<Card
 			className={`flex items-center justify-center rounded-xl border border-dashed border-border bg-surface-secondary text-muted ${className ?? ""}`}
 		>
-			<div className="flex flex-col items-center gap-2">
+			<VStack gap="block" alignItems="center">
 				<ImageIcon className="h-7 w-7" />
 				<span className="text-xs">미리보기 없음</span>
-			</div>
+			</VStack>
 		</Card>
 	);
 }
@@ -138,13 +139,18 @@ const ExerciseMediaField = observer(
 
 		return (
 			<div className="rounded-2xl border border-border bg-surface p-4">
-				<div className="mb-3 flex items-start justify-between gap-3">
+				<HStack
+					alignItems="start"
+					justifyContent="between"
+					gap="block"
+					className="mb-3"
+				>
 					<div>
 						<p className="font-medium">{label}</p>
 						<p className="mt-1 text-sm text-muted">{description}</p>
 					</div>
 					{isEditable ? (
-						<div className="flex gap-2">
+						<HStack>
 							<Button size="sm" variant="tertiary" onPress={onOpenPicker}>
 								{selectedAsset || fileId ? "다시 선택" : "에셋에서 선택"}
 							</Button>
@@ -156,25 +162,25 @@ const ExerciseMediaField = observer(
 							>
 								해제
 							</Button>
-						</div>
+						</HStack>
 					) : null}
-				</div>
+				</HStack>
 				{selectedAsset ? (
-					<div className="flex flex-col gap-3 md:flex-row">
+					<VStack gap="block" className="md:flex-row">
 						<MediaPreview
 							imageUrl={isImage ? selectedAsset.publicUrl : undefined}
 							videoUrl={!isImage ? selectedAsset.publicUrl : undefined}
 							title={selectedAsset.originalName}
 							className="aspect-video w-full max-w-xs"
 						/>
-						<div className="space-y-1 text-sm">
+						<VStack gap="dense" className="text-sm">
 							<p className="font-medium">{selectedAsset.originalName}</p>
 							<p className="text-muted">{selectedAsset.mimeType}</p>
 							<p className="break-all font-mono text-xs text-muted">
 								{selectedAsset.id}
 							</p>
-						</div>
-					</div>
+						</VStack>
+					</VStack>
 				) : fileId ? (
 					<div className="rounded-xl border border-border bg-surface-secondary px-4 py-3">
 						<p className="break-all font-mono text-sm">{fileId}</p>
@@ -210,15 +216,15 @@ export const TaskExerciseForm = observer(
 		const isSchedulable = state.videoFileId.trim().length > 0;
 
 		return (
-			<div className="flex flex-col gap-4">
+			<VStack>
 				<Alert
 					status={languageCode ? "accent" : "warning"}
 					title="현재 Space 콘텐츠 언어"
 					actions={
 						<Chip
 							size="sm"
-							variant="flat"
-							color={languageCode ? "primary" : "warning"}
+							variant="soft"
+							color={languageCode ? "accent" : "warning"}
 						>
 							{languageLabel}
 						</Chip>
@@ -240,7 +246,7 @@ export const TaskExerciseForm = observer(
 					<label className="mb-1 block text-sm font-medium text-foreground">
 						지속시간 <span className="text-danger">*</span>
 					</label>
-					<div className="flex items-center gap-2">
+					<HStack alignItems="center">
 						<TextField
 							type="number"
 							placeholder="분"
@@ -266,7 +272,7 @@ export const TaskExerciseForm = observer(
 							isDisabled={readOnly}
 							onValueChange={() => clearFieldError(state, "duration")}
 						/>
-					</div>
+					</HStack>
 					{state.errors.duration ? (
 						<p className="mt-1 text-sm text-danger">{state.errors.duration}</p>
 					) : null}
@@ -317,20 +323,20 @@ export const TaskExerciseForm = observer(
 					onClear={onClickClearVideoAssetButton}
 				/>
 				<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
-					<div className="flex items-center gap-2">
+					<HStack alignItems="center">
 						<span className="font-medium text-foreground">
 							스케줄 가능 상태
 						</span>
 						<Chip color={isSchedulable ? "success" : "warning"} size="sm">
 							{isSchedulable ? "가능" : "불가"}
 						</Chip>
-					</div>
+					</HStack>
 					<p className="mt-2">
 						영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할
 						수 있습니다.
 					</p>
 				</div>
-			</div>
+			</VStack>
 		);
 	},
 );

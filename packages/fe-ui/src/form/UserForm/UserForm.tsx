@@ -4,6 +4,7 @@ import { UserFormSchema } from "@cocrepo/schema";
 import type { FormSchemaStateContract } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { TextField } from "../../input/TextField";
+import { VStack } from "../../rhythm";
 import { Form } from "../Form";
 
 /**
@@ -32,44 +33,45 @@ export const UserForm = observer(
 		return (
 			<Form
 				aria-label="회원 정보"
-				className="flex flex-col gap-6"
 				state={state}
 				schema={UserFormSchema}
 				readOnly={readOnly}
 			>
-				<TextField
-					label="이름"
-					placeholder="홍길동"
-					state={state}
-					path="name"
-					autoComplete="name"
-				/>
-				<TextField
-					label="이메일"
-					placeholder="hong@example.com"
-					state={state}
-					path="email"
-					type="email"
-					autoComplete="email"
-				/>
-				<TextField
-					label="전화번호"
-					placeholder="010-1234-5678"
-					state={state}
-					path="phone"
-					type="tel"
-					autoComplete="tel"
-				/>
-				{readOnly ? null : (
+				<VStack gap="page">
 					<TextField
-						label="비밀번호"
-						placeholder="비밀번호를 입력하세요"
+						label="이름"
+						placeholder="홍길동"
 						state={state}
-						path="password"
-						type="password"
-						autoComplete="new-password"
+						path="name"
+						autoComplete="name"
 					/>
-				)}
+					<TextField
+						label="이메일"
+						placeholder="hong@example.com"
+						state={state}
+						path="email"
+						type="email"
+						autoComplete="email"
+					/>
+					<TextField
+						label="전화번호"
+						placeholder="010-1234-5678"
+						state={state}
+						path="phone"
+						type="tel"
+						autoComplete="tel"
+					/>
+					{readOnly ? null : (
+						<TextField
+							label="비밀번호"
+							placeholder="비밀번호를 입력하세요"
+							state={state}
+							path="password"
+							type="password"
+							autoComplete="new-password"
+						/>
+					)}
+				</VStack>
 			</Form>
 		);
 	},

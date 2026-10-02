@@ -1,5 +1,22 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import { type ReactNode } from "react";
+import { DesignSystemProvider } from "../../design-system/provider";
 import { PureDateStrip as DateStrip } from "./index";
+
+const renderWithDesignSystem = (children: ReactNode) =>
+	render(
+		<DesignSystemProvider
+			config={{
+				animation: "disable-all",
+				devInfo: {
+					stylingPrinciples: false,
+				},
+				toast: false,
+			}}
+		>
+			{children}
+		</DesignSystemProvider>,
+	);
 
 describe("DateStrip", () => {
 	it("선택 가능한 날짜를 누르면 value와 option을 전달해야 한다", () => {
@@ -12,7 +29,7 @@ describe("DateStrip", () => {
 			value: "2026-05-12",
 		};
 
-		render(
+		renderWithDesignSystem(
 			<DateStrip
 				onSelect={onSelect}
 				options={[option]}
@@ -37,7 +54,7 @@ describe("DateStrip", () => {
 		// Given
 		const onSelect = jest.fn();
 
-		render(
+		renderWithDesignSystem(
 			<DateStrip
 				onSelect={onSelect}
 				options={[

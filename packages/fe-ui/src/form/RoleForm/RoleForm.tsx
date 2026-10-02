@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
+import { VStack } from "../../rhythm";
 
 export type RoleFormField = "name" | "displayName" | "description";
 
@@ -25,7 +26,7 @@ export interface RoleFormProps {
 export const RoleForm = observer(
 	({ state, readOnly = false }: RoleFormProps) => {
 		return (
-			<div className="space-y-6">
+			<VStack gap="page">
 				<TextField
 					label="역할 식별자"
 					placeholder="CUSTOM_ROLE"
@@ -79,7 +80,7 @@ export const RoleForm = observer(
 					maxLength={200}
 					minRows={3}
 				/>
-			</div>
+			</VStack>
 		);
 	},
 );

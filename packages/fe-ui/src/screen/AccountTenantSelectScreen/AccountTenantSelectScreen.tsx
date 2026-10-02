@@ -30,7 +30,7 @@ export const AccountTenantSelectScreen = observer(
 				<SectionSurface className="max-w-md rounded-2xl shadow-sm">
 					<Section>
 						<Section.Header>
-							<VStack fullWidth className="gap-2">
+							<VStack fullWidth gap="inline">
 								<Typography
 									type="body-xs"
 									weight="semibold"

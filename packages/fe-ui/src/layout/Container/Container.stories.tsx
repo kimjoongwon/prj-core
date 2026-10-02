@@ -45,7 +45,7 @@ export const 기본: Story = {
 export const 커스텀스타일: Story = {
 	args: {
 		children: "커스텀 스타일 컴테이너",
-		className: "p-4 bg-blue-100 rounded-lg border-2 border-blue-300",
+		className: "rounded-lg border-2 border-accent/30 bg-accent-soft p-4",
 	},
 	parameters: {
 		docs: {
@@ -58,15 +58,15 @@ export const 커스텀스타일: Story = {
 
 export const 여러요소: Story = {
 	args: {
-		className: "gap-4 p-4 bg-gray-50 rounded-lg",
+		className: "gap-4 rounded-lg bg-surface-secondary p-4",
 		children: "",
 	},
 	render: (args) => (
 		<Container {...args}>
 			<>
-				<div className="rounded bg-blue-200 p-2">아이템 1</div>
-				<div className="rounded bg-green-200 p-2">아이템 2</div>
-				<div className="rounded bg-yellow-200 p-2">아이템 3</div>
+				<div className="rounded bg-surface-tertiary p-2">아이템 1</div>
+				<div className="rounded bg-surface-secondary p-2">아이템 2</div>
+				<div className="rounded bg-accent-soft p-2">아이템 3</div>
 			</>
 		</Container>
 	),
@@ -81,19 +81,20 @@ export const 여러요소: Story = {
 
 export const 반응형: Story = {
 	args: {
-		className: "w-full max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg",
+		className:
+			"mx-auto w-full max-w-md rounded-lg bg-surface p-6 shadow-surface",
 		children: "",
 	},
 	render: (args) => (
 		<Container {...args}>
 			<>
 				<h2 className="mb-4 font-bold text-xl">카드 제목</h2>
-				<p className="mb-4 text-gray-600">
+				<p className="mb-4 text-muted">
 					다양한 화면 크기에 잘 맞는 반응형 컴테이너의 예시입니다.
 				</p>
 				<button
 					type="button"
-					className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+					className="w-full rounded bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover"
 				>
 					액션 버튼
 				</button>
@@ -111,7 +112,8 @@ export const 반응형: Story = {
 
 export const 폼레이아웃: Story = {
 	args: {
-		className: "gap-4 p-6 max-w-sm bg-white border rounded-lg shadow",
+		className:
+			"gap-4 max-w-sm rounded-lg border border-border bg-surface p-6 shadow-surface",
 		children: "",
 	},
 	render: (args) => (
@@ -135,7 +137,7 @@ export const 폼레이아웃: Story = {
 				/>
 				<button
 					type="button"
-					className="w-full rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+					className="w-full rounded bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover"
 				>
 					메시지 보내기
 				</button>
@@ -154,7 +156,7 @@ export const 폼레이아웃: Story = {
 export const 플레이그라운드: Story = {
 	args: {
 		children: "플레이그라운드 컴테이너",
-		className: "p-4 border-2 border-dashed border-gray-300",
+		className: "border-2 border-dashed border-border p-4",
 	},
 	parameters: {
 		docs: {

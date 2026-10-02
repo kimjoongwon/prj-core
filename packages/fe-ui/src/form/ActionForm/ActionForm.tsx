@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Select } from "../../input/Select";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
+import { VStack } from "../../rhythm";
 
 export type ActionFormField =
 	| "name"
@@ -40,7 +41,7 @@ const groupOptions = [
 export const ActionForm = observer(
 	({ state, readOnly = false }: ActionFormProps) => {
 		return (
-			<div className="space-y-6">
+			<VStack gap="page">
 				<TextField
 					label="행위 식별자"
 					placeholder="read:masked:email"
@@ -103,7 +104,7 @@ export const ActionForm = observer(
 					isDisabled={readOnly}
 					description="낮은 숫자일수록 먼저 표시됩니다."
 				/>
-			</div>
+			</VStack>
 		);
 	},
 );

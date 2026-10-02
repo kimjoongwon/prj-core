@@ -73,6 +73,7 @@ const DialogComponent = forwardRef<
 						<HeroDialog.Portal {...portalProps}>
 							<HeroDialog.Overlay {...overlayProps} />
 							<HeroDialog.Content {...contentProps}>
+								{/* 저수준 layout 예외: heroui-native Dialog.Content slot에 끼워 넣는 헤더/액션 행이라 raw gap을 유지합니다. */}
 								{(title || description || showClose) && (
 									<View className="flex-row items-start justify-between gap-3">
 										<View className="flex-1 gap-1">

@@ -8,6 +8,7 @@ import {
 import { useApp } from "@cocrepo/store";
 import {
 	Button,
+	HStack,
 	TimelineEditScreen,
 	type TimelineFormState,
 } from "@cocrepo/ui";
@@ -114,7 +115,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			isLoading={isLoading && !state.isInitialized}
 			notFound={!isLoading && !timeline}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -133,7 +134,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 					>
 						저장
 					</Button>
-				</div>
+				</HStack>
 			}
 		/>
 	);

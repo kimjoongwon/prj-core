@@ -62,8 +62,7 @@ export const ThemeToggleButton = observer(function ThemeToggleButton({
 			onPress={toggleTheme}
 			startContent={<Icon size={16} />}
 			className={[
-				"border-slate-200/70 bg-white/80 text-slate-700 shadow-lg shadow-slate-900/5 backdrop-blur-md hover:bg-white",
-				"dark:border-white/10 dark:bg-slate-950/75 dark:text-slate-100 dark:hover:bg-slate-950",
+				"border-border bg-surface text-foreground shadow-sm hover:bg-surface-hover",
 				className,
 			]
 				.filter(Boolean)

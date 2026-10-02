@@ -40,13 +40,13 @@ const meta = {
 	},
 	render: (args) => (
 		<VStack {...args} className="w-[260px]">
-			<View className="rounded-xl bg-content1 p-4">
+			<View className="rounded-xl bg-surface-secondary p-4">
 				<Text className="text-base font-bold text-foreground">예약 상태</Text>
 			</View>
-			<View className="rounded-xl bg-content1 p-4">
+			<View className="rounded-xl bg-surface-secondary p-4">
 				<Text className="text-sm text-muted">다음 행동을 안내합니다.</Text>
 			</View>
-			<View className="rounded-xl bg-content1 p-4">
+			<View className="rounded-xl bg-surface-secondary p-4">
 				<Text className="text-sm text-muted">필요한 정보만 묶습니다.</Text>
 			</View>
 		</VStack>
@@ -75,7 +75,7 @@ export const GapScale: Story = {
 			{gapSamples.map(([gap, label]) => (
 				<View key={gap}>
 					<Text className="mb-2 text-sm font-bold text-foreground">{label}</Text>
-					<VStack gap={gap} className="rounded-xl bg-content1 p-3">
+					<VStack gap={gap} className="rounded-xl bg-surface-secondary p-3">
 						<Text className="text-sm text-foreground">항목 A</Text>
 						<Text className="text-sm text-foreground">항목 B</Text>
 					</VStack>

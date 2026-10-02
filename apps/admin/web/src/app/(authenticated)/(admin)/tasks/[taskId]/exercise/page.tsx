@@ -6,7 +6,7 @@ import {
 	useGetTaskExercise,
 	useGetTaskRoutines,
 } from "@cocrepo/api/core/tasks";
-import { Button, TaskExerciseEditScreen } from "@cocrepo/ui";
+import { Button, HStack, TaskExerciseEditScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -90,7 +90,7 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 			isNotFound={!isLoading && !exercise}
 			isSubmitPending={false}
 			actions={
-				<div className="flex gap-2">
+				<HStack>
 					<Button
 						variant="tertiary"
 						startContent={<Pencil className="size-4" />}
@@ -99,8 +99,6 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 						수정
 					</Button>
 					<Button
-
-
 						variant="tertiary"
 						startContent={<Trash2 className="size-4" />}
 						onPress={onClickDeleteButton}
@@ -109,7 +107,7 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 					>
 						삭제
 					</Button>
-				</div>
+				</HStack>
 			}
 			onClickCancelButton={onClickBackButton}
 		/>

@@ -36,21 +36,19 @@ export const DateRangeInput = observer(
 					aria-label={
 						config.label ? `${t(config.label)} ${t("시작일")}` : t("시작일")
 					}
-					className="h-7 min-w-0 flex-1 rounded-sm border border-[#cbd5e1] bg-white px-2 text-[12px] font-normal text-[#1f2937] outline-none transition-colors hover:border-[#94a3b8] focus:border-[#3b82f6] focus:ring-1 focus:ring-[#93c5fd] dark:border-white/10 dark:bg-neutral-950/70 dark:text-slate-100 dark:hover:border-white/20 dark:focus:border-sky-400 dark:focus:ring-sky-500/40"
+					className="h-7 min-w-0 flex-1 rounded-sm border border-field-border bg-field px-2 text-[12px] font-normal text-field-foreground outline-none transition-colors hover:border-field-border-hover focus:border-field-border-focus focus-field-ring"
 					type="date"
 					value={startValue}
 					onChange={(event) =>
 						handleChange(startKey, event.currentTarget.value)
 					}
 				/>
-				<span className="text-[12px] text-[#64748b] dark:text-slate-400">
-					-
-				</span>
+				<span className="text-[12px] text-muted">-</span>
 				<input
 					aria-label={
 						config.label ? `${t(config.label)} ${t("종료일")}` : t("종료일")
 					}
-					className="h-7 min-w-0 flex-1 rounded-sm border border-[#cbd5e1] bg-white px-2 text-[12px] font-normal text-[#1f2937] outline-none transition-colors hover:border-[#94a3b8] focus:border-[#3b82f6] focus:ring-1 focus:ring-[#93c5fd] dark:border-white/10 dark:bg-neutral-950/70 dark:text-slate-100 dark:hover:border-white/20 dark:focus:border-sky-400 dark:focus:ring-sky-500/40"
+					className="h-7 min-w-0 flex-1 rounded-sm border border-field-border bg-field px-2 text-[12px] font-normal text-field-foreground outline-none transition-colors hover:border-field-border-hover focus:border-field-border-focus focus-field-ring"
 					type="date"
 					value={endValue}
 					onChange={(event) => handleChange(endKey, event.currentTarget.value)}

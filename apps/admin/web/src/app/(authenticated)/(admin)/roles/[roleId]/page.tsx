@@ -16,8 +16,11 @@ import {
 	useGetRoleById,
 } from "@cocrepo/api/core/roles";
 import {
-	type AssignablePolicy,
+	AssignablePolicy,
 	Button,
+	Chip,
+	HStack,
+	InfoList,
 	RoleAssignmentForm,
 	type RoleAssignmentFormState,
 	type RoleAssignmentValue,
@@ -31,7 +34,7 @@ import { ArrowLeft, Edit, Save, ShieldCheck, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const AdminRolesRoleDetailRoute = observer(() => {
 	const { roleId } = useParams<{
@@ -136,7 +139,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 				</Button>
 			}
 			actions={
-				<div className="flex flex-wrap gap-2">
+				<HStack className="flex-wrap">
 					<Button
 						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
@@ -171,18 +174,40 @@ const AdminRolesRoleDetailRoute = observer(() => {
 							</Button>
 						</>
 					) : null}
-				</div>
+				</HStack>
 			}
 		>
 			{role ? (
-				<SectionLike title="추가 정보">
-					<dl className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-						<Info label="Role ID" value={String(role.id)} />
-						<Info label="상태" value={role.removedAt ? "삭제됨" : "사용 중"} />
-						<Info label="생성일" value={formatDate(role.createdAt)} />
-						<Info label="수정일" value={formatDate(role.updatedAt)} />
-					</dl>
-				</SectionLike>
+				<Section>
+					<Section.Header title="추가 정보" />
+					<Section.Body>
+						<InfoList
+							columns={3}
+							items={[
+								{ key: "roleId", label: "Role ID", value: String(role.id) },
+								{
+									key: "status",
+									label: "상태",
+									value: role.removedAt ? (
+										<Chip>삭제됨</Chip>
+									) : (
+										<Chip color="success">사용 중</Chip>
+									),
+								},
+								{
+									key: "createdAt",
+									label: "생성일",
+									value: formatDate(role.createdAt),
+								},
+								{
+									key: "updatedAt",
+									label: "수정일",
+									value: formatDate(role.updatedAt),
+								},
+							]}
+						/>
+					</Section.Body>
+				</Section>
 			) : null}
 			<Section>
 				<Section.Header
@@ -190,7 +215,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					description="현재 Role에 연결된 Policy assignment를 관리합니다."
 					actions={
 						isEditingPolicies ? (
-							<div className="flex gap-2">
+							<HStack>
 								<Button variant="tertiary" onPress={cancelPolicyEdit}>
 									취소
 								</Button>
@@ -203,7 +228,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 								>
 									저장
 								</Button>
-							</div>
+							</HStack>
 						) : (
 							<Button
 								variant="tertiary"
@@ -280,27 +305,5 @@ function formatDate(value?: Date | null) {
 		return "-";
 	}
 	return new Date(value).toLocaleString("ko-KR");
-}
-function SectionLike({
-	title,
-	children,
-}: {
-	title: string;
-	children: ReactNode;
-}) {
-	return (
-		<section>
-			<h3 className="mb-4 text-lg font-semibold">{title}</h3>
-			{children}
-		</section>
-	);
-}
-function Info({ label, value }: { label: string; value: string }) {
-	return (
-		<div className="rounded-lg border border-border bg-background/60 p-3">
-			<dt className="text-xs text-muted">{label}</dt>
-			<dd className="mt-1 break-all text-sm font-medium">{value}</dd>
-		</div>
-	);
 }
 export default AdminRolesRoleDetailRoute;
