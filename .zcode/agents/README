@@ -1,6 +1,6 @@
 # .zcode/agents — ZCode subagent 생성본
 
-이 디렉터리는 [.codex/agents](../../.codex/agents)의 TOML 원본에서 생성한 ZCode subagent 정의 38개를 보관합니다. 기존 37개 역할의 이름과 Codex 모델·추론 설정을 유지하고 `etc-agent-builder`를 추가합니다. 개인 설정과 구분해 저장소에서 공유하며, 기존 YAML frontmatter + Markdown 본문 형식을 유지합니다. 같은 파일명과 `name`으로 원본과 대응합니다.
+이 디렉터리는 [.codex/agents](../../.codex/agents)의 TOML 원본에서 생성한 ZCode subagent 정의 35개를 보관합니다. 각 역할의 이름과 Codex 모델·추론 설정을 유지합니다. 개인 설정과 구분해 저장소에서 공유하며, 기존 YAML frontmatter + Markdown 본문 형식을 유지합니다. 같은 파일명과 `name`으로 원본과 대응합니다.
 
 ## 파일 형식과 모델
 
@@ -29,7 +29,7 @@ description: "CQRS Command와 Query 메시지 클래스를 만듭니다."
 | `pnpm agents:sync` | Codex 원본에서 ZCode 생성본 갱신 |
 | `pnpm agents:sync:check` | 생성본 누락·추가·내용 불일치의 읽기 전용 검사 |
 | `pnpm agents:sync:test` | 생성기 회귀 테스트 |
-| `pnpm agents:contracts:check` | 생성본 최신 상태와 38쌍의 자가완결·실행 계약 검사 |
+| `pnpm agents:contracts:check` | 생성본 최신 상태와 35쌍의 자가완결·실행 계약 검사 |
 | `pnpm agents:contracts:test` | 계약 검사 fixture의 성공·실패 조건 테스트 |
 | `pnpm agents:flow:test` | logging-only Hook의 로컬 동작 테스트 |
 

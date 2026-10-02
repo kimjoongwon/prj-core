@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-export const AGENT_DEFINITION_COUNT = 38;
+export const AGENT_DEFINITION_COUNT = 35;
 const CODEX_FIELDS = [
 	"name",
 	"description",

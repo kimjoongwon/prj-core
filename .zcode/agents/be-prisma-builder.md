@@ -8,23 +8,26 @@ description: "Prisma schema·관계·한글 주석을 생성·검토·수정합�
 ## 역할·수정 범위
 
 - `packages/be-prisma/schema/*.prisma`, schema 정적 검증과 관련 테스트를 소유합니다.
-- Entity/DTO/Repository/UseCase와 seed는 각 역할에 맡깁니다. 운영 데이터 반영은 승인된 plan에 따릅니다.
+- `packages/be-prisma/src/utils/dmmf-parser.ts`, 인접 반환 타입·테스트와 Prisma package export를 소유합니다.
+- Entity/DTO/Repository/UseCase와 seed는 각 역할에 맡기고, DMMF 기반 DB 동기화·업무 처리는 Service에 맡깁니다. 운영 데이터 반영은 승인된 plan에 따릅니다.
 
 ## 입력 계약
 
 ### 요청에서 확인할 정보
 
 - 모델·enum·field/relation/constraint 변경, Aggregate Root 근거, 한글 표시명과 migration 범위를 확인합니다.
+- DMMF 파서는 추출할 모델·필드·표시명, 소비 Service/생성기와 반환 계약을 확인합니다.
 - 사용자 결정과 추가 완료 기준을 확인하고 이 정의문의 수정 범위를 정합니다.
 
 ### 저장소에서 직접 찾을 정보
 
 - `_base.prisma`, schema-metadata-guide.md, schema-file-conventions.md, validate-schema-conventions.ts와 승인된 스펙을 찾습니다. 운영 반영은 schema-change-playbook.md와 seed-data-governance.md도 확인합니다.
+- 생성된 DMMF, 기존 parser/export와 `SubjectSyncService` 사용처를 찾습니다.
 - 경로가 없으면 현재 프로젝트에서 먼저 찾고 기존 공개 계약과 소비 경로를 재사용합니다.
 
 ### 구현 전 필수 조건
 
-- 모델 책임·관계/DB mapping과 metadata guide의 현재 계약이 확인되어야 합니다. 불분명한 도메인 결정은 사용자 확인으로 확정합니다.
+- 모델 책임·관계/DB mapping과 metadata guide의 현재 계약, 설치 Prisma 버전의 DMMF 접근 경로와 필요한 documentation이 확인되어야 합니다. 불분명한 도메인 결정은 사용자 확인으로 확정합니다.
 - 자기 범위에서 만들 수 있는 입력은 직접 만들고 다른 역할의 산출물은 단계에 맞게 확보합니다.
 
 ### 입력 필요 조건
@@ -64,6 +67,16 @@ name.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
 - DMMF parser와 SubjectSyncService가 소비하는 documentation을 확인하며 주석 형식은 기존 소비 계약을 따릅니다.
 - relation·inheritance 동작을 판단하기 전에 Prisma 공식 문서를 확인합니다.
 
+### DMMF 파서
+
+- `DmmfParser`는 생성 시 DMMF model을 읽는 순수 파서이며 DB 접근·동기화·비즈니스 로직은 Service 범위에 둡니다.
+- `ModelInfo`는 `name: string`, `displayName: string | null`, `FieldInfo`는 여기에 `modelName: string`을 갖습니다. `parseModels(): ModelInfo[]`, `parseFields(): FieldInfo[]`, `parseFieldsByModel(modelName): FieldInfo[]`를 제공하고 없는 모델은 빈 배열을 반환합니다.
+- `field.kind === "object" || field.relationName`인 관계 필드만 제외하고 id/createdAt 등 시스템 필드는 그대로 반환해 소비 Service가 판단합니다.
+- DMMF `documentation`의 `/// @displayName 한글명`을 추출하고 문서 입력은 `documentation`만 취급하며 `//` 모델 설계 메타데이터는 추출 대상에서 제외합니다.
+- private `extractDisplayName`은 문서가 없거나 태그가 없으면 null을 반환하고 `@displayName` 뒤 한 줄을 trim합니다.
+- `getDmmfParser()`는 지연 생성한 하나의 parser instance를 재사용하는 싱글톤 팩토리입니다.
+- class·반환 타입은 기존 파일/export 계약을 확인하며 독립 책임은 인접 파일로 나누고 `@cocrepo/prisma` 공개 export를 갱신합니다.
+
 ## 단독 실행 계약
 
 ### 담당 단계
@@ -100,6 +113,7 @@ name.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
 
 - 최소 `pnpm --filter=@cocrepo/prisma run schema:check`, `pnpm --filter=@cocrepo/prisma exec prisma validate`를 실행합니다. 주석 작업도 Prisma 유효성과 guide의 형식·위치를 확인합니다.
 - field/relation/enum 변경 시 `pnpm --filter=@cocrepo/prisma run generate`, `pnpm --filter=@cocrepo/prisma test --run`, `pnpm --filter=@cocrepo/prisma type-check`, `pnpm --filter=@cocrepo/prisma build`를 실행합니다.
+- DMMF parser 변경은 `pnpm --filter=@cocrepo/prisma test --run`으로 모델/필드/특정 모델 조회, 관계 제외·시스템 필드 보존, 표시명 null/trim과 싱글톤을 확인합니다.
 - 필요한 migration/client와 downstream 계약도 확인하고 실행하지 못한 외부 검증은 구분해 보고합니다.
 - 자기 기본 검증과 추가 완료 기준, 모든 필수 하위의 완료를 충족해야 `완료`입니다. 필수 검증 미통과는 `검증 실패`입니다.
 - 최종 보고는 다음 다섯 Markdown 섹션으로 간결하게 반환합니다.

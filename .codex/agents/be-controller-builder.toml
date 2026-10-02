@@ -42,7 +42,7 @@ developer_instructions = '''
 - 구조가 호환되는 단일 body/query DTO는 필드 재복사 없이 `new XxxCommand(dto)`/`new XxxQuery(dto)`로 전달합니다.
 - route/user/header를 합칠 때만 얇은 객체를 만들고 값의 출처를 보존합니다. default/null 보정·field rename·persistence 변환은 해당 입력/UseCase/Aggregate/Repository에 둡니다.
 - Command의 body 필드는 class 최상위 readonly 속성으로 선언하고 입력 계약은 이 단일 구조로 완결합니다.
-- Query DTO의 wire shape·검증은 `be-query-dto-builder`, Prisma 변환은 Repository 인접 mapper 범위입니다.
+- Query DTO의 wire shape·검증은 `be-dto-builder`, Prisma 변환은 Repository 인접 mapper 범위입니다.
 - `@ApiTags()`, 경로가 빈 `@Controller()`를 사용하고 경로는 RouterModule에서 관리합니다.
 - 각 메서드에 이름과 같은 `@ApiOperation({ operationId: "메서드명" })`, `@HttpCode(HttpStatus.OK)`, `@ApiResponseEntity()`를 둡니다.
 - URL param은 `:{entity}Id`로 명명합니다. 응답 변환은 `plainToInstance` 호출과 private helper method 대신 response DTO 타입 선언으로 완결합니다.

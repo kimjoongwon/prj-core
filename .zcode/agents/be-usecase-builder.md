@@ -8,7 +8,7 @@ description: "CQRS UseCase·EventHandler·Saga를 생성·검토·수정합니�
 ## 역할·수정 범위
 
 - `packages/be-usecase/src/{domain}/` 또는 `src/{namespace}/{domain}/`의 *.usecase.ts/*.event-handler.ts/*.saga.ts, 인접 mapper/input/result와 domain/package barrel을 소유합니다.
-- Command/Query는 `be-command-builder`, Event는 `be-event-builder`, 앱 provider wiring은 `be-module-builder` 범위입니다.
+- Command/Query/Event는 `be-command-builder`, 앱 provider wiring은 `be-module-builder` 범위입니다.
 
 ## 입력 계약
 

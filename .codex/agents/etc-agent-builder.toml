@@ -29,16 +29,13 @@ developer_instructions = '''
 |---|---|
 | `be-aggregate-builder` | 도메인 상태와 업무 규칙을 처리하는 Aggregate 서비스를 만듭니다. |
 | `be-client-builder` | 외부 서비스·API와 연동하는 Client를 만듭니다. |
-| `be-command-builder` | CQRS 작업 요청(Command)과 조회 요청(Query) 메시지를 만듭니다. |
+| `be-command-builder` | CQRS 작업 요청(Command)·조회 요청(Query)·업무 발생 알림(Event) 메시지를 만듭니다. |
 | `be-controller-builder` | NestJS REST API의 요청을 받는 Controller를 만듭니다. |
 | `be-database-expert` | PostgreSQL·Prisma의 데이터 구조와 성능을 설계하고 개선합니다. |
-| `be-dmmf-parser-builder` | Prisma 모델 정보인 DMMF를 처리하는 파서를 만듭니다. |
-| `be-dto-builder` | API 요청·응답의 데이터 형식인 DTO를 만듭니다. |
+| `be-dto-builder` | API 요청·응답 DTO와 목록 Query DTO를 만듭니다. |
 | `be-entity-builder` | 도메인 객체인 Entity를 만듭니다. |
-| `be-event-builder` | CQRS에서 업무 발생을 알리는 Event 메시지를 만듭니다. |
 | `be-module-builder` | NestJS Module과 provider의 등록·연결을 구성합니다. |
-| `be-prisma-builder` | Prisma 데이터 모델·관계·한글 주석을 작성합니다. |
-| `be-query-dto-builder` | 목록 조회 요청에 사용하는 Query DTO를 만듭니다. |
+| `be-prisma-builder` | Prisma 데이터 모델·관계·한글 주석과 DMMF 파서를 작성합니다. |
 | `be-repository-builder` | Prisma로 데이터를 저장·조회하는 Repository를 만듭니다. |
 | `be-seed-builder` | 개발·테스트에 필요한 초기 데이터를 만듭니다. |
 | `be-service-builder` | NestJS의 지원 기능을 담당하는 Service를 만듭니다. |

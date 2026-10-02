@@ -10,7 +10,7 @@
 
 - Codex 원본은 `.codex/agents/*.toml`의 `name`, `description`, `model`, `model_reasoning_effort`, `developer_instructions`로 유지합니다. 기존 모델·추론 설정은 보존합니다.
 - ZCode 정의는 Codex 원본에서 생성한 `.zcode/agents/*.md`입니다. YAML frontmatter에는 `name`, `description`만 두고 모델 설정은 추가하지 않습니다. Frontmatter 주석에는 원본 경로와 생성 명령이 표시됩니다.
-- 기존 37개 역할의 이름과 모델·추론 설정을 유지하고 `etc-agent-builder`를 추가해, 원본과 생성본은 같은 38개 역할이며 파일명과 `name`으로 대응합니다. 생성기는 name·description과 TOML의 `developer_instructions`를 Markdown 본문에 그대로 옮깁니다. `pnpm agents:contracts:check`는 생성본의 최신 상태와 역할 계약을 검사합니다.
+- 원본과 생성본은 같은 35개 역할이며 파일명과 `name`으로 대응하고 각 역할의 이름과 모델·추론 설정을 유지합니다. 생성기는 name·description과 TOML의 `developer_instructions`를 Markdown 본문에 그대로 옮깁니다. `pnpm agents:contracts:check`는 생성본의 최신 상태와 역할 계약을 검사합니다.
 - 정의문의 최상위 절은 역할·수정 범위, 입력 계약, 기술 규칙, 단독 실행 계약, 생성·리뷰·수정, 검증·보고 순서입니다. 필요한 역할 계약은 정의문 안에 넣으며 별도 외부 지침 파일을 읽게 하지 않습니다.
 - ZCode의 실제 중첩 호출과 부모 문맥 격리 지원은 이 변경에서 검증하지 않았습니다. 파일 형식의 일치는 런타임 지원 확인과 별개입니다.
 
@@ -119,7 +119,7 @@ flowchart TD
 
 `pnpm agents:sync`는 Codex 원본에서 ZCode 파일을 생성합니다. `pnpm agents:sync:check`는 파일 누락·추가·내용 불일치를 읽기 전용으로 검사하고, `pnpm agents:sync:test`는 생성기의 회귀 조건을 검사합니다.
 
-`pnpm agents:contracts:check`는 생성본의 최신 상태를 검사한 뒤 38쌍의 metadata·본문 일치, 절 구조, 담당 기본값, 하위 단계 명시, 입력 재개, 부모 문맥 비의존, 생성·리뷰·수정, 수정 범위·예산과 보고 계약을 검사합니다. 기존 config와 logging-only Hook·logger 설정 검사도 유지합니다. `pnpm agents:contracts:test`는 독립 fixture로 이 검사와 의미 있는 실패 조건을 테스트합니다.
+`pnpm agents:contracts:check`는 생성본의 최신 상태를 검사한 뒤 35쌍의 metadata·본문 일치, 절 구조, 담당 기본값, 하위 단계 명시, 입력 재개, 부모 문맥 비의존, 생성·리뷰·수정, 수정 범위·예산과 보고 계약을 검사합니다. 기존 config와 logging-only Hook·logger 설정 검사도 유지합니다. `pnpm agents:contracts:test`는 독립 fixture로 이 검사와 의미 있는 실패 조건을 테스트합니다.
 
 `lint:repo`와 `lint:repo:fix`는 계약 검사를 먼저 실행합니다. Root `pnpm test`도 `agents:contracts:check`로 현재 원본·생성본의 불일치를 먼저 검사하고, `agents:contracts:test` → `agents:sync:test` → `turbo test` 순서로 실행합니다. 따라서 lint와 test를 각각 호출해도 정의 불일치를 검출하며, 기존 Jenkins public CI의 `pnpm lint`·`pnpm test` 경로에서도 같은 검사를 수행합니다. lint·test·CI는 자동으로 생성본을 수정하지 않습니다. 현재 공개 CI가 이 명령을 호출한다는 확인이며, 실제 Jenkins 실행 검증 결과가 아닙니다.
 
