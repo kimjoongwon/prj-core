@@ -94,21 +94,41 @@ Mobile 램프는 `heroui-native` 색 token명을 그대로 쓰는 OKLCH 오버�
 
 기본 서체는 **Pretendard**를 유지합니다.
 
-타이포그래피의 목표는 포스터처럼 강하게 보이는 것이 아니라, 사용자가 상태와 다음 행동을 빠르게 이해하도록 돕는 것입니다. 화면별 별도 `ScreenTitle` 같은 alias를 만들기보다 `Text` primitive의 역할형 variant를 사용합니다.
+타이포그래피의 목표는 포스터처럼 강하게 보이는 것이 아니라, 사용자가 상태와 다음 행동을 빠르게 이해하도록 돕는 것입니다. 화면 텍스트는 자체 텍스트 컴포넌트를 만들지 않고 **HeroUI `Typography`를 통과**합니다. 웹은 `@cocrepo/ui`의 `Typography`(`@heroui/react` 순수 재수출), 모바일은 `@cocrepo/mo-ui`의 `Typography`(`heroui-native` 순수 재수출)가 각 플랫폼의 단일 경로입니다. 두 재수출 barrel에는 래퍼 로직이 없습니다.
 
-| 역할 | 느낌 | 사용처 | 주의 |
-|------|------|--------|------|
-| `display` | 큰 첫 인상 | auth, dashboard intro, mobile home hero | Admin CRUD 목록에는 남용하지 않음 |
-| `headline` | 화면 제목 | page/screen title, major section | 한 화면에 1개 중심 권장 |
-| `title` | 영역 제목 | card title, section title, dialog title | body보다 명확히 높게 |
-| `body` | 기본 읽기 | 설명, 목록 본문, form helper | 과하게 작게 만들지 않음 |
-| `label` | 짧은 이름표 | field label, table header, status label | 긴 문장에 사용하지 않음 |
-| `caption` | 보조 정보 | timestamp, metadata, legal copy | 핵심 안내를 caption으로 숨기지 않음 |
-| `button` | 행동 문구 | CTA, toolbar action | 동사 중심으로 짧게 |
+- 공식 문서: [Typography (React)](https://heroui.com/en/docs/react/components/typography), [Typography (Native)](https://heroui.com/en/docs/native/components/text)
+
+### Type Scale (구조형 계약)
+
+`type` prop 하나가 크기·굵기·줄높이를 함께 정합니다. 화면별 `ScreenTitle` 같은 역할형 alias를 새로 만들지 않고, 아래 구조형 type과 `weight`, `className` 조합으로 표현합니다. 웹과 모바일이 같은 체계를 사용합니다.
+
+| type | 클래스(웹·모바일 공통) | 용도 |
+|------|----------------------|------|
+| `h1` | `text-4xl font-semibold tracking-tight` | 화면 주제, auth/intro의 큰 첫 인상 |
+| `h2` | `text-3xl font-semibold tracking-tight` | 큰 섹션 제목 |
+| `h3` | `text-2xl font-semibold tracking-tight` | 화면 제목 기본, 강조 card 제목 |
+| `h4` | `text-xl font-semibold tracking-tight` | 영역 제목 |
+| `h5` | `text-lg font-semibold tracking-tight` | card/section 제목 |
+| `h6` | `text-base font-semibold tracking-tight` | 작은 영역 제목, 강조 label |
+| `body` | `text-base leading-7` | 기본 읽기 본문 |
+| `body-sm` | `text-sm leading-6` | 목록 본문, control label, 보조 설명 |
+| `body-xs` | `text-xs leading-5` | timestamp, metadata, caption |
+| `code` | `text-sm` + monospace + chip 배경 | 코드, 상태 코드, 복사 대상 값 |
+
+Compound는 `Typography.Heading`(`level` 1~6), `Typography.Paragraph`(`size` base/sm/xs), `Typography.Code`, 웹은 추가로 `Typography.Prose`(긴 형식 문서)를 제공합니다.
+
+### Props 계약
+
+- `weight`: `normal` / `medium` / `semibold` / `bold`. `type`이 암시하는 굵기를 덮어씁니다(모바일은 tailwind-merge로 항상 승리). `extrabold`는 preset에 없으므로 `className="font-extrabold"`로만 표현합니다.
+- `align`: `start` / `center` / `end` / `justify`. 물리 방향(`left`/`right`)이 아니라 논리 방향을 사용합니다. 모바일에서 `justify`는 iOS 전용이며 Android는 좌측 정렬로 동작합니다.
+- `color`: 공식 preset은 `default` / `muted`뿐입니다. 다른 색 역할은 `className="text-accent"`, `className="text-danger"`처럼 theme token 클래스로 전달합니다.
+- `truncate`: 한 줄 말줄임. 모바일은 `numberOfLines={1}`로 구현되고, 명시적 `numberOfLines` prop이 있으면 그것이 우선합니다.
+- 웹 `render` prop: 시맨틱 렌더 요소를 교체할 때 사용합니다. 예: 정의 목록의 값을 `<Typography type="body-sm" render={<dd />}>...</Typography>`로 표현.
 
 ### Typography Rules
 
-- 화면 내부 텍스트는 가능한 `Text` 컴포넌트를 통과합니다.
+- 화면 내부 텍스트는 가능한 `Typography`를 통과합니다. 웹 래퍼의 자동 i18n 번역은 제거되었으므로, 번역이 필요한 문구는 호출부에서 `useT()`로 명시합니다. 레이아웃 소유자(`Screen.Header`, `Section.Header`)는 자신이 받은 `title`/`description` props에 대해 번역을 적용한 뒤 렌더링합니다.
+- 모바일에서 raw `react-native` `Text` import는 프로젝트 코드에서 사용하지 않습니다. 문자열 children을 받는 compound/action wrapper는 `Typography`로 정규화합니다.
 - 제목은 정보 구조를 설명해야 하며, 장식용 큰 글자는 피합니다.
 - 본문은 간결한 존댓말을 사용합니다.
 - 버튼 문구는 사용자가 하는 행동을 말합니다. 예: `저장`, `예약하기`, `다시 시도`.
@@ -212,11 +232,12 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 ## Components
 
-### Text
+### Typography
 
-- 모든 사용자-facing 텍스트는 가능한 `Text` primitive를 사용합니다.
-- 화면별 title component를 새로 만들기보다 `Text` variant와 layout owner를 조합합니다.
-- 긴 문구는 줄바꿈과 좁은 화면을 고려합니다.
+- 모든 사용자-facing 텍스트는 가능한 `Typography`를 사용합니다(웹·모바일 모두 HeroUI 재수출).
+- 화면별 title component를 새로 만들지 않고 `Typography`의 `type`/`weight`와 layout owner를 조합합니다.
+- 색 역할은 `color="muted"` preset과 `className="text-{역할}"` 패턴으로 표현합니다.
+- 긴 문구는 줄바꿈과 좁은 화면을 고려하고, 한 줄 제한이 필요하면 `truncate`를 사용합니다.
 
 ### Button
 
@@ -320,7 +341,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 - `Screen Rough`에는 상태, 다음 행동, surface 계층, 주요 CTA 위치를 표시합니다.
 - `Visual Snapshot`은 장식 설명보다 화면의 밀도와 첫 인상을 보여줍니다.
-- `Annotated Wireframe`은 `Text`, `Button`, `Surface`, `Feature`, `Widget`, `Input`, `Action`, `DataDisplay`, `Feedback` 계층을 구분합니다.
+- `Annotated Wireframe`은 `Typography`, `Button`, `Surface`, `Feature`, `Widget`, `Input`, `Action`, `DataDisplay`, `Feedback` 계층을 구분합니다.
 - `Rhythm / Layout Contract`에는 web/mobile `VStack`, `HStack`, web `Spacer`, 예외적 `View/tv slots`와 `page`, `section`, `block`, `inline`, `dense`, `roomy` gap preset을 기록합니다.
 - 색상은 값이 아니라 역할로 씁니다. 예: `surface`, `accent`, `danger`, `muted`.
 - 큰 섹션은 auth, dashboard intro, mobile home, empty state처럼 핵심 인상이 필요한 경우에만 계획합니다.
@@ -329,7 +350,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 - 기존 component 재사용을 먼저 검토합니다.
 - 새 component는 하나의 파일에 하나의 exported UI component만 둡니다.
-- 사용자-facing 텍스트는 가능한 `Text` primitive를 사용합니다.
+- 사용자-facing 텍스트는 가능한 `Typography`를 사용합니다.
 - Web layout은 가능한 `VStack`, `HStack`, `Spacer`의 semantic rhythm preset으로 조합합니다.
 - Mobile layout은 가능한 `VStack`, `HStack`의 semantic rhythm preset으로 조합합니다.
 - raw gap class가 필요하면 이유를 spec 또는 최종 보고에 남깁니다.
@@ -362,6 +383,6 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 
 - 이 문서는 디자인 언어 v1입니다. 2026-09-11 갱신: mobile surface 램프를 등간격(3%p)으로 재설계하고(Surface Ladder 참조), rhythm preset을 `VStack`/`HStack`의 `gap` prop으로 구현했습니다.
 - 2026-10-02 갱신: 색·형태·컴포넌트 어휘를 HeroUI v3 토큰 체계에 맞춰 정리했습니다(`accent`/`default`/`surface` 계층/`overlay`/radius token, `Chip`·`Badge` 역할 구분).
-- 구체적인 typography size 규칙은 현재 구현을 기준으로 별도 작업에서 맞춥니다.
+- 2026-10-03 확정: 타이포그래피를 HeroUI `Typography` 구조형 계약(`type`×크기 표, `weight`/`align`/`color`/`truncate`/`render`, compound `Heading`/`Paragraph`/`Code`/`Prose`)으로 전환했습니다. 자체 역할형 variant 표와 fe-mo-ui 자체 `Text`는 이 계약으로 대체되며, 남은 `Text` 소비처는 이 문서 기준으로 전환 후 제거합니다.
 - 개별 화면 리디자인은 sidecar spec 단위로 진행합니다.
 - 디자인 원칙을 `AGENTS.md` 루트 조율과 UI builder 역할 에이전트 정의에 연결하는 작업은 후속 변경으로 다룹니다.
