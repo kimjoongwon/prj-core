@@ -1,3 +1,44 @@
+// Buzz #cicd 채널 알림 (게이트웨이: prj-devops docs/buzz-ci-integration.md)
+// - 메시지 줄 배열을 받아 JSON으로 게이트웨이에 POST한다(마지막에 Jenkins 빌드 링크 추가).
+// - BUZZ_NOTIFY_URL이 잡에 주입되지 않으면 조용히 건너뛴다.
+// - 알림은 best-effort: 게이트웨이 장애가 빌드 결과에 영향을 주지 않는다.
+def buzzNotify(List messageLines) {
+    if (!env.BUZZ_NOTIFY_URL) {
+        echo '[buzz] BUZZ_NOTIFY_URL 미설정 — 알림 생략'
+        return
+    }
+    def credId = env.BUZZ_NOTIFY_CREDENTIAL_ID ?: 'buzz-notify-token'
+    def lines = messageLines + ["Jenkins: ${env.BUILD_URL}"]
+    writeFile file: '.buzz-notify.json', text: groovy.json.JsonOutput.toJson([content: lines.join('\n')])
+    try {
+        withCredentials([string(credentialsId: credId, variable: 'BUZZ_TOKEN')]) {
+            sh '''#!/usr/bin/env bash
+                set -uo pipefail
+                # set +x: 토큰 평문 노출 차단
+                set +x
+                if command -v curl >/dev/null 2>&1; then
+                    curl -fsS -m 10 -X POST "${BUZZ_NOTIFY_URL}/send" \\
+                        -H "Authorization: Bearer ${BUZZ_TOKEN}" \\
+                        -H 'Content-Type: application/json' \\
+                        --data-binary @.buzz-notify.json \\
+                        || echo '[buzz] 알림 전송 실패 (curl, 무시됨)'
+                elif command -v wget >/dev/null 2>&1; then
+                    wget -q -O /dev/null \\
+                        --header="Authorization: Bearer ${BUZZ_TOKEN}" \\
+                        --header='Content-Type: application/json' \\
+                        --post-file=.buzz-notify.json \\
+                        "${BUZZ_NOTIFY_URL}/send" \\
+                        || echo '[buzz] 알림 전송 실패 (wget, 무시됨)'
+                else
+                    echo '[buzz] curl/wget 없음 — 알림 생략'
+                fi
+            '''
+        }
+    } finally {
+        sh 'rm -f .buzz-notify.json || true'
+    }
+}
+
 pipeline {
     agent any
 
@@ -50,6 +91,11 @@ pipeline {
             name: 'GITOPS_DEPLOY_CREDENTIAL_ID',
             defaultValue: 'prj-deploy-deploy-key',
             description: 'prj-deploy push 전용 deploy key (Secret text, PEM)'
+        )
+        string(
+            name: 'BUZZ_NOTIFY_URL',
+            defaultValue: 'http://buzz-gateway.devops-tools.svc.cluster.local',
+            description: 'Buzz #cicd 알림 게이트웨이 URL (값을 비우면 알림 끔 - prj-devops docs/buzz-ci-integration.md)'
         )
     }
 
@@ -133,6 +179,19 @@ pipeline {
 
     post {
         always {
+            script {
+                def status = currentBuild.currentResult
+                def emoji = status == 'SUCCESS' ? '✅' : (status == 'FAILURE' ? '❌' : '⚠️')
+                def resultText = status == 'SUCCESS' ? '성공' : (status == 'FAILURE' ? '실패' : status)
+                def lines = [
+                    "${emoji} **${params.APP_NAME}** GitOps 범프 ${resultText}",
+                    "이미지 태그: \`${params.IMAGE_TAG ?: 'n/a'}\` (env: ${params.DEPLOY_ENV})",
+                ]
+                if (params.SOURCE_BUILD_URL?.trim()) {
+                    lines << "업스트림 빌드: ${params.SOURCE_BUILD_URL}"
+                }
+                buzzNotify(lines)
+            }
             echo "GitOps update summary: APP=${params.APP_NAME}, TAG=${params.IMAGE_TAG}, ENV=${params.DEPLOY_ENV}"
             echo "Source build: ${params.SOURCE_BUILD_URL}"
             echo "Source commit: ${params.SOURCE_COMMIT}"

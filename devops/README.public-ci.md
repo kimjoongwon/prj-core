@@ -9,6 +9,7 @@
 - `HARBOR_CREDENTIAL_ID`: Harbor push credential ID
 - `GITOPS_UPDATE_JOB`: 승인된 GitOps 갱신 job 이름
 - `GITOPS_CREDENTIAL_ID`: GitOps 저장소 쓰기 credential ID
+- `BUZZ_NOTIFY_URL` (선택): Buzz #cicd 알림 게이트웨이 URL(예: `http://buzz-gateway.devops-tools.svc.cluster.local`). 주입하지 않으면 빌드/범프 파이프라인의 buzz 알림이 조용히 생략된다. 전송 자격증명은 Secret text credential `buzz-notify-token`(기본값, `BUZZ_NOTIFY_CREDENTIAL_ID` env로 재정의 가능). 전체 구성은 prj-devops `docs/buzz-ci-integration.md`.
 
 서비스 배포는 `main` 또는 `stg` 보호 브랜치만 허용하고, Storybook은 `main`만 허용합니다. GitOps job도 `TRUSTED_DEPLOYMENT=true`가 없거나 PR 문맥이면 실행을 거부합니다. Jenkins 관리자는 배포 job의 Jenkinsfile 경로와 revision을 보호 브랜치로 고정하고 승인된 사용자만 수동 실행 또는 설정 변경이 가능하도록 권한을 제한해야 합니다.
 
