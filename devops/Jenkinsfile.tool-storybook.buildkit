@@ -41,6 +41,16 @@ def buzzNotify(List messageLines) {
     }
 }
 
+// 알림용 소요시간 포맷 (ms → "1시간 2분" / "3분 4초" / "45초")
+def fmtDur(long ms) {
+    long s = Math.max(ms, 0L).intdiv(1000L)
+    if (s < 60L) { return "${s}초" }
+    long m = s.intdiv(60L)
+    s %= 60L
+    if (m < 60L) { return "${m}분 ${s}초" }
+    return "${m.intdiv(60L)}시간 ${m % 60L}분"
+}
+
 podTemplate(
     containers: [
         containerTemplate(
@@ -78,6 +88,9 @@ podTemplate(
         def STORYBOOK_DISABLE_CHROMATIC = 'true'
         def GITOPS_APP = 'tool-storybook'
         def GITOPS_UPDATE_JOB = CONFIGURED_GITOPS_UPDATE_JOB
+        // 알림용: 이미지 빌드 단계 소요시간 측정
+        def IMAGE_STAGE_START_MS = 0L
+        def IMAGE_STAGE_MS = 0L
 
         stage('Validate Branch') {
             if (env.BRANCH_NAME && env.BRANCH_NAME != 'main') {
@@ -96,6 +109,7 @@ podTemplate(
                 IMAGE_TAG = commitSha.substring(0, 12)
             }
 
+            IMAGE_STAGE_START_MS = System.currentTimeMillis()
             stage('Build and Push Image') {
                 container('buildctl') {
                     // Harbor 인증은 buildkitd 데몬에 마운트된 시크릿으로 처리하므로 registry login 불필요
@@ -111,6 +125,8 @@ podTemplate(
                     """
                 }
             }
+
+            IMAGE_STAGE_MS = System.currentTimeMillis() - IMAGE_STAGE_START_MS
 
             stage('Trigger GitOps Update Job') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
@@ -143,6 +159,7 @@ podTemplate(
                     "${emoji} **${GITOPS_APP}** (buildkit) ${resultText}",
                     "이미지: \`${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}\`",
                     "커밋: \`${env.GIT_COMMIT ?: 'n/a'}\`",
+                    "소요: 전체 ${fmtDur((long)(currentBuild.duration * 1000L))}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
                 ])
             } catch (Exception notifyErr) {
                 echo "[buzz] 알림 단계 오류 (무시됨): ${notifyErr.message}"
