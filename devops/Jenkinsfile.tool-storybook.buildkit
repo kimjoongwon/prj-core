@@ -59,8 +59,9 @@ def buzzNotify(List messageLines, Map opts = [:]) {
     def eventId = ''
     try {
         if (fileExists('.buzz-notify-resp.json')) {
-            def resp = new groovy.json.JsonSlurperClassic().parseText(readFile('.buzz-notify-resp.json'))
-            eventId = (resp?.event?.event_id) ?: (resp?.event?.id) ?: ''
+            // 샌드박스는 JsonSlurper 생성을 차단하므로 정규식으로 event_id만 추출한다
+            def mt = (readFile('.buzz-notify-resp.json') =~ /"event_id\s*":\s*"([0-9a-f]{64})"/)
+            if (mt.find()) { eventId = mt.group(1) }
         }
     } catch (Exception e) {
         echo "[buzz] 알림 응답 파싱 실패 (무시됨): ${e.message}"
