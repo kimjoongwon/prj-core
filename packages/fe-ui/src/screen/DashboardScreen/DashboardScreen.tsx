@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	Container,
 	Screen,
 	Section,
 	SectionSurface,
@@ -33,45 +34,52 @@ const dashboardCards = [
  * 대시보드 페이지
  *
  * 관리자 앱의 기본 랜딩 페이지입니다.
+ * Admin.Main 안에서 전폭으로 렌더링되므로 `Container width="page"`가
+ * 화면 폭 경계를 소유하고 세로 리듬은 `VStack`이 유지합니다.
  */
-function DashboardScreenContent() {
+export const DashboardScreen = observer(() => {
 	const t = useT();
 	return (
-		<VStack fullWidth>
-			<Screen.Header
-				title="대시보드"
-				description="관리자 대시보드에 오신 것을 환영합니다."
-			/>
-			<SectionSurface>
-				<Section>
-					<Section.Body>
-						<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-							{dashboardCards.map((card) => (
-								<div
-									key={card.label}
-									className="rounded-xl border border-divider bg-background"
-								>
-									<div className="p-6">
-										<h2>
-											<Typography type="body-sm" weight="medium" color="muted">
-												{t(card.label)}
-											</Typography>
-										</h2>
-										<Typography.Heading
-											level={3}
-											weight="bold"
-											className="mt-2"
-										>
-											{card.value}
-										</Typography.Heading>
+		<Container width="page">
+			<VStack fullWidth>
+				<Screen.Header
+					title="대시보드"
+					description="관리자 대시보드에 오신 것을 환영합니다."
+				/>
+				<SectionSurface>
+					<Section>
+						<Section.Body>
+							<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+								{dashboardCards.map((card) => (
+									<div
+										key={card.label}
+										className="rounded-xl border border-divider bg-background"
+									>
+										<div className="p-6">
+											<h2>
+												<Typography
+													type="body-sm"
+													weight="medium"
+													color="muted"
+												>
+													{t(card.label)}
+												</Typography>
+											</h2>
+											<Typography.Heading
+												level={3}
+												weight="bold"
+												className="mt-2"
+											>
+												{card.value}
+											</Typography.Heading>
+										</div>
 									</div>
-								</div>
-							))}
-						</div>
-					</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
+								))}
+							</div>
+						</Section.Body>
+					</Section>
+				</SectionSurface>
+			</VStack>
+		</Container>
 	);
-}
-export const DashboardScreen = observer(DashboardScreenContent);
+});

@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Typography } from "../../data-display/Typography";
 import { AccountTenantSelect } from "../../domain/account";
 import { useT } from "../../i18n";
-import { Section } from "../../layout";
+import { Container, Section } from "../../layout";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { ScreenSurface, SectionSurface } from "../../surface";
 
@@ -20,6 +20,8 @@ export interface AccountTenantSelectScreenProps {
 /**
  * 로그인한 account가 작업할 tenant를 선택하는 독립 화면입니다.
  * tenant 조회와 선택 저장은 `AccountTenantSelect`에 위임합니다.
+ * 셸 없이 전체 viewport에서 렌더링되므로 `Container width="narrow"`가
+ * 선택 카드의 읽기·입력 폭 경계를 소유합니다.
  */
 export const AccountTenantSelectScreen = observer(
 	({ eyebrow, title, description }: AccountTenantSelectScreenProps) => {
@@ -30,30 +32,32 @@ export const AccountTenantSelectScreen = observer(
 				variant="transparent"
 				className="flex min-h-dvh items-center justify-center rounded-none bg-background px-6 py-10"
 			>
-				<SectionSurface className="max-w-md rounded-2xl shadow-sm">
-					<Section>
-						<Section.Header>
-							<VStack fullWidth gap="inline">
-								<Typography
-									type="body-xs"
-									weight="semibold"
-									className="uppercase tracking-[0.2em] text-muted"
-								>
-									{t(eyebrow)}
-								</Typography>
-								<Typography.Heading level={1}>{t(title)}</Typography.Heading>
-								<Typography.Paragraph color="muted" size="sm">
-									{t(description)}
-								</Typography.Paragraph>
-							</VStack>
-						</Section.Header>
-						<Section.Body>
-							<VStack fullWidth>
-								<AccountTenantSelect />
-							</VStack>
-						</Section.Body>
-					</Section>
-				</SectionSurface>
+				<Container width="narrow">
+					<SectionSurface className="rounded-2xl shadow-sm">
+						<Section>
+							<Section.Header>
+								<VStack fullWidth gap="inline">
+									<Typography
+										type="body-xs"
+										weight="semibold"
+										className="uppercase tracking-[0.2em] text-muted"
+									>
+										{t(eyebrow)}
+									</Typography>
+									<Typography.Heading level={1}>{t(title)}</Typography.Heading>
+									<Typography.Paragraph color="muted" size="sm">
+										{t(description)}
+									</Typography.Paragraph>
+								</VStack>
+							</Section.Header>
+							<Section.Body>
+								<VStack fullWidth>
+									<AccountTenantSelect />
+								</VStack>
+							</Section.Body>
+						</Section>
+					</SectionSurface>
+				</Container>
 			</ScreenSurface>
 		);
 	},
