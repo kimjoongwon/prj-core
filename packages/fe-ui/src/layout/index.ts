@@ -4,4 +4,6 @@ export * from "./App";
 export * from "./Auth";
 export * from "./Container/Container";
 export * from "./Screen";
+export * from "./ScrollShadow/ScrollShadow";
 export * from "./Section";
+export * from "./Separator/Separator";

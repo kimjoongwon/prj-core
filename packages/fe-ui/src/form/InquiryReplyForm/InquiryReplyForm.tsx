@@ -1,10 +1,11 @@
 "use client";
 
-import { Separator, Tooltip } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
 import { BookOpen, FileText, Paperclip, Send, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
 import { Typography } from "../../data-display/Typography";
+import { Separator } from "../../layout";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { HStack, VStack } from "../../rhythm";

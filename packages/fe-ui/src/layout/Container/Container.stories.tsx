@@ -1,178 +1,148 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Typography } from "../../data-display/Typography";
-import { Container } from "./Container";
+import { HStack, VStack } from "../../rhythm";
+import { Container, type ContainerWidth } from "./Container";
 
 const meta = {
 	title: "layout/Container",
 	component: Container,
 	parameters: {
-		layout: "centered",
+		layout: "fullscreen",
 		docs: {
 			description: {
 				component:
-					"일관된 레이아웃 구조를 제공하는 유연한 컴테이너 컴포넌트입니다.",
+					"콘텐츠 폭을 역할 단위로 제한하고 중앙 정렬하는 구조 primitive입니다. 세로 리듬은 소유하지 않고 자식은 VStack/HStack으로 조합합니다.",
 			},
 		},
 	},
 	tags: ["autodocs"],
 	argTypes: {
+		width: {
+			control: "select",
+			options: ["narrow", "content", "page", "wide", "full"],
+			description: "폭 역할 (기본: page)",
+		},
+		containerQuery: {
+			control: "boolean",
+			description: "이 컨테이너 폭을 기준으로 하는 container query 활성화",
+		},
 		className: {
 			control: "text",
-			description: "추가 CSS 클래스",
+			description: "폭 외 여백 등 조합용 추가 CSS 클래스",
 		},
 		children: {
 			control: "text",
-			description: "컴테이너 내부에 표시할 컨텐츠",
+			description: "컨테이너 내부 콘텐츠",
 		},
+	},
+	args: {
+		width: "page",
 	},
 } satisfies Meta<typeof Container>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const widthLabels: Record<ContainerWidth, string> = {
+	narrow: "narrow — 읽기 전용 폼·본문 (max-w-[40rem])",
+	content: "content — 본문 중심 콘텐츠 (max-w-4xl)",
+	page: "page — 페이지 기본 (max-w-7xl)",
+	wide: "wide — 넓은 대시보드 (max-w-[96rem])",
+	full: "full — 전체 폭 (max-w-none)",
+};
+
 export const 기본: Story = {
 	args: {
-		children: "컴테이너 컨텐츠",
+		children: "컨테이너 콘텐츠",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "기본 컴테이너입니다.",
+				story: "기본 폭 역할은 page(max-w-7xl)이고 항상 중앙 정렬됩니다.",
 			},
 		},
 	},
 };
 
-export const 커스텀스타일: Story = {
-	args: {
-		children: "커스텀 스타일 컴테이너",
-		className: "rounded-lg border-2 border-accent/30 bg-accent-soft p-4",
-	},
+export const 폭역할별: Story = {
+	args: { children: "" },
+	render: () => (
+		<VStack gap="page">
+			{(Object.keys(widthLabels) as ContainerWidth[]).map((width) => (
+				<Container key={width} width={width}>
+					<div className="rounded-lg border border-dashed border-border bg-surface p-3 text-sm">
+						{widthLabels[width]}
+					</div>
+				</Container>
+			))}
+		</VStack>
+	),
 	parameters: {
+		layout: "padded",
 		docs: {
 			description: {
-				story: "커스텀 스타일이 적용된 컴테이너입니다.",
+				story: "폭 역할 5종의 최대 폭을 나란히 비교합니다.",
 			},
 		},
 	},
 };
 
-export const 여러요소: Story = {
-	args: {
-		className: "gap-4 rounded-lg bg-surface-secondary p-4",
-		children: "",
-	},
-	render: (args) => (
-		<Container {...args}>
-			<>
-				<div className="rounded bg-surface-tertiary p-2">
-					<Typography>아이템 1</Typography>
-				</div>
-				<div className="rounded bg-surface-secondary p-2">
-					<Typography>아이템 2</Typography>
-				</div>
-				<div className="rounded bg-accent-soft p-2">
-					<Typography>아이템 3</Typography>
-				</div>
-			</>
+export const 세로리듬조합: Story = {
+	args: { children: "" },
+	render: () => (
+		<Container width="content" className="py-8">
+			<VStack gap="page">
+				<header className="rounded-lg bg-surface-secondary p-4">
+					<h2 className="text-lg font-bold">제목 블록</h2>
+					<p className="text-muted text-sm">
+						Container는 폭만 소유하고 세로 간격은 VStack gap이 소유합니다.
+					</p>
+				</header>
+				<HStack gap="section">
+					<div className="flex-1 rounded-lg bg-surface-tertiary p-4 text-sm">
+						본문 블록
+					</div>
+					<div className="flex-1 rounded-lg bg-surface-tertiary p-4 text-sm">
+						보조 블록
+					</div>
+				</HStack>
+			</VStack>
 		</Container>
 	),
 	parameters: {
+		layout: "padded",
 		docs: {
 			description: {
-				story: "여러 자식 요소가 있는 컴테이너입니다.",
+				story:
+					"폭은 Container width, 세로 리듬은 VStack/HStack 조합으로 분리해 사용합니다.",
 			},
 		},
 	},
 };
 
-export const 반응형: Story = {
-	args: {
-		className:
-			"mx-auto w-full max-w-md rounded-lg bg-surface p-6 shadow-surface",
-		children: "",
-	},
-	render: (args) => (
-		<Container {...args}>
-			<>
-				<Typography.Heading className="mb-4 text-xl" level={2} weight="bold">
-					카드 제목
-				</Typography.Heading>
-				<Typography.Paragraph className="mb-4" color="muted">
-					다양한 화면 크기에 잘 맞는 반응형 컨테이너의 예시입니다.
-				</Typography.Paragraph>
-				<button
-					type="button"
-					className="w-full rounded bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover"
-				>
-					액션 버튼
-				</button>
-			</>
-		</Container>
+export const 컨테이너쿼리: Story = {
+	args: { children: "" },
+	render: () => (
+		<VStack gap="page">
+			{(["narrow", "content"] as const).map((width) => (
+				<Container key={width} containerQuery width={width}>
+					<div className="flex flex-col gap-3 @md:flex-row @md:gap-6">
+						<div className="flex-1 rounded-lg border border-border bg-surface p-4 text-sm">
+							{width} 컨테이너 — 좁을 때 세로, @md(28rem) 이상에서 가로로 전환
+						</div>
+						<div className="flex-1 rounded-lg border border-border bg-surface p-4 text-sm">
+							@container 기준 자식
+						</div>
+					</div>
+				</Container>
+			))}
+		</VStack>
 	),
 	parameters: {
+		layout: "padded",
 		docs: {
 			description: {
-				story: "반응형 카드 레이아웃에 사용되는 컴테이너입니다.",
-			},
-		},
-	},
-};
-
-export const 폼레이아웃: Story = {
-	args: {
-		className:
-			"gap-4 max-w-sm rounded-lg border border-border bg-surface p-6 shadow-surface",
-		children: "",
-	},
-	render: (args) => (
-		<Container {...args}>
-			<>
-				<Typography.Heading className="text-lg" level={3}>
-					연락처 폼
-				</Typography.Heading>
-				<input
-					type="text"
-					placeholder="이름"
-					className="w-full rounded border p-2"
-				/>
-				<input
-					type="email"
-					placeholder="이메일"
-					className="w-full rounded border p-2"
-				/>
-				<textarea
-					placeholder="메시지"
-					rows={3}
-					className="w-full resize-none rounded border p-2"
-				/>
-				<button
-					type="button"
-					className="w-full rounded bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover"
-				>
-					메시지 보내기
-				</button>
-			</>
-		</Container>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "적절한 간격이 있는 폼 레이아웃에 사용되는 컴테이너입니다.",
-			},
-		},
-	},
-};
-
-export const 플레이그라운드: Story = {
-	args: {
-		children: "플레이그라운드 컴테이너",
-		className: "border-2 border-dashed border-border p-4",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "다양한 컴테이너 설정을 테스트할 수 있는 플레이그라운드입니다.",
+				story:
+					"containerQuery를 켜면 자식이 뷰포트가 아니라 이 컨테이너의 폭을 기준으로 반응합니다.",
 			},
 		},
 	},

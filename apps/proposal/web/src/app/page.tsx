@@ -5,11 +5,12 @@ import {
 	Chip,
 	Container,
 	HStack,
+	Separator,
 	Typography,
 	useDesignSystemTheme,
 	VStack,
 } from "@cocrepo/ui";
-import { Card, Separator } from "@heroui/react";
+import { Card } from "@heroui/react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -670,232 +671,111 @@ export default observer(function ProposalPage() {
 			/>
 			<main className="mx-auto w-full max-w-[90rem] px-5 pb-20 pt-8 md:px-8 md:pb-28 md:pt-10">
 				<div className="rounded-3xl border border-border bg-surface px-6 py-10 shadow-surface md:px-14 md:py-14">
-					<Container className="mx-auto max-w-7xl gap-24 py-8 md:gap-32 md:py-12">
-						<HeroSection hero={pageData.hero} process={pageData.process} />
-						<LandingSection
-							id="problem"
-							eyebrow="Why this model"
-							title="외주 업계의 현실은 수주와 제작 사이의 간극, 그리고 중간 계층의 병목입니다"
-							description="겉으로는 고급 인력이 제안을 이끌지만, 실제 제작이 저연차 체인과 중간 전달자 구조로 흘러가면 비용은 비싸고 속도는 느려집니다. 여기에 AI 시대에도 남아 있는 어중간한 기획·디자인·개발 계층이 더해지면 일정은 더 길어집니다."
-						>
-							<motion.div
-								className="grid gap-6 md:grid-cols-3"
-								initial="hidden"
-								whileInView="show"
-								viewport={VIEWPORT}
-								variants={GRID_VARIANTS}
+					<Container width="page" className="py-8 md:py-12">
+						<VStack gap="roomy" className="md:gap-32">
+							<HeroSection hero={pageData.hero} process={pageData.process} />
+							<LandingSection
+								id="problem"
+								eyebrow="Why this model"
+								title="외주 업계의 현실은 수주와 제작 사이의 간극, 그리고 중간 계층의 병목입니다"
+								description="겉으로는 고급 인력이 제안을 이끌지만, 실제 제작이 저연차 체인과 중간 전달자 구조로 흘러가면 비용은 비싸고 속도는 느려집니다. 여기에 AI 시대에도 남아 있는 어중간한 기획·디자인·개발 계층이 더해지면 일정은 더 길어집니다."
 							>
-								{pageData.problems.map(renderNarrativeCard)}
-							</motion.div>
-						</LandingSection>
-						<LandingSection
-							id="approach"
-							eyebrow="Approach"
-							title="우리는 정적 시안보다 Code to Storybook 흐름을 기준으로 움직입니다"
-							description="AI를 장식용 기능으로 보지 않습니다. 기획, 디자인, 개발 초안처럼 이미 빨라진 레이어에는 AI를 적극 투입하고, 기준 자산은 Figma가 아니라 Code로 둡니다. Storybook은 그 Code를 변형과 상태까지 함께 검토하는 공유면입니다. 실제 거래 대상은 AI 개발 플로우 전체입니다."
-						>
-							<motion.div
-								className="grid gap-6 md:grid-cols-3"
-								initial="hidden"
-								whileInView="show"
-								viewport={VIEWPORT}
-								variants={GRID_VARIANTS}
-							>
-								{pageData.approach.map(renderNarrativeCard)}
-							</motion.div>
-						</LandingSection>
-						<LandingSection
-							id="process"
-							eyebrow="Execution flow"
-							title="실행 흐름은 짧게, 산출물은 겹치지 않게 설계합니다"
-							description="각 단계는 다음 단계를 기다리기 위한 문서가 아니라, 바로 구현과 검증으로 이어지기 위한 입력입니다. 그래서 같은 예산에서도 더 많은 범위를 다룰 수 있습니다."
-						>
-							<motion.div
-								className="grid gap-6 xl:grid-cols-5"
-								initial="hidden"
-								whileInView="show"
-								viewport={VIEWPORT}
-								variants={GRID_VARIANTS}
-							>
-								{pageData.process.map(renderProcessCard)}
-							</motion.div>
-						</LandingSection>
-						<LandingSection
-							id="cost"
-							eyebrow="Cost optimization"
-							title={pageData.costModel.title}
-							description={pageData.costModel.description}
-						>
-							<motion.div
-								className="grid gap-6 md:grid-cols-3"
-								initial="hidden"
-								whileInView="show"
-								viewport={VIEWPORT}
-								variants={GRID_VARIANTS}
-							>
-								{pageData.costModel.benefits.map(renderNarrativeCard)}
-							</motion.div>
-							<div className="grid gap-6 md:grid-cols-2">
-								<Card className="border border-danger/30 bg-danger/10 shadow-none">
-									<Card.Header className="flex-col items-start gap-3">
-										<Chip variant="soft" color="danger">
-											줄이는 비용
-										</Chip>
-										<Typography.Heading level={5}>
-											없애도 되는 레이어
-										</Typography.Heading>
-									</Card.Header>
-									<Card.Content>
-										<ul className="flex flex-col gap-4">
-											{pageData.costModel.removed.map(renderCostLine)}
-										</ul>
-									</Card.Content>
-								</Card>
-								<Card className="border border-success/30 bg-success/10 shadow-none">
-									<Card.Header className="flex-col items-start gap-3">
-										<Chip variant="soft" color="success">
-											남겨야 하는 비용
-										</Chip>
-										<Typography.Heading level={5}>
-											사람이 붙잡아야 하는 레이어
-										</Typography.Heading>
-									</Card.Header>
-									<Card.Content>
-										<ul className="flex flex-col gap-4">
-											{pageData.costModel.focused.map(renderCostLine)}
-										</ul>
-									</Card.Content>
-								</Card>
-							</div>
-						</LandingSection>
-						<LandingSection
-							id="stack"
-							eyebrow="Tech credibility"
-							title="README에 쌓인 모노레포 기술 자산 위에서 빠르게 전달합니다"
-							description="소개용 카피만 만드는 팀이 아니라, 실제로 운영 가능한 제품 구조를 전제로 화면과 서버를 함께 설계합니다. 아래 스택은 현재 저장소에서 사용하는 핵심 기술 축입니다."
-						>
-							<motion.div
-								className="grid gap-6 md:grid-cols-2"
-								initial="hidden"
-								whileInView="show"
-								viewport={VIEWPORT}
-								variants={GRID_VARIANTS}
-							>
-								{pageData.stack.map(renderStackCard)}
-							</motion.div>
-						</LandingSection>
-						<LandingSection
-							id="fit"
-							eyebrow="Best fit"
-							title="이런 프로젝트일수록 AI 중심 방식의 차이가 분명합니다"
-							description="복잡한 문서보다 빠른 실행과 운영 가능한 구조가 중요한 팀, 그리고 handoff 비용을 줄이고 싶은 팀에 특히 잘 맞습니다."
-						>
-							<motion.div
-								className="grid gap-6 md:grid-cols-2"
-								initial="hidden"
-								whileInView="show"
-								viewport={VIEWPORT}
-								variants={GRID_VARIANTS}
-							>
-								{pageData.projectFits.map(renderNarrativeCard)}
-							</motion.div>
-							<Card className="border border-border bg-surface">
-								<Card.Content className="gap-7 p-6 md:p-9">
-									<VStack gap="section">
-										<Chip variant="soft" color="accent">
-											Closing note
-										</Chip>
-										<Typography.Heading
-											level={3}
-											className="font-display md:text-4xl"
-										>
-											{pageData.closing.title}
-										</Typography.Heading>
-										<Typography.Paragraph color="muted" className="max-w-3xl">
-											{pageData.closing.description}
-										</Typography.Paragraph>
-									</VStack>
-									<ul className="grid gap-4 md:grid-cols-3">
-										{pageData.closing.bullets.map(renderClosingBullet)}
-									</ul>
-								</Card.Content>
-							</Card>
-						</LandingSection>
-						<LandingSection
-							id="career"
-							eyebrow="Builder background"
-							title={pageData.career.title}
-							description={pageData.career.description}
-						>
-							<motion.div
-								className="grid gap-6 md:grid-cols-4"
-								initial="hidden"
-								whileInView="show"
-								viewport={VIEWPORT}
-								variants={GRID_VARIANTS}
-							>
-								{pageData.career.summary.map(renderMetricCard)}
-							</motion.div>
-							<motion.div
-								className="grid gap-6 xl:grid-cols-2"
-								initial="hidden"
-								whileInView="show"
-								viewport={VIEWPORT}
-								variants={GRID_VARIANTS}
-							>
-								{pageData.career.entries.map(renderCareerCard)}
-							</motion.div>
-							<div className="grid gap-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
 								<motion.div
-									className="grid gap-6 sm:grid-cols-2"
+									className="grid gap-6 md:grid-cols-3"
 									initial="hidden"
 									whileInView="show"
 									viewport={VIEWPORT}
 									variants={GRID_VARIANTS}
 								>
-									{pageData.career.credentials.map(renderResumeFactCard)}
+									{pageData.problems.map(renderNarrativeCard)}
 								</motion.div>
-								<Card className="border border-border bg-surface">
-									<Card.Header
-										className={`flex-col items-start gap-3 border-b ${PANEL_DIVIDER_CLASS}`}
-									>
-										<Chip variant="soft" color="accent">
-											Resume note
-										</Chip>
-										<VStack gap="inline">
+							</LandingSection>
+							<LandingSection
+								id="approach"
+								eyebrow="Approach"
+								title="우리는 정적 시안보다 Code to Storybook 흐름을 기준으로 움직입니다"
+								description="AI를 장식용 기능으로 보지 않습니다. 기획, 디자인, 개발 초안처럼 이미 빨라진 레이어에는 AI를 적극 투입하고, 기준 자산은 Figma가 아니라 Code로 둡니다. Storybook은 그 Code를 변형과 상태까지 함께 검토하는 공유면입니다. 실제 거래 대상은 AI 개발 플로우 전체입니다."
+							>
+								<motion.div
+									className="grid gap-6 md:grid-cols-3"
+									initial="hidden"
+									whileInView="show"
+									viewport={VIEWPORT}
+									variants={GRID_VARIANTS}
+								>
+									{pageData.approach.map(renderNarrativeCard)}
+								</motion.div>
+							</LandingSection>
+							<LandingSection
+								id="process"
+								eyebrow="Execution flow"
+								title="실행 흐름은 짧게, 산출물은 겹치지 않게 설계합니다"
+								description="각 단계는 다음 단계를 기다리기 위한 문서가 아니라, 바로 구현과 검증으로 이어지기 위한 입력입니다. 그래서 같은 예산에서도 더 많은 범위를 다룰 수 있습니다."
+							>
+								<motion.div
+									className="grid gap-6 xl:grid-cols-5"
+									initial="hidden"
+									whileInView="show"
+									viewport={VIEWPORT}
+									variants={GRID_VARIANTS}
+								>
+									{pageData.process.map(renderProcessCard)}
+								</motion.div>
+							</LandingSection>
+							<LandingSection
+								id="cost"
+								eyebrow="Cost optimization"
+								title={pageData.costModel.title}
+								description={pageData.costModel.description}
+							>
+								<motion.div
+									className="grid gap-6 md:grid-cols-3"
+									initial="hidden"
+									whileInView="show"
+									viewport={VIEWPORT}
+									variants={GRID_VARIANTS}
+								>
+									{pageData.costModel.benefits.map(renderNarrativeCard)}
+								</motion.div>
+								<div className="grid gap-6 md:grid-cols-2">
+									<Card className="border border-danger/30 bg-danger/10 shadow-none">
+										<Card.Header className="flex-col items-start gap-3">
+											<Chip variant="soft" color="danger">
+												줄이는 비용
+											</Chip>
 											<Typography.Heading level={5}>
-												{pageData.career.statement.title}
+												없애도 되는 레이어
 											</Typography.Heading>
-											<Typography.Paragraph size="sm" color="muted">
-												{pageData.career.statement.description}
-											</Typography.Paragraph>
-										</VStack>
-									</Card.Header>
-									<Card.Content>
-										<ul className="flex flex-col gap-4">
-											{pageData.career.statement.bullets.map(renderCareerLine)}
-										</ul>
-									</Card.Content>
-								</Card>
-							</div>
-							<VStack gap="page">
-								<VStack gap="block">
-									<Chip variant="soft" color="default">
-										Portfolio
-									</Chip>
-									<Typography.Heading level={3} className="font-display">
-										이력서에 포함된 개인 포트폴리오와 학습 프로젝트
-									</Typography.Heading>
-									<Typography.Paragraph
-										size="sm"
-										color="muted"
-										className="max-w-3xl"
-									>
-										실서비스에 적용 가능한 구조를 목표로 운영 중인 개인
-										프로젝트도 함께 노출합니다. 실무 경력 외에 어떤 방향으로
-										역량을 확장하고 있는지도 보이도록 구성했습니다.
-									</Typography.Paragraph>
-								</VStack>
+										</Card.Header>
+										<Card.Content>
+											<ul className="flex flex-col gap-4">
+												{pageData.costModel.removed.map(renderCostLine)}
+											</ul>
+										</Card.Content>
+									</Card>
+									<Card className="border border-success/30 bg-success/10 shadow-none">
+										<Card.Header className="flex-col items-start gap-3">
+											<Chip variant="soft" color="success">
+												남겨야 하는 비용
+											</Chip>
+											<Typography.Heading level={5}>
+												사람이 붙잡아야 하는 레이어
+											</Typography.Heading>
+										</Card.Header>
+										<Card.Content>
+											<ul className="flex flex-col gap-4">
+												{pageData.costModel.focused.map(renderCostLine)}
+											</ul>
+										</Card.Content>
+									</Card>
+								</div>
+							</LandingSection>
+							<LandingSection
+								id="stack"
+								eyebrow="Tech credibility"
+								title="README에 쌓인 모노레포 기술 자산 위에서 빠르게 전달합니다"
+								description="소개용 카피만 만드는 팀이 아니라, 실제로 운영 가능한 제품 구조를 전제로 화면과 서버를 함께 설계합니다. 아래 스택은 현재 저장소에서 사용하는 핵심 기술 축입니다."
+							>
 								<motion.div
 									className="grid gap-6 md:grid-cols-2"
 									initial="hidden"
@@ -903,13 +783,136 @@ export default observer(function ProposalPage() {
 									viewport={VIEWPORT}
 									variants={GRID_VARIANTS}
 								>
-									{pageData.career.portfolio.map(renderPortfolioCard)}
+									{pageData.stack.map(renderStackCard)}
 								</motion.div>
+							</LandingSection>
+							<LandingSection
+								id="fit"
+								eyebrow="Best fit"
+								title="이런 프로젝트일수록 AI 중심 방식의 차이가 분명합니다"
+								description="복잡한 문서보다 빠른 실행과 운영 가능한 구조가 중요한 팀, 그리고 handoff 비용을 줄이고 싶은 팀에 특히 잘 맞습니다."
+							>
+								<motion.div
+									className="grid gap-6 md:grid-cols-2"
+									initial="hidden"
+									whileInView="show"
+									viewport={VIEWPORT}
+									variants={GRID_VARIANTS}
+								>
+									{pageData.projectFits.map(renderNarrativeCard)}
+								</motion.div>
+								<Card className="border border-border bg-surface">
+									<Card.Content className="gap-7 p-6 md:p-9">
+										<VStack gap="section">
+											<Chip variant="soft" color="accent">
+												Closing note
+											</Chip>
+											<Typography.Heading
+												level={3}
+												className="font-display md:text-4xl"
+											>
+												{pageData.closing.title}
+											</Typography.Heading>
+											<Typography.Paragraph color="muted" className="max-w-3xl">
+												{pageData.closing.description}
+											</Typography.Paragraph>
+										</VStack>
+										<ul className="grid gap-4 md:grid-cols-3">
+											{pageData.closing.bullets.map(renderClosingBullet)}
+										</ul>
+									</Card.Content>
+								</Card>
+							</LandingSection>
+							<LandingSection
+								id="career"
+								eyebrow="Builder background"
+								title={pageData.career.title}
+								description={pageData.career.description}
+							>
+								<motion.div
+									className="grid gap-6 md:grid-cols-4"
+									initial="hidden"
+									whileInView="show"
+									viewport={VIEWPORT}
+									variants={GRID_VARIANTS}
+								>
+									{pageData.career.summary.map(renderMetricCard)}
+								</motion.div>
+								<motion.div
+									className="grid gap-6 xl:grid-cols-2"
+									initial="hidden"
+									whileInView="show"
+									viewport={VIEWPORT}
+									variants={GRID_VARIANTS}
+								>
+									{pageData.career.entries.map(renderCareerCard)}
+								</motion.div>
+								<div className="grid gap-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+									<motion.div
+										className="grid gap-6 sm:grid-cols-2"
+										initial="hidden"
+										whileInView="show"
+										viewport={VIEWPORT}
+										variants={GRID_VARIANTS}
+									>
+										{pageData.career.credentials.map(renderResumeFactCard)}
+									</motion.div>
+									<Card className="border border-border bg-surface">
+										<Card.Header
+											className={`flex-col items-start gap-3 border-b ${PANEL_DIVIDER_CLASS}`}
+										>
+											<Chip variant="soft" color="accent">
+												Resume note
+											</Chip>
+											<VStack gap="inline">
+												<Typography.Heading level={5}>
+													{pageData.career.statement.title}
+												</Typography.Heading>
+												<Typography.Paragraph size="sm" color="muted">
+													{pageData.career.statement.description}
+												</Typography.Paragraph>
+											</VStack>
+										</Card.Header>
+										<Card.Content>
+											<ul className="flex flex-col gap-4">
+												{pageData.career.statement.bullets.map(renderCareerLine)}
+											</ul>
+										</Card.Content>
+									</Card>
+								</div>
+								<VStack gap="page">
+									<VStack gap="block">
+										<Chip variant="soft" color="default">
+											Portfolio
+										</Chip>
+										<Typography.Heading level={3} className="font-display">
+											이력서에 포함된 개인 포트폴리오와 학습 프로젝트
+										</Typography.Heading>
+										<Typography.Paragraph
+											size="sm"
+											color="muted"
+											className="max-w-3xl"
+										>
+											실서비스에 적용 가능한 구조를 목표로 운영 중인 개인
+											프로젝트도 함께 노출합니다. 실무 경력 외에 어떤 방향으로
+											역량을 확장하고 있는지도 보이도록 구성했습니다.
+										</Typography.Paragraph>
+									</VStack>
+									<motion.div
+										className="grid gap-6 md:grid-cols-2"
+										initial="hidden"
+										whileInView="show"
+										viewport={VIEWPORT}
+										variants={GRID_VARIANTS}
+									>
+										{pageData.career.portfolio.map(renderPortfolioCard)}
+									</motion.div>
 							</VStack>
 						</LandingSection>
-					</Container>
-				</div>
-			</main>
+					</VStack>
+				</Container>
+			</div>
+		</main>
 		</div>
 	);
 });

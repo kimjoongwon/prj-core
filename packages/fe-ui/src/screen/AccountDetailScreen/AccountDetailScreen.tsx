@@ -5,10 +5,11 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	Separator,
 	Typography,
 	VStack,
 } from "@cocrepo/ui";
-import { ListBox, Separator } from "@heroui/react";
+import { ListBox } from "@heroui/react";
 import {
 	ArrowLeft,
 	KeyRound,

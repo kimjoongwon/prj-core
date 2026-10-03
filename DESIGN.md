@@ -172,11 +172,28 @@ Mobile은 편안한 확인과 다음 행동 안내가 중요합니다.
 
 - 값 체계의 canonical owner는 `packages/fe-ui/src/rhythm/stack-gap.ts`와 `packages/fe-mo-ui/src/rhythm/stack-gap.ts`입니다. 두 파일의 값 목록과 크기는 항상 일치해야 하며, 이 표를 함께 갱신합니다.
 
-- Web/PC 조합은 `@cocrepo/ui`의 `VStack`, `HStack`, `Spacer`를 우선 사용합니다.
+- Web/PC 조합은 `@cocrepo/ui`의 `VStack`, `HStack`을 우선 사용합니다.
 - Mobile 조합은 `@cocrepo/mo-ui`의 `VStack`, `HStack`을 우선 사용합니다.
 - raw `gap-*`, `space-y-*`, `space-x-*`는 CSS grid, third-party layout, legacy 유지 같은 예외에서만 사용합니다.
 - Mobile에서 third-party native bridge나 primitive로 표현하기 어려운 저수준 layout만 `View`와 `tailwind-variants` slot을 예외적으로 사용합니다.
 - spec에는 어떤 UI component를 쓰는지만이 아니라 어떤 rhythm primitive가 감싸는지도 적습니다.
+
+### Container Width
+
+폭은 임시 값이 아니라 콘텐츠 역할로 정의합니다. web `Container`는 중앙 정렬과 폭 역할만 소유하고, 세로 리듬은 자식 `VStack`/`HStack` 조합이 소유합니다.
+
+| 폭 역할 | 최대 폭 | 사용처 |
+|---------|---------|--------|
+| `narrow` | `max-w-[40rem]` | 읽기 전용 폼, 본문 중심 문서 |
+| `content` | `max-w-4xl` | 본문 중심 콘텐츠 |
+| `page` | `max-w-7xl` | 페이지 기본 |
+| `wide` | `max-w-[96rem]` | 넓은 대시보드, 대형 표 |
+| `full` | `max-w-none` | 전체 폭 영역 |
+
+- `Container`는 항상 `mx-auto w-full` 중앙 정렬을 유지하고 폭 역할 기본값은 `page`입니다.
+- 폭은 `width` prop으로 지정하고, 화면 코드에서 임의 `max-w-*`로 폭을 다시 지정하지 않습니다. 여백·수직 패딩은 `className`으로 조합합니다.
+- 세로 간격과 방향은 `Container`가 아니라 자식 `VStack`/`HStack`의 gap preset으로 조합합니다.
+- `containerQuery`를 켜면 자식이 뷰포트가 아니라 이 컨테이너 폭을 기준으로 `@md:flex-row`처럼 반응합니다.
 
 ### Large Section Usage
 
@@ -342,7 +359,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 - `Screen Rough`에는 상태, 다음 행동, surface 계층, 주요 CTA 위치를 표시합니다.
 - `Visual Snapshot`은 장식 설명보다 화면의 밀도와 첫 인상을 보여줍니다.
 - `Annotated Wireframe`은 `Typography`, `Button`, `Surface`, `Feature`, `Widget`, `Input`, `Action`, `DataDisplay`, `Feedback` 계층을 구분합니다.
-- `Rhythm / Layout Contract`에는 web/mobile `VStack`, `HStack`, web `Spacer`, 예외적 `View/tv slots`와 `page`, `section`, `block`, `inline`, `dense`, `roomy` gap preset을 기록합니다.
+- `Rhythm / Layout Contract`에는 web/mobile `VStack`, `HStack`, `Container` 폭 역할, 예외적 `View/tv slots`와 `page`, `section`, `block`, `inline`, `dense`, `roomy` gap preset을 기록합니다.
 - 색상은 값이 아니라 역할로 씁니다. 예: `surface`, `accent`, `danger`, `muted`.
 - 큰 섹션은 auth, dashboard intro, mobile home, empty state처럼 핵심 인상이 필요한 경우에만 계획합니다.
 
@@ -351,7 +368,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 - 기존 component 재사용을 먼저 검토합니다.
 - 새 component는 하나의 파일에 하나의 exported UI component만 둡니다.
 - 사용자-facing 텍스트는 가능한 `Typography`를 사용합니다.
-- Web layout은 가능한 `VStack`, `HStack`, `Spacer`의 semantic rhythm preset으로 조합합니다.
+- Web layout은 가능한 `VStack`, `HStack`의 semantic rhythm preset으로 조합합니다.
 - Mobile layout은 가능한 `VStack`, `HStack`의 semantic rhythm preset으로 조합합니다.
 - raw gap class가 필요하면 이유를 spec 또는 최종 보고에 남깁니다.
 - 신규/수정 UI component는 story와 unit test 계약을 함께 작성합니다.
@@ -360,7 +377,7 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 ### QA 시
 
 - 상태와 다음 행동이 보이는지 확인합니다.
-- spec의 rhythm 계약과 실제 web/mobile `VStack`/`HStack`, web `Spacer`, 또는 예외적 mobile layout owner가 일치하는지 확인합니다.
+- spec의 rhythm 계약과 실제 web/mobile `VStack`/`HStack`, `Container` 폭 역할, 또는 예외적 mobile layout owner가 일치하는지 확인합니다.
 - 과한 장식, 임의 색상, 불필요한 gradient/blur가 없는지 확인합니다.
 - 긴 텍스트, 좁은 화면, disabled/loading/error 상태를 확인합니다.
 - story/test가 component 상태를 충분히 다루는지 확인합니다.
@@ -384,5 +401,6 @@ surface는 화면의 정보 계층을 만드는 도구입니다. shadow를 많�
 - 이 문서는 디자인 언어 v1입니다. 2026-09-11 갱신: mobile surface 램프를 등간격(3%p)으로 재설계하고(Surface Ladder 참조), rhythm preset을 `VStack`/`HStack`의 `gap` prop으로 구현했습니다.
 - 2026-10-02 갱신: 색·형태·컴포넌트 어휘를 HeroUI v3 토큰 체계에 맞춰 정리했습니다(`accent`/`default`/`surface` 계층/`overlay`/radius token, `Chip`·`Badge` 역할 구분).
 - 2026-10-03 확정: 타이포그래피를 HeroUI `Typography` 구조형 계약(`type`×크기 표, `weight`/`align`/`color`/`truncate`/`render`, compound `Heading`/`Paragraph`/`Code`/`Prose`)으로 전환했습니다. 자체 역할형 variant 표와 fe-mo-ui 자체 `Text`는 이 계약으로 대체되며, 남은 `Text` 소비처는 이 문서 기준으로 전환 후 제거합니다.
+- 2026-10-03 확정: web `Container`를 폭 역할(`narrow`/`content`/`page`/`wide`/`full` + `containerQuery`) 계약으로 정리하고, HeroUI `Separator`·`ScrollShadow`를 layout 재수출 래퍼로 일원화했습니다. web `Spacer` 문구는 실제 구현에 없어 제거했습니다.
 - 개별 화면 리디자인은 sidecar spec 단위로 진행합니다.
 - 디자인 원칙을 `AGENTS.md` 루트 조율과 UI builder 역할 에이전트 정의에 연결하는 작업은 후속 변경으로 다룹니다.
