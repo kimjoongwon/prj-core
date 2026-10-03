@@ -182,18 +182,41 @@ Mobile은 편안한 확인과 다음 행동 안내가 중요합니다.
 
 폭은 임시 값이 아니라 콘텐츠 역할로 정의합니다. web `Container`는 중앙 정렬과 폭 역할만 소유하고, 세로 리듬은 자식 `VStack`/`HStack` 조합이 소유합니다.
 
-| 폭 역할 | 최대 폭 | 사용처 |
-|---------|---------|--------|
-| `narrow` | `max-w-[40rem]` | 읽기 전용 폼, 본문 중심 문서 |
-| `content` | `max-w-4xl` | 본문 중심 콘텐츠 |
-| `page` | `max-w-7xl` | 페이지 기본 |
-| `wide` | `max-w-[96rem]` | 넓은 대시보드, 대형 표 |
-| `full` | `max-w-none` | 전체 폭 영역 |
+폭을 결정하는 주체는 화면이 아니라 **콘텐츠의 종류**입니다. 읽기 텍스트는 눈 이동 거리를 줄이기 위해 좁게, 표는 열 수만큼 넓게, 랜딩·요약은 그 사이를 사용합니다. 반응형 동작은 `Container`의 `w-full`(모바일 전폭) + `max-w-*`(데스크톱 상한) + `mx-auto`(중앙) 조합이 이미 소유하므로, 화면 코드는 폭 역할 하나만 선택하고 별도 미디어쿼리로 폭을 다루지 않습니다.
+
+| 폭 역할 | 최대 폭 | 언제 쓰는가 | 대표 예시 |
+|---------|---------|-------------|-----------|
+| `narrow` | `max-w-[40rem]` (640px) | 읽기·입력에 시선을 좁게 유지할 때 | 인증 폼(로그인·비밀번호 재설정), 문의 본문 읽기 뷰, 좁은 설정 폼 |
+| `content` | `max-w-4xl` (896px) | 문서·상세 본문이 주인 화면 | 서비스 문서 상세, 템플릿 미리보기, 글 위주 상세 |
+| `page` | `max-w-7xl` (1280px) | 표·목록·요약이 주가 되는 페이지 기본 | DataGrid 목록 화면, 대시보드, 랜딩 |
+| `wide` | `max-w-[96rem]` (1536px) | 가로 공간을 집약적으로 쓰는 화면 | 3열 브라우저(폴더+목록+미리보기), 타임라인 편성, 주간 캘린더 |
+| `full` | `max-w-none` (제한 없음) | 화면을 가로로 전부 채우는 full-bleed 영역 | 에디터 전체 폭, 지도, 갤러리 |
 
 - `Container`는 항상 `mx-auto w-full` 중앙 정렬을 유지하고 폭 역할 기본값은 `page`입니다.
 - 폭은 `width` prop으로 지정하고, 화면 코드에서 임의 `max-w-*`로 폭을 다시 지정하지 않습니다. 여백·수직 패딩은 `className`으로 조합합니다.
-- 세로 간격과 방향은 `Container`가 아니라 자식 `VStack`/`HStack`의 gap preset으로 조합합니다.
-- `containerQuery`를 켜면 자식이 뷰포트가 아니라 이 컨테이너 폭을 기준으로 `@md:flex-row`처럼 반응합니다.
+- 세로 간격과 방향은 `Container`가 아니라 자식 `VStack`/`HStack`의 gap preset으로 조합합니다. 폭은 `Container`, 간격은 `VStack`/`HStack`으로 역할을 나눕니다.
+
+```tsx
+<Container width="content" className="py-8">
+	<VStack gap="section">
+		<DocumentHeader />
+		<DocumentBody />
+	</VStack>
+</Container>
+```
+
+- `containerQuery`를 켜면 자식이 뷰포트가 아니라 이 컨테이너 폭을 기준으로 `@md:flex-row`처럼 반응합니다. 폭에 따른 표현 전환은 부모가 화면 크기를 판단해 넘겨주는 대신, 자식이 자기 폭에 스스로 반응하는 패턴으로 작성합니다. 같은 카드 구성이라도 좁은 컨테이너에서는 세로, 넓은 컨테이너에서는 가로로 전환됩니다.
+
+```tsx
+<Container containerQuery width="page">
+	<div className="flex flex-col @3xl:flex-row">
+		<Thumbnail />
+		<SummaryBody />
+	</div>
+</Container>
+```
+
+- 레이아웃 셸(`Admin.Body`, Screen 뼈대)은 각자 폭을 소유하므로 그 안에 `Container`를 중첩하지 않습니다. 일회성 크기 박스처럼 폭 역할이 없는 요소는 `Container` 대신 Tailwind 클래스로 직접 표현합니다.
 
 ### Large Section Usage
 
