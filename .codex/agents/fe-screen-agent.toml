@@ -64,7 +64,7 @@ developer_instructions = '''
 ### 모바일
 
 - 모바일은 작업 전에 `https://heroui.com/llms-patterns.txt`, `node_modules/heroui-native/package.json` exports, `node_modules/heroui-native/src/components/**` source와 `@cocrepo/mo-ui` export를 확인합니다.
-- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현에 두고 Screen은 공개 `Text`를 사용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
+- 노출 텍스트는 `@cocrepo/mo-ui`의 `Typography`(`heroui-native` 재수출)를 사용합니다. raw `react-native` `Text` import는 사용하지 않고 Screen은 공개 `Typography`를 사용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Typography`로 정규화합니다.
 - HeroUI Native wrapper가 필요하면 단순 재노출 대신 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 갖춘 wrapper로 완결합니다.
 - 모바일 스타일은 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className`과 `tailwind-variants` slot/variant를 우선합니다. `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
 - 모바일 Screen은 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web과 브라우저 대체 처리는 웹 Screen 계약으로 둡니다.

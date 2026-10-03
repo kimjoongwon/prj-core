@@ -62,7 +62,7 @@ description: "Widget과 업무 로직을 연결한 Feature를 생성·검토·�
 ### 모바일
 
 - 모바일은 작업 전에 `https://heroui.com/llms-patterns.txt`, `node_modules/heroui-native/package.json` exports, `node_modules/heroui-native/src/components/**` source와 `@cocrepo/mo-ui` export를 확인합니다.
-- 노출 텍스트는 `@cocrepo/mo-ui`의 `Text`를 사용합니다. `react-native`의 `Text` 직접 import는 `packages/fe-mo-ui/src/data-display/Text` 내부만 허용합니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Text`로 정규화합니다.
+- 노출 텍스트는 `@cocrepo/mo-ui`의 `Typography`(`heroui-native` 재수출)를 사용합니다. `react-native`의 `Text` 직접 import는 사용하지 않습니다. 문자열 children을 받는 compound/action wrapper는 내부에서 `Typography`로 정규화합니다.
 - HeroUI Native wrapper가 필요하면 의미 있는 `label`, `helperText`, `errorMessage`, `title`, `description`, `items`, `trigger`, `actions` props와 dot-slot escape hatch를 갖춘 wrapper로 완성합니다.
 - 모바일 스타일은 uniwind `className`과 `tailwind-variants` slot/variant로 작성하고 `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 사용합니다.
 - 모바일 Feature는 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`, `document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web, react-native-web 분기는 웹 계약에 둡니다.

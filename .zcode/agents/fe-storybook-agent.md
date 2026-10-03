@@ -50,7 +50,7 @@ description: "웹·모바일 Storybook 예시를 생성·검토·수정합니다
 - DataGrid compound story는 `packages/fe-ui/src/data-grid/index.stories.tsx` 하나에 모아 둡니다.
 - Story `render`는 Storybook 전역 frame과 component 자체 layout 영역을 그대로 사용합니다.
 - 웹 outer surface는 `PageSurface`/공개 호환 `ScreenSurface`, 주요 section은 `SectionSurface`가 감싼 `Section`, widget/local panel은 `Surface` 계약을 보여줍니다. `SectionSurface`는 현행 계약을 따르고 `Section.Header`/`Body`/`Footer`/`LeftAside`/`RightAside`를 사용합니다.
-- 모바일 fixture는 `@cocrepo/mo-ui`의 Text/Provider/Portal 규칙을 따릅니다. 사용자 문자열은 Text로 감싸고 HeroUI Native children도 Text 계약으로 정규화합니다. DOM/Next.js 규칙은 웹 story에, React Native 규칙은 모바일 story에만 적용합니다.
+- 모바일 fixture는 `@cocrepo/mo-ui`의 Typography/Provider/Portal 규칙을 따릅니다. 사용자 문자열은 Typography(`heroui-native` 재수출)로 감싸고 HeroUI Native children도 Typography 계약으로 정규화합니다. DOM/Next.js 규칙은 웹 story에, React Native 규칙은 모바일 story에만 적용합니다.
 
 ## 단독 실행 계약
 
@@ -90,7 +90,7 @@ description: "웹·모바일 Storybook 예시를 생성·검토·수정합니다
 
 - 웹 기본 검증: `pnpm --filter=tool-storybook type-check`와 `pnpm --filter=@cocrepo/ui type-check`.
 - 모바일 기본 검증: `pnpm --filter=tool-mobile-storybook type-check`와 `pnpm --filter=@cocrepo/mo-ui type-check`.
-- fixture와 props/type, 공개 import, 지원 상태, 독립 실행·Text/Provider/Portal 경계를 확인합니다. Playwright 화면 확인은 사용자가 명시적으로 요청한 경우에만 실행합니다.
+- fixture와 props/type, 공개 import, 지원 상태, 독립 실행·Typography/Provider/Portal 경계를 확인합니다. Playwright 화면 확인은 사용자가 명시적으로 요청한 경우에만 실행합니다.
 - 보고에는 story와 참조 component 경로, 포함 상태, Storybook 검증 결과, 소스/테스트 owner의 남은 이슈를 포함합니다. `none-storybook`도 판정 근거와 필요한 검증을 보고합니다.
 - 자기 기본 검증과 요청의 추가 완료 기준을 통과하고 모든 필수 하위가 완료해야 `완료`입니다. 구현 후 미통과는 변경 경로와 첫 핵심 오류를 포함해 `검증 실패`로 보고합니다.
 - 최종 보고는 `## 작업 결과`(완료/입력 필요/검증 실패), `## 작업 요약`(결과 중심 5문장 이내), `## 변경 산출물`(생성·수정·삭제 경로, 공개 계약과 소비 용도), `## 수행한 검증`(명령과 성공·실패, 미실행 사유), `## 남은 문제`(실제 차단 사항, 후속 owner·소비 경로 또는 없음)의 5개 섹션으로 작성합니다.

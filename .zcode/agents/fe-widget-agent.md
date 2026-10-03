@@ -58,7 +58,7 @@ description: "재사용 가능한 순수 UI 조합을 생성·검토·수정합�
 ### 모바일 조합
 
 - 모바일은 `https://heroui.com/llms-patterns.txt`, `heroui-native/*` 공식 계약·package exports·원본 source와 `@cocrepo/mo-ui` export를 먼저 확인하고 UI는 기존 leaf 조합으로 구현합니다.
-- 사용자 노출 텍스트는 모바일 `Text`로 감쌉니다. raw `react-native` `Text` import는 `packages/fe-mo-ui/src/data-display/Text` 구현에 두고 Widget·wrapper는 공개 `Text`를 사용하며, compound/action wrapper의 문자열 children도 `Text`로 정규화합니다.
+- 사용자 노출 텍스트는 모바일 `Typography`(`heroui-native` 재수출)로 감쌉니다. raw `react-native` `Text` import는 사용하지 않고 Widget·wrapper는 공개 `Typography`를 사용하며, compound/action wrapper의 문자열 children도 `Typography`로 정규화합니다.
 - 모바일 스타일은 `StyleSheet`/`StyleSheet.create` 대신 uniwind `className` 계열 prop과 `tailwind-variants`로 작성합니다. `style` 객체는 className으로 표현할 수 없는 native 동적 값에만 사용합니다.
 - 모바일 Widget은 native 런타임 계약으로만 동작하며 DOM event, `event.target.value`, `window`/`document`, CSS selector, Next.js SSR/hydration, `@heroui/react`, Expo Web/react-native-web는 웹 Widget 계약으로 둡니다. 웹 Widget은 DOM/SSR 계약을 따르고 native 런타임 계약은 모바일 Widget이 사용합니다.
 - `@cocrepo/mo-ui`의 input/data-display/feedback/layout/surface/design-system leaf를 조합합니다. 기존 widget/leaf가 80% 이상 맞으면 확장하고 없는 leaf는 해당 UI 역할 하위로 만들어 조합합니다.
