@@ -196,7 +196,7 @@ pipeline {
                 def lines = [
                     "${emoji} **${params.APP_NAME}** GitOps 범프 ${resultText}",
                     "이미지 태그: `${params.IMAGE_TAG ?: 'n/a'}` (env: ${params.DEPLOY_ENV})",
-                    "소요: ${fmtDur((long)(currentBuild.duration * 1000L))}",
+                    "소요: ${fmtDur((long) currentBuild.duration)}",
                 ]
                 if (params.SOURCE_BUILD_URL?.trim()) {
                     lines << "업스트림 빌드: ${params.SOURCE_BUILD_URL}"
