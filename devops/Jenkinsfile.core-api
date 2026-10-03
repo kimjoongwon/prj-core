@@ -13,14 +13,18 @@ if (!HARBOR_REGISTRY || !HARBOR_CREDENTIAL_ID || !CONFIGURED_GITOPS_UPDATE_JOB) 
 // - 메시지 줄 배열을 받아 JSON으로 게이트웨이에 POST한다(마지막에 Jenkins 빌드 링크 추가).
 // - BUZZ_NOTIFY_URL이 잡에 주입되지 않으면 조용히 건너뛴다.
 // - 알림은 best-effort: 게이트웨이 장애가 빌드 결과에 영향을 주지 않는다.
-def buzzNotify(List messageLines) {
+def buzzNotify(List messageLines, Map opts = [:]) {
     if (!env.BUZZ_NOTIFY_URL) {
         echo '[buzz] BUZZ_NOTIFY_URL 미설정 — 알림 생략'
-        return
+        return ''
     }
     def credId = env.BUZZ_NOTIFY_CREDENTIAL_ID ?: 'buzz-notify-token'
     def lines = messageLines + ["Jenkins: ${env.BUILD_URL}"]
-    writeFile file: '.buzz-notify.json', text: groovy.json.JsonOutput.toJson([content: lines.join('\n')])
+    def payload = [content: lines.join('\n')]
+    if (opts.replyTo) { payload.replyTo = opts.replyTo }
+    if (opts.linkKey) { payload.linkKey = opts.linkKey }
+    if (opts.mentions) { payload.mentions = opts.mentions }
+    writeFile file: '.buzz-notify.json', text: groovy.json.JsonOutput.toJson(payload)
     try {
         withCredentials([string(credentialsId: credId, variable: 'BUZZ_TOKEN')]) {
             sh '''#!/usr/bin/env bash
@@ -32,12 +36,14 @@ def buzzNotify(List messageLines) {
                         -H "Authorization: Bearer ${BUZZ_TOKEN}" \\
                         -H 'Content-Type: application/json' \\
                         --data-binary @.buzz-notify.json \\
+                        -o .buzz-notify-resp.json \\
                         || echo '[buzz] 알림 전송 실패 (curl, 무시됨)'
                 elif command -v wget >/dev/null 2>&1; then
                     wget -q -O /dev/null \\
                         --header="Authorization: Bearer ${BUZZ_TOKEN}" \\
                         --header='Content-Type: application/json' \\
                         --post-file=.buzz-notify.json \\
+                        -O .buzz-notify-resp.json \\
                         "${BUZZ_NOTIFY_URL}/send" \\
                         || echo '[buzz] 알림 전송 실패 (wget, 무시됨)'
                 else
@@ -48,7 +54,21 @@ def buzzNotify(List messageLines) {
     } finally {
         sh 'rm -f .buzz-notify.json || true'
     }
+    def eventId = ''
+    try {
+        if (fileExists('.buzz-notify-resp.json')) {
+            def resp = groovy.json.JsonSlurperClassic.parseText(readFile('.buzz-notify-resp.json'))
+            eventId = (resp?.event?.event_id) ?: (resp?.event?.id) ?: ''
+        }
+    } catch (Exception e) {
+        echo "[buzz] 알림 응답 파싱 실패 (무시됨): ${e.message}"
+    }
+    sh 'rm -f .buzz-notify-resp.json || true'
+    return eventId
 }
+
+// 빌드 실패 알림에 멘션할 ZCode 공개키 (buzz #cicd 멤버 — hex, 게이트웨이 --mention)
+def ZCODE_HEX = '15d01a6721298f5fe8f6b4180cb6db42230a9e04127795650eecb7531152e991'
 
 // 알림용 소요시간 포맷 (ms → "1시간 2분" / "3분 4초" / "45초")
 def fmtDur(long ms) {
@@ -97,6 +117,8 @@ podTemplate(
         // 알림용: 이미지 빌드 단계 소요시간 측정
         def IMAGE_STAGE_START_MS = 0L
         def IMAGE_STAGE_MS = 0L
+        // 범프/배포 알림을 이 빌드의 buzz 스레드로 묶는 용도
+        def BUILD_BUZZ_EVENT_ID = ''
 
         try {
             stage('Checkout') {
@@ -177,6 +199,14 @@ podTemplate(
 
             IMAGE_STAGE_MS = System.currentTimeMillis() - IMAGE_STAGE_START_MS
 
+            // 빌드 성공 알림을 범프 트리거 앞에 보내, 범프/배포 알림을 같은 buzz 스레드로 묶는다
+            BUILD_BUZZ_EVENT_ID = buzzNotify([
+                "✅ **${GITOPS_APP}** 빌드 성공",
+                "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
+                "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
+                "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
+            ])
+
             stage('Trigger GitOps Update Job') {
                 if (ENV_NAME == 'prod') {
                     catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
@@ -190,6 +220,7 @@ podTemplate(
                                 string(name: 'DEPLOY_ENV', value: 'prod'),
                                 string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
                                 string(name: 'SOURCE_COMMIT', value: gitCommit),
+                                string(name: 'SOURCE_BUZZ_EVENT_ID', value: BUILD_BUZZ_EVENT_ID ?: ''),
                             ]
                         )
                         echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
@@ -203,18 +234,17 @@ podTemplate(
             currentBuild.result = 'FAILURE'
             throw e
         } finally {
-            // Buzz #cicd 빌드 알림 — best-effort, 알림 오류가 빌드 결과를 덮지 않게 try/catch로 감싼다
+            // 실패 시에만 알림(성공은 위에서 이미 전송) — @ZCode 멘션으로 자동 진단 트리거
             try {
-                container('podman') {
-                    def status = currentBuild.currentResult
-                    def emoji = status == 'SUCCESS' ? '✅' : (status == 'FAILURE' ? '❌' : '⚠️')
-                    def resultText = status == 'SUCCESS' ? '빌드 성공' : (status == 'FAILURE' ? '빌드 실패' : status)
-                    buzzNotify([
-                        "${emoji} **${GITOPS_APP}** ${resultText}",
-                        "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
-                        "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
-                        "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
-                    ])
+                if (currentBuild.currentResult == 'FAILURE') {
+                    container('podman') {
+                        buzzNotify([
+                            "❌ **${GITOPS_APP}** 빌드 실패",
+                            "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
+                            "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
+                            "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
+                        ], [mentions: [ZCODE_HEX]])
+                    }
                 }
             } catch (Exception notifyErr) {
                 echo "[buzz] 알림 단계 오류 (무시됨): ${notifyErr.message}"
