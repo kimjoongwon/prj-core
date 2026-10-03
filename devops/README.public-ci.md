@@ -18,3 +18,5 @@
 `Install and Validate` stage는 공유 PVC `pnpm-store-pvc`를 `/pnpm/store`에 마운트하고 `pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline`로 의존성을 설치해 네트워크 다운로드를 줄입니다. PVC 자체는 prj-devops 저장소에서 별도로 생성·관리하며 이 문서는 이름만 참조합니다. `disableConcurrentBuilds()`로 같은 job의 동시 실행은 막혀 있습니다.
 
 미신뢰 PR도 공유 스토어에 쓰지만 pnpm 스토어는 content-addressed이므로 변조된 콘텐츠가 재사용되면 무결성 검증 실패로 빌드가 실패합니다. 즉 스토어 오염이 아닌 DoS만 가능하며, 비정상 사용으로 스토어가 가득 차면 PVC를 클리어해 복구합니다.
+
+- 2026-10-03: buzz #cicd 알림 메시지에 빌드/범프/동기화 소요시간이 포함된다 (docs: prj-devops buzz-ci-integration.md).
