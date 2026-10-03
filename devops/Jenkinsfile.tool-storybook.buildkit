@@ -26,18 +26,30 @@ def buzzNotify(List messageLines, Map opts = [:]) {
     writeFile file: '.buzz-notify.json', text: groovy.json.JsonOutput.toJson(payload)
     try {
         withCredentials([string(credentialsId: credId, variable: 'BUZZ_TOKEN')]) {
-            // buildctl(moby/buildkit) 컨테이너에는 curl이 없어 buzz-notify 컨테이너에서 전송
-            container('buzz-notify') {
+            // buildctl(moby/buildkit) 컨테이너에는 curl이 없다 — wget 폴백으로 전송
+            // (containerCap=2 제한으로 알림 전용 컨테이너를 추가할 수 없음)
+            container('buildctl') {
                 sh '''#!/usr/bin/env bash
                     set -uo pipefail
                     # set +x: 토큰 평문 노출 차단
                     set +x
-                    curl -fsS -m 10 -X POST "${BUZZ_NOTIFY_URL}/send" \\
-                        -H "Authorization: Bearer ${BUZZ_TOKEN}" \\
-                        -H 'Content-Type: application/json' \\
-                        --data-binary @.buzz-notify.json \\
-                        -o .buzz-notify-resp.json \\
-                        || echo '[buzz] 알림 전송 실패 (무시됨)'
+                    if command -v curl >/dev/null 2>&1; then
+                        curl -fsS -m 10 -X POST "${BUZZ_NOTIFY_URL}/send" \\
+                            -H "Authorization: Bearer ${BUZZ_TOKEN}" \\
+                            -H 'Content-Type: application/json' \\
+                            --data-binary @.buzz-notify.json \\
+                            -o .buzz-notify-resp.json \\
+                            || echo '[buzz] 알림 전송 실패 (curl, 무시됨)'
+                    elif command -v wget >/dev/null 2>&1; then
+                        wget -q -O .buzz-notify-resp.json \\
+                            --header="Authorization: Bearer ${BUZZ_TOKEN}" \\
+                            --header='Content-Type: application/json' \\
+                            --post-file=.buzz-notify.json \\
+                            "${BUZZ_NOTIFY_URL}/send" \\
+                            || echo '[buzz] 알림 전송 실패 (wget, 무시됨)'
+                    else
+                        echo '[buzz] curl/wget 없음 — 알림 생략'
+                    fi
                 '''
             }
         }
@@ -85,18 +97,10 @@ podTemplate(
             resourceLimitCpu: '1500m',
             // CPU request는 미지정 시 limit과 같게 잡혀 PVC 고정 노드(node-02)에서 스케줄링이 막히므로 명시적으로 낮춤
             resourceRequestCpu: '300m',
-        ),
-        // Buzz 알림 전송 전용 컨테이너 (buildctl 이미지에 curl이 없음)
-        containerTemplate(
-            name: 'buzz-notify',
-            image: 'docker.io/curlimages/curl:8.16.0@sha256:5a91ea0c9c3ee27b4abe657b68cf6bf0676afa13b236b3bda34283cb3924d4f6',
-            ttyEnabled: true,
-            command: 'cat',
-            resourceLimitMemory: '128Mi',
-            resourceRequestMemory: '32Mi',
-            resourceLimitCpu: '100m',
-            resourceRequestCpu: '10m',
         )
+        // 주의: 알림 전용 컨테이너를 추가하지 않는다 — cloud의 containerCap(2)는
+        // 파드당 컨테이너 수(jnlp 포함) 상한이라 3개가 되면 파드가 영구 스케줄 대기한다.
+        // 알림은 buildctl 컨테이너의 wget 폴백으로 전송한다.
     ]
 ) {
     node(POD_LABEL) {
