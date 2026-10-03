@@ -59,7 +59,7 @@ def buzzNotify(List messageLines, Map opts = [:]) {
     def eventId = ''
     try {
         if (fileExists('.buzz-notify-resp.json')) {
-            def resp = groovy.json.JsonSlurperClassic.parseText(readFile('.buzz-notify-resp.json'))
+            def resp = new groovy.json.JsonSlurperClassic().parseText(readFile('.buzz-notify-resp.json'))
             eventId = (resp?.event?.event_id) ?: (resp?.event?.id) ?: ''
         }
     } catch (Exception e) {
