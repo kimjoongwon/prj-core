@@ -195,7 +195,7 @@ pipeline {
                 def resultText = status == 'SUCCESS' ? '성공' : (status == 'FAILURE' ? '실패' : status)
                 def lines = [
                     "${emoji} **${params.APP_NAME}** GitOps 범프 ${resultText}",
-                    "이미지 태그: \`${params.IMAGE_TAG ?: 'n/a'}\` (env: ${params.DEPLOY_ENV})",
+                    "이미지 태그: `${params.IMAGE_TAG ?: 'n/a'}` (env: ${params.DEPLOY_ENV})",
                     "소요: ${fmtDur((long)(currentBuild.duration * 1000L))}",
                 ]
                 if (params.SOURCE_BUILD_URL?.trim()) {

@@ -157,8 +157,8 @@ podTemplate(
                 def resultText = status == 'SUCCESS' ? '빌드 성공' : (status == 'FAILURE' ? '빌드 실패' : status)
                 buzzNotify([
                     "${emoji} **${GITOPS_APP}** (buildkit) ${resultText}",
-                    "이미지: \`${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}\`",
-                    "커밋: \`${env.GIT_COMMIT ?: 'n/a'}\`",
+                    "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
+                    "커밋: `${env.GIT_COMMIT ?: 'n/a'}`",
                     "소요: 전체 ${fmtDur((long)(currentBuild.duration * 1000L))}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
                 ])
             } catch (Exception notifyErr) {
