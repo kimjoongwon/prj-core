@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { ResponsiveFrame } from "./index";
 
 const FrameContent = ({ label }: { label: string }) => (
 	<View className="gap-2 rounded-xl border border-border bg-surface p-4">
-		<Text className="text-xs font-bold uppercase text-accent">{label}</Text>
-		<Text className="text-base font-extrabold text-foreground">
+		<Typography className="uppercase text-accent" type="body-xs" weight="bold">{label}</Typography>
+		<Typography className="font-extrabold" type="h6">
 			예약 카드 레이아웃
-		</Text>
-		<Text className="text-sm leading-5 text-muted">
+		</Typography>
+		<Typography color="muted" type="body-sm">
 			부모 너비가 고정된 상태에서 자식 레이아웃의 줄바꿈과 여백을 확인합니다.
-		</Text>
+		</Typography>
 	</View>
 );
 

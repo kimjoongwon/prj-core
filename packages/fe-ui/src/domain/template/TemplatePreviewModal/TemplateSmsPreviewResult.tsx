@@ -1,3 +1,4 @@
+import { Typography } from "../../../data-display/Typography";
 import { formatTextByteCount } from "../../../data-display/text-byte";
 
 export interface TemplateSmsPreviewResultProps {
@@ -11,15 +12,17 @@ export function TemplateSmsPreviewResult({
 	return (
 		<div className="flex flex-col">
 			<div className="flex">
-				<span className="text-sm font-semibold text-foreground">
+				<Typography.Paragraph size="sm" weight="semibold">
 					미리보기 결과
-				</span>
-				<span className="text-sm text-muted">
+				</Typography.Paragraph>
+				<Typography.Paragraph color="muted" size="sm">
 					{formatTextByteCount(content)}
-				</span>
+				</Typography.Paragraph>
 			</div>
 			<div className="rounded-lg border border-border bg-surface-secondary p-4">
-				<p className="whitespace-pre-wrap text-sm text-foreground">{content}</p>
+				<Typography.Paragraph className="whitespace-pre-wrap" size="sm">
+					{content}
+				</Typography.Paragraph>
 			</div>
 		</div>
 	);

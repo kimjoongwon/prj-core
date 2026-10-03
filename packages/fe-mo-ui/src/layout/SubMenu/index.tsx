@@ -10,7 +10,8 @@ import {
 	type ReactNode,
 } from "react";
 import { View } from "react-native";
-import { getTextContent, Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { getTextContent } from "../../data-display/text-content";
 
 type HeroSubMenuProps = ComponentPropsWithoutRef<typeof HeroSubMenu>;
 type HeroSubMenuContentProps = ComponentPropsWithoutRef<
@@ -59,9 +60,9 @@ const SubMenuTrigger = forwardRef<
 			) : (
 				// 저수준 layout 예외: heroui-native SubMenu.Trigger slot에 끼워 넣는 label 행이라 raw gap을 유지합니다.
 				<View className="flex-row items-center justify-between gap-3">
-					<Text className="flex-1" variant="label">
+					<Typography className="flex-1" type="body-sm" weight="semibold">
 						{label}
-					</Text>
+					</Typography>
 					<HeroSubMenu.TriggerIndicator />
 				</View>
 			)}

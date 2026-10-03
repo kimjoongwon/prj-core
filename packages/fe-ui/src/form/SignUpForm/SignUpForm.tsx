@@ -2,6 +2,7 @@
 
 import { CheckCircle, UserPlus } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Link, TextArea, TextField } from "../../input";
@@ -108,26 +109,22 @@ export const SignUpForm = observer(
 							<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
 								<CheckCircle className="h-8 w-8 text-success" />
 							</div>
-							<h2 className="mb-2 text-lg font-semibold">
+							<Typography.Heading className="mb-2" level={5}>
 								{t("인증 메일을 확인하세요")}
-							</h2>
-							<p className="mb-6 text-sm leading-6 text-muted">
+							</Typography.Heading>
+							<Typography className="mb-6" type="body-sm" color="muted">
 								<span className="font-medium text-foreground">
 									{state.submittedEmail}
 								</span>
 								{t("으로 회원가입 이메일 인증 링크를 발송했습니다.")}
 								<br />
 								{t("메일의 인증 링크를 열면 가입이 완료됩니다.")}
-							</p>
+							</Typography>
 							{state.submittedSpaceName && (
 								<Alert
 									status="success"
 									title="가입 요청 완료"
-									description={
-										<span>
-											{t("선택한 Space")}: {state.submittedSpaceName}
-										</span>
-									}
+									description={`${t("선택한 Space")}: ${state.submittedSpaceName}`}
 								/>
 							)}
 
@@ -260,12 +257,10 @@ export const SignUpForm = observer(
 					</VStack>
 				)}
 
-				<VStack
-					gap="block"
-					alignItems="center"
-					className="mt-6 text-center text-sm text-muted"
-				>
-					<span>{t("이미 계정이 있으신가요?")}</span>
+				<VStack gap="block" alignItems="center" className="mt-6 text-center">
+					<Typography type="body-sm" color="muted">
+						{t("이미 계정이 있으신가요?")}
+					</Typography>
 					<Link href={loginHref} className="text-muted hover:text-muted">
 						{t("로그인으로 돌아가기")}
 					</Link>

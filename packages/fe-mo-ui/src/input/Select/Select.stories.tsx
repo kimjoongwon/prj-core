@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { observable } from "mobx";
 import { ScrollView } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { Select } from "./index";
 
@@ -26,12 +26,12 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="block">
 				<VStack gap="block">
-					<Text className="text-lg font-extrabold text-foreground">
+					<Typography className="font-extrabold" type="h5">
 						Select
-					</Text>
-					<Text className="text-sm leading-5 text-muted">
+					</Typography>
+					<Typography color="muted" type="body-sm">
 						좁은 화면에서 옵션 목록을 popover로 선택합니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<Select
 					listLabel="예약 유형"

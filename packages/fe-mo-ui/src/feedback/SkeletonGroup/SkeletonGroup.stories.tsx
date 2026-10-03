@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { SkeletonGroup } from "./index";
 
 const meta = {
@@ -19,12 +19,12 @@ export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					SkeletonGroup
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					여러 skeleton item의 로딩 상태와 애니메이션을 한 번에 맞춥니다.
-				</Text>
+				</Typography>
 			</View>
 			<SkeletonGroup isLoading variant="shimmer">
 				<View className="gap-3 rounded-lg border border-border bg-surface p-4">

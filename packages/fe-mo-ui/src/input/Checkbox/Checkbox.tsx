@@ -9,7 +9,8 @@ import {
 	forwardRef,
 } from "react";
 import { View } from "react-native";
-import { getTextContent, Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { getTextContent } from "../../data-display/text-content";
 import { joinClassNames } from "../../rhythm/class-name";
 
 type HeroCheckboxProps = ComponentPropsWithoutRef<typeof HeroCheckbox>;
@@ -51,9 +52,9 @@ const PureCheckboxComponent = forwardRef<
 			<View className="relative size-6 overflow-hidden rounded-lg bg-field shadow-field">
 				<HeroCheckbox.Indicator />
 			</View>
-			<Text className="flex-1" variant="label">
+			<Typography className="flex-1" type="body-sm" weight="semibold">
 				{label}
-			</Text>
+			</Typography>
 		</HeroCheckbox>
 	);
 });

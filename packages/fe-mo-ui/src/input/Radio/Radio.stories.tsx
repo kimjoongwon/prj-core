@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { HStack, VStack } from "../../rhythm";
 import { PureRadio as Radio } from "./index";
 
@@ -26,10 +26,10 @@ export const States: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="section">
 				<VStack gap="block">
-					<Text className="text-lg font-extrabold text-foreground">Radio</Text>
-					<Text className="text-sm leading-5 text-muted">
+					<Typography className="font-extrabold" type="h5">Radio</Typography>
+					<Typography color="muted" type="body-sm">
 						단독 radio primitive 또는 RadioGroup 내부 indicator로 사용합니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<VStack
 					className="rounded-lg border border-border bg-surface p-4"
@@ -37,17 +37,17 @@ export const States: Story = {
 				>
 					<HStack alignItems="center" gap="block">
 						<Radio isSelected />
-						<Text className="text-sm font-semibold text-foreground">
+						<Typography type="body-sm" weight="semibold">
 							SMS 알림
-						</Text>
+						</Typography>
 					</HStack>
 					<HStack alignItems="center" gap="block">
 						<Radio />
-						<Text className="text-sm font-semibold text-foreground">앱 푸시</Text>
+						<Typography type="body-sm" weight="semibold">앱 푸시</Typography>
 					</HStack>
 					<HStack alignItems="center" className="opacity-50" gap="block">
 						<Radio isDisabled />
-						<Text className="text-sm font-semibold text-foreground">이메일</Text>
+						<Typography type="body-sm" weight="semibold">이메일</Typography>
 					</HStack>
 				</VStack>
 			</VStack>

@@ -12,7 +12,8 @@ import {
 	type ReactNode,
 } from "react";
 import { View } from "react-native";
-import { getTextContent, Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { getTextContent } from "../../data-display/text-content";
 
 type HeroAccordionProps = ComponentPropsWithoutRef<typeof HeroAccordion>;
 type HeroAccordionItemProps = ComponentPropsWithoutRef<
@@ -41,7 +42,9 @@ const AccordionComponent = forwardRef<
 					<AccordionTrigger>{title}</AccordionTrigger>
 					<HeroAccordion.Content>
 						{typeof content === "string" || typeof content === "number" ? (
-							<Text tone="muted">{content}</Text>
+							<Typography color="muted" type="body-sm">
+								{content}
+							</Typography>
 						) : (
 							content
 						)}
@@ -63,12 +66,12 @@ const AccordionTrigger = forwardRef<
 				children
 			) : (
 				// 저수준 layout 예외: heroui-native Accordion.Trigger slot에 끼워 넣는 label 행이라 raw gap을 유지합니다.
-				<View className="flex-row items-center justify-between gap-3">
-					<Text className="flex-1" variant="label">
-						{label}
-					</Text>
-					<HeroAccordion.Indicator />
-				</View>
+					<View className="flex-row items-center justify-between gap-3">
+						<Typography className="flex-1" type="body-sm" weight="semibold">
+							{label}
+						</Typography>
+						<HeroAccordion.Indicator />
+					</View>
 			)}
 		</HeroAccordion.Trigger>
 	);

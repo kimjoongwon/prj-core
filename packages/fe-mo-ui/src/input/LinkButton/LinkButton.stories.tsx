@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { HStack, VStack } from "../../rhythm";
 import { LinkButton } from "./index";
 
@@ -33,18 +33,18 @@ export const InlineLinks: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="section">
 				<VStack gap="block">
-					<Text className="text-lg font-extrabold text-foreground">
+					<Typography className="font-extrabold" type="h5">
 						LinkButton
-					</Text>
-					<Text className="text-sm leading-5 text-muted">
+					</Typography>
+					<Typography color="muted" type="body-sm">
 						본문 안에서 약관, 정책, 상세 보기 같은 낮은 강도의 액션을 표시합니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<View className="rounded-lg border border-border bg-surface p-4">
-					<Text className="text-sm leading-6 text-surface-foreground">
+					<Typography className="text-surface-foreground" type="body-sm">
 						예약을 진행하면 환불 정책과 개인정보 처리방침에 동의한 것으로
 						간주됩니다.
-					</Text>
+					</Typography>
 					<HStack
 						alignItems="center"
 						className="mt-3 flex-wrap"

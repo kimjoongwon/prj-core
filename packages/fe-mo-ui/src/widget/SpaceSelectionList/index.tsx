@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { SpaceListItem, type SpaceListItemInfo } from "../SpaceListItem";
 
 export interface SpaceSelectionListProps extends Omit<ViewProps, "children"> {
@@ -23,7 +23,9 @@ export const SpaceSelectionList = observer(function SpaceSelectionList({
 	if (spaces.length === 0) {
 		return (
 			<View {...rest} className={classNames.empty()}>
-				<Text className={classNames.emptyText()}>{emptyLabel}</Text>
+				<Typography className={classNames.emptyText()} type="body-sm">
+					{emptyLabel}
+				</Typography>
 			</View>
 		);
 	}

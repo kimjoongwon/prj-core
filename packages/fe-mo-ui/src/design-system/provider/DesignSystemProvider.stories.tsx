@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { Card } from "../../layout/Card";
 import { DesignSystemProvider } from "./index";
@@ -32,7 +32,7 @@ export const Default: Story = {
 					HeroUI Native 런타임 설정과 포털 호스트를 제공합니다.
 				</Card.Description>
 				<View className="flex-row items-center justify-between">
-					<Text className="text-sm font-semibold text-muted">Portal ready</Text>
+					<Typography color="muted" type="body-sm" weight="semibold">Portal ready</Typography>
 					<Button size="sm" variant="secondary">
 						Check
 					</Button>

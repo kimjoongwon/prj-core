@@ -3,6 +3,7 @@
 import { AlertTriangle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input";
 import { Auth } from "../../layout/Auth";
 import { VStack } from "../../rhythm";
@@ -27,9 +28,21 @@ export const AuthErrorScreen = observer(
 
 				<VStack gap="section">
 					<div className="rounded-lg border border-danger/30 bg-danger/10 p-4">
-						<p className="text-sm font-medium text-danger">{t(error)}</p>
+						<Typography.Paragraph
+							size="sm"
+							weight="medium"
+							className="text-danger"
+						>
+							{t(error)}
+						</Typography.Paragraph>
 						{errorDescription ? (
-							<p className="mt-2 text-sm text-muted">{t(errorDescription)}</p>
+							<Typography.Paragraph
+								size="sm"
+								color="muted"
+								className="mt-2"
+							>
+								{t(errorDescription)}
+							</Typography.Paragraph>
 						) : null}
 					</div>
 				</VStack>

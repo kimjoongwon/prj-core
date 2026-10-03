@@ -1,10 +1,11 @@
-import { Text } from "@cocrepo/mo-ui";
+import { DesignSystemProvider, Typography } from "@cocrepo/mo-ui";
 import { act, render, screen, waitFor } from "@testing-library/react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";
 import { mobileSession } from "@/auth/mobile-session";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
+import type { ReactNode } from "react";
 
 const mockReplace = jest.fn();
 let mockPathname = "/";
@@ -41,7 +42,6 @@ jest.mock("@cocrepo/api/core/client", () => ({
 		mockSetApiSessionScope(...args),
 }));
 
-
 jest.mock("expo-secure-store", () => ({
 	deleteItemAsync: jest.fn(async () => undefined),
 	getItemAsync: jest.fn(async () => null),
@@ -56,6 +56,23 @@ const resetMobileSession = () => {
 	mobileSession.nextPathAfterLogin = "/";
 	mobileApiScope.clear();
 };
+
+// heroui-native Typography 렌더에 HeroUINativeProvider 컨텍스트가 필요해
+// 게이트 children을 동일한 DesignSystemProvider 래퍼로 감쌉니다.
+const renderAuthSessionGate = (children: ReactNode) =>
+	render(
+		<DesignSystemProvider
+			config={{
+				animation: "disable-all",
+				devInfo: {
+					stylingPrinciples: false,
+				},
+				toast: false,
+			}}
+		>
+			<AuthSessionGate>{children}</AuthSessionGate>
+		</DesignSystemProvider>,
+	);
 
 describe("AuthSessionGate", () => {
 	beforeEach(() => {
@@ -83,10 +100,8 @@ describe("AuthSessionGate", () => {
 			.spyOn(mobileSession, "verifySession")
 			.mockResolvedValue(false);
 
-		render(
-			<AuthSessionGate>
-				<Text>home-screen</Text>
-			</AuthSessionGate>,
+		renderAuthSessionGate(
+			<Typography type="body-sm">home-screen</Typography>,
 		);
 
 		await waitFor(() => {
@@ -155,10 +170,8 @@ describe("AuthSessionGate", () => {
 		mobileSession.authStatus = "authenticated";
 		mobileApiScope.markSpaceSelectionPending();
 
-		render(
-			<AuthSessionGate>
-				<Text>home-screen</Text>
-			</AuthSessionGate>,
+		renderAuthSessionGate(
+			<Typography type="body-sm">home-screen</Typography>,
 		);
 
 		await waitFor(() => {
@@ -172,10 +185,8 @@ describe("AuthSessionGate", () => {
 
 	it("비인증 상태면 로그인 라우트를 먼저 보낸 뒤 layout 이후 splash를 끈다", async () => {
 		mobileSession.authStatus = "unauthenticated";
-		const view = render(
-			<AuthSessionGate>
-				<Text>login-screen</Text>
-			</AuthSessionGate>,
+		const view = renderAuthSessionGate(
+			<Typography type="body-sm">login-screen</Typography>,
 		);
 
 		await waitFor(() => {
@@ -188,9 +199,19 @@ describe("AuthSessionGate", () => {
 
 		mockPathname = "/auth/login";
 		view.rerender(
-			<AuthSessionGate>
-				<Text>login-screen</Text>
-			</AuthSessionGate>,
+			<DesignSystemProvider
+				config={{
+					animation: "disable-all",
+					devInfo: {
+						stylingPrinciples: false,
+					},
+					toast: false,
+				}}
+			>
+				<AuthSessionGate>
+					<Typography type="body-sm">login-screen</Typography>
+				</AuthSessionGate>
+			</DesignSystemProvider>,
 		);
 
 		expect(screen.getByText("login-screen")).toBeTruthy();
@@ -208,10 +229,8 @@ describe("AuthSessionGate", () => {
 		mockPathname = "/auth/login";
 		mobileSession.authStatus = "authenticated";
 
-		render(
-			<AuthSessionGate>
-				<Text>login-screen</Text>
-			</AuthSessionGate>,
+		renderAuthSessionGate(
+			<Typography type="body-sm">login-screen</Typography>,
 		);
 
 		await waitFor(() => {
@@ -224,10 +243,8 @@ describe("AuthSessionGate", () => {
 		mockPathname = "/dashboard";
 		mobileSession.authStatus = "authenticated";
 
-		render(
-			<AuthSessionGate>
-				<Text>idp-dashboard-screen</Text>
-			</AuthSessionGate>,
+		renderAuthSessionGate(
+			<Typography type="body-sm">idp-dashboard-screen</Typography>,
 		);
 
 		await waitFor(() => {
@@ -240,10 +257,8 @@ describe("AuthSessionGate", () => {
 		mockPathname = "/dashboard";
 		mobileSession.authStatus = "unauthenticated";
 
-		render(
-			<AuthSessionGate>
-				<Text>idp-dashboard-screen</Text>
-			</AuthSessionGate>,
+		renderAuthSessionGate(
+			<Typography type="body-sm">idp-dashboard-screen</Typography>,
 		);
 
 		await waitFor(() => {

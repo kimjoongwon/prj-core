@@ -9,7 +9,8 @@ import {
 	forwardRef,
 } from "react";
 import { View } from "react-native";
-import { getTextContent, Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { getTextContent } from "../../data-display/text-content";
 
 type HeroSwitchProps = ComponentPropsWithoutRef<typeof HeroSwitch>;
 
@@ -43,9 +44,9 @@ const PureSwitchComponent = forwardRef<
 	return (
 		// 저수준 layout 예외: heroui-native Switch label 행 계약을 그대로 노출하는 래퍼라 raw gap을 유지합니다.
 		<View className="w-full flex-row items-center justify-between gap-3">
-			<Text className="flex-1" variant="label">
+			<Typography className="flex-1" type="body-sm" weight="semibold">
 				{label}
-			</Text>
+			</Typography>
 			{control}
 		</View>
 	);

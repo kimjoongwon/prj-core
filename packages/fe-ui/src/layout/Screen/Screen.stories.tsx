@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input";
 import { Screen } from "./Screen";
 
@@ -29,12 +30,14 @@ export const Basic: Story = {
 				/>
 				<Screen.Body>
 					<div className="rounded-lg border border-border bg-surface p-5">
-						Screen body
+						<Typography>Screen body</Typography>
 					</div>
 				</Screen.Body>
 				<Screen.Footer>
-					<div className="rounded-lg border border-border bg-surface p-4 text-sm text-muted">
-						Screen footer
+					<div className="rounded-lg border border-border bg-surface p-4">
+						<Typography.Paragraph color="muted" size="sm">
+							Screen footer
+						</Typography.Paragraph>
 					</div>
 				</Screen.Footer>
 			</Screen>

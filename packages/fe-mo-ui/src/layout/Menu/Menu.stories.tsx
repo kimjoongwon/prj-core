@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { Menu } from "./index";
 
@@ -21,10 +21,10 @@ export const Default: Story = {
 		<View className="flex-1 justify-center px-4 py-5">
 			<View className="gap-4 rounded-lg border border-border bg-surface p-4">
 				<View className="gap-1">
-					<Text className="text-lg font-extrabold text-foreground">Menu</Text>
-					<Text className="text-sm leading-5 text-muted">
+					<Typography className="font-extrabold" type="h5">Menu</Typography>
+					<Typography color="muted" type="body-sm">
 						정렬, 필터, 행 액션처럼 짧은 명령 세트를 표시합니다.
-					</Text>
+					</Typography>
 				</View>
 				<Menu isDefaultOpen>
 					<Menu.Trigger>

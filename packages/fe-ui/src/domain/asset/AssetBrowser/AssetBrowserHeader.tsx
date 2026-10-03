@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Typography } from "../../../data-display/Typography";
+import { translateNode, useT } from "../../../i18n";
 
 export interface AssetBrowserHeaderProps {
 	title: ReactNode;
@@ -13,6 +14,8 @@ export const AssetBrowserHeader = ({
 	description,
 	actions,
 }: AssetBrowserHeaderProps) => {
+	const t = useT();
+
 	return (
 		<div className="border-b border-separator min-w-0 pb-4">
 			<div className="flex items-start justify-between gap-4">
@@ -21,10 +24,10 @@ export const AssetBrowserHeader = ({
 						className="text-2xl font-semibold leading-8"
 						level={1}
 					>
-						{title}
+						{translateNode(title, t)}
 					</Typography.Heading>
 					<Typography.Paragraph className="mt-1" color="muted" size="sm">
-						{description}
+						{translateNode(description, t)}
 					</Typography.Paragraph>
 				</div>
 				{actions ? <div className="shrink-0">{actions}</div> : null}

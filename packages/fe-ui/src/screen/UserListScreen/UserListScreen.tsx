@@ -12,6 +12,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	Typography,
 	VStack,
 } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
@@ -45,12 +46,12 @@ function UsersDirectoryHeader({ totalCount }: { totalCount: number }) {
 			className="mb-5 border-b border-border/80 pb-4 md:flex-row md:items-end md:justify-between"
 		>
 			<VStack gap="dense">
-				<h2 className="text-base font-semibold tracking-tight text-foreground">
-					회원 디렉터리
+				<h2 className="tracking-tight">
+					<Typography weight="semibold">회원 디렉터리</Typography>
 				</h2>
-				<p className="text-sm text-muted">
+				<Typography.Paragraph size="sm" color="muted">
 					등록된 이용자를 빠르게 검색하고 상태를 확인할 수 있습니다.
-				</p>
+				</Typography.Paragraph>
 			</VStack>
 			<Chip
 				className="h-8 px-2 text-sm font-medium"

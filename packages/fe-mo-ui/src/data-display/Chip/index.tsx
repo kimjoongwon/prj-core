@@ -4,7 +4,8 @@ import {
 	type ComponentRef,
 	forwardRef,
 } from "react";
-import { getTextContent, Text } from "../Text";
+import { Typography } from "../Typography";
+import { getTextContent } from "../text-content";
 
 type HeroChipProps = ComponentPropsWithoutRef<typeof HeroChip>;
 export type ChipProps = HeroChipProps & {};
@@ -26,9 +27,12 @@ const ChipComponent = forwardRef<ComponentRef<typeof HeroChip>, ChipProps>(
 				{label === null ? (
 					children
 				) : (
-					<Text className={chipClassNames.label({ color, size, variant })}>
+					<Typography
+						className={chipClassNames.label({ color, size, variant })}
+						type="body-sm"
+					>
 						{label}
-					</Text>
+					</Typography>
 				)}
 			</HeroChip>
 		);

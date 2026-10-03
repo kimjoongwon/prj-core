@@ -1,4 +1,5 @@
 import type { CSSProperties, PropsWithChildren } from "react";
+import { Typography } from "../data-display/Typography";
 
 const stageClassName =
 	"grid min-h-screen place-items-center bg-background px-6 py-8 text-foreground";
@@ -40,21 +41,28 @@ export function PageStoryScaffold({
 		<PageStoryCard maxWidth={560}>
 			<div className="grid gap-4">
 				<div className="grid gap-1.5">
-					<p className="text-xs font-bold tracking-widest text-accent uppercase">
+					<Typography.Paragraph
+						size="xs"
+						weight="bold"
+						className="text-accent uppercase tracking-widest"
+					>
 						Page Story Scaffold
-					</p>
-					<h2 className="text-[28px] leading-tight font-bold text-foreground">
-						{componentName}
-					</h2>
+					</Typography.Paragraph>
+					<Typography.Heading level={2}>{componentName}</Typography.Heading>
 				</div>
-				<p className="text-[15px] leading-relaxed text-muted">{description}</p>
+				<Typography.Paragraph color="muted">{description}</Typography.Paragraph>
 				<div className="rounded-xl border border-border bg-surface-secondary p-4">
-					<p className="mb-2 text-xs font-semibold text-muted">
+					<Typography.Paragraph
+						size="xs"
+						weight="semibold"
+						color="muted"
+						className="mb-2"
+					>
 						Target component
-					</p>
-					<code className="text-[13px] leading-relaxed break-words text-foreground">
+					</Typography.Paragraph>
+					<Typography.Code className="break-words">
 						{componentPath}
-					</code>
+					</Typography.Code>
 				</div>
 			</div>
 		</PageStoryCard>

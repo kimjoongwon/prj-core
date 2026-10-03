@@ -8,7 +8,7 @@ import {
 	type ViewProps,
 } from "react-native";
 import { tv } from "tailwind-variants";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Icon } from "../../icon";
 import { HStack, VStack } from "../../rhythm";
 import type { BookingClassFeedItem } from "../../widget/BookingClassCard";
@@ -36,12 +36,12 @@ const OptionalText = ({
 	if (value === undefined || value === null || value === false) {
 		return null;
 	}
-	return <Text className={className}>{value}</Text>;
+	return <Typography className={className} type="body-sm">{value}</Typography>;
 };
 const ClassTitle = ({ item }: { item: BookingClassFeedItem }) => (
-	<Text className={classNames.classTitle()}>
+	<Typography className={classNames.classTitle()} type="body-sm">
 		{item.timeLabel} · {item.programName}
-	</Text>
+	</Typography>
 );
 const createConfirmHandler = (props: BookingPolicySheetProps) => {
 	if (!props.item || props.isLoading || !props.onConfirm) {
@@ -89,7 +89,9 @@ const SheetAction = ({
 						tone={disabled ? "muted" : "accentForeground"}
 					/>
 				) : null}
-				<Text className={actionClassNames.actionText()}>{label}</Text>
+				<Typography className={actionClassNames.actionText()} type="body-sm">
+					{label}
+				</Typography>
 			</HStack>
 		</Pressable>
 	);
@@ -129,9 +131,9 @@ const BookingPolicySheetComponent = observer(
 			>
 				<View className={classNames.handle()} />
 				<VStack gap="dense">
-					<Text className={classNames.title()} key="title">
+					<Typography className={classNames.title()} key="title" type="body-sm">
 						{title}
-					</Text>
+					</Typography>
 					<ClassTitle item={item} />
 					<OptionalText
 						className={classNames.classMeta()}
@@ -142,19 +144,23 @@ const BookingPolicySheetComponent = observer(
 					<VStack className={classNames.policy()} gap="dense">
 						<HStack alignItems="center" key="policy-label">
 							<Icon name="shieldCheck" size="xs" tone="accent" />
-							<Text className={classNames.policyLabel()}>
+							<Typography className={classNames.policyLabel()} type="body-sm">
 								Cancellation policy
-							</Text>
+							</Typography>
 						</HStack>
-						<Text className={classNames.policyText()} key="policy-value">
+						<Typography
+							className={classNames.policyText()}
+							key="policy-value"
+							type="body-sm"
+						>
 							{cancellationPolicy}
-						</Text>
+						</Typography>
 					</VStack>
 				) : null}
 				<VStack gap="block">
-					<Text className={classNames.memoLabel()} key="memo-label">
+					<Typography className={classNames.memoLabel()} key="memo-label" type="body-sm">
 						{memoLabel}
-					</Text>
+					</Typography>
 					<TextInput
 						key="memo-input"
 						accessibilityLabel={memoLabel}

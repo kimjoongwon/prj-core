@@ -2,6 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 import { Switch } from "../../input/Switch/Switch";
 import { TextField } from "../../input/TextField/TextField";
@@ -113,8 +114,10 @@ export const RoleAssignmentForm = observer(
 
 		if (isLoading) {
 			return (
-				<div className="flex items-center justify-center p-8 text-sm text-muted">
-					정책을 불러오는 중...
+				<div className="flex items-center justify-center p-8">
+					<Typography type="body-sm" color="muted">
+						정책을 불러오는 중...
+					</Typography>
 				</div>
 			);
 		}
@@ -153,7 +156,9 @@ export const RoleAssignmentForm = observer(
 								>
 									<div className="min-w-0">
 										<HStack alignItems="center" className="flex-wrap">
-											<p className="font-semibold">{getPolicyLabel(policy)}</p>
+											<Typography weight="semibold">
+												{getPolicyLabel(policy)}
+											</Typography>
 											<Chip
 												size="sm"
 												color={isSelected ? "success" : "default"}
@@ -171,13 +176,13 @@ export const RoleAssignmentForm = observer(
 												</Chip>
 											) : null}
 										</HStack>
-										<p className="mt-1 text-sm text-muted">
+										<Typography className="mt-1" type="body-sm" color="muted">
 											{policy.description || policy.name}
-										</p>
-										<p className="mt-2 text-xs text-muted">
+										</Typography>
+										<Typography className="mt-2" type="body-xs" color="muted">
 											우선순위 {assignment?.priority ?? 0} · Ability{" "}
 											{policy.abilityCount ?? 0}개
-										</p>
+										</Typography>
 										{!readOnly && assignment ? (
 											<HStack
 												alignItems="center"
@@ -223,8 +228,10 @@ export const RoleAssignmentForm = observer(
 						);
 					})
 				) : (
-					<div className="rounded-xl border border-border bg-background p-6 text-center text-sm text-muted">
-						{emptyMessage}
+					<div className="rounded-xl border border-border bg-background p-6">
+						<Typography align="center" type="body-sm" color="muted">
+							{emptyMessage}
+						</Typography>
 					</div>
 				)}
 			</div>

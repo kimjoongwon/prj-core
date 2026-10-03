@@ -8,6 +8,7 @@ import {
 	getContentLanguageLabel,
 	toContentLanguageCode,
 } from "../../data-display/content-language";
+import { Typography } from "../../data-display/Typography";
 import type { AssetBrowserAsset } from "../../domain/asset/AssetBrowser";
 import { Alert } from "../../feedback/Alert/Alert";
 import { Button } from "../../input/Button/Button";
@@ -109,7 +110,7 @@ function MediaPreview({
 		>
 			<VStack gap="block" alignItems="center">
 				<ImageIcon className="h-7 w-7" />
-				<span className="text-xs">미리보기 없음</span>
+				<Typography type="body-xs">미리보기 없음</Typography>
 			</VStack>
 		</Card>
 	);
@@ -146,8 +147,10 @@ const ExerciseMediaField = observer(
 					className="mb-3"
 				>
 					<div>
-						<p className="font-medium">{label}</p>
-						<p className="mt-1 text-sm text-muted">{description}</p>
+						<Typography weight="medium">{label}</Typography>
+						<Typography className="mt-1" type="body-sm" color="muted">
+							{description}
+						</Typography>
 					</div>
 					{isEditable ? (
 						<HStack>
@@ -173,21 +176,27 @@ const ExerciseMediaField = observer(
 							title={selectedAsset.originalName}
 							className="aspect-video w-full max-w-xs"
 						/>
-						<VStack gap="dense" className="text-sm">
-							<p className="font-medium">{selectedAsset.originalName}</p>
-							<p className="text-muted">{selectedAsset.mimeType}</p>
-							<p className="break-all font-mono text-xs text-muted">
+						<VStack gap="dense">
+							<Typography type="body-sm" weight="medium">
+								{selectedAsset.originalName}
+							</Typography>
+							<Typography type="body-sm" color="muted">
+								{selectedAsset.mimeType}
+							</Typography>
+							<Typography.Code className="break-all text-muted">
 								{selectedAsset.id}
-							</p>
+							</Typography.Code>
 						</VStack>
 					</VStack>
 				) : fileId ? (
 					<div className="rounded-xl border border-border bg-surface-secondary px-4 py-3">
-						<p className="break-all font-mono text-sm">{fileId}</p>
+						<Typography.Code className="break-all">{fileId}</Typography.Code>
 					</div>
 				) : (
-					<div className="rounded-xl border border-dashed border-border px-4 py-6 text-sm text-muted">
-						{placeholder}
+					<div className="rounded-xl border border-dashed border-border px-4 py-6">
+						<Typography type="body-sm" color="muted">
+							{placeholder}
+						</Typography>
 					</div>
 				)}
 			</div>
@@ -243,8 +252,12 @@ export const TaskExerciseForm = observer(
 					onValueChange={() => clearFieldError(state, "name")}
 				/>
 				<div>
-					<label className="mb-1 block text-sm font-medium text-foreground">
-						지속시간 <span className="text-danger">*</span>
+					{/* 지속시간 label은 분/초 두 입력을 묶는 시각 라벨이다. label 요소로
+					    시맨틱을 유지하고 텍스트는 Typography로 표현한다. */}
+					<label className="mb-1 block">
+						<Typography type="body-sm" weight="medium">
+							지속시간 <span className="text-danger">*</span>
+						</Typography>
 					</label>
 					<HStack alignItems="center">
 						<TextField
@@ -274,7 +287,9 @@ export const TaskExerciseForm = observer(
 						/>
 					</HStack>
 					{state.errors.duration ? (
-						<p className="mt-1 text-sm text-danger">{state.errors.duration}</p>
+						<Typography className="mt-1 text-danger" type="body-sm">
+							{state.errors.duration}
+						</Typography>
 					) : null}
 				</div>
 				<TextField
@@ -322,19 +337,19 @@ export const TaskExerciseForm = observer(
 					onOpenPicker={onOpenVideoPicker}
 					onClear={onClickClearVideoAssetButton}
 				/>
-				<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
+				<div className="rounded-lg bg-surface-secondary p-3">
 					<HStack alignItems="center">
-						<span className="font-medium text-foreground">
+						<Typography type="body-sm" weight="medium">
 							스케줄 가능 상태
-						</span>
+						</Typography>
 						<Chip color={isSchedulable ? "success" : "warning"} size="sm">
 							{isSchedulable ? "가능" : "불가"}
 						</Chip>
 					</HStack>
-					<p className="mt-2">
+					<Typography className="mt-2" type="body-sm" color="muted">
 						영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할
 						수 있습니다.
-					</p>
+					</Typography>
 				</div>
 			</VStack>
 		);

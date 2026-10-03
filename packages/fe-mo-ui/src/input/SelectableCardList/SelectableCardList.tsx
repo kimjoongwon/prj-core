@@ -1,13 +1,13 @@
 import { type ReactNode } from "react";
 import {
 	type StyleProp,
-	Text,
 	View,
 	type ViewProps,
 	type ViewStyle,
 } from "react-native";
 import { tv } from "tailwind-variants";
 import { Chip, chipClassNames, type ChipProps } from "../../data-display/Chip";
+import { Typography } from "../../data-display/Typography";
 import { Icon, type MobileIconName } from "../../icon";
 import { HStack, VStack } from "../../rhythm";
 import { PureRadio } from "../Radio/Radio";
@@ -85,15 +85,19 @@ const NodeText = ({
 	if (node === undefined || node === null || node === false) {
 		return null;
 	}
-	return <Text className={className}>{node}</Text>;
+	return <Typography className={className} type="body-sm">{node}</Typography>;
 };
 const SelectableTag = ({ tag }: { tag: ReactNode }) => (
 	<View className={classNames.tag()}>
-		<Text className={classNames.tagText()}>{tag}</Text>
+		<Typography className={classNames.tagText()} type="body-sm">
+			{tag}
+		</Typography>
 	</View>
 );
 const SelectableMeta = ({ meta }: { meta: ReactNode }) => (
-	<Text className={classNames.metaText()}>{meta}</Text>
+	<Typography className={classNames.metaText()} type="body-sm">
+		{meta}
+	</Typography>
 );
 const SelectableTitleIcon = ({ item }: { item: SelectableCardItem }) => {
 	if (!item.iconName) {
@@ -136,7 +140,9 @@ const DisabledReasonText = ({ item }: { item: SelectableCardItem }) => {
 		return null;
 	}
 	return (
-		<Text className={classNames.disabledReason()}>{item.disabledReason}</Text>
+		<Typography className={classNames.disabledReason()} type="body-sm">
+			{item.disabledReason}
+		</Typography>
 	);
 };
 type SelectionChipColor = NonNullable<ChipProps["color"]>;
@@ -166,18 +172,19 @@ const SelectionIndicator = ({
 			variant={chipVariant}
 		>
 			<PureRadio.Indicator className={slotClassNames.radioIndicator()} />
-			<Text
+			<Typography
 				className={chipClassNames.label({
 					className: "font-bold",
 					color: chipColor,
 					size: "sm",
 					variant: chipVariant,
 				})}
+				type="body-sm"
 			>
 				{isSelected
 					? (config.selectedLabel ?? "Selected")
 					: (config.selectLabel ?? "Select")}
-			</Text>
+			</Typography>
 		</Chip>
 	);
 };
@@ -271,9 +278,9 @@ const EmptyContent = ({
 	}
 	return (
 		<View accessibilityRole="summary" className={classNames.empty()}>
-			<Text className={classNames.emptyTitle()}>
+			<Typography className={classNames.emptyTitle()} type="body-sm">
 				{emptyLabel ?? "No options available"}
-			</Text>
+			</Typography>
 		</View>
 	);
 };

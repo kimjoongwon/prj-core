@@ -12,6 +12,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	Typography,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
@@ -156,12 +157,12 @@ const SubjectGroupFilterTabs = observer(
 					</Tabs.List>
 				</Tabs>
 				<div className="rounded-lg border border-border bg-surface-secondary p-4">
-					<div className="text-sm font-semibold text-foreground">
+					<Typography type="body-sm" weight="semibold">
 						{t(selectedFilter.label)} {t("대상")}
-					</div>
-					<p className="mt-1 text-sm text-muted">
+					</Typography>
+					<Typography.Paragraph size="sm" color="muted" className="mt-1">
 						{t(selectedFilter.description)}
-					</p>
+					</Typography.Paragraph>
 				</div>
 			</VStack>
 		);

@@ -11,6 +11,7 @@ import type {
 import { CheckboxGroup, FieldError, Label, ListBox } from "@heroui/react";
 import { RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button/Button";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 import { Select } from "../../input/Select/Select";
@@ -171,7 +172,7 @@ export const OidcClientForm = observer(
 				{/* 기본 정보 */}
 				<section>
 					<VStack gap="page" className="p-6">
-						<h3 className="text-lg font-semibold">기본 정보</h3>
+						<Typography.Heading level={5}>기본 정보</Typography.Heading>
 						<TextField
 							label="Client ID"
 							placeholder="my-app-client"
@@ -255,7 +256,7 @@ export const OidcClientForm = observer(
 				{/* 인증 설정 */}
 				<section>
 					<VStack gap="page" className="p-6">
-						<h3 className="text-lg font-semibold">인증 설정</h3>
+						<Typography.Heading level={5}>인증 설정</Typography.Heading>
 						<Select
 							label="인증 방식"
 							value={
@@ -354,9 +355,9 @@ export const OidcClientForm = observer(
 								>
 									First-party 클라이언트
 								</Checkbox>
-								<p className="mt-2 text-xs leading-5 text-muted">
+								<Typography className="mt-2" type="body-xs" color="muted">
 									플랫폼이 소유하거나 신뢰하는 클라이언트로 표시합니다.
-								</p>
+								</Typography>
 							</div>
 							<div className="rounded-xl border border-border p-4">
 								<Checkbox
@@ -366,10 +367,10 @@ export const OidcClientForm = observer(
 								>
 									권한 동의 화면 생략
 								</Checkbox>
-								<p className="mt-2 text-xs leading-5 text-muted">
+								<Typography className="mt-2" type="body-xs" color="muted">
 									First-party에서만 사용할 수 있으며, prompt=consent 요청은 항상
 									동의 화면을 표시합니다.
-								</p>
+								</Typography>
 							</div>
 						</div>
 					</VStack>
@@ -377,9 +378,11 @@ export const OidcClientForm = observer(
 				{/* Redirect URIs */}
 				<section>
 					<VStack className="p-6">
-						<h3 className="text-lg font-semibold">Redirect URIs</h3>
+						<Typography.Heading level={5}>Redirect URIs</Typography.Heading>
 						{state.errors.redirectUris && (
-							<p className="text-sm text-danger">{state.errors.redirectUris}</p>
+							<Typography className="text-danger" type="body-sm">
+								{state.errors.redirectUris}
+							</Typography>
 						)}
 						<StringListInput
 							value={state.redirectUris}
@@ -399,7 +402,9 @@ export const OidcClientForm = observer(
 				</section>
 				<section>
 					<VStack gap="page" className="p-6">
-						<h3 className="text-lg font-semibold">앱 복귀 설정 (선택)</h3>
+						<Typography.Heading level={5}>
+							앱 복귀 설정 (선택)
+						</Typography.Heading>
 						<TextField
 							label="로그인 화면 URL"
 							placeholder="/admin/auth/login 또는 https://app.example.com/auth/login"
@@ -433,11 +438,13 @@ export const OidcClientForm = observer(
 				<section>
 					<VStack gap="page" className="p-6">
 						<div>
-							<h3 className="text-lg font-semibold">로그인 화면 설정</h3>
-							<p className="mt-1 text-sm text-muted">
+							<Typography.Heading level={5}>
+								로그인 화면 설정
+							</Typography.Heading>
+							<Typography className="mt-1" type="body-sm" color="muted">
 								IDP Web 로그인 폼은 공통 컴포넌트를 사용하고, 여기서는 client별
 								표현만 덮어씁니다.
-							</p>
+							</Typography>
 						</div>
 						<Checkbox
 							isSelected={!state.useCustomLoginUi}
@@ -552,7 +559,7 @@ export const OidcClientForm = observer(
 				{/* 추가 정보 */}
 				<section>
 					<VStack gap="page" className="p-6">
-						<h3 className="text-lg font-semibold">추가 정보 (선택)</h3>
+						<Typography.Heading level={5}>추가 정보 (선택)</Typography.Heading>
 						<TextField
 							label="로고 URI"
 							placeholder="https://example.com/logo.png"

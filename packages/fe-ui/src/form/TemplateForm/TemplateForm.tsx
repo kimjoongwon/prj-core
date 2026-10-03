@@ -1,5 +1,6 @@
 "use client";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { RadioGroup } from "../../input/RadioGroup/RadioGroup";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { TextField } from "../../input/TextField/TextField";
@@ -100,7 +101,7 @@ export const TemplateForm = observer(
 					<HStack alignItems="start" justifyContent="between" gap="block">
 						<HStack alignItems="start" gap="inline">
 							<div>
-								<h2>{"기본 정보"}</h2>
+								<Typography.Heading level={5}>기본 정보</Typography.Heading>
 							</div>
 						</HStack>
 					</HStack>
@@ -188,7 +189,7 @@ export const TemplateForm = observer(
 					<HStack alignItems="start" justifyContent="between" gap="block">
 						<HStack alignItems="start" gap="inline">
 							<div>
-								<h2>{"콘텐츠"}</h2>
+								<Typography.Heading level={5}>콘텐츠</Typography.Heading>
 							</div>
 						</HStack>
 					</HStack>
@@ -210,7 +211,7 @@ export const TemplateForm = observer(
 					<HStack alignItems="start" justifyContent="between" gap="block">
 						<HStack alignItems="start" gap="inline">
 							<div>
-								<h2>{"변수 관리"}</h2>
+								<Typography.Heading level={5}>변수 관리</Typography.Heading>
 							</div>
 						</HStack>
 					</HStack>

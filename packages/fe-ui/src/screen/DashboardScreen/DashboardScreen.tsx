@@ -1,6 +1,12 @@
 "use client";
 
-import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import {
+	Screen,
+	Section,
+	SectionSurface,
+	Typography,
+	VStack,
+} from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 
@@ -46,10 +52,18 @@ function DashboardScreenContent() {
 									className="rounded-xl border border-divider bg-background"
 								>
 									<div className="p-6">
-										<h2 className="text-sm font-medium text-muted">
-											{t(card.label)}
+										<h2>
+											<Typography type="body-sm" weight="medium" color="muted">
+												{t(card.label)}
+											</Typography>
 										</h2>
-										<p className="mt-2 text-3xl font-bold">{card.value}</p>
+										<Typography.Heading
+											level={3}
+											weight="bold"
+											className="mt-2"
+										>
+											{card.value}
+										</Typography.Heading>
 									</div>
 								</div>
 							))}

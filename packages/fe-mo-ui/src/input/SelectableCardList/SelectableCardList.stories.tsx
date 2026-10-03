@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { PureSelectableCardList as SelectableCardList } from "./index";
 
@@ -21,12 +21,12 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="block">
 				<VStack gap="block">
-					<Text className="text-lg font-extrabold text-foreground">
+					<Typography className="font-extrabold" type="h5">
 						SelectableCardList
-					</Text>
-					<Text className="text-sm leading-5 text-muted">
+					</Typography>
+					<Typography color="muted" type="body-sm">
 						예약 전에 확인할 선택지를 카드 형태로 고릅니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<SelectableCardList
 					description="예약 전에 선택한 시간과 요청 사항을 한 번 더 확인합니다."

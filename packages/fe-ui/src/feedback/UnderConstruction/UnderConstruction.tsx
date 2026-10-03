@@ -3,6 +3,7 @@
 import { Card } from "@heroui/react";
 import { Construction } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
 
 export interface UnderConstructionProps {
@@ -33,8 +34,12 @@ export const UnderConstruction = observer(function UnderConstruction({
 				>
 					<Construction aria-hidden className="size-10 text-muted" />
 					<div className="space-y-2">
-						<h1 className="text-2xl font-bold">{t(title)}</h1>
-						<p className="text-muted">{t(description)}</p>
+						<Typography.Heading className="text-2xl" level={1} weight="bold">
+							{t(title)}
+						</Typography.Heading>
+						<Typography.Paragraph color="muted">
+							{t(description)}
+						</Typography.Paragraph>
 					</div>
 				</output>
 			</Card.Content>

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { tv } from "tailwind-variants";
 import { CommunityPostCard } from "../../data-display/CommunityPostCard";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Button } from "../../input/Button";
 import { BottomSheet } from "../../layout/BottomSheet";
@@ -140,12 +140,16 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 					<VStack>
 						<View className={classNames.intro()}>
 							<VStack>
-								<Text className={classNames.eyebrow()}>COMMUNITY</Text>
-								<Text className={classNames.title()}>지점 커뮤니티</Text>
-								<Text className={classNames.description()}>
+								<Typography className={classNames.eyebrow()} type="body-sm">
+									COMMUNITY
+								</Typography>
+								<Typography className={classNames.title()} type="body-sm">
+									지점 커뮤니티
+								</Typography>
+								<Typography className={classNames.description()} type="body-sm">
 									같은 지점 회원들과 수업 후기, 준비물, 운영 소식을 편하게
 									나눕니다.
-								</Text>
+								</Typography>
 							</VStack>
 						</View>
 						<VStack>{content}</VStack>
@@ -164,7 +168,9 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 				>
 					<VStack>
 						<VStack>
-							<Text className={classNames.label()}>제목</Text>
+							<Typography className={classNames.label()} type="body-sm">
+								제목
+							</Typography>
 							<TextInput
 								accessibilityLabel="커뮤니티 글 제목"
 								className={classNames.input()}
@@ -176,13 +182,19 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 								value={composer.title}
 							/>
 							{composer.titleError ? (
-								<Text accessibilityRole="alert" className={classNames.error()}>
+								<Typography
+									accessibilityRole="alert"
+									className={classNames.error()}
+									type="body-sm"
+								>
 									{composer.titleError}
-								</Text>
+								</Typography>
 							) : null}
 						</VStack>
 						<VStack>
-							<Text className={classNames.label()}>내용</Text>
+							<Typography className={classNames.label()} type="body-sm">
+								내용
+							</Typography>
 							<TextInput
 								accessibilityLabel="커뮤니티 글 내용"
 								className={classNames.textarea()}
@@ -198,9 +210,13 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 								value={composer.text}
 							/>
 							{composer.textError ? (
-								<Text accessibilityRole="alert" className={classNames.error()}>
+								<Typography
+									accessibilityRole="alert"
+									className={classNames.error()}
+									type="body-sm"
+								>
 									{composer.textError}
-								</Text>
+								</Typography>
 							) : null}
 						</VStack>
 						<HStack>

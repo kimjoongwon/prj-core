@@ -1,6 +1,7 @@
 "use client";
 
 import { FileX } from "lucide-react";
+import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
 
 const DATA_GRID_EMPTY_MESSAGE = "데이터가 없습니다.";
@@ -24,9 +25,14 @@ export function DataGridEmptyRow({
 			>
 				<div className="flex flex-col items-center justify-center gap-3">
 					<FileX size={40} />
-					<p className="text-sm font-medium">
+					<Typography
+						align="center"
+						color="muted"
+						type="body-sm"
+						weight="medium"
+					>
 						{t(emptyMessage ?? DATA_GRID_EMPTY_MESSAGE)}
-					</p>
+					</Typography>
 				</div>
 			</td>
 		</tr>

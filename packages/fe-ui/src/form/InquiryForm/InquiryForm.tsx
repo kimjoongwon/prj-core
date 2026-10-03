@@ -7,6 +7,7 @@ import type {
 } from "@cocrepo/api/core/inquiries";
 import type { FormFieldMeta, FormOptionItem, FormUiPaths } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button/Button";
 import { Select } from "../../input/Select";
 import { TextArea } from "../../input/TextArea";
@@ -130,20 +131,20 @@ export const InquiryForm = observer(
 													onClick={() => onSelectCustomer?.(customer)}
 													className="w-full rounded-lg px-3 py-2 text-left transition-colors hover:bg-default"
 												>
-													<div className="text-sm font-medium">
+													<Typography type="body-sm" weight="medium">
 														{customer.label}
-													</div>
-													<div className="text-xs text-muted">
+													</Typography>
+													<Typography type="body-xs" color="muted">
 														{customer.description || customer.id}
-													</div>
+													</Typography>
 												</button>
 											))}
 										</VStack>
 									) : null}
 									{state.customerId ? (
-										<div className="text-xs text-muted">
+										<Typography type="body-xs" color="muted">
 											선택된 고객 ID: {state.customerId}
-										</div>
+										</Typography>
 									) : null}
 								</VStack>
 							) : null}

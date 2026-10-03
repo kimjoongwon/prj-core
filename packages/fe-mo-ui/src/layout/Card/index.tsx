@@ -6,7 +6,7 @@ import {
 	type ReactNode,
 } from "react";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 
 type HeroCardProps = ComponentPropsWithoutRef<typeof HeroCard>;
 type HeroCardTitleProps = ComponentPropsWithoutRef<typeof HeroCard.Title>;
@@ -59,27 +59,27 @@ const CardComponent = forwardRef<ComponentRef<typeof HeroCard>, CardProps>(
 	},
 );
 CardComponent.displayName = "Card";
-const CardTitle = forwardRef<ComponentRef<typeof Text>, CardTitleProps>(
+const CardTitle = forwardRef<ComponentRef<typeof Typography>, CardTitleProps>(
 	({ children, className, ...props }, ref) => (
-		<Text
+		<Typography
 			{...props}
 			ref={ref}
 			className={className}
-			variant="title"
+			type="h6"
 			weight="semibold"
 		>
 			{children}
-		</Text>
+		</Typography>
 	),
 );
 CardTitle.displayName = "Card.Title";
 const CardDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	CardDescriptionProps
 >(({ children, className, ...props }, ref) => (
-	<Text {...props} ref={ref} className={className} tone="muted" variant="body">
+	<Typography {...props} ref={ref} className={className} color="muted" type="body-sm">
 		{children}
-	</Text>
+	</Typography>
 ));
 CardDescription.displayName = "Card.Description";
 export const Card = Object.assign(CardComponent, {

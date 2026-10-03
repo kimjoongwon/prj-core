@@ -1,5 +1,6 @@
 import type { PlanningScenario } from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
+import { Typography } from "../../../data-display/Typography";
 import { PlanningPreviewFrame } from "./PlanningPreviewFrame";
 
 const readyScenario = {
@@ -100,12 +101,20 @@ type Story = StoryObj<typeof meta>;
 function PreviewCard({ title = "Preview" }: { title?: string }) {
 	return (
 		<div className="grid gap-3 rounded-lg border border-border bg-surface p-5">
-			<p className="text-xs font-semibold uppercase text-accent">Screen</p>
-			<h3 className="text-xl font-semibold text-foreground">{title}</h3>
-			<p className="max-w-2xl text-sm text-muted">
+			<Typography.Paragraph
+				className="text-accent uppercase"
+				size="xs"
+				weight="semibold"
+			>
+				Screen
+			</Typography.Paragraph>
+			<Typography.Heading className="text-xl" level={3}>
+				{title}
+			</Typography.Heading>
+			<Typography.Paragraph className="max-w-2xl" color="muted" size="sm">
 				실제 screen story가 이 영역 전체 너비에 렌더링됩니다. 넓은 화면은 가로
 				스크롤로 확인합니다.
-			</p>
+			</Typography.Paragraph>
 		</div>
 	);
 }

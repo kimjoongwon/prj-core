@@ -6,6 +6,7 @@ import {
 	getContentLanguageLabel,
 	toContentLanguageCode,
 } from "../../data-display/content-language";
+import { Typography } from "../../data-display/Typography";
 import { Alert } from "../../feedback/Alert/Alert";
 import { Select } from "../../input/Select";
 import { TextArea } from "../../input/TextArea";
@@ -194,9 +195,9 @@ export const TimelineSessionForm = observer(
 								isRequired
 								onValueChange={changeType}
 							/>
-							<p className="text-sm text-muted">
+							<Typography type="body-sm" color="muted">
 								{sessionTypeDescriptions[state.type]}
-							</p>
+							</Typography>
 							<TextArea
 								label="설명"
 								placeholder="세션에 대한 부가 설명을 입력하세요."

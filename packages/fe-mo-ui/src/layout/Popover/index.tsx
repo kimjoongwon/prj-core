@@ -11,7 +11,7 @@ import {
 	type ReactNode,
 } from "react";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 
 type HeroPopoverProps = ComponentPropsWithoutRef<typeof HeroPopover>;
 type HeroPopoverContentProps = ComponentPropsWithoutRef<
@@ -107,21 +107,28 @@ const PopoverComponent = forwardRef<
 	},
 );
 PopoverComponent.displayName = "Popover";
-const PopoverTitle = forwardRef<ComponentRef<typeof Text>, PopoverTitleProps>(
-	({ children, className, ...props }, ref) => (
-		<Text {...props} ref={ref} className={className} variant="label">
-			{children}
-		</Text>
-	),
-);
+const PopoverTitle = forwardRef<
+	ComponentRef<typeof Typography>,
+	PopoverTitleProps
+>(({ children, className, ...props }, ref) => (
+	<Typography
+		{...props}
+		ref={ref}
+		className={className}
+		type="body-sm"
+		weight="semibold"
+	>
+		{children}
+	</Typography>
+));
 PopoverTitle.displayName = "Popover.Title";
 const PopoverDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	PopoverDescriptionProps
 >(({ children, className, ...props }, ref) => (
-	<Text {...props} ref={ref} className={className} tone="muted" variant="body">
+	<Typography {...props} ref={ref} className={className} color="muted" type="body-sm">
 		{children}
-	</Text>
+	</Typography>
 ));
 PopoverDescription.displayName = "Popover.Description";
 export const Popover = Object.assign(PopoverComponent, {

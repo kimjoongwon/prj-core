@@ -1,5 +1,22 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import type { ReactNode } from "react";
+import { DesignSystemProvider } from "../../design-system/provider";
 import { BookingPolicySheet } from "./index";
+
+const renderWithDesignSystem = (children: ReactNode) =>
+	render(
+		<DesignSystemProvider
+			config={{
+				animation: "disable-all",
+				devInfo: {
+					stylingPrinciples: false,
+				},
+				toast: false,
+			}}
+		>
+			{children}
+		</DesignSystemProvider>,
+	);
 
 describe("BookingPolicySheet", () => {
 	it("예약 확인 정보와 정책을 렌더링하고 메모와 함께 confirm 해야 한다", () => {
@@ -14,7 +31,7 @@ describe("BookingPolicySheet", () => {
 			timeLabel: "09:00",
 		};
 
-		render(
+		renderWithDesignSystem(
 			<BookingPolicySheet
 				cancellationPolicy="시작 12시간 전까지 취소할 수 있습니다."
 				confirmLabel="예약 확정"
@@ -43,7 +60,7 @@ describe("BookingPolicySheet", () => {
 		// Given
 		const onConfirm = jest.fn();
 
-		render(
+		renderWithDesignSystem(
 			<BookingPolicySheet
 				isLoading={true}
 				item={{

@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { Typography } from "../../data-display/Typography";
 import { AccountTenantSelect } from "../../domain/account";
+import { useT } from "../../i18n";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { ScreenSurface, SectionSurface } from "../../surface";
@@ -22,6 +23,8 @@ export interface AccountTenantSelectScreenProps {
  */
 export const AccountTenantSelectScreen = observer(
 	({ eyebrow, title, description }: AccountTenantSelectScreenProps) => {
+		const t = useT();
+
 		return (
 			<ScreenSurface
 				variant="transparent"
@@ -36,11 +39,11 @@ export const AccountTenantSelectScreen = observer(
 									weight="semibold"
 									className="uppercase tracking-[0.2em] text-muted"
 								>
-									{eyebrow}
+									{t(eyebrow)}
 								</Typography>
-								<Typography.Heading level={1}>{title}</Typography.Heading>
+								<Typography.Heading level={1}>{t(title)}</Typography.Heading>
 								<Typography.Paragraph color="muted" size="sm">
-									{description}
+									{t(description)}
 								</Typography.Paragraph>
 							</VStack>
 						</Section.Header>

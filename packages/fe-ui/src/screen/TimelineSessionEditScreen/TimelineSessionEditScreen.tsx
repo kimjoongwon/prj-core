@@ -8,6 +8,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import type { MouseEvent, ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { DateTimeCell } from "../../data-grid/cell";
 import {
 	TimelineSessionForm,
@@ -114,7 +115,7 @@ export const TimelineSessionEditScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<span className="text-muted">{loadingMessage}</span>
+									<Typography color="muted">{loadingMessage}</Typography>
 								</HStack>
 							</Section.Body>
 						</Section>
@@ -135,7 +136,9 @@ export const TimelineSessionEditScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<p className="text-muted">{notFoundMessage}</p>
+									<Typography.Paragraph color="muted">
+										{notFoundMessage}
+									</Typography.Paragraph>
 									{notFoundAction ?? (
 										<Button variant="tertiary">목록으로</Button>
 									)}
@@ -169,7 +172,11 @@ export const TimelineSessionEditScreen = observer(
 											<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 												{metadata.typeLabel && metadata.typeColor ? (
 													<div>
-														<label className="text-sm text-muted">유형</label>
+														<label>
+															<Typography type="body-sm" color="muted">
+																유형
+															</Typography>
+														</label>
 														<div className="mt-1">
 															<Chip
 																color={metadata.typeColor}
@@ -184,25 +191,33 @@ export const TimelineSessionEditScreen = observer(
 												{state.type === "RECURRING" ? (
 													<>
 														<div>
-															<label className="text-sm text-muted">
-																반복 요일
+															<label>
+																<Typography type="body-sm" color="muted">
+																	반복 요일
+																</Typography>
 															</label>
-															<p className="mt-1">
+															<Typography.Paragraph className="mt-1">
 																{metadata.recurringDayLabel ?? "-"}
-															</p>
+															</Typography.Paragraph>
 														</div>
 														<div>
-															<label className="text-sm text-muted">
-																반복 주기
+															<label>
+																<Typography type="body-sm" color="muted">
+																	반복 주기
+																</Typography>
 															</label>
-															<p className="mt-1">
+															<Typography.Paragraph className="mt-1">
 																{metadata.repeatCycleLabel ?? "-"}
-															</p>
+															</Typography.Paragraph>
 														</div>
 													</>
 												) : null}
 												<div>
-													<label className="text-sm text-muted">타임라인</label>
+													<label>
+														<Typography type="body-sm" color="muted">
+															타임라인
+														</Typography>
+													</label>
 													<div className="mt-1">
 														{metadata.timelineHref && metadata.timelineName ? (
 															<Link
@@ -218,7 +233,11 @@ export const TimelineSessionEditScreen = observer(
 												</div>
 												{metadata.createdAt ? (
 													<div>
-														<label className="text-sm text-muted">등록일</label>
+														<label>
+															<Typography type="body-sm" color="muted">
+																등록일
+															</Typography>
+														</label>
 														<div className="mt-1">
 															<DateTimeCell value={metadata.createdAt} />
 														</div>
@@ -248,22 +267,34 @@ export const TimelineSessionEditScreen = observer(
 										<Section.Body>
 											<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
 												<div className="rounded-lg bg-surface-secondary p-3">
-													<p className="text-xs text-muted">전체 프로그램</p>
-													<p className="mt-1 text-lg font-semibold">
+													<Typography.Paragraph size="xs" color="muted">
+														전체 프로그램
+													</Typography.Paragraph>
+													<Typography.Heading level={5} className="mt-1">
 														{totalPrograms}개
-													</p>
+													</Typography.Heading>
 												</div>
 												<div className="rounded-lg bg-surface-secondary p-3">
-													<p className="text-xs text-muted">강사 연결 정상</p>
-													<p className="mt-1 text-lg font-semibold text-success">
+													<Typography.Paragraph size="xs" color="muted">
+														강사 연결 정상
+													</Typography.Paragraph>
+													<Typography.Heading
+														level={5}
+														className="mt-1 text-success"
+													>
 														{resolvedPrograms}개
-													</p>
+													</Typography.Heading>
 												</div>
 												<div className="rounded-lg bg-surface-secondary p-3">
-													<p className="text-xs text-muted">확인 필요</p>
-													<p className="mt-1 text-lg font-semibold text-warning">
+													<Typography.Paragraph size="xs" color="muted">
+														확인 필요
+													</Typography.Paragraph>
+													<Typography.Heading
+														level={5}
+														className="mt-1 text-warning"
+													>
 														{unresolvedPrograms}개
-													</p>
+													</Typography.Heading>
 												</div>
 											</div>
 											<Table aria-label="프로그램 목록">

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { observable } from "mobx";
 import { ScrollView } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { RadioGroup } from "./index";
 
@@ -26,12 +26,12 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="block">
 				<VStack gap="block">
-					<Text className="text-lg font-extrabold text-foreground">
+					<Typography className="font-extrabold" type="h5">
 						RadioGroup
-					</Text>
-					<Text className="text-sm leading-5 text-muted">
+					</Typography>
+					<Typography color="muted" type="body-sm">
 						상호 배타적인 옵션 중 하나를 고릅니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<RadioGroup
 					options={[

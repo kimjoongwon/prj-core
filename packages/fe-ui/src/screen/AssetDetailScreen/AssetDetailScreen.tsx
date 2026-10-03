@@ -16,6 +16,7 @@ import { ArrowLeft, FolderInput, Maximize2, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button/Button";
 import { Select } from "../../input/Select/Select";
 import { TextField } from "../../input/TextField/TextField";
@@ -158,7 +159,9 @@ export const AssetDetailScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<p className="text-muted">에셋을 찾을 수 없습니다.</p>
+									<Typography.Paragraph color="muted">
+										에셋을 찾을 수 없습니다.
+									</Typography.Paragraph>
 									<Button variant="tertiary" onPress={onClickBackButton}>
 										목록으로
 									</Button>
@@ -265,44 +268,68 @@ export const AssetDetailScreen = observer(
 													</Chip>
 												</HStack>
 												<VStack gap="block" className="mt-4">
-													<p className="text-lg font-semibold text-foreground">
+													<Typography.Heading level={5}>
 														{asset.originalName}
-													</p>
-													<p className="text-sm leading-6 text-muted">
+													</Typography.Heading>
+													<Typography.Paragraph size="sm" color="muted">
 														{previewUrl
 															? "브라우저 안에서 바로 검토하고, 필요하면 원본 파일을 새 탭으로 열 수 있습니다."
 															: "업로드가 완료되지 않았거나 브라우저가 인라인 렌더링을 지원하지 않는 형식이면 안내 카드로 폴백됩니다."}
-													</p>
+													</Typography.Paragraph>
 												</VStack>
 												<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-1">
 													<div className="rounded-2xl bg-default/80 px-4 py-3">
-														<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
+														<Typography.Paragraph
+															size="xs"
+															weight="medium"
+															color="muted"
+															className="uppercase tracking-[0.12em]"
+														>
 															MIME Type
-														</p>
-														<p className="mt-2 break-all font-mono text-sm text-foreground">
+														</Typography.Paragraph>
+														<Typography.Code className="mt-2 break-all">
 															{asset.mimeType}
-														</p>
+														</Typography.Code>
 													</div>
 													<div className="rounded-2xl bg-default/80 px-4 py-3">
-														<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
+														<Typography.Paragraph
+															size="xs"
+															weight="medium"
+															color="muted"
+															className="uppercase tracking-[0.12em]"
+														>
 															파일 크기
-														</p>
-														<p className="mt-2 text-sm font-semibold text-foreground">
+														</Typography.Paragraph>
+														<Typography.Paragraph
+															size="sm"
+															weight="semibold"
+															className="mt-2"
+														>
 															{formatBytes(asset.sizeBytes)}
-														</p>
+														</Typography.Paragraph>
 													</div>
 													<div className="rounded-2xl bg-default/80 px-4 py-3">
-														<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
+														<Typography.Paragraph
+															size="xs"
+															weight="medium"
+															color="muted"
+															className="uppercase tracking-[0.12em]"
+														>
 															현재 폴더
-														</p>
-														<p className="mt-2 break-all font-mono text-sm text-foreground">
+														</Typography.Paragraph>
+														<Typography.Code className="mt-2 break-all">
 															{asset.folderId}
-														</p>
+														</Typography.Code>
 													</div>
 													<div className="rounded-2xl bg-default/80 px-4 py-3">
-														<p className="text-xs font-medium uppercase tracking-[0.12em] text-muted">
+														<Typography.Paragraph
+															size="xs"
+															weight="medium"
+															color="muted"
+															className="uppercase tracking-[0.12em]"
+														>
 															등록일
-														</p>
+														</Typography.Paragraph>
 														<div className="mt-2 text-sm">
 															<DateTimeCell value={asset.createdAt} />
 														</div>
@@ -317,39 +344,68 @@ export const AssetDetailScreen = observer(
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											<div>
-												<p className="text-sm text-muted">파일명</p>
-												<p className="mt-1 font-medium">{asset.originalName}</p>
+												<Typography.Paragraph size="sm" color="muted">
+													파일명
+												</Typography.Paragraph>
+												<Typography.Paragraph
+													weight="medium"
+													className="mt-1"
+												>
+													{asset.originalName}
+												</Typography.Paragraph>
 											</div>
 											<div>
-												<p className="text-sm text-muted">에셋 ID</p>
-												<p className="mt-1 font-mono text-sm">{asset.id}</p>
+												<Typography.Paragraph size="sm" color="muted">
+													에셋 ID
+												</Typography.Paragraph>
+												<Typography.Code className="mt-1">
+													{asset.id}
+												</Typography.Code>
 											</div>
 											<div>
-												<p className="text-sm text-muted">타입</p>
-												<p className="mt-1">{getKindLabel(asset.kind)}</p>
+												<Typography.Paragraph size="sm" color="muted">
+													타입
+												</Typography.Paragraph>
+												<Typography.Paragraph className="mt-1">
+													{getKindLabel(asset.kind)}
+												</Typography.Paragraph>
 											</div>
 											<div>
-												<p className="text-sm text-muted">상태</p>
-												<p className="mt-1">{getStatusLabel(asset.status)}</p>
+												<Typography.Paragraph size="sm" color="muted">
+													상태
+												</Typography.Paragraph>
+												<Typography.Paragraph className="mt-1">
+													{getStatusLabel(asset.status)}
+												</Typography.Paragraph>
 											</div>
 											<div>
-												<p className="text-sm text-muted">MIME 타입</p>
-												<p className="mt-1 font-mono text-sm">
+												<Typography.Paragraph size="sm" color="muted">
+													MIME 타입
+												</Typography.Paragraph>
+												<Typography.Code className="mt-1">
 													{asset.mimeType}
-												</p>
+												</Typography.Code>
 											</div>
 											<div>
-												<p className="text-sm text-muted">크기</p>
-												<p className="mt-1">{formatBytes(asset.sizeBytes)}</p>
+												<Typography.Paragraph size="sm" color="muted">
+													크기
+												</Typography.Paragraph>
+												<Typography.Paragraph className="mt-1">
+													{formatBytes(asset.sizeBytes)}
+												</Typography.Paragraph>
 											</div>
 											<div>
-												<p className="text-sm text-muted">현재 폴더 ID</p>
-												<p className="mt-1 font-mono text-sm">
+												<Typography.Paragraph size="sm" color="muted">
+													현재 폴더 ID
+												</Typography.Paragraph>
+												<Typography.Code className="mt-1">
 													{asset.folderId}
-												</p>
+												</Typography.Code>
 											</div>
 											<div>
-												<p className="text-sm text-muted">등록일</p>
+												<Typography.Paragraph size="sm" color="muted">
+													등록일
+												</Typography.Paragraph>
 												<div className="mt-1">
 													<DateTimeCell value={asset.createdAt} />
 												</div>

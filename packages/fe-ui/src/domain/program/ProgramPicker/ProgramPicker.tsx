@@ -4,6 +4,7 @@ import { useGetRoutine, useGetRoutines } from "@cocrepo/api/core/routines";
 import { useGetUserById, useGetUsers } from "@cocrepo/api/core/users";
 import type { ModalState } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../../data-display/Typography";
 import { useT } from "../../../i18n";
 import { Button } from "../../../input/Button/Button";
 import { TextField } from "../../../input/TextField";
@@ -125,9 +126,13 @@ export const ProgramPicker = observer(function ProgramPicker({
 			/>
 			<div className="flex max-h-80 flex-col gap-2 overflow-auto">
 				{listQuery.isLoading ? (
-					<p className="text-sm text-muted">불러오는 중입니다.</p>
+					<Typography.Paragraph color="muted" size="sm">
+						불러오는 중입니다.
+					</Typography.Paragraph>
 				) : listQuery.isError ? (
-					<p className="text-sm text-danger">목록을 불러오지 못했습니다.</p>
+					<Typography.Paragraph className="text-danger" size="sm">
+						목록을 불러오지 못했습니다.
+					</Typography.Paragraph>
 				) : null}
 				{!listQuery.isLoading && !listQuery.isError
 					? filteredOptions.map((option) => (
@@ -155,7 +160,9 @@ export const ProgramPicker = observer(function ProgramPicker({
 				{!listQuery.isLoading &&
 				!listQuery.isError &&
 				filteredOptions.length === 0 ? (
-					<p className="text-sm text-muted">{t("검색 결과가 없습니다.")}</p>
+					<Typography.Paragraph color="muted" size="sm">
+						{t("검색 결과가 없습니다.")}
+					</Typography.Paragraph>
 				) : null}
 			</div>
 			<div className="flex justify-end">

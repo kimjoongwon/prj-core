@@ -8,6 +8,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	Typography,
 	VStack,
 } from "@cocrepo/ui";
 import { Spinner, Table } from "@heroui/react";
@@ -73,23 +74,49 @@ function SubjectInfoSection({
 				<Section.Body>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
-							<div className="mb-1 text-sm text-muted">식별자</div>
-							<div className="font-medium">{subject.name}</div>
+							<Typography.Paragraph
+								size="sm"
+								color="muted"
+								className="mb-1"
+							>
+								식별자
+							</Typography.Paragraph>
+							<Typography.Paragraph weight="medium">
+								{subject.name}
+							</Typography.Paragraph>
 						</div>
 						<div>
-							<div className="mb-1 text-sm text-muted">표시명</div>
+							<Typography.Paragraph
+								size="sm"
+								color="muted"
+								className="mb-1"
+							>
+								표시명
+							</Typography.Paragraph>
 							<div className="font-medium">
 								<DefaultCell value={subject.displayName || "-"} />
 							</div>
 						</div>
 						<div>
-							<div className="mb-1 text-sm text-muted">아이콘</div>
+							<Typography.Paragraph
+								size="sm"
+								color="muted"
+								className="mb-1"
+							>
+								아이콘
+							</Typography.Paragraph>
 							<div className="font-medium">
 								<DefaultCell value={subject.icon || "-"} />
 							</div>
 						</div>
 						<div>
-							<div className="mb-1 text-sm text-muted">분류</div>
+							<Typography.Paragraph
+								size="sm"
+								color="muted"
+								className="mb-1"
+							>
+								분류
+							</Typography.Paragraph>
 							<div>
 								{subject.group ? (
 									<Chip
@@ -105,17 +132,37 @@ function SubjectInfoSection({
 							</div>
 						</div>
 						<div>
-							<div className="mb-1 text-sm text-muted">정렬 순서</div>
-							<div className="font-medium">{subject.order}</div>
+							<Typography.Paragraph
+								size="sm"
+								color="muted"
+								className="mb-1"
+							>
+								정렬 순서
+							</Typography.Paragraph>
+							<Typography.Paragraph weight="medium">
+								{subject.order}
+							</Typography.Paragraph>
 						</div>
 						<div>
-							<div className="mb-1 text-sm text-muted">생성일</div>
+							<Typography.Paragraph
+								size="sm"
+								color="muted"
+								className="mb-1"
+							>
+								생성일
+							</Typography.Paragraph>
 							<div className="font-medium">
 								<DateTimeCell value={subject.createdAt} />
 							</div>
 						</div>
 						<div>
-							<div className="mb-1 text-sm text-muted">수정일</div>
+							<Typography.Paragraph
+								size="sm"
+								color="muted"
+								className="mb-1"
+							>
+								수정일
+							</Typography.Paragraph>
 							<div className="font-medium">
 								<DateTimeCell value={subject.updatedAt} />
 							</div>
@@ -146,9 +193,9 @@ function SubjectFieldsSection({
 		content = (
 			<div className="rounded-xl bg-default p-8 text-center">
 				<Box className="mx-auto mb-4 size-12 text-muted" />
-				<p className="text-muted">
+				<Typography.Paragraph color="muted">
 					이 Subject는 Entity 기반이 아니므로 필드 정보가 없습니다.
-				</p>
+				</Typography.Paragraph>
 			</div>
 		);
 	} else if (isLoading) {
@@ -177,7 +224,7 @@ function SubjectFieldsSection({
 									<DefaultCell value={field.displayName || "-"} />
 								</Table.Cell>
 								<Table.Cell>
-									<code className="text-xs">{field.type}</code>
+									<Typography.Code>{field.type}</Typography.Code>
 								</Table.Cell>
 								<Table.Cell>
 									<div className="flex justify-center">
@@ -248,7 +295,9 @@ export const SubjectDetailScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<p className="text-muted">Subject를 찾을 수 없습니다.</p>
+									<Typography.Paragraph color="muted">
+										Subject를 찾을 수 없습니다.
+									</Typography.Paragraph>
 									<Button
 										variant="tertiary"
 										startContent={<ArrowLeft className="size-4" />}

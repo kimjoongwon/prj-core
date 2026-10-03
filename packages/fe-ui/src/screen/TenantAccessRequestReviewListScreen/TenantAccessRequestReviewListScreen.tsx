@@ -5,6 +5,7 @@ import { Table } from "@heroui/react";
 import { Eye } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
@@ -98,16 +99,18 @@ function RequestSummaryCell({
 	return (
 		<VStack gap="dense">
 			<HStack alignItems="center" className="flex-wrap">
-				<span className="font-medium text-foreground">{spaceName}</span>
+				<Typography weight="medium">
+					{spaceName}
+				</Typography>
 				<Chip size="sm" variant="soft">
 					{roleName}
 				</Chip>
 			</HStack>
 			{requesterName || requesterEmail ? (
-				<span className="text-sm text-muted">
+				<Typography type="body-sm" color="muted">
 					{requesterName ?? requesterEmail}
 					{requesterName && requesterEmail ? ` · ${requesterEmail}` : ""}
-				</span>
+				</Typography>
 			) : null}
 		</VStack>
 	);
@@ -136,21 +139,31 @@ export const TenantAccessRequestReviewListScreen = observer(
 									<Section>
 										<Section.Body>
 											<VStack>
-												<span className="text-sm text-muted">전체 신청</span>
-												<span className="text-2xl font-semibold text-foreground">
+												<Typography
+													type="body-sm"
+													color="muted"
+												>
+													전체 신청
+												</Typography>
+												<Typography.Heading level={3}>
 													{totalCount.toLocaleString("ko-KR")}
-												</span>
+												</Typography.Heading>
 											</VStack>
 										</Section.Body>
 									</Section>
 									<Section>
 										<Section.Body>
 											<VStack>
-												<span className="text-sm text-muted">승인 대기</span>
+												<Typography
+													type="body-sm"
+													color="muted"
+												>
+													승인 대기
+												</Typography>
 												<HStack alignItems="center">
-													<span className="text-2xl font-semibold text-foreground">
+													<Typography.Heading level={3}>
 														{pendingCount.toLocaleString("ko-KR")}
-													</span>
+													</Typography.Heading>
 													<Chip color="warning" variant="soft" size="sm">
 														PENDING
 													</Chip>

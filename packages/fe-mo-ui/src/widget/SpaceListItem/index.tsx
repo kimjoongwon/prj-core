@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { tv } from "tailwind-variants";
 import { Avatar } from "../../data-display/Avatar";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Icon } from "../../icon";
 import { Card } from "../../layout/Card";
 
@@ -80,12 +80,20 @@ export const SpaceListItem = observer(function SpaceListItem({
 					</Avatar>
 				</View>
 				<View className={slotClassNames.content()}>
-					<Text className={slotClassNames.name()} numberOfLines={1}>
+					<Typography
+						className={slotClassNames.name()}
+						numberOfLines={1}
+						type="body-sm"
+					>
 						{space.name}
-					</Text>
-					<Text className={slotClassNames.address()} numberOfLines={2}>
+					</Typography>
+					<Typography
+						className={slotClassNames.address()}
+						numberOfLines={2}
+						type="body-sm"
+					>
 						{space.address || "주소 정보가 없습니다."}
-					</Text>
+					</Typography>
 				</View>
 				<View className={slotClassNames.accessory()}>
 					{accessory ??

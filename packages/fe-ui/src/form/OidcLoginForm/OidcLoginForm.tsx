@@ -4,6 +4,7 @@ import type { OidcClientLoginUi } from "@cocrepo/type";
 import { LockKeyhole } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Checkbox, Link, TextField } from "../../input";
@@ -202,15 +203,15 @@ export const OidcLoginForm = observer(
 									? t(state.error.displayMessage)
 									: t(getFallbackErrorMessage(state.error))}
 								{state.error.hint && (
-									<span className="mt-2 block text-xs leading-5 opacity-80">
+									<Typography className="mt-2 opacity-80" type="body-xs">
 										{t(state.error.hint)}
-									</span>
+									</Typography>
 								)}
 							</>
 						}
 						actions={
 							actionsToRender.length > 0 ? (
-								<HStack gap="block" className="flex-wrap text-sm">
+								<HStack gap="block" className="flex-wrap">
 									{actionsToRender.map((action) =>
 										action.href ? (
 											<Link
@@ -221,12 +222,13 @@ export const OidcLoginForm = observer(
 												{t(action.label)}
 											</Link>
 										) : (
-											<span
+											<Typography
 												key={`${action.type}:${action.label}`}
-												className="text-muted"
+												type="body-sm"
+												color="muted"
 											>
 												{t(action.label)}
-											</span>
+											</Typography>
 										),
 									)}
 								</HStack>
@@ -289,12 +291,12 @@ export const OidcLoginForm = observer(
 				</form>
 
 				<VStack gap="block" alignItems="center" className="mt-6 text-center">
-					<div className="text-sm text-muted">
+					<Typography type="body-sm" color="muted">
 						{t("계정이 없으신가요?")}{" "}
 						<Link href={signUpHref} className="font-medium text-accent">
 							{t("회원가입")}
 						</Link>
-					</div>
+					</Typography>
 					<button
 						type="button"
 						data-action="abort-interaction"

@@ -5,6 +5,7 @@ import type { ModalState } from "@cocrepo/store";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../../data-display/Chip/Chip";
+import { Typography } from "../../../data-display/Typography";
 import { VariableInputForm } from "../../../form/VariableInputForm";
 import { Button } from "../../../input/Button/Button";
 import { TemplateEmailPreviewResult } from "./TemplateEmailPreviewResult";
@@ -48,7 +49,9 @@ export const TemplatePreviewModal = observer(function TemplatePreviewModal({
 		<>
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col gap-3">
-					<p className="text-sm font-semibold text-foreground">변수 입력</p>
+					<Typography.Paragraph size="sm" weight="semibold">
+						변수 입력
+					</Typography.Paragraph>
 					<VariableInputForm
 						variables={preview.variables}
 						values={preview.variableValues}
@@ -65,7 +68,9 @@ export const TemplatePreviewModal = observer(function TemplatePreviewModal({
 				</Button>
 
 				{preview.status === "error" && preview.errorMessage ? (
-					<p className="text-sm text-danger">{preview.errorMessage}</p>
+					<Typography.Paragraph className="text-danger" size="sm">
+						{preview.errorMessage}
+					</Typography.Paragraph>
 				) : null}
 
 				{preview.isLoading ? (
@@ -78,9 +83,13 @@ export const TemplatePreviewModal = observer(function TemplatePreviewModal({
 					<div className="flex flex-col gap-4">
 						{preview.result.unresolvedVariables.length > 0 ? (
 							<div className="flex flex-col gap-2">
-								<p className="text-sm font-semibold text-warning">
+								<Typography.Paragraph
+									className="text-warning"
+									size="sm"
+									weight="semibold"
+								>
 									미치환 변수
-								</p>
+								</Typography.Paragraph>
 								<div className="flex flex-wrap gap-2">
 									{preview.result.unresolvedVariables.map((variableName) => (
 										<Chip

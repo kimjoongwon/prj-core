@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useState } from "react";
+import { Typography } from "../../data-display/Typography";
 import { Skeleton } from "./Skeleton";
 
 const meta = {
@@ -186,24 +187,28 @@ export const LoadingStates: Story = {
 						animationType={isLoaded ? "none" : "pulse"}
 						className="h-6 w-3/4 rounded-lg"
 					>
-						<h3 className="font-bold text-lg">Amazing Product Title</h3>
+						<Typography.Heading className="text-lg" level={3} weight="bold">
+							Amazing Product Title
+						</Typography.Heading>
 					</Skeleton>
 
 					<Skeleton
 						animationType={isLoaded ? "none" : "pulse"}
 						className="h-4 w-full rounded-lg"
 					>
-						<p className="text-muted">
+						<Typography.Paragraph color="muted">
 							This is a detailed product description that explains all the
 							features.
-						</p>
+						</Typography.Paragraph>
 					</Skeleton>
 
 					<Skeleton
 						animationType={isLoaded ? "none" : "pulse"}
 						className="h-6 w-1/3 rounded-lg"
 					>
-						<div className="font-bold text-accent text-xl">$99.99</div>
+						<Typography className="text-accent text-xl" weight="bold">
+							$99.99
+						</Typography>
 					</Skeleton>
 				</div>
 

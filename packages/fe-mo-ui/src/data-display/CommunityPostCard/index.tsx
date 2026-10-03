@@ -5,7 +5,7 @@ import { tv } from "tailwind-variants";
 import { Icon } from "../../icon";
 import { HStack, VStack } from "../../rhythm";
 import { Chip } from "../Chip";
-import { Text } from "../Text";
+import { Typography } from "../Typography";
 
 export interface CommunityPostCardProps extends Omit<ViewProps, "children"> {
 	authorName: ReactNode;
@@ -39,13 +39,23 @@ export const CommunityPostCard = observer((props: CommunityPostCardProps) => {
 				<HStack alignItems="center" justifyContent="between">
 					<HStack alignItems="center" className="flex-1">
 						<Icon name="users" size="xs" tone="accent" />
-						<Text className={classNames.author()} numberOfLines={1}>
+						<Typography
+							className={classNames.author()}
+							numberOfLines={1}
+							type="body-sm"
+						>
 							{authorName}
-						</Text>
-						<Text className={classNames.dot()}>·</Text>
-						<Text className={classNames.createdAt()} numberOfLines={1}>
+						</Typography>
+						<Typography className={classNames.dot()} type="body-sm">
+							·
+						</Typography>
+						<Typography
+							className={classNames.createdAt()}
+							numberOfLines={1}
+							type="body-sm"
+						>
 							{createdAtLabel}
-						</Text>
+						</Typography>
 					</HStack>
 					<HStack alignItems="center">
 						{isPinned ? (
@@ -61,13 +71,17 @@ export const CommunityPostCard = observer((props: CommunityPostCardProps) => {
 					</HStack>
 				</HStack>
 				{title ? (
-					<Text className={classNames.title()} numberOfLines={2}>
+					<Typography
+						className={classNames.title()}
+						numberOfLines={2}
+						type="body-sm"
+					>
 						{title}
-					</Text>
+					</Typography>
 				) : null}
-				<Text className={classNames.text()} numberOfLines={6}>
+				<Typography className={classNames.text()} numberOfLines={6} type="body-sm">
 					{text}
-				</Text>
+				</Typography>
 			</VStack>
 		</View>
 	);

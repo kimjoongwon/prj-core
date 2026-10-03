@@ -1,4 +1,5 @@
 import { HtmlContentRenderer } from "../../../data-display/HtmlContentRenderer";
+import { Typography } from "../../../data-display/Typography";
 
 export interface TemplateEmailPreviewResultProps {
 	subject: string | null;
@@ -12,17 +13,21 @@ export function TemplateEmailPreviewResult({
 }: TemplateEmailPreviewResultProps) {
 	return (
 		<div className="flex flex-col">
-			<span className="text-sm font-semibold text-foreground">
+			<Typography.Paragraph size="sm" weight="semibold">
 				미리보기 결과
-			</span>
+			</Typography.Paragraph>
 			{subject ? (
 				<div className="flex flex-col">
-					<span className="text-xs text-muted">제목</span>
-					<span className="text-sm text-foreground">{subject}</span>
+					<Typography.Paragraph color="muted" size="xs">
+						제목
+					</Typography.Paragraph>
+					<Typography.Paragraph size="sm">{subject}</Typography.Paragraph>
 				</div>
 			) : null}
 			<div className="flex flex-col">
-				<span className="text-xs text-muted">본문</span>
+				<Typography.Paragraph color="muted" size="xs">
+					본문
+				</Typography.Paragraph>
 				<HtmlContentRenderer html={content} />
 			</div>
 		</div>

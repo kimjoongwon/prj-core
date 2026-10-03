@@ -82,7 +82,7 @@ jest.mock("@cocrepo/mo-ui", () => {
 				children,
 			),
 		Spinner: () => React.createElement(MockText, null, "loading-spinner"),
-		Text: ({
+		Typography: ({
 			children,
 			...props
 		}: {

@@ -1,3 +1,5 @@
+import { Typography } from "../../../data-display/Typography";
+
 export interface PhoneCellProps {
 	/** 전화번호 */
 	value?: string | null;
@@ -15,21 +17,39 @@ export interface PhoneCellProps {
 const joinClassNames = (...values: Array<string | false | null | undefined>) =>
 	values.filter(Boolean).join(" ");
 
+/** 셀 마크업(text-[13px])과 동일한 크기를 유지하는 폴백 클래스입니다. */
+const DATA_CELL_SIZE_FALLBACK_CLASS_NAME = "text-[13px]";
+
 export const PhoneCell = ({ value, className, title }: PhoneCellProps) => {
 	if (!value) {
 		return (
-			<span className={joinClassNames("text-muted", className)} title={title}>
+			<Typography
+				className={joinClassNames(
+					DATA_CELL_SIZE_FALLBACK_CLASS_NAME,
+					className,
+				)}
+				color="muted"
+				title={title}
+				type="body-sm"
+			>
 				-
-			</span>
+			</Typography>
 		);
 	}
 
 	// 이미 하이픈이 포함되어 있으면 그대로 표시
 	if (value.includes("-")) {
 		return (
-			<span className={className} title={title}>
+			<Typography
+				className={joinClassNames(
+					DATA_CELL_SIZE_FALLBACK_CLASS_NAME,
+					className,
+				)}
+				title={title}
+				type="body-sm"
+			>
 				{value}
-			</span>
+			</Typography>
 		);
 	}
 
@@ -51,8 +71,12 @@ export const PhoneCell = ({ value, className, title }: PhoneCellProps) => {
 	}
 
 	return (
-		<span className={className} title={title}>
+		<Typography
+			className={joinClassNames(DATA_CELL_SIZE_FALLBACK_CLASS_NAME, className)}
+			title={title}
+			type="body-sm"
+		>
 			{formatted}
-		</span>
+		</Typography>
 	);
 };

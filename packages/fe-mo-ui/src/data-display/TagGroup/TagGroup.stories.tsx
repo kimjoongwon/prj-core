@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../Text";
+import { Typography } from "../Typography";
 import { TagGroup } from "./index";
 
 const meta = {
@@ -19,10 +19,10 @@ export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">TagGroup</Text>
-				<Text className="text-sm leading-5 text-muted">
+				<Typography className="font-extrabold" type="h5">TagGroup</Typography>
+				<Typography color="muted" type="body-sm">
 					수업 태그, 필터 키워드, 선택 가능한 속성 묶음을 표시합니다.
-				</Text>
+				</Typography>
 			</View>
 			<TagGroup
 				defaultSelectedKeys={["core", "reformer"]}

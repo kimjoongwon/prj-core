@@ -9,6 +9,7 @@ import { requireDecimalId } from "@cocrepo/type";
 import { LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Chip } from "../../../data-display/Chip/Chip";
+import { Typography } from "../../../data-display/Typography";
 import { Button } from "../../../input/Button/Button";
 import { Select } from "../../../input/Select/Select";
 
@@ -165,22 +166,29 @@ export function PlanningSessionBar({
 							<Chip color="accent" size="sm" variant="tertiary">
 								{context.realm}
 							</Chip>
-							<span className="text-xs font-medium text-muted">
+							<Typography color="muted" type="body-xs" weight="medium">
 								role {roleLabel}
-							</span>
+							</Typography>
 						</div>
-						<p className="truncate text-sm font-semibold text-foreground">
+						<Typography.Paragraph size="sm" truncate weight="semibold">
 							{accountName}
-						</p>
-						<p className="truncate text-xs text-muted">{accountCaption}</p>
+						</Typography.Paragraph>
+						<Typography.Paragraph color="muted" size="xs" truncate>
+							{accountCaption}
+						</Typography.Paragraph>
 					</div>
 				</div>
 
 				<div className="flex flex-wrap items-center justify-end gap-2">
 					<div className="min-w-0">
-						<p className="mb-1 text-[11px] font-semibold uppercase text-muted">
+						<Typography.Paragraph
+							className="mb-1 text-[11px] uppercase"
+							color="muted"
+							size="xs"
+							weight="semibold"
+						>
 							Tenant / Space
-						</p>
+						</Typography.Paragraph>
 						<Select
 							aria-label="Space 선택"
 							value={spaceSelectValue}
@@ -222,17 +230,17 @@ export function PlanningSessionBar({
 				</div>
 			</div>
 
-			<div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted">
+			<div className="mt-3 flex flex-wrap items-center gap-2">
 				<ShieldCheck className="h-4 w-4 text-success" size={16} />
-				<span>
+				<Typography color="muted" type="body-xs">
 					실제 인증, 라우터, API 호출 없이 Storybook 안에서만 컨텍스트를
 					검토합니다.
-				</span>
+				</Typography>
 				{selectedSpace ? (
-					<span className="break-words">
+					<Typography className="break-words" color="muted" type="body-xs">
 						선택: {selectedSpace.tenantName ?? selectedSpace.tenantId} /{" "}
 						{selectedSpace.fitnessCenterName}
-					</span>
+					</Typography>
 				) : null}
 			</div>
 		</section>

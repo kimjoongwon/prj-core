@@ -1,7 +1,7 @@
 import { forwardRef, type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 
 export type ScreenActionBarOrientation = "horizontal" | "vertical";
@@ -90,7 +90,9 @@ const ScreenActionBarComponent = forwardRef<View, ScreenActionBarProps>(
 				ref={ref}
 			>
 				{description ? (
-					<Text className={classNames.description()}>{description}</Text>
+					<Typography className={classNames.description()} type="body-sm">
+						{description}
+					</Typography>
 				) : null}
 				{hasCustomActions || hasGeneratedActions ? (
 					<View className={slotClassNames.actions()}>

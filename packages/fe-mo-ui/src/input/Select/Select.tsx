@@ -11,7 +11,7 @@ import {
 	forwardRef,
 	type ReactNode,
 } from "react";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 
 type HeroSelectProps = ComponentPropsWithoutRef<typeof HeroSelect>;
 type HeroSelectCloseProps = ComponentPropsWithoutRef<typeof HeroSelect.Close>;
@@ -140,53 +140,54 @@ const PureSelectComponent = forwardRef<
 );
 PureSelectComponent.displayName = "PureSelect";
 const SelectItemLabel = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	HeroSelectItemLabelProps
 >(({ className, ...props }, ref) => {
 	const { label } = useSelectItem();
 
 	return (
-		<Text
+		<Typography
 			{...props}
 			ref={ref}
 			accessibilityRole="text"
 			className={className}
-			variant="label"
+			type="body-sm"
+			weight="semibold"
 		>
 			{label}
-		</Text>
+		</Typography>
 	);
 });
 SelectItemLabel.displayName = "Select.ItemLabel";
 const SelectItemDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	HeroSelectItemDescriptionProps
 >(({ children, className, ...props }, ref) => (
-	<Text
+	<Typography
 		{...props}
 		ref={ref}
 		accessibilityRole="summary"
 		className={className}
-		tone="muted"
-		variant="body"
+		color="muted"
+		type="body-sm"
 	>
 		{children}
-	</Text>
+	</Typography>
 ));
 SelectItemDescription.displayName = "Select.ItemDescription";
 const SelectListLabel = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	HeroSelectListLabelProps
 >(({ children, className, ...props }, ref) => (
-	<Text
+	<Typography
 		{...props}
 		ref={ref}
 		className={className}
-		tone="muted"
-		variant="caption"
+		color="muted"
+		type="body-xs"
 	>
 		{children}
-	</Text>
+	</Typography>
 ));
 SelectListLabel.displayName = "Select.ListLabel";
 export const PureSelect = Object.assign(PureSelectComponent, {

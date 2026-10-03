@@ -7,6 +7,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	Typography,
 	toContentLanguageCode,
 	useT,
 	VStack,
@@ -114,7 +115,7 @@ function MediaPreview({
 		>
 			<VStack gap="block" alignItems="center">
 				<ImageIcon className="h-7 w-7" />
-				<span className="text-xs">미리보기 없음</span>
+				<Typography.Paragraph size="xs">미리보기 없음</Typography.Paragraph>
 			</VStack>
 		</Card>
 	);
@@ -140,8 +141,12 @@ const ExerciseMediaField = observer(function ExerciseMediaField({
 		<div className="rounded-2xl border border-border bg-surface p-4">
 			<HStack alignItems="start" justifyContent="between" gap="block">
 				<div>
-					<p className="font-medium">{t(label)}</p>
-					<p className="mt-1 text-sm text-muted">{t(description)}</p>
+					<Typography.Paragraph weight="medium">
+						{t(label)}
+					</Typography.Paragraph>
+					<Typography.Paragraph size="sm" color="muted" className="mt-1">
+						{t(description)}
+					</Typography.Paragraph>
 				</div>
 				<HStack>
 					<Button size="sm" variant="tertiary" onPress={onOpenPicker}>
@@ -165,18 +170,26 @@ const ExerciseMediaField = observer(function ExerciseMediaField({
 						title={selectedAsset.originalName}
 						className="aspect-video w-full max-w-xs"
 					/>
-					<VStack gap="dense" className="text-sm">
-						<p className="font-medium">{selectedAsset.originalName}</p>
-						<p className="text-muted">{selectedAsset.mimeType}</p>
-						<p className="break-all font-mono text-xs text-muted">
+					<VStack gap="dense">
+						<Typography.Paragraph weight="medium">
+							{selectedAsset.originalName}
+						</Typography.Paragraph>
+						<Typography.Paragraph color="muted" size="sm">
+							{selectedAsset.mimeType}
+						</Typography.Paragraph>
+						<Typography.Code className="break-all">
 							{selectedAsset.id}
-						</p>
+						</Typography.Code>
 					</VStack>
 				</VStack>
 			) : (
-				<div className="rounded-xl border border-dashed border-border px-4 py-6 text-sm text-muted">
+				<Typography.Paragraph
+					color="muted"
+					size="sm"
+					className="rounded-xl border border-dashed border-border px-4 py-6"
+				>
 					{t(placeholder)}
-				</div>
+				</Typography.Paragraph>
 			)}
 		</div>
 	);
@@ -270,8 +283,10 @@ export const TaskCreateScreen = observer(
 									errorMessage={errors.name ? t(errors.name) : undefined}
 								/>
 								<div>
-									<label className="mb-1 block text-sm font-medium text-foreground">
-										{t("지속시간")} <span className="text-danger">*</span>
+									<label className="mb-1 block">
+										<Typography type="body-sm" weight="medium">
+											{t("지속시간")} <span className="text-danger">*</span>
+										</Typography>
 									</label>
 									<HStack alignItems="center">
 										<TextField
@@ -281,7 +296,9 @@ export const TaskCreateScreen = observer(
 											onValueChange={onChangeDurationMinInput}
 											min={0}
 											endContent={
-												<span className="text-muted text-sm">{t("분")}</span>
+												<Typography type="body-sm" color="muted">
+													{t("분")}
+												</Typography>
 											}
 											className="max-w-32"
 										/>
@@ -293,15 +310,20 @@ export const TaskCreateScreen = observer(
 											min={0}
 											max={59}
 											endContent={
-												<span className="text-muted text-sm">{t("초")}</span>
+												<Typography type="body-sm" color="muted">
+													{t("초")}
+												</Typography>
 											}
 											className="max-w-32"
 										/>
 									</HStack>
 									{errors.duration ? (
-										<p className="mt-1 text-sm text-danger">
+										<Typography.Paragraph
+											size="sm"
+											className="mt-1 text-danger"
+										>
 											{t(errors.duration)}
-										</p>
+										</Typography.Paragraph>
 									) : null}
 								</div>
 								<TextField
@@ -315,7 +337,9 @@ export const TaskCreateScreen = observer(
 									isInvalid={Boolean(errors.count)}
 									errorMessage={errors.count ? t(errors.count) : undefined}
 									endContent={
-										<span className="text-muted text-sm">{t("회")}</span>
+										<Typography type="body-sm" color="muted">
+											{t("회")}
+										</Typography>
 									}
 								/>
 								<TextArea
@@ -348,11 +372,11 @@ export const TaskCreateScreen = observer(
 										onClickClearVideoAssetButton();
 									}}
 								/>
-								<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
+								<div className="rounded-lg bg-surface-secondary p-3">
 									<HStack alignItems="center">
-										<span className="font-medium text-foreground">
+										<Typography type="body-sm" weight="medium">
 											{t("스케줄 가능 상태")}
-										</span>
+										</Typography>
 										<Chip
 											color={isSchedulable ? "success" : "warning"}
 											size="sm"
@@ -360,11 +384,15 @@ export const TaskCreateScreen = observer(
 											{isSchedulable ? t("가능") : t("불가")}
 										</Chip>
 									</HStack>
-									<p className="mt-2">
+									<Typography.Paragraph
+										size="sm"
+										color="muted"
+										className="mt-2"
+									>
 										{t(
 											"영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.",
 										)}
-									</p>
+									</Typography.Paragraph>
 								</div>
 							</VStack>
 						</Section.Body>

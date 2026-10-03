@@ -6,6 +6,7 @@ import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { DateTimeCell } from "../../data-grid/cell";
 import {
 	AssetBrowser,
@@ -141,7 +142,7 @@ export const TaskExerciseEditScreen = observer(
 									className="p-8"
 								>
 									<Spinner size="sm" />
-									<span className="text-muted">로딩 중...</span>
+									<Typography color="muted">로딩 중...</Typography>
 								</HStack>
 							</Section.Body>
 						</Section>
@@ -165,7 +166,9 @@ export const TaskExerciseEditScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<p className="text-muted">운동 detail을 찾을 수 없습니다.</p>
+									<Typography.Paragraph color="muted">
+										운동 detail을 찾을 수 없습니다.
+									</Typography.Paragraph>
 									<Button variant="tertiary" onPress={onClickCancelButton}>
 										목록으로
 									</Button>
@@ -206,23 +209,41 @@ export const TaskExerciseEditScreen = observer(
 							<Section.Body>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
-										<label className="text-sm text-muted">Task ID</label>
-										<p className="mt-1 font-mono text-sm">{metadata.taskId}</p>
+										<label>
+											<Typography type="body-sm" color="muted">
+												Task ID
+											</Typography>
+										</label>
+										<Typography.Code className="mt-1">
+											{metadata.taskId}
+										</Typography.Code>
 									</div>
 									<div>
-										<label className="text-sm text-muted">Space ID</label>
-										<p className="mt-1 font-mono text-sm">
+										<label>
+											<Typography type="body-sm" color="muted">
+												Space ID
+											</Typography>
+										</label>
+										<Typography.Code className="mt-1">
 											{metadata.spaceId ?? "-"}
-										</p>
+										</Typography.Code>
 									</div>
 									<div>
-										<label className="text-sm text-muted">지속시간</label>
-										<p className="mt-1">
+										<label>
+											<Typography type="body-sm" color="muted">
+												지속시간
+											</Typography>
+										</label>
+										<Typography.Paragraph className="mt-1">
 											{formatDuration(state.durationMin, state.durationSec)}
-										</p>
+										</Typography.Paragraph>
 									</div>
 									<div>
-										<label className="text-sm text-muted">스케줄 가능</label>
+										<label>
+											<Typography type="body-sm" color="muted">
+												스케줄 가능
+											</Typography>
+										</label>
 										<div className="mt-1">
 											<Chip
 												color={
@@ -237,13 +258,21 @@ export const TaskExerciseEditScreen = observer(
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-muted">등록일</label>
+										<label>
+											<Typography type="body-sm" color="muted">
+												등록일
+											</Typography>
+										</label>
 										<div className="mt-1">
 											<DateTimeCell value={metadata.createdAt ?? "-"} />
 										</div>
 									</div>
 									<div>
-										<label className="text-sm text-muted">수정일</label>
+										<label>
+											<Typography type="body-sm" color="muted">
+												수정일
+											</Typography>
+										</label>
 										<div className="mt-1">
 											<DateTimeCell value={metadata.updatedAt} />
 										</div>
@@ -263,10 +292,12 @@ export const TaskExerciseEditScreen = observer(
 											className="flex items-center justify-between rounded-lg bg-surface-secondary p-3"
 										>
 											<div>
-												<p className="font-medium">{routine.name}</p>
-												<p className="text-sm text-muted">
+												<Typography.Paragraph weight="medium">
+													{routine.name}
+												</Typography.Paragraph>
+												<Typography.Paragraph size="sm" color="muted">
 													{routine.label || "-"}
-												</p>
+												</Typography.Paragraph>
 											</div>
 											<div className="text-sm text-muted">
 												<DateTimeCell value={routine.createdAt} />

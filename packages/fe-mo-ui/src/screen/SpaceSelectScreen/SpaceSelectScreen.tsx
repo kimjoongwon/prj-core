@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { tv } from "tailwind-variants";
 import { Chip, chipClassNames } from "../../data-display/Chip";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
 import { Button } from "../../input/Button";
@@ -100,23 +100,24 @@ export const SpaceSelectScreen = observer(function SpaceSelectScreen({
 					<VStack gap="block">
 						<Chip color="accent" size="sm" variant="soft">
 							<Icon name="mapPin" size="xs" tone="accent" />
-							<Text
+							<Typography
 								className={chipClassNames.label({
 									color: "accent",
 									size: "sm",
 									variant: "soft",
 									className: "font-bold uppercase",
 								})}
+								type="body-sm"
 							>
 								Branch
-							</Text>
+							</Typography>
 						</Chip>
-						<Text className={classNames.title()}>
+						<Typography className={classNames.title()} type="body-sm">
 							이용할 지점을 선택해 주세요
-						</Text>
-						<Text className={classNames.description()}>
+						</Typography>
+						<Typography className={classNames.description()} type="body-sm">
 							선택한 지점으로 예약 목록과 알림 설정이 연결됩니다.
-						</Text>
+						</Typography>
 					</VStack>
 					{selectionErrorDescription ? (
 						<StatusFeedback

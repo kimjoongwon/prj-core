@@ -1,4 +1,4 @@
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Icon } from "../../icon";
 import { ListGroup } from "../../layout/ListGroup";
 import { quickActionListClassNames } from "./QuickActionList.class-names";
@@ -29,8 +29,12 @@ export function renderQuickActionListItem(item: QuickActionListItem) {
 				<Icon name={item.iconName} size="sm" tone="accent" />
 			</ListGroup.ItemPrefix>
 			<ListGroup.ItemContent>
-				<Text className={classNames.label()}>{item.label}</Text>
-				<Text className={classNames.description()}>{item.description}</Text>
+				<Typography className={classNames.label()} type="body-sm">
+					{item.label}
+				</Typography>
+				<Typography className={classNames.description()} type="body-sm">
+					{item.description}
+				</Typography>
 			</ListGroup.ItemContent>
 			<ListGroup.ItemSuffix>
 				<Icon

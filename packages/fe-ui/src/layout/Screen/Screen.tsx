@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { Typography } from "../../data-display/Typography";
+import { translateNode, useT } from "../../i18n";
 
 export interface ScreenProps extends ComponentPropsWithoutRef<"div"> {
 	children?: ReactNode;
@@ -48,6 +49,7 @@ const ScreenHeader = ({
 	actions,
 	...props
 }: ScreenHeaderProps) => {
+	const t = useT();
 	const hasHeaderContent = Boolean(title || description || actions);
 
 	return (
@@ -66,12 +68,12 @@ const ScreenHeader = ({
 								className="text-2xl font-semibold leading-8"
 								level={1}
 							>
-								{title}
+								{translateNode(title, t)}
 							</Typography.Heading>
 						)}
 						{description && (
 							<Typography.Paragraph className="mt-1" color="muted" size="sm">
-								{description}
+								{translateNode(description, t)}
 							</Typography.Paragraph>
 						)}
 					</div>

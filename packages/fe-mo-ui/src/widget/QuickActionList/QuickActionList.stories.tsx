@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { QuickActionList } from "./QuickActionList";
 
 const meta = {
@@ -19,12 +19,12 @@ export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					QuickActionList
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					자주 쓰는 이동을 compact list로 제공합니다.
-				</Text>
+				</Typography>
 			</View>
 			<QuickActionList
 				items={[

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { ScrollView, View } from "react-native";
 import { Chip } from "../../data-display/Chip";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Icon } from "../../icon";
 import { Button } from "../../input/Button";
 import { Card } from "../../layout/Card";
@@ -40,12 +40,19 @@ export const MyPageScreen = observer(function MyPageScreen({
 							<HStack alignItems="center">
 								<Icon name="userRound" size="lg" tone="accent" />
 								<View className={classNames.accountTitleBlock()}>
-									<Text className={classNames.accountName()} numberOfLines={1}>
+									<Typography
+										className={classNames.accountName()}
+										numberOfLines={1}
+										type="body-sm"
+									>
 										{displayName}
-									</Text>
-									<Text className={classNames.accountDescription()}>
+									</Typography>
+									<Typography
+										className={classNames.accountDescription()}
+										type="body-sm"
+									>
 										{accountDescription}
-									</Text>
+									</Typography>
 								</View>
 								<Chip
 									color={isAuthenticated ? "success" : "warning"}
@@ -60,15 +67,23 @@ export const MyPageScreen = observer(function MyPageScreen({
 						<HStack alignItems="center">
 							<Icon name="mapPin" size="md" tone="accent" />
 							<View className={classNames.accountTitleBlock()}>
-								<Text className={classNames.spaceLabel()}>현재 지점</Text>
-								<Text className={classNames.spaceName()} numberOfLines={2}>
+								<Typography className={classNames.spaceLabel()} type="body-sm">
+									현재 지점
+								</Typography>
+								<Typography
+									className={classNames.spaceName()}
+									numberOfLines={2}
+									type="body-sm"
+								>
 									{currentSpaceName}
-								</Text>
+								</Typography>
 							</View>
 						</HStack>
 					</Card>
 					<VStack>
-						<Text className={classNames.sectionLabel()}>빠른 이동</Text>
+						<Typography className={classNames.sectionLabel()} type="body-sm">
+							빠른 이동
+						</Typography>
 						<QuickActionList items={quickActions} />
 					</VStack>
 					<Button
@@ -76,16 +91,19 @@ export const MyPageScreen = observer(function MyPageScreen({
 						onPress={onPressLogout}
 						variant="danger-soft"
 					>
-						<HStack
-							alignItems="center"
-							gap="inline"
-							justifyContent="center"
-						>
-							<Icon name="logOut" size="sm" tone="danger" />
-							<Text className={classNames.dangerButtonText()}>
-								{isLogoutPending ? "로그아웃 중" : "로그아웃"}
-							</Text>
-						</HStack>
+							<HStack
+								alignItems="center"
+								gap="inline"
+								justifyContent="center"
+							>
+								<Icon name="logOut" size="sm" tone="danger" />
+								<Typography
+									className={classNames.dangerButtonText()}
+									type="body-sm"
+								>
+									{isLogoutPending ? "로그아웃 중" : "로그아웃"}
+								</Typography>
+							</HStack>
 					</Button>
 				</VStack>
 			</ScrollView>

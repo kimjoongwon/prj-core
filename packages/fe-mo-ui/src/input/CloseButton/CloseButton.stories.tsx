@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { HStack, VStack } from "../../rhythm";
 import { CloseButton } from "./index";
 
@@ -30,7 +30,7 @@ export const Default: Story = {};
 export const Sizes: Story = {
 	render: () => (
 		<VStack alignItems="center" gap="section">
-			<Text className="text-sm font-semibold text-muted">Close actions</Text>
+			<Typography color="muted" type="body-sm" weight="semibold">Close actions</Typography>
 			<HStack
 				alignItems="center"
 				className="rounded-lg border border-border bg-surface p-3"

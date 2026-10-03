@@ -6,6 +6,7 @@ import type {
 	DataGridEditorOption,
 } from "@cocrepo/type";
 import type { ChangeEvent, KeyboardEvent, ReactNode } from "react";
+import { Typography } from "../../../data-display/Typography";
 
 interface EditorCellProps<TData, TValue> {
 	config: DataGridEditorConfig;
@@ -25,9 +26,12 @@ function getDatalistId(field: string) {
 
 function EditorError({ message }: { message?: string }) {
 	return message ? (
-		<div className="absolute left-0 top-full z-20 mt-1 whitespace-nowrap rounded bg-danger px-2 py-1 text-xs text-danger-foreground shadow-overlay">
+		<Typography
+			className="absolute left-0 top-full z-20 mt-1 whitespace-nowrap rounded bg-danger px-2 py-1 text-danger-foreground shadow-overlay"
+			type="body-xs"
+		>
 			{message}
-		</div>
+		</Typography>
 	) : null;
 }
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { Description, FieldError, Label } from "heroui-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { PureControlField as ControlField } from "./index";
 
@@ -81,9 +81,9 @@ export const Composition: Story = {
 					</>
 				)}
 			</ControlField>
-			<Text tone="muted">
+			<Typography color="muted" type="body-sm">
 				children render function과 Indicator slot을 함께 사용할 수 있습니다.
-			</Text>
+			</Typography>
 		</VStack>
 	),
 };

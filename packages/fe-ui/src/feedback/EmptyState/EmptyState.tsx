@@ -4,6 +4,7 @@ import { Card } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { translateNode, useT } from "../../i18n";
 
 export interface EmptyStateProps {
@@ -53,7 +54,9 @@ export const EmptyState = observer(
 		return (
 			<Card className="bg-surface/50 border border-border">
 				<Card.Header className="pb-0">
-					<h2 className="text-2xl font-bold">{t(title)}</h2>
+					<Typography.Heading className="text-2xl" level={2} weight="bold">
+						{t(title)}
+					</Typography.Heading>
 				</Card.Header>
 				<Card.Content>
 					<div className="flex flex-col items-center justify-center py-16 text-center">
@@ -64,10 +67,12 @@ export const EmptyState = observer(
 								</Chip>
 							)}
 						</div>
-						<p className="text-muted mb-2">{t(description)}</p>
-						<p className="text-muted text-sm">
+						<Typography.Paragraph className="mb-2" color="muted">
+							{t(description)}
+						</Typography.Paragraph>
+						<Typography.Paragraph color="muted" size="sm">
 							{t("이 영역은 기능 구현 전 빈 상태입니다.")}
-						</p>
+						</Typography.Paragraph>
 						{action && <div className="mt-4">{translateNode(action, t)}</div>}
 					</div>
 				</Card.Content>

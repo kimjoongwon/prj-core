@@ -1,6 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../../data-display/Typography";
 import { type Translate, useT } from "../../../i18n";
 
 export interface DefaultCellProps {
@@ -90,28 +91,22 @@ export const DefaultCell = observer(function DefaultCell({
 
 	return (
 		<div className="min-w-0">
-			<span
+			<Typography
 				className={joinClassNames(
-					"block",
-					size === "xs" ? "text-xs" : "text-sm",
-					isEmptyValue
-						? "text-muted"
-						: tone === "muted"
-							? "text-muted"
-							: "text-foreground",
 					mono && "font-mono",
 					tabular && "tabular-nums",
-					weight === "medium" && "font-medium",
-					weight === "semibold" && "font-semibold",
-					truncate && "truncate",
 					lineClamp === 1 && "line-clamp-1",
 					lineClamp === 2 && "line-clamp-2",
 					className,
 				)}
+				color={isEmptyValue || tone === "muted" ? "muted" : "default"}
 				title={translatedTitle}
+				truncate={truncate}
+				type={size === "xs" ? "body-xs" : "body-sm"}
+				weight={weight === "normal" ? undefined : weight}
 			>
 				{translatedDisplayValue}
-			</span>
+			</Typography>
 		</div>
 	);
 });

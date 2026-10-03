@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
 import type { CSSProperties, MouseEvent } from "react";
+import { Typography } from "../../data-display/Typography";
 
 export interface HtmlEditorProps {
 	value: string;
@@ -66,7 +67,11 @@ export const HtmlEditor = observer(
 			>
 				<div className="mb-2">
 					<label className="text-sm font-medium text-foreground">{label}</label>
-					{description ? <p className="mt-1 text-xs text-muted">{description}</p> : null}
+					{description ? (
+						<Typography.Paragraph className="mt-1" color="muted" size="xs">
+							{description}
+						</Typography.Paragraph>
+					) : null}
 				</div>
 				<div className="service-document-html-editor__surface">
 					<div className="service-document-html-editor__toolbar" role="toolbar" aria-label="HTML 서식">
@@ -97,7 +102,11 @@ export const HtmlEditor = observer(
 						aria-invalid={isInvalid || undefined}
 					/>
 				</div>
-				{isInvalid && errorMessage ? <p className="mt-1 text-sm text-danger">{errorMessage}</p> : null}
+				{isInvalid && errorMessage ? (
+					<Typography.Paragraph className="mt-1 text-danger" size="sm">
+						{errorMessage}
+					</Typography.Paragraph>
+				) : null}
 			</div>
 		);
 	},

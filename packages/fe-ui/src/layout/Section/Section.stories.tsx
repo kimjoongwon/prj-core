@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input";
 import { SectionSurface } from "../../surface";
 import { Section } from "./Section";
@@ -32,10 +33,10 @@ export const Basic: Story = {
 					<Section.Body>
 						<div className="grid grid-cols-2 gap-3">
 							<div className="rounded-lg border border-border bg-background px-3 py-2">
-								Name
+								<Typography>Name</Typography>
 							</div>
 							<div className="rounded-lg border border-border bg-background px-3 py-2">
-								Status
+								<Typography>Status</Typography>
 							</div>
 						</div>
 					</Section.Body>
@@ -50,15 +51,21 @@ export const DataArea: Story = {
 			<SectionSurface className="overflow-hidden">
 				<Section overflow="hidden">
 					<Section.Body>
-						<div className="grid grid-cols-3 bg-surface-secondary px-4 py-3 text-muted text-xs">
-							<span>Name</span>
-							<span>Owner</span>
-							<span>Status</span>
+						<div className="grid grid-cols-3 bg-surface-secondary px-4 py-3">
+							<Typography color="muted" type="body-xs">
+								Name
+							</Typography>
+							<Typography color="muted" type="body-xs">
+								Owner
+							</Typography>
+							<Typography color="muted" type="body-xs">
+								Status
+							</Typography>
 						</div>
-						<div className="grid grid-cols-3 border-border border-t px-4 py-3 text-sm">
-							<span>DataGrid wrapper</span>
-							<span>layout/Section</span>
-							<span>기본 inset</span>
+						<div className="grid grid-cols-3 border-border border-t px-4 py-3">
+							<Typography type="body-sm">DataGrid wrapper</Typography>
+							<Typography type="body-sm">layout/Section</Typography>
+							<Typography type="body-sm">기본 inset</Typography>
 						</div>
 					</Section.Body>
 				</Section>
@@ -76,16 +83,18 @@ export const LeftAside: Story = {
 						description="좌측 navigation/filter와 본문을 하나의 section boundary 안에서 배치합니다."
 					/>
 					<Section.LeftAside>
-						<div className="rounded-lg border border-border bg-background p-3 text-sm">
-							<p className="font-semibold">Filter rail</p>
-							<p className="mt-2 text-muted">
+						<div className="rounded-lg border border-border bg-background p-3">
+							<Typography.Paragraph size="sm" weight="semibold">
+								Filter rail
+							</Typography.Paragraph>
+							<Typography.Paragraph className="mt-2" color="muted" size="sm">
 								모바일에서는 슬롯 순서대로 위에 쌓입니다.
-							</p>
+							</Typography.Paragraph>
 						</div>
 					</Section.LeftAside>
 					<Section.Body>
 						<div className="min-h-32 rounded-lg border border-border bg-background p-4">
-							Main body
+							<Typography>Main body</Typography>
 						</div>
 					</Section.Body>
 				</Section>
@@ -104,13 +113,17 @@ export const RightAside: Story = {
 					/>
 					<Section.Body>
 						<div className="min-h-32 rounded-lg border border-border bg-background p-4">
-							Main body
+							<Typography>Main body</Typography>
 						</div>
 					</Section.Body>
 					<Section.RightAside>
-						<div className="rounded-lg border border-border bg-background p-3 text-sm">
-							<p className="font-semibold">Summary panel</p>
-							<p className="mt-2 text-muted">desktop에서는 320px 컬럼입니다.</p>
+						<div className="rounded-lg border border-border bg-background p-3">
+							<Typography.Paragraph size="sm" weight="semibold">
+								Summary panel
+							</Typography.Paragraph>
+							<Typography.Paragraph className="mt-2" color="muted" size="sm">
+								desktop에서는 320px 컬럼입니다.
+							</Typography.Paragraph>
 						</div>
 					</Section.RightAside>
 				</Section>
@@ -128,23 +141,25 @@ export const BothAsides: Story = {
 						description="좌측 탐색, 본문, 우측 요약을 같은 section 안에서 정렬합니다."
 					/>
 					<Section.LeftAside>
-						<div className="rounded-lg border border-border bg-background p-3 text-sm">
-							Left aside
+						<div className="rounded-lg border border-border bg-background p-3">
+							<Typography.Paragraph size="sm">Left aside</Typography.Paragraph>
 						</div>
 					</Section.LeftAside>
 					<Section.Body>
 						<div className="min-h-36 rounded-lg border border-border bg-background p-4">
-							Main body
+							<Typography>Main body</Typography>
 						</div>
 					</Section.Body>
 					<Section.RightAside>
-						<div className="rounded-lg border border-border bg-background p-3 text-sm">
-							Right aside
+						<div className="rounded-lg border border-border bg-background p-3">
+							<Typography.Paragraph size="sm">Right aside</Typography.Paragraph>
 						</div>
 					</Section.RightAside>
 					<Section.Footer>
-						<div className="rounded-lg border border-border bg-background p-3 text-sm text-muted">
-							Footer는 좌우 layout에서도 전체 폭을 차지합니다.
+						<div className="rounded-lg border border-border bg-background p-3">
+							<Typography.Paragraph color="muted" size="sm">
+								Footer는 좌우 layout에서도 전체 폭을 차지합니다.
+							</Typography.Paragraph>
 						</div>
 					</Section.Footer>
 				</Section>

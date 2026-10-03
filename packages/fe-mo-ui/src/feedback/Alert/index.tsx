@@ -5,7 +5,8 @@ import {
 	forwardRef,
 	type ReactNode,
 } from "react";
-import { Text, type TextProps } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { joinClassNames } from "../../rhythm/class-name";
 
 type HeroAlertProps = ComponentPropsWithoutRef<typeof HeroAlert>;
 type HeroAlertDescriptionProps = ComponentPropsWithoutRef<
@@ -44,36 +45,36 @@ const AlertComponent = forwardRef<ComponentRef<typeof HeroAlert>, AlertProps>(
 	},
 );
 AlertComponent.displayName = "Alert";
-const toneByStatus: Record<string, TextProps["tone"]> = {
-	accent: "accent",
-	danger: "danger",
-	success: "success",
-	warning: "warning",
+const statusTextClassNames: Record<string, string> = {
+	accent: "text-accent",
+	danger: "text-danger",
+	success: "text-success",
+	warning: "text-warning",
 };
-const AlertTitle = forwardRef<ComponentRef<typeof Text>, AlertTitleProps>(
+const AlertTitle = forwardRef<ComponentRef<typeof Typography>, AlertTitleProps>(
 	({ children, className, ...props }, ref) => {
 		const { status } = useAlert();
 		return (
-			<Text
+			<Typography
 				{...props}
 				ref={ref}
-				className={className}
-				tone={toneByStatus[status] ?? "foreground"}
-				variant="label"
+				className={joinClassNames(className, statusTextClassNames[status])}
+				type="body-sm"
+				weight="semibold"
 			>
 				{children}
-			</Text>
+			</Typography>
 		);
 	},
 );
 AlertTitle.displayName = "Alert.Title";
 const AlertDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	AlertDescriptionProps
 >(({ children, className, ...props }, ref) => (
-	<Text {...props} ref={ref} className={className} tone="muted" variant="body">
+	<Typography {...props} ref={ref} className={className} color="muted" type="body-sm">
 		{children}
-	</Text>
+	</Typography>
 ));
 AlertDescription.displayName = "Alert.Description";
 export const Alert = Object.assign(AlertComponent, {

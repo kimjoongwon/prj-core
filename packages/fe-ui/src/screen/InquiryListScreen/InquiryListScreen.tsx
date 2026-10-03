@@ -15,6 +15,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	Typography,
 	VStack,
 } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
@@ -120,10 +121,12 @@ function MetricCard({
 						</div>
 					) : null}
 					<div className="flex flex-1 flex-col">
-						<span className="text-sm text-muted">{title}</span>
-						<span className={`text-2xl font-bold ${styles.value}`}>
+						<Typography type="body-sm" color="muted">
+							{title}
+						</Typography>
+						<Typography.Heading level={3} className={styles.value}>
 							{typeof value === "number" ? value.toLocaleString() : value}
-						</span>
+						</Typography.Heading>
 					</div>
 				</HStack>
 			</Card.Content>

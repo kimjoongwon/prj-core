@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { observable } from "mobx";
 import { ScrollView } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { TextField } from "./index";
 
@@ -26,10 +26,10 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="block">
 				<VStack>
-					<Text variant="heading">TextField</Text>
-					<Text tone="muted">
+					<Typography className="font-extrabold" type="h5">TextField</Typography>
+					<Typography color="muted" type="body-sm">
 						MobX form state와 연결되는 기본 텍스트 입력입니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<TextField
 					description="예약 알림과 영수증을 받을 이메일입니다."

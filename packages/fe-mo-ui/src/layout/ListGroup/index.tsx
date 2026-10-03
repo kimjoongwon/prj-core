@@ -5,7 +5,7 @@ import {
 	forwardRef,
 	type ReactNode,
 } from "react";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 
 type HeroListGroupProps = ComponentPropsWithoutRef<typeof HeroListGroup>;
 type HeroListGroupItemProps = ComponentPropsWithoutRef<
@@ -55,27 +55,27 @@ const ListGroupComponent = forwardRef<
 ));
 ListGroupComponent.displayName = "ListGroup";
 const ListGroupItemTitle = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	ListGroupItemTitleProps
 >(({ children, className, ...props }, ref) => (
-	<Text
+	<Typography
 		{...props}
 		ref={ref}
 		className={className}
-		variant="label"
+		type="body-sm"
 		weight="semibold"
 	>
 		{children}
-	</Text>
+	</Typography>
 ));
 ListGroupItemTitle.displayName = "ListGroup.ItemTitle";
 const ListGroupItemDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	ListGroupItemDescriptionProps
 >(({ children, className, ...props }, ref) => (
-	<Text {...props} ref={ref} className={className} tone="muted" variant="body">
+	<Typography {...props} ref={ref} className={className} color="muted" type="body-sm">
 		{children}
-	</Text>
+	</Typography>
 ));
 ListGroupItemDescription.displayName = "ListGroup.ItemDescription";
 export const ListGroup = Object.assign(ListGroupComponent, {

@@ -3,6 +3,7 @@
 import type { PasswordRule } from "@cocrepo/constant";
 import { AlertTriangle, Check, CheckCircle, KeyRound, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Link, TextField } from "../../input";
@@ -65,7 +66,9 @@ export const ResetPasswordForm = observer(
 				{step === "validating" && (
 					<div className="text-center py-8">
 						<div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-						<p className="text-muted">{t("링크를 확인하고 있습니다...")}</p>
+						<Typography color="muted">
+							{t("링크를 확인하고 있습니다...")}
+						</Typography>
 					</div>
 				)}
 
@@ -75,14 +78,14 @@ export const ResetPasswordForm = observer(
 						<div className="w-16 h-16 bg-danger/20 rounded-full mx-auto mb-4 flex items-center justify-center">
 							<AlertTriangle className="h-8 w-8 text-danger" />
 						</div>
-						<h2 className="text-lg font-semibold mb-2">
+						<Typography.Heading className="mb-2" level={5}>
 							{tokenError ? t(tokenError) : t("링크가 만료되었습니다")}
-						</h2>
-						<p className="text-muted text-sm mb-6">
+						</Typography.Heading>
+						<Typography className="mb-6" type="body-sm" color="muted">
 							{t(
 								"비밀번호 재설정 링크는 30분간 유효하며, 1회만 사용할 수 있습니다.",
 							)}
-						</p>
+						</Typography>
 						<Link href={forgotPasswordHref}>
 							<Button
 								variant="primary"
@@ -101,14 +104,14 @@ export const ResetPasswordForm = observer(
 						<div className="w-16 h-16 bg-success/20 rounded-full mx-auto mb-4 flex items-center justify-center">
 							<CheckCircle className="h-8 w-8 text-success" />
 						</div>
-						<h2 className="text-lg font-semibold mb-2">
+						<Typography.Heading className="mb-2" level={5}>
 							{t("비밀번호가 변경되었습니다")}
-						</h2>
-						<p className="text-muted text-sm mb-6">
+						</Typography.Heading>
+						<Typography className="mb-6" type="body-sm" color="muted">
 							{t("보안을 위해 모든 기기에서 로그아웃되었습니다.")}
 							<br />
 							{t("새 비밀번호로 다시 로그인해주세요.")}
-						</p>
+						</Typography>
 						<Link href={loginHref}>
 							<Button
 								variant="primary"
@@ -151,11 +154,7 @@ export const ResetPasswordForm = observer(
 									{state.password ? (
 										<VStack gap="dense" className="mt-2">
 											{passwordRuleResults.map((rule) => (
-												<HStack
-													key={rule.rule}
-													alignItems="center"
-													className="text-sm"
-												>
+												<HStack key={rule.rule} alignItems="center">
 													{rule.passed ? (
 														<Check
 															className="size-4 shrink-0 text-success"
@@ -167,13 +166,13 @@ export const ResetPasswordForm = observer(
 															aria-hidden
 														/>
 													)}
-													<span
-														className={
-															rule.passed ? "text-success" : "text-muted"
-														}
+													<Typography
+														className={rule.passed ? "text-success" : undefined}
+														type="body-sm"
+														color={rule.passed ? "default" : "muted"}
 													>
 														{t(rule.label)}
-													</span>
+													</Typography>
 												</HStack>
 											))}
 										</VStack>

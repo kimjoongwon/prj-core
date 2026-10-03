@@ -11,6 +11,7 @@ import { flexRender, type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { type CSSProperties, type KeyboardEvent, useEffect } from "react";
+import { Typography } from "../../../data-display/Typography";
 import { type Translate, translateNode } from "../../../i18n";
 import { EditorCell } from "../../cell/EditorCell";
 import { HierarchyCell } from "../../cell/HierarchyCell";
@@ -126,11 +127,15 @@ function DataGridGroupRow<T extends { id: Key }>({
 							.filter(Boolean)
 							.join(" ")}
 					/>
-					<span className="text-foreground">{groupLabel}</span>
-					<span className="text-foreground">{groupValue}</span>
-					<span className="text-xs font-normal text-muted">
+					<Typography className="text-[13px]" type="body-sm" weight="medium">
+						{groupLabel}
+					</Typography>
+					<Typography className="text-[13px]" type="body-sm" weight="medium">
+						{groupValue}
+					</Typography>
+					<Typography color="muted" type="body-xs" weight="normal">
 						({leafRowCount})
-					</span>
+					</Typography>
 				</button>
 			</td>
 		</tr>

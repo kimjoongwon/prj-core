@@ -1,3 +1,5 @@
+import { Typography } from "../../../data-display/Typography";
+
 export interface TemplatePushPreviewResultProps {
 	subject: string | null;
 	content: string;
@@ -10,17 +12,23 @@ export function TemplatePushPreviewResult({
 }: TemplatePushPreviewResultProps) {
 	return (
 		<div className="flex flex-col gap-3">
-			<span className="text-sm font-semibold text-foreground">
+			<Typography.Paragraph size="sm" weight="semibold">
 				미리보기 결과
-			</span>
+			</Typography.Paragraph>
 			<div className="rounded-lg border border-border bg-surface-secondary p-4">
 				<div className="flex flex-col gap-2">
 					{subject ? (
-						<span className="text-sm font-semibold text-foreground">
+						<Typography.Paragraph size="sm" weight="semibold">
 							{subject}
-						</span>
+						</Typography.Paragraph>
 					) : null}
-					<p className="whitespace-pre-wrap text-sm text-muted">{content}</p>
+					<Typography.Paragraph
+						className="whitespace-pre-wrap"
+						color="muted"
+						size="sm"
+					>
+						{content}
+					</Typography.Paragraph>
 				</div>
 			</div>
 		</div>

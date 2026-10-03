@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
+import { Typography } from "../../../data-display/Typography";
 import { useT } from "../../../i18n";
 import { Button } from "../../../input/Button/Button";
 
@@ -335,8 +336,12 @@ export const FolderTree = observer(
 			>
 				<div className="flex items-center justify-between border-b border-border px-4 py-3">
 					<div>
-						<p className="text-sm font-semibold text-foreground">{t("폴더")}</p>
-						<p className="text-xs text-muted">{t("에셋 탐색 기준")}</p>
+						<Typography.Paragraph size="sm" weight="semibold">
+							{t("폴더")}
+						</Typography.Paragraph>
+						<Typography.Paragraph color="muted" size="xs">
+							{t("에셋 탐색 기준")}
+						</Typography.Paragraph>
 					</div>
 					<div className="flex items-center gap-1">
 						{showRenameButton ? (
@@ -399,9 +404,14 @@ export const FolderTree = observer(
 							</button>
 
 							{treeNodes.length === 0 ? (
-								<div className="rounded-lg border border-dashed border-border px-3 py-6 text-center text-sm text-muted">
+								<Typography.Paragraph
+									align="center"
+									className="rounded-lg border border-dashed border-border px-3 py-6"
+									color="muted"
+									size="sm"
+								>
 									{t("등록된 폴더가 없습니다.")}
-								</div>
+								</Typography.Paragraph>
 							) : (
 								treeNodes.map((node) => (
 									<FolderTreeNodeItem

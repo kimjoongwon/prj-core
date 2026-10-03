@@ -7,6 +7,7 @@ import {
 	getContentLanguageLabel,
 	toContentLanguageCode,
 } from "../../data-display/content-language";
+import { Typography } from "../../data-display/Typography";
 import {
 	ProgramPicker,
 	ProgramPickerState,
@@ -198,14 +199,22 @@ export const TimelineSessionProgramForm = observer(
 								</Button>
 							) : null}
 						</div>
-						<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
-							<p className="font-medium text-foreground">연결 요약</p>
-							<p className="mt-1">루틴: {state.routineName || "-"}</p>
-							<p>강사: {state.instructorName || "-"}</p>
+						<div className="rounded-lg bg-surface-secondary p-3">
+							<Typography type="body-sm" weight="medium">
+								연결 요약
+							</Typography>
+							<Typography className="mt-1" type="body-sm" color="muted">
+								루틴: {state.routineName || "-"}
+							</Typography>
+							<Typography type="body-sm" color="muted">
+								강사: {state.instructorName || "-"}
+							</Typography>
 						</div>
 						<div className="rounded-lg border border-border p-3">
 							<HStack alignItems="center" justifyContent="between" gap="block">
-								<p className="font-medium text-foreground">실행 운동 preview</p>
+								<Typography type="body-sm" weight="medium">
+									실행 운동 preview
+								</Typography>
 								<Chip
 									color={hasUnschedulableRoutine ? "warning" : "success"}
 									size="sm"
@@ -214,9 +223,9 @@ export const TimelineSessionProgramForm = observer(
 								</Chip>
 							</HStack>
 							{routinePreview.length === 0 ? (
-								<p className="mt-2 text-sm text-muted">
+								<Typography className="mt-2" type="body-sm" color="muted">
 									선택한 루틴에 등록된 운동이 없습니다.
-								</p>
+								</Typography>
 							) : (
 								<VStack gap="block" className="mt-3">
 									{routinePreview.map((activity, index) => (
@@ -229,9 +238,9 @@ export const TimelineSessionProgramForm = observer(
 												justifyContent="between"
 												gap="block"
 											>
-												<p className="font-medium">
+												<Typography type="body-sm" weight="medium">
 													{activity.order}. {activity.exerciseName}
-												</p>
+												</Typography>
 												<Chip
 													color={activity.isSchedulable ? "success" : "warning"}
 													size="sm"
@@ -240,23 +249,27 @@ export const TimelineSessionProgramForm = observer(
 													{activity.isSchedulable ? "가능" : "불가"}
 												</Chip>
 											</HStack>
-											<p className="mt-1 text-muted text-sm">
+											<Typography className="mt-1" type="body-sm" color="muted">
 												반복 {activity.repetitions}회 · 휴식 {activity.restTime}
 												초
-											</p>
+											</Typography>
 											{activity.notes ? (
-												<p className="mt-1 text-muted text-xs">
+												<Typography
+													className="mt-1"
+													type="body-xs"
+													color="muted"
+												>
 													{activity.notes}
-												</p>
+												</Typography>
 											) : null}
 										</div>
 									))}
 								</VStack>
 							)}
 							{hasUnschedulableRoutine ? (
-								<p className="mt-3 text-sm text-warning">
+								<Typography className="mt-3 text-warning" type="body-sm">
 									영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.
-								</p>
+								</Typography>
 							) : null}
 						</div>
 						<TextField

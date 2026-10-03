@@ -10,7 +10,7 @@ import {
 	forwardRef,
 	type ReactNode,
 } from "react";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 
 type HeroToastProps = ComponentPropsWithoutRef<typeof HeroToast>;
 type HeroToastDescriptionProps = ComponentPropsWithoutRef<
@@ -47,21 +47,27 @@ const ToastComponent = forwardRef<ComponentRef<typeof HeroToast>, ToastProps>(
 	},
 );
 ToastComponent.displayName = "Toast";
-const ToastTitle = forwardRef<ComponentRef<typeof Text>, ToastTitleProps>(
+const ToastTitle = forwardRef<ComponentRef<typeof Typography>, ToastTitleProps>(
 	({ children, className, ...props }, ref) => (
-		<Text {...props} ref={ref} className={className} variant="label">
+		<Typography
+			{...props}
+			ref={ref}
+			className={className}
+			type="body-sm"
+			weight="semibold"
+		>
 			{children}
-		</Text>
+		</Typography>
 	),
 );
 ToastTitle.displayName = "Toast.Title";
 const ToastDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	ToastDescriptionProps
 >(({ children, className, ...props }, ref) => (
-	<Text {...props} ref={ref} className={className} tone="muted" variant="body">
+	<Typography {...props} ref={ref} className={className} color="muted" type="body-sm">
 		{children}
-	</Text>
+	</Typography>
 ));
 ToastDescription.displayName = "Toast.Description";
 export const Toast = Object.assign(ToastComponent, {

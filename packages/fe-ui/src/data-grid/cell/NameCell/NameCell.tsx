@@ -1,3 +1,5 @@
+import { Typography } from "../../../data-display/Typography";
+
 export interface NameCellProps {
 	value?: string | null;
 	variant?: "plain" | "identifier" | "clickable";
@@ -12,7 +14,11 @@ export const NameCell = ({
 	const content = value ?? "-";
 
 	if (variant === "identifier") {
-		return <span className="font-mono text-sm">{content}</span>;
+		return (
+			<Typography className="font-mono" type="body-sm">
+				{content}
+			</Typography>
+		);
 	}
 
 	if (variant === "clickable") {
@@ -29,9 +35,9 @@ export const NameCell = ({
 
 	return (
 		<div className="min-w-0">
-			<span className="block truncate text-sm font-semibold tracking-tight text-foreground">
+			<Typography truncate type="body-sm" weight="semibold">
 				{content}
-			</span>
+			</Typography>
 		</div>
 	);
 };

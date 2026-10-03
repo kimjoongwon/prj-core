@@ -11,7 +11,7 @@ import {
 	type ReactNode,
 } from "react";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 
 type HeroBottomSheetProps = ComponentPropsWithoutRef<typeof HeroBottomSheet>;
 type HeroBottomSheetContentProps = ComponentPropsWithoutRef<
@@ -107,41 +107,42 @@ const BottomSheetComponent = forwardRef<
 );
 BottomSheetComponent.displayName = "BottomSheet";
 const BottomSheetTitle = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	BottomSheetTitleProps
 >(({ children, className, ...props }, ref) => {
 	const { nativeID } = useBottomSheet();
 	return (
-		<Text
+		<Typography
 			{...props}
 			ref={ref}
 			accessibilityRole="text"
 			className={className}
 			nativeID={`${nativeID}_title`}
-			variant="title"
+			type="h6"
+			weight="bold"
 		>
 			{children}
-		</Text>
+		</Typography>
 	);
 });
 BottomSheetTitle.displayName = "BottomSheet.Title";
 const BottomSheetDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	BottomSheetDescriptionProps
 >(({ children, className, ...props }, ref) => {
 	const { nativeID } = useBottomSheet();
 	return (
-		<Text
+		<Typography
 			{...props}
 			ref={ref}
 			accessibilityRole="text"
 			className={className}
 			nativeID={`${nativeID}_desc`}
-			tone="muted"
-			variant="body"
+			color="muted"
+			type="body-sm"
 		>
 			{children}
-		</Text>
+		</Typography>
 	);
 });
 BottomSheetDescription.displayName = "BottomSheet.Description";

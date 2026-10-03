@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import {
 	type SelectableCardItem,
 	PureSelectableCardList as SelectableCardList,
@@ -86,7 +86,9 @@ const getEmptyMessage = (props: OccurrencePickerProps) => {
 };
 const EmptyMessage = (props: OccurrencePickerProps) => (
 	<View accessibilityRole="summary" className={classNames.empty()}>
-		<Text className={classNames.emptyText()}>{getEmptyMessage(props)}</Text>
+		<Typography className={classNames.emptyText()} type="body-sm">
+			{getEmptyMessage(props)}
+		</Typography>
 	</View>
 );
 const ErrorMessage = ({ errorMessage }: { errorMessage?: ReactNode }) => {
@@ -94,9 +96,13 @@ const ErrorMessage = ({ errorMessage }: { errorMessage?: ReactNode }) => {
 		return null;
 	}
 	return (
-		<Text accessibilityRole="alert" className={classNames.errorText()}>
+		<Typography
+			accessibilityRole="alert"
+			className={classNames.errorText()}
+			type="body-sm"
+		>
 			{errorMessage}
-		</Text>
+		</Typography>
 	);
 };
 const OccurrencePickerComponent = observer((props: OccurrencePickerProps) => {

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { tv } from "tailwind-variants";
 import { Chip, chipClassNames, type ChipProps } from "../../data-display/Chip";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { HStack, VStack } from "../../rhythm";
 export interface DateStripOption {
 	badge?: ReactNode;
@@ -75,16 +75,17 @@ const DateBadge = ({
 			size="sm"
 			variant={chipVariant}
 		>
-			<Text
+			<Typography
 				className={chipClassNames.label({
 					className: slotClassNames.badgeText(),
 					color: chipColor,
 					size: "sm",
 					variant: chipVariant,
 				})}
+				type="body-sm"
 			>
 				{badge}
-			</Text>
+			</Typography>
 		</Chip>
 	);
 };
@@ -124,8 +125,12 @@ const DateOption = ({
 			className={slotClassNames.option()}
 		>
 			<VStack alignItems="center" gap="dense" justifyContent="center">
-				<Text className={slotClassNames.dayLabel()}>{option.dayLabel}</Text>
-				<Text className={slotClassNames.dateLabel()}>{option.dateLabel}</Text>
+				<Typography className={slotClassNames.dayLabel()} type="body-sm">
+					{option.dayLabel}
+				</Typography>
+				<Typography className={slotClassNames.dateLabel()} type="body-sm">
+					{option.dateLabel}
+				</Typography>
 				<DateBadge isSelected={isSelected} option={option} />
 			</VStack>
 		</Pressable>
@@ -174,9 +179,9 @@ const PureDateStripComponent = (props: PureDateStripProps) => {
 				className={classNames.empty()}
 				style={style}
 			>
-				<Text className={classNames.emptyText()}>
+				<Typography className={classNames.emptyText()} type="body-sm">
 					{emptyLabel ?? "No dates"}
-				</Text>
+				</Typography>
 			</View>
 		);
 	}

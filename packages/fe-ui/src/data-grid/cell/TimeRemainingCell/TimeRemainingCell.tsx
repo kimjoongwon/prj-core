@@ -1,5 +1,6 @@
 import { AlertTriangle, Clock } from "lucide-react";
 import { Chip } from "../../../data-display/Chip/Chip";
+import { Typography } from "../../../data-display/Typography";
 import { DefaultCell } from "../DefaultCell/DefaultCell";
 
 export type TimeRemainingStatus = "ok" | "warning" | "breach";
@@ -78,7 +79,9 @@ export const TimeRemainingCell = ({
 		return (
 			<div className="flex w-full items-center justify-center gap-1 text-muted text-sm">
 				<Clock className="h-3.5 w-3.5" />
-				<span>{formatRemainingTime(remainingMinutes)}</span>
+				<Typography color="muted" type="body-sm">
+					{formatRemainingTime(remainingMinutes)}
+				</Typography>
 			</div>
 		);
 	}

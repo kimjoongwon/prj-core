@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { PressableFeedback } from "./index";
 
@@ -20,9 +20,9 @@ export const Default: Story = {
 	render: () => (
 		<View className="w-[280px] rounded-xl border border-border bg-surface p-4">
 			<PressableFeedback className="rounded-xl bg-accent px-4 py-3">
-				<Text align="center" className="text-accent-foreground" variant="label">
+				<Typography align="center" className="text-accent-foreground" type="body-sm" weight="semibold">
 					눌림 피드백
-				</Text>
+				</Typography>
 			</PressableFeedback>
 		</View>
 	),
@@ -39,10 +39,10 @@ export const Composition: Story = {
 				<PressableFeedback.Ripple />
 				<PressableFeedback.Scale>
 					<VStack gap="dense">
-						<Text variant="label">복합 피드백</Text>
-						<Text tone="muted">
+						<Typography type="body-sm" weight="semibold">복합 피드백</Typography>
+						<Typography color="muted" type="body-sm">
 							Highlight, Ripple, Scale slot을 함께 조합합니다.
-						</Text>
+						</Typography>
 					</VStack>
 				</PressableFeedback.Scale>
 			</PressableFeedback>
@@ -50,9 +50,9 @@ export const Composition: Story = {
 				className="rounded-xl border border-border p-4"
 				isDisabled
 			>
-				<Text tone="muted" variant="label">
+				<Typography color="muted" type="body-sm" weight="semibold">
 					비활성 상태
-				</Text>
+				</Typography>
 			</PressableFeedback>
 		</VStack>
 	),

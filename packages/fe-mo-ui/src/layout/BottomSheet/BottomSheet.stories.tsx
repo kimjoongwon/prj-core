@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { BottomSheet } from "./index";
 
@@ -20,12 +20,12 @@ export const Open: Story = {
 	render: () => (
 		<View className="flex-1 justify-end px-4 py-5">
 			<View className="gap-2 rounded-lg border border-border bg-surface p-4">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					BottomSheet
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					모바일에서 선택, 필터, 확인 작업을 화면 아래에서 띄웁니다.
-				</Text>
+				</Typography>
 				<Button variant="secondary">시트 열기</Button>
 			</View>
 			<BottomSheet isOpen onOpenChange={() => undefined}>

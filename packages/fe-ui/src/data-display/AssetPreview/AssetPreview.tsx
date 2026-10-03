@@ -4,6 +4,7 @@ import { cn, Modal, useOverlayState } from "@heroui/react";
 import { FileText, ImageIcon, Link2Off, PlayCircle } from "lucide-react";
 import { Button } from "../../input/Button/Button";
 import { Chip } from "../Chip/Chip";
+import { Typography } from "../Typography";
 
 export interface AssetPreviewAsset {
 	id: string;
@@ -198,14 +199,14 @@ function AssetPreviewFallback({
 					)}
 				</div>
 				<div className="space-y-2">
-					<p className="text-base font-semibold text-foreground">
+					<Typography.Paragraph weight="semibold">
 						{mode === "unsupported"
 							? "이 형식은 인라인 미리보기를 지원하지 않습니다."
 							: "지금은 인라인 미리보기를 열 수 없습니다."}
-					</p>
-					<p className="text-sm leading-6 text-muted">
+					</Typography.Paragraph>
+					<Typography.Paragraph color="muted" size="sm">
 						{getAssetPreviewStatusMessage(asset, mode)}
-					</p>
+					</Typography.Paragraph>
 				</div>
 			</div>
 		</div>
@@ -287,19 +288,27 @@ export function AssetPreview({
 			</div>
 			{showInfo ? (
 				<div className="border-t border-border/60 bg-surface/90 px-4 py-4 sm:px-6">
-					<div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-						<div className="min-w-0">
-							<p className="truncate text-base font-semibold text-foreground">
-								{asset.originalName}
-							</p>
-							<p className="mt-1 text-sm text-muted">{asset.mimeType}</p>
+						<div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+							<div className="min-w-0">
+								<Typography.Paragraph truncate weight="semibold">
+									{asset.originalName}
+								</Typography.Paragraph>
+								<Typography.Paragraph className="mt-1" color="muted" size="sm">
+									{asset.mimeType}
+								</Typography.Paragraph>
+							</div>
+							<div className="flex flex-wrap items-center gap-2">
+								<Typography color="muted" type="body-xs" weight="medium">
+									{formatAssetPreviewBytes(asset.sizeBytes)}
+								</Typography>
+								<Typography color="muted" type="body-xs">
+									/
+								</Typography>
+								<Typography color="muted" type="body-xs" weight="medium">
+									{getAssetPreviewStatusMessage(asset, previewMode)}
+								</Typography>
+							</div>
 						</div>
-						<div className="flex flex-wrap items-center gap-2 text-xs font-medium text-muted">
-							<span>{formatAssetPreviewBytes(asset.sizeBytes)}</span>
-							<span className="text-muted">/</span>
-							<span>{getAssetPreviewStatusMessage(asset, previewMode)}</span>
-						</div>
-					</div>
 				</div>
 			) : null}
 		</div>

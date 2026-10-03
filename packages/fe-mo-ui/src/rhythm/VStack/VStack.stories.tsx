@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "./index";
 
 const meta = {
@@ -41,13 +41,13 @@ const meta = {
 	render: (args) => (
 		<VStack {...args} className="w-[260px]">
 			<View className="rounded-xl bg-surface-secondary p-4">
-				<Text className="text-base font-bold text-foreground">예약 상태</Text>
+				<Typography type="h6" weight="bold">예약 상태</Typography>
 			</View>
 			<View className="rounded-xl bg-surface-secondary p-4">
-				<Text className="text-sm text-muted">다음 행동을 안내합니다.</Text>
+				<Typography color="muted" type="body-sm">다음 행동을 안내합니다.</Typography>
 			</View>
 			<View className="rounded-xl bg-surface-secondary p-4">
-				<Text className="text-sm text-muted">필요한 정보만 묶습니다.</Text>
+				<Typography color="muted" type="body-sm">필요한 정보만 묶습니다.</Typography>
 			</View>
 		</VStack>
 	),
@@ -74,10 +74,10 @@ export const GapScale: Story = {
 		<VStack gap="page" className="w-[280px]">
 			{gapSamples.map(([gap, label]) => (
 				<View key={gap}>
-					<Text className="mb-2 text-sm font-bold text-foreground">{label}</Text>
+					<Typography className="mb-2" type="body-sm" weight="bold">{label}</Typography>
 					<VStack gap={gap} className="rounded-xl bg-surface-secondary p-3">
-						<Text className="text-sm text-foreground">항목 A</Text>
-						<Text className="text-sm text-foreground">항목 B</Text>
+						<Typography type="body-sm">항목 A</Typography>
+						<Typography type="body-sm">항목 B</Typography>
 					</VStack>
 				</View>
 			))}

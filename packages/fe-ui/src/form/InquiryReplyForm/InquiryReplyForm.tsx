@@ -4,6 +4,7 @@ import { Separator, Tooltip } from "@heroui/react";
 import { BookOpen, FileText, Paperclip, Send, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { HStack, VStack } from "../../rhythm";
@@ -182,10 +183,10 @@ export const InquiryReplyForm = observer(
 								className="rounded-lg bg-surface-secondary px-2 py-1"
 							>
 								<FileText className="size-4 text-muted" />
-								<span className="text-xs text-foreground">{file.name}</span>
-								<span className="text-xs text-muted">
+								<Typography type="body-xs">{file.name}</Typography>
+								<Typography type="body-xs" color="muted">
 									({formatFileSize(file.size)})
-								</span>
+								</Typography>
 								<Button
 									isIconOnly
 									size="sm"
@@ -207,12 +208,10 @@ export const InquiryReplyForm = observer(
 								className="rounded-lg bg-surface-secondary px-2 py-1"
 							>
 								<FileText className="size-4 text-muted" />
-								<span className="text-xs text-foreground">
-									{attachment.name}
-								</span>
-								<span className="text-xs text-muted">
+								<Typography type="body-xs">{attachment.name}</Typography>
+								<Typography type="body-xs" color="muted">
 									({formatFileSize(attachment.size)})
-								</span>
+								</Typography>
 								{onRemoveAttachment && (
 									<Button
 										isIconOnly
@@ -296,9 +295,9 @@ export const InquiryReplyForm = observer(
 				</div>
 
 				{/* 힌트 */}
-				<span className="text-xs text-muted">
+				<Typography type="body-xs" color="muted">
 					Ctrl + Enter로 빠르게 전송할 수 있습니다
-				</span>
+				</Typography>
 			</VStack>
 		);
 	},

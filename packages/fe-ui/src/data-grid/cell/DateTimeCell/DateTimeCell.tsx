@@ -1,9 +1,13 @@
 import { formatDateTime } from "@cocrepo/toolkit";
+import { Typography } from "../../../data-display/Typography";
 
 export interface DateTimeCellProps {
 	/** 생성 DTO의 DateTime 값 */
 	value: Date | null | undefined;
 }
+
+/** 셀 마크업(text-[13px])과 동일한 크기를 유지하는 폴백 클래스입니다. */
+const DATA_CELL_SIZE_FALLBACK_CLASS_NAME = "text-[13px]";
 
 /**
  * DateTimeCell 컴포넌트
@@ -19,8 +23,16 @@ export interface DateTimeCellProps {
  */
 export const DateTimeCell = ({ value }: DateTimeCellProps) => {
 	if (!value || Number.isNaN(value.getTime())) {
-		return <span>-</span>;
+		return (
+			<Typography className={DATA_CELL_SIZE_FALLBACK_CLASS_NAME} type="body-sm">
+				-
+			</Typography>
+		);
 	}
 
-	return <span>{formatDateTime(value)}</span>;
+	return (
+		<Typography className={DATA_CELL_SIZE_FALLBACK_CLASS_NAME} type="body-sm">
+			{formatDateTime(value)}
+		</Typography>
+	);
 };

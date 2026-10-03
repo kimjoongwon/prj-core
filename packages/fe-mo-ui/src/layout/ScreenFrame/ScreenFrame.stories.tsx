@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { ScreenActionBar } from "../ScreenActionBar";
 import { ScreenFrame } from "./index";
 
@@ -24,12 +24,12 @@ export const Default: Story = {
 			edges={["top", "right", "bottom", "left"]}
 		>
 			<View className="gap-2 rounded-lg border border-border bg-surface p-4">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					ScreenFrame
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					안전 영역과 화면 배경을 하나의 native screen frame으로 관리합니다.
-				</Text>
+				</Typography>
 			</View>
 		</ScreenFrame>
 	),
@@ -52,13 +52,13 @@ export const WithBottomAction: Story = {
 			edges={["top", "right", "bottom", "left"]}
 		>
 			<View className="gap-2 rounded-lg border border-border bg-surface p-4">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					하단 액션 슬롯
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					safe area padding은 ScreenFrame이 소유하고, CTA 묶음은
 					ScreenActionBar가 담당합니다.
-				</Text>
+				</Typography>
 			</View>
 		</ScreenFrame>
 	),

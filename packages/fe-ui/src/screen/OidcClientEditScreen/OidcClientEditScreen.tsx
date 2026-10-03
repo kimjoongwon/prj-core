@@ -1,6 +1,13 @@
 "use client";
 
-import { HStack, Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import {
+	HStack,
+	Screen,
+	Section,
+	SectionSurface,
+	Typography,
+	VStack,
+} from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
@@ -60,7 +67,9 @@ export const OidcClientEditScreen = observer(
 									className="p-8"
 								>
 									<Spinner size="sm" />
-									<span className="text-muted">{loadingMessage}</span>
+									<Typography color="muted">
+										{loadingMessage}
+									</Typography>
 								</HStack>
 							</Section.Body>
 						</Section>
@@ -81,7 +90,9 @@ export const OidcClientEditScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<p className="text-muted">{notFoundMessage}</p>
+									<Typography.Paragraph color="muted">
+										{notFoundMessage}
+									</Typography.Paragraph>
 									{notFoundAction ?? (
 										<Button variant="tertiary">목록으로</Button>
 									)}

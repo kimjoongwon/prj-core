@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Surface } from "../Surface";
 import { SectionSurface } from "./index";
 
@@ -21,18 +21,18 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="gap-4 bg-background px-4 py-5">
 			<SectionSurface className="gap-3 rounded-2xl p-4">
 				<View className="gap-1">
-					<Text className="text-lg font-extrabold text-foreground">
+					<Typography className="font-extrabold" type="h5">
 						SectionSurface
-					</Text>
-					<Text className="text-sm leading-5 text-muted">
+					</Typography>
+					<Typography color="muted" type="body-sm">
 						화면 안의 주요 구획을 감싸는 section-level 표면입니다.
-					</Text>
+					</Typography>
 				</View>
 				<Surface className="gap-1 rounded-xl p-3" variant="tertiary">
-					<Text className="text-sm font-bold text-foreground">다음 예약</Text>
-					<Text className="text-sm leading-5 text-muted">
+					<Typography type="body-sm" weight="bold">다음 예약</Typography>
+					<Typography color="muted" type="body-sm">
 						오전 10:30, 강남 리포머 센터
-					</Text>
+					</Typography>
 				</Surface>
 			</SectionSurface>
 		</ScrollView>
@@ -48,10 +48,10 @@ export const Variants: Story = {
 					key={variant}
 					variant={variant}
 				>
-					<Text className="text-sm font-bold text-foreground">{variant}</Text>
-					<Text className="text-sm leading-5 text-muted">
+					<Typography type="body-sm" weight="bold">{variant}</Typography>
+					<Typography color="muted" type="body-sm">
 						section 표면의 variant 단계와 내부 텍스트 대비를 확인합니다.
-					</Text>
+					</Typography>
 				</SectionSurface>
 			))}
 		</ScrollView>

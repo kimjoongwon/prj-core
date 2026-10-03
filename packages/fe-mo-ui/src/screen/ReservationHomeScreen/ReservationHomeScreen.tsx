@@ -3,7 +3,7 @@ import { type ReactNode } from "react";
 import { ScrollView, View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { Chip } from "../../data-display/Chip";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { BookingPolicySheet } from "../../feature/BookingPolicySheet";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
@@ -184,19 +184,24 @@ export const ReservationHomeScreen = observer(
 							key="overview"
 						>
 							<VStack gap="dense" key="header">
-								<Text className={classNames.eyebrow()} key="eyebrow">
+								<Typography className={classNames.eyebrow()} key="eyebrow" type="body-sm">
 									예약 현황
-								</Text>
-								<Text className={classNames.overviewTitle()} key="title">
+								</Typography>
+								<Typography
+									className={classNames.overviewTitle()}
+									key="title"
+									type="body-sm"
+								>
 									{selectedDateLabel ?? "선택한 날짜"}
-								</Text>
+								</Typography>
 							</VStack>
-							<Text
+							<Typography
 								className={classNames.overviewDescription()}
 								key="description"
+								type="body-sm"
 							>
 								예약 가능한 수업과 내 예약 상태를 한 화면에서 확인합니다.
-							</Text>
+							</Typography>
 							<HStack
 								className={classNames.summaryGrid()}
 								gap="dense"
@@ -205,47 +210,66 @@ export const ReservationHomeScreen = observer(
 								<View className={classNames.summaryCard()} key="window">
 									<HStack key="label">
 										<Icon name="calendarRange" size="xs" tone="muted" />
-										<Text className={classNames.summaryLabel()}>
+										<Typography className={classNames.summaryLabel()} type="body-sm">
 											조회 기간
-										</Text>
+										</Typography>
 									</HStack>
-									<Text className={classNames.summaryValue()} key="value">
+									<Typography
+										className={classNames.summaryValue()}
+										key="value"
+										type="body-sm"
+									>
 										{bookingWindowDays}일
-									</Text>
+									</Typography>
 								</View>
 								<View className={classNames.summaryCard()} key="reserved">
 									<HStack key="label">
 										<Icon name="ticketCheck" size="xs" tone="muted" />
-										<Text className={classNames.summaryLabel()}>내 예약</Text>
+										<Typography className={classNames.summaryLabel()} type="body-sm">
+											내 예약
+										</Typography>
 									</HStack>
-									<Text className={classNames.summaryValue()} key="value">
+									<Typography
+										className={classNames.summaryValue()}
+										key="value"
+										type="body-sm"
+									>
 										{reservedCount}
-									</Text>
+									</Typography>
 								</View>
 								<View className={classNames.summaryCard()} key="visible">
 									<HStack key="label">
 										<Icon name="listChecks" size="xs" tone="muted" />
-										<Text className={classNames.summaryLabel()}>
+										<Typography className={classNames.summaryLabel()} type="body-sm">
 											표시 수업
-										</Text>
+										</Typography>
 									</HStack>
-									<Text className={classNames.summaryValue()} key="value">
+									<Typography
+										className={classNames.summaryValue()}
+										key="value"
+										type="body-sm"
+									>
 										{cardItems.length}개
-									</Text>
+									</Typography>
 								</View>
 							</HStack>
 						</VStack>
 						<VStack gap="block" key="dates">
 							<VStack gap="dense" key="header">
-								<Text className={classNames.sectionTitle()} key="title">
+								<Typography
+									className={classNames.sectionTitle()}
+									key="title"
+									type="body-sm"
+								>
 									예약 날짜
-								</Text>
-								<Text
+								</Typography>
+								<Typography
 									className={classNames.sectionDescription()}
 									key="description"
+									type="body-sm"
 								>
 									오늘부터 14일간의 예약 가능 수업입니다.
-								</Text>
+								</Typography>
 							</VStack>
 							<DateStrip
 								key="strip"
@@ -256,24 +280,33 @@ export const ReservationHomeScreen = observer(
 						</VStack>
 						<VStack gap="block" key="feed">
 							<VStack gap="dense" key="header">
-								<Text className={classNames.sectionTitle()} key="title">
+								<Typography
+									className={classNames.sectionTitle()}
+									key="title"
+									type="body-sm"
+								>
 									수업 목록
-								</Text>
-								<Text
+								</Typography>
+								<Typography
 									className={classNames.sectionDescription()}
 									key="description"
+									type="body-sm"
 								>
 									{selectedDateLabel ?? "선택한 날짜"} 기준으로 예약 상태를
 									보여줍니다.
-								</Text>
+								</Typography>
 							</VStack>
 							<HStack className="flex-wrap" gap="inline" key="filters">
 								{filterChipNodes}
 							</HStack>
 							{isFetching ? (
-								<Text className={classNames.sessionLabel()} key="fetching">
+								<Typography
+									className={classNames.sessionLabel()}
+									key="fetching"
+									type="body-sm"
+								>
 									최신 예약 상태를 확인 중입니다.
-								</Text>
+								</Typography>
 							) : null}
 							{feedContent}
 						</VStack>

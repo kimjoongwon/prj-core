@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../VStack";
 import { HStack } from "./index";
 
@@ -45,11 +45,11 @@ const meta = {
 			className="w-[280px] rounded-xl bg-surface-secondary p-4"
 		>
 			<View>
-				<Text className="text-base font-bold text-foreground">내 예약</Text>
-				<Text className="text-xs text-muted">오늘 확인할 항목</Text>
+				<Typography type="h6" weight="bold">내 예약</Typography>
+				<Typography color="muted" type="body-xs">오늘 확인할 항목</Typography>
 			</View>
 			<View className="rounded-full bg-accent px-3 py-1">
-				<Text className="text-xs font-bold text-accent-foreground">3건</Text>
+				<Typography className="text-accent-foreground" type="body-xs" weight="bold">3건</Typography>
 			</View>
 		</HStack>
 	),
@@ -76,13 +76,13 @@ export const GapScale: Story = {
 				] as const
 			).map(([gap, label]) => (
 				<View key={gap}>
-					<Text className="mb-2 text-sm font-bold text-foreground">{label}</Text>
+					<Typography className="mb-2" type="body-sm" weight="bold">{label}</Typography>
 					<HStack
 						gap={gap}
 						className="rounded-xl bg-surface-secondary p-3"
 					>
-						<Text className="text-sm text-foreground">항목 A</Text>
-						<Text className="text-sm text-foreground">항목 B</Text>
+						<Typography type="body-sm">항목 A</Typography>
+						<Typography type="body-sm">항목 B</Typography>
 					</HStack>
 				</View>
 			))}

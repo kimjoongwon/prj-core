@@ -10,7 +10,8 @@ import {
 	forwardRef,
 	type ReactNode,
 } from "react";
-import { getTextContent, Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { getTextContent } from "../../data-display/text-content";
 import { PureRadio } from "../Radio/Radio";
 
 type HeroRadioGroupProps = ComponentPropsWithoutRef<typeof HeroRadioGroup>;
@@ -50,7 +51,9 @@ const PureRadioGroupComponent = forwardRef<
 							option.text
 						) : (
 							<>
-								<Text variant="label">{label}</Text>
+								<Typography type="body-sm" weight="semibold">
+									{label}
+								</Typography>
 								<PureRadio />
 							</>
 						)}
@@ -74,7 +77,9 @@ const RadioGroupItem = forwardRef<
 				children
 			) : (
 				<>
-					<Text variant="label">{label}</Text>
+					<Typography type="body-sm" weight="semibold">
+						{label}
+					</Typography>
 					<PureRadio />
 				</>
 			)}

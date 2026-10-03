@@ -8,6 +8,7 @@ import {
 	type FitnessCenterFormState,
 } from "../../form/FitnessCenterForm";
 import { Button } from "../../input/Button/Button";
+import { Typography } from "../../data-display/Typography";
 import { Screen } from "../../layout/Screen";
 import { Section } from "../../layout/Section/Section";
 import { HStack, VStack } from "../../rhythm";
@@ -60,7 +61,9 @@ export const FitnessCenterEditScreen = observer(
 									className="p-8"
 								>
 									<Spinner size="sm" />
-									<span className="text-muted">로딩 중...</span>
+									<Typography color="muted">
+										로딩 중...
+									</Typography>
 								</HStack>
 							</Section.Body>
 						</Section>
@@ -84,9 +87,9 @@ export const FitnessCenterEditScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<p className="text-muted">
+									<Typography.Paragraph color="muted">
 										피트니스 센터 정보를 찾을 수 없습니다.
-									</p>
+									</Typography.Paragraph>
 									<Button variant="tertiary" onPress={onClickCancelButton}>
 										목록으로
 									</Button>

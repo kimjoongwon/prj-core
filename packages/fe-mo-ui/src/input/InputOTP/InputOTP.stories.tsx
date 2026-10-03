@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { observable } from "mobx";
 import { ScrollView } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { InputOTP } from "./index";
 
@@ -26,10 +26,10 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="block">
 				<VStack>
-					<Text variant="heading">InputOTP</Text>
-					<Text tone="muted">
+					<Typography className="font-extrabold" type="h5">InputOTP</Typography>
+					<Typography color="muted" type="body-sm">
 						휴대폰 인증, 초대 코드 같은 짧은 보안 입력을 확인합니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<InputOTP
 					description="문자로 받은 6자리 인증번호를 입력합니다."

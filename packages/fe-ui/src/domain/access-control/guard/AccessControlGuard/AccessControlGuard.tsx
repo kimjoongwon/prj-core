@@ -113,10 +113,10 @@ export const AccessControlGuard = observer(function AccessControlGuard({
 						<LockKeyhole className="h-6 w-6" />
 					</div>
 					<div className="space-y-2">
-						<p className="text-base font-semibold">
+						<Typography.Paragraph weight="semibold">
 							{t("이 화면은 현재 선택한 Space 권한으로 열 수 없습니다.")}
-						</p>
-						<p className="max-w-xl text-sm text-muted">
+						</Typography.Paragraph>
+						<Typography.Paragraph className="max-w-xl" color="muted" size="sm">
 							{isScopeAccessible
 								? t(
 										"메뉴 노출 권한이 있어도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은 막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시 열 수 있습니다.",
@@ -124,7 +124,7 @@ export const AccessControlGuard = observer(function AccessControlGuard({
 								: t(
 										"현재 선택한 tenant role이 PLATFORM_ADMIN이 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 PLATFORM_ADMIN tenant로 전환한 뒤 다시 시도해 주세요.",
 									)}
-						</p>
+						</Typography.Paragraph>
 					</div>
 					<div className="flex gap-2">
 						<Button variant="tertiary" onPress={onClickBackButton}>

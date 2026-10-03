@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { Typography } from "../../data-display/Typography";
 import { DateTimeCell } from "../../data-grid/cell";
 import {
 	TimelineSessionProgramForm,
@@ -82,7 +83,7 @@ export const TimelineSessionProgramEditScreen = observer(
 									className="p-8"
 								>
 									<Spinner size="sm" />
-									<span className="text-muted">{loadingMessage}</span>
+									<Typography color="muted">{loadingMessage}</Typography>
 								</HStack>
 							</Section.Body>
 						</Section>
@@ -103,7 +104,9 @@ export const TimelineSessionProgramEditScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<p className="text-muted">{notFoundMessage}</p>
+									<Typography.Paragraph color="muted">
+										{notFoundMessage}
+									</Typography.Paragraph>
 									{notFoundAction ?? (
 										<Button variant="tertiary">목록으로</Button>
 									)}
@@ -138,7 +141,11 @@ export const TimelineSessionProgramEditScreen = observer(
 										<Section.Body>
 											<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 												<div>
-													<label className="text-sm text-muted">루틴</label>
+													<label>
+														<Typography type="body-sm" color="muted">
+															루틴
+														</Typography>
+													</label>
 													<div className="mt-1">
 														{metadata.routineHref && state.routineName ? (
 															<Link
@@ -153,20 +160,32 @@ export const TimelineSessionProgramEditScreen = observer(
 													</div>
 												</div>
 												<div>
-													<label className="text-sm text-muted">강사</label>
-													<p className="mt-1">
+													<label>
+														<Typography type="body-sm" color="muted">
+															강사
+														</Typography>
+													</label>
+													<Typography.Paragraph className="mt-1">
 														{metadata.instructorLabel ?? state.instructorName}
-													</p>
+													</Typography.Paragraph>
 												</div>
 												<div>
-													<label className="text-sm text-muted">운동 수</label>
-													<p className="mt-1">
+													<label>
+														<Typography type="body-sm" color="muted">
+															운동 수
+														</Typography>
+													</label>
+													<Typography.Paragraph className="mt-1">
 														{metadata.activityCountLabel ??
 															`${routinePreview.length}개`}
-													</p>
+													</Typography.Paragraph>
 												</div>
 												<div>
-													<label className="text-sm text-muted">세션</label>
+													<label>
+														<Typography type="body-sm" color="muted">
+															세션
+														</Typography>
+													</label>
 													<div className="mt-1">
 														{metadata.sessionHref && metadata.sessionName ? (
 															<Link
@@ -182,7 +201,11 @@ export const TimelineSessionProgramEditScreen = observer(
 												</div>
 												{metadata.createdAt ? (
 													<div>
-														<label className="text-sm text-muted">등록일</label>
+														<label>
+															<Typography type="body-sm" color="muted">
+																등록일
+															</Typography>
+														</label>
 														<div className="mt-1">
 															<DateTimeCell value={metadata.createdAt} />
 														</div>

@@ -3,6 +3,7 @@
 import { ArrowLeft, Check, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
@@ -77,8 +78,17 @@ function DetailItem({
 }) {
 	return (
 		<VStack>
-			<span className="text-xs font-medium uppercase text-muted">{label}</span>
-			<span className="text-sm text-foreground">{value || "-"}</span>
+			<Typography
+				type="body-xs"
+				weight="medium"
+				className="uppercase"
+				color="muted"
+			>
+				{label}
+			</Typography>
+			<Typography type="body-sm">
+				{value || "-"}
+			</Typography>
 		</VStack>
 	);
 }
@@ -107,16 +117,18 @@ function RequestSummaryBlock({
 	return (
 		<VStack gap="dense">
 			<HStack alignItems="center" className="flex-wrap">
-				<span className="font-medium text-foreground">{spaceName}</span>
+				<Typography weight="medium">
+					{spaceName}
+				</Typography>
 				<Chip size="sm" variant="soft">
 					{roleName}
 				</Chip>
 			</HStack>
-			<span className="text-sm text-muted">
+			<Typography type="body-sm" color="muted">
 				{requesterName || requesterEmail
 					? `${requesterName ?? requesterEmail}${requesterName && requesterEmail ? ` · ${requesterEmail}` : ""}`
 					: "-"}
-			</span>
+			</Typography>
 		</VStack>
 	);
 }

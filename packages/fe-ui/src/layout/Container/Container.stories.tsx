@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Typography } from "../../data-display/Typography";
 import { Container } from "./Container";
 
 const meta = {
@@ -64,9 +65,15 @@ export const 여러요소: Story = {
 	render: (args) => (
 		<Container {...args}>
 			<>
-				<div className="rounded bg-surface-tertiary p-2">아이템 1</div>
-				<div className="rounded bg-surface-secondary p-2">아이템 2</div>
-				<div className="rounded bg-accent-soft p-2">아이템 3</div>
+				<div className="rounded bg-surface-tertiary p-2">
+					<Typography>아이템 1</Typography>
+				</div>
+				<div className="rounded bg-surface-secondary p-2">
+					<Typography>아이템 2</Typography>
+				</div>
+				<div className="rounded bg-accent-soft p-2">
+					<Typography>아이템 3</Typography>
+				</div>
 			</>
 		</Container>
 	),
@@ -88,10 +95,12 @@ export const 반응형: Story = {
 	render: (args) => (
 		<Container {...args}>
 			<>
-				<h2 className="mb-4 font-bold text-xl">카드 제목</h2>
-				<p className="mb-4 text-muted">
-					다양한 화면 크기에 잘 맞는 반응형 컴테이너의 예시입니다.
-				</p>
+				<Typography.Heading className="mb-4 text-xl" level={2} weight="bold">
+					카드 제목
+				</Typography.Heading>
+				<Typography.Paragraph className="mb-4" color="muted">
+					다양한 화면 크기에 잘 맞는 반응형 컨테이너의 예시입니다.
+				</Typography.Paragraph>
 				<button
 					type="button"
 					className="w-full rounded bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover"
@@ -119,7 +128,9 @@ export const 폼레이아웃: Story = {
 	render: (args) => (
 		<Container {...args}>
 			<>
-				<h3 className="font-semibold text-lg">연락처 폼</h3>
+				<Typography.Heading className="text-lg" level={3}>
+					연락처 폼
+				</Typography.Heading>
 				<input
 					type="text"
 					placeholder="이름"

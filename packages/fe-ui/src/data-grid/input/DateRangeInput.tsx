@@ -2,6 +2,7 @@
 
 import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
 
 interface DateRangeInputProps {
@@ -43,7 +44,9 @@ export const DateRangeInput = observer(
 						handleChange(startKey, event.currentTarget.value)
 					}
 				/>
-				<span className="text-[12px] text-muted">-</span>
+				<Typography color="muted" type="body-xs">
+					-
+				</Typography>
 				<input
 					aria-label={
 						config.label ? `${t(config.label)} ${t("종료일")}` : t("종료일")

@@ -5,6 +5,7 @@ import {
 	Chip,
 	Container,
 	HStack,
+	Typography,
 	useDesignSystemTheme,
 	VStack,
 } from "@cocrepo/ui";
@@ -98,15 +99,11 @@ const ITEM_VARIANTS = {
 	},
 } as const;
 
-const SECTION_TITLE_CLASS =
-	"font-display text-3xl font-semibold text-foreground md:text-5xl";
-const SECTION_DESCRIPTION_CLASS =
-	"mt-5 text-base leading-8 text-muted md:text-lg md:leading-9";
+const SECTION_TITLE_CLASS = "font-display md:text-5xl";
+const SECTION_DESCRIPTION_CLASS = "mt-5 md:text-lg";
 const SURFACE_CARD_CLASS = "h-full border border-border bg-surface";
 const NAVIGATION_BUTTON_CLASS =
 	"border border-border bg-surface text-foreground transition-colors hover:bg-surface-hover";
-const MUTED_TEXT_CLASS = "text-muted";
-const SOFT_TEXT_CLASS = "text-muted";
 const STRONG_TEXT_CLASS = "text-foreground";
 const PANEL_DIVIDER_CLASS = "border-border";
 const PANEL_ICON_CLASS =
@@ -157,12 +154,20 @@ function SectionHeading({ eyebrow, title, description }: SectionHeadingProps) {
 		<div className="max-w-4xl">
 			<HStack alignItems="center" gap="section" className="mb-5">
 				<span className="h-px w-12 bg-separator" />
-				<span className="text-[11px] font-semibold uppercase tracking-[0.32em] text-accent">
+				<Typography
+					type="body-xs"
+					weight="semibold"
+					className="text-accent uppercase tracking-[0.32em]"
+				>
 					{eyebrow}
-				</span>
+				</Typography>
 			</HStack>
-			<h2 className={SECTION_TITLE_CLASS}>{title}</h2>
-			<p className={SECTION_DESCRIPTION_CLASS}>{description}</p>
+			<Typography.Heading level={2} className={SECTION_TITLE_CLASS}>
+				{title}
+			</Typography.Heading>
+			<Typography.Paragraph color="muted" className={SECTION_DESCRIPTION_CLASS}>
+				{description}
+			</Typography.Paragraph>
 		</div>
 	);
 }
@@ -246,8 +251,12 @@ function renderMetricCard(item: ProposalMetric) {
 		<motion.div key={item.label} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_CLASS}>
 				<Card.Content className="gap-4 p-6 md:p-7">
-					<p className="text-sm font-semibold text-foreground">{item.label}</p>
-					<p className="text-sm leading-6 text-muted">{item.description}</p>
+					<Typography.Paragraph size="sm" weight="semibold">
+						{item.label}
+					</Typography.Paragraph>
+					<Typography.Paragraph size="sm" color="muted">
+						{item.description}
+					</Typography.Paragraph>
 				</Card.Content>
 			</Card>
 		</motion.div>
@@ -265,13 +274,13 @@ function renderNarrativeCard(item: ProposalNarrativeCard) {
 						<Icon className="h-5 w-5" />
 					</div>
 					<VStack gap="dense">
-						<h3 className="text-lg font-semibold text-foreground">
-							{item.title}
-						</h3>
+						<Typography.Heading level={5}>{item.title}</Typography.Heading>
 					</VStack>
 				</Card.Header>
-				<Card.Content className={`pt-4 text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
-					{item.description}
+				<Card.Content className="pt-4">
+					<Typography.Paragraph size="sm" color="muted">
+						{item.description}
+					</Typography.Paragraph>
 				</Card.Content>
 			</Card>
 		</motion.div>
@@ -280,10 +289,12 @@ function renderNarrativeCard(item: ProposalNarrativeCard) {
 
 function renderProcessOutput(output: string) {
 	return (
-		<li key={output} className={`text-sm ${MUTED_TEXT_CLASS}`}>
+		<li key={output}>
 			<HStack alignItems="start" gap="block">
 				<BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-				<span>{output}</span>
+				<Typography type="body-sm" color="muted">
+					{output}
+				</Typography>
 			</HStack>
 		</li>
 	);
@@ -304,16 +315,16 @@ function renderProcessCard(step: ProposalProcessStep) {
 						>
 							Step {step.step}
 						</Chip>
-						<h3 className="text-lg font-semibold text-foreground">
-							{step.title}
-						</h3>
+						<Typography.Heading level={5}>{step.title}</Typography.Heading>
 					</VStack>
 					<div className={PANEL_ICON_CLASS}>
 						<Icon className="h-5 w-5" />
 					</div>
 				</Card.Header>
-				<Card.Content className={`gap-6 text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
-					<p>{step.description}</p>
+				<Card.Content className="gap-6">
+					<Typography.Paragraph size="sm" color="muted">
+						{step.description}
+					</Typography.Paragraph>
 					<ul className="flex flex-col gap-2">
 						{step.outputs.map(renderProcessOutput)}
 					</ul>
@@ -325,10 +336,12 @@ function renderProcessCard(step: ProposalProcessStep) {
 
 function renderCostLine(item: string) {
 	return (
-		<li key={item} className={`text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
+		<li key={item}>
 			<HStack alignItems="start" gap="block">
 				<BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-accent" />
-				<span>{item}</span>
+				<Typography type="body-sm" color="muted">
+					{item}
+				</Typography>
 			</HStack>
 		</li>
 	);
@@ -336,10 +349,12 @@ function renderCostLine(item: string) {
 
 function renderCareerLine(item: string) {
 	return (
-		<li key={item} className={`text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
+		<li key={item}>
 			<HStack alignItems="start" gap="block">
 				<BadgeCheck className="mt-1 h-4 w-4 shrink-0 text-accent" />
-				<span>{item}</span>
+				<Typography type="body-sm" color="muted">
+					{item}
+				</Typography>
 			</HStack>
 		</li>
 	);
@@ -350,13 +365,17 @@ function renderResumeFactCard(item: ProposalResumeFact) {
 		<motion.div key={item.label} variants={ITEM_VARIANTS}>
 			<Card className={SURFACE_CARD_CLASS}>
 				<Card.Content className="gap-3 p-6">
-					<p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-accent">
+					<Typography.Paragraph
+						size="xs"
+						weight="semibold"
+						className="text-accent uppercase tracking-[0.26em]"
+					>
 						{item.label}
-					</p>
-					<p className="text-lg font-semibold text-foreground">{item.value}</p>
-					<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+					</Typography.Paragraph>
+					<Typography.Heading level={5}>{item.value}</Typography.Heading>
+					<Typography.Paragraph size="sm" color="muted">
 						{item.description}
-					</p>
+					</Typography.Paragraph>
 				</Card.Content>
 			</Card>
 		</motion.div>
@@ -389,15 +408,19 @@ function renderCareerCard(entry: ProposalCareerEntry) {
 								{entry.period}
 							</Chip>
 							<VStack gap="inline">
-								<h3 className="text-xl font-semibold text-foreground">
+								<Typography.Heading level={5}>
 									{entry.organization}
-								</h3>
-								<p className="text-sm font-semibold text-accent">
+								</Typography.Heading>
+								<Typography.Paragraph
+									size="sm"
+									weight="semibold"
+									className="text-accent"
+								>
 									{entry.role}
-								</p>
-								<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+								</Typography.Paragraph>
+								<Typography.Paragraph size="sm" color="muted">
 									{entry.headline}
-								</p>
+								</Typography.Paragraph>
 							</VStack>
 						</VStack>
 						<div className={PANEL_ICON_CLASS}>
@@ -406,9 +429,9 @@ function renderCareerCard(entry: ProposalCareerEntry) {
 					</div>
 				</Card.Header>
 				<Card.Content className="gap-6 p-6 md:p-7">
-					<p className={`text-sm leading-7 ${MUTED_TEXT_CLASS}`}>
+					<Typography.Paragraph size="sm" color="muted">
 						{entry.description}
-					</p>
+					</Typography.Paragraph>
 					<ul className="flex flex-col gap-3">
 						{entry.highlights.map(renderCareerLine)}
 					</ul>
@@ -432,12 +455,10 @@ function renderPortfolioCard(item: ProposalPortfolioItem) {
 						<Icon className="h-5 w-5" />
 					</div>
 					<VStack gap="inline">
-						<h3 className="text-lg font-semibold text-foreground">
-							{item.title}
-						</h3>
-						<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+						<Typography.Heading level={5}>{item.title}</Typography.Heading>
+						<Typography.Paragraph size="sm" color="muted">
 							{item.description}
-						</p>
+						</Typography.Paragraph>
 					</VStack>
 				</Card.Header>
 				<Card.Content className="gap-5 pt-5">
@@ -462,12 +483,10 @@ function renderStackCard(group: ProposalStackGroup) {
 						{group.title}
 					</Chip>
 					<VStack gap="inline">
-						<h3 className="text-lg font-semibold text-foreground">
-							{group.title}
-						</h3>
-						<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+						<Typography.Heading level={5}>{group.title}</Typography.Heading>
+						<Typography.Paragraph size="sm" color="muted">
 							{group.description}
-						</p>
+						</Typography.Paragraph>
 					</VStack>
 				</Card.Header>
 				<Card.Content className="flex-row flex-wrap gap-2 pt-0">
@@ -480,10 +499,12 @@ function renderStackCard(group: ProposalStackGroup) {
 
 function renderClosingBullet(bullet: string) {
 	return (
-		<li key={bullet} className="text-sm font-medium">
+		<li key={bullet}>
 			<HStack alignItems="center" gap="block" className={STRONG_TEXT_CLASS}>
 				<BadgeCheck className="h-4 w-4 text-accent" />
-				<span>{bullet}</span>
+				<Typography type="body-sm" weight="medium">
+					{bullet}
+				</Typography>
 			</HStack>
 		</li>
 	);
@@ -509,12 +530,16 @@ function TopNavigation({
 							O
 						</div>
 						<div>
-							<p className="font-display text-lg font-semibold text-foreground">
+							<Typography.Heading level={5} className="font-display">
 								온짓다
-							</p>
-							<p className="text-xs uppercase tracking-[0.22em] text-muted">
+							</Typography.Heading>
+							<Typography.Paragraph
+								size="xs"
+								color="muted"
+								className="uppercase tracking-[0.22em]"
+							>
 								AI-centered delivery studio
-							</p>
+							</Typography.Paragraph>
 						</div>
 					</HStack>
 					<div className="flex flex-col gap-4 md:items-end">
@@ -557,12 +582,15 @@ function HeroSection({
 					{hero.eyebrow}
 				</Chip>
 				<VStack gap="roomy">
-					<h1 className="font-display max-w-5xl text-5xl font-semibold leading-none text-foreground md:text-7xl">
+					<Typography.Heading
+						level={1}
+						className="font-display max-w-5xl text-5xl leading-none md:text-7xl"
+					>
 						{hero.title}
-					</h1>
-					<p className="max-w-3xl text-base leading-8 text-muted md:text-lg">
+					</Typography.Heading>
+					<Typography.Paragraph color="muted" className="max-w-3xl md:text-lg">
 						{hero.description}
-					</p>
+					</Typography.Paragraph>
 				</VStack>
 				<HStack gap="section" className="flex-wrap">
 					<Button
@@ -599,13 +627,13 @@ function HeroSection({
 							Execution board
 						</Chip>
 						<VStack gap="inline">
-							<h2 className="font-display text-2xl font-semibold text-foreground">
+							<Typography.Heading level={3} className="font-display">
 								기획에서 코드까지 같은 리듬으로 움직입니다
-							</h2>
-							<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+							</Typography.Heading>
+							<Typography.Paragraph size="sm" color="muted">
 								화면, 스펙, 구현이 서로를 기다리지 않도록 실행 레이어를 촘촘하게
 								맞춥니다.
-							</p>
+							</Typography.Paragraph>
 						</VStack>
 					</Card.Header>
 					<Card.Content className="gap-6 p-6 md:p-8">
@@ -713,9 +741,9 @@ export default observer(function ProposalPage() {
 										<Chip variant="soft" color="danger">
 											줄이는 비용
 										</Chip>
-										<h3 className="text-xl font-semibold text-foreground">
+										<Typography.Heading level={5}>
 											없애도 되는 레이어
-										</h3>
+										</Typography.Heading>
 									</Card.Header>
 									<Card.Content>
 										<ul className="flex flex-col gap-4">
@@ -728,9 +756,9 @@ export default observer(function ProposalPage() {
 										<Chip variant="soft" color="success">
 											남겨야 하는 비용
 										</Chip>
-										<h3 className="text-xl font-semibold text-foreground">
+										<Typography.Heading level={5}>
 											사람이 붙잡아야 하는 레이어
-										</h3>
+										</Typography.Heading>
 									</Card.Header>
 									<Card.Content>
 										<ul className="flex flex-col gap-4">
@@ -777,12 +805,15 @@ export default observer(function ProposalPage() {
 										<Chip variant="soft" color="accent">
 											Closing note
 										</Chip>
-										<h3 className="font-display text-3xl font-semibold text-foreground md:text-4xl">
+										<Typography.Heading
+											level={3}
+											className="font-display md:text-4xl"
+										>
 											{pageData.closing.title}
-										</h3>
-										<p className="max-w-3xl text-base leading-8 text-muted">
+										</Typography.Heading>
+										<Typography.Paragraph color="muted" className="max-w-3xl">
 											{pageData.closing.description}
-										</p>
+										</Typography.Paragraph>
 									</VStack>
 									<ul className="grid gap-4 md:grid-cols-3">
 										{pageData.closing.bullets.map(renderClosingBullet)}
@@ -832,12 +863,12 @@ export default observer(function ProposalPage() {
 											Resume note
 										</Chip>
 										<VStack gap="inline">
-											<h3 className="text-xl font-semibold text-foreground">
+											<Typography.Heading level={5}>
 												{pageData.career.statement.title}
-											</h3>
-											<p className={`text-sm leading-7 ${SOFT_TEXT_CLASS}`}>
+											</Typography.Heading>
+											<Typography.Paragraph size="sm" color="muted">
 												{pageData.career.statement.description}
-											</p>
+											</Typography.Paragraph>
 										</VStack>
 									</Card.Header>
 									<Card.Content>
@@ -852,16 +883,18 @@ export default observer(function ProposalPage() {
 									<Chip variant="soft" color="default">
 										Portfolio
 									</Chip>
-									<h3 className="font-display text-2xl font-semibold text-foreground">
+									<Typography.Heading level={3} className="font-display">
 										이력서에 포함된 개인 포트폴리오와 학습 프로젝트
-									</h3>
-									<p
-										className={`max-w-3xl text-sm leading-7 ${SOFT_TEXT_CLASS}`}
+									</Typography.Heading>
+									<Typography.Paragraph
+										size="sm"
+										color="muted"
+										className="max-w-3xl"
 									>
 										실서비스에 적용 가능한 구조를 목표로 운영 중인 개인
 										프로젝트도 함께 노출합니다. 실무 경력 외에 어떤 방향으로
 										역량을 확장하고 있는지도 보이도록 구성했습니다.
-									</p>
+									</Typography.Paragraph>
 								</VStack>
 								<motion.div
 									className="grid gap-6 md:grid-cols-2"

@@ -13,6 +13,7 @@ import {
 	X,
 } from "lucide-react";
 import type { DragEvent } from "react";
+import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
 import {
@@ -148,9 +149,9 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 			<div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
 				<div className="flex min-w-0 flex-1 items-center gap-2">
 					<Group className="size-4 shrink-0 text-muted" aria-hidden />
-					<span className="shrink-0 text-xs font-semibold text-foreground">
+					<Typography className="shrink-0" type="body-xs" weight="semibold">
 						{t("그룹")}
-					</span>
+					</Typography>
 					<ul
 						aria-label={t("그룹 기준")}
 						className="flex min-h-8 min-w-0 flex-1 list-none flex-wrap items-center gap-1.5 rounded border border-border bg-surface px-2 py-1"
@@ -169,10 +170,16 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 										onDragStart={(event) => handleDragStart(event, columnId)}
 										onDragOver={(event) => event.preventDefault()}
 										onDrop={(event) => handleDrop(event, index)}
-										className="inline-flex h-6 items-center gap-1 rounded border border-accent/20 bg-accent-soft px-1.5 text-xs font-medium text-accent-soft-foreground"
+										className="inline-flex h-6 items-center gap-1 rounded border border-accent/20 bg-accent-soft px-1.5"
 									>
 										<GripVertical className="size-3.5 text-muted" aria-hidden />
-										<span>{t(label)}</span>
+										<Typography
+											className="text-accent-soft-foreground"
+											type="body-xs"
+											weight="medium"
+										>
+											{t(label)}
+										</Typography>
 										<Button
 											aria-label={`${label} 그룹 왼쪽으로 이동`}
 											className="h-5 min-w-5 rounded px-0"
@@ -210,7 +217,11 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 								);
 							})
 						) : (
-							<li className="text-xs text-muted">{t("그룹 없음")}</li>
+							<li>
+								<Typography color="muted" type="body-xs">
+									{t("그룹 없음")}
+								</Typography>
+							</li>
 						)}
 					</ul>
 				</div>

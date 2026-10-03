@@ -3,6 +3,7 @@
 import type { DataGridTableConfig } from "@cocrepo/type";
 import { flexRender, type Header } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../../data-display/Typography";
 import { type Translate, translateNode } from "../../../i18n";
 import { getColumnAlignClassName } from "../../columns/columnConfig";
 import { ColumnFilterInput } from "../../input/ColumnFilterInput";
@@ -95,9 +96,9 @@ function TableHeaderView<T extends { id: Key }>({
 								type="checkbox"
 							/>
 						) : (
-							<span className="sr-only">
+							<Typography className="sr-only" type="body-xs">
 								{t(DATA_GRID_SELECTION_COLUMN_LABEL)}
-							</span>
+							</Typography>
 						)}
 					</th>
 				) : null}

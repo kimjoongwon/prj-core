@@ -11,7 +11,7 @@ import {
 	type ReactNode,
 } from "react";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 
 type HeroDialogProps = ComponentPropsWithoutRef<typeof HeroDialog>;
 type HeroDialogContentProps = ComponentPropsWithoutRef<
@@ -98,41 +98,44 @@ const DialogComponent = forwardRef<
 	},
 );
 DialogComponent.displayName = "Dialog";
-const DialogTitle = forwardRef<ComponentRef<typeof Text>, DialogTitleProps>(
-	({ children, className, ...props }, ref) => {
-		const { nativeID } = useDialog();
-		return (
-			<Text
-				{...props}
-				ref={ref}
-				accessibilityRole="text"
-				className={className}
-				nativeID={`${nativeID}_title`}
-				variant="title"
-			>
-				{children}
-			</Text>
-		);
-	},
+const DialogTitle = forwardRef<
+	ComponentRef<typeof Typography>,
+	DialogTitleProps
+>(({ children, className, ...props }, ref) => {
+	const { nativeID } = useDialog();
+	return (
+		<Typography
+			{...props}
+			ref={ref}
+			accessibilityRole="text"
+			className={className}
+			nativeID={`${nativeID}_title`}
+			type="h6"
+			weight="bold"
+		>
+			{children}
+		</Typography>
+	);
+},
 );
 DialogTitle.displayName = "Dialog.Title";
 const DialogDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	DialogDescriptionProps
 >(({ children, className, ...props }, ref) => {
 	const { nativeID } = useDialog();
 	return (
-		<Text
+		<Typography
 			{...props}
 			ref={ref}
 			accessibilityRole="text"
 			className={className}
 			nativeID={`${nativeID}_desc`}
-			tone="muted"
-			variant="body"
+			color="muted"
+			type="body-sm"
 		>
 			{children}
-		</Text>
+		</Typography>
 	);
 });
 DialogDescription.displayName = "Dialog.Description";

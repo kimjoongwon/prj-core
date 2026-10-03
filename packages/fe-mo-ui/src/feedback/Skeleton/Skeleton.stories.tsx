@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Skeleton } from "./index";
 
 const meta = {
@@ -32,10 +32,10 @@ export const CardLoading: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">Skeleton</Text>
-				<Text className="text-sm leading-5 text-muted">
+				<Typography className="font-extrabold" type="h5">Skeleton</Typography>
+				<Typography color="muted" type="body-sm">
 					목록과 카드가 로딩 중일 때 실제 레이아웃과 비슷한 자리를 잡습니다.
-				</Text>
+				</Typography>
 			</View>
 			<View className="gap-3 rounded-lg border border-border bg-surface p-4">
 				<Skeleton className="h-32 w-full rounded-lg" />

@@ -2,6 +2,7 @@
 
 import type { ReactElement } from "react";
 import { Chip } from "../../../data-display/Chip/Chip";
+import { Typography } from "../../../data-display/Typography";
 import { ThemeToggleButton } from "../../theme/ThemeToggleButton";
 import { PlanningSessionBar } from "./PlanningSessionBar";
 import { formatPlanningStatus } from "./planningPreviewFormat";
@@ -27,16 +28,20 @@ export const PlanningPreviewFrame = (({
 				<header className="rounded-lg border border-border bg-surface p-4 xl:col-span-2">
 					<div className="flex flex-wrap items-start justify-between gap-3">
 						<div className="grid min-w-0 gap-1">
-							<p className="text-xs font-semibold uppercase text-accent">
+							<Typography.Paragraph
+								className="text-accent uppercase"
+								size="xs"
+								weight="semibold"
+							>
 								Planning Preview
-							</p>
-							<h1 className="break-words text-2xl font-semibold">
+							</Typography.Paragraph>
+							<Typography.Heading className="break-words text-2xl" level={1}>
 								{scenario.title}
-							</h1>
+							</Typography.Heading>
 							{scenario.description ? (
-								<p className="max-w-3xl text-sm text-muted">
+								<Typography.Paragraph className="max-w-3xl" color="muted" size="sm">
 									{scenario.description}
-								</p>
+								</Typography.Paragraph>
 							) : null}
 						</div>
 						<div className="flex shrink-0 flex-wrap items-center justify-end gap-2">

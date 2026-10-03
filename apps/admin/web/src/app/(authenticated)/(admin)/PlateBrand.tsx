@@ -1,4 +1,4 @@
-import { HStack } from "@cocrepo/ui";
+import { HStack, Typography } from "@cocrepo/ui";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,9 +21,11 @@ export const PlateBrand = () => {
 						className="size-8 object-contain"
 					/>
 				</span>
-				<span className="truncate font-extrabold text-[19px] leading-none tracking-[-0.035em]">
+				<Typography
+					className="truncate text-[19px] font-extrabold leading-none tracking-[-0.035em]"
+				>
 					Plate
-				</span>
+				</Typography>
 			</HStack>
 		</Link>
 	);

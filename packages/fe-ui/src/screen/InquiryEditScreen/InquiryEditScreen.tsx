@@ -21,6 +21,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { InquiryWebSocketProvider } from "../../domain/inquiry";
 import {
 	InquiryForm,
@@ -199,10 +200,18 @@ function InquiryMetaPanel({
 		<Card className={`bg-surface ${className}`}>
 			<Card.Content className="p-4">
 				<VStack gap="section">
-					<h3 className="text-sm font-semibold text-muted">메타 정보</h3>
+					<h3>
+						<Typography type="body-sm" weight="semibold" color="muted">
+							메타 정보
+						</Typography>
+					</h3>
 
 					<VStack gap="dense">
-						<label className="text-xs text-muted">상태</label>
+						<label>
+							<Typography type="body-xs" color="muted">
+								상태
+							</Typography>
+						</label>
 						{isEditable ? (
 							<Select
 								size="sm"
@@ -219,7 +228,11 @@ function InquiryMetaPanel({
 					</VStack>
 
 					<VStack gap="dense">
-						<label className="text-xs text-muted">우선순위</label>
+						<label>
+							<Typography type="body-xs" color="muted">
+								우선순위
+							</Typography>
+						</label>
 						{isEditable ? (
 							<Select
 								size="sm"
@@ -240,7 +253,11 @@ function InquiryMetaPanel({
 					</VStack>
 
 					<VStack gap="dense">
-						<label className="text-xs text-muted">카테고리</label>
+						<label>
+							<Typography type="body-xs" color="muted">
+								카테고리
+							</Typography>
+						</label>
 						{isEditable ? (
 							<Select
 								size="sm"
@@ -257,7 +274,11 @@ function InquiryMetaPanel({
 					</VStack>
 
 					<VStack gap="dense">
-						<label className="text-xs text-muted">담당자</label>
+						<label>
+							<Typography type="body-xs" color="muted">
+								담당자
+							</Typography>
+						</label>
 						{isEditable ? (
 							<Select
 								size="sm"
@@ -268,14 +289,16 @@ function InquiryMetaPanel({
 								placeholder="담당자 선택"
 							/>
 						) : (
-							<span className="text-sm text-foreground">
-								{assigneeName || "미배정"}
-							</span>
+							<Typography type="body-sm">{assigneeName || "미배정"}</Typography>
 						)}
 					</VStack>
 
 					<VStack gap="block">
-						<label className="text-xs text-muted">태그</label>
+						<label>
+							<Typography type="body-xs" color="muted">
+								태그
+							</Typography>
+						</label>
 						<HStack gap="dense" className="flex-wrap">
 							{tags.map((tag) => (
 								<Chip
@@ -362,46 +385,60 @@ function InquiryInfoPanel({
 		<Card className="bg-surface">
 			<Card.Content className="p-4">
 				<VStack gap="block">
-					<h3 className="text-sm font-semibold text-muted">문의 정보</h3>
+					<h3>
+						<Typography type="body-sm" weight="semibold" color="muted">
+							문의 정보
+						</Typography>
+					</h3>
 					<HStack alignItems="center">
 						<Hash className="size-4 text-muted" />
-						<span className="text-sm text-muted">문의번호:</span>
-						<span className="font-mono text-sm font-medium text-foreground">
-							{inquiryNumber}
-						</span>
+						<Typography type="body-sm" color="muted">
+							문의번호:
+						</Typography>
+						<Typography.Code weight="medium">{inquiryNumber}</Typography.Code>
 					</HStack>
 					<div>
-						<span className="text-sm text-muted">제목: </span>
-						<span className="font-semibold text-foreground">{title}</span>
+						<Typography type="body-sm" color="muted">
+							제목:{" "}
+						</Typography>
+						<Typography weight="semibold">{title}</Typography>
 					</div>
 					<HStack alignItems="center">
 						<MessageSquare className="size-4 text-muted" />
-						<span className="text-sm text-muted">채널:</span>
-						<span className="text-sm text-foreground">{channel}</span>
+						<Typography type="body-sm" color="muted">
+							채널:
+						</Typography>
+						<Typography type="body-sm">{channel}</Typography>
 					</HStack>
 					<HStack alignItems="center">
 						<Clock className="size-4 text-muted" />
-						<span className="text-sm text-muted">접수일:</span>
-						<span className="text-sm text-foreground">{createdAt}</span>
+						<Typography type="body-sm" color="muted">
+							접수일:
+						</Typography>
+						<Typography type="body-sm">{createdAt}</Typography>
 					</HStack>
 					<HStack
 						alignItems="center"
 						className="rounded-lg bg-surface-secondary p-2"
 					>
-						<span className="text-sm">감정 분석:</span>
-						<span className="text-lg">{sentimentTone}</span>
-						<span className="text-sm font-medium">{sentiment.label}</span>
-						<span className="text-xs text-muted">
+						<Typography type="body-sm">감정 분석:</Typography>
+						<Typography className="text-lg">{sentimentTone}</Typography>
+						<Typography type="body-sm" weight="medium">
+							{sentiment.label}
+						</Typography>
+						<Typography type="body-xs" color="muted">
 							(신뢰도 {sentiment.confidence}%)
-						</span>
+						</Typography>
 					</HStack>
 					{onlineParticipants.length > 0 ? (
 						<HStack alignItems="center">
 							<User className="size-4 text-success" />
-							<span className="text-sm text-success">온라인:</span>
-							<span className="text-sm text-foreground">
+							<Typography type="body-sm" className="text-success">
+								온라인:
+							</Typography>
+							<Typography type="body-sm">
 								{onlineParticipants.join(", ")}
-							</span>
+							</Typography>
 						</HStack>
 					) : null}
 				</VStack>
@@ -426,34 +463,44 @@ function CustomerInfoPanel({
 		<Card className="bg-surface">
 			<Card.Content className="p-4">
 				<VStack gap="block">
-					<h3 className="text-sm font-semibold text-muted">고객 정보</h3>
+					<h3>
+						<Typography type="body-sm" weight="semibold" color="muted">
+							고객 정보
+						</Typography>
+					</h3>
 					<HStack alignItems="center">
 						<User className="size-4 text-muted" />
-						<span className="font-semibold text-foreground">{name}</span>
+						<Typography weight="semibold">{name}</Typography>
 						{email ? (
-							<span className="text-sm text-muted">({email})</span>
+							<Typography type="body-sm" color="muted">
+								({email})
+							</Typography>
 						) : null}
 					</HStack>
 					{phone ? (
 						<HStack alignItems="center">
 							<Phone className="size-4 text-muted" />
-							<span className="text-sm text-foreground">{phone}</span>
+							<Typography type="body-sm">{phone}</Typography>
 						</HStack>
 					) : null}
 					{joinedAt ? (
 						<HStack alignItems="center">
 							<Calendar className="size-4 text-muted" />
-							<span className="text-sm text-muted">가입일:</span>
-							<span className="text-sm text-foreground">{joinedAt}</span>
+							<Typography type="body-sm" color="muted">
+								가입일:
+							</Typography>
+							<Typography type="body-sm">{joinedAt}</Typography>
 						</HStack>
 					) : null}
 					{inquiryCount !== undefined ? (
 						<HStack alignItems="center">
 							<Mail className="size-4 text-muted" />
-							<span className="text-sm text-muted">문의 이력:</span>
-							<span className="text-sm font-medium text-foreground">
+							<Typography type="body-sm" color="muted">
+								문의 이력:
+							</Typography>
+							<Typography type="body-sm" weight="medium">
 								{inquiryCount}건
-							</span>
+							</Typography>
 						</HStack>
 					) : null}
 				</VStack>
@@ -491,13 +538,15 @@ function ParticipantPanel({
 			<Card.Content className="p-4">
 				<VStack gap="block">
 					<div className="flex items-center justify-between">
-						<h3 className="text-sm font-semibold text-muted">
-							참여자 ({participants.length})
+						<h3>
+							<Typography type="body-sm" weight="semibold" color="muted">
+								참여자 ({participants.length})
+							</Typography>
 						</h3>
 						{onlineParticipants.length > 0 ? (
-							<span className="text-xs text-success">
+							<Typography type="body-xs" className="text-success">
 								{onlineParticipants.length}명 온라인
-							</span>
+							</Typography>
 						) : null}
 					</div>
 					<VStack gap="block">
@@ -512,14 +561,16 @@ function ParticipantPanel({
 									<span
 										className={`size-2 rounded-full ${participant.isOnline ? "bg-success" : "bg-default"}`}
 									/>
-									<span className="flex-1 text-sm text-foreground">
+									<Typography type="body-sm" className="flex-1">
 										{participant.name}
-									</span>
+									</Typography>
 									<Chip size="sm" variant="soft" color={roleInfo.color}>
 										{roleInfo.label}
 									</Chip>
 									{participant.isTyping ? (
-										<span className="text-xs text-accent">작성 중...</span>
+										<Typography type="body-xs" className="text-accent">
+											작성 중...
+										</Typography>
 									) : null}
 								</HStack>
 							);
@@ -527,12 +578,12 @@ function ParticipantPanel({
 					</VStack>
 					{typingParticipants.length > 0 ? (
 						<div className="rounded-lg bg-accent-soft p-2">
-							<span className="text-xs text-accent">
+							<Typography type="body-xs" className="text-accent">
 								{typingParticipants
 									.map((participant) => participant.name)
 									.join(", ")}
 								님이 타이핑 중입니다...
-							</span>
+							</Typography>
 						</div>
 					) : null}
 				</VStack>
@@ -572,13 +623,19 @@ function SlaMetricRow({ metric }: { metric: SlaMetric }) {
 			<div className="flex items-center justify-between">
 				<HStack alignItems="center">
 					{icon}
-					<span className="text-sm text-foreground">{metric.label}</span>
+					<Typography type="body-sm">{metric.label}</Typography>
 				</HStack>
-				<span className={`text-xs font-medium ${color}`}>{status}</span>
+				<Typography type="body-xs" weight="medium" className={color}>
+					{status}
+				</Typography>
 			</div>
-			<div className="flex items-center justify-between text-xs text-muted">
-				<span>{formatDurationMinutes(metric.elapsedMinutes)}</span>
-				<span>목표: {formatDurationMinutes(metric.targetMinutes)}</span>
+			<div className="flex items-center justify-between">
+				<Typography type="body-xs" color="muted">
+					{formatDurationMinutes(metric.elapsedMinutes)}
+				</Typography>
+				<Typography type="body-xs" color="muted">
+					목표: {formatDurationMinutes(metric.targetMinutes)}
+				</Typography>
 			</div>
 			<ProgressBar
 				aria-label={`${metric.label} 진행률`}
@@ -603,7 +660,11 @@ function SlaTrackerPanel({
 		<Card className="bg-surface">
 			<Card.Content className="p-4">
 				<VStack gap="section">
-					<h3 className="text-sm font-semibold text-muted">SLA 추적</h3>
+					<h3>
+						<Typography type="body-sm" weight="semibold" color="muted">
+							SLA 추적
+						</Typography>
+					</h3>
 					<VStack gap="section">
 						<SlaMetricRow metric={firstResponse} />
 						<SlaMetricRow metric={resolution} />

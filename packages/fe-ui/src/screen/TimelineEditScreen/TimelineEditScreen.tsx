@@ -6,6 +6,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { DateTimeCell } from "../../data-grid/cell";
 import { TimelineForm, type TimelineFormState } from "../../form/TimelineForm";
 import { Button } from "../../input/Button/Button";
@@ -93,7 +94,7 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 								justifyContent="center"
 								className="p-8"
 							>
-								<span className="text-muted">{loadingMessage}</span>
+								<Typography color="muted">{loadingMessage}</Typography>
 							</HStack>
 						</Section.Body>
 					</Section>
@@ -114,7 +115,9 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 								justifyContent="center"
 								className="p-8"
 							>
-								<p className="text-muted">{notFoundMessage}</p>
+								<Typography.Paragraph color="muted">
+									{notFoundMessage}
+								</Typography.Paragraph>
 								{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
 							</VStack>
 						</Section.Body>
@@ -150,7 +153,11 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											<div>
-												<label className="text-sm text-muted">등록일</label>
+												<label>
+													<Typography type="body-sm" color="muted">
+														등록일
+													</Typography>
+												</label>
 												<div className="mt-1">
 													<DateTimeCell value={metadata.createdAt} />
 												</div>
@@ -179,22 +186,34 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
 											<div className="rounded-lg bg-surface-secondary p-3">
-												<p className="text-xs text-muted">전체 세션</p>
-												<p className="mt-1 text-lg font-semibold">
+												<Typography.Paragraph size="xs" color="muted">
+													전체 세션
+												</Typography.Paragraph>
+												<Typography.Heading level={5} className="mt-1">
 													{totalSessions}개
-												</p>
+												</Typography.Heading>
 											</div>
 											<div className="rounded-lg bg-surface-secondary p-3">
-												<p className="text-xs text-muted">연결된 세션</p>
-												<p className="mt-1 text-lg font-semibold text-success">
+												<Typography.Paragraph size="xs" color="muted">
+													연결된 세션
+												</Typography.Paragraph>
+												<Typography.Heading
+													level={5}
+													className="mt-1 text-success"
+												>
 													{connectedSessions}개
-												</p>
+												</Typography.Heading>
 											</div>
 											<div className="rounded-lg bg-surface-secondary p-3">
-												<p className="text-xs text-muted">미연결 세션</p>
-												<p className="mt-1 text-lg font-semibold text-warning">
+												<Typography.Paragraph size="xs" color="muted">
+													미연결 세션
+												</Typography.Paragraph>
+												<Typography.Heading
+													level={5}
+													className="mt-1 text-warning"
+												>
 													{unconnectedSessions}개
-												</p>
+												</Typography.Heading>
 											</div>
 										</div>
 										<Table aria-label="세션 목록">

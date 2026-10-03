@@ -2,6 +2,7 @@
 
 import { Card } from "@heroui/react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { Typography } from "../../data-display/Typography";
 import { translateNode, useT } from "../../i18n";
 
 export interface AuthProps extends ComponentPropsWithoutRef<"div"> {
@@ -217,15 +218,16 @@ export const AuthPanelHeader = ({
 		<div className="mb-8 flex items-start gap-4">
 			{visual ? <div className="shrink-0">{visual}</div> : null}
 			<div className="min-w-0">
-				<h1
-					className={`text-2xl font-semibold tracking-tight ${titleToneClass}`}
+				<Typography.Heading
+					className={`text-2xl ${titleToneClass}`}
+					level={1}
 				>
 					{translatedTitle}
-				</h1>
+				</Typography.Heading>
 				{translatedSubtitle ? (
-					<p className="mt-2 text-sm leading-6 text-muted">
+					<Typography.Paragraph className="mt-2" color="muted" size="sm">
 						{translatedSubtitle}
-					</p>
+					</Typography.Paragraph>
 				) : null}
 			</div>
 		</div>

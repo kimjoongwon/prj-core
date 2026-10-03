@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { observable } from "mobx";
 import { ScrollView } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { Tabs } from "./index";
 
@@ -26,10 +26,10 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="block">
 				<VStack gap="block">
-					<Text className="text-lg font-extrabold text-foreground">Tabs</Text>
-					<Text className="text-sm leading-5 text-muted">
+					<Typography className="font-extrabold" type="h5">Tabs</Typography>
+					<Typography color="muted" type="body-sm">
 						예약 가능, 내 예약, 대기 목록 같은 같은 화면 내 관점을 전환합니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<Tabs
 					options={[

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
 import { Icon } from "../../icon";
-import { Text } from "../Text";
+import { Typography } from "../Typography";
 import { Avatar } from "./index";
 
 const meta = {
@@ -20,10 +20,10 @@ export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">Avatar</Text>
-				<Text className="text-sm leading-5 text-muted">
+				<Typography className="font-extrabold" type="h5">Avatar</Typography>
+				<Typography color="muted" type="body-sm">
 					사용자, 코치, 지점 이미지를 원형 또는 soft 톤으로 표시합니다.
-				</Text>
+				</Typography>
 			</View>
 			<View className="flex-row items-center gap-4 rounded-lg border border-border bg-surface p-4">
 				<Avatar alt="Hana coach" color="accent" size="lg">

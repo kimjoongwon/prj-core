@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { ListGroup } from "../../layout/ListGroup";
 import { quickActionListClassNames } from "./QuickActionList.class-names";
 import type { QuickActionListProps } from "./QuickActionList.props";
@@ -21,9 +21,9 @@ export const QuickActionList = observer(function QuickActionList({
 	if (items.length === 0) {
 		return (
 			<View {...rest} className={classNames.empty()}>
-				<Text className={classNames.emptyText()}>
+				<Typography className={classNames.emptyText()} type="body-sm">
 					사용할 수 있는 빠른 이동이 없습니다.
-				</Text>
+				</Typography>
 			</View>
 		);
 	}

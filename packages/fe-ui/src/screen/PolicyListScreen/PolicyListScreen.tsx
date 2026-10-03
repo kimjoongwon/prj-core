@@ -1,7 +1,14 @@
 "use client";
 
 import type { PolicyResponseDto } from "@cocrepo/api/core/policies";
-import { HStack, Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import {
+	HStack,
+	Screen,
+	Section,
+	SectionSurface,
+	Typography,
+	VStack,
+} from "@cocrepo/ui";
 import { Spinner, Table } from "@heroui/react";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -55,7 +62,9 @@ export const PolicyListScreen = observer(
 										className="p-8"
 									>
 										<Spinner size="sm" />
-										<span className="text-muted">정책을 불러오는 중...</span>
+										<Typography color="muted">
+											정책을 불러오는 중...
+										</Typography>
 									</HStack>
 								) : (
 									<Table aria-label="정책 목록">
@@ -77,12 +86,12 @@ export const PolicyListScreen = observer(
 																	onClickPolicyRow(String(policy.id))
 																}
 															>
-																<p className="font-semibold">
+																<Typography.Paragraph weight="semibold">
 																	{getPolicyLabel(policy)}
-																</p>
-																<p className="text-xs text-muted">
+																</Typography.Paragraph>
+																<Typography.Paragraph size="xs" color="muted">
 																	{policy.description || policy.name}
-																</p>
+																</Typography.Paragraph>
 															</button>
 														</Table.Cell>
 														<Table.Cell>
@@ -141,7 +150,9 @@ export const PolicyListScreen = observer(
 							</Section.Body>
 						</Section>
 					</SectionSurface>
-					<p className="text-xs text-muted">총 {totalCount}개 정책</p>
+					<Typography.Paragraph size="xs" color="muted">
+					총 {totalCount}개 정책
+				</Typography.Paragraph>
 				</VStack>
 			</VStack>
 		);

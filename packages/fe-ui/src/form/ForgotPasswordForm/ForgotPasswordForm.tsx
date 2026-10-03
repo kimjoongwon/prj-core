@@ -2,6 +2,7 @@
 
 import { CheckCircle, Mail } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Link, TextField } from "../../input";
@@ -46,17 +47,17 @@ export const ForgotPasswordForm = observer(
 								<div className="w-16 h-16 bg-success/20 rounded-full mx-auto mb-4 flex items-center justify-center">
 									<CheckCircle className="h-8 w-8 text-success" />
 								</div>
-								<h2 className="text-lg font-semibold mb-2">
+								<Typography.Heading className="mb-2" level={5}>
 									{t("이메일을 확인하세요")}
-								</h2>
-								<p className="text-muted text-sm mb-6">
+								</Typography.Heading>
+								<Typography className="mb-6" type="body-sm" color="muted">
 									<span className="font-medium text-foreground">
 										{state.email}
 									</span>
 									{t("으로 예약 계정 비밀번호 재설정 링크를 발송했습니다.")}
 									<br />
 									{t("이메일이 도착하지 않았다면 스팸 폴더를 확인해주세요.")}
-								</p>
+								</Typography>
 
 								<Button
 									type="submit"

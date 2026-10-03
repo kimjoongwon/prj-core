@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
 import { tv } from "tailwind-variants";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { AnimatedTabIcon } from "./index";
 
 const meta = {
@@ -52,7 +52,9 @@ export const BottomTabs: Story = {
 						size={24}
 						strokeWidth={2}
 					/>
-					<Text className={classNames.label()}>{item.label}</Text>
+					<Typography className={classNames.label()} type="body-sm">
+						{item.label}
+					</Typography>
 				</View>
 			))}
 		</View>

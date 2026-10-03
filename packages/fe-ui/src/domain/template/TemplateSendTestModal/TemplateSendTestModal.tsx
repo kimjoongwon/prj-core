@@ -4,6 +4,7 @@ import { useSendTestTemplate } from "@cocrepo/api/core/templates";
 import type { ModalState } from "@cocrepo/store";
 import { AlertCircle, CheckCircle, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../../data-display/Typography";
 import { VariableInputForm } from "../../../form/VariableInputForm";
 import { Button } from "../../../input/Button/Button";
 import { TextField } from "../../../input/TextField/TextField";
@@ -60,7 +61,9 @@ export const TemplateSendTestModal = observer(function TemplateSendTestModal({
 
 				{sendTest.variables.length > 0 ? (
 					<div className="flex flex-col gap-2">
-						<p className="text-sm font-semibold text-foreground">변수 값</p>
+						<Typography.Paragraph size="sm" weight="semibold">
+							변수 값
+						</Typography.Paragraph>
 						<VariableInputForm
 							variables={sendTest.variables}
 							values={sendTest.variableValues}
@@ -85,17 +88,25 @@ export const TemplateSendTestModal = observer(function TemplateSendTestModal({
 						<div className="flex flex-col gap-1">
 							{sendTest.result.success ? (
 								<>
-									<span className="text-sm font-medium text-success">
+									<Typography.Paragraph
+										className="text-success"
+										size="sm"
+										weight="medium"
+									>
 										발송 성공
-									</span>
-									<span className="text-xs text-muted">
+									</Typography.Paragraph>
+									<Typography.Paragraph color="muted" size="xs">
 										발송 시각: {formatTemplateSentAt(sendTest.result.sentAt)}
-									</span>
+									</Typography.Paragraph>
 								</>
 							) : (
-								<span className="text-sm font-medium text-danger">
+								<Typography.Paragraph
+									className="text-danger"
+									size="sm"
+									weight="medium"
+								>
 									발송 실패: {sendTest.result.errorMessage}
-								</span>
+								</Typography.Paragraph>
 							)}
 						</div>
 					</div>

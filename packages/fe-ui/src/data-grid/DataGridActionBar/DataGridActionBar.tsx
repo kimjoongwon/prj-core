@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
 import type { DataGridActionBarState } from "../state/DataGridActionBarState";
 
@@ -26,10 +27,14 @@ export function DataGridActionBarView({
 		<div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
 			<div className="flex items-center gap-4 rounded-full border border-border bg-overlay px-6 py-3 shadow-overlay">
 				{showCount ? (
-					<span className="text-sm font-medium text-overlay-foreground">
+					<Typography
+						className="text-overlay-foreground"
+						type="body-sm"
+						weight="medium"
+					>
 						{selectedCount}
 						{t("개 선택됨")}
-					</span>
+					</Typography>
 				) : null}
 				<div className="h-6 w-px bg-separator" />
 				<div className="flex items-center gap-2">{actions}</div>

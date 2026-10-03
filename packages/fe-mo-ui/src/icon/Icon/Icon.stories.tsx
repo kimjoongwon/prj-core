@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
 import { tv } from "tailwind-variants";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Icon, type MobileIconName, mobileIcons } from "./index";
 
 const iconNames = Object.keys(mobileIcons) as MobileIconName[];
@@ -57,9 +57,13 @@ export const GlyphGrid: Story = {
 			{iconNames.map((name) => (
 				<View className={classNames.item()} key={name}>
 					<Icon name={name} size="lg" tone="foreground" />
-					<Text className={classNames.label()} numberOfLines={1}>
+					<Typography
+						className={classNames.label()}
+						numberOfLines={1}
+						type="body-sm"
+					>
 						{name}
-					</Text>
+					</Typography>
 				</View>
 			))}
 		</ScrollView>

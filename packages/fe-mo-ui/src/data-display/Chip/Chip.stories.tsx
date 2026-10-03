@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../Text";
+import { Typography } from "../Typography";
 import { Chip } from "./index";
 
 const meta = {
@@ -41,10 +41,10 @@ export const Variants: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">Chip</Text>
-				<Text className="text-sm leading-5 text-muted">
+				<Typography className="font-extrabold" type="h5">Chip</Typography>
+				<Typography color="muted" type="body-sm">
 					상태, 레벨, 필터 토큰처럼 짧은 메타 정보를 표시합니다.
-				</Text>
+				</Typography>
 			</View>
 			<View className="flex-row flex-wrap gap-2">
 				<Chip color="accent">추천</Chip>

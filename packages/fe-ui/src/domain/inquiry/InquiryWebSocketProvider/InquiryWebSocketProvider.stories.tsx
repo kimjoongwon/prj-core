@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Typography } from "../../../data-display/Typography";
 import {
 	InquiryWebSocketProvider,
 	useInquiryWebSocket,
@@ -7,8 +8,8 @@ import {
 function ConsumerFixture() {
 	const context = useInquiryWebSocket();
 	return (
-		<div className="rounded-lg border border-border bg-surface p-4 text-sm">
-			연결 상태: {context.status}
+		<div className="rounded-lg border border-border bg-surface p-4">
+			<Typography type="body-sm">연결 상태: {context.status}</Typography>
 		</div>
 	);
 }

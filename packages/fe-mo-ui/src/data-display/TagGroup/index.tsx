@@ -10,7 +10,8 @@ import {
 	forwardRef,
 	type ReactNode,
 } from "react";
-import { getTextContent, Text } from "../Text";
+import { Typography } from "../Typography";
+import { getTextContent } from "../text-content";
 
 type HeroTagGroupProps = ComponentPropsWithoutRef<typeof HeroTagGroup>;
 type HeroTagGroupItemProps = ComponentPropsWithoutRef<typeof HeroTagGroup.Item>;
@@ -63,12 +64,18 @@ const TagGroupItem = forwardRef<
 });
 TagGroupItem.displayName = "TagGroup.Item";
 const TagGroupItemLabel = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	TagGroupItemLabelProps
 >(({ children, className, ...props }, ref) => (
-	<Text {...props} ref={ref} className={className} variant="label">
+	<Typography
+		{...props}
+		ref={ref}
+		className={className}
+		type="body-sm"
+		weight="semibold"
+	>
 		{children}
-	</Text>
+	</Typography>
 ));
 TagGroupItemLabel.displayName = "TagGroup.ItemLabel";
 export const TagGroup = Object.assign(TagGroupComponent, {

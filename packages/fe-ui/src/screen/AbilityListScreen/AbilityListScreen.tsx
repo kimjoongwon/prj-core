@@ -5,7 +5,13 @@ import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,
 } from "@cocrepo/type";
-import { DataGrid, DataGridState, Screen, SectionSurface } from "@cocrepo/ui";
+import {
+	DataGrid,
+	DataGridState,
+	Screen,
+	SectionSurface,
+	Typography,
+} from "@cocrepo/ui";
 import { Card, ListBox, Spinner } from "@heroui/react";
 import {
 	Ban,
@@ -118,12 +124,19 @@ function MetricCard({
 						</div>
 					) : null}
 					<div className="flex flex-1 flex-col">
-						<span className="text-sm text-muted">{title}</span>
-						<span className={`text-2xl font-bold ${styles.value}`}>
+						<Typography
+							type="body-sm"
+							color="muted"
+						>
+							{title}
+						</Typography>
+						<Typography.Heading level={3} className={styles.value}>
 							{typeof value === "number" ? value.toLocaleString() : value}
-						</span>
+						</Typography.Heading>
 						{description ? (
-							<span className="text-xs text-muted">{description}</span>
+							<Typography type="body-xs" color="muted">
+								{description}
+							</Typography>
 						) : null}
 					</div>
 				</HStack>
@@ -159,7 +172,9 @@ const AbilityListScreenFallback = observer(() => {
 					<Section.Body>
 						<HStack alignItems="center" justifyContent="center">
 							<Spinner size="sm" />
-							<span className="text-muted">로딩 중...</span>
+							<Typography color="muted">
+								로딩 중...
+							</Typography>
 						</HStack>
 					</Section.Body>
 				</Section>
@@ -169,7 +184,9 @@ const AbilityListScreenFallback = observer(() => {
 					<Section.Body>
 						<HStack alignItems="center" justifyContent="center">
 							<Spinner size="sm" />
-							<span className="text-muted">로딩 중...</span>
+							<Typography color="muted">
+								로딩 중...
+							</Typography>
 						</HStack>
 					</Section.Body>
 				</Section>
@@ -403,9 +420,12 @@ export const AbilityListScreen = observer(
 											</Chip>
 										) : null}
 										{!activeFilters ? (
-											<span className="text-sm text-muted">
+											<Typography
+												type="body-sm"
+												color="muted"
+											>
 												적용된 필터가 없습니다.
-											</span>
+											</Typography>
 										) : null}
 									</HStack>
 									<Button

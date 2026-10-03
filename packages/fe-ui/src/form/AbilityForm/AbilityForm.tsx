@@ -1,6 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { Select } from "../../input/Select";
 import { Switch } from "../../input/Switch";
 import { TextArea } from "../../input/TextArea";
@@ -56,7 +57,9 @@ export const AbilityForm = observer(
 		return (
 			<VStack gap="roomy">
 				<section>
-					<h2 className="mb-4 text-lg font-semibold">기본 정보</h2>
+					<Typography.Heading className="mb-4" level={5}>
+						기본 정보
+					</Typography.Heading>
 					<div className="grid grid-cols-1 gap-4">
 						<TextField
 							label="권한 이름"
@@ -82,7 +85,9 @@ export const AbilityForm = observer(
 					</div>
 				</section>
 				<section>
-					<h2 className="mb-4 text-lg font-semibold">CASL 정보</h2>
+					<Typography.Heading className="mb-4" level={5}>
+						CASL 정보
+					</Typography.Heading>
 					<div className="grid grid-cols-1 gap-4">
 						<Select
 							label="Subject"
@@ -124,10 +129,10 @@ export const AbilityForm = observer(
 						/>
 						<div className="flex items-center justify-between rounded-lg border border-border p-4">
 							<div>
-								<p className="font-medium">거부 권한 (cannot)</p>
-								<p className="text-sm text-muted">
+								<Typography weight="medium">거부 권한 (cannot)</Typography>
+								<Typography type="body-sm" color="muted">
 									활성화 시 권한을 거부합니다.
-								</p>
+								</Typography>
 							</div>
 							<Switch state={state} path="inverted" isDisabled={readOnly} />
 						</div>

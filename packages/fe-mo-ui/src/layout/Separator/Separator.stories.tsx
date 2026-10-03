@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Separator } from "./index";
 
 const meta = {
@@ -35,21 +35,21 @@ export const Examples: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					Separator
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					관련 정보 사이에 낮은 강도의 구분선을 넣습니다.
-				</Text>
+				</Typography>
 			</View>
 			<View className="gap-3 rounded-lg border border-border bg-surface p-4">
-				<Text className="text-sm font-bold text-foreground">예약 정보</Text>
+				<Typography type="body-sm" weight="bold">예약 정보</Typography>
 				<Separator />
-				<Text className="text-sm leading-5 text-muted">5월 23일 09:30</Text>
+				<Typography color="muted" type="body-sm">5월 23일 09:30</Typography>
 				<View className="h-8 flex-row items-center gap-3">
-					<Text className="text-sm text-foreground">Studio A</Text>
+					<Typography type="body-sm">Studio A</Typography>
 					<Separator orientation="vertical" />
-					<Text className="text-sm text-foreground">Hana coach</Text>
+					<Typography type="body-sm">Hana coach</Typography>
 				</View>
 				<Separator variant="thick" />
 			</View>

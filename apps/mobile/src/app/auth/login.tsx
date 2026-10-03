@@ -5,7 +5,7 @@ import {
 	LinkButton,
 	ScreenFrame,
 	Spinner,
-	Text,
+	Typography,
 	VStack,
 } from "@cocrepo/mo-ui";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -87,21 +87,30 @@ const AuthLoginRoute = observer(() => {
 		>
 			<VStack className={classNames.centerView()} justifyContent="center">
 				<VStack className={classNames.header()} gap="block">
-					<Text tone="accent" variant="eyebrow" weight="extrabold">
+					<Typography
+						className="font-extrabold uppercase tracking-wide text-accent"
+						type="body-xs"
+					>
 						PLATE
-					</Text>
-					<Text className={classNames.title()}>로그인</Text>
-					<Text tone="muted" variant="body">
+					</Typography>
+					<Typography className={classNames.title()} type="body-sm">
+						로그인
+					</Typography>
+					<Typography color="muted" type="body-sm">
 						로그인은 IDP(onjitda)를 통해 진행됩니다. 시트에서 계정에
 						로그인하면 앱으로 자동으로 돌아옵니다.
-					</Text>
+					</Typography>
 				</VStack>
 
 				<VStack gap="section">
 					{errorMessage ? (
-						<Text accessibilityRole="alert" className={classNames.errorText()}>
+						<Typography
+							accessibilityRole="alert"
+							className={classNames.errorText()}
+							type="body-sm"
+						>
 							{errorMessage}
-						</Text>
+						</Typography>
 					) : null}
 
 					<Button
@@ -117,9 +126,13 @@ const AuthLoginRoute = observer(() => {
 								justifyContent="center"
 							>
 								<Spinner color="default" size="sm" />
-								<Text className="text-accent-foreground" variant="label">
+								<Typography
+									className="text-accent-foreground"
+									type="body-sm"
+									weight="semibold"
+								>
 									로그인 중
-								</Text>
+								</Typography>
 							</HStack>
 						) : (
 							<HStack
@@ -128,9 +141,13 @@ const AuthLoginRoute = observer(() => {
 								justifyContent="center"
 							>
 								<Icon name="logIn" size="sm" tone="accentForeground" />
-								<Text className="text-accent-foreground" variant="label">
+								<Typography
+									className="text-accent-foreground"
+									type="body-sm"
+									weight="semibold"
+								>
 									IDP로 로그인
-								</Text>
+								</Typography>
 							</HStack>
 						)}
 					</Button>
@@ -145,18 +162,28 @@ const AuthLoginRoute = observer(() => {
 							accessibilityLabel="open-idp-sign-up"
 							onPress={() => openOidcAuthPage("/auth/sign-up")}
 						>
-							<Text className="text-accent" variant="label">
+							<Typography
+								className="text-accent"
+								type="body-sm"
+								weight="semibold"
+							>
 								회원가입
-							</Text>
+							</Typography>
 						</LinkButton>
-						<Text className={classNames.auxLinkDivider()}>·</Text>
+						<Typography className={classNames.auxLinkDivider()} type="body-sm">
+							·
+						</Typography>
 						<LinkButton
 							accessibilityLabel="open-idp-forgot-password"
 							onPress={() => openOidcAuthPage("/auth/forgot-password")}
 						>
-							<Text className="text-accent" variant="label">
+							<Typography
+								className="text-accent"
+								type="body-sm"
+								weight="semibold"
+							>
 								비밀번호 찾기
-							</Text>
+							</Typography>
 						</LinkButton>
 					</HStack>
 				</VStack>

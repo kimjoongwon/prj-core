@@ -1,7 +1,8 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { TextField } from "../../input/TextField/TextField";
+import { Typography } from "../../data-display/Typography";
+import { TextField } from "../../input/TextField";
 import { VStack } from "../../rhythm";
 
 /** 템플릿 변수 정보입니다. */
@@ -42,7 +43,11 @@ export interface VariableInputFormProps {
 export const VariableInputForm = observer(
 	({ variables, values, onChange }: VariableInputFormProps) => {
 		if (variables.length === 0) {
-			return <p className="text-sm text-muted">정의된 변수가 없습니다.</p>;
+			return (
+				<Typography type="body-sm" color="muted">
+					정의된 변수가 없습니다.
+				</Typography>
+			);
 		}
 
 		const handleValueChange = (

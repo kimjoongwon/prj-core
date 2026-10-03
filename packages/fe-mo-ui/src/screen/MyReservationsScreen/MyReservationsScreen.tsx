@@ -3,7 +3,7 @@ import { type ReactNode } from "react";
 import { ScrollView, View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { Chip, chipClassNames } from "../../data-display/Chip";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
 import { ScreenFrame } from "../../layout/ScreenFrame";
@@ -83,35 +83,51 @@ export const MyReservationsScreen = observer(
 						<View className={classNames.reservationHeader()} key="header">
 							<HStack alignItems="center" gap="dense" key="date">
 								<Icon name="calendarCheck" size="xs" tone="success" />
-								<Text className={classNames.reservationDate()}>
+								<Typography
+									className={classNames.reservationDate()}
+									type="body-sm"
+								>
 									{item.dateLabel}
-								</Text>
+								</Typography>
 							</HStack>
 							<Chip color="warning" key="status" size="sm" variant="soft">
 								<Icon name="badgeCheck" size="xs" tone="warning" />
-								<Text
+								<Typography
 									className={chipClassNames.label({
 										color: "warning",
 										size: "sm",
 										variant: "soft",
 									})}
+									type="body-sm"
 								>
 									{item.statusLabel}
-								</Text>
+								</Typography>
 							</Chip>
 						</View>
-						<Text className={classNames.reservationTitle()} key="title">
+						<Typography
+							className={classNames.reservationTitle()}
+							key="title"
+							type="body-sm"
+						>
 							{item.title}
-						</Text>
+						</Typography>
 						{item.metaLabel ? (
-							<Text className={classNames.reservationMeta()} key="meta">
+							<Typography
+								className={classNames.reservationMeta()}
+								key="meta"
+								type="body-sm"
+							>
 								{item.metaLabel}
-							</Text>
+							</Typography>
 						) : null}
 						{item.memo ? (
-							<Text className={classNames.sectionDescription()} key="memo">
+							<Typography
+								className={classNames.sectionDescription()}
+								key="memo"
+								type="body-sm"
+							>
 								{item.memo}
-							</Text>
+							</Typography>
 						) : null}
 					</VStack>,
 				);
@@ -134,16 +150,21 @@ export const MyReservationsScreen = observer(
 				>
 					<VStack gap="section">
 						<VStack gap="dense" key="header">
-							<Text className={classNames.sectionTitle()} key="title">
+							<Typography
+								className={classNames.sectionTitle()}
+								key="title"
+								type="body-sm"
+							>
 								내 예약
-							</Text>
-							<Text
+							</Typography>
+							<Typography
 								className={classNames.sectionDescription()}
 								key="description"
+								type="body-sm"
 							>
 								예약 확정과 대기 상태를 실제 Reservation API 기준으로
 								확인합니다.
-							</Text>
+							</Typography>
 						</VStack>
 						{reservationsContent}
 					</VStack>

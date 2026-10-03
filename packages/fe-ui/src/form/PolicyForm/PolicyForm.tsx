@@ -1,6 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
@@ -51,7 +52,9 @@ export const PolicyForm = observer(
 		return (
 			<VStack gap="roomy">
 				<section>
-					<h2 className="mb-4 text-lg font-semibold">기본 정보</h2>
+					<Typography.Heading className="mb-4" level={5}>
+						기본 정보
+					</Typography.Heading>
 					<div className="grid gap-4 md:grid-cols-2">
 						<TextField
 							label="정책 이름"
@@ -84,10 +87,10 @@ export const PolicyForm = observer(
 				</section>
 				<section>
 					<div className="mb-4">
-						<h2 className="text-lg font-semibold">Ability 선택</h2>
-						<p className="text-sm text-muted">
+						<Typography.Heading level={5}>Ability 선택</Typography.Heading>
+						<Typography type="body-sm" color="muted">
 							정책에 포함할 Ability를 선택합니다.
-						</p>
+						</Typography>
 					</div>
 					<div className="grid gap-3">
 						{abilities.length > 0 ? (
@@ -104,10 +107,16 @@ export const PolicyForm = observer(
 											gap="section"
 										>
 											<div>
-												<p className="font-semibold">{ability.label}</p>
-												<p className="mt-1 text-sm text-muted">
+												<Typography weight="semibold">
+													{ability.label}
+												</Typography>
+												<Typography
+													className="mt-1"
+													type="body-sm"
+													color="muted"
+												>
 													{ability.description || "설명 없음"}
-												</p>
+												</Typography>
 											</div>
 											<Checkbox
 												isSelected={isSelected}
@@ -121,8 +130,10 @@ export const PolicyForm = observer(
 								);
 							})
 						) : (
-							<div className="rounded-xl border border-border bg-background p-6 text-center text-sm text-muted">
-								선택 가능한 Ability가 없습니다.
+							<div className="rounded-xl border border-border bg-background p-6">
+								<Typography align="center" type="body-sm" color="muted">
+									선택 가능한 Ability가 없습니다.
+								</Typography>
 							</div>
 						)}
 					</div>

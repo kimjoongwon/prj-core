@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { tv } from "tailwind-variants";
 import { Chip, chipClassNames, type ChipProps } from "../../data-display/Chip";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Icon, type IconTone, type MobileIconName } from "../../icon";
 export type BookingAvailabilityStatus =
 	| "AVAILABLE"
@@ -97,7 +97,7 @@ const OptionalText = ({
 	if (value === undefined || value === null || value === false) {
 		return null;
 	}
-	return <Text className={className}>{value}</Text>;
+	return <Typography className={className} type="body-sm">{value}</Typography>;
 };
 const getPrimitiveNodeKey = (node: ReactNode) => {
 	if (typeof node === "string" || typeof node === "number") {
@@ -135,13 +135,17 @@ const CapacityText = ({ item }: { item: BookingClassFeedItem }) => {
 	return (
 		<View className={classNames.capacityRow()}>
 			<Icon name="users" size="xs" tone="muted" />
-			<Text className={classNames.capacityText()}>{parts.join(" · ")}</Text>
+			<Typography className={classNames.capacityText()} type="body-sm">
+				{parts.join(" · ")}
+			</Typography>
 		</View>
 	);
 };
 const ExerciseTag = ({ tag }: { tag: ReactNode }) => (
 	<View className={classNames.tag()}>
-		<Text className={classNames.tagText()}>{tag}</Text>
+		<Typography className={classNames.tagText()} type="body-sm">
+			{tag}
+		</Typography>
 	</View>
 );
 const ExerciseTags = ({ item }: { item: BookingClassFeedItem }) => {
@@ -192,9 +196,9 @@ const BookingMeta = ({ item }: { item: BookingClassFeedItem }) => {
 	return (
 		<View className={classNames.meta()}>
 			{meta.map(({ key, value }) => (
-				<Text key={key} className={classNames.metaText()}>
+				<Typography key={key} className={classNames.metaText()} type="body-sm">
 					{value}
-				</Text>
+				</Typography>
 			))}
 		</View>
 	);
@@ -206,7 +210,9 @@ const TimelineText = ({ value }: { value?: ReactNode }) => {
 	return (
 		<View className={classNames.timelineRow()}>
 			<Icon name="mapPin" size="xs" tone="muted" />
-			<Text className={classNames.timeline()}>{value}</Text>
+			<Typography className={classNames.timeline()} type="body-sm">
+				{value}
+			</Typography>
 		</View>
 	);
 };
@@ -230,40 +236,49 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
 	});
 	return (
 		<View {...rest} className={slotClassNames.root()} style={style}>
-			<View className={slotClassNames.header()}>
-				<View className={slotClassNames.timeBlock()} key="time">
-					<Icon name="clock" size="sm" tone="muted" />
-					<Text className={slotClassNames.time()} key="time-label">
-						{item.timeLabel}
-					</Text>
-				</View>
-				<View className={slotClassNames.titleBlock()} key="titles">
-					<View className={slotClassNames.titleRow()} key="title-row">
-						<Text className={slotClassNames.program()} key="program">
-							{item.programName}
-						</Text>
-						<Chip
-							color={STATUS_CHIP_COLORS[item.status]}
-							key="status"
-							size="sm"
-							variant="soft"
+				<View className={slotClassNames.header()}>
+					<View className={slotClassNames.timeBlock()} key="time">
+						<Icon name="clock" size="sm" tone="muted" />
+						<Typography
+							className={slotClassNames.time()}
+							key="time-label"
+							type="body-sm"
 						>
-							<Icon
-								name={STATUS_ICONS[item.status]}
-								size="xs"
-								tone={STATUS_ICON_TONES[item.status]}
-							/>
-							<Text
-								className={chipClassNames.label({
-									color: STATUS_CHIP_COLORS[item.status],
-									size: "sm",
-									variant: "soft",
-								})}
-							>
-								{item.statusLabel ?? STATUS_LABELS[item.status]}
-							</Text>
-						</Chip>
+							{item.timeLabel}
+						</Typography>
 					</View>
+					<View className={slotClassNames.titleBlock()} key="titles">
+						<View className={slotClassNames.titleRow()} key="title-row">
+							<Typography
+								className={slotClassNames.program()}
+								key="program"
+								type="body-sm"
+							>
+								{item.programName}
+							</Typography>
+							<Chip
+								color={STATUS_CHIP_COLORS[item.status]}
+								key="status"
+								size="sm"
+								variant="soft"
+							>
+								<Icon
+									name={STATUS_ICONS[item.status]}
+									size="xs"
+									tone={STATUS_ICON_TONES[item.status]}
+								/>
+								<Typography
+									className={chipClassNames.label({
+										color: STATUS_CHIP_COLORS[item.status],
+										size: "sm",
+										variant: "soft",
+									})}
+									type="body-sm"
+								>
+									{item.statusLabel ?? STATUS_LABELS[item.status]}
+								</Typography>
+							</Chip>
+						</View>
 					<OptionalText
 						className={slotClassNames.session()}
 						value={item.sessionName}
@@ -275,9 +290,9 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
 			<CapacityText item={item} />
 			<ExerciseTags item={item} />
 			{item.myReservationStatus ? (
-				<Text className={slotClassNames.myStatus()}>
+				<Typography className={slotClassNames.myStatus()} type="body-sm">
 					{item.myReservationStatus}
-				</Text>
+				</Typography>
 			) : null}
 			<Pressable
 				accessibilityLabel={
@@ -293,7 +308,9 @@ const BookingClassCardComponent = observer((props: BookingClassCardProps) => {
 				}
 				className={slotClassNames.action()}
 			>
-				<Text className={slotClassNames.actionText()}>{ctaLabel}</Text>
+				<Typography className={slotClassNames.actionText()} type="body-sm">
+					{ctaLabel}
+				</Typography>
 				<Icon
 					name="arrowRight"
 					size="sm"

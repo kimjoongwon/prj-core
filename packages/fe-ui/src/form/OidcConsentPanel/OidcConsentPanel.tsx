@@ -8,6 +8,7 @@ import {
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import { ShieldCheck } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Typography } from "../../data-display/Typography";
 import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button } from "../../input";
@@ -59,8 +60,11 @@ export const OidcConsentPanel = observer(
 
 				{/* 요청된 권한 목록 */}
 				<div className="mb-6 rounded-xl border border-border bg-surface-secondary p-4">
-					<h3 className="mb-3 text-sm font-medium text-foreground">
-						{t("요청된 권한")}
+					{/* 권한 목록의 시맨틱 헤딩은 h3 요소를 유지하고 텍스트는 Typography로 표현한다. */}
+					<h3 className="mb-3">
+						<Typography type="body-sm" weight="medium">
+							{t("요청된 권한")}
+						</Typography>
 					</h3>
 					{/* raw space-y 예외: 시맨틱 ul/li 목록 구조를 유지해야 해서 VStack(div)으로 대체하지 않음 */}
 					<ul className="space-y-3">
@@ -81,9 +85,13 @@ export const OidcConsentPanel = observer(
 										/>
 									</svg>
 								</div>
-								<p className="min-w-0 break-words text-foreground font-medium">
+								<Typography
+									className="min-w-0 break-words"
+									type="body-sm"
+									weight="medium"
+								>
 									{SCOPE_LABELS[scope] ? t(SCOPE_LABELS[scope]) : scope}
-								</p>
+								</Typography>
 							</li>
 						))}
 					</ul>
@@ -113,11 +121,16 @@ export const OidcConsentPanel = observer(
 				</HStack>
 
 				{/* 개인정보 안내 */}
-				<p className="text-center text-muted text-xs mt-6">
+				<Typography
+					className="mt-6"
+					align="center"
+					type="body-xs"
+					color="muted"
+				>
 					{t("허용하면 서비스 이용에 필요한 정보가")}{" "}
 					{client?.name || t("애플리케이션")}
 					{t("과(와) 공유됩니다.")}
-				</p>
+				</Typography>
 			</Auth.Panel>
 		);
 	},

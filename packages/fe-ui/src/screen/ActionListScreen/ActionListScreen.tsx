@@ -15,6 +15,7 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
+	Typography,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
@@ -247,10 +248,12 @@ const ActionContextItem = observer(
 			<HStack alignItems="start" className="border-border/80 p-4 md:border-b-0">
 				<span className="rounded-lg bg-accent/10 p-2 text-accent">{icon}</span>
 				<VStack>
-					<span className="text-sm font-semibold text-foreground">
+					<Typography type="body-sm" weight="semibold">
 						{t(title)}
-					</span>
-					<span className="text-sm text-muted">{t(description)}</span>
+					</Typography>
+					<Typography type="body-sm" color="muted">
+						{t(description)}
+					</Typography>
 				</VStack>
 			</HStack>
 		);
@@ -285,12 +288,12 @@ const ActionGroupFilterTabs = observer(
 					</Tabs.List>
 				</Tabs>
 				<div className="rounded-lg border border-border bg-surface-secondary p-4">
-					<div className="text-sm font-semibold text-foreground">
+					<Typography type="body-sm" weight="semibold">
 						{t(selectedFilter.label)} {t("액션")}
-					</div>
-					<p className="mt-1 text-sm text-muted">
+					</Typography>
+					<Typography.Paragraph size="sm" color="muted" className="mt-1">
 						{t(selectedFilter.description)}
-					</p>
+					</Typography.Paragraph>
 				</div>
 			</VStack>
 		);

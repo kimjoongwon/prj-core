@@ -1,13 +1,32 @@
 import { render, screen } from "@testing-library/react-native";
-import { Text } from "../Text";
+import type { ReactNode } from "react";
+import { DesignSystemProvider } from "../../design-system/provider";
+import { Typography } from "../Typography";
 import { SummaryList } from "./index";
+
+const renderWithDesignSystem = (children: ReactNode) =>
+	render(
+		<DesignSystemProvider
+			config={{
+				animation: "disable-all",
+				devInfo: {
+					stylingPrinciples: false,
+				},
+				toast: false,
+			}}
+		>
+			{children}
+		</DesignSystemProvider>,
+	);
 
 describe("SummaryList", () => {
 	it("선택 요약 값과 비어 있는 필드 placeholder를 함께 렌더링해야 한다", () => {
 		// Given
-		render(
+		renderWithDesignSystem(
 			<SummaryList
-				footer={<Text>메모는 선택 사항입니다.</Text>}
+				footer={
+					<Typography type="body-sm">메모는 선택 사항입니다.</Typography>
+				}
 				items={[
 					{
 						label: "예약 대상",
@@ -33,7 +52,7 @@ describe("SummaryList", () => {
 
 	it("값이 0인 요약 항목은 선택된 값으로 처리해야 한다", () => {
 		// Given
-		render(
+		renderWithDesignSystem(
 			<SummaryList
 				items={[
 					{

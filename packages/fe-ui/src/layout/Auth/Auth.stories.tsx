@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Typography } from "../../data-display/Typography";
 import { Auth } from "./Auth";
 
 const meta = {
@@ -17,7 +18,7 @@ export const Centered: Story = {
 			<Auth.Body>
 				<Auth.Main>
 					<div className="rounded-2xl border border-border bg-surface p-6">
-						Auth form area
+						<Typography>Auth form area</Typography>
 					</div>
 				</Auth.Main>
 			</Auth.Body>
@@ -30,13 +31,15 @@ export const Split: Story = {
 		<Auth>
 			<Auth.Body>
 				<Auth.Aside>
-					<div className="flex h-full items-center justify-center bg-surface-secondary p-10 text-xl font-semibold">
-						Brand story
+					<div className="flex h-full items-center justify-center bg-surface-secondary p-10">
+						<Typography className="text-xl" weight="semibold">
+							Brand story
+						</Typography>
 					</div>
 				</Auth.Aside>
 				<Auth.Main>
 					<div className="rounded-2xl border border-border bg-surface p-6">
-						Login panel
+						<Typography>Login panel</Typography>
 					</div>
 				</Auth.Main>
 			</Auth.Body>

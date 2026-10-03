@@ -1,6 +1,13 @@
 "use client";
 
-import { HStack, Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import {
+	HStack,
+	Screen,
+	Section,
+	SectionSurface,
+	Typography,
+	VStack,
+} from "@cocrepo/ui";
 import {
 	Activity,
 	CheckCircle,
@@ -140,12 +147,15 @@ export const IdentityDashboardScreen = observer(
 														{card.icon}
 													</div>
 													<div>
-														<p className="text-sm text-muted">
+														<Typography.Paragraph size="sm" color="muted">
 															{t(card.label)}
-														</p>
-														<p className={`text-2xl font-bold ${card.color}`}>
+														</Typography.Paragraph>
+														<Typography.Heading
+															level={3}
+															className={card.color}
+														>
 															{stats?.[card.key] ?? 0}
-														</p>
+														</Typography.Heading>
 													</div>
 												</div>
 											))}
@@ -156,23 +166,32 @@ export const IdentityDashboardScreen = observer(
 									<Section.Header title="최근 7일 로그인 추이" />
 									<Section.Body>
 										{trendItems.length === 0 ? (
-											<p className="py-8 text-center text-muted">
+											<Typography.Paragraph
+												color="muted"
+												className="py-8 text-center"
+											>
 												{t("로그인 추이 데이터가 없습니다.")}
-											</p>
+											</Typography.Paragraph>
 										) : (
 											<VStack gap="section">
 												<HStack alignItems="center" gap="section">
 													<HStack alignItems="center" gap="dense">
 														<div className="h-3 w-3 rounded-sm bg-success" />
-														<span className="text-sm text-muted">
+														<Typography
+															type="body-sm"
+															color="muted"
+														>
 															{t("성공")}
-														</span>
+														</Typography>
 													</HStack>
 													<HStack alignItems="center" gap="dense">
 														<div className="h-3 w-3 rounded-sm bg-danger" />
-														<span className="text-sm text-muted">
+														<Typography
+															type="body-sm"
+															color="muted"
+														>
 															{t("실패")}
-														</span>
+														</Typography>
 													</HStack>
 												</HStack>
 												<HStack alignItems="end" gap="block" className="h-50">
@@ -195,9 +214,13 @@ export const IdentityDashboardScreen = observer(
 																		height: "100%",
 																	}}
 																>
-																	<span className="mb-1 text-xs text-muted">
+																	<Typography
+																		type="body-xs"
+																		color="muted"
+																		className="mb-1"
+																	>
 																		{item.successCount}
-																	</span>
+																	</Typography>
 																	<div
 																		className="w-6 rounded-t-md bg-success transition-all md:w-8"
 																		style={{
@@ -214,9 +237,13 @@ export const IdentityDashboardScreen = observer(
 																		height: "100%",
 																	}}
 																>
-																	<span className="mb-1 text-xs text-muted">
+																	<Typography
+																		type="body-xs"
+																		color="muted"
+																		className="mb-1"
+																	>
 																		{item.failureCount}
-																	</span>
+																	</Typography>
 																	<div
 																		className="w-6 rounded-t-md bg-danger transition-all md:w-8"
 																		style={{
@@ -228,9 +255,13 @@ export const IdentityDashboardScreen = observer(
 																	/>
 																</div>
 															</HStack>
-															<span className="mt-1 text-xs text-muted">
+															<Typography
+																type="body-xs"
+																color="muted"
+																className="mt-1"
+															>
 																{formatShortDate(item.date)}
-															</span>
+															</Typography>
 														</VStack>
 													))}
 												</HStack>

@@ -3,7 +3,7 @@ import { type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { HStack, VStack } from "../../rhythm";
-import { Text } from "../Text";
+import { Typography } from "../Typography";
 export type SummaryListItemState = "complete" | "missing" | "warning";
 export interface SummaryListItem {
 	helperText?: ReactNode;
@@ -29,7 +29,7 @@ const OptionalText = ({
 	if (node === undefined || node === null || node === false) {
 		return null;
 	}
-	return <Text className={className}>{node}</Text>;
+	return <Typography className={className} type="body-sm">{node}</Typography>;
 };
 const getDisplayedValue = (item: SummaryListItem) =>
 	item.value ?? item.placeholder ?? "Not selected";
@@ -67,17 +67,18 @@ const SummaryItem = ({ item }: { item: SummaryListItem }) => {
 				gap="block"
 				justifyContent="between"
 			>
-				<Text className={classNames.itemLabel()} key="label">
+				<Typography className={classNames.itemLabel()} key="label" type="body-sm">
 					{item.label}
-				</Text>
-				<Text
+				</Typography>
+				<Typography
 					className={summaryListClassNames({
 						state,
 					}).itemValue()}
 					key="value"
+					type="body-sm"
 				>
 					{getDisplayedValue(item)}
-				</Text>
+				</Typography>
 			</HStack>
 			<OptionalText
 				className={classNames.helperText()}

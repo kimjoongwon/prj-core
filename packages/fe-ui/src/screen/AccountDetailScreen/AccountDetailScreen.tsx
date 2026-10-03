@@ -1,6 +1,13 @@
 "use client";
 
-import { HStack, Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import {
+	HStack,
+	Screen,
+	Section,
+	SectionSurface,
+	Typography,
+	VStack,
+} from "@cocrepo/ui";
 import { ListBox, Separator } from "@heroui/react";
 import {
 	ArrowLeft,
@@ -127,7 +134,7 @@ export const AccountDetailScreen = observer(
 						<Section>
 							<Section.Body>
 								<div className="flex items-center justify-center p-8">
-									<span className="text-muted">로딩 중...</span>
+									<Typography color="muted">로딩 중...</Typography>
 								</div>
 							</Section.Body>
 						</Section>
@@ -153,7 +160,9 @@ export const AccountDetailScreen = observer(
 									justifyContent="center"
 									className="p-8"
 								>
-									<p className="text-muted">계정을 찾을 수 없습니다.</p>
+									<Typography.Paragraph color="muted">
+										계정을 찾을 수 없습니다.
+									</Typography.Paragraph>
 									<Button variant="tertiary" onPress={onClickBackButton}>
 										목록으로
 									</Button>
@@ -188,15 +197,35 @@ export const AccountDetailScreen = observer(
 									<Section.Body>
 										<dl className="grid grid-cols-1 gap-6 md:grid-cols-2">
 											<div>
-												<dt className="text-sm text-muted mb-1">이름</dt>
-												<dd className="font-medium">{account.name}</dd>
+												<dt className="mb-1">
+													<Typography type="body-sm" color="muted">
+														이름
+													</Typography>
+												</dt>
+												<dd>
+													<Typography weight="medium">
+														{account.name}
+													</Typography>
+												</dd>
 											</div>
 											<div>
-												<dt className="text-sm text-muted mb-1">이메일</dt>
-												<dd className="font-medium">{account.email}</dd>
+												<dt className="mb-1">
+													<Typography type="body-sm" color="muted">
+														이메일
+													</Typography>
+												</dt>
+												<dd>
+													<Typography weight="medium">
+														{account.email}
+													</Typography>
+												</dd>
 											</div>
 											<div>
-												<dt className="text-sm text-muted mb-1">활성 상태</dt>
+												<dt className="mb-1">
+													<Typography type="body-sm" color="muted">
+														활성 상태
+													</Typography>
+												</dt>
 												<dd>
 													<HStack alignItems="center">
 														<Switch
@@ -216,7 +245,11 @@ export const AccountDetailScreen = observer(
 												</dd>
 											</div>
 											<div>
-												<dt className="text-sm text-muted mb-1">잠금 상태</dt>
+												<dt className="mb-1">
+													<Typography type="body-sm" color="muted">
+														잠금 상태
+													</Typography>
+												</dt>
 												<dd>
 													<HStack alignItems="center">
 														<Chip
@@ -250,23 +283,29 @@ export const AccountDetailScreen = observer(
 													</HStack>
 													{account.lockedUntil &&
 														!account.isPermanentlyLocked && (
-															<p className="text-xs text-muted mt-1">
+															<Typography.Paragraph
+																size="xs"
+																color="muted"
+																className="mt-1"
+															>
 																해제 예정: {account.lockedUntil}
-															</p>
+															</Typography.Paragraph>
 														)}
 												</dd>
 											</div>
 											<div>
-												<dt className="text-sm text-muted mb-1">
-													로그인 실패 횟수
+												<dt className="mb-1">
+													<Typography type="body-sm" color="muted">
+														로그인 실패 횟수
+													</Typography>
 												</dt>
 												<dd>
 													<HStack alignItems="center">
-														<span
-															className={`font-mono text-lg ${account.failedLoginAttempts > 0 ? "text-warning" : "text-muted"}`}
+														<Typography.Code
+															className={`text-lg ${account.failedLoginAttempts > 0 ? "text-warning" : "text-muted"}`}
 														>
 															{account.failedLoginAttempts}
-														</span>
+														</Typography.Code>
 														{account.failedLoginAttempts > 0 && (
 															<Button
 																size="sm"
@@ -282,28 +321,40 @@ export const AccountDetailScreen = observer(
 												</dd>
 											</div>
 											<div>
-												<dt className="text-sm text-muted mb-1">
-													마지막 로그인 시간
+												<dt className="mb-1">
+													<Typography type="body-sm" color="muted">
+														마지막 로그인 시간
+													</Typography>
 												</dt>
 												<dd>
 													{account.lastLoginAt ? (
 														account.lastLoginAt
 													) : (
-														<span className="text-muted">-</span>
+														<Typography color="muted">-</Typography>
 													)}
 												</dd>
 											</div>
 											<div>
-												<dt className="text-sm text-muted mb-1">
-													마지막 로그인 IP
+												<dt className="mb-1">
+													<Typography type="body-sm" color="muted">
+														마지막 로그인 IP
+													</Typography>
 												</dt>
-												<dd className="font-mono text-sm">
-													{account.lastLoginIp ?? "-"}
+												<dd>
+													<Typography.Code>
+														{account.lastLoginIp ?? "-"}
+													</Typography.Code>
 												</dd>
 											</div>
 											<div>
-												<dt className="text-sm text-muted mb-1">가입일</dt>
-												<dd>{account.createdAt}</dd>
+												<dt className="mb-1">
+													<Typography type="body-sm" color="muted">
+														가입일
+													</Typography>
+												</dt>
+												<dd>
+													<Typography>{account.createdAt}</Typography>
+												</dd>
 											</div>
 										</dl>
 									</Section.Body>
@@ -356,28 +407,36 @@ export const AccountDetailScreen = observer(
 														className="grid gap-3 py-3 md:grid-cols-[minmax(0,1fr)_minmax(0,0.7fr)_auto]"
 													>
 														<div className="min-w-0">
-															<p className="truncate font-medium">
+															<Typography.Paragraph weight="medium" truncate>
 																{grant.spaceName}
-															</p>
-															<p className="truncate text-xs text-muted">
+															</Typography.Paragraph>
+															<Typography.Paragraph
+																size="xs"
+																color="muted"
+																truncate
+															>
 																{grant.spaceLabel ?? grant.spaceId}
-															</p>
+															</Typography.Paragraph>
 														</div>
 														<div className="flex items-center">
 															<Chip size="sm" variant="soft" color="accent">
 																{grant.roleDisplayName ?? grant.roleName}
 															</Chip>
 														</div>
-														<div className="text-sm text-muted">
+														<Typography.Paragraph size="sm" color="muted">
 															{grant.grantedAt}
-														</div>
+														</Typography.Paragraph>
 													</div>
 												))}
 											</div>
 										) : (
-											<p className="py-3 text-sm text-muted">
+											<Typography.Paragraph
+												size="sm"
+												color="muted"
+												className="py-3"
+											>
 												부여된 접근 권한이 없습니다.
-											</p>
+											</Typography.Paragraph>
 										)}
 										<Separator className="my-4" />
 										<div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end">
@@ -398,11 +457,11 @@ export const AccountDetailScreen = observer(
 														textValue={option.label}
 													>
 														<div className="flex flex-col">
-															<span>{option.label}</span>
+															<Typography>{option.label}</Typography>
 															{option.description ? (
-																<span className="text-xs text-muted">
+																<Typography type="body-xs" color="muted">
 																	{option.description}
-																</span>
+																</Typography>
 															) : null}
 														</div>
 													</ListBox.Item>
@@ -425,11 +484,11 @@ export const AccountDetailScreen = observer(
 														textValue={option.label}
 													>
 														<div className="flex flex-col">
-															<span>{option.label}</span>
+															<Typography>{option.label}</Typography>
 															{option.description ? (
-																<span className="text-xs text-muted">
+																<Typography type="body-xs" color="muted">
 																	{option.description}
-																</span>
+																</Typography>
 															) : null}
 														</div>
 													</ListBox.Item>

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { tv } from "tailwind-variants";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Icon } from "../../icon";
 import { HStack } from "../../rhythm";
 
@@ -48,9 +48,9 @@ export function CustomHeader({
 					) : null}
 				</View>
 				<View className={classNames.titleBlock()}>
-					<Text className={classNames.title()} numberOfLines={1}>
+					<Typography className={classNames.title()} numberOfLines={1} type="body-sm">
 						{title}
-					</Text>
+					</Typography>
 					{shouldUseSubtitleButton ? (
 						<Pressable
 							accessibilityLabel={
@@ -61,14 +61,22 @@ export function CustomHeader({
 							hitSlop={SUBTITLE_BUTTON_HIT_SLOP}
 							onPress={onPressSubtitle}
 						>
-							<Text className={classNames.subtitle()} numberOfLines={1}>
+							<Typography
+								className={classNames.subtitle()}
+								numberOfLines={1}
+								type="body-sm"
+							>
 								{subtitle}
-							</Text>
+							</Typography>
 						</Pressable>
 					) : subtitle ? (
-						<Text className={classNames.subtitle()} numberOfLines={1}>
+						<Typography
+							className={classNames.subtitle()}
+							numberOfLines={1}
+							type="body-sm"
+						>
 							{subtitle}
-						</Text>
+						</Typography>
 					) : null}
 				</View>
 				<View className={classNames.side()}>{right}</View>

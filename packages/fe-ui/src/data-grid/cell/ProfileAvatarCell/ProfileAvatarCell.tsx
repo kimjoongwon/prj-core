@@ -1,5 +1,6 @@
 import { Avatar } from "@heroui/react";
 import type { ReactNode } from "react";
+import { Typography } from "../../../data-display/Typography";
 
 export interface ProfileAvatarCellProps {
 	/** 이름 */
@@ -11,6 +12,9 @@ export interface ProfileAvatarCellProps {
 	/** 아바타 아이콘 (src가 없을 때 표시) */
 	icon?: ReactNode;
 }
+
+/** 셀 마크업(text-[13px])과 동일한 크기를 유지하는 폴백 클래스입니다. */
+const DATA_CELL_SIZE_FALLBACK_CLASS_NAME = "text-[13px]";
 
 /**
  * 아바타 + 이름 + 부제목을 표시하는 Cell 컴포넌트
@@ -31,9 +35,17 @@ export const ProfileAvatarCell = ({
 				<Avatar.Fallback>{icon ?? displayName.slice(0, 1)}</Avatar.Fallback>
 			</Avatar>
 			<div>
-				<p className="font-medium">{displayName || "-"}</p>
+				<Typography
+					className={DATA_CELL_SIZE_FALLBACK_CLASS_NAME}
+					type="body-sm"
+					weight="medium"
+				>
+					{displayName || "-"}
+				</Typography>
 				{displaySubtitle && (
-					<p className="text-xs text-muted">{displaySubtitle}</p>
+					<Typography color="muted" type="body-xs">
+						{displaySubtitle}
+					</Typography>
 				)}
 			</div>
 		</div>

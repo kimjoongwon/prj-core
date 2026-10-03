@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { Typography } from "../../data-display/Typography";
+import { translateNode, useT } from "../../i18n";
 
 export type SectionInset = "section" | "compact" | "none";
 export type SectionOverflow = "visible" | "hidden";
@@ -133,6 +134,7 @@ const SectionHeader = ({
 	actions,
 	...props
 }: SectionHeaderProps) => {
+	const t = useT();
 	const hasHeaderContent = Boolean(title || description || actions);
 
 	return (
@@ -146,12 +148,12 @@ const SectionHeader = ({
 					<div className="min-w-0 flex-1">
 						{title && (
 							<Typography.Heading className="font-semibold" level={2}>
-								{title}
+								{translateNode(title, t)}
 							</Typography.Heading>
 						)}
 						{description && (
 							<Typography.Paragraph className="mt-1" color="muted" size="sm">
-								{description}
+								{translateNode(description, t)}
 							</Typography.Paragraph>
 						)}
 					</div>

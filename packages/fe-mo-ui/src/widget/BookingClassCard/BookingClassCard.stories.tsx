@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { BookingClassCard, type BookingClassFeedItem } from "./index";
 
 const item: BookingClassFeedItem = {
@@ -51,12 +51,12 @@ export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					BookingClassCard
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					예약 피드에서 수업 정보, 잔여석, 예약 상태, CTA를 표시합니다.
-				</Text>
+				</Typography>
 			</View>
 			<BookingClassCard item={item} onPressCta={() => undefined} />
 			<BookingClassCard item={reservedItem} onPressCta={() => undefined} />

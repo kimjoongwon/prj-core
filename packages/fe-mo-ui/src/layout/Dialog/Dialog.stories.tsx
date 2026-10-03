@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { Dialog } from "./index";
 
@@ -20,10 +20,10 @@ export const Open: Story = {
 	render: () => (
 		<View className="flex-1 justify-center px-4 py-5">
 			<View className="gap-2 rounded-lg border border-border bg-surface p-4">
-				<Text className="text-lg font-extrabold text-foreground">Dialog</Text>
-				<Text className="text-sm leading-5 text-muted">
+				<Typography className="font-extrabold" type="h5">Dialog</Typography>
+				<Typography color="muted" type="body-sm">
 					파괴적 작업이나 중요한 확인을 중앙 오버레이로 묻습니다.
-				</Text>
+				</Typography>
 			</View>
 			<Dialog isOpen onOpenChange={() => undefined}>
 				<Dialog.Portal>

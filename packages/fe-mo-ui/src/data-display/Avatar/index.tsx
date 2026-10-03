@@ -10,7 +10,8 @@ import {
 	type ReactNode,
 } from "react";
 import type { ImageSourcePropType } from "react-native";
-import { getTextContent, Text } from "../Text";
+import { Typography } from "../Typography";
+import { getTextContent } from "../text-content";
 
 type HeroAvatarProps = ComponentPropsWithoutRef<typeof HeroAvatar>;
 type HeroAvatarFallbackProps = ComponentPropsWithoutRef<
@@ -63,9 +64,9 @@ const AvatarFallback = forwardRef<
 			{label === null ? (
 				children
 			) : (
-				<Text align="center" variant="label">
+				<Typography align="center" type="body-sm" weight="semibold">
 					{label}
-				</Text>
+				</Typography>
 			)}
 		</HeroAvatar.Fallback>
 	);

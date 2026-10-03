@@ -6,6 +6,7 @@ import type {
 } from "@cocrepo/type";
 import { Popover } from "@heroui/react";
 import { Settings2 } from "lucide-react";
+import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
@@ -45,12 +46,12 @@ export function DataGridColumnSettingsView<T>({
 			<Popover.Content placement="bottom end">
 				<div className="flex min-w-56 flex-col gap-3 p-3">
 					<div>
-						<p className="text-sm font-semibold text-foreground">
+						<Typography type="body-sm" weight="semibold">
 							{t("컬럼 설정")}
-						</p>
-						<p className="text-xs text-muted">
+						</Typography>
+						<Typography color="muted" type="body-xs">
 							{t("표시할 컬럼을 선택합니다.")}
-						</p>
+						</Typography>
 					</div>
 					<div className="flex flex-col gap-2">
 						{columns.map((column) => {

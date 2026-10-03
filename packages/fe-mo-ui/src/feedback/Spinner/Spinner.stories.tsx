@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Spinner } from "./index";
 
 const meta = {
@@ -36,10 +36,10 @@ export const Sizes: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">Spinner</Text>
-				<Text className="text-sm leading-5 text-muted">
+				<Typography className="font-extrabold" type="h5">Spinner</Typography>
+				<Typography color="muted" type="body-sm">
 					짧은 대기 상태나 버튼 내부 loading 상태를 표시합니다.
-				</Text>
+				</Typography>
 			</View>
 			<View className="flex-row items-center gap-5 rounded-lg border border-border bg-surface p-4">
 				<Spinner size="sm" />

@@ -8,7 +8,8 @@ import {
 	type ComponentRef,
 	forwardRef,
 } from "react";
-import { getTextContent, Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { getTextContent } from "../../data-display/text-content";
 
 type HeroButtonProps = ComponentPropsWithoutRef<typeof HeroButton>;
 export type ButtonProps = HeroButtonProps & {};
@@ -33,9 +34,12 @@ const ButtonComponent = forwardRef<
 			{label === null ? (
 				children
 			) : (
-				<Text className={buttonClassNames.label({ size, variant })}>
+				<Typography
+					className={buttonClassNames.label({ size, variant })}
+					type="body-sm"
+				>
 					{label}
-				</Text>
+				</Typography>
 			)}
 		</HeroButton>
 	);

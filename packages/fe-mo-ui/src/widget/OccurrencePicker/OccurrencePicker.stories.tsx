@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { OccurrencePicker } from "./index";
 
 const meta = {
@@ -19,12 +19,12 @@ export const Recurring: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					OccurrencePicker
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					반복 수업 또는 시간대 선택이 필요한 예약에서 발생 회차를 고릅니다.
-				</Text>
+				</Typography>
 			</View>
 			<OccurrencePicker
 				description="예약 가능한 회차 중 하나를 선택해 주세요."

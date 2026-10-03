@@ -12,6 +12,7 @@ import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { AssetPreviewDialog } from "../../../data-display/AssetPreview";
+import { Typography } from "../../../data-display/Typography";
 import {
 	buildAssetTableColumns,
 	DataGrid,
@@ -521,11 +522,11 @@ export const AssetBrowser = observer(
 								<Modal.Header>{t("폴더 생성")}</Modal.Header>
 								<Modal.Body>
 									<div className="flex flex-col gap-3">
-										<p className="text-sm text-muted">
+										<Typography.Paragraph color="muted" size="sm">
 											{selectedFolderId
 												? t("현재 선택한 폴더 아래에 새 폴더를 생성합니다.")
 												: t("루트 폴더에 새 폴더를 생성합니다.")}
-										</p>
+										</Typography.Paragraph>
 										<TextField
 											label="폴더명"
 											placeholder="새 폴더명을 입력하세요"
@@ -619,8 +620,10 @@ export const AssetBrowser = observer(
 					{t("업로드")}
 				</Button>
 				{uploadRequirementMessage ? (
-					<output className="max-w-56 text-right text-xs text-muted">
-						{t(uploadRequirementMessage)}
+					<output className="max-w-56 text-right">
+						<Typography align="end" color="muted" type="body-xs">
+							{t(uploadRequirementMessage)}
+						</Typography>
 					</output>
 				) : null}
 			</div>

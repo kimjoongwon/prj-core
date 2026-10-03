@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { ScrollView, View } from "react-native";
 import { tv } from "tailwind-variants";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { BottomSheet } from "../../layout/BottomSheet";
 import { HStack, VStack } from "../../rhythm";
 import {
@@ -67,9 +67,9 @@ export const SpaceSelectionSheet = observer(function SpaceSelectionSheet({
 							/>
 						) : (
 							<View className={classNames.empty()}>
-								<Text className={classNames.emptyText()}>
+								<Typography className={classNames.emptyText()} type="body-sm">
 									선택할 수 있는 지점이 없습니다.
-								</Text>
+								</Typography>
 							</View>
 						)}
 					</ScrollView>

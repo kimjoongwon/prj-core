@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button/Button";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 import { HtmlEditor } from "../../input/HtmlEditor";
@@ -373,18 +374,20 @@ export const ServiceDocumentListScreen = observer(
 													fullWidth
 												>
 													<div key="documents-summary">
-														<p
+														<Typography.Paragraph
 															key="documents-summary-title"
-															className="text-sm font-semibold text-foreground"
+															size="sm"
+															weight="semibold"
 														>
 															문서 목록
-														</p>
-														<p
+														</Typography.Paragraph>
+														<Typography.Paragraph
 															key="documents-summary-count"
-															className="text-xs text-muted"
+															size="xs"
+															color="muted"
 														>
 															총 {totalCount.toLocaleString("ko-KR")}개
-														</p>
+														</Typography.Paragraph>
 													</div>
 													{isLoading ? (
 														<Spinner key="documents-loading" size="sm" />
@@ -425,17 +428,20 @@ export const ServiceDocumentListScreen = observer(
 																						key="document-icon"
 																						className="h-4 w-4 text-accent"
 																					/>
-																					<span
+																					<Typography
 																						key="document-title"
-																						className="font-medium"
+																						weight="medium"
 																					>
 																						{document.title}
-																					</span>
+																					</Typography>
 																				</HStack>
-																				<span className="text-xs text-muted">
+																				<Typography
+																					type="body-xs"
+																					color="muted"
+																				>
 																					{getKindLabel(document.kind)} ·{" "}
 																					{document.locale}
-																				</span>
+																				</Typography>
 																			</VStack>
 																		</Table.Cell>
 																		<Table.Cell>
@@ -531,20 +537,22 @@ export const ServiceDocumentListScreen = observer(
 												fullWidth
 											>
 												<div key="form-title">
-													<p
+													<Typography.Paragraph
 														key="form-title-heading"
-														className="text-sm font-semibold text-foreground"
+														size="sm"
+														weight="semibold"
 													>
 														{isEditing ? "문서 수정" : "새 문서"}
-													</p>
-													<p
+													</Typography.Paragraph>
+													<Typography.Paragraph
 														key="form-title-description"
-														className="text-xs text-muted"
+														size="xs"
+														color="muted"
 													>
 														{editingDocumentId
 															? "초안 문서만 수정할 수 있습니다."
 															: "게시 전 초안으로 저장됩니다."}
-													</p>
+													</Typography.Paragraph>
 												</div>
 												<Button
 													key="close-form"

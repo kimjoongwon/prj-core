@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { SpaceSelectionSheet } from "./index";
 
@@ -38,12 +38,12 @@ export const Open: Story = {
 	render: () => (
 		<View className="flex-1 justify-end px-4 py-5">
 			<View className="gap-2 rounded-lg border border-border bg-surface p-4">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					SpaceSelectionSheet
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					아래에서 열린 상태의 지점 선택 시트를 확인합니다.
-				</Text>
+				</Typography>
 				<Button variant="secondary">지점 변경</Button>
 			</View>
 			<SpaceSelectionSheet

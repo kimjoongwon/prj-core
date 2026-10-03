@@ -10,6 +10,7 @@ import {
 	getContentLanguageLabel,
 	toContentLanguageCode,
 } from "../../data-display/content-language";
+import { Typography } from "../../data-display/Typography";
 import { Alert } from "../../feedback/Alert/Alert";
 import { Button } from "../../input/Button/Button";
 import { TextField } from "../../input/TextField";
@@ -104,7 +105,7 @@ const RoutineMediaThumbnail = ({
 		>
 			<VStack gap="block" alignItems="center">
 				<ImageIcon className="h-7 w-7" />
-				<span className="text-xs">미리보기 없음</span>
+				<Typography type="body-xs">미리보기 없음</Typography>
 			</VStack>
 		</Card>
 	);
@@ -129,10 +130,12 @@ const CandidateTaskCard = observer(
 					<div className="min-w-0 flex-1">
 						<HStack alignItems="start" justifyContent="between" gap="inline">
 							<div className="min-w-0">
-								<p className="line-clamp-2 font-medium">{task.exerciseName}</p>
-								<p className="mt-1 text-xs text-muted">
+								<Typography className="line-clamp-2" weight="medium">
+									{task.exerciseName}
+								</Typography>
+								<Typography className="mt-1" type="body-xs" color="muted">
 									기본 반복 {task.exerciseCount}회
-								</p>
+								</Typography>
 							</div>
 							<Chip
 								size="sm"
@@ -204,12 +207,12 @@ const ActivityCard = observer(
 							className="mb-3 md:flex-row md:items-start md:justify-between"
 						>
 							<div>
-								<p className="font-medium">{activity.exerciseName}</p>
-								<p className="mt-1 text-sm text-muted">
+								<Typography weight="medium">{activity.exerciseName}</Typography>
+								<Typography className="mt-1" type="body-sm" color="muted">
 									{isEditable
 										? "드래그해서 루틴 순서를 조정할 수 있습니다."
 										: `루틴 순서 ${index + 1}`}
-								</p>
+								</Typography>
 							</div>
 							<HStack alignItems="center">
 								<Chip
@@ -231,9 +234,9 @@ const ActivityCard = observer(
 							</HStack>
 						</VStack>
 						{!activity.isSchedulable ? (
-							<p className="mb-3 text-sm text-warning">
+							<Typography className="mb-3 text-warning" type="body-sm">
 								영상이 없어 Program 생성에 사용할 수 없는 운동입니다.
-							</p>
+							</Typography>
 						) : null}
 						<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 							<TextField
@@ -428,24 +431,23 @@ export const RoutineForm = observer(
 									/>
 									<div className="rounded-2xl border border-border p-4">
 										<div className="mb-3">
-											<p className="font-medium">후보 운동</p>
-											<p className="text-sm text-muted">
+											<Typography weight="medium">후보 운동</Typography>
+											<Typography type="body-sm" color="muted">
 												이미지는 썸네일, 비디오는 편성 가능 여부 기준으로
 												사용합니다.
-											</p>
+											</Typography>
 										</div>
 										{isTasksLoading ? (
-											<HStack
-												alignItems="center"
-												className="text-sm text-muted"
-											>
+											<HStack alignItems="center">
 												<Spinner size="sm" />
-												<span>운동 목록을 불러오는 중...</span>
+												<Typography type="body-sm" color="muted">
+													운동 목록을 불러오는 중...
+												</Typography>
 											</HStack>
 										) : candidateTasks.length === 0 ? (
-											<p className="text-sm text-muted">
+											<Typography type="body-sm" color="muted">
 												조건에 맞는 스케줄 가능 운동이 없습니다.
-											</p>
+											</Typography>
 										) : (
 											<div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
 												{candidateTasks.map((task) => (
@@ -468,26 +470,26 @@ export const RoutineForm = observer(
 									className="mb-3"
 								>
 									<div>
-										<p className="font-medium">추가된 활동</p>
-										<p className="text-sm text-muted">
+										<Typography weight="medium">추가된 활동</Typography>
+										<Typography type="body-sm" color="muted">
 											{!readOnly
 												? "드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다."
 												: "루틴에 연결된 활동입니다."}
-										</p>
+										</Typography>
 									</div>
 									<Chip size="sm" variant="soft" color="accent">
 										{visibleActivities.length}개
 									</Chip>
 								</HStack>
 								{state.errors.activities ? (
-									<p className="mb-3 text-sm text-danger">
+									<Typography className="mb-3 text-danger" type="body-sm">
 										{state.errors.activities}
-									</p>
+									</Typography>
 								) : null}
 								{visibleActivities.length === 0 ? (
-									<p className="text-sm text-muted">
+									<Typography type="body-sm" color="muted">
 										아직 추가된 활동이 없습니다.
-									</p>
+									</Typography>
 								) : !readOnly ? (
 									// raw gap 예외: DraggableSortableList가 자체 flex 간격을 className으로만 조절 가능
 									<DraggableSortableList

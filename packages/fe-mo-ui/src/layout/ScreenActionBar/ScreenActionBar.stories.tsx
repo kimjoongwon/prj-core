@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { ScreenActionBar } from "./index";
 
 const meta = {
@@ -49,9 +49,9 @@ export const CustomContent: Story = {
 		<View className="flex-1 justify-end bg-background">
 			<ScreenActionBar description="필요하면 직접 조합한 액션 영역도 사용할 수 있습니다.">
 				<View className="rounded-lg border border-border bg-surface-secondary p-3">
-					<Text className="text-center text-sm font-bold text-foreground">
+					<Typography align="center" type="body-sm" weight="bold">
 						커스텀 하단 액션
-					</Text>
+					</Typography>
 				</View>
 			</ScreenActionBar>
 		</View>

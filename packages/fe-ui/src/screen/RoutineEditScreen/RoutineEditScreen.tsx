@@ -6,6 +6,7 @@ import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
 import { DateTimeCell } from "../../data-grid/cell";
 import {
 	type RoutineActivityFormItem,
@@ -85,7 +86,7 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 								className="p-8"
 							>
 								<Spinner size="sm" />
-								<span className="text-muted">{loadingMessage}</span>
+								<Typography color="muted">{loadingMessage}</Typography>
 							</HStack>
 						</Section.Body>
 					</Section>
@@ -106,7 +107,9 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 								justifyContent="center"
 								className="p-8"
 							>
-								<p className="text-muted">{notFoundMessage}</p>
+								<Typography.Paragraph color="muted">
+									{notFoundMessage}
+								</Typography.Paragraph>
 								{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
 							</VStack>
 						</Section.Body>
@@ -145,22 +148,31 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 											<div className="rounded-lg bg-surface-secondary p-3">
-												<p className="text-xs text-muted">전체 활동</p>
-												<p className="mt-1 text-lg font-semibold">
+												<Typography.Paragraph size="xs" color="muted">
+													전체 활동
+												</Typography.Paragraph>
+												<Typography.Heading level={5} className="mt-1">
 													{visibleActivities.length}개
-												</p>
+												</Typography.Heading>
 											</div>
 											<div className="rounded-lg bg-surface-secondary p-3">
-												<p className="text-xs text-muted">연결 정상</p>
-												<p className="mt-1 text-lg font-semibold text-success">
+												<Typography.Paragraph size="xs" color="muted">
+													연결 정상
+												</Typography.Paragraph>
+												<Typography.Heading
+													level={5}
+													className="mt-1 text-success"
+												>
 													{resolvedActivities}개
-												</p>
+												</Typography.Heading>
 											</div>
 											<div className="rounded-lg bg-surface-secondary p-3">
-												<p className="text-xs text-muted">사용 중 프로그램</p>
-												<p className="mt-1 text-lg font-semibold">
+												<Typography.Paragraph size="xs" color="muted">
+													사용 중 프로그램
+												</Typography.Paragraph>
+												<Typography.Heading level={5} className="mt-1">
 													{programs.length}개
-												</p>
+												</Typography.Heading>
 											</div>
 										</div>
 										{unresolvedActivities > 0 ? (
@@ -183,7 +195,9 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 													key={program.id}
 													className="flex items-center justify-between rounded-lg bg-surface-secondary p-3"
 												>
-													<p className="font-medium">{program.name}</p>
+													<Typography.Paragraph weight="medium">
+														{program.name}
+													</Typography.Paragraph>
 												</div>
 											))}
 										</VStack>
@@ -197,7 +211,11 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											{metadata.createdAt ? (
 												<div>
-													<label className="text-sm text-muted">등록일</label>
+													<label>
+														<Typography type="body-sm" color="muted">
+															등록일
+														</Typography>
+													</label>
 													<div className="mt-1">
 														<DateTimeCell value={metadata.createdAt} />
 													</div>
@@ -205,7 +223,11 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 											) : null}
 											{metadata.updatedAt ? (
 												<div>
-													<label className="text-sm text-muted">수정일</label>
+													<label>
+														<Typography type="body-sm" color="muted">
+															수정일
+														</Typography>
+													</label>
 													<div className="mt-1">
 														<DateTimeCell value={metadata.updatedAt} />
 													</div>

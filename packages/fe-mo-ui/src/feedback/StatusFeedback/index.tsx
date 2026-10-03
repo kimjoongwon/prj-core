@@ -3,7 +3,7 @@ import { type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { Chip, chipClassNames, type ChipProps } from "../../data-display/Chip";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Icon, type IconTone, type MobileIconName } from "../../icon";
 import { Button } from "../../input/Button";
 import { Card } from "../../layout/Card";
@@ -62,7 +62,11 @@ const FeedbackDescription = ({ description }: { description?: ReactNode }) => {
 	if (!description) {
 		return null;
 	}
-	return <Text className={classNames.description()}>{description}</Text>;
+	return (
+		<Typography className={classNames.description()} type="body-sm">
+			{description}
+		</Typography>
+	);
 };
 const FeedbackAction = ({
 	label,
@@ -156,19 +160,20 @@ const StatusFeedbackComponent = observer((props: StatusFeedbackProps) => {
 						size="xs"
 						tone={STATUS_ICON_TONES[status]}
 					/>
-					<Text
+					<Typography
 						className={chipClassNames.label({
 							color: statusChipColor,
 							size: "sm",
 							variant: "soft",
 						})}
+						type="body-sm"
 					>
 						{STATUS_LABELS[status]}
-					</Text>
+					</Typography>
 				</Chip>
-				<Text className={slotClassNames.title()} key="title">
+				<Typography className={slotClassNames.title()} key="title" type="body-sm">
 					{title}
-				</Text>
+				</Typography>
 			</View>
 			<FeedbackDescription description={description} />
 			<FeedbackActions

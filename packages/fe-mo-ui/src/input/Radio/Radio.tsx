@@ -5,7 +5,8 @@ import {
 	forwardRef,
 } from "react";
 import { View } from "react-native";
-import { getTextContent, Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { getTextContent } from "../../data-display/text-content";
 
 type HeroRadioProps = ComponentPropsWithoutRef<typeof HeroRadio>;
 export type PureRadioProps = HeroRadioProps & {};
@@ -28,9 +29,9 @@ const PureRadioComponent = forwardRef<
 		// 저수준 layout 예외: heroui-native Radio label 행 계약을 그대로 노출하는 래퍼라 raw gap을 유지합니다.
 		<View className="w-full flex-row items-center gap-3">
 			<HeroRadio {...props} ref={ref} />
-			<Text className="flex-1" variant="label">
+			<Typography className="flex-1" type="body-sm" weight="semibold">
 				{label}
-			</Text>
+			</Typography>
 		</View>
 	);
 });

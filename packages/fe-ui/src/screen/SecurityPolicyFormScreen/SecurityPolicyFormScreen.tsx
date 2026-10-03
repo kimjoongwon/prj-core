@@ -1,6 +1,12 @@
 "use client";
 
-import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import {
+	Screen,
+	Section,
+	SectionSurface,
+	Typography,
+	VStack,
+} from "@cocrepo/ui";
 import { Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../input/Button/Button";
@@ -115,10 +121,15 @@ export const SecurityPolicyFormScreen = observer(
 													}}
 												>
 													<div>
-														<p className="text-sm font-medium">대문자 필수</p>
-														<p className="text-xs text-muted">
+														<Typography.Paragraph
+															size="sm"
+															weight="medium"
+														>
+															대문자 필수
+														</Typography.Paragraph>
+														<Typography.Paragraph size="xs" color="muted">
 															영문 대문자(A-Z)를 1자 이상 포함해야 합니다
-														</p>
+														</Typography.Paragraph>
 													</div>
 												</Switch>
 												<Switch
@@ -131,10 +142,15 @@ export const SecurityPolicyFormScreen = observer(
 													}}
 												>
 													<div>
-														<p className="text-sm font-medium">소문자 필수</p>
-														<p className="text-xs text-muted">
+														<Typography.Paragraph
+															size="sm"
+															weight="medium"
+														>
+															소문자 필수
+														</Typography.Paragraph>
+														<Typography.Paragraph size="xs" color="muted">
 															영문 소문자(a-z)를 1자 이상 포함해야 합니다
-														</p>
+														</Typography.Paragraph>
 													</div>
 												</Switch>
 												<Switch
@@ -147,10 +163,15 @@ export const SecurityPolicyFormScreen = observer(
 													}}
 												>
 													<div>
-														<p className="text-sm font-medium">숫자 필수</p>
-														<p className="text-xs text-muted">
+														<Typography.Paragraph
+															size="sm"
+															weight="medium"
+														>
+															숫자 필수
+														</Typography.Paragraph>
+														<Typography.Paragraph size="xs" color="muted">
 															숫자(0-9)를 1자 이상 포함해야 합니다
-														</p>
+														</Typography.Paragraph>
 													</div>
 												</Switch>
 												<Switch
@@ -163,10 +184,15 @@ export const SecurityPolicyFormScreen = observer(
 													}}
 												>
 													<div>
-														<p className="text-sm font-medium">특수문자 필수</p>
-														<p className="text-xs text-muted">
+														<Typography.Paragraph
+															size="sm"
+															weight="medium"
+														>
+															특수문자 필수
+														</Typography.Paragraph>
+														<Typography.Paragraph size="xs" color="muted">
 															특수문자(!@#$%^&* 등)를 1자 이상 포함해야 합니다
-														</p>
+														</Typography.Paragraph>
 													</div>
 												</Switch>
 											</VStack>

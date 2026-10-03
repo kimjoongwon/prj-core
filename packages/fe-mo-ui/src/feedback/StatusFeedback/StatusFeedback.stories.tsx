@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { StatusFeedback } from "./index";
 
 const meta = {
@@ -19,12 +19,12 @@ export const States: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					StatusFeedback
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					로딩, 빈 상태, 오류, 성공 상태를 같은 표면에서 비교합니다.
-				</Text>
+				</Typography>
 			</View>
 			<StatusFeedback
 				description="예약 가능한 클래스와 내 예약 상태를 확인하고 있습니다."

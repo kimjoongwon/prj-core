@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { ScrollView, View, type ViewProps } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { ScrollShadow } from "./index";
 
 const StoryGradient = ({
@@ -29,12 +29,12 @@ export const Default: Story = {
 	render: () => (
 		<View className="flex-1 gap-4 px-4 py-5">
 			<View className="gap-2">
-				<Text className="text-lg font-extrabold text-foreground">
+				<Typography className="font-extrabold" type="h5">
 					ScrollShadow
-				</Text>
-				<Text className="text-sm leading-5 text-muted">
+				</Typography>
+				<Typography color="muted" type="body-sm">
 					스크롤 가능한 영역의 위아래에 그라데이션 그림자를 더합니다.
-				</Text>
+				</Typography>
 			</View>
 			<ScrollShadow
 				LinearGradientComponent={StoryGradient}
@@ -55,10 +55,10 @@ export const Default: Story = {
 							className="rounded-lg border border-border bg-surface-secondary p-3"
 							key={name}
 						>
-							<Text className="text-sm font-bold text-foreground">{name}</Text>
-							<Text className="text-xs leading-5 text-muted">
+							<Typography type="body-sm" weight="bold">{name}</Typography>
+							<Typography color="muted" type="body-xs">
 								예약 가능한 수업 정보를 확인합니다.
-							</Text>
+							</Typography>
 						</View>
 					))}
 				</ScrollView>

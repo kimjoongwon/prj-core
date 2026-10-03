@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
+import { Typography } from "../Typography";
 import { DraggableSortableList, DragHandle } from "./DraggableSortableList";
 
 interface StoryItem {
@@ -41,10 +42,10 @@ const storyArgs = {
 	disabled: false,
 	onReorder: (_fromIndex: number, _toIndex: number) => undefined,
 	renderItem: (item: { id: string }) => (
-		<span>
+		<Typography>
 			{initialItems.find((initialItem) => initialItem.id === item.id)?.label ??
 				item.id}
-		</span>
+		</Typography>
 	),
 };
 
@@ -68,10 +69,12 @@ function SortableFixture({ disabled = false }: { disabled?: boolean }) {
 					<div className="flex items-center gap-3 rounded-lg border border-border bg-surface px-3 py-3 shadow-sm">
 						<DragHandle {...dragHandleProps} disabled={disabled} />
 						<div className="min-w-0 flex-1">
-							<p className="text-sm font-semibold text-foreground">
+							<Typography.Paragraph size="sm" weight="semibold">
 								{index + 1}. {item.label}
-							</p>
-							<p className="truncate text-xs text-muted">{item.description}</p>
+							</Typography.Paragraph>
+							<Typography.Paragraph color="muted" size="xs" truncate>
+								{item.description}
+							</Typography.Paragraph>
 						</div>
 					</div>
 				)}

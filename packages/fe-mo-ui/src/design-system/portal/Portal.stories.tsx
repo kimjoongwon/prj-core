@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { Portal } from "./Portal";
 import { PortalHost } from "./PortalHost";
 
@@ -23,13 +23,13 @@ export const PortalHostUsage: Story = {
 		<View className="w-[320px] gap-4 rounded-xl border border-border bg-surface p-4">
 			<View className="min-h-[96px] justify-end rounded-xl border border-dashed border-border bg-background p-3">
 				<PortalHost name={hostName} />
-				<Text tone="muted">이 영역 위쪽에 PortalHost가 배치됩니다.</Text>
+				<Typography color="muted" type="body-sm">이 영역 위쪽에 PortalHost가 배치됩니다.</Typography>
 			</View>
 			<Portal hostName={hostName} name="storybook-notification">
 				<View className="rounded-xl bg-accent px-4 py-3">
-					<Text className="text-accent-foreground" variant="label">
+					<Typography className="text-accent-foreground" type="body-sm" weight="semibold">
 						Portal을 통해 렌더된 알림
-					</Text>
+					</Typography>
 				</View>
 			</Portal>
 		</View>

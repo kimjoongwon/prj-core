@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { observable } from "mobx";
 import { ScrollView } from "react-native";
-import { Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { Textarea } from "./index";
 
@@ -26,10 +26,10 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="block">
 				<VStack>
-					<Text variant="heading">Textarea</Text>
-					<Text tone="muted">
+					<Typography className="font-extrabold" type="h5">Textarea</Typography>
+					<Typography color="muted" type="body-sm">
 						예약 메모처럼 여러 줄 입력이 필요한 필드입니다.
-					</Text>
+					</Typography>
 				</VStack>
 				<Textarea
 					description="현장에서 확인해야 하는 내용을 남깁니다."

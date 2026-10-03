@@ -11,7 +11,8 @@ import {
 	forwardRef,
 	type ReactNode,
 } from "react";
-import { getTextContent, Text } from "../../data-display/Text";
+import { Typography } from "../../data-display/Typography";
+import { getTextContent } from "../../data-display/text-content";
 
 type HeroMenuProps = ComponentPropsWithoutRef<typeof HeroMenu>;
 type HeroMenuContentProps = ComponentPropsWithoutRef<typeof HeroMenu.Content>;
@@ -100,21 +101,28 @@ const MenuItem = forwardRef<ComponentRef<typeof HeroMenu.Item>, MenuItemProps>(
 	},
 );
 MenuItem.displayName = "Menu.Item";
-const MenuItemTitle = forwardRef<ComponentRef<typeof Text>, MenuItemTitleProps>(
-	({ children, className, ...props }, ref) => (
-		<Text {...props} ref={ref} className={className} variant="label">
-			{children}
-		</Text>
-	),
-);
+const MenuItemTitle = forwardRef<
+	ComponentRef<typeof Typography>,
+	MenuItemTitleProps
+>(({ children, className, ...props }, ref) => (
+	<Typography
+		{...props}
+		ref={ref}
+		className={className}
+		type="body-sm"
+		weight="semibold"
+	>
+		{children}
+	</Typography>
+));
 MenuItemTitle.displayName = "Menu.ItemTitle";
 const MenuItemDescription = forwardRef<
-	ComponentRef<typeof Text>,
+	ComponentRef<typeof Typography>,
 	MenuItemDescriptionProps
 >(({ children, className, ...props }, ref) => (
-	<Text {...props} ref={ref} className={className} tone="muted" variant="body">
+	<Typography {...props} ref={ref} className={className} color="muted" type="body-sm">
 		{children}
-	</Text>
+	</Typography>
 ));
 MenuItemDescription.displayName = "Menu.ItemDescription";
 export const Menu = Object.assign(MenuComponent, {
