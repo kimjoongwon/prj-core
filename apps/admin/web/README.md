@@ -10,32 +10,28 @@ Admin 앱은 피트니스/예약 플랫폼의 관리자 인터페이스를 제�
 
 | 카테고리 | 기술 | 버전 |
 |----------|------|------|
-| **Framework** | React | 19.0 |
-| **Build Tool** | Vite | 6.0 |
-| **Routing** | TanStack Router | 1.x |
-| **State Management** | MobX | 6.x |
+| **Framework** | React | 19.2 |
+| **Meta Framework** | Next.js (App Router, `--turbopack`) | 16.x |
+| **State Management** | MobX (`@cocrepo/store`) | 6.x |
 | **Data Fetching** | TanStack Query | 5.x |
-| **UI Components** | HeroUI | 2.8 |
+| **UI Components** | HeroUI | 3.1 |
 | **Styling** | Tailwind CSS | 4.x |
-| **API Client** | @cocrepo/api | - |
+| **API Client** | @cocrepo/api (Orval 생성) | - |
 
 ## 폴더 구조
 
 ```
 src/
-├── routes/              # TanStack Router 라우트
-│   ├── __root.tsx       # 루트 레이아웃
-│   ├── _auth/           # 인증 필요 라우트
-│   └── _public/         # 공개 라우트
-├── components/          # 공유 컴포넌트
-│   ├── layouts/         # 레이아웃 컴포넌트
-│   ├── ui/              # UI 컴포넌트
-│   └── features/        # 기능별 컴포넌트
-├── hooks/               # 커스텀 훅
-├── stores/              # MobX 스토어
-├── providers/           # Context Providers
-├── lib/                 # 유틸리티 함수
-└── styles/              # 전역 스타일
+├── app/                        # Next.js App Router
+│   ├── (authenticated)/        # 인증 필요 라우트 그룹
+│   │   ├── (admin)/            # 관리자 화면
+│   │   └── select-space/       # 스페이스 선택
+│   ├── auth/                   # 로그인 등 인증 화면 (login, (flow))
+│   ├── layout.tsx              # 루트 레이아웃
+│   ├── providers.tsx           # 전역 Provider
+│   └── page.tsx                # 진입 페이지
+├── runtime-urls.ts             # 런타임 URL 조합
+└── test/                       # 앱 단위 테스트 (Vitest)
 ```
 
 ## 시작하기
@@ -44,31 +40,26 @@ src/
 
 ```bash
 # 루트 디렉토리에서
-pnpm start:admin
+pnpm start:admin-web
 
-# 또는 apps/admin 디렉토리에서
+# 또는 apps/admin/web 디렉토리에서
 pnpm dev
 ```
 
-개발 서버: http://localhost:5173
+개발 서버: http://localhost:3000/admin (포트는 `ADMIN_WEB_PORT`로 재정의, basePath `/admin`)
 
 ### 빌드
 
 ```bash
-pnpm build
-```
-
-### 프리뷰
-
-```bash
-pnpm preview
+pnpm build          # next build (컨테이너는 standalone 출력 — devops/Dockerfile.admin-web.ops.md 참고)
+pnpm analyze        # 번들 분석 빌드
 ```
 
 ## 주요 기능
 
 ### 인증
 
-- 로그인/로그아웃
+- 로그인/로그아웃 (OIDC — 자세한 흐름은 `docs/mobile-oidc-flow.guide.md`, `docs/oidc-client-ids.guide.md` 참고)
 - JWT 기반 인증
 - 자동 토큰 갱신
 
@@ -129,16 +120,19 @@ function UsersPage() {
 
 ## 라우팅
 
-TanStack Router를 사용한 타입 안전 라우팅:
+Next.js App Router 파일 기반 라우팅:
 
 ```typescript
-import { Link, useNavigate } from '@tanstack/react-router';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 function Navigation() {
+  const router = useRouter();
+
   return (
     <nav>
-      <Link to="/dashboard">대시보드</Link>
-      <Link to="/users">사용자</Link>
+      <Link href="/dashboard">대시보드</Link>
+      <Link href="/users">사용자</Link>
     </nav>
   );
 }
@@ -146,10 +140,15 @@ function Navigation() {
 
 ## 환경 변수
 
+`apps/admin/web/.env.local` (dev 스크립트가 source하며 Next.js 표준 로딩 경로):
+
 ```env
-VITE_API_BASE_URL=http://localhost:3000
-VITE_APP_NAME=PRJ Admin
+CORE_API_INTERNAL_URL=http://localhost:3006   # 개발 프록시 → core-api
+IDP_API_INTERNAL_URL=http://localhost:3007    # 개발 프록시 → idp-api
+NEXT_PUBLIC_WS_URL=ws://localhost:3006        # 브라우저 WebSocket base URL
 ```
+
+키 설명: [docs/env-reference.md](../../../docs/env-reference.md)
 
 ## 개발 가이드
 
@@ -178,12 +177,4 @@ return <Button onClick={() => doSomething()}>클릭</Button>;
 
 - `@cocrepo/api` - API 클라이언트
 - `@cocrepo/ui` - 공유 UI 컴포넌트 + 디자인 시스템
-- `@cocrepo/store` - 공유 상태 관리
-- `@cocrepo/hook` - 공유 훅
-- `@cocrepo/constant` - 공유 상수
-
-## E2E 로그인/검증 공통 가이드
-
-Admin E2E 로그인 및 로그인 이후 검증 규칙은 아래 문서를 단일 기준으로 사용합니다.
-
-- `apps/test/e2e/README.md`
+CI 라우터 검증(2026-10-04): 이 커밋은 apps/admin/web 경로 변경으로 admin-web-build만 트리거해야 한다.
