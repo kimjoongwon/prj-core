@@ -80,8 +80,8 @@ pipeline {
     parameters {
         choice(
             name: 'APP_NAME',
-            choices: ['core-api', 'admin-web', 'proposal-web', 'spring-api', 'tool-storybook', 'idp-api', 'idp-web'],
-            description: 'GitOps values-prod.yaml image.tag update target app'
+            choices: ['core-api', 'admin-web', 'proposal-web', 'tool-storybook', 'idp-api', 'idp-web'],
+            description: 'GitOps 이미지 태그 범프 대상 앱 (prj-deploy {prod,stg}/<앱>.yaml)'
         )
         string(
             name: 'IMAGE_TAG',
@@ -90,8 +90,8 @@ pipeline {
         )
         choice(
             name: 'DEPLOY_ENV',
-            choices: ['prod'],
-            description: 'Deploy environment'
+            choices: ['prod', 'stg'],
+            description: 'Deploy environment (prj-deploy 대상 디렉터리 prod/|stg/)'
         )
         string(
             name: 'SOURCE_BUILD_URL',

@@ -209,25 +209,22 @@ podTemplate(
             ])
 
             stage('Trigger GitOps Update Job') {
-                if (ENV_NAME == 'prod') {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                        def gitCommit = env.GIT_COMMIT ?: ''
-                        build(
-                            job: GITOPS_UPDATE_JOB,
-                            wait: false,
-                            parameters: [
-                                string(name: 'APP_NAME', value: GITOPS_APP),
-                                string(name: 'IMAGE_TAG', value: IMAGE_TAG),
-                                string(name: 'DEPLOY_ENV', value: 'prod'),
-                                string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
-                                string(name: 'SOURCE_COMMIT', value: gitCommit),
-                                string(name: 'SOURCE_BUZZ_EVENT_ID', value: BUILD_BUZZ_EVENT_ID ?: ''),
-                            ]
-                        )
-                        echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
-                    }
-                } else {
-                    echo "Skip GitOps update trigger for ENV=${ENV_NAME}"
+                // prod/main·stg 수동 빌드 모두 범프 — DEPLOY_ENV로 prj-deploy 대상 파일(prod/|stg/)이 결정된다
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    def gitCommit = env.GIT_COMMIT ?: ''
+                    build(
+                        job: GITOPS_UPDATE_JOB,
+                        wait: false,
+                        parameters: [
+                            string(name: 'APP_NAME', value: GITOPS_APP),
+                            string(name: 'IMAGE_TAG', value: IMAGE_TAG),
+                            string(name: 'DEPLOY_ENV', value: ENV_NAME),
+                            string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
+                            string(name: 'SOURCE_COMMIT', value: gitCommit),
+                            string(name: 'SOURCE_BUZZ_EVENT_ID', value: BUILD_BUZZ_EVENT_ID ?: ''),
+                        ]
+                    )
+                    echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}, ENV=${ENV_NAME}"
                 }
             }
 
