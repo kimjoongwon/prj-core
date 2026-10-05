@@ -24,8 +24,7 @@ Admin 앱은 피트니스/예약 플랫폼의 관리자 인터페이스를 제�
 src/
 ├── app/                        # Next.js App Router
 │   ├── (authenticated)/        # 인증 필요 라우트 그룹
-│   │   ├── (admin)/            # 관리자 화면
-│   │   └── select-space/       # 스페이스 선택
+│   │   └── (admin)/            # 관리자 화면
 │   ├── auth/                   # 로그인 등 인증 화면 (login, (flow))
 │   ├── layout.tsx              # 루트 레이아웃
 │   ├── providers.tsx           # 전역 Provider

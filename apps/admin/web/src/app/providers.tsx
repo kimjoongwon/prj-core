@@ -14,10 +14,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode } from "react";
-import {
-	deserializeQueryCacheData,
-	serializeQueryCacheData,
-} from "./query-cache-serializer";
+import { makeAdminQueryClient } from "./query-client";
 
 interface ProvidersProps {
 	children: ReactNode;
@@ -38,33 +35,16 @@ const ADMIN_APP_CONFIG = {
 	persistStorageKey: "admin-persist",
 } satisfies AppProviderConfig;
 
-function makeQueryClient() {
-	return new QueryClient({
-		defaultOptions: {
-			dehydrate: {
-				serializeData: serializeQueryCacheData,
-			},
-			hydrate: {
-				deserializeData: deserializeQueryCacheData,
-			},
-			queries: {
-				// SSR 환경에서 클라이언트 즉시 refetch 방지를 위한 staleTime 설정
-				staleTime: 60 * 1000,
-			},
-		},
-	});
-}
-
 let browserQueryClient: QueryClient | undefined;
 
 function getQueryClient() {
 	if (isServer) {
 		// 서버: 항상 새로운 QueryClient 생성
-		return makeQueryClient();
+		return makeAdminQueryClient();
 	}
 	// 브라우저: 기존 클라이언트 재사용 (React Suspense 대응)
 	if (!browserQueryClient) {
-		browserQueryClient = makeQueryClient();
+		browserQueryClient = makeAdminQueryClient();
 	}
 	return browserQueryClient;
 }
