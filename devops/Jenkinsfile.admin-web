@@ -120,8 +120,8 @@ podTemplate(
         def BUILD_BUZZ_EVENT_ID = ''
 
         stage('Validate Branch') {
-            if (env.BRANCH_NAME && env.BRANCH_NAME != 'main') {
-                error("admin-web only supports main branch because GitOps deployment exists only for prod.")
+            if (env.BRANCH_NAME && !DEPLOYMENT_BRANCHES.contains(env.BRANCH_NAME)) {
+                error("admin-web only supports ${DEPLOYMENT_BRANCHES} branches.")
             }
         }
 
