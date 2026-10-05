@@ -5,7 +5,7 @@ model_reasoning_effort = "low"
 developer_instructions = '''
 ## 역할·수정 범위
 
-- `packages/be-prisma/seed-data.ts`, 필요한 `seed.ts`, `src/reference-data/definitions/**/*.ts`와 인접 테스트를 소유합니다.
+- `packages/be-prisma/seed.ts` 진입점, `src/bootstrap/**`, `src/e2e/**`, `src/reference-data/definitions/**/*.ts`와 인접 테스트를 소유합니다.
 - 모델 구조는 Prisma, 도메인 클래스·API 계약은 해당 역할에 맡깁니다.
 
 ## 입력 계약
@@ -35,6 +35,7 @@ developer_instructions = '''
 ## 기술 규칙
 
 - 타입 interface와 seed/mapping/export를 함께 맞추며 데이터 추가가 쉬운 패턴을 사용합니다.
+- `seed.ts`는 thin 진입점을 유지하고 `PRISMA_SEED_PROFILE`로 `bootstrap`(기본)과 `e2e`를 분기합니다. 실제 seed 논리는 `src/bootstrap/run-bootstrap.ts`, `src/e2e/run-e2e-seed.ts`에 두고 진입점에는 env loading·client lifecycle·runner 선택만 둡니다.
 - 회사-1/테스트 같은 추상명 대신 현실적인 브랜드·장소·합성 이름을 사용하고 지역/주소·지점 관계를 일치시킵니다.
 - 이메일·한국 전화번호·주소·사업자번호(XXX-XX-XXXXX) 형식을 확인합니다. 개인 정보는 합성 값으로 만들고 브랜드는 내부 테스트 용도를 명시합니다.
 - 모든 FK를 연결해 고아 없는 관계를 완성합니다. ADMIN은 담당 Space, USER는 가입 Space와 연결하며 역할·권한을 맞춥니다.

@@ -8,9 +8,6 @@ if (!HARBOR_REGISTRY || !HARBOR_CREDENTIAL_ID || !CONFIGURED_GITOPS_UPDATE_JOB) 
     error('내부 배포 설정(HARBOR_REGISTRY, HARBOR_CREDENTIAL_ID, GITOPS_UPDATE_JOB)이 필요합니다.')
 }
 
-def PODMAN_EPHEMERAL_REQUEST = '8Gi'
-def PODMAN_EPHEMERAL_LIMIT = '20Gi'
-
 // Buzz #cicd 채널 알림 (게이트웨이: prj-devops docs/buzz-ci-integration.md)
 // - 메시지 줄 배열을 받아 JSON으로 게이트웨이에 POST한다(마지막에 Jenkins 빌드 링크 추가).
 // - BUZZ_NOTIFY_URL이 잡에 주입되지 않으면 조용히 건너뛴다.
@@ -29,29 +26,32 @@ def buzzNotify(List messageLines, Map opts = [:]) {
     writeFile file: '.buzz-notify.json', text: groovy.json.JsonOutput.toJson(payload)
     try {
         withCredentials([string(credentialsId: credId, variable: 'BUZZ_TOKEN')]) {
-            sh '''#!/usr/bin/env bash
-                set -uo pipefail
-                # set +x: 토큰 평문 노출 차단
-                set +x
-                if command -v curl >/dev/null 2>&1; then
-                    curl -fsS -m 10 -X POST "${BUZZ_NOTIFY_URL}/send" \\
-                        -H "Authorization: Bearer ${BUZZ_TOKEN}" \\
-                        -H 'Content-Type: application/json' \\
-                        --data-binary @.buzz-notify.json \\
-                        -o .buzz-notify-resp.json \\
-                        || echo '[buzz] 알림 전송 실패 (curl, 무시됨)'
-                elif command -v wget >/dev/null 2>&1; then
-                    wget -q -O /dev/null \\
-                        --header="Authorization: Bearer ${BUZZ_TOKEN}" \\
-                        --header='Content-Type: application/json' \\
-                        --post-file=.buzz-notify.json \\
-                        -O .buzz-notify-resp.json \\
-                        "${BUZZ_NOTIFY_URL}/send" \\
-                        || echo '[buzz] 알림 전송 실패 (wget, 무시됨)'
-                else
-                    echo '[buzz] curl/wget 없음 — 알림 생략'
-                fi
-            '''
+            // buildctl(moby/buildkit) 컨테이너에는 curl이 없다 — wget 폴백으로 전송
+            // (containerCap=2 제한으로 알림 전용 컨테이너를 추가할 수 없음)
+            container('buildctl') {
+                sh '''#!/usr/bin/env bash
+                    set -uo pipefail
+                    # set +x: 토큰 평문 노출 차단
+                    set +x
+                    if command -v curl >/dev/null 2>&1; then
+                        curl -fsS -m 10 -X POST "${BUZZ_NOTIFY_URL}/send" \\
+                            -H "Authorization: Bearer ${BUZZ_TOKEN}" \\
+                            -H 'Content-Type: application/json' \\
+                            --data-binary @.buzz-notify.json \\
+                            -o .buzz-notify-resp.json \\
+                            || echo '[buzz] 알림 전송 실패 (curl, 무시됨)'
+                    elif command -v wget >/dev/null 2>&1; then
+                        wget -q -O .buzz-notify-resp.json \\
+                            --header="Authorization: Bearer ${BUZZ_TOKEN}" \\
+                            --header='Content-Type: application/json' \\
+                            --post-file=.buzz-notify.json \\
+                            "${BUZZ_NOTIFY_URL}/send" \\
+                            || echo '[buzz] 알림 전송 실패 (wget, 무시됨)'
+                    else
+                        echo '[buzz] curl/wget 없음 — 알림 생략'
+                    fi
+                '''
+            }
         }
     } finally {
         sh 'rm -f .buzz-notify.json || true'
@@ -84,28 +84,24 @@ def fmtDur(long ms) {
 }
 
 podTemplate(
-    volumes: [
-        persistentVolumeClaim(
-            claimName: 'container-builder-pvc',
-            mountPath: '/var/lib/containers'
-        )
-    ],
     containers: [
         containerTemplate(
-            name: 'podman',
-            image: 'quay.io/podman/stable:v5.8.4@sha256:3c99be9108dacd2b25d2f343c91386abd14a5ceaca68aa3e8d7f6ee2ebd50a16',
-            alwaysPullImage: false,
-            privileged: true,
-            resourceRequestEphemeralStorage: PODMAN_EPHEMERAL_REQUEST,
-            resourceLimitEphemeralStorage: PODMAN_EPHEMERAL_LIMIT,
+            name: 'buildctl',
+            image: 'docker.io/moby/buildkit:v0.33.0-rootless@sha256:80b15f0735e87bab7bf59ec4d695dfb4a7cfb25521cf56dc75d6f256285b63ef',
             ttyEnabled: true,
             command: 'cat',
+            envVars: [
+                containerEnvVar(key: 'BUILDKIT_HOST', value: 'tcp://buildkitd.devops-tools.svc.cluster.local:1234')
+            ],
             resourceLimitMemory: '3Gi',
             resourceRequestMemory: '2Gi',
             resourceLimitCpu: '1500m',
             // CPU request는 미지정 시 limit과 같게 잡혀 PVC 고정 노드(node-02)에서 스케줄링이 막히므로 명시적으로 낮춤
             resourceRequestCpu: '300m',
         )
+        // 주의: 알림 전용 컨테이너를 추가하지 않는다 — cloud의 containerCap(2)는
+        // 파드당 컨테이너 수(jnlp 포함) 상한이라 3개가 되면 파드가 영구 스케줄 대기한다.
+        // 알림은 buildctl 컨테이너의 wget 폴백으로 전송한다.
     ]
 ) {
     node(POD_LABEL) {
@@ -114,9 +110,6 @@ podTemplate(
         def IMAGE_TAG = ''
         def IMAGE_PATH = "${HARBOR_REGISTRY}/${ENV_NAME}/tool-storybook"
         def STORYBOOK_DISABLE_CHROMATIC = 'true'
-        def STORYBOOK_BUILD_NOFILE = '65536'
-        def IMAGE_TAG_ARGS = []
-        def CLEANUP_IMAGES = []
         def GITOPS_APP = 'tool-storybook'
         def GITOPS_UPDATE_JOB = CONFIGURED_GITOPS_UPDATE_JOB
         // 알림용: 이미지 빌드 단계 소요시간 측정
@@ -124,15 +117,6 @@ podTemplate(
         def IMAGE_STAGE_MS = 0L
         // 범프/배포 알림을 이 빌드의 buzz 스레드로 묶는 용도
         def BUILD_BUZZ_EVENT_ID = ''
-        def PODMAN_BASE_DIR = '/var/lib/containers/tsb'
-        def BUILD_KEY = "b${env.BUILD_NUMBER ?: '0'}"
-        def BUILD_ROOT = "${PODMAN_BASE_DIR}/${BUILD_KEY}"
-        def WORKSPACE_DIR = "${BUILD_ROOT}/ws"
-        def PODMAN_ROOT = "${BUILD_ROOT}/root"
-        def PODMAN_RUNROOT = "${BUILD_ROOT}/run"
-        def PODMAN_TMPDIR = "${BUILD_ROOT}/tmp"
-        def PODMAN_HOME = "${BUILD_ROOT}/home"
-        def PODMAN_GLOBAL_ARGS = "--root ${PODMAN_ROOT} --runroot ${PODMAN_RUNROOT} --tmpdir ${PODMAN_TMPDIR}"
 
         stage('Validate Branch') {
             if (env.BRANCH_NAME && env.BRANCH_NAME != 'main') {
@@ -140,145 +124,79 @@ podTemplate(
             }
         }
 
-        ws(WORKSPACE_DIR) {
+        try {
+            stage('Checkout') {
+                deleteDir()
+                def scmVars = checkout scm
+                def commitSha = scmVars.GIT_COMMIT ?: env.GIT_COMMIT ?: ''
+                if (commitSha.length() < 12) {
+                    error("GIT_COMMIT을 확인할 수 없어 SHA 이미지 태그를 만들 수 없습니다: '${commitSha}'")
+                }
+                IMAGE_TAG = commitSha.substring(0, 12)
+            }
+
+            IMAGE_STAGE_START_MS = System.currentTimeMillis()
+            stage('Build and Push Image') {
+                container('buildctl') {
+                    // Harbor 인증은 buildkitd 데몬에 마운트된 시크릿으로 처리하므로 registry login 불필요
+                    sh """
+                        buildctl --addr "\$BUILDKIT_HOST" build \\
+                            --frontend dockerfile.v0 \\
+                            --local context=. \\
+                            --local dockerfile=. \\
+                            --opt filename=devops/Dockerfile.tool-storybook \\
+                            --opt build-arg:STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC} \\
+                            --output type=image,name=${IMAGE_PATH}:${IMAGE_TAG},push=true \\
+                            --progress=plain
+                    """
+                }
+            }
+
+            IMAGE_STAGE_MS = System.currentTimeMillis() - IMAGE_STAGE_START_MS
+
+            // 빌드 성공 알림을 범프 트리거 앞에 보내, 범프/배포 알림을 같은 buzz 스레드로 묶는다
+            BUILD_BUZZ_EVENT_ID = buzzNotify([
+                "✅ **${GITOPS_APP}** (buildkit) 빌드 성공",
+                "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
+                "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
+                "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
+            ])
+
+            stage('Trigger GitOps Update Job') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    def gitCommit = env.GIT_COMMIT ?: ''
+                    build(
+                        job: GITOPS_UPDATE_JOB,
+                        wait: false,
+                        parameters: [
+                            string(name: 'APP_NAME', value: GITOPS_APP),
+                            string(name: 'IMAGE_TAG', value: IMAGE_TAG),
+                            string(name: 'DEPLOY_ENV', value: 'prod'),
+                            string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
+                            string(name: 'SOURCE_COMMIT', value: gitCommit),
+                            string(name: 'SOURCE_BUZZ_EVENT_ID', value: BUILD_BUZZ_EVENT_ID ?: ''),
+                        ]
+                    )
+                    echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
+                }
+            }
+
+        } catch (Exception e) {
+            currentBuild.result = 'FAILURE'
+            throw e
+        } finally {
+            // 실패 시에만 알림(성공은 위에서 이미 전송) — @ZCode 멘션으로 자동 진단 트리거
             try {
-                stage('Checkout') {
-                    deleteDir()
-                    def scmVars = checkout scm
-                    def commitSha = scmVars.GIT_COMMIT ?: env.GIT_COMMIT ?: ''
-                    if (commitSha.length() < 12) {
-                        error("GIT_COMMIT을 확인할 수 없어 SHA 이미지 태그를 만들 수 없습니다: '${commitSha}'")
-                    }
-                    IMAGE_TAG = commitSha.substring(0, 12)
-                    IMAGE_TAG_ARGS = ["-t ${IMAGE_PATH}:${IMAGE_TAG}"]
-                    CLEANUP_IMAGES = ["${IMAGE_PATH}:${IMAGE_TAG}"]
+                if (currentBuild.currentResult == 'FAILURE') {
+                    buzzNotify([
+                        "❌ **${GITOPS_APP}** (buildkit) 빌드 실패",
+                        "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
+                        "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
+                        "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
+                    ], [mentions: [ZCODE_HEX]])
                 }
-
-                IMAGE_STAGE_START_MS = System.currentTimeMillis()
-                stage('Build and Push Image') {
-                    container('podman') {
-                        sh """
-                            mkdir -p ${PODMAN_BASE_DIR}
-                            find ${PODMAN_BASE_DIR} -mindepth 1 -maxdepth 1 -type d -mtime +2 -exec rm -rf {} + || true
-                            rm -rf ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
-                            mkdir -p ${WORKSPACE_DIR} ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
-                            chmod 700 ${PODMAN_RUNROOT}
-                            export TMPDIR=${PODMAN_TMPDIR}
-                            export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
-                            export HOME=${PODMAN_HOME}
-                            export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
-                            podman ${PODMAN_GLOBAL_ARGS} info
-                        """
-
-                        withCredentials([
-                            usernamePassword(
-                                credentialsId: HARBOR_CREDENTIAL_ID,
-                                usernameVariable: 'HARBOR_USERNAME',
-                                passwordVariable: 'HARBOR_PASSWORD'
-                            )
-                        ]) {
-                            sh """
-                                export TMPDIR=${PODMAN_TMPDIR}
-                                export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
-                                export HOME=${PODMAN_HOME}
-                                export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
-                                # set +x: xtrace로 인한 비밀번호 평문 노출 차단
-                                set +x; echo \$HARBOR_PASSWORD | podman ${PODMAN_GLOBAL_ARGS} login \\
-                                    -u \$HARBOR_USERNAME \\
-                                    --password-stdin \\
-                                    --tls-verify=true \\
-                                    ${HARBOR_REGISTRY}
-                            """
-
-                            sh """
-                                export TMPDIR=${PODMAN_TMPDIR}
-                                export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
-                                export HOME=${PODMAN_HOME}
-                                export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
-                                podman ${PODMAN_GLOBAL_ARGS} build \\
-                                    --format=docker \\
-                                    --layers \\
-                                    --pull=newer \\
-                                    --ulimit nofile=${STORYBOOK_BUILD_NOFILE}:${STORYBOOK_BUILD_NOFILE} \\
-                                    --build-arg STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC} \\
-                                    --build-arg STORYBOOK_BUILD_NOFILE=${STORYBOOK_BUILD_NOFILE} \\
-                                    -f ./devops/Dockerfile.tool-storybook \\
-                                    ${IMAGE_TAG_ARGS.join(' \\\n                                    ')} \\
-                                    .
-                            """
-
-                            sh """
-                                export TMPDIR=${PODMAN_TMPDIR}
-                                export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
-                                export HOME=${PODMAN_HOME}
-                                export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
-                                podman ${PODMAN_GLOBAL_ARGS} push \\
-                                    --compression-format=gzip \\
-                                    --compression-level=3 \\
-                                    ${IMAGE_PATH}:${IMAGE_TAG}
-                            """
-
-                            sh """
-                                export TMPDIR=${PODMAN_TMPDIR}
-                                export XDG_RUNTIME_DIR=${PODMAN_RUNROOT}
-                                export HOME=${PODMAN_HOME}
-                                export REGISTRY_AUTH_FILE=${PODMAN_HOME}/auth.json
-                                podman ${PODMAN_GLOBAL_ARGS} rmi \\
-                                    ${CLEANUP_IMAGES.join(' \\\n                                    ')} || true
-                                rm -rf ${PODMAN_ROOT} ${PODMAN_RUNROOT} ${PODMAN_TMPDIR} ${PODMAN_HOME}
-                            """
-                        }
-                    }
-                }
-
-                IMAGE_STAGE_MS = System.currentTimeMillis() - IMAGE_STAGE_START_MS
-
-                // 빌드 성공 알림을 범프 트리거 앞에 보내, 범프/배포 알림을 같은 buzz 스레드로 묶는다
-                BUILD_BUZZ_EVENT_ID = buzzNotify([
-                    "✅ **tool-storybook** 빌드 성공",
-                    "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
-                    "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
-                    "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
-                ])
-
-                stage('Trigger GitOps Update Job') {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                        def gitCommit = env.GIT_COMMIT ?: ''
-                        build(
-                            job: GITOPS_UPDATE_JOB,
-                            wait: false,
-                            parameters: [
-                                string(name: 'APP_NAME', value: GITOPS_APP),
-                                string(name: 'IMAGE_TAG', value: IMAGE_TAG),
-                                string(name: 'DEPLOY_ENV', value: 'prod'),
-                                string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
-                                string(name: 'SOURCE_COMMIT', value: gitCommit),
-                                    string(name: 'SOURCE_BUZZ_EVENT_ID', value: BUILD_BUZZ_EVENT_ID ?: ''),
-                            ]
-                        )
-                        echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
-                    }
-                }
-
-            } catch (Exception e) {
-                currentBuild.result = 'FAILURE'
-                throw e
-            } finally {
-                // 실패 시에만 알림(성공은 위에서 이미 전송) — @ZCode 멘션으로 자동 진단 트리거
-                try {
-                    if (currentBuild.currentResult == 'FAILURE') {
-                        container('podman') {
-                            buzzNotify([
-                                "❌ **tool-storybook** 빌드 실패",
-                                "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
-                                "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
-                                "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
-                            ], [mentions: [ZCODE_HEX]])
-                        }
-                    }
-                } catch (Exception notifyErr) {
-                    echo "[buzz] 알림 단계 오류 (무시됨): ${notifyErr.message}"
-                }
+            } catch (Exception notifyErr) {
+                echo "[buzz] 알림 단계 오류 (무시됨): ${notifyErr.message}"
             }
         }
     }

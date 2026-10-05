@@ -37,10 +37,10 @@ developer_instructions = '''
 - PostgreSQL, 저장소의 Prisma 버전과 Redis 사용을 확인합니다. 라이브러리·DB 동작을 판단하기 전에 공식 문서를 확인합니다.
 - 3NF를 기본으로 정규화하고 성능상 비정규화가 필요하면 데이터 일관성 전략을 명시합니다. 중복 데이터는 명시한 일관성 전략으로 정당화되는 경우에만 늘립니다.
 - PK/FK, NOT NULL, UNIQUE, 기본값과 Soft Delete의 `removedAt`을 검토합니다.
-- 공통 `id`는 `String @unique @default(ulid()) @db.VarChar(26)` 공개 ULID이며 API/URL/event/외부 연동에 사용합니다.
-- `seq`는 `Int @id @default(autoincrement())` 내부 PK/FK join 값으로 내부 조인에만 사용하고 외부 계약은 공개 ULID `id`를 사용합니다.
+- 공개 ULID는 `{entity}Id` 필드에 `String @unique @default(ulid()) @db.Char(26)`로 선언하며 API/URL/event/외부 연동에 사용합니다.
+- 내부 PK는 `id BigInt @id @default(autoincrement())`로 내부 조인·FK join 값에만 사용하고 외부 계약은 공개 ULID `{entity}Id`를 사용합니다.
 - `createdAt @default(now())`, nullable `updatedAt @updatedAt`, nullable `removedAt`과 DB snake_case mapping을 유지합니다.
-- 테이블/model은 PascalCase, Prisma 필드는 camelCase, DB 컬럼은 `@map`의 snake_case, FK는 `{relation}Seq`를 기본으로 합니다.
+- 테이블/model은 PascalCase, Prisma 필드는 camelCase, DB 컬럼은 `@map`의 snake_case, FK는 `{relation}Id BigInt`에 `@map("{relation}_id")`를 기본으로 하고 선택 관계는 nullable로 선언합니다.
 - schema 배치와 메타데이터·관계 표현은 Prisma owner 계약을 따릅니다. 현재 테넌트 필드를 확인하고 모든 tenant 조회에 해당 필터를 적용합니다.
 - FK와 주요 조회 조건에 필요한 인덱스를 검토하고 복합 컬럼 순서를 query 패턴에 맞춥니다. 쓰기 비용·저장 공간·중복 인덱스도 비교합니다.
 - N+1은 필요한 relation include/select로 줄이고 필요한 필드만 조회합니다. SELECT *와 무제한 목록 대신 select·페이지네이션을 사용합니다.

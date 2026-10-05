@@ -1,5 +1,11 @@
 # OIDC 인증 플로우
 
+> ⚠️ **아키텍처 변경 고지**: 이 문서의 포트/역할 표는 IDP 분리 이전 구조다. 현재는
+> **idp-api(:3007)가 OIDC Provider**, **idp-web(:3008)이 로그인/동의 UI**를 소유하며
+> core-api(:3006)는 토큰 검증만 수행한다(issuer = idp-web origin).
+> admin-web client 인증 방식은 `client_secret_post`다.
+> 현재 기준 문서: `docs/local-dev-environment.diagram.md`, `docs/oidc-client-ids.guide.md`.
+
 ## 개요
 
 본 프로젝트는 **OpenID Connect (OIDC) Authorization Code Flow**를 사용하여 인증을 처리합니다.

@@ -46,7 +46,7 @@ developer_instructions = '''
 - 공용 hook은 `packages/fe-hook/src`, package helper는 기존 `src/utils` owner 경로를 사용하고 컴포넌트 폴더는 leaf 구현만 소유합니다.
 - 페이지 구조는 `Page`/`Section`/`PageTitleBar`를 재사용합니다. `App`/`Page`/`Section`은 layout-only, outer 표면은 `PageSurface`/공개 호환 `ScreenSurface`, section 표면은 `SectionSurface`, local panel은 `Surface`입니다. 제거된 detail/form surface wrapper 대신 현행 surface 계약을 사용합니다.
 - `SectionSurface`는 `Section` compound를 감싸고 header/body/footer/aside 슬롯은 `Section` compound가 소유합니다. `VStack`/`HStack`/`Spacer`와 semantic rhythm preset은 Screen 책임입니다.
-- `HeaderBar`/`BottomNav`/`ActionFab`/`OverlayMenu`는 Widget, `NavigationPanel`은 domain navigation 역할이며 기본 표시 UI는 해당 공개 조합을 재사용합니다.
+- `AccountTenantSelect`·`AccessControlGuard` 등은 Widget/Feature의 domain 업무 조합, `NavigationPanel`은 domain navigation 역할이며 기본 표시 UI는 해당 공개 조합을 재사용합니다.
 
 ### 모바일 표시·Provider·피드백·Portal
 

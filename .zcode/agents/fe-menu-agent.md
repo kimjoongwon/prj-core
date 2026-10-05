@@ -57,7 +57,7 @@ description: "웹 메뉴 조합과 모바일 메뉴 UI를 생성·검토·수정
 - FAB action은 3~4개, 기본 단일 버튼에서 팬 형태로 펼치고 외부 click으로 닫습니다. 권한 없는 action을 숨기고 모든 action이 숨겨지면 FAB도 숨깁니다.
 - `PageTabs` 같은 3depth 탭은 route skeleton에서 한 번만 표시하고 탭 렌더링은 route skeleton이 단일 소유합니다. client의 `usePathname` 기반 활성 판단은 Feature가 맡고 route `layout.tsx`는 서버 경계를 유지합니다.
 - 순수 Widget은 props만, Feature는 app 상태와 callback을 연결합니다. `NavTreePanel`→`NavigationPanel`, `TabBar`→`BottomTab`/`PageTabs`, `MenuList`→`SubMenuList`, `FABPanel`→`QuickActionFAB` 소비 경계를 유지합니다.
-- `HeaderBar`/`BottomNav`/`ActionFab`/`OverlayMenu`의 순수 UI는 Widget owner에 맡깁니다. Menu owner는 메뉴 데이터·domain navigation 조합을 제공하고 app.navigation/app.accessControl 직접 연결은 해당 Feature/Store owner에 맡깁니다.
+- Menu owner는 메뉴 데이터와 웹 `NavigationPanel`(`packages/fe-ui/src/domain/navigation`), 모바일 `Menu`/`SubMenu`(`packages/fe-mo-ui/src/layout`) 공개 조합을 제공하고 app.navigation/app.accessControl 직접 연결은 해당 Feature/Store owner에 맡깁니다.
 - 같은 메뉴·탭·액션 UI는 기존 Tabs/Dropdown/Menu/Breadcrumbs/Button/Link를 조합해 구현합니다.
 
 ### React Native Menu/SubMenu

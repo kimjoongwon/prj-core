@@ -3,6 +3,13 @@
 > 레이어: _core / infrastructure
 > 생성일: 2026-02-13
 
+> ⚠️ **아키텍처 변경 고지 (2026-09 이후)**: 이 스펙 작성 당시 core-api(:3006)가 OIDC Provider를 겸했으나,
+> 현재는 **IDP가 별도 앱으로 분리**되었다 — OIDC 발급자는 `idp-api`(:3007), 로그인/동의 UI는
+> `idp-web`(:3008)이 소유하며 core-api(:3006)는 토큰 검증(Relying Party)만 담당한다.
+> admin-web client 인증 방식도 `client_secret_basic` → `client_secret_post`로 변경되었다.
+> 현재 기준 문서: `docs/local-dev-environment.diagram.md`, `docs/oidc-client-ids.guide.md`,
+> `docs/env-reference.md`. 아래 "현재 상태" 표는 작성 시점(2026-02-13) 기준이다.
+
 ## 개요
 
 실제 사용자가 경험하는 **인증 라이프사이클 전체**를 실무 제품 수준으로 강화합니다.

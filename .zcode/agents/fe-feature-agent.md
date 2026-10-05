@@ -8,8 +8,8 @@ description: "Widget과 업무 로직을 연결한 Feature를 생성·검토·�
 ## 역할·수정 범위
 
 - 웹 Feature는 Widget에 app 상태·API·업무 이벤트·router를 연결합니다. 모바일 Feature는 props로 받은 상태·handler로 재사용 상호작용을 조합합니다.
-- 수정 범위는 `packages/fe-ui/src/feature/[Name]/{[Name].tsx,types.ts,index.ts}`, `src/feature/index.ts`, 대응하는 `packages/fe-mo-ui/src/feature/**`와 필요한 package root export·테스트·spec입니다.
-- Feature는 `packages/fe-ui`·`packages/fe-mo-ui`의 feature 소유 경로에 만들고 Hook·Store·순수 Widget·Screen·Route·leaf 구현은 각 owner에게 맡깁니다.
+- 웹 수정 범위는 `packages/fe-ui/src/domain/{domain}/{Name}/{Name}.tsx`, 같은 위치 테스트·props·barrel과 `src/domain/index.ts`, 필요한 package root export·테스트·spec입니다. 모바일 수정 범위는 `packages/fe-mo-ui/src/feature/[Name]/{[Name].tsx,types.ts,index.ts}`, `src/feature/index.ts`와 필요한 package root export·테스트·spec입니다.
+- 웹 Feature는 `packages/fe-ui/src/domain`의 domain 조합 경로에, 모바일 Feature는 `packages/fe-mo-ui/src/feature` 소유 경로에 만들고 Hook·Store·순수 Widget·Screen·Route·leaf 구현은 각 owner에게 맡깁니다.
 - 대상 경로로 플랫폼을 정하고 해당 규칙만 적용합니다. 웹은 `packages/fe-ui/**`, `apps/*/web/**`, 모바일은 `packages/fe-mo-ui/**`, `apps/mobile/**`입니다.
 
 ## 입력 계약
@@ -23,7 +23,7 @@ description: "Widget과 업무 로직을 연결한 Feature를 생성·검토·�
 
 - 경로가 없으면 현재 저장소에서 기존 구현, 공개 export, 소비 코드와 테스트를 직접 찾습니다.
 - 승인된 서비스 딜리버리 스펙과 라우트 딜리버리 스펙의 실행 범위를 확인합니다. Screen/Feature 기획은 시각·컴포넌트 계약 맥락으로 사용합니다.
-- 기존 `src/{feature,widget,primitive}`와 input/display, API 생성 export, `useApp()` 의미 경로와 route/screen 소비 계약을 찾습니다.
+- 기존 `src/domain` 업무 조합(NavigationPanel, AccountTenantSelect, AccessControlGuard 등)과 input/data-display, API 생성 export, `useApp()` 의미 경로와 route/screen 소비 계약을 찾습니다.
 
 ### 구현 전 필수 조건
 
@@ -69,7 +69,7 @@ description: "Widget과 업무 로직을 연결한 Feature를 생성·검토·�
 - Widget·leaf를 조합하고 상태 범위·handler를 props로 받습니다. 이벤트는 `onPress*`, `onChange*`처럼 RN 대상이 드러나게 짓습니다.
 - API query/mutation·params·navigation·invalidation·native bridge·storage hydrate는 Route 책임이므로 모바일 Feature는 Route가 전달한 계약만 소비합니다.
 - UI는 기존 Widget·leaf 조합으로 구현하고 화면 전체 시각 구성은 Screen에 맡깁니다.
-- `HeaderBar`, `BottomNav`, `ActionFab`, `OverlayMenu`는 Widget, `NavigationPanel`은 `domain/navigation` 소유이며 Feature는 이 공개 조합을 재사용합니다.
+- 모바일 Widget(`BookingClassCard`, `OccurrencePicker`, `QuickActionList`, `SpaceSelectionList` 등)과 웹 `NavigationPanel`(`domain/navigation` 소유)은 각 owner가 공개한 조합이며 Feature는 이 공개 조합을 재사용합니다.
 
 ## 단독 실행 계약
 

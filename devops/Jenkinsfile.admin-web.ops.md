@@ -6,34 +6,46 @@
 
 ## 역할
 
-`admin-web` 이미지를 빌드하고 Harbor에 푸시합니다.  
-프로덕션 브랜치(`main`)에서는 GitOps 반영 작업을 별도 Job으로 비동기 트리거합니다.
+`admin-web` 이미지를 원격 BuildKit 데몬(buildkitd)으로 빌드해 Harbor production 저장소에 푸시합니다.  
+빌드 성공 후에는 GitOps 반영 Job을 비동기로 트리거해 **prj-deploy**의 `prod/admin-web.yaml` 이미지 태그를 갱신합니다(2026-09-27 저장소 분리 이후).
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
 | 빌드 대상 | `admin-web` |
-| 이미지 경로 | `HARBOR_REGISTRY/{prod|stg}/admin-web` |
-| Podman 실행 이미지 | `quay.io/podman/stable:v5.8.4` multi-arch manifest를 digest로 고정 |
-| pull 정책 | agent 시작 시 `alwaysPullImage: false`, 이미지 빌드 시 `--pull=newer` 사용(로컬 캐시 우선, 원본이 더 최신일 때만 재풀) |
-| 격리 경계 | 동적 Jenkins agent Pod 안에서 실행하고 hostPath 대신 builder 전용 PVC만 마운트 |
-| 실행 Stage | `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
+| 이미지 경로 | `HARBOR_REGISTRY/prod/admin-web` — SHA-12 커밋 태그만 push (`latest` 없음) |
+| 브랜치 정책 | `main`(prod)·`stg` 허용 (2026-10-05 stg 재가동으로 복원 — B구조 buildkit 유지), 그 외 브랜치/PR은 즉시 실패 |
+| 빌드 방식 | `buildctl --addr tcp://buildkitd.devops-tools.svc.cluster.local:1234`로 원격 buildkitd 빌드 (Podman 미사용) |
+| 실행 컨테이너 | `docker.io/moby/buildkit:v0.33.0-rootless` digest 고정, `privileged` 아님, PVC 마운트 없음 |
+| 캐시 저장 | BuildKit 캐시는 buildkitd 데몬의 PVC에 저장되어 빌드 간 재사용됨 |
+| Harbor 인증 | Jenkinsfile에 registry login 없음. buildkitd 데몬에 마운트된 시크릿으로 처리 (런북 참조) |
+| 실행 Stage | `Validate Branch` → `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
 | GitOps 트리거 | 보호된 내부 job이 주입하는 `GITOPS_UPDATE_JOB` 환경변수 |
-| 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
+| 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV=prod`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT`, `SOURCE_BUZZ_EVENT_ID` |
+| 알림 | buzz #cicd 채널 성공/실패 알림. 성공 알림 `event_id`를 `SOURCE_BUZZ_EVENT_ID`로 전달해 범프/배포 알림을 같은 스레드로 묶고, 실패 시 @ZCode 멘션 |
 | 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
 
 ## 구현 체크리스트
 
-- [x] `podman build/push`를 기존과 동일하게 수행함
-- [x] Podman agent를 안전 버전과 검증된 multi-arch digest로 고정함
-- [x] `podman build --pull=always`를 제거해 베이스 이미지를 노드 로컬 캐시에서 재사용함
-- [x] `main` 브랜치에서만 GitOps Job 트리거함
-- [x] GitOps Job은 `wait: false` 비동기로 실행함
-- [x] GitOps 트리거 실패가 이미지 빌드 성공을 실패로 바꾸지 않음
+- [x] 보안 게이트(main 전용 검사, `TRUSTED_DEPLOYMENT`, 내부 배포 환경변수 검증)를 통일된 B구조로 유지함
+- [x] privileged 없는 buildctl 컨테이너로 빌드 방식을 교체함
+- [x] 빌드와 push를 `buildctl --output type=image,push=true` 단일 명령으로 수행함
+- [x] `Dockerfile.admin-web`는 수정 없이 dockerfile.v0 프론트엔드가 그대로 소비함
+- [x] prod GitOps 트리거 stage 계약(파라미터, 비동기, UNSTABLE 전파)을 기존 잡과 동일하게 유지함
+- [x] registry login 단계 제거, `latest` 태그 폐지(SHA-12 GitOps만 사용). stg 브랜치 빌드는 2026-10-05 재가동으로 복원됨
+
+## 운영 노트
+
+- 2026-10-04 stg 비활성화 시기에 prod 전용으로 축소됐으나, 2026-10-04 밤 stg가 서비스 4앱으로 재가동되어 2026-10-05 stg 빌드 지원을 복원했습니다.
+- 첫 적용 시 같은 커밋으로 2회 빌드해 `--progress=plain` 로그에서 캐시 재사용(`CACHED`)과 이미지 push 성공을 확인합니다.
 
 ## 잔여 위험
 
-`privileged: true`는 현재 Jenkins Podman 스토리지 드라이버와 PVC 운영 계약을 실제 환경에서 검증하기 전까지 배포 전용 job에서만 유지합니다. 외부 PR은 `Jenkinsfile.public-ci`의 비특권 컨테이너만 사용합니다.
-digest 고정은 실행 이미지 변조 위험을 낮추지만 privileged 컨테이너의 노드 탈출 영향을 제거하지 않으므로, 전용 namespace와 격리된 builder node pool에서 운용하고 rootless Podman 전환 검증 후 권한을 제거해야 합니다.
-`alwaysPullImage: false`와 `podman build --pull=always` 제거로 노드 로컬 캐시 이미지를 재사용하므로 실행 이미지 신선도는 노드 캐시 상태를 따릅니다.
+buildkitd 데몬이 단일 장애점이므로 데몬 장애 시 이 잡의 빌드가 실패합니다. Podman 롤백 경로는 제거되어 롤백 시 git history의 구 Jenkinsfile 복원이 필요합니다.
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-10-04 | Podman → BuildKit B구조 전환 · 2026-10-05 | stg 재가동으로 stg 빌드 지원 복원 | zcode |
