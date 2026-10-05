@@ -85,6 +85,11 @@ def fmtDur(long ms) {
 }
 
 podTemplate(
+    volumes: [
+        // 원격 buildkit 푸시 자격은 클라이언트가 전달한다 — 데몬의 docker-config만으로는 부족(2026-10-05 실증).
+        // secret 키가 config.json이므로 마운트 즉시 ~/.docker/config.json으로 인식된다.
+        secretVolume(secretName: 'buildkit-client-config', mountPath: '/home/user/.docker')
+    ],
     containers: [
         containerTemplate(
             name: 'buildctl',
