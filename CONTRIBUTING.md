@@ -2,7 +2,7 @@
 
 ## 개발 환경
 
-- Node.js 22.18 이상과 `packageManager`에 지정된 pnpm을 사용합니다.
+- Node.js 24 이상을 사용합니다(프로덕션 컨테이너·CI 이미지는 24.21.0으로 고정 — `devops/Dockerfile.*`, `devops/Jenkinsfile.public-ci` 참조). `packageManager`에 지정된 pnpm을 사용합니다.
 - 설치 후 README의 로컬 실행 절차를 따릅니다.
 - 실제 `.env`, 인증서, 개인 키, 운영 URL이나 자격증명을 커밋하지 않습니다.
 - TypeScript 증분 빌드 캐시인 `*.tsbuildinfo`는 생성 산출물이므로 커밋하지 않습니다.

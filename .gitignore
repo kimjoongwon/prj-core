@@ -71,3 +71,4 @@ playwright-report/
 .zcode/plans/
 # video-agent-kit 플러그인 로컬 마커
 .video_agent/
+.v2c/

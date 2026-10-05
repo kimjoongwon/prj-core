@@ -2,7 +2,8 @@
 
 `prj-core`의 로컬 환경 변수 규칙은 다음과 같습니다.
 
-- 로컬 실행은 각 프로젝트 디렉터리의 `.env`만 사용합니다.
+- 서버 앱·패키지(core-api, idp-api, be-prisma)는 각 프로젝트 디렉터리의 `.env`를 사용합니다.
+- Next.js 웹 앱(admin·idp·proposal web)은 각 디렉터리의 `.env.local`을 사용합니다(dev 스크립트가 source).
 - `.env.example`는 커밋되는 템플릿이며, 런타임에서 직접 읽지 않습니다.
 - 로컬 개발용 실제 키(이메일 SMTP, 객체 스토리지, 인증 서명)는 팀 OpenBao에서 `pnpm secrets:pull`로 가져옵니다. 자세한 흐름은 아래 [로컬 개발 시크릿(OpenBao)](#로컬-개발-시크릿openbao) 섹션을 참고하세요.
 - 배포 환경 변수는 `prj-devops`의 OpenBao 연동을 통해 주입됩니다.
@@ -14,7 +15,10 @@
 | 프로젝트 | 로컬 파일 | 템플릿 | 비고 |
 | --- | --- | --- | --- |
 | `core-api` | `apps/core/api/.env` | `apps/core/api/.env.example` | Core API 런타임 + Auth/OIDC/IDP endpoint + e2e |
-| `admin-web` | `apps/admin/web/.env` | 없음 | Next.js Admin Web |
+| `idp-api` | `apps/idp/api/.env` | `apps/idp/api/.env.example` | OIDC 발급자 런타임(OpenBao 병합 대상) |
+| `admin-web` | `apps/admin/web/.env.local` | `apps/admin/web/.env.example` | Next.js Admin Web |
+| `idp-web` | `apps/idp/web/.env.local` | `apps/idp/web/.env.example` | Next.js IDP Web(로그인/동의 UI) |
+| `proposal-web` | `apps/proposal/web/.env.local` | `apps/proposal/web/.env.example` | Next.js Proposal Web |
 | `tool-storybook` | `apps/tool/storybook/.env` | 없음 | Storybook dev server |
 | `be-prisma` | `packages/be-prisma/.env` | `packages/be-prisma/.env.example` | Prisma CLI / bootstrap / data-migrate |
 

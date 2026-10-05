@@ -7,8 +7,8 @@ description: "재사용 가능한 순수 UI 조합을 생성·검토·수정합�
 
 ## 역할·수정 범위
 
-- 웹 `packages/fe-ui/src/widget/**`, 모바일 `packages/fe-mo-ui/src/widget/**`의 재사용 UI 조합, 같은 위치 단위 테스트·props와 local·상위 barrel을 소유합니다.
-- API/store/router/URL/native bridge 연결은 Feature, 전체 화면 시각 구조는 Screen, 기본 leaf는 해당 UI 역할에 맡깁니다. 공용 Widget은 웹·모바일 widget 소유 경로에 만듭니다.
+- 웹 `packages/fe-ui/src/domain/**`의 재사용 업무 UI 조합, 모바일 `packages/fe-mo-ui/src/widget/**`의 재사용 UI 조합, 같은 위치 단위 테스트·props와 local·상위 barrel을 소유합니다.
+- API/store/router/URL/native bridge 연결은 Feature, 전체 화면 시각 구조는 Screen, 기본 leaf는 해당 UI 역할에 맡깁니다. 공용 Widget은 웹은 domain 소유 경로, 모바일은 widget 소유 경로에 만듭니다.
 
 ## 입력 계약
 
@@ -18,7 +18,7 @@ description: "재사용 가능한 순수 UI 조합을 생성·검토·수정합�
 
 ### 저장소에서 직접 찾을 정보
 
-- 기존 Widget, data-display/input/feedback/layout/surface/cell/data-grid leaf, public export와 props/type, 소비 Feature/Screen과 테스트를 찾습니다. 경로가 없으면 `widget/[Name]`에서 직접 확인합니다.
+- 기존 domain 업무 조합·모바일 Widget, data-display/input/feedback/layout/surface/cell/data-grid leaf, public export와 props/type, 소비 Feature/Screen과 테스트를 찾습니다. 경로가 없으면 웹은 `domain/{domain}/{Name}`, 모바일은 `widget/[Name]`에서 직접 확인합니다.
 - 대상 플랫폼, 공개 계약과 ownership을 먼저 확정합니다. 모르는 경로는 저장소에서 직접 찾아 확정합니다.
 
 ### 구현 전 필수 조건
@@ -46,8 +46,8 @@ description: "재사용 가능한 순수 UI 조합을 생성·검토·수정합�
 - 외부 observable을 렌더링하면 exported component를 `observer`로 감쌉니다. 최적화는 `observer`와 순수 함수 memo 중 역할에 맞는 하나만 적용하고 순수 함수 memo는 실제 성능 근거가 있을 때만 사용합니다.
 - 반복 table/tab group/metric grid/flow rail/status summary/read-only detail/card/list 시각 block을 Widget으로 분리합니다. `ui-composition-gap` 요청은 기존 Widget 대체 가능성부터 확인하며 Feature/Page가 조합 UI를 Widget props 계약으로 가져가도록 계약을 제공합니다.
 - 기본은 surface-less입니다. route/page title, `ScreenSurface`/`SectionSurface`, route navigation은 Screen/route owner가 소유합니다. 필요한 local panel만 `Surface`로 구성하고 제거된 detail/form surface wrapper 대신 현행 surface 계약을 사용합니다. 반복 item은 leaf의 border/divider/background/spacing으로 구분합니다.
-- `HeaderBar`/`BottomNav`/`ActionFab`/`OverlayMenu`는 widget 바로 아래 `[Name]/`에 둡니다. `NavigationPanel`은 domain navigation입니다. 공용 props는 현재 layout owner가 공개한 type을 재사용합니다.
-- 새 Widget은 `widget/index.ts`, package `src/index.ts` 및 필요한 기존 domain barrel 동기화로 공개를 완결합니다.
+- 웹 재사용 조합은 `domain/{domain}/{Name}/`에 두고 `NavigationPanel`은 `domain/navigation`이 소유합니다. 모바일 Widget은 `widget/[Name]/` 바로 아래에 둡니다. 공용 props는 현재 layout owner가 공개한 type을 재사용합니다.
+- 새 Widget은 소유 위치의 `index.ts`와 package `src/index.ts`를 동기화해 공개를 완결합니다. 웹은 해당 `domain/{domain}/index.ts`, 모바일은 `widget/index.ts`에서 공개합니다.
 
 ### 웹 조합
 

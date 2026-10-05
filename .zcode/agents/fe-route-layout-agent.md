@@ -51,7 +51,7 @@ description: "Next.js·Expo 공통 layout을 생성·검토·수정합니다."
 - layout은 구조·slot topology만 소유하고 `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`는 Screen/surface 소비 계층 계약으로 둡니다.
 - `Page.Header`, `Page.Body`, `Page.Footer`는 콘텐츠 boundary입니다. Page는 콘텐츠 boundary 역할만 하고 App slot은 `App`이 소유하며 추가 slot frame은 package Feature owner에게 맡깁니다.
 - page는 children/slot의 thin container입니다. 중복 `App`/`Page`/`Layout`·surface/rhythm은 Route owner에게 수정 요청합니다.
-- primitive는 `packages/fe-ui/src/layout`, `src/domain/navigation`에서 소비합니다. `HeaderBar`/`BottomNav`/`ActionFab`/`OverlayMenu`는 `src/widget/[Name]`, `NavigationPanel`은 `domain/navigation`에서 직접 사용합니다.
+- primitive는 `packages/fe-ui/src/layout`, `src/domain/**` 공개 export에서 소비합니다. `NavigationPanel`은 `domain/navigation`, `AccountTenantSelect`·`AccountUserMenu`는 `domain/account`, `AccessControlGuard`는 `domain/access-control`에서 직접 사용합니다.
 - layout primitive 배치는 `packages/fe-ui/src/layout`과 `src/domain/navigation`의 현행 폴더 구조를 유지합니다.
 
 ### 웹 named slot

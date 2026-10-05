@@ -6,47 +6,52 @@
 
 ## 역할
 
-`tool-storybook` 이미지를 빌드하고 Harbor production 저장소에 푸시합니다.  
-빌드 성공 후에는 GitOps 반영 Job을 비동기로 트리거해 `prj-devops`의 prod 태그를 갱신합니다.
+`tool-storybook` 이미지를 원격 BuildKit 데몬(buildkitd)으로 빌드해 Harbor production 저장소에 푸시합니다.  
+빌드 성공 후에는 GitOps 반영 Job을 비동기로 트리거해 **prj-deploy**의 `prod/tool-storybook.yaml` 이미지 태그를 갱신합니다(2026-09-27 저장소 분리 이후).  
+2026-10-04 BuildKit 파일럿(`Jenkinsfile.tool-storybook.buildkit`)을 본체로 병합해 Podman 빌드를 제거했습니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
 | 빌드 대상 | `tool-storybook` |
-| 이미지 경로 | `HARBOR_REGISTRY/prod/tool-storybook` |
-| 브랜치 정책 | `main` 브랜치만 허용, 그 외 브랜치는 즉시 실패 |
-| Podman 실행 이미지 | `quay.io/podman/stable:v5.8.4` multi-arch manifest를 digest로 고정 |
-| pull 정책 | agent 시작 시 `alwaysPullImage: false`, 이미지 빌드 시 `--pull=newer` 사용(로컬 캐시 우선, 원본이 더 최신일 때만 재풀) |
-| 격리 경계 | 동적 Jenkins agent Pod와 build별 PVC 하위 Podman storage/workspace 경로 사용 |
+| 이미지 경로 | `HARBOR_REGISTRY/prod/tool-storybook` — SHA-12 커밋 태그만 push (`latest` 없음) |
+| 브랜치 정책 | `main` 브랜치만 허용, PR/그 외 브랜치는 즉시 실패 |
+| 빌드 방식 | `buildctl --addr tcp://buildkitd.devops-tools.svc.cluster.local:1234`로 원격 buildkitd 빌드 (Podman 미사용) |
+| 실행 컨테이너 | `docker.io/moby/buildkit:v0.33.0-rootless` digest 고정, `privileged` 아님, PVC 마운트 없음 |
+| 캐시 저장 | BuildKit 캐시는 buildkitd 데몬의 PVC에 저장되어 빌드 간 재사용됨 |
+| Harbor 인증 | Jenkinsfile에 registry login 없음. buildkitd 데몬에 마운트된 시크릿으로 처리 (런북 참조) |
+| 빌드 인자 | `STORYBOOK_DISABLE_CHROMATIC=true` (파일럿에서 `STORYBOOK_BUILD_NOFILE` build-arg는 제거됨 — Dockerfile 기본값과 RUN 내 ulimit 폴백이 처리) |
 | 실행 Stage | `Validate Branch` → `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
-| 빌드 인자 | `STORYBOOK_DISABLE_CHROMATIC`, `STORYBOOK_BUILD_NOFILE` |
-| 빌드 리밋 | `podman build --ulimit nofile=<value>:<value>`로 RUN 컨테이너의 파일 디스크립터 한계를 상향 |
-| 워크스페이스 위치 | `ws(/var/lib/containers/tsb/b<build>/ws)`로 Jenkins workspace를 짧은 PVC 하위 경로에 고정 |
-| 임시 디렉터리 | `TMPDIR`, `XDG_RUNTIME_DIR`, `HOME`을 `/var/lib/containers/*` 아래로 고정해 Podman 임시 파일을 PVC로 유도 |
-| 빌드별 경로 | workspace/Podman storage를 `/var/lib/containers/tsb/b<build>/{ws,root,run,tmp,home}`로 단순화 |
-| Ephemeral Storage | `podman` 컨테이너에 `request=8Gi`, `limit=20Gi`를 요청 |
 | GitOps 트리거 | 보호된 내부 job이 주입하는 `GITOPS_UPDATE_JOB` 환경변수 |
-| 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT` |
+| 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV=prod`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT`, `SOURCE_BUZZ_EVENT_ID` |
+| 알림 | buzz #cicd 채널 성공/실패 알림. 성공 알림 `event_id`를 `SOURCE_BUZZ_EVENT_ID`로 전달해 범프/배포 알림을 같은 스레드로 묶고, 실패 시 @ZCode 멘션 |
 | 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
 
 ## 구현 체크리스트
 
-- [x] `podman build/push`를 기존 앱과 동일하게 수행함
-- [x] production 저장소(`prod/tool-storybook`)만 대상으로 푸시함
-- [x] `main` 브랜치 외에는 배포를 막아 prod-only 정책을 강제함
-- [x] GitOps Job을 `wait: false` 비동기로 실행함
-- [x] GitOps 트리거 실패가 이미지 빌드 성공을 실패로 바꾸지 않음
-- [x] fully qualified base image 리터럴로 short-name resolution 문제를 회피함
-- [x] Podman agent를 안전 버전과 검증된 multi-arch digest로 고정함
-- [x] Storybook 정적 이미지 빌드에서는 Chromatic addon 비활성화와 `nofile` 상향 인자를 함께 전달함
-- [x] `podman build --ulimit`로 builder RUN 컨테이너 hard/soft nofile 한계를 직접 상향함
-- [x] Podman 컨테이너의 `ephemeral-storage` request/limit를 명시해 low-storage 노드 배치를 피함
-- [x] workspace 및 Podman 임시 디렉터리를 PVC로 유도해 emptyDir 기반 ephemeral storage 사용량을 줄임
-- [x] `ws(...)`와 Podman `--root/--runroot/--tmpdir`를 빌드별 PVC 경로로 고정해 overlay/tmp/workspace가 노드 ephemeral storage를 쓰지 않도록 함
-- [x] `ephemeral-storage` request/limit를 `8Gi/20Gi`로 상향해 더 큰 여유가 있는 노드로 스케줄되도록 조정함
+- [x] 보안 게이트(main 전용 검사, `TRUSTED_DEPLOYMENT`, 내부 배포 환경변수 검증)를 유지함
+- [x] privileged 없는 buildctl 컨테이너로 빌드 방식을 교체함
+- [x] 빌드와 push를 `buildctl --output type=image,push=true` 단일 명령으로 수행함
+- [x] `Dockerfile.tool-storybook`은 수정 없이 dockerfile.v0 프론트엔드가 그대로 소비함
+- [x] prod GitOps 트리거 stage 계약(파라미터, 비동기, UNSTABLE 전파)을 유지함
+- [x] 파일럿 검증 완료 구조(알림 컨테이너 제거·wget 폴백·event_id 정규식 추출)를 그대로 본체에 병합함
+
+## 운영 노트
+
+- 파일럿 잡 항목은 prj-devops main(d5baa2b)에서 본체 `tool-storybook-build` 잡으로 병합되었습니다(regions 승계, 파일럿 잡 scriptPath 변경·정리 불필요). 남은 외부 조치는 Jenkins 차트 `helm upgrade` 적용 1건뿐입니다.
+- 함정: 적용 직후 첫 gitops 범프 빌드는 선언적 파라미터가 한 번 지워져 `TRUSTED_DEPLOYMENT != 'true'`로 실패할 수 있습니다. 파라미터를 명시해 재실행하면 됩니다(prj-devops docs/buzz-ci-integration.md).
+- 적용 후 첫 앱 빌드에서 buildctl 파드 프로비저닝(구 파일럿 잡의 containerCap 라벨 대기 이력)을 관찰합니다. 검증 관점: 같은 커밋으로 2회 빌드해 `--progress=plain` 로그에서 pnpm/turbo 스텝의 `CACHED` 표시를 확인하고 빌드 시간을 비교하며, 이미지 push 성공을 확인합니다.
+- watch-item: BuildKit은 빌드별 ulimit 상향이 불가합니다. Storybook 빌드의 `nofile=65536` 요구가 buildkitd 데몬 기본값으로 충분한지 관찰합니다. 부족하면 빌드 실패(EMFILE)로 나타나며, 이 경우 Dockerfile RUN 내 ulimit 폴백 로직 점검이 필요합니다.
 
 ## 잔여 위험
 
-`privileged: true`는 현재 Jenkins Podman 스토리지 드라이버와 PVC 운영 계약을 실제 환경에서 검증하기 전까지 배포 전용 job에서만 유지합니다. 외부 PR은 `Jenkinsfile.public-ci`의 비특권 컨테이너만 사용합니다.
-build별 storage 경로는 작업 간 오염을 줄이지만 privileged 컨테이너의 노드 탈출 영향을 제거하지 않으므로, 전용 namespace와 격리된 builder node pool에서 운용하고 rootless Podman 전환 검증 후 권한을 제거해야 합니다.
+buildkitd 데몬이 단일 장애점이므로 데몬 장애 시 이 잡의 빌드가 실패합니다. 파일럿 병합으로 Podman 병행 운영 경로가 사라져 롤백 시 git history의 구 Jenkinsfile 복원이 필요합니다.
+
+## 변경 이력
+
+| 일자 | 내용 | 작성자 |
+|------|------|--------|
+| 2026-09-20 | BuildKit 파일럿 파이프라인 `Jenkinsfile.tool-storybook.buildkit` 신설 (캐시 마운트 영속성 검증) | codex |
+| 2026-10-04 | 파일럿을 본체로 병합 — Podman 빌드 제거, `--ulimit nofile`/`STORYBOOK_BUILD_NOFILE` build-arg 제거, 파일럿 2파일 삭제 | zcode |
+| 2026-10-04 | 운영 노트 정정 — prj-devops d5baa2b의 파일럿 잡 본체 병합 반영, 남은 외부 조치를 Jenkins 차트 helm upgrade 1건으로 확정 | zcode |

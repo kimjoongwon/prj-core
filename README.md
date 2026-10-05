@@ -3,7 +3,7 @@
 > 현대적인 풀스택 예약 플랫폼을 위한 모노레포 아키텍처
 
 [![타입스크립트](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-22.18+-green.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-24+-green.svg)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.34-orange.svg)](https://pnpm.io/)
 [![Turborepo](https://img.shields.io/badge/Turborepo-latest-red.svg)](https://turbo.build/)
 [![NestJS](https://img.shields.io/badge/NestJS-11-E0234E.svg)](https://nestjs.com/)
@@ -86,8 +86,8 @@
 | 카테고리             | 기술            | 버전      | 설명                    |
 | -------------------- | --------------- | --------- | ----------------------- |
 | **Framework**        | React           | 19.2      | UI 라이브러리           |
-| **Build Tool**       | Vite            | 6.4       | 번들러 및 개발 서버     |
-| **Routing**          | TanStack Router | 1.x       | 타입 안전 라우팅        |
+| **Meta Framework**   | Next.js         | 16.x      | 웹 앱 프레임워크(App Router, admin·idp·proposal 웹) |
+| **Routing**          | App Router (Next.js) / Expo Router | 16.x | 파일 기반 라우팅 |
 | **State Management** | MobX            | 6.13      | 반응형 상태 관리         |
 | **Data Fetching**    | TanStack Query  | 5.83      | 서버 상태 관리          |
 | **API Client**       | Orval 생성 클라이언트 | 8.x  | OpenAPI 기반 자동 생성 (`fe-api`) |
@@ -102,7 +102,7 @@
 | 카테고리             | 기술            | 버전      | 설명                |
 | -------------------- | --------------- | --------- | ------------------- |
 | **Framework**        | NestJS          | 11.2 | Node.js 프레임워크  |
-| **Runtime**          | Node.js         | 22.18+ | JavaScript 런타임 |
+| **Runtime**          | Node.js         | 24(컨테이너 24.21.0 고정) | JavaScript 런타임 |
 | **Language**         | TypeScript      | 5.9  | 타입스크립트        |
 | **ORM**              | Prisma          | 7.10 | 데이터베이스 ORM    |
 | **Database**         | PostgreSQL      | 14+  | 관계형 데이터베이스 |
@@ -135,8 +135,8 @@ prj-core/
 ├── apps/                          # 애플리케이션
 │   ├── core/api/                  # Core API — 메인 백엔드 (NestJS, http://localhost:3006)
 │   ├── idp/api/                   # IDP API — OIDC 인증 서버 백엔드
-│   ├── idp/web/                   # IDP Web — 로그인/동의 화면 (React + Vite)
-│   ├── admin/web/                 # Admin 웹 (React + Vite, http://localhost:3000)
+│   ├── idp/web/                   # IDP Web — 로그인/동의 화면 (Next.js, http://localhost:3008)
+│   ├── admin/web/                 # Admin 웹 (Next.js, http://localhost:3000/admin)
 │   ├── proposal/web/              # Proposal 웹 (http://localhost:3011/proposal)
 │   ├── mobile/                    # 모바일 앱 (Expo + Detox E2E)
 │   ├── tool/storybook/            # 웹 UI 컴포넌트 문서화 (http://localhost:6006)
@@ -251,7 +251,7 @@ graph TD
 
 ### 로컬 핵심 서비스 한 번에 실행
 
-Docker Desktop과 Node.js 22+, pnpm 10+를 준비한 뒤 clean clone에서 실행합니다.
+Docker Desktop과 Node.js 24+, pnpm 10+를 준비한 뒤 clean clone에서 실행합니다.
 
 ```bash
 pnpm install --frozen-lockfile
@@ -268,7 +268,7 @@ pnpm start -- core-api admin-web proposal-web
 
 ### 사전 요구사항
 
-- **Node.js**: 22.18.0 이상
+- **Node.js**: 24.0.0 이상 (프로덕션 컨테이너·CI는 24.21.0으로 고정)
 - **pnpm**: 10.34.0 이상
 - **PostgreSQL**: 14.x 이상
 
@@ -289,15 +289,18 @@ pnpm install
 
 2. **환경 변수 설정**
 
-로컬 개발에서는 각 앱/패키지 디렉터리의 `.env.example`을 `.env`로 복사합니다.
-`.env.local`과 `.env.development.local`은 사용하지 않습니다.
+로컬 개발에서는 각 앱/패키지 디렉터리의 `.env.example`을 복사해 사용합니다.
+서버 앱·패키지(core-api, idp-api, be-prisma)는 `.env`를, Next.js 웹 앱(admin·idp·proposal
+web)은 `.env.local`을 사용합니다(dev 스크립트가 `.env.local`을 source). 그 외 변형
+(`.env.development.local` 등)은 사용하지 않습니다.
 
 ```bash
 cp apps/core/api/.env.example apps/core/api/.env
 cp packages/be-prisma/.env.example packages/be-prisma/.env
 ```
 
-> **💡 참고**: `.env.example`는 커밋되는 템플릿이고, 실제 로컬 실행은 각 디렉터리의 `.env`만 사용합니다.
+> **💡 참고**: `.env.example`는 커밋되는 템플릿이고, 실제 로컬 실행은 위 규칙에 따라
+> 각 디렉터리의 `.env`(서버 계열) / `.env.local`(웹 앱 계열)만 사용합니다.
 > 배포 환경 변수는 `prj-devops`의 OpenBao를 통해 주입됩니다.
 
 3. **데이터베이스 마이그레이션**
@@ -332,15 +335,20 @@ pnpm start:mobile          # Expo 모바일 앱
 
 이 프로젝트의 환경 변수 규칙은 다음과 같습니다.
 
-- 로컬 실행은 각 앱/패키지 디렉터리의 `.env`만 사용합니다.
+- 서버 앱·패키지(core-api, idp-api, be-prisma)는 각 디렉터리의 `.env`를 사용합니다.
+- Next.js 웹 앱(admin·idp·proposal web)은 각 디렉터리의 `.env.local`을 사용합니다(dev 스크립트가 source).
 - `.env.example`는 커밋되는 템플릿이며 런타임에서 직접 읽지 않습니다.
-- `.env.local`, `.env.development.local`은 사용하지 않습니다.
+- `.env.development.local` 등 그 외 변형은 사용하지 않습니다.
 - 배포 환경 변수는 `prj-devops`에서 관리하는 OpenBao를 통해 주입됩니다.
 
 ### 예제 파일
 
-- `apps/core/api/.env.example`
-- `packages/be-prisma/.env.example`
+- `apps/core/api/.env.example` → `.env`
+- `apps/idp/api/.env.example` → `.env`
+- `apps/admin/web/.env.example` → `.env.local`
+- `apps/idp/web/.env.example` → `.env.local`
+- `apps/proposal/web/.env.example` → `.env.local`
+- `packages/be-prisma/.env.example` → `.env`
 - 프로젝트별 env 키 표: [docs/env-reference.md](./docs/env-reference.md)
 
 ## 💻 개발 가이드
@@ -525,4 +533,3 @@ Kubernetes 배포에서는 런타임 `.env` 파일을 사용하지 않습니다.
 ---
 
 **타입스크립트, 리액트, NestJS, Prisma로 만들어졌습니다 ❤️**
-```
