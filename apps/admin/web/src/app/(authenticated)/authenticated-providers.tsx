@@ -3,18 +3,37 @@ import {
 	installCoreSessionRecovery,
 	refreshSessionTokens,
 } from "@cocrepo/api/core/client";
-import { useVerifyToken } from "@cocrepo/api/idp/auth";
+import {
+	getCurrentSpace,
+	getCurrentSpaceQueryKey,
+	getGetMySpacesQueryKey,
+	getMySpaces,
+	setCurrentSpace,
+	useVerifyToken,
+} from "@cocrepo/api/idp/auth";
 import { isScopeKindAccessible, Token } from "@cocrepo/constant";
 import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
 import { type AuthSession, useApp } from "@cocrepo/store";
+import { formatDatabaseId } from "@cocrepo/type";
 import { Spinner } from "@heroui/react";
+import {
+	type DehydratedState,
+	HydrationBoundary,
+	type QueryClient,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 import { resolveAbilityBootstrapRules } from "./ability-bootstrap";
 
 interface AuthenticatedProvidersProps {
 	children: ReactNode;
+	/**
+	 * (authenticated) layout이 서버에서 prefetch한 쿐시. accessToken 쿠키가
+	 * 없거나 prefetch가 실패한 폴백 경로에서는 undefined다.
+	 */
+	dehydratedState?: DehydratedState;
 }
 
 // window.location.href는 origin 전체 경로를 쓴다(admin web은 basePath "/admin").
@@ -60,63 +79,85 @@ function installAdminSessionRecovery(authSession: AuthSession) {
  * 순간부터 세션/권한/tenant bootstrap이 동작합니다.
  *
  * Provider 계층 구조:
- * SessionBootstrap (OIDC 세션 쿠키 → 스토어 부트스트랩)
- * └── TenantAccessBootstrapper (권한 규칙 + navigation scope)
- *     └── AccountBootstrapper (tenant 선택 부트스트랩과 리다이렉트)
+ * HydrationBoundary (서버 prefetch 캐시 → 브라우저 QueryClient)
+ * └── SessionBootstrap (OIDC 세션 쿠키 → 스토어 부트스트랩)
+ *     └── TenantAccessBootstrapper (권한 규칙 + navigation scope)
+ *         └── AccountBootstrapper (tenant 선택 부트스트랩)
  */
 export const AuthenticatedProviders = observer(
-	function AuthenticatedProviders({ children }: AuthenticatedProvidersProps) {
+	function AuthenticatedProviders({
+		children,
+		dehydratedState,
+	}: AuthenticatedProvidersProps) {
 		return (
-			<SessionBootstrap>
-				<TenantAccessBootstrapper>
-					<AccountBootstrapper>{children}</AccountBootstrapper>
-				</TenantAccessBootstrapper>
-			</SessionBootstrap>
+			<HydrationBoundary state={dehydratedState}>
+				<SessionBootstrap>
+					<TenantAccessBootstrapper>
+						<AccountBootstrapper>{children}</AccountBootstrapper>
+					</TenantAccessBootstrapper>
+				</SessionBootstrap>
+			</HydrationBoundary>
 		);
 	},
 );
 
 /**
- * current-space가 null이고 사용 가능한 space가 1개 이상이면 첫 번째를 자동 선택한다.
- * TenantAccessBootstrapper가 권한 확인 중에 무한 대기하는 것을 방지한다.
+ * current-space가 null이고 사용 가능한 space가 1개 이상이면 첫 번째 tenant를
+ * 기본 선택한다. 스토어 복원 세션(재방문/새로고침)과 쿠키 갱신 세션(첫 진입)
+ * 모든 세션 경로에서 호출되며, TenantAccessBootstrapper가 권한 확인 중에
+ * 무한 대기하는 것을 방지한다.
+ *
+ * 확인용 조회는 클라이언트 hook과 같은 queryKey의 캐시(서버 prefetch 또는
+ * 폴백 경로의 선행 fetch)를 ensureQueryData로 읽어 중복 GET을 만들지 않고
+ * 실제 선택만 POST로 수행한다. POST 결과는 current-space 캐시에 반영해 추가
+ * GET 없이 선택 상태가 확정되게 한다. Authorization은 customFetch가 세션
+ * 스코프(스토어)의 토큰을 주입한다.
  */
-async function autoSelectFirstSpace(accessToken: string): Promise<void> {
-	try {
-		const currentResponse = await fetch("/api/v1/auth/current-space", {
-			headers: { Authorization: `Bearer ${accessToken}` },
-			credentials: "include",
-		});
-		const currentBody = (await currentResponse.json()) as {
-			data?: { id?: string } | null;
-		};
-		if (currentBody?.data?.id) {
-			return;
-		}
-
-		const spacesResponse = await fetch("/api/v1/auth/my-spaces", {
-			headers: { Authorization: `Bearer ${accessToken}` },
-			credentials: "include",
-		});
-		const spacesBody = (await spacesResponse.json()) as {
-			data?: Array<{ tenantId?: string }>;
-		};
-		const firstTenantId = spacesBody?.data?.[0]?.tenantId;
-		if (!firstTenantId) {
-			return;
-		}
-
-		await fetch("/api/v1/auth/current-space", {
-			method: "POST",
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({ tenantId: firstTenantId }),
-		});
-	} catch {
-		// 자동 선택 실패 시 /select-space 화면이 안내한다.
+async function runAutoSelectFirstSpace(queryClient: QueryClient): Promise<void> {
+	const currentResponse = await queryClient.ensureQueryData({
+		queryKey: getCurrentSpaceQueryKey(),
+		queryFn: ({ signal }) => getCurrentSpace(undefined, signal),
+	});
+	if (currentResponse?.data?.id) {
+		return;
 	}
+
+	const spacesResponse = await queryClient.ensureQueryData({
+		queryKey: getGetMySpacesQueryKey(),
+		queryFn: ({ signal }) => getMySpaces({ signal }),
+	});
+	const firstTenantId = spacesResponse?.data?.[0]?.tenantId;
+	if (!firstTenantId) {
+		return;
+	}
+
+	const selectedSpaceResponse = await setCurrentSpace({
+		tenantId: formatDatabaseId(firstTenantId),
+	});
+	queryClient.setQueryData(
+		getCurrentSpaceQueryKey(),
+		selectedSpaceResponse,
+	);
+}
+
+let autoSelectFirstSpacePromise: Promise<void> | null = null;
+
+/**
+ * StrictMode 이중 실행 등 SessionBootstrap이 동시에 자동 선택을 시도하면
+ * POST가 중복된다. 진행 중인 호출을 공유해 1회만 실행한다. 실패는 무시한다
+ * (tenant 미선택 상태로 그대로 진행한다).
+ */
+function autoSelectFirstSpace(queryClient: QueryClient): Promise<void> {
+	if (!autoSelectFirstSpacePromise) {
+		autoSelectFirstSpacePromise = runAutoSelectFirstSpace(queryClient)
+			.catch(() => {
+				// 자동 선택 실패 시 무시하고 tenant 미선택 상태로 진행한다.
+			})
+			.finally(() => {
+				autoSelectFirstSpacePromise = null;
+			});
+	}
+	return autoSelectFirstSpacePromise;
 }
 
 /**
@@ -135,9 +176,10 @@ function readSessionPresenceMarker(): boolean {
  * OIDC 콜백은 HttpOnly 세션 쿠키(accessToken/refreshToken/sessionId)만 심은 채
  * 프론트 스토어는 비어 있는 상태로 도착한다. document.cookie로는 HttpOnly 쿠키를
  * 읽을 수 없으므로 공용 token/refresh(단일 비행)를 호출해 회전된 토큰과
- * sessionId로 스토어를 채운다. 세션 표시가 없거나 갱신에 실패하면 로그인 화면으로
- * 보내고 하위 트리는 렌더하지 않는다(비인증 API 호출이 401 콘솔을 오염시키지
- * 않도록).
+ * sessionId로 스토어를 채운다. 스토어 세션이 살아 있는 재방문도 세션 확정으로
+ * 인정한다. 세션 표시가 없거나 갱신에 실패하면 로그인 화면으로 보내고 하위
+ * 트리는 렌더하지 않는다(비인증 API 호출이 401 콘솔을 오염시키지 않도록).
+ * 세션이 확보된 모든 경로에서 tenant 미선택 시 첫 번째 tenant를 기본 선택한다.
  */
 const SessionBootstrap = observer(function SessionBootstrap({
 	children,
@@ -147,6 +189,7 @@ const SessionBootstrap = observer(function SessionBootstrap({
 	const app = useApp();
 	const { authSession } = app.account;
 	const router = useRouter();
+	const queryClient = useQueryClient();
 	const [shouldRenderChildren, setShouldRenderChildren] = useState(false);
 
 	useEffect(() => {
@@ -154,23 +197,35 @@ const SessionBootstrap = observer(function SessionBootstrap({
 
 		installAdminSessionRecovery(authSession);
 
+		// 세션 확보와 tenant 기본 선택은 별개 단계로 나눈다. 스토어 복원
+		// 세션(재방문/새로고침)과 쿠키 갱신 세션(첫 진입) 모두 세션이 확보된
+		// 뒤에는 같은 tenant 기본 선택 계약을 밟아야 한다.
 		const bootstrapFromSessionCookies = async (): Promise<boolean> => {
-			if (authSession.refreshToken && authSession.sessionId) {
+			const ensureAuthenticatedSession = async (): Promise<boolean> => {
+				if (authSession.refreshToken && authSession.sessionId) {
+					return true;
+				}
+				if (!readSessionPresenceMarker()) {
+					router.replace("/auth/login");
+					return false;
+				}
+
+				const refreshed = await refreshSessionTokens();
+				if (!refreshed) {
+					router.replace("/auth/login");
+					return false;
+				}
 				return true;
-			}
-			if (!readSessionPresenceMarker()) {
-				router.replace("/auth/login");
+			};
+
+			if (!(await ensureAuthenticatedSession())) {
 				return false;
 			}
 
-			const refreshed = await refreshSessionTokens();
-			if (!refreshed) {
-				router.replace("/auth/login");
-				return false;
-			}
-
-			// Space 미선택 시 첫 번째 space를 자동 선택한다 (첫 로그인 UX).
-			await autoSelectFirstSpace(authSession.accessToken ?? "");
+			// tenant 미선택 사용자는 모든 세션 경로에서 첫 번째 tenant가
+			// 기본이다. 이미 선택이 있으면 캐시 조회(서버 prefetch 포함)로
+			// 조기 반환되어 추가 네트워크가 없다.
+			await autoSelectFirstSpace(queryClient);
 			return true;
 		};
 
@@ -183,7 +238,7 @@ const SessionBootstrap = observer(function SessionBootstrap({
 		return () => {
 			cancelled = true;
 		};
-	}, [authSession, router]);
+	}, [authSession, queryClient, router]);
 
 	if (!shouldRenderChildren) {
 		return (
@@ -277,34 +332,6 @@ const AccountBootstrapper = observer(function AccountBootstrapper({
 	children: ReactNode;
 }) {
 	useTenantBootstrapFromApi();
-	const app = useApp();
-	const account = app.account;
-	const pathname = usePathname();
-	const router = useRouter();
-
-	useEffect(() => {
-		if (
-			!account.authSession.isAuthenticated ||
-			!account.isSelectionResolved
-		) {
-			return;
-		}
-
-		if (!account.currentTenantId && pathname !== "/select-space") {
-			router.replace("/select-space");
-			return;
-		}
-
-		if (account.currentTenantId && pathname === "/select-space") {
-			router.replace("/dashboard");
-		}
-	}, [
-		account,
-		account.currentTenantId,
-		account.isSelectionResolved,
-		pathname,
-		router,
-	]);
 
 	return children;
 });
