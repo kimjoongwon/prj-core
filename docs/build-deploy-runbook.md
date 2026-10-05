@@ -16,7 +16,7 @@
 - Jenkins 차트는 **ArgoCD 밖**이다 — values 변경은 `helm upgrade` 수동 적용 필요.
 - ArgoCD 앱들은 `automated + selfHeal` — prj-deploy main 푸시만 하면 롤아웃은 자동(폴링 60초 + 웹훅).
 - **stg는 2026-10-04 서비스 단위로 재가동됨**(app-of-apps 설명 기준). 단 ingress-stg는 아직 미적용이라
-  `stg.onjitda.com` 외부 라우팅은 404 — 접근은 클러스터 내부 경로(예: core-api-stg LoadBalancer 192.168.0.23)로만 가능.
+  `stg.onjitda.com` ingress 라우팅 정상(2026-10-05) — core-api-stg의 LoadBalancer 직접 노출은 제거되어 ClusterIP/ingress 경유가 유일 경로.
   (이전 상태: app-of-apps `exclude: "*-stg.yaml"`로 전면 중단 — 재가동 전엔 stg가 통째로 404였음)
 
 ## 2. 이미지 빌드 흐름 (2026-10-04 B구조 통일 이후)
