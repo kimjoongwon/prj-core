@@ -1,5 +1,6 @@
-// core-api는 운영(prod) 전용 — stg 빌드 지원 제거 (2026-10-04 B구조 전환, staging은 ArgoCD app-of-apps에서 이미 제외)
-if (env.CHANGE_ID || env.BRANCH_NAME != 'main' || env.TRUSTED_DEPLOYMENT != 'true') {
+// core-api — main(prod)·stg 양 브랜치 배포 지원 (2026-10-05 stg 재가동으로 복원, B구조 buildkit 유지)
+def DEPLOYMENT_BRANCHES = ['main', 'stg']
+if (env.CHANGE_ID || !DEPLOYMENT_BRANCHES.contains(env.BRANCH_NAME) || env.TRUSTED_DEPLOYMENT != 'true') {
     error('배포는 main 보호 브랜치의 승인된 내부 job에서만 실행할 수 있습니다.')
 }
 def HARBOR_REGISTRY = env.HARBOR_REGISTRY
@@ -106,7 +107,7 @@ podTemplate(
     ]
 ) {
     node(POD_LABEL) {
-        def ENV_NAME = 'prod'
+        def ENV_NAME = env.BRANCH_NAME == 'main' ? 'prod' : 'stg'
         // SHA-12 immutable tag: 이미지-빌드커밋 1:1 추적. 실제 값은 checkout 후에 확정한다.
         def IMAGE_TAG = ''
         def IMAGE_PATH = "${HARBOR_REGISTRY}/${ENV_NAME}/core-api"
@@ -170,7 +171,7 @@ podTemplate(
                         parameters: [
                             string(name: 'APP_NAME', value: GITOPS_APP),
                             string(name: 'IMAGE_TAG', value: IMAGE_TAG),
-                            string(name: 'DEPLOY_ENV', value: 'prod'),
+                            string(name: 'DEPLOY_ENV', value: ENV_NAME),
                             string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
                             string(name: 'SOURCE_COMMIT', value: gitCommit),
                             string(name: 'SOURCE_BUZZ_EVENT_ID', value: BUILD_BUZZ_EVENT_ID ?: ''),
