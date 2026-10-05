@@ -1,0 +1,285 @@
+import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
+import { expect, type Page, test } from "@playwright/test";
+
+let ADMIN_TENANT_ID = "";
+
+test.beforeEach(async ({ page }) => {
+	const context = await loginToConsole(page);
+	ADMIN_TENANT_ID = context.tenantId;
+});
+
+const ADMIN_API_BASE_URL = new URL(
+	"/api/v1",
+	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
+).toString();
+const ADMIN_WEB_BASE_URL = (
+	process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin"
+).replace(/\/$/, "");
+const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
+
+async function gotoRoutineList(page: Page) {
+	await page.goto("./routines", { waitUntil: "domcontentloaded" });
+	await page.waitForLoadState("networkidle");
+	await expect(page.getByRole("heading", { name: "루틴" })).toBeVisible();
+}
+
+test.describe("루틴 목록 페이지", () => {
+	// ── E2E-001: 목록 렌더링 ──
+
+	test.describe("[E2E-001] 목록 렌더링", () => {
+		test("루틴 목록 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
+			// Given: 루틴 목록 페이지 진입
+			await gotoRoutineList(page);
+
+			// Then: 타이틀과 설명 확인
+			await expect(page.getByRole("heading", { name: "루틴" })).toBeVisible();
+			await expect(
+				page.getByText("운동 루틴(커리큘럼)을 관리합니다."),
+			).toBeVisible();
+		});
+
+		test("루틴 등록 버튼이 표시되어야 한다", async ({ page }) => {
+			// Given: 루틴 목록 페이지 진입
+			await gotoRoutineList(page);
+
+			// Then: 루틴 등록 버튼 확인
+			await expect(page.getByRole("button", { name: "루틴 등록" })).toBeVisible(
+				{ timeout: 15000 },
+			);
+		});
+
+		test("검색 입력 필드가 표시되어야 한다", async ({ page }) => {
+			// Given: 루틴 목록 페이지 진입
+			await gotoRoutineList(page);
+
+			// Then: 검색 필드 확인
+			await expect(page.getByPlaceholder("루틴명으로 검색...")).toBeVisible({
+				timeout: 15000,
+			});
+		});
+	});
+
+	// ── E2E-002: 루틴 CRUD 플로우 ──
+
+	test.describe("[E2E-002] 루틴 CRUD 플로우", () => {
+		test("루틴 등록 → 상세 → 수정 → 삭제 전체 플로우", async ({ page }) => {
+			const uniqueSuffix = `${Date.now()}`.slice(-6);
+			const TEST_NAME = `E2E 테스트 루틴 ${uniqueSuffix}`;
+			const TEST_LABEL = `E2E-TEST-${uniqueSuffix}`;
+			const UPDATED_NAME = `E2E 수정된 루틴 ${uniqueSuffix}`;
+			const UPDATED_LABEL = `E2E-UPDATED-${uniqueSuffix}`;
+			const TEST_TASK_NAME = `E2E 루틴 운동 ${uniqueSuffix}`;
+			let createdTaskId: string | undefined;
+
+			const clickSaveButton = async () => {
+				await page.getByRole("button", { name: "저장" }).click();
+			};
+
+			// Cleanup: 기존 E2E 테스트 루틴 삭제
+			try {
+				const resp = await page.request.get(
+					`${ADMIN_API_BASE_URL}/routines`,
+					{ headers: getSpaceHeaders() },
+				);
+				const body = await resp.json();
+				const routines = body.data ?? [];
+				for (const routine of routines as { id: string; name: string }[]) {
+					if (routine.name === TEST_NAME || routine.name === UPDATED_NAME) {
+						await page.request.delete(
+							`${ADMIN_API_BASE_URL}/routines/${routine.id}`,
+							{ headers: getSpaceHeaders() },
+						);
+					}
+				}
+			} catch {
+				// cleanup 실패해도 계속 진행
+			}
+
+			const createTaskResponse = await page.request.post(
+				`${ADMIN_API_BASE_URL}/tasks`,
+				{
+					headers: getSpaceHeaders(),
+					data: {
+						name: TEST_TASK_NAME,
+						duration: 30,
+						count: 5,
+						videoFileId: TEST_VIDEO_FILE_ID,
+					},
+				},
+			);
+			expect(createTaskResponse.status()).toBe(201);
+			const createTaskResponseBody = (await createTaskResponse.json()) as {
+				data?: { id?: string };
+			};
+			createdTaskId = createTaskResponseBody.data?.id;
+			expect(createdTaskId).toBeTruthy();
+			expect(createdTaskId).toMatch(/^[1-9]\d*$/);
+
+			// Given: 루틴 등록 페이지로 이동
+			await page.goto("./routines/new", { waitUntil: "domcontentloaded" });
+			await page.waitForLoadState("networkidle");
+
+			// Then: 등록 페이지 타이틀 확인
+			await expect(
+				page.getByRole("heading", { name: "루틴 등록" }),
+			).toBeVisible();
+
+			// When: 루틴 이름 입력
+			await page.getByLabel("루틴 이름").fill(TEST_NAME);
+
+			// When: 단축 라벨 입력
+			await page.getByLabel("단축 라벨").fill(TEST_LABEL);
+
+			// When: 전용 schedulable 운동을 후보에서 찾아 활동으로 추가한다
+			await page.getByLabel("운동 검색").fill(TEST_TASK_NAME);
+			await expect(page.getByText(TEST_TASK_NAME, { exact: true })).toBeVisible(
+				{
+					timeout: 10000,
+				},
+			);
+			const addExerciseButton = page
+				.getByRole("button", { name: "추가" })
+				.first();
+			await addExerciseButton.click();
+
+			// When: 저장 버튼 클릭 (API 응답 대기)
+			const createResponse = page.waitForResponse(
+				(resp) =>
+					resp.url().includes("/api/v1/routines") &&
+					resp.request().method() === "POST",
+			);
+			await clickSaveButton();
+			const response = await createResponse;
+
+			// Then: 201 Created 응답 확인
+			expect(response.status()).toBe(201);
+			const createRoutineBody = (await response.json()) as {
+				data?: { id?: string };
+			};
+			const createdRoutineId = createRoutineBody.data?.id;
+			expect(createdRoutineId).toBeTruthy();
+			expect(createdRoutineId).toMatch(/^[1-9]\d*$/);
+
+			// Then: 상세 페이지로 이동 확인
+			await page
+				.waitForURL(/\/routines\/[1-9]\d*$/, { timeout: 5000 })
+				.catch(async () => {
+					await page.goto(
+						`${ADMIN_WEB_BASE_URL}/routines/${createdRoutineId}`,
+						{
+							waitUntil: "domcontentloaded",
+						},
+					);
+				});
+			await page.waitForLoadState("networkidle");
+
+			// Then: 등록한 정보 확인
+			await expect(
+				page.getByRole("heading", { name: TEST_NAME, exact: true }),
+			).toBeVisible({ timeout: 10000 });
+			await expect(
+				page.getByRole("textbox", { name: /단축 라벨/ }),
+			).toHaveValue(TEST_LABEL);
+
+			// ── 수정 플로우 ──
+
+			// When: 수정 버튼 클릭
+			await page.getByRole("button", { name: "수정" }).click();
+			await page.waitForURL(/\/routines\/.*\/edit/, { timeout: 15000 });
+			await page.waitForLoadState("networkidle");
+
+			// Then: 수정 페이지 타이틀 확인
+			await expect(
+				page.getByRole("heading", { name: "루틴 수정" }),
+			).toBeVisible({ timeout: 10000 });
+
+			// When: 루틴명 수정
+			const nameInput = page.getByLabel("루틴 이름");
+			await nameInput.fill(UPDATED_NAME);
+
+			// When: 단축 라벨 수정
+			const labelInput = page.getByLabel("단축 라벨");
+			await labelInput.fill(UPDATED_LABEL);
+			await page.waitForTimeout(300);
+
+			// When: 저장 버튼 클릭 (PATCH 응답 대기)
+			const updateResponse = page.waitForResponse(
+				(resp) =>
+					resp.url().includes("/api/v1/routines/") &&
+					resp.request().method() === "PATCH",
+			);
+			await clickSaveButton();
+			const patchResp = await updateResponse;
+
+			// Then: 200 OK 응답 확인
+			expect(patchResp.status()).toBe(200);
+
+			// Then: 상세 페이지로 복귀
+			const updatedRoutineDetailResponse = page.waitForResponse(
+				(resp) =>
+					resp.url().includes(`/api/v1/routines/${createdRoutineId}`) &&
+					resp.request().method() === "GET",
+			);
+			await page.waitForURL(/\/routines\/[1-9]\d*$/, { timeout: 15000 });
+			await updatedRoutineDetailResponse;
+			await page.waitForLoadState("networkidle");
+
+			// 페이지 리로드하여 최신 데이터 확인
+			await page.reload();
+			await page.waitForLoadState("networkidle");
+
+			await expect(
+				page.getByRole("heading", { name: UPDATED_NAME, exact: true }),
+			).toBeVisible({ timeout: 10000 });
+
+			// ── 삭제 플로우 ──
+
+			// When: 삭제 버튼 클릭
+			const deleteResponse = page.waitForResponse(
+				(resp) =>
+					resp.url().includes("/api/v1/routines/") &&
+					resp.request().method() === "DELETE",
+			);
+			await page.getByRole("button", { name: "삭제" }).click();
+			const deleteResp = await deleteResponse;
+
+			// Then: 204 No Content 응답 확인
+			expect(deleteResp.status()).toBe(204);
+
+			// Then: 목록 페이지로 이동
+			await page.waitForURL(/\/routines\/?$/, { timeout: 15000 });
+			await page.waitForLoadState("networkidle");
+
+			await expect(page.getByRole("heading", { name: "루틴" })).toBeVisible({
+				timeout: 10000,
+			});
+
+			// Then: 삭제된 루틴명이 목록에 없음
+			await expect(
+				page.getByText(UPDATED_NAME, { exact: true }),
+			).not.toBeVisible();
+
+			if (createdTaskId) {
+				let deleteTaskStatus: number | undefined;
+				for (let attempt = 0; attempt < 3; attempt += 1) {
+					const deleteTaskResponse = await page.request.delete(
+						`${ADMIN_API_BASE_URL}/tasks/${createdTaskId}`,
+						{ headers: getSpaceHeaders() },
+					);
+					deleteTaskStatus = deleteTaskResponse.status();
+
+					if (deleteTaskStatus === 204 || deleteTaskStatus === 404) {
+						break;
+					}
+
+					if (deleteTaskStatus !== 409) {
+						expect(deleteTaskStatus).toBe(204);
+					}
+
+					await page.waitForTimeout(500);
+				}
+			}
+		});
+	});
+});

@@ -1,10 +1,11 @@
-import { UserDto } from "@cocrepo/dto";
 import { User } from "@cocrepo/entity";
 import { PrismaService } from "@cocrepo/service";
+import type { ContextUserSnapshot, DatabaseId } from "@cocrepo/type";
+import type { Provider, Type } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 
 export type MockedPrismaService = DeepMockProxy<PrismaService>;
@@ -18,16 +19,16 @@ export const resetMockPrismaService = (prisma: MockedPrismaService): void => {
 };
 
 export interface TestUserData {
-	id: string;
+	id: DatabaseId;
 	name: string;
 	phone: string;
 	password: string;
 	email: string;
-	spaceId: string;
+	spaceId: DatabaseId;
 	tenants?: Array<{
-		id: string;
-		spaceId: string;
-		roleId: string;
+		id: DatabaseId;
+		spaceId: DatabaseId;
+		roleId: DatabaseId;
 	}>;
 	profiles?: Array<{
 		name: string;
@@ -39,17 +40,17 @@ export const createTestUser = (
 	overrides: Partial<TestUserData> = {},
 ): TestUserData => {
 	return {
-		id: "user-test-id",
+		id: 101n,
 		name: "test@example.com",
 		phone: "010-1234-5678",
 		password: "$2b$10$hashedPassword",
 		email: "test@example.com",
-		spaceId: "space-test-id",
+		spaceId: 301n,
 		tenants: [
 			{
-				id: "tenant-test-id",
-				spaceId: "space-test-id",
-				roleId: "role-test-id",
+				id: 201n,
+				spaceId: 301n,
+				roleId: 401n,
 			},
 		],
 		profiles: [
@@ -63,11 +64,11 @@ export const createTestUser = (
 };
 
 export const createTestUserDto = (
-	overrides: Partial<UserDto> = {},
-): UserDto => {
+	overrides: Partial<ContextUserSnapshot> = {},
+): ContextUserSnapshot => {
 	return {
-		id: "user-test-id",
-		spaceId: "space-test-id",
+		id: 101n,
+		spaceId: 301n,
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",
@@ -76,30 +77,33 @@ export const createTestUserDto = (
 		updatedAt: new Date("2024-01-01"),
 		tenants: [
 			{
-				id: "tenant-test-id",
+				id: 201n,
 				name: "Test Tenant",
-				spaceId: "space-test-id",
-				roleId: "role-test-id",
+				spaceId: 301n,
+				roleId: 401n,
 				space: {
-					id: "space-test-id",
+					id: 301n,
 					name: "Test Space",
-					ground: {
-						id: "ground-test-id",
-						name: "Test Ground",
+					fitnessCenter: {
+						id: 501n,
+						name: "Test Fitness Center",
+						company: {
+							id: 601n,
+							name: "Test Company",
+						},
 					},
 				},
-			} as any,
+			},
 		],
 		...overrides,
-	} as UserDto;
+	} as ContextUserSnapshot;
 };
 
 export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 	const user = new User();
 	Object.assign(user, {
-		id: "user-test-id",
-		seq: 1,
-		spaceId: "space-test-id",
+		id: 101n,
+		spaceId: 301n,
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",
@@ -109,19 +113,23 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 		removedAt: null,
 		tenants: [
 			{
-				id: "tenant-test-id",
+				id: 201n,
 				name: "Test Tenant",
-				spaceId: "space-test-id",
-				roleId: "role-test-id",
+				spaceId: 301n,
+				roleId: 401n,
 				space: {
-					id: "space-test-id",
+					id: 301n,
 					name: "Test Space",
-					ground: {
-						id: "ground-test-id",
-						name: "Test Ground",
+					fitnessCenter: {
+						id: 501n,
+						name: "Test Fitness Center",
+						company: {
+							id: 601n,
+							name: "Test Company",
+						},
 					},
 				},
-			} as any,
+			},
 		],
 		...overrides,
 	});
@@ -213,8 +221,8 @@ export const createMockResponse = (
 };
 
 export const setupTestModule = async (
-	providers: any[],
-	overrides: Record<string, any> = {},
+	providers: Provider[],
+	overrides: Record<string, unknown> = {},
 ): Promise<TestingModule> => {
 	const module: TestingModule = await Test.createTestingModule({
 		providers: [
@@ -247,9 +255,9 @@ export const setupTestModule = async (
 };
 
 export const setupTestController = async (
-	controller: any,
-	providers: any[] = [],
-	overrides: Record<string, any> = {},
+	controller: Type<unknown>,
+	providers: Provider[] = [],
+	overrides: Record<string, unknown> = {},
 ): Promise<TestingModule> => {
 	const module: TestingModule = await Test.createTestingModule({
 		controllers: [controller],
@@ -283,11 +291,11 @@ export const setupTestController = async (
 };
 
 export const expectToThrowAsync = async (
-	fn: () => Promise<any>,
-	errorClass?: any,
+	fn: () => Promise<unknown>,
+	errorClass?: new (...arguments_: unknown[]) => Error,
 	errorMessage?: string | RegExp,
 ): Promise<void> => {
-	let error: any;
+	let error: unknown;
 	try {
 		await fn();
 	} catch (e) {
@@ -299,10 +307,11 @@ export const expectToThrowAsync = async (
 		expect(error).toBeInstanceOf(errorClass);
 	}
 	if (errorMessage) {
+		const message = error instanceof Error ? error.message : String(error);
 		if (typeof errorMessage === "string") {
-			expect(error.message).toBe(errorMessage);
+			expect(message).toBe(errorMessage);
 		} else {
-			expect(error.message).toMatch(errorMessage);
+			expect(message).toMatch(errorMessage);
 		}
 	}
 };

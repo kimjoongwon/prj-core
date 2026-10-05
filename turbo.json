@@ -1,12 +1,46 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [
-    "**/.env.local",
-    "**/.env.development.local",
+    "**/.env",
     "pnpm-workspace.yaml",
     "pnpm-lock.yaml"
   ],
-  "globalEnv": ["NODE_ENV", "REDIS_HOST", "REDIS_PORT", "REDIS_PASSWORD"],
+  "globalEnv": [
+    "NODE_ENV",
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "REDIS_HOST",
+    "REDIS_PORT",
+    "REDIS_PASSWORD",
+    "CORS_ENABLED",
+    "CORS_ALLOWED_ORIGINS",
+    "TRUST_PROXY_HOPS",
+    "SWAGGER_ENABLED",
+    "SWAGGER_ALLOWED_IPS",
+    "SWAGGER_BASIC_AUTH_USERNAME",
+    "SWAGGER_BASIC_AUTH_PASSWORD",
+    "SWAGGER_OAUTH_REDIRECT_URI",
+    "API_PREFIX",
+    "APP_ADMIN_EMAIL",
+    "APP_HEADER_LANGUAGE",
+    "AUTH_JWT_SECRET",
+    "AUTH_JWT_TOKEN_EXPIRES_IN",
+    "AUTH_JWT_TOKEN_REFRESH_IN",
+    "AUTH_JWT_SALT_ROUNDS",
+    "ADMIN_WEB_URL",
+    "CORE_API_URL",
+    "CORE_API_INTERNAL_URL",
+    "IDP_API_URL",
+    "IDP_API_INTERNAL_URL",
+    "IDP_WEB_URL",
+    "NEXT_PUBLIC_WS_URL",
+    "OIDC_ISSUER",
+    "OIDC_JWKS_URI",
+    "OIDC_ADMIN_BASE_URL",
+    "OIDC_INTERACTION_BASE_URL",
+    "OIDC_STORYBOOK_BASE_URL",
+    "STORYBOOK_DISABLE_CHROMATIC"
+  ],
   "tasks": {
     // === 기본 태스크 ===
     "build": {
@@ -24,13 +58,26 @@
       "dependsOn": ["^build"],
       "cache": false
     },
+    "type-check:prod": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["node_modules/.cache/tsc/**"]
+    },
     "lint": {},
+    "lint:prod": {},
     "lint:fix": {},
     "format": {},
     "test": {
+      // 테스트는 자기 패키지와 의존 패키지의 dist가 모두 완성된 뒤 실행한다.
+      // 빌드 캐시 키가 globalEnv(DATABASE_URL 등) 유무로 갈리면 테스트 중 빌드가
+      // 재실행되는데, rm -rf dist 창에 jest/vitest(@cocrepo/constant은 자기 dist를
+      // npm pack하는 경계 테스트)가 dist를 읽어 ENOENT로 실패하는 플레이크가
+      // 재현된다. type-check는 자기 src만 읽어 ^build로 충분하다.
+      "dependsOn": ["build", "^build"],
       "outputs": ["coverage/**"]
     },
     "test:e2e": {
+      "dependsOn": ["build", "^build"],
       "outputs": ["coverage/**"]
     },
     "clean": {
@@ -40,19 +87,93 @@
     // === 특수 빌드 패키지 ===
     "@cocrepo/prisma#build": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "prisma/**", "tsconfig.json", "package.json", "tsup.config.*"],
+      "inputs": [
+        "src/**",
+        "schema/**",
+        "scripts/**",
+        "prisma.config.ts",
+        "seed.ts",
+        "data-migrate.ts",
+        "tsconfig.json",
+        "package.json"
+      ],
       "outputs": ["dist/**"],
       "cache": true
     },
+    "@cocrepo/e2e#build": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@cocrepo/hook#build": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@cocrepo/store#build": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@cocrepo/type#build": {
+      "outputs": ["dist/**"]
+    },
+    "@cocrepo/ui#build": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
 
     // === 앱 태스크 ===
-    "server#build": {
+    "admin-web#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "cache": true
+    },
+    "admin-web#start:dev": {
+      "dependsOn": ["^build"],
+      "with": ["@cocrepo/constant#start:dev"],
+      "cache": false,
+      "persistent": true
+    },
+    "proposal-web#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "cache": true
+    },
+    "idp-web#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "cache": true
+    },
+    "idp-api#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "tsconfig.build.json", "package.json", "nest-cli.json"],
       "outputs": ["dist/**"],
       "cache": true
     },
-    "server#start:dev": {
+    "core-api#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "tsconfig.build.json", "package.json", "nest-cli.json"],
+      "outputs": ["dist/**"],
+      "cache": true
+    },
+    "tool-storybook#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        ".storybook/**",
+        "package.json",
+        "postcss.config.*",
+        "public/**",
+        "tailwind.css",
+        "test-setup.js",
+        "tsconfig.json",
+        "vitest.config.*",
+        "hero.ts"
+      ],
+      "outputs": ["storybook-static/**"],
+      "cache": true
+    },
+    "core-api#start:dev": {
       "dependsOn": ["^build"],
       "cache": false,
       "persistent": true

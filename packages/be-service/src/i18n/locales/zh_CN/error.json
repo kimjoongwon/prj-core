@@ -1,0 +1,31 @@
+{
+  "prisma": {
+    "P2002": "存在重复数据",
+    "P2025": "未找到请求的数据",
+    "P2003": "关联数据不存在",
+    "P2016": "数据库架构不匹配错误",
+    "P2001": "没有符合查询条件的数据",
+    "P2014": "关系约束违规",
+    "P2015": "未找到关联数据",
+    "P2018": "未找到必需的连接数据",
+    "P2019": "输入错误",
+    "P2021": "表不存在",
+    "P2022": "列不存在"
+  },
+  "auth": {
+    "unauthorized": "需要身份验证",
+    "forbidden": "访问被拒绝",
+    "invalidToken": "无效的令牌",
+    "expiredToken": "令牌已过期",
+    "invalidCredentials": "电子邮件或密码不正确",
+    "userNotFound": "未找到用户",
+    "duplicateEmail": "电子邮件已在使用中",
+    "sessionExpired": "会话已过期"
+  },
+  "server": {
+    "internal": "服务器内部错误",
+    "badRequest": "错误的请求",
+    "notImplemented": "功能未实现",
+    "timeout": "请求超时"
+  }
+}

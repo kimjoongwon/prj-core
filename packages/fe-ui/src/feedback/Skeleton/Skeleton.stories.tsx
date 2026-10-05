@@ -1,0 +1,254 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import { useEffect, useState } from "react";
+import { Typography } from "../../data-display/Typography";
+import { Skeleton } from "./Skeleton";
+
+const meta = {
+	title: "feedback/Skeleton",
+	component: Skeleton,
+	parameters: {
+		layout: "centered",
+		docs: {
+			description: {
+				component:
+					"A skeleton loading component that displays placeholder content while data is being loaded. Based on NextUI Skeleton component.",
+			},
+		},
+	},
+	tags: ["autodocs"],
+	argTypes: {
+		animationType: {
+			control: "select",
+			options: ["pulse", "shimmer", "none"],
+			description: "Skeleton animation type",
+			defaultValue: "pulse",
+		},
+		children: {
+			control: "text",
+			description: "The content to display when loaded",
+		},
+		className: {
+			control: "text",
+			description: "Additional CSS classes to apply",
+		},
+	},
+} satisfies Meta<typeof Skeleton>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+	args: {
+		animationType: "pulse",
+		children: "Content loaded!",
+		className: "w-48 h-12 rounded-lg",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Default skeleton loading state.",
+			},
+		},
+	},
+};
+
+export const Loaded: Story = {
+	args: {
+		animationType: "none",
+		children: "This content has finished loading!",
+		className: "w-48 h-12 rounded-lg",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Skeleton with content loaded.",
+			},
+		},
+	},
+};
+
+export const TextSkeletons: Story = {
+	render: () => (
+		<div className="w-64 max-w-sm space-y-3">
+			<Skeleton className="h-4 w-3/4 rounded-lg" />
+			<Skeleton className="h-4 w-full rounded-lg" />
+			<Skeleton className="h-4 w-2/3 rounded-lg" />
+			<Skeleton className="h-4 w-1/2 rounded-lg" />
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: "Multiple text line skeletons with different widths.",
+			},
+		},
+	},
+};
+
+export const CardSkeleton: Story = {
+	render: () => (
+		<div className="max-w-sm space-y-4 rounded-lg border border-border bg-surface p-6 shadow-surface">
+			<Skeleton className="h-32 w-full rounded-lg" />
+			<div className="space-y-2">
+				<Skeleton className="h-6 w-3/4 rounded-lg" />
+				<Skeleton className="h-4 w-full rounded-lg" />
+				<Skeleton className="h-4 w-full rounded-lg" />
+				<Skeleton className="h-4 w-2/3 rounded-lg" />
+			</div>
+			<div className="flex space-x-2">
+				<Skeleton className="h-8 w-20 rounded-lg" />
+				<Skeleton className="h-8 w-24 rounded-lg" />
+			</div>
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Card layout skeleton with image, text, and button placeholders.",
+			},
+		},
+	},
+};
+
+export const ProfileSkeleton: Story = {
+	render: () => (
+		<div className="flex max-w-md items-center space-x-4 rounded-lg border border-border bg-surface p-4 shadow-surface">
+			<Skeleton className="h-12 w-12 rounded-full" />
+			<div className="flex-1 space-y-2">
+				<Skeleton className="h-4 w-24 rounded-lg" />
+				<Skeleton className="h-3 w-32 rounded-lg" />
+			</div>
+			<Skeleton className="h-6 w-16 rounded-lg" />
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Profile card skeleton with avatar, name, and status placeholders.",
+			},
+		},
+	},
+};
+
+export const ListSkeleton: Story = {
+	render: () => (
+		<div className="max-w-md space-y-4">
+			{[...Array(5)].map((_, i) => {
+				const uniqueKey = `list-skeleton-item-${i}-${Math.random()
+					.toString(36)
+					.substr(2, 9)}`;
+				return (
+					<div
+						key={uniqueKey}
+						className="flex items-center space-x-3 rounded-lg border border-border bg-surface p-3"
+					>
+						<Skeleton className="h-8 w-8 rounded-full" />
+						<div className="flex-1 space-y-1">
+							<Skeleton className="h-4 w-3/4 rounded-lg" />
+							<Skeleton className="h-3 w-1/2 rounded-lg" />
+						</div>
+						<Skeleton className="h-6 w-12 rounded-lg" />
+					</div>
+				);
+			})}
+		</div>
+	),
+	parameters: {
+		docs: {
+			description: {
+				story: "List of skeleton items for loading states in lists.",
+			},
+		},
+	},
+};
+
+export const LoadingStates: Story = {
+	render: () => {
+		const [isLoaded, setIsLoaded] = useState(false);
+
+		useEffect(() => {
+			const timer = setTimeout(() => setIsLoaded(true), 2000);
+			return () => clearTimeout(timer);
+		}, []);
+
+		return (
+			<div className="max-w-sm rounded-lg border border-border bg-surface p-6 shadow-surface">
+				<Skeleton
+					animationType={isLoaded ? "none" : "pulse"}
+					className="mb-4 h-40 w-full rounded-lg"
+				>
+					<div className="h-40 w-full rounded-lg bg-surface-tertiary" />
+				</Skeleton>
+
+				<div className="space-y-2">
+					<Skeleton
+						animationType={isLoaded ? "none" : "pulse"}
+						className="h-6 w-3/4 rounded-lg"
+					>
+						<Typography.Heading className="text-lg" level={3} weight="bold">
+							Amazing Product Title
+						</Typography.Heading>
+					</Skeleton>
+
+					<Skeleton
+						animationType={isLoaded ? "none" : "pulse"}
+						className="h-4 w-full rounded-lg"
+					>
+						<Typography.Paragraph color="muted">
+							This is a detailed product description that explains all the
+							features.
+						</Typography.Paragraph>
+					</Skeleton>
+
+					<Skeleton
+						animationType={isLoaded ? "none" : "pulse"}
+						className="h-6 w-1/3 rounded-lg"
+					>
+						<Typography className="text-accent text-xl" weight="bold">
+							$99.99
+						</Typography>
+					</Skeleton>
+				</div>
+
+				<div className="mt-4">
+					<Skeleton
+						animationType={isLoaded ? "none" : "pulse"}
+						className="h-10 w-full rounded-lg"
+					>
+						<button
+							type="button"
+							className="w-full rounded-lg bg-accent px-4 py-2 text-accent-foreground hover:bg-accent-hover"
+						>
+							Add to Cart
+						</button>
+					</Skeleton>
+				</div>
+			</div>
+		);
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"Interactive example showing skeleton loading state transitioning to actual content.",
+			},
+		},
+	},
+};
+
+export const Playground: Story = {
+	args: {
+		animationType: "pulse",
+		children: "Playground content",
+		className: "w-64 h-16 rounded-lg",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Playground for testing different skeleton configurations.",
+			},
+		},
+	},
+};

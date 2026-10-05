@@ -1,0 +1,16 @@
+// Prisma multi-file schema의 generator와 datasource를 정의합니다.
+// 모델은 schema 루트의 모델별 개별 파일에 선언합니다.
+//
+// 최소 schema metadata 의미와 선택 기준:
+//   ../docs/schema-metadata-guide.md
+// 파일 배치와 구조적 검증 기준:
+//   ../docs/schema-file-conventions.md
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}

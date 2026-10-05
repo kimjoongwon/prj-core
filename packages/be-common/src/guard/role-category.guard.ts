@@ -1,24 +1,33 @@
-import { UserDto } from "@cocrepo/dto";
-import { Category } from "@cocrepo/entity";
-import { RoleCategoryNames } from "@cocrepo/enum";
+import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { ROLE_CATEGORIES_KEY } from "@cocrepo/decorator";
+import { Category, hydrateEntity } from "@cocrepo/entity";
+import { RoleCategoryName } from "@cocrepo/enum";
+import type {
+	ContextTenantSnapshot,
+	ContextUserSnapshot,
+	DatabaseId,
+} from "@cocrepo/type";
 import {
-	CanActivate,
-	ExecutionContext,
+	type CanActivate,
+	type ExecutionContext,
 	ForbiddenException,
 	Injectable,
 	UnauthorizedException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { plainToInstance } from "class-transformer";
 import { isEmpty } from "lodash";
+import { ClsService } from "nestjs-cls";
 
 @Injectable()
 export class RoleCategoryGuard implements CanActivate {
-	constructor(private readonly reflector: Reflector) {}
+	constructor(
+		private readonly reflector: Reflector,
+		private readonly cls: ClsService,
+	) {}
 
 	canActivate(context: ExecutionContext): boolean {
-		const roleCategories = this.reflector.get<RoleCategoryNames[]>(
-			"roleCategories",
+		const roleCategories = this.reflector.get<RoleCategoryName[]>(
+			ROLE_CATEGORIES_KEY,
 			context.getHandler(),
 		);
 
@@ -26,8 +35,9 @@ export class RoleCategoryGuard implements CanActivate {
 			return true;
 		}
 
-		const request = context.switchToHttp().getRequest();
-		const user = <UserDto>request.user;
+		const user = this.cls.get<ContextUserSnapshot | undefined>(
+			CONTEXT_KEYS.AUTH_USER,
+		);
 
 		if (!user) {
 			throw new UnauthorizedException("인증된 사용자가 필요합니다.");
@@ -37,11 +47,14 @@ export class RoleCategoryGuard implements CanActivate {
 			throw new ForbiddenException("사용자에게 할당된 테넌트가 없습니다.");
 		}
 
-		// Find first tenant as default
-		const tenant = user.tenants[0];
+		// CLS에서 tenant 읽기 (RequestContextMiddleware가 설정)
+		const tenant = this.cls.get<ContextTenantSnapshot | undefined>(
+			CONTEXT_KEYS.TENANT,
+		);
+		const spaceId = this.cls.get<DatabaseId | undefined>(CONTEXT_KEYS.SPACE_ID);
 
 		if (!tenant) {
-			throw new ForbiddenException("기본 테넌트가 설정되지 않았습니다.");
+			throw new ForbiddenException("해당 Space에 대한 테넌트가 없습니다.");
 		}
 
 		if (!tenant.role) {
@@ -52,9 +65,9 @@ export class RoleCategoryGuard implements CanActivate {
 		let userCategoryHierarchy: string[] = [];
 
 		if (tenant.role.classification?.category) {
-			const categoryEntity = plainToInstance(
+			const categoryEntity = hydrateEntity(
 				Category,
-				tenant.role.classification.category,
+				tenant.role.classification.category as Partial<Category>,
 			);
 
 			// Get parent names (current category + all ancestors)
@@ -73,9 +86,13 @@ export class RoleCategoryGuard implements CanActivate {
 		);
 
 		if (!hasRequiredRoleCategory) {
+			const endpoint = `${context.getClass().name}.${context.getHandler().name}`;
 			throw new ForbiddenException(
-				`이 작업을 수행하려면 다음 역할 카테고리 중 하나에 속해야 합니다: ${roleCategories.map((category) => category.name).join(", ")}.
-				현재 사용자의 역할 카테고리 계층: ${userCategoryHierarchy.join(" → ")}`,
+				`[RoleCategoryGuard] 접근 거부\n` +
+					`- 엔드포인트: ${endpoint}\n` +
+					`- 사용자: ${user.id} (space: ${spaceId ?? "없음"})\n` +
+					`- 현재 역할 카테고리 계층: ${userCategoryHierarchy.join(" → ") || "없음"}\n` +
+					`- 요구 조건: ${roleCategories.map((c) => c.name).join(", ")}`,
 			);
 		}
 

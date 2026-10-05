@@ -1,0 +1,1 @@
+export const DEFAULT_FEED_WINDOW_DAYS = 14;

@@ -1,0 +1,71 @@
+import {
+	IsDate,
+	IsNotEmpty,
+	IsOptional,
+	MaxDate,
+	MinDate,
+} from "class-validator";
+import { VALIDATION_MESSAGES } from "../constants/validation-messages";
+import { applyDecorators } from "./apply";
+
+export interface DateDecoratorOptions {
+	/** 필수 여부 (기본값: true) */
+	required?: boolean;
+	/** 최소 날짜 */
+	minDate?: Date | (() => Date);
+	/** 최대 날짜 */
+	maxDate?: Date | (() => Date);
+}
+
+/**
+ * 날짜 필드 데코레이터 (순수 class-validator)
+ *
+ * 입력값을 변환하지 않고 검증합니다.
+ *
+ * @example
+ * ```typescript
+ * class EventSchema {
+ *   @DateField()
+ *   startDate: Date;
+ *
+ *   @DateField({ minDate: () => new Date() })
+ *   futureDate: Date;
+ * }
+ * ```
+ */
+export function DateField(
+	options: DateDecoratorOptions = {},
+): PropertyDecorator {
+	const { required = true, minDate, maxDate } = options;
+
+	const decorators: PropertyDecorator[] = [
+		IsDate({ message: VALIDATION_MESSAGES.DATE_TYPE }),
+	];
+
+	if (required) {
+		decorators.push(IsNotEmpty({ message: VALIDATION_MESSAGES.REQUIRED }));
+	} else {
+		decorators.push(IsOptional());
+	}
+
+	if (minDate) {
+		const date = typeof minDate === "function" ? minDate() : minDate;
+		decorators.push(MinDate(date, { message: VALIDATION_MESSAGES.MIN_DATE }));
+	}
+
+	if (maxDate) {
+		const date = typeof maxDate === "function" ? maxDate() : maxDate;
+		decorators.push(MaxDate(date, { message: VALIDATION_MESSAGES.MAX_DATE }));
+	}
+
+	return applyDecorators(...decorators);
+}
+
+/**
+ * 선택적 날짜 필드 데코레이터
+ */
+export function DateFieldOptional(
+	options: Omit<DateDecoratorOptions, "required"> = {},
+): PropertyDecorator {
+	return DateField({ ...options, required: false });
+}

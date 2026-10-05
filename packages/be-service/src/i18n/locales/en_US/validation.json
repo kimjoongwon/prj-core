@@ -1,0 +1,22 @@
+{
+  "required": "This field is required",
+  "stringType": "Must be a string",
+  "numberType": "Must be a number",
+  "booleanType": "Must be a boolean",
+  "arrayType": "Must be an array",
+  "objectType": "Must be an object",
+  "emailFormat": "Please enter a valid email address",
+  "minLength": "Must be at least {{min}} characters",
+  "maxLength": "Must be at most {{max}} characters",
+  "min": "Minimum value is {{min}}",
+  "max": "Maximum value is {{max}}",
+  "pattern": "Invalid format",
+  "enum": "Invalid value",
+  "unique": "This value is already in use",
+  "url": "Please enter a valid URL",
+  "uuid": "Please enter a valid UUID",
+  "date": "Please enter a valid date",
+  "positiveNumber": "Must be a positive number",
+  "negativeNumber": "Must be a negative number",
+  "integer": "Must be an integer"
+}

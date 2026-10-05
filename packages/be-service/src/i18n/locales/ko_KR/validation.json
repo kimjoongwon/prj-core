@@ -1,0 +1,22 @@
+{
+  "required": "필수 입력 항목입니다",
+  "stringType": "문자열 형식이 아닙니다",
+  "numberType": "숫자 형식이 아닙니다",
+  "booleanType": "논리값 형식이 아닙니다",
+  "arrayType": "배열 형식이 아닙니다",
+  "objectType": "객체 형식이 아닙니다",
+  "emailFormat": "유효한 이메일 주소를 입력해주세요",
+  "minLength": "최소 {{min}}자 이상 입력해주세요",
+  "maxLength": "최대 {{max}}자까지 입력 가능합니다",
+  "min": "최소값은 {{min}}입니다",
+  "max": "최대값은 {{max}}입니다",
+  "pattern": "올바른 형식이 아닙니다",
+  "enum": "허용된 값이 아닙니다",
+  "unique": "이미 사용 중인 값입니다",
+  "url": "유효한 URL을 입력해주세요",
+  "uuid": "유효한 UUID를 입력해주세요",
+  "date": "유효한 날짜를 입력해주세요",
+  "positiveNumber": "양수를 입력해주세요",
+  "negativeNumber": "음수를 입력해주세요",
+  "integer": "정수를 입력해주세요"
+}

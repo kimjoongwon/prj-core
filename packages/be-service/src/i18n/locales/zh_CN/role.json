@@ -1,0 +1,22 @@
+{
+  "PLATFORM_ADMIN": {
+    "name": "平台管理员",
+    "description": "负责运营整个平台并访问所有 Space 和系统资源的角色"
+  },
+  "COMPANY_MANAGER": {
+    "name": "公司管理员",
+    "description": "管理特定 Company 中的网点、会员、预约、内容等运营资源的角色"
+  },
+  "MEMBER": {
+    "name": "会员",
+    "description": "管理自己的信息和预约，并可查看设施和内容的角色"
+  },
+  "category": {
+    "SHARED": "共享",
+    "WORKSPACE": "工作区",
+    "PUBLIC": "公开",
+    "PROJECT": "项目",
+    "TECHNICAL": "技术",
+    "RESTRICTED": "受限"
+  }
+}

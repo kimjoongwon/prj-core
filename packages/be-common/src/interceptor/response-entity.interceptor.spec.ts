@@ -1,5 +1,6 @@
 import { RESPONSE_MESSAGE_METADATA } from "@cocrepo/decorator";
 import { ResponseEntity } from "@cocrepo/entity";
+import type { I18nTranslationService } from "@cocrepo/service";
 import {
 	type CallHandler,
 	type ExecutionContext,
@@ -10,19 +11,36 @@ import { lastValueFrom, of } from "rxjs";
 import { wrapResponse } from "../util/response.util";
 import { ResponseEntityInterceptor } from "./response-entity.interceptor";
 
+jest.mock("@cocrepo/service", () => {
+	class I18nTranslationService {
+		translate = jest.fn(async (value: string) => value);
+	}
+	return {
+		__esModule: true,
+		I18nTranslationService,
+	};
+});
+
 // Placeholder imports - will be implemented in corresponding modules
 
 describe("ResponseEntityInterceptor", () => {
 	let reflector: Reflector;
 	let interceptor: ResponseEntityInterceptor;
+	let mockTranslationService: jest.Mocked<I18nTranslationService>;
 
 	beforeEach(() => {
 		reflector = new Reflector();
-		interceptor = new ResponseEntityInterceptor(reflector);
+		mockTranslationService = {
+			translate: jest.fn(async (value: string) => value),
+		} as unknown as jest.Mocked<I18nTranslationService>;
+		interceptor = new ResponseEntityInterceptor(
+			reflector,
+			mockTranslationService,
+		);
 	});
 
 	const createExecutionContext = (
-		handler: (...args: any[]) => any,
+		handler: (...args: unknown[]) => unknown,
 		status: number = HttpStatus.OK,
 	): ExecutionContext =>
 		({
@@ -96,7 +114,7 @@ describe("ResponseEntityInterceptor", () => {
 				{ items: [1, 2, 3] },
 				{
 					page: 1,
-				} as any,
+				} as never,
 			),
 		);
 	});

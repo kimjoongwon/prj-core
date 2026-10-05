@@ -1,0 +1,122 @@
+export type AppConfig = {
+	nodeEnv: string;
+	name: string;
+	adminEmail?: string;
+	workingDirectory: string;
+	frontendDomain?: string;
+	backendDomain: string;
+	port: number;
+	apiPrefix: string;
+	fallbackLanguage: string;
+	headerLanguage: string;
+};
+
+export type ObjectStorageProvider = "aws-s3" | "backblaze-b2" | "cloudflare-r2";
+
+export type ObjectStorageConfig = {
+	provider: ObjectStorageProvider;
+	accessKeyId: string;
+	secretAccessKey: string;
+	apiToken?: string;
+	region: string;
+	bucket: string;
+	endpoint?: string;
+	publicBaseUrl?: string;
+	forcePathStyle?: boolean;
+};
+
+export type SMTPConfig = {
+	username: string;
+	password: string;
+	port: number;
+	host: string;
+	secure: boolean;
+	sender: string;
+};
+
+export type CorsConfig = {
+	enabled: boolean;
+};
+
+export type AppleConfig = {
+	appAudience: string[];
+};
+
+export type AuthConfig = {
+	expires: string | number;
+	refresh: string | number;
+};
+
+export type DatabaseConfig = {
+	url?: string;
+	type?: string;
+	host?: string;
+	port?: number;
+	password?: string;
+	name?: string;
+	username?: string;
+	synchronize?: boolean;
+	maxConnections: number;
+	sslEnabled?: boolean;
+	rejectUnauthorized?: boolean;
+	ca?: string;
+	key?: string;
+	cert?: string;
+};
+
+export type FacebookConfig = {
+	appId?: string;
+	appSecret?: string;
+};
+
+export type FileConfig = {
+	driver: string;
+	accessKeyId?: string;
+	secretAccessKey?: string;
+	awsDefaultS3Bucket?: string;
+	awsDefaultS3Url?: string;
+	awsS3Region?: string;
+	maxFileSize: number;
+};
+
+export type GoogleConfig = {
+	clientId?: string;
+	clientSecret?: string;
+};
+
+export type MailConfig = {
+	port: number;
+	host?: string;
+	user?: string;
+	password?: string;
+	defaultEmail?: string;
+	defaultName?: string;
+	ignoreTLS: boolean;
+	secure: boolean;
+	requireTLS: boolean;
+};
+
+export type TwitterConfig = {
+	consumerKey?: string;
+	consumerSecret?: string;
+};
+
+export type RedisConfig = {
+	host: string;
+	port: number;
+	password?: string;
+};
+
+export type AllConfigType = {
+	app: AppConfig;
+	apple: AppleConfig;
+	auth: AuthConfig;
+	objectStorage: ObjectStorageConfig;
+	database: DatabaseConfig;
+	facebook: FacebookConfig;
+	file: FileConfig;
+	google: GoogleConfig;
+	mail: MailConfig;
+	twitter: TwitterConfig;
+	redis: RedisConfig;
+};

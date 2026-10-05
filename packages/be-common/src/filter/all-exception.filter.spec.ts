@@ -1,13 +1,25 @@
+import { Prisma } from "@cocrepo/prisma";
+import type { I18nTranslationService } from "@cocrepo/service";
 import {
-	ArgumentsHost,
+	type ArgumentsHost,
 	HttpException,
+	type HttpServer,
 	HttpStatus,
 	InternalServerErrorException,
 	Logger,
 } from "@nestjs/common";
 import { BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
-import { Test, TestingModule } from "@nestjs/testing";
 import { AllExceptionsFilter } from "./all-exception.filter";
+
+jest.mock("@cocrepo/service", () => {
+	class TranslationService {
+		translate = jest.fn(async (value: string) => value);
+	}
+	return {
+		__esModule: true,
+		TranslationService,
+	};
+});
 
 describe("AllExceptionsFilter", () => {
 	let filter: AllExceptionsFilter;
@@ -16,24 +28,25 @@ describe("AllExceptionsFilter", () => {
 	let baseFilterCatchSpy: jest.SpyInstance;
 
 	const createMockArgumentsHost = (
-		request: Partial<{ url: string; method: string }> = {},
-		response: any = {},
+		request: Partial<{ url: string; method: string; id: unknown }> = {},
+		response: unknown = {},
 	): ArgumentsHost => {
 		return {
 			switchToHttp: () => ({
 				getRequest: () => ({
 					url: request.url || "/api/test",
 					method: request.method || "GET",
+					id: request.id,
 				}),
 				getResponse: () => response,
 				getNext: () => jest.fn(),
 			}),
 			getArgs: () => [],
 			getArgByIndex: () => ({}),
-			switchToRpc: () => ({}) as any,
-			switchToWs: () => ({}) as any,
-			getType: () => "http" as any,
-		} as ArgumentsHost;
+			switchToRpc: () => ({}),
+			switchToWs: () => ({}),
+			getType: () => "http",
+		} as unknown as ArgumentsHost;
 	};
 
 	beforeEach(async () => {
@@ -41,17 +54,18 @@ describe("AllExceptionsFilter", () => {
 			httpAdapter: {
 				reply: jest.fn(),
 				getRequestUrl: jest.fn(),
+				isHeadersSent: jest.fn().mockReturnValue(false),
 			},
-		} as any;
+		} as unknown as HttpAdapterHost;
 
-		const module: TestingModule = await Test.createTestingModule({
-			providers: [
-				AllExceptionsFilter,
-				{ provide: HttpAdapterHost, useValue: mockHttpAdapterHost },
-			],
-		}).compile();
+		const mockTranslationService = {
+			translate: jest.fn().mockImplementation((key: string) => key),
+		};
 
-		filter = module.get<AllExceptionsFilter>(AllExceptionsFilter);
+		filter = new AllExceptionsFilter(
+			mockHttpAdapterHost.httpAdapter as unknown as HttpServer,
+			mockTranslationService as unknown as I18nTranslationService,
+		);
 
 		// Logger.error 모킹
 		loggerErrorSpy = jest.spyOn(Logger.prototype, "error").mockImplementation();
@@ -72,6 +86,68 @@ describe("AllExceptionsFilter", () => {
 	});
 
 	describe("catch", () => {
+		it("P2022를 안전한 스키마 오류 응답으로 변환해야 한다", async () => {
+			const exception = new Prisma.PrismaClientKnownRequestError(
+				"The column does not exist",
+				{
+					code: "P2022",
+					clientVersion: "test",
+					meta: { column: "fitness_centers.space_id", query: "SELECT secret" },
+				},
+			);
+			const host = createMockArgumentsHost({ url: "/api/v1/auth/login" });
+
+			await filter.catch(exception, host);
+
+			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+			expect(wrappedException.getStatus()).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+			expect(wrappedException.getResponse()).toMatchObject({
+				httpStatus: HttpStatus.SERVICE_UNAVAILABLE,
+				message:
+					"서버 데이터베이스가 최신 상태가 아닙니다. 관리자에게 문의해 주세요.",
+				data: {
+					code: "P2022",
+					target: "fitness_centers.space_id",
+					retryable: false,
+				},
+			});
+			expect(JSON.stringify(wrappedException.getResponse())).not.toContain(
+				"SELECT secret",
+			);
+			expect(loggerErrorSpy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					prisma: expect.objectContaining({
+						code: "P2022",
+						meta: {
+							column: "fitness_centers.space_id",
+							query: "[REDACTED]",
+						},
+					}),
+				}),
+			);
+		});
+
+		it("P2002, P2003, P2025를 명시된 HTTP 상태로 변환해야 한다", async () => {
+			const cases = [
+				["P2002", HttpStatus.CONFLICT],
+				["P2003", HttpStatus.BAD_REQUEST],
+				["P2025", HttpStatus.NOT_FOUND],
+			] as const;
+
+			for (const [code, expectedStatus] of cases) {
+				baseFilterCatchSpy.mockClear();
+				await filter.catch(
+					new Prisma.PrismaClientKnownRequestError("known error", {
+						code,
+						clientVersion: "test",
+					}),
+					createMockArgumentsHost(),
+				);
+				const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+				expect(wrappedException.getStatus()).toBe(expectedStatus);
+			}
+		});
+
 		it("HttpException을 처리하고 super.catch를 호출해야 한다", () => {
 			// Given
 			const exception = new HttpException(
@@ -105,6 +181,87 @@ describe("AllExceptionsFilter", () => {
 			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
 			expect(wrappedException.getStatus()).toBe(
 				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+			expect(wrappedException.getResponse()).toMatchObject({
+				message: "Internal server error",
+				data: { correlationId: expect.any(String) },
+			});
+		});
+
+		it("예상하지 못한 500 응답에서 내부 정보 대신 correlation ID만 반환해야 한다", async () => {
+			const sensitiveMessage =
+				"postgresql://admin:db-password@db.internal/core failed at /Users/admin/private/config.ts secret=jwt-secret";
+			const host = createMockArgumentsHost({
+				url: "/api/test",
+				id: "req-safe_123",
+			});
+
+			await filter.catch(new Error(sensitiveMessage), host);
+
+			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+			const response = wrappedException.getResponse();
+			expect(response).toEqual({
+				httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+				message: "Internal server error",
+				data: { correlationId: "req-safe_123" },
+			});
+			const serializedResponse = JSON.stringify(response);
+			expect(serializedResponse).not.toContain("postgresql://");
+			expect(serializedResponse).not.toContain("/Users/admin");
+			expect(serializedResponse).not.toContain("jwt-secret");
+			expect(loggerErrorSpy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					correlationId: "req-safe_123",
+					cause: {
+						name: "Error",
+						message: expect.not.stringContaining("db-password"),
+					},
+				}),
+			);
+		});
+
+		it("안전하지 않은 요청 ID는 응답에 반사하지 않아야 한다", async () => {
+			await filter.catch(
+				new Error("unexpected"),
+				createMockArgumentsHost({ id: "<script>alert(1)</script>" }),
+			);
+
+			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+			const correlationId = wrappedException.getResponse().data.correlationId;
+			expect(correlationId).toMatch(
+				/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+			);
+		});
+
+		it("Multer 배열 인덱스 제한 오류를 400 상태로 변환해야 한다", async () => {
+			const exception = Object.assign(
+				new Error("Field name array index too large"),
+				{
+					name: "MulterError",
+					code: "LIMIT_FIELD_ARRAY_INDEX",
+				},
+			);
+			const host = createMockArgumentsHost({
+				url: "/api/assets/upload",
+				method: "POST",
+			});
+
+			await filter.catch(exception, host);
+
+			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+			expect(wrappedException.getStatus()).toBe(HttpStatus.BAD_REQUEST);
+			expect(wrappedException.getResponse()).toMatchObject({
+				httpStatus: HttpStatus.BAD_REQUEST,
+				message: "Field name array index too large",
+				data: null,
+			});
+			expect(loggerErrorSpy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					message: "Field name array index too large",
+					status: HttpStatus.BAD_REQUEST,
+					path: "/api/assets/upload",
+					method: "POST",
+				}),
 			);
 		});
 
@@ -176,7 +333,7 @@ describe("AllExceptionsFilter", () => {
 			// Given
 			const exception = {
 				message: "Unknown error",
-			} as any;
+			};
 			const host = createMockArgumentsHost({ url: "/api/test" }, {});
 
 			// When

@@ -1,0 +1,28 @@
+// @data-type: MASTER
+// @aggregate-root: true
+// @description: 사용자 생성 콘텐츠
+/// @displayName 콘텐츠
+model Content {
+  contentId   String    @unique @default(ulid()) @map("content_id") @db.Char(26)
+  id          BigInt    @id @default(autoincrement())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 제목
+  title       String?
+  /// @displayName 설명
+  description String?
+  /// @displayName 유형
+  type        TextTypes @default(Editor)
+  /// @displayName 본문
+  text        String?   @db.VarChar(1000)
+  fileId      String?   @map("file_id")
+  spaceId     BigInt    @map("space_id")
+  createdById BigInt?   @map("created_by_id")
+  space       Space     @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy   User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  post        Post?
+
+  @@index([spaceId])
+  @@map("contents")
+}

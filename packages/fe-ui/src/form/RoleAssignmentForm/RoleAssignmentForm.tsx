@@ -1,0 +1,240 @@
+"use client";
+
+import { observer } from "mobx-react-lite";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Typography } from "../../data-display/Typography";
+import { Checkbox } from "../../input/Checkbox/Checkbox";
+import { Switch } from "../../input/Switch/Switch";
+import { TextField } from "../../input/TextField/TextField";
+import { HStack } from "../../rhythm";
+
+export interface AssignablePolicy {
+	id: string;
+	name: string;
+	displayName?: string | null;
+	description?: string | null;
+	abilityCount?: number | null;
+}
+
+export interface RoleAssignmentValue {
+	policyId: string;
+	isActive: boolean;
+	priority: number;
+}
+
+export interface RoleAssignmentFormState {
+	assignments: RoleAssignmentValue[];
+}
+
+export interface RoleAssignmentFormProps {
+	state: RoleAssignmentFormState;
+	policies: AssignablePolicy[];
+	baselineAssignments?: RoleAssignmentValue[];
+	readOnly?: boolean;
+	isLoading?: boolean;
+	emptyMessage?: string;
+}
+
+function getPolicyLabel(policy: AssignablePolicy) {
+	return policy.displayName || policy.name;
+}
+
+function setAssignments(
+	state: RoleAssignmentFormState,
+	nextAssignments: RoleAssignmentValue[],
+) {
+	state.assignments = nextAssignments;
+}
+
+/**
+ * Role aggregate의 Policy assignment 편집 필드 조합입니다.
+ * route는 readOnly와 저장 액션만 결정하고, form은 assignment state만 수정합니다.
+ */
+export const RoleAssignmentForm = observer(
+	({
+		state,
+		policies,
+		baselineAssignments = state.assignments,
+		readOnly = false,
+		isLoading = false,
+		emptyMessage = "사용 가능한 정책이 없습니다.",
+	}: RoleAssignmentFormProps) => {
+		const selectedAssignmentMap = new Map(
+			state.assignments.map((assignment) => [assignment.policyId, assignment]),
+		);
+		const selectedPolicyIds = state.assignments.map(
+			(assignment) => assignment.policyId,
+		);
+		const selectedSet = new Set(selectedPolicyIds);
+		const baselineSet = new Set(
+			baselineAssignments.map((assignment) => assignment.policyId),
+		);
+		const addedCount = selectedPolicyIds.filter(
+			(policyId) => !baselineSet.has(policyId),
+		).length;
+		const removedCount = baselineAssignments.filter(
+			(assignment) => !selectedSet.has(assignment.policyId),
+		).length;
+
+		const togglePolicy = (policyId: string) => {
+			if (readOnly) {
+				return;
+			}
+			if (selectedSet.has(policyId)) {
+				setAssignments(
+					state,
+					state.assignments.filter(
+						(assignment) => assignment.policyId !== policyId,
+					),
+				);
+				return;
+			}
+			setAssignments(state, [
+				...state.assignments,
+				{ policyId, isActive: true, priority: 0 },
+			]);
+		};
+
+		const updateAssignment = (
+			policyId: string,
+			patch: Partial<Omit<RoleAssignmentValue, "policyId">>,
+		) => {
+			if (readOnly) {
+				return;
+			}
+			setAssignments(
+				state,
+				state.assignments.map((assignment) =>
+					assignment.policyId === policyId
+						? { ...assignment, ...patch }
+						: assignment,
+				),
+			);
+		};
+
+		if (isLoading) {
+			return (
+				<div className="flex items-center justify-center p-8">
+					<Typography type="body-sm" color="muted">
+						정책을 불러오는 중...
+					</Typography>
+				</div>
+			);
+		}
+
+		return (
+			<div className="grid gap-3">
+				<HStack className="flex-wrap">
+					<Chip color="accent" variant="soft">
+						할당 {selectedPolicyIds.length}
+					</Chip>
+					{readOnly ? null : (
+						<Chip color="success" variant="soft">
+							추가 {addedCount}
+						</Chip>
+					)}
+					{readOnly ? null : (
+						<Chip color="warning" variant="soft">
+							해제 {removedCount}
+						</Chip>
+					)}
+				</HStack>
+				{policies.length > 0 ? (
+					policies.map((policy) => {
+						const isSelected = selectedSet.has(policy.id);
+						const assignment = selectedAssignmentMap.get(policy.id);
+
+						return (
+							<div
+								key={policy.id}
+								className="rounded-xl border border-border bg-background p-4"
+							>
+								<HStack
+									alignItems="start"
+									justifyContent="between"
+									gap="section"
+								>
+									<div className="min-w-0">
+										<HStack alignItems="center" className="flex-wrap">
+											<Typography weight="semibold">
+												{getPolicyLabel(policy)}
+											</Typography>
+											<Chip
+												size="sm"
+												color={isSelected ? "success" : "default"}
+												variant="soft"
+											>
+												{isSelected ? "할당됨" : "미할당"}
+											</Chip>
+											{assignment ? (
+												<Chip
+													size="sm"
+													color={assignment.isActive ? "accent" : "default"}
+													variant="soft"
+												>
+													{assignment.isActive ? "활성" : "비활성"}
+												</Chip>
+											) : null}
+										</HStack>
+										<Typography className="mt-1" type="body-sm" color="muted">
+											{policy.description || policy.name}
+										</Typography>
+										<Typography className="mt-2" type="body-xs" color="muted">
+											우선순위 {assignment?.priority ?? 0} · Ability{" "}
+											{policy.abilityCount ?? 0}개
+										</Typography>
+										{!readOnly && assignment ? (
+											<HStack
+												alignItems="center"
+												gap="block"
+												className="mt-3 flex-wrap"
+											>
+												<TextField
+													className="w-32"
+													label="우선순위"
+													type="number"
+													size="sm"
+													value={`${assignment.priority}`}
+													onValueChange={(value) => {
+														updateAssignment(policy.id, {
+															priority: Number(value || 0),
+														});
+													}}
+												/>
+												<Switch
+													size="sm"
+													isSelected={assignment.isActive}
+													onValueChange={(value) => {
+														updateAssignment(policy.id, {
+															isActive: value,
+														});
+													}}
+												>
+													활성
+												</Switch>
+											</HStack>
+										) : null}
+									</div>
+									{readOnly ? null : (
+										<Checkbox
+											isSelected={isSelected}
+											onValueChange={() => {
+												togglePolicy(policy.id);
+											}}
+										/>
+									)}
+								</HStack>
+							</div>
+						);
+					})
+				) : (
+					<div className="rounded-xl border border-border bg-background p-6">
+						<Typography align="center" type="body-sm" color="muted">
+							{emptyMessage}
+						</Typography>
+					</div>
+				)}
+			</div>
+		);
+	},
+);

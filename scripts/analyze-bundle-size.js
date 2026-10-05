@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 /**
  * 번들 사이즈 분석 및 표시
@@ -28,13 +28,13 @@ function analyzeBundleSize(packageName) {
 
   // 소스 직접 배포하는 패키지는 번들 사이즈 분석 스킵 (echo만 있는 경우)
   if (buildScript.includes("echo") && !buildScript.includes("tsc") && !buildScript.includes("tsup")) {
-    console.log("\n" + "=".repeat(60));
+    console.log(`\n${"=".repeat(60)}`);
     console.log("ℹ️  번들 사이즈 분석");
     console.log("=".repeat(60));
     console.log(`📦 패키지: ${packageName}`);
     console.log(`📌 빌드 방식: 소스 직접 배포 (번들링 없음)`);
     console.log("💡 dist 폴더가 없는 패키지입니다.");
-    console.log("=".repeat(60) + "\n");
+    console.log(`${"=".repeat(60)}\n`);
     return;
   }
 
@@ -80,17 +80,17 @@ function analyzeBundleSize(packageName) {
 
   // 번들 사이즈가 없으면 종료
   if (Object.keys(sizes).length === 0) {
-    console.log("\n" + "=".repeat(60));
+    console.log(`\n${"=".repeat(60)}`);
     console.log("ℹ️  번들 사이즈 분석");
     console.log("=".repeat(60));
     console.log(`📦 패키지: ${packageName}`);
     console.log(`📌 빌드 결과: 번들 파일을 찾을 수 없습니다.`);
-    console.log("=".repeat(60) + "\n");
+    console.log(`${"=".repeat(60)}\n`);
     return;
   }
 
   // 번들 사이즈 출력
-  console.log("\n" + "=".repeat(60));
+  console.log(`\n${"=".repeat(60)}`);
   console.log("📦 번들 사이즈 분석");
   console.log("=".repeat(60));
 
@@ -126,7 +126,7 @@ function analyzeBundleSize(packageName) {
     );
   }
 
-  console.log("=".repeat(60) + "\n");
+  console.log(`${"=".repeat(60)}\n`);
 }
 
 // 메인 실행

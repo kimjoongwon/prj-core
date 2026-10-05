@@ -1,0 +1,74 @@
+{
+  "name": "@cocrepo/usecase",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "CQRS command/query usecase layer for cocrepo",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
+    "build": "rm -rf dist && tsc --build",
+    "start:dev": "tsc --build --watch",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "format": "biome check --write .",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+  },
+  "dependencies": {
+    "@cocrepo/aggregate": "workspace:*",
+    "@cocrepo/client": "workspace:*",
+    "@cocrepo/command": "workspace:*",
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/context": "workspace:*",
+    "@cocrepo/event": "workspace:*",
+    "@cocrepo/service": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "@cocrepo/vo": "workspace:*",
+    "@nestjs/cqrs": "^11.0.3"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.2.3",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/jwt": "^11.0.0",
+    "class-transformer": "^0.5.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nestjs-cls": "^6.1.0"
+  },
+  "devDependencies": {
+    "@cocrepo/tsconfig": "workspace:*",
+    "@nestjs/common": "^11.2.3",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/jwt": "^11.0.0",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "catalog:",
+    "class-transformer": "^0.5.1",
+    "express": "^5.1.0",
+    "jest": "^30.5.1",
+    "jsonwebtoken": "^9.0.2",
+    "nestjs-cls": "^6.1.0",
+    "ts-jest": "^29.4.12",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "private": true
+}

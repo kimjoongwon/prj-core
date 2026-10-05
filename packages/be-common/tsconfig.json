@@ -1,19 +1,27 @@
 {
+  "extends": "@cocrepo/tsconfig/nestjs-package.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "commonjs",
-    "declaration": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "declarationMap": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "strictPropertyInitialization": false
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "__tests__"]
+  "references": [
+    { "path": "../common-constant" },
+    { "path": "../be-decorator" },
+    { "path": "../be-entity" },
+    { "path": "../common-enum" },
+    { "path": "../be-prisma" },
+    { "path": "../be-repository" },
+    { "path": "../be-service" },
+    { "path": "../common-toolkit" }
+  ],
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/test/**",
+    "**/__tests__/**",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }

@@ -1,0 +1,28 @@
+// @data-type: CONFIGURATION
+// @description: Role에 Policy를 할당하고 활성 상태와 우선순위를 관리
+/// @displayName 역할의 정책 할당
+model RoleAssignment {
+  roleAssignmentId String    @unique @default(ulid()) @map("role_assignment_id") @db.Char(26)
+  id               BigInt    @id @default(autoincrement())
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt        DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 역할 내부 순번
+  roleId   BigInt  @map("role_id")
+  /// @displayName 정책 내부 순번
+  policyId BigInt  @map("policy_id")
+  /// @displayName 활성화 여부
+  isActive Boolean @default(true) @map("is_active")
+  /// @displayName 우선순위
+  priority Int     @default(0)
+
+  role   Role   @relation(fields: [roleId], references: [id])
+  policy Policy @relation(fields: [policyId], references: [id])
+
+  @@unique([roleId, policyId])
+  @@index([roleId])
+  @@index([policyId])
+  @@index([isActive])
+  @@map("role_assignments")
+}

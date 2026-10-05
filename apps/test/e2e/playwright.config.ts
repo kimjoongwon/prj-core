@@ -1,0 +1,336 @@
+import Module from "node:module";
+import path from "node:path";
+
+if (
+	process.env.PLAYWRIGHT_BROWSERS_PATH &&
+	process.env.PLAYWRIGHT_BROWSERS_PATH !== "0" &&
+	!path.isAbsolute(process.env.PLAYWRIGHT_BROWSERS_PATH)
+) {
+	process.env.PLAYWRIGHT_BROWSERS_PATH = path.resolve(
+		process.cwd(),
+		process.env.PLAYWRIGHT_BROWSERS_PATH,
+	);
+}
+
+process.env.E2E_ENV = process.env.E2E_ENV ?? "local";
+
+const workspaceNodeModulesPath = path.join(__dirname, "node_modules");
+const existingNodePath = process.env.NODE_PATH;
+process.env.NODE_PATH = [workspaceNodeModulesPath, existingNodePath]
+	.filter((value): value is string => Boolean(value))
+	.join(path.delimiter);
+
+// Playwright가 모노레포 바깥(out/full) 경로에서 테스트를 로드해도 workspace 의존성을 찾게 합니다.
+(
+	Module as typeof Module & {
+		_initPaths?: () => void;
+	}
+)._initPaths?.();
+
+const configRequire = Module.createRequire(__filename);
+const playwrightTestEntry = configRequire.resolve("@playwright/test");
+const playwrightTestRequire = Module.createRequire(playwrightTestEntry);
+const playwrightTestShimEntry =
+	playwrightTestRequire.resolve("playwright/test");
+const playwrightEntry = playwrightTestRequire.resolve("playwright");
+const moduleWithResolver = Module as typeof Module & {
+	_resolveFilename: (
+		this: unknown,
+		request: string,
+		...args: unknown[]
+	) => string;
+};
+const originalResolveFilename = moduleWithResolver._resolveFilename;
+const globalWithPlaywrightResolver = globalThis as typeof globalThis & {
+	__cocrepoPlaywrightResolvePatched?: boolean;
+};
+
+if (!globalWithPlaywrightResolver.__cocrepoPlaywrightResolvePatched) {
+	moduleWithResolver._resolveFilename = function resolvePlaywrightPackage(
+		this: unknown,
+		request: string,
+		...args: unknown[]
+	) {
+		if (request === "@playwright/test") {
+			return playwrightTestEntry;
+		}
+
+		if (request === "playwright/test") {
+			return playwrightTestShimEntry;
+		}
+
+		if (request === "playwright") {
+			return playwrightEntry;
+		}
+
+		return originalResolveFilename.call(this, request, ...args);
+	};
+
+	globalWithPlaywrightResolver.__cocrepoPlaywrightResolvePatched = true;
+}
+
+const { defineConfig, devices } = configRequire(
+	"@playwright/test",
+) as typeof import("@playwright/test");
+
+const e2eEnvironment = process.env.E2E_ENV;
+const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
+const e2eTarget = process.env.E2E_TARGET ?? "all";
+const chromiumLaunchOptions = {
+	args: ["--disable-crash-reporter"],
+};
+const shouldUseLocalRuntime = e2eEnvironment === "local";
+const reuseExistingServer = shouldUseLocalRuntime && !process.env.CI;
+const includesAdminTarget = e2eTarget === "admin" || e2eTarget === "all";
+const includesStorybookTarget =
+	e2eTarget === "storybook" || e2eTarget === "all";
+const shouldUseAdminSetup = !skipAdminSetup;
+
+function ensureTrailingSlash(url: string) {
+	return url.endsWith("/") ? url : `${url}/`;
+}
+
+function resolveBaseUrl(options: {
+	envKey: string;
+	localDefault: string;
+	required: boolean;
+}) {
+	const configured = process.env[options.envKey];
+
+	if (configured) {
+		return ensureTrailingSlash(configured);
+	}
+
+	if (options.required) {
+		throw new Error(
+			`${options.envKey} is required when E2E_ENV=${e2eEnvironment}.`,
+		);
+	}
+
+	return ensureTrailingSlash(options.localDefault);
+}
+
+const adminBaseUrl = resolveBaseUrl({
+	envKey: "E2E_ADMIN_BASE_URL",
+	localDefault: "http://localhost:3000/admin/",
+	required: e2eEnvironment === "prod" && includesAdminTarget,
+});
+const coreApiBaseUrl = resolveBaseUrl({
+	envKey: "E2E_CORE_API_BASE_URL",
+	localDefault: "http://localhost:3006/",
+	required: false,
+});
+const idpApiBaseUrl = resolveBaseUrl({
+	envKey: "E2E_IDP_API_BASE_URL",
+	localDefault: "http://localhost:3007/",
+	required: false,
+});
+const idpWebBaseUrl = resolveBaseUrl({
+	envKey: "E2E_IDP_WEB_BASE_URL",
+	localDefault: "http://localhost:3008/",
+	required: false,
+});
+const storybookBaseUrl = resolveBaseUrl({
+	envKey: "E2E_STORYBOOK_BASE_URL",
+	localDefault: "http://localhost:6006/",
+	required: e2eEnvironment === "prod" && includesStorybookTarget,
+});
+
+process.env.E2E_ADMIN_BASE_URL = adminBaseUrl;
+process.env.E2E_CORE_API_BASE_URL = coreApiBaseUrl;
+process.env.E2E_IDP_API_BASE_URL = idpApiBaseUrl;
+process.env.E2E_IDP_WEB_BASE_URL = idpWebBaseUrl;
+process.env.E2E_STORYBOOK_BASE_URL = storybookBaseUrl;
+
+const coreApiInternalUrl = coreApiBaseUrl.replace(/\/$/, "");
+const idpApiInternalUrl = idpApiBaseUrl.replace(/\/$/, "");
+
+const adminAuthStorageStatePath = path.join(
+	__dirname,
+	"tests/admin/helpers/.auth",
+	e2eEnvironment,
+	"admin.json",
+);
+
+function buildApiStartCommand(
+	filter: "core-api" | "idp-api",
+	script: "start:dev" | "start:e2e",
+) {
+	return [
+		"bash -lc",
+		`'export SMTP_SECURE=\${SMTP_SECURE:-false}; pnpm --filter=${filter} ${script}'`,
+	].join(" ");
+}
+
+function createCoreApiServer(script: "start:dev" | "start:e2e") {
+	return {
+		command: buildApiStartCommand("core-api", script),
+		url: new URL("/api-json", coreApiBaseUrl).toString(),
+		reuseExistingServer,
+		timeout: 120000,
+		cwd: "../../..",
+	};
+}
+
+const coreApiServer = createCoreApiServer("start:dev");
+const seededCoreApiServer = createCoreApiServer("start:e2e");
+
+// 발급자(idp-api) — issuer/interaction UI는 idp-web origin으로 고정하고
+// admin-web 클라이언트의 redirect/login/return URL은 admin origin으로 보정한다.
+const idpApiServer = {
+	command: `E2E_IDP_WEB_BASE_URL="${idpWebBaseUrl}" E2E_ADMIN_BASE_URL="${adminBaseUrl}" ${buildApiStartCommand("idp-api", "start:e2e")}`,
+	url: new URL("/api/password-policy", idpApiBaseUrl).toString(),
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+const idpWebServer = {
+	command: `IDP_API_INTERNAL_URL="${idpApiInternalUrl}" pnpm --filter=idp-web start:dev`,
+	// /auth/login은 302 리다이렉트 진입점이라 렌더만 되는 폼 페이지로 프로브한다.
+	url: new URL("/auth/forgot-password", idpWebBaseUrl).toString(),
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+const adminWebServer = {
+	command: `CORE_API_INTERNAL_URL="${coreApiInternalUrl}" IDP_API_INTERNAL_URL="${idpApiInternalUrl}" pnpm --filter=admin-web exec next dev --webpack -p "\${ADMIN_WEB_PORT:-3000}"`,
+	// /admin/auth/login은 이제 307 리다이렉트라 준비 확인용 200 응답이 아니므로
+	// 렌더만 되는 폼 페이지로 프로브한다.
+	url: new URL("/admin/auth/forgot-password", adminBaseUrl).toString(),
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+const storybookServer = {
+	command: "pnpm --filter=tool-storybook start:dev",
+	url: new URL("/__storybook_auth/login", storybookBaseUrl).toString(),
+	reuseExistingServer,
+	timeout: 120000,
+	cwd: "../../..",
+};
+
+function getWebServers() {
+	if (e2eTarget === "admin") {
+		return [seededCoreApiServer, idpApiServer, idpWebServer, adminWebServer];
+	}
+
+	if (e2eTarget === "storybook") {
+		return [
+			coreApiServer,
+			idpApiServer,
+			idpWebServer,
+			adminWebServer,
+			storybookServer,
+		];
+	}
+
+	return [
+		seededCoreApiServer,
+		idpApiServer,
+		idpWebServer,
+		adminWebServer,
+		storybookServer,
+	];
+}
+
+/**
+ * Playwright E2E 테스트 설정 (멀티앱, Sidecar 방식)
+ *
+ * 테스트 파일은 각 페이지 코드 옆에 *.e2e.ts 로 위치합니다:
+ *   apps/admin/web/src/app/(admin)/templates/page.e2e.ts
+ *
+ * 앱별 테스트 실행:
+ *   pnpm --filter=test-e2e test:admin
+ *
+ * @see https://playwright.dev/docs/test-configuration
+ */
+export default defineConfig({
+	// 모노레포 루트에서 *.e2e.ts 파일 탐색
+	testDir: path.join(__dirname, "../../.."),
+	testMatch: "**/*.e2e.ts",
+	testIgnore: ["**/node_modules/**", "**/dist/**", "**/out/**"],
+
+	fullyParallel: true,
+	forbidOnly: !!process.env.CI,
+	retries: process.env.CI ? 2 : 0,
+	// Admin 시나리오는 같은 시드 계정의 current-space를 갱신하므로 기본은 직렬 실행합니다.
+	workers: process.env.CI ? 1 : Number(process.env.E2E_WORKERS ?? 1),
+
+	reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
+
+	// 글로벌 설정 (baseURL은 프로젝트별로 설정)
+	use: {
+		screenshot: "only-on-failure",
+		video: "on-first-retry",
+		trace: "on-first-retry",
+		actionTimeout: 10000,
+		navigationTimeout: 60000,
+	},
+
+	timeout: 90000,
+
+	// 앱별 프로젝트 설정
+	projects: [
+		// ── Admin Auth Setup ──
+		...(shouldUseAdminSetup
+			? [
+					{
+						name: "admin-setup",
+						// setup 파일은 apps/test/e2e에 계속 존재
+						testMatch: "**/apps/test/e2e/tests/admin/helpers/*.setup.ts",
+						use: {
+							...devices["Desktop Chrome"],
+							baseURL: adminBaseUrl,
+							launchOptions: chromiumLaunchOptions,
+						},
+					},
+				]
+			: []),
+
+		// ── Admin ──
+		{
+			name: "admin-chromium",
+			testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
+			dependencies: shouldUseAdminSetup ? ["admin-setup"] : [],
+			use: {
+				...devices["Desktop Chrome"],
+				baseURL: adminBaseUrl,
+				launchOptions: chromiumLaunchOptions,
+				storageState: adminAuthStorageStatePath,
+			},
+		},
+
+		// ── IDP interaction 화면 ──
+		// 로그인/동의 페이지 스펙은 admin origin의 OIDC 시작 URL을 통해 새 인증
+		// 흐름을 여니 사전 세션(setup/storageState)이 필요 없다.
+		{
+			name: "idp-chromium",
+			testMatch: "**/apps/idp/web/src/**/*.e2e.ts",
+			use: {
+				...devices["Desktop Chrome"],
+				baseURL: adminBaseUrl,
+				launchOptions: chromiumLaunchOptions,
+			},
+		},
+
+		// ── Storybook ──
+		{
+			name: "storybook-chromium",
+			testMatch: "**/apps/tool/storybook/**/*.e2e.ts",
+			use: {
+				...devices["Desktop Chrome"],
+				baseURL: storybookBaseUrl,
+				launchOptions: chromiumLaunchOptions,
+			},
+		},
+	],
+
+	// 개발 서버 설정 (SKIP_WEBSERVER=1 로 비활성화)
+	webServer:
+		process.env.SKIP_WEBSERVER || !shouldUseLocalRuntime
+			? undefined
+			: getWebServers(),
+});

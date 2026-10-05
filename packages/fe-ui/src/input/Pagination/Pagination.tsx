@@ -1,0 +1,28 @@
+export type {
+	PaginationContentProps,
+	PaginationEllipsisProps,
+	PaginationItemProps,
+	PaginationLinkProps,
+	PaginationNextIconProps,
+	PaginationNextProps,
+	PaginationPreviousIconProps,
+	PaginationPreviousProps,
+	PaginationProps,
+	PaginationRootProps,
+	PaginationSummaryProps,
+	PaginationVariants,
+} from "@heroui/react";
+export {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationNextIcon,
+	PaginationPrevious,
+	PaginationPreviousIcon,
+	PaginationRoot,
+	PaginationSummary,
+	paginationVariants,
+} from "@heroui/react";

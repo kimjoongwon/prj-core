@@ -1,0 +1,65 @@
+pipeline {
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: node
+      image: node:24.21.0-bookworm-slim
+      command: ["sleep"]
+      args: ["infinity"]
+      volumeMounts:
+        - name: pnpm-store
+          mountPath: /pnpm/store
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+  volumes:
+    # 2026-10-04: pnpm-store-pvc 폐지(WaitForFirstConsumer라 미사용 PVC가 영구 Pending했음).
+    # 임시 파드 수명과 같이 사라지는 emptyDir 캐시로 전환 — 매 PR 콜드 install이지만
+    # public-ci는 미사용 잡이라 빌드 시간보다 인프라 단순성 우선.
+    - name: pnpm-store
+      emptyDir:
+        sizeLimit: 10Gi
+'''
+        }
+    }
+
+    options {
+        skipDefaultCheckout(true)
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                container('node') {
+                    checkout scm
+                }
+            }
+        }
+        stage('Install and Validate') {
+            steps {
+                container('node') {
+                    sh '''#!/usr/bin/env bash
+                        set -euo pipefail
+                        corepack enable
+                        pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline
+                        pnpm public-packages:check
+                        pnpm type-check
+                        pnpm lint
+                        pnpm test
+                    '''
+                }
+            }
+        }
+    }
+}

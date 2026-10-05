@@ -1,0 +1,31 @@
+{
+  "prisma": {
+    "P2002": "Duplicate data exists",
+    "P2025": "Requested data not found",
+    "P2003": "Related data does not exist",
+    "P2016": "Database schema mismatch error",
+    "P2001": "No data matches the query condition",
+    "P2014": "Relationship constraint violation",
+    "P2015": "Related data not found",
+    "P2018": "Required connection data not found",
+    "P2019": "Input error",
+    "P2021": "Table does not exist",
+    "P2022": "Column does not exist"
+  },
+  "auth": {
+    "unauthorized": "Authentication required",
+    "forbidden": "Access denied",
+    "invalidToken": "Invalid token",
+    "expiredToken": "Expired token",
+    "invalidCredentials": "Invalid email or password",
+    "userNotFound": "User not found",
+    "duplicateEmail": "Email already in use",
+    "sessionExpired": "Session expired"
+  },
+  "server": {
+    "internal": "Internal server error",
+    "badRequest": "Bad request",
+    "notImplemented": "Feature not implemented",
+    "timeout": "Request timeout"
+  }
+}

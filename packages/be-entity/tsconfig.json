@@ -1,0 +1,14 @@
+{
+  "extends": "@cocrepo/tsconfig/nestjs-package.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "references": [
+    { "path": "../be-prisma" },
+    { "path": "../be-decorator" }
+  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

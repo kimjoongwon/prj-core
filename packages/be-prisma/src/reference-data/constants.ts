@@ -1,0 +1,4 @@
+export const SYSTEM_SPACE_ULID = "01J00000000000000000000001";
+export const SYSTEM_TENANT_ULID = "01J00000000000000000000002";
+
+export const REFERENCE_DATA_HISTORY_TABLE = "reference_data_migration_history";

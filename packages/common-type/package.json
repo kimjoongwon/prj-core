@@ -1,0 +1,69 @@
+{
+  "name": "@cocrepo/type",
+  "version": "1.3.18",
+  "description": "shared type library",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./database-id": {
+      "types": "./dist/src/database-id.d.ts",
+      "require": "./dist/src/database-id.js",
+      "import": "./dist/esm/src/database-id.js",
+      "default": "./dist/esm/src/database-id.js"
+    },
+    "./bigint-json": {
+      "types": "./dist/src/bigint-json.d.ts",
+      "require": "./dist/src/bigint-json.js",
+      "import": "./dist/esm/src/bigint-json.js",
+      "default": "./dist/esm/src/bigint-json.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "!dist/**/*.map",
+    "!dist/**/*.tsbuildinfo",
+    "!src/**/test/**",
+    "!src/**/tests/**",
+    "!src/**/*.test.*",
+    "!src/**/*.spec.*"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc --build && tsc -p tsconfig.esm.json && node scripts/write-esm-package-json.mjs",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "format": "biome check --write .",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "type-check:prod": "tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+  },
+  "author": "kimjoongwon",
+  "license": "ISC",
+  "devDependencies": {
+    "@heroui/react": "catalog:",
+    "@tanstack/react-table": "^8.21.3",
+    "@types/react": "catalog:",
+    "react": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimjoongwon/prj-core.git",
+    "directory": "packages/common-type"
+  }
+}

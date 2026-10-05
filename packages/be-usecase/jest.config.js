@@ -1,0 +1,62 @@
+module.exports = {
+	preset: "ts-jest",
+	testEnvironment: "node",
+	rootDir: ".",
+	testMatch: [
+		"<rootDir>/src/**/*.spec.ts",
+		"<rootDir>/__tests__/**/*.spec.ts",
+		"<rootDir>/__tests__/**/*.test.ts",
+	],
+	moduleFileExtensions: ["ts", "js", "json"],
+	setupFiles: ["reflect-metadata"],
+	moduleNameMapper: {
+		"^@cocrepo/aggregate$": "<rootDir>/__tests__/mocks/aggregate.ts",
+		"^@cocrepo/client$": "<rootDir>/__tests__/mocks/client.ts",
+		"^@cocrepo/command$": "<rootDir>/__tests__/mocks/command.ts",
+		"^@cocrepo/constant$": "<rootDir>/../common-constant/src",
+		"^@cocrepo/service$": "<rootDir>/__tests__/mocks/service.ts",
+		"^@cocrepo/toolkit$": "<rootDir>/../common-toolkit/index.ts",
+		"^@cocrepo/type$": "<rootDir>/../common-type/dist",
+		"^@cocrepo/type/(.*)$": "<rootDir>/../common-type/dist/src/$1.js",
+		"^@cocrepo/vo$": "<rootDir>/../be-vo/src",
+	},
+	transform: {
+		"^.+\\.ts$": [
+			"ts-jest",
+			{
+				tsconfig: {
+					module: "commonjs",
+					baseUrl: ".",
+					paths: {
+						"@cocrepo/type/bigint-json": [
+							"../common-type/dist/src/bigint-json.d.ts",
+						],
+					},
+					target: "es2022",
+					esModuleInterop: true,
+					allowSyntheticDefaultImports: true,
+					experimentalDecorators: true,
+					emitDecoratorMetadata: true,
+					types: ["jest", "node"],
+					skipLibCheck: true,
+					strict: false,
+				},
+			},
+		],
+	},
+	collectCoverageFrom: [
+		"src/**/*.ts",
+		"!src/**/*.spec.ts",
+		"!src/**/*.test.ts",
+		"!src/**/*.d.ts",
+		"!src/**/index.ts",
+	],
+	coverageDirectory: "./coverage",
+	coverageReporters: ["text", "lcov", "html"],
+	maxWorkers: 1,
+	testTimeout: 10000,
+	forceExit: true,
+	clearMocks: true,
+	resetMocks: true,
+	restoreMocks: true,
+};

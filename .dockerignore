@@ -4,6 +4,50 @@ node_modules
 **/node_modules
 # 빌드 결과물 제외 - Docker에서 재빌드
 dist
+**/dist
+out
+**/.next
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+# 환경 파일은 Docker build context에 포함하지 않음
+.env
+.env.*
+**/.env
+**/.env.*
+!**/.env.example
+# 인증서, 개인 키와 브라우저 산출물 제외
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.jks
+**/*.keystore
+playwright-report
+**/playwright-report
+test-results
+**/test-results
+**/screenshots
+**/*.snap.png
+# 로컬 임시 파일/로그 제외
+.tmp
+.tmp-java
+*.log
+.agents
+.claude
+.codex
+.opencode
+.qoder
+.vscode
+.wt
+browsers
+**/browsers
+.playwright-cli
+# 모바일 네이티브 로컬 빌드 산출물(iOS/Android)은 서버 이미지 빌드에 불필요
+apps/mobile/ios
+apps/mobile/android
+storybook-static
+**/storybook-static
 # Git 히스토리 제외 - 보안 및 이미지 크기 최적화
 .git
 # .gitignore

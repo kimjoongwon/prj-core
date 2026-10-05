@@ -1,0 +1,103 @@
+{
+  "metadata": {
+    "domain": "CASL (RBAC/ABAC)",
+    "updatedAt": "2026-07-26",
+    "sourceFiles": [
+      "packages/be-prisma/schema/role.prisma",
+      "packages/be-prisma/schema/role-assignment.prisma",
+      "packages/be-prisma/schema/policy.prisma",
+      "packages/be-prisma/schema/policy-entry.prisma",
+      "packages/be-prisma/schema/ability.prisma",
+      "packages/be-prisma/schema/action.prisma",
+      "packages/be-prisma/schema/subject.prisma",
+      "packages/be-common/src/casl/casl-ability.factory.ts"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "tenant",
+      "type": "context",
+      "name": "Tenant",
+      "description": "현재 Space에서 User가 가진 Role을 결정합니다."
+    },
+    {
+      "id": "role",
+      "type": "reference",
+      "name": "Role",
+      "description": "Tenant가 맡는 역할입니다."
+    },
+    {
+      "id": "role-assignment",
+      "type": "configuration",
+      "name": "RoleAssignment",
+      "description": "Role에 Policy를 할당하고 활성 상태와 우선순위를 관리합니다."
+    },
+    {
+      "id": "policy",
+      "type": "configuration",
+      "name": "Policy",
+      "description": "현재 Space의 권한 규칙 묶음입니다."
+    },
+    {
+      "id": "policy-entry",
+      "type": "configuration",
+      "name": "PolicyEntry",
+      "description": "Policy 안에 포함되는 Ability 항목입니다."
+    },
+    {
+      "id": "ability",
+      "type": "reference",
+      "name": "Ability",
+      "description": "Action, Subject와 조건을 묶은 재사용 가능한 권한 정의입니다."
+    },
+    {
+      "id": "action",
+      "type": "reference",
+      "name": "Action",
+      "description": "수행할 행동을 정의합니다."
+    },
+    {
+      "id": "subject",
+      "type": "reference",
+      "name": "Subject",
+      "description": "행동의 대상을 정의합니다."
+    }
+  ],
+  "edges": [
+    {
+      "from": "tenant",
+      "to": "role",
+      "relation": "selects"
+    },
+    {
+      "from": "role",
+      "to": "role-assignment",
+      "relation": "assignments"
+    },
+    {
+      "from": "role-assignment",
+      "to": "policy",
+      "relation": "policy"
+    },
+    {
+      "from": "policy",
+      "to": "policy-entry",
+      "relation": "entries"
+    },
+    {
+      "from": "policy-entry",
+      "to": "ability",
+      "relation": "ability"
+    },
+    {
+      "from": "ability",
+      "to": "action",
+      "relation": "action"
+    },
+    {
+      "from": "ability",
+      "to": "subject",
+      "relation": "subject"
+    }
+  ]
+}

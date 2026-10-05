@@ -1,0 +1,15 @@
+*.tsbuildinfo
+**/*.tsbuildinfo
+*.map
+**/*.map
+test/
+tests/
+**/*.test.*
+**/*.spec.*
+seed/
+seeds/
+.env
+.env.*
+*.pem
+*.key
+

@@ -1,0 +1,60 @@
+{
+  "name": "@cocrepo/dto",
+  "version": "0.1.11",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "DTO 클래스 패키지",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "tsc --build",
+    "start:dev": "tsc --build --watch",
+    "format": "biome check --write .",
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+  },
+  "dependencies": {
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/decorator": "workspace:*",
+    "@cocrepo/entity": "workspace:*",
+    "@cocrepo/enum": "workspace:*",
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/schema": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "@nestjs/mapped-types": "^2.1.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.2.3",
+    "@nestjs/swagger": "^11.4.7",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2"
+  },
+  "devDependencies": {
+    "@cocrepo/tsconfig": "workspace:*",
+    "@nestjs/common": "^11.2.3",
+    "@nestjs/swagger": "^11.4.7",
+    "@types/node": "catalog:",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "private": true
+}

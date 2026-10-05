@@ -1,0 +1,34 @@
+/**
+ * @ApiResponseEntity 데코레이터에서 사용하는 메타데이터 키
+ * DtoTransformInterceptor가 이 메타데이터를 읽어 자동으로 Entity → DTO 변환을 수행합니다.
+ */
+
+/**
+ * Controller 메서드가 반환하는 DTO 클래스 정보
+ * @example SetMetadata(DTO_CLASS_METADATA, UserDto)
+ */
+export const DTO_CLASS_METADATA = "api:response:dto_class";
+
+/**
+ * 반환 데이터가 배열인지 여부
+ * @example SetMetadata(DTO_IS_ARRAY_METADATA, true)
+ */
+export const DTO_IS_ARRAY_METADATA = "api:response:is_array";
+
+/**
+ * DtoTransformInterceptor를 특정 엔드포인트에서 스킵
+ * @example @SetMetadata(SKIP_DTO_TRANSFORM, true)
+ */
+export const SKIP_DTO_TRANSFORM = "dto:skip_transform";
+
+/**
+ * 응답 메시지 커스터마이징용 메타데이터 키
+ * @example @ResponseMessage("사용자 생성 완료")
+ */
+export const RESPONSE_MESSAGE_METADATA = "shared:response-message";
+
+/**
+ * DTO 변환 시 제외할 필드 목록
+ * @example SetMetadata(DTO_EXCLUDE_FIELDS_METADATA, ['password', 'deletedAt'])
+ */
+export const DTO_EXCLUDE_FIELDS_METADATA = "api:response:exclude_fields";

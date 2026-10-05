@@ -1,0 +1,28 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "react-native": [
+        "./node_modules/react-native"
+      ],
+      "react-native/*": [
+        "./node_modules/react-native/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    ".rnstorybook/**/*.ts",
+    ".rnstorybook/**/*.tsx",
+    "../../../packages/fe-mo-ui/src/**/*.stories.ts",
+    "../../../packages/fe-mo-ui/src/**/*.stories.tsx",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

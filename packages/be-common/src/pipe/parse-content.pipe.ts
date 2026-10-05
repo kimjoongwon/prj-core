@@ -9,7 +9,10 @@ import { validate } from "class-validator";
 
 @Injectable()
 export class ParseContentPipe implements PipeTransform {
-	async transform(value: any, metadata: ArgumentMetadata) {
+	async transform(
+		value: Record<string, unknown>,
+		metadata: ArgumentMetadata,
+	): Promise<unknown> {
 		if (value.content && typeof value.content === "string") {
 			try {
 				value.content = JSON.parse(value.content);

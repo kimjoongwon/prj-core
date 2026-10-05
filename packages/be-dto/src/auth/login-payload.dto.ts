@@ -1,0 +1,26 @@
+import { LoginSchema } from "@cocrepo/schema";
+import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
+
+/**
+ * 로그인 요청 DTO
+ *
+ * @cocrepo/schema의 LoginSchema를 확장하여
+ * Swagger 문서화 메타데이터를 추가합니다.
+ */
+export class LoginPayloadDto extends LoginSchema {
+	@ApiProperty({
+		example: "ceo@f45training.co.kr",
+		description: "사용자 이메일",
+	})
+	@Transform(({ value }) =>
+		typeof value === "string" ? value.trim().toLowerCase() : value,
+	)
+	email: string;
+
+	@ApiProperty({
+		example: "SuperAdmin123!@#",
+		description: "사용자 비밀번호 (8자 이상)",
+	})
+	password: string;
+}

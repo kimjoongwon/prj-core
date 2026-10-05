@@ -2,13 +2,13 @@
 
 > 현대적인 풀스택 예약 플랫폼을 위한 모노레포 아키텍처
 
-[![타입스크립트](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)
-[![pnpm](https://img.shields.io/badge/pnpm-10.16-orange.svg)](https://pnpm.io/)
+[![타입스크립트](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-24+-green.svg)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-10.34-orange.svg)](https://pnpm.io/)
 [![Turborepo](https://img.shields.io/badge/Turborepo-latest-red.svg)](https://turbo.build/)
 [![NestJS](https://img.shields.io/badge/NestJS-11-E0234E.svg)](https://nestjs.com/)
 [![React](https://img.shields.io/badge/React-19-61DAFB.svg)](https://react.dev/)
-[![Prisma](https://img.shields.io/badge/Prisma-6-2D3748.svg)](https://www.prisma.io/)
+[![Prisma](https://img.shields.io/badge/Prisma-7-2D3748.svg)](https://www.prisma.io/)
 [![라이선스](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC)
 
 ## 📋 목차
@@ -66,7 +66,18 @@
 ### 파일 관리
 
 - 📁 **S3 통합**: AWS S3를 통한 이미지/영상 관리
-- 🖼️ **이미지 최적화**: Sharp를 이용한 자동 리사이징
+- 📤 **업로드 UX**: react-dropzone 기반 드래그 앤 드롭 업로드
+
+### 인증 & IDP
+
+- 🔑 **자체 OIDC 인증 서버**: `idp-api`/`idp-web` 앱으로 로그인·동의·로그아웃(end_session) 플로우 제공
+- 🎫 **OIDC 클라이언트 관리**: 멀티 클라이언트 등록/관리 — [oidc-client-ids 가이드](./docs/oidc-client-ids.guide.md)
+- 📱 **모바일 OIDC 플로우**: Expo 앱 연동 — [mobile-oidc-flow 가이드](./docs/mobile-oidc-flow.guide.md)
+
+### 품질 & 테스트
+
+- 🧪 **테스트 피라미드**: Vitest 단위 테스트 + Playwright 관리자 e2e(`apps/test/e2e`) + 모바일 Detox E2E
+- 🏗 **CI 게이트**: 타입 체크, Biome 린트/포맷, 퍼블릭 패키지 경계 검사
 
 ## 🛠 기술 스택
 
@@ -74,126 +85,97 @@
 
 | 카테고리             | 기술            | 버전      | 설명                    |
 | -------------------- | --------------- | --------- | ----------------------- |
-| **Framework**        | React           | 19.0      | UI 라이브러리           |
-| **Build Tool**       | Vite            | 6.0       | 번들러 및 개발 서버     |
-| **Routing**          | TanStack Router | 1.x       | 타입 안전 라우팅        |
-| **State Management** | MobX / Valtio   | 6.x / 2.x | 반응형 상태 관리        |
-| **Data Fetching**    | TanStack Query  | 5.x       | 서버 상태 관리          |
-| **UI Components**    | HeroUI          | 2.8       | 컴포넌트 라이브러리     |
-| **Styling**          | Tailwind CSS    | 4.x       | 유틸리티 CSS 프레임워크 |
-| **Animations**       | Framer Motion   | latest    | 애니메이션 라이브러리   |
-| **DnD**              | dnd-kit         | 6.x       | 드래그 앤 드롭          |
+| **Framework**        | React           | 19.2      | UI 라이브러리           |
+| **Meta Framework**   | Next.js         | 16.x      | 웹 앱 프레임워크(App Router, admin·idp·proposal 웹) |
+| **Routing**          | App Router (Next.js) / Expo Router | 16.x | 파일 기반 라우팅 |
+| **State Management** | MobX            | 6.13      | 반응형 상태 관리         |
+| **Data Fetching**    | TanStack Query  | 5.83      | 서버 상태 관리          |
+| **API Client**       | Orval 생성 클라이언트 | 8.x  | OpenAPI 기반 자동 생성 (`fe-api`) |
+| **UI Components**    | HeroUI          | 3.1       | 컴포넌트 라이브러리     |
+| **Styling**          | Tailwind CSS    | 4.3       | 유틸리티 CSS 프레임워크 |
+| **Animations**       | Framer Motion   | 12.x      | 애니메이션 라이브러리   |
+| **File Upload**      | react-dropzone  | 14.x      | 드래그 앤 드롭 업로드  |
 | **Icons**            | Lucide React    | latest    | 아이콘 라이브러리       |
 
 ### Backend
 
-| 카테고리             | 기술            | 버전 | 설명                |
-| -------------------- | --------------- | ---- | ------------------- |
-| **Framework**        | NestJS          | 11.x | Node.js 프레임워크  |
-| **Runtime**          | Node.js         | 20+  | JavaScript 런타임   |
-| **Language**         | TypeScript      | 5.8  | 타입스크립트        |
-| **ORM**              | Prisma          | 6.x  | 데이터베이스 ORM    |
+| 카테고리             | 기술            | 버전      | 설명                |
+| -------------------- | --------------- | --------- | ------------------- |
+| **Framework**        | NestJS          | 11.2 | Node.js 프레임워크  |
+| **Runtime**          | Node.js         | 24(컨테이너 24.21.0 고정) | JavaScript 런타임 |
+| **Language**         | TypeScript      | 5.9  | 타입스크립트        |
+| **ORM**              | Prisma          | 7.10 | 데이터베이스 ORM    |
 | **Database**         | PostgreSQL      | 14+  | 관계형 데이터베이스 |
+| **Cache**            | Redis (ioredis) | -    | 캐시/세션           |
+| **Architecture**     | CQRS (@nestjs/cqrs) | 11.x | 커맨드/쿼리 분리 |
 | **Authentication**   | Passport.js     | 0.7  | 인증 미들웨어       |
-| **Authorization**    | CASL            | 6.7  | 권한 관리           |
+| **Authorization**    | CASL            | 6.x  | 권한 관리           |
 | **Validation**       | class-validator | 0.14 | DTO 검증            |
-| **API Docs**         | Swagger         | 11.x | OpenAPI 문서화      |
+| **API Docs**         | Swagger         | 11.4 | OpenAPI 문서화      |
 | **File Storage**     | AWS S3          | 3.x  | 파일 스토리지       |
 | **Email**            | Nodemailer      | 7.x  | 이메일 발송         |
-| **Logging**          | Pino            | 9.x  | 고성능 로깅         |
-| **Image Processing** | Sharp           | 0.34 | 이미지 최적화       |
+| **Logging**          | Pino (nestjs-pino) | 4.x | 고성능 로깅       |
 
 ### DevOps & Tools
 
 | 카테고리              | 기술          | 버전          | 설명               |
 | --------------------- | ------------- | ------------- | ------------------ |
 | **Monorepo**          | Turborepo     | latest        | 빌드 시스템        |
-| **Package Manager**   | pnpm          | 10.16         | 패키지 매니저      |
+| **Package Manager**   | pnpm          | 10.34         | 패키지 매니저 + catalog |
 | **Linter**            | Biome         | 2.1           | 린터 및 포매터     |
-| **Testing**           | Jest / Vitest | 30.x / latest | 테스팅 프레임워크  |
+| **Testing**           | Vitest / Playwright / Detox | 4.x | 단위·e2e·모바일 E2E |
 | **Secret Management** | OpenBao       | latest        | 환경 변수 관리     |
-| **Storybook**         | Storybook     | 9.x           | UI 컴포넌트 문서화 |
+| **Storybook**         | Storybook     | 10.6          | UI 컴포넌트 문서화 |
+| **CI/CD**             | Jenkins       | -             | 빌드 → Harbor push → GitOps 태그 범프 |
 
 ## 📁 프로젝트 구조
 
 ```
 prj-core/
 ├── apps/                          # 애플리케이션
-│   ├── admin/                     # Admin 웹 애플리케이션 (React + Vite)
-│   │   ├── src/
-│   │   │   ├── routes/           # TanStack Router 라우트
-│   │   │   ├── hooks/            # React Hooks
-│   │   │   └── providers/        # Context Providers
-│   │   └── package.json
-│   ├── agent/                     # AI Agent 애플리케이션
-│   │   └── package.json
-│   ├── coin/                      # 코인/결제 애플리케이션
-│   │   └── package.json
-│   ├── server/                    # Backend API (NestJS)
-│   │   ├── src/
-│   │   │   ├── module/           # 기능별 모듈
-│   │   │   └── shared/           # 공유 리소스
-│   │   ├── test/                 # E2E 테스트
-│   │   └── package.json
-│   └── storybook/                 # UI 컴포넌트 문서화
-│       └── package.json
-├── packages/                      # 공유 패키지
-│   ├── api/                      # 자동 생성 API 클라이언트 (Orval)
-│   ├── constant/                 # 공통 상수
-│   │   └── src/
-│   │       ├── routing/         # 프론트엔드 라우팅 상수
-│   │       └── schema/          # 백엔드 스키마 상수
-│   ├── decorator/                # NestJS 데코레이터 모음
-│   │   └── src/
-│   │       ├── field/           # 필드 데코레이터 (primitives, complex, specialized)
-│   │       └── *.decorator.ts   # 인증, 권한, API 데코레이터
-│   ├── design-system/            # HeroUI 기반 디자인 시스템
-│   │   └── src/
-│   │       ├── provider/        # DesignSystemProvider
-│   │       ├── theme/           # 테마 설정 및 토큰
-│   │       └── styles/          # 기본 스타일
-│   ├── dto/                      # Data Transfer Objects
-│   │   └── src/
-│   │       ├── auth/            # 인증 관련 DTO
-│   │       ├── create/          # 생성 DTO
-│   │       ├── update/          # 수정 DTO
-│   │       └── query/           # 조회 DTO
-│   ├── entity/                   # 데이터베이스 엔티티 타입
-│   │   └── src/
-│   │       └── *.entity.ts      # 엔티티 정의
-│   ├── enum/                     # 공유 열거형
-│   │   └── src/
-│   │       └── *.enum.ts        # 카테고리, 그룹, 세션 타입 등
-│   ├── hook/                     # 공유 React Hook
-│   ├── prisma/                   # Prisma 스키마 & Client
-│   │   └── prisma/
-│   │       ├── models/          # Prisma 모델 정의
-│   │       ├── migrations/      # DB 마이그레이션
-│   │       └── seed.ts          # 시드 데이터
-│   ├── repository/               # Repository 패턴 구현
-│   │   └── src/
-│   │       └── repositories/    # 각 엔티티별 Repository
-│   ├── service/                  # 비즈니스 로직 & 서비스 레이어
-│   │   └── src/
-│   │       ├── facade/          # Facade 패턴 서비스
-│   │       ├── resources/       # 리소스별 서비스
-│   │       └── utils/           # 서비스 유틸리티
-│   ├── store/                    # 공유 상태 관리 (MobX)
-│   ├── toolkit/                  # 유틸리티 함수
-│   ├── type/                     # 공유 TypeScript 타입
-│   │   └── src/
-│   │       ├── config.types.ts  # 설정 관련 타입
-│   │       ├── json.ts          # JSON 타입 (Prisma 7 호환)
-│   │       ├── page-meta.ts     # 페이지네이션 타입
-│   │       └── index.ts         # 타입 유틸리티 (Paths, Leaves 등)
-│   ├── ui/                       # 공유 UI 컴포넌트
-│   └── vo/                       # Value Object (도메인 불변 값)
-│       └── src/
-│           └── *.vo.ts          # Value Object 정의
-├── scripts/                       # 빌드/배포 스크립트
-├── devops/                        # 인프라 설정
+│   ├── core/api/                  # Core API — 메인 백엔드 (NestJS, http://localhost:3006)
+│   ├── idp/api/                   # IDP API — OIDC 인증 서버 백엔드
+│   ├── idp/web/                   # IDP Web — 로그인/동의 화면 (Next.js, http://localhost:3008)
+│   ├── admin/web/                 # Admin 웹 (Next.js, http://localhost:3000/admin)
+│   ├── proposal/web/              # Proposal 웹 (http://localhost:3011/proposal)
+│   ├── mobile/                    # 모바일 앱 (Expo + Detox E2E)
+│   ├── tool/storybook/            # 웹 UI 컴포넌트 문서화 (http://localhost:6006)
+│   ├── tool/mobile-storybook/     # 모바일 UI 컴포넌트 문서화
+│   └── test/e2e/                  # Playwright 기반 관리자 e2e (test-e2e)
+├── packages/                      # 공유 패키지 (@cocrepo/* 스코프)
+│   ├── be-prisma/                 # Prisma 스키마(schema/*.prisma)·마이그레이션·시드
+│   ├── be-entity/                 # 데이터베이스 엔티티 타입
+│   ├── be-vo/                     # Value Object (도메인 불변 값)
+│   ├── be-aggregate/              # 도메인 집합체 (Aggregate)
+│   ├── be-event/                  # 도메인 이벤트
+│   ├── be-command/                # 쓰기 명령 (Command)
+│   ├── be-dto/                    # Data Transfer Objects
+│   ├── be-input/                  # 입력 모델/검증
+│   ├── be-decorator/              # NestJS 데코레이터 모음
+│   ├── be-controller/             # 컨트롤러 계층
+│   ├── be-context/                # 요청 컨텍스트
+│   ├── be-client/                 # 외부 클라이언트 (S3, Redis 등)
+│   ├── be-repository/             # Repository 패턴 구현
+│   ├── be-service/                # 비즈니스 로직 & 서비스 레이어
+│   ├── be-usecase/                # CQRS UseCase/Handler 계층
+│   ├── be-common/                 # 백엔드 공통 유틸
+│   ├── fe-api/                    # Orval 자동 생성 API 클라이언트 (@cocrepo/api)
+│   ├── fe-ui/                     # 공유 웹 UI 컴포넌트
+│   ├── fe-mo-ui/                  # 공유 모바일 UI 컴포넌트
+│   ├── fe-hook/                   # 공유 React Hook
+│   ├── fe-store/                  # 공유 상태 관리 (MobX)
+│   ├── fe-e2e/                    # e2e 지원 유틸
+│   ├── common-type/               # 공유 TypeScript 타입
+│   ├── common-enum/               # 공유 열거형
+│   ├── common-constant/           # 공통 상수
+│   ├── common-schema/             # 공유 스키마
+│   ├── common-toolkit/            # 유틸리티 함수
+│   └── common-tsconfig/           # 공유 tsconfig 프리셋
+├── devops/                        # 앱별 Dockerfile·Jenkinsfile (+ ops 문서)
+├── scripts/                       # 기동/릴리스/검증 스크립트
+├── docs/                          # 가이드 문서 (env, OIDC, CQRS 마이그레이션 등)
 ├── biome.json                     # Biome 설정
-├── pnpm-workspace.yaml           # pnpm 워크스페이스 설정
+├── pnpm-workspace.yaml            # pnpm 워크스페이스 + catalog 정의
 ├── turbo.json                     # Turborepo 설정
 └── package.json                   # Root 패키지
 ```
@@ -203,114 +185,91 @@ prj-core/
 ```mermaid
 graph TD
     subgraph Applications
-        Admin[Admin App]
-        Server[Server API]
-        Storybook[Storybook]
-        Agent[Agent App]
-        Coin[Coin App]
+        CoreApi[core-api]
+        IdpApi[idp-api]
+        IdpWeb[idp-web]
+        Admin[admin-web]
+        Proposal[proposal-web]
+        Mobile[mobile-app]
+        Storybook[tool-storybook]
+        E2E[test-e2e]
     end
 
-    subgraph "Foundation Packages"
-        Type[type]
-        Enum[enum]
-        Constant[constant]
-        Toolkit[toolkit]
+    subgraph "Backend Layer (be-*)"
+        Controller[be-controller]
+        Usecase[be-usecase]
+        Service[be-service]
+        Repository[be-repository]
+        Dto[be-dto]
+        Decorator[be-decorator]
+        Context[be-context]
+        Client[be-client]
     end
 
-    subgraph "Data Layer"
-        Prisma[prisma]
-        VO[vo - Value Object]
-        Entity[entity]
+    subgraph "Domain & Data"
+        Aggregate[be-aggregate]
+        Event[be-event]
+        Command[be-command]
+        VO[be-vo]
+        Entity[be-entity]
+        Prisma[be-prisma]
     end
 
-    subgraph "Backend Core"
-        Decorator[decorator]
-        DTO[dto]
-        Repository[repository]
-        Service[service]
+    subgraph "Frontend Layer (fe-*)"
+        ApiClient[fe-api]
+        UI[fe-ui / fe-mo-ui]
+        Hook[fe-hook]
+        Store[fe-store]
     end
 
-    subgraph "Frontend Core"
-        DesignSystem[design-system]
-        UI[ui]
-        Hook[hook]
-        Store[store]
-        ApiClient[api]
+    subgraph "Common (common-*)"
+        Type[common-type]
+        Enum[common-enum]
+        Constant[common-constant]
+        Schema[common-schema]
+        Toolkit[common-toolkit]
     end
 
-    %% Application Dependencies
-    Server --> Service
-    Server --> Repository
-    Server --> DTO
-    Server --> Decorator
-    Server --> Prisma
-    Server --> Constant
-    Server --> Toolkit
-
-    Admin --> ApiClient
-    Admin --> UI
-    Admin --> Store
-    Admin --> DesignSystem
-    Admin --> Toolkit
-
-    Storybook --> UI
-    Storybook --> DesignSystem
-
-    %% Backend Package Dependencies
-    Service --> Repository
-    Service --> DTO
-    Service --> Entity
-    Service --> VO
-    Service --> Decorator
-    Service --> Prisma
-    Service --> Type
-    Service --> Constant
-    Service --> Toolkit
-
+    CoreApi --> Controller & Usecase & Service & Repository & Dto & Prisma
+    IdpApi --> Controller & Usecase & Dto & Prisma
+    Admin & Proposal & IdpWeb --> ApiClient & UI & Hook & Store
+    Mobile --> ApiClient & Hook
+    Usecase --> Aggregate & Command & Event & Service
+    Service --> Repository & Entity & VO
     Repository --> Prisma
-    Repository --> Entity
-
-    DTO --> Entity
-    DTO --> Decorator
-    DTO --> Enum
-    DTO --> Constant
-    DTO --> Toolkit
-
-    Entity --> Prisma
-    Entity --> Decorator
-    Entity --> Type
-
-    Decorator --> Prisma
-    Decorator --> Constant
-    Decorator --> Toolkit
-
-    %% Frontend Package Dependencies
-    UI --> Hook
-    UI --> Type
-    UI --> Toolkit
-    UI --> ApiClient
-
-    Hook --> Type
-    Hook --> Toolkit
-
-    Store --> Toolkit
-
+    Controller --> Dto & Decorator & Context
+    Dto --> Entity & Enum & Constant
+    Client --> Prisma
     ApiClient --> Type
-
-    DesignSystem --> UI
+    UI & Hook --> Type & Toolkit
 ```
 
-> **📝 참고**: 모노레포 아키텍처 개선으로 패키지가 재구성되었습니다.
-> - `packages/schema` → `packages/prisma`로 변경
-> - `packages/type`, `packages/vo`, `packages/repository`, `packages/service` 신규 추가
-> - DTO, Entity, Enum, Decorator가 독립 패키지로 분리
+> **📝 참고**: 패키지는 접두사로 계층을 구분합니다 — `be-*`(백엔드), `fe-*`(프론트엔드), `common-*`(양쪽 공용).
+> 모든 워크스페이스 패키지는 `@cocrepo/*` 스코프로 참조하며, 의존성 버전은 `pnpm-workspace.yaml`의 catalog로 일괄 관리합니다.
 
 ## 🚀 시작하기
 
+### 로컬 핵심 서비스 한 번에 실행
+
+Docker Desktop과 Node.js 24+, pnpm 10+를 준비한 뒤 clean clone에서 실행합니다.
+
+```bash
+pnpm install --frozen-lockfile
+cp apps/core/api/.env.example apps/core/api/.env
+cp apps/admin/web/.env.example apps/admin/web/.env.local
+cp apps/proposal/web/.env.example apps/proposal/web/.env.local
+cp packages/be-prisma/.env.example packages/be-prisma/.env
+pnpm start -- core-api admin-web proposal-web
+```
+
+위 명령은 로컬 PostgreSQL/Redis 컨테이너를 readiness까지 기동하고 migration과 멱등 bootstrap을 실행합니다. API는 `http://localhost:3006`, Admin은 `http://localhost:3000`, Proposal은 `http://localhost:3011`에서 확인합니다. Docker를 직접 관리하거나 원격 인프라를 사용할 때만 `START_SKIP_INFRA_START=1`과 `START_SKIP_INFRA_CHECK=1`을 명시합니다.
+
+기동 실패 시 출력된 PostgreSQL/Redis 주소와 서비스명을 먼저 확인합니다. Docker daemon이 꺼져 있으면 Docker Desktop을 시작하고, 포트가 사용 중이면 해당 프로세스를 종료한 뒤 같은 명령을 다시 실행합니다.
+
 ### 사전 요구사항
 
-- **Node.js**: 20.x 이상
-- **pnpm**: 10.16.0 이상
+- **Node.js**: 24.0.0 이상 (프로덕션 컨테이너·CI는 24.21.0으로 고정)
+- **pnpm**: 10.34.0 이상
 - **PostgreSQL**: 14.x 이상
 
 ### 설치
@@ -318,80 +277,79 @@ graph TD
 1. **저장소 클론**
 
 ```bash
-git clone https://github.com/your-org/prj-core.git
+git clone https://github.com/kimjoongwon/prj-core.git
 cd prj-core
 ```
 
-2. **의존성 설치**
+1. **의존성 설치**
 
 ```bash
 pnpm install
 ```
 
-3. **환경 변수 설정**
+2. **환경 변수 설정**
 
-개발 환경에서는 `.env` 파일을 생성합니다:
+로컬 개발에서는 각 앱/패키지 디렉터리의 `.env.example`을 복사해 사용합니다.
+서버 앱·패키지(core-api, idp-api, be-prisma)는 `.env`를, Next.js 웹 앱(admin·idp·proposal
+web)은 `.env.local`을 사용합니다(dev 스크립트가 `.env.local`을 source). 그 외 변형
+(`.env.development.local` 등)은 사용하지 않습니다.
 
 ```bash
-cp .env.example .env
+cp apps/core/api/.env.example apps/core/api/.env
+cp packages/be-prisma/.env.example packages/be-prisma/.env
 ```
 
-> **💡 참고**: 프로덕션 환경에서는 Kubernetes에 배포된 **OpenBao**를 통해 환경 변수를 안전하게 관리하며, 배포 시점에 자동으로 주입됩니다.
+> **💡 참고**: `.env.example`는 커밋되는 템플릿이고, 실제 로컬 실행은 위 규칙에 따라
+> 각 디렉터리의 `.env`(서버 계열) / `.env.local`(웹 앱 계열)만 사용합니다.
+> 배포 환경 변수는 `prj-devops`의 OpenBao를 통해 주입됩니다.
 
-4. **데이터베이스 마이그레이션**
+3. **데이터베이스 마이그레이션**
 
 ```bash
-cd packages/prisma
-pnpm prisma migrate dev
-pnpm prisma db seed
+cd packages/be-prisma
+pnpm db:migrate
+pnpm db:seed
 ```
 
 ### 개발 서버 실행
 
 ```bash
-# 모든 애플리케이션 실행
-pnpm start:dev
+# 대화형 실행기
+pnpm start
 
 # 개별 실행
-pnpm start:server      # NestJS 서버 (http://localhost:3000)
-pnpm start:admin       # Admin 웹앱 (http://localhost:5173)
-pnpm start:storybook   # Storybook (http://localhost:6006)
+pnpm start:core-api        # Core API (http://localhost:3006)
+pnpm start:admin-web       # Admin 웹앱 (http://localhost:3000)
+pnpm start:proposal-web    # Proposal 웹앱 (http://localhost:3011/proposal)
+pnpm start:idp-api         # OIDC IDP API
+pnpm start:idp-web         # OIDC IDP 웹 (로그인/동의 화면)
+pnpm start:tool-storybook  # Storybook (http://localhost:6006)
+pnpm start:mobile          # Expo 모바일 앱
 ```
+
+> 인증/OIDC는 별도 앱(`idp-api`, `idp-web`)으로 분리되어 있습니다. 모바일은 `pnpm start:mobile`, 모바일 Storybook은 `pnpm start:mobile-storybook`으로 실행합니다.
 
 ## 🔧 환경 설정
 
 ### 환경 변수 관리
 
-이 프로젝트는 **Kubernetes에 배포된 OpenBao**를 통해 환경 변수를 안전하게 관리합니다. 배포 시점에 OpenBao에서 환경 변수를 자동으로 주입하여 보안성을 강화하고 설정을 중앙에서 관리합니다.
+이 프로젝트의 환경 변수 규칙은 다음과 같습니다.
 
-### 필수 환경 변수
+- 서버 앱·패키지(core-api, idp-api, be-prisma)는 각 디렉터리의 `.env`를 사용합니다.
+- Next.js 웹 앱(admin·idp·proposal web)은 각 디렉터리의 `.env.local`을 사용합니다(dev 스크립트가 source).
+- `.env.example`는 커밋되는 템플릿이며 런타임에서 직접 읽지 않습니다.
+- `.env.development.local` 등 그 외 변형은 사용하지 않습니다.
+- 배포 환경 변수는 `prj-devops`에서 관리하는 OpenBao를 통해 주입됩니다.
 
-```env
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/prj_core
+### 예제 파일
 
-# JWT
-JWT_SECRET=your-jwt-secret
-JWT_EXPIRES_IN=7d
-JWT_REFRESH_EXPIRES_IN=30d
-
-# AWS S3
-AWS_ACCESS_KEY_ID=your-aws-access-key
-AWS_SECRET_ACCESS_KEY=your-aws-secret-key
-AWS_REGION=ap-northeast-2
-AWS_S3_BUCKET=your-bucket-name
-
-# Email (선택사항)
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USER=your-email@gmail.com
-MAIL_PASSWORD=your-app-password
-
-# Application
-NODE_ENV=development
-PORT=3000
-CORS_ORIGIN=http://localhost:5173
-```
+- `apps/core/api/.env.example` → `.env`
+- `apps/idp/api/.env.example` → `.env`
+- `apps/admin/web/.env.example` → `.env.local`
+- `apps/idp/web/.env.example` → `.env.local`
+- `apps/proposal/web/.env.example` → `.env.local`
+- `packages/be-prisma/.env.example` → `.env`
+- 프로젝트별 env 키 표: [docs/env-reference.md](./docs/env-reference.md)
 
 ## 💻 개발 가이드
 
@@ -400,22 +358,25 @@ CORS_ORIGIN=http://localhost:5173
 ```bash
 # 빌드
 pnpm build                    # 모든 패키지 및 앱 빌드
-pnpm build:server            # 서버만 빌드
-pnpm build:admin             # Admin 앱만 빌드
-pnpm build:packages          # 패키지만 빌드
+pnpm build:core-api           # Core API만 빌드
+pnpm build:admin-web          # Admin 웹만 빌드
+pnpm build:proposal-web       # Proposal 웹만 빌드
+pnpm build:idp-api            # IDP API만 빌드
+pnpm build:packages           # 패키지만 빌드
 
 # 테스트
-pnpm test                     # 모든 테스트 실행
-pnpm test:watch              # Watch 모드
-pnpm test:cov                # 커버리지 확인
+pnpm test                     # 모든 단위 테스트 (Vitest)
+pnpm test:e2e                 # Playwright 관리자 e2e 전체
+pnpm test:api:e2e             # API e2e
+pnpm test:e2e:idp:local       # IDP 로컬 e2e
 
-# 린트 & 포맷
+# 린트 & 포맷 (Biome)
 pnpm lint                     # 린트 검사
-pnpm lint:fix                # 린트 자동 수정
+pnpm lint:fix                 # 린트 자동 수정
 pnpm format                   # 코드 포맷팅
 
 # 타입 체크
-pnpm type-check              # TypeScript 타입 검사
+pnpm type-check               # TypeScript 타입 검사
 
 # 클린업
 pnpm clean                    # 빌드 산출물 제거
@@ -424,16 +385,17 @@ pnpm clean                    # 빌드 산출물 제거
 ### 패키지 관리
 
 ```bash
-# 패키지 버전 업데이트
+# 퍼블릭 패키지 버전 업데이트
 pnpm version:patch           # 패치 버전 업데이트 (0.0.x)
 pnpm version:minor           # 마이너 버전 업데이트 (0.x.0)
 pnpm version:major           # 메이저 버전 업데이트 (x.0.0)
 
-# 패키지 배포
-pnpm publish:packages        # 모든 패키지 배포
+# 퍼블릭 패키지 배포
+pnpm publish:packages        # 퍼블릭 패키지 배포
 pnpm publish:dry             # Dry run (실제 배포 X)
+pnpm public-packages:check   # 퍼블릭 경계 검사
 
-# 릴리즈 (버전 업데이트 + 빌드 + 배포)
+# 릴리즈 (버전 업데이트 + 빌드 + 배포 + 앱 의존성 갱신)
 pnpm release:patch
 pnpm release:minor
 pnpm release:major
@@ -442,23 +404,22 @@ pnpm release:major
 ### 데이터베이스 관리
 
 ```bash
-cd packages/prisma
+cd packages/be-prisma
 
-# Prisma 명령어
-pnpm prisma migrate dev      # 마이그레이션 생성 및 적용
-pnpm prisma migrate deploy   # 프로덕션 마이그레이션
-pnpm prisma db seed          # 시드 데이터 삽입
-pnpm prisma studio           # Prisma Studio 실행
-pnpm prisma generate         # Prisma Client 재생성
+pnpm db:migrate              # 마이그레이션 생성 및 적용 (prisma migrate dev)
+pnpm db:migrate:deploy       # 마이그레이션 배포 (stg/prod 변형 지원)
+pnpm db:seed                 # 시드 + 멱등 bootstrap (db:bootstrap)
+pnpm db:studio               # Prisma Studio 실행
+pnpm generate                # Prisma Client 재생성
 ```
+
+스키마는 `packages/be-prisma/schema/*.prisma`의 멀티파일로 관리하며, `pnpm schema:check`로 네이밍 컨벤션을 검증합니다.
 
 ### API 클라이언트 재생성
 
 ```bash
-cd packages/api
-
-# OpenAPI 스펙에서 클라이언트 생성
-pnpm generate
+# 루트에서 실행 (packages/fe-api — Orval)
+pnpm codegen:api
 ```
 
 ### 코드 스타일 가이드
@@ -475,15 +436,8 @@ pnpm generate
   - 공유 코드는 `packages/`에 위치
 
 - **커밋 메시지**
-  ```
-  feat: 새로운 기능 추가
-  fix: 버그 수정
-  docs: 문서 수정
-  style: 코드 포맷팅
-  refactor: 코드 리팩토링
-  test: 테스트 추가/수정
-  chore: 빌드 설정 등
-  ```
+
+  커밋 메시지 형식과 허용 타입은 [프로젝트 공통 규칙](./AGENTS.md#커밋-메시지-규칙)을 따릅니다.
 
 ## 🏗 아키텍처
 
@@ -518,28 +472,47 @@ Tenant (최상위 조직)
 
 ## 🚢 배포
 
-### 도커를 이용한 배포
+### Jenkins를 통한 배포 (운영)
+
+앱별 Jenkinsfile이 `devops/`에 형상 관리됩니다(각 파일 옆에 `.ops.md` 운영 문서 동반).
+
+```bash
+# Jenkins 파이프라인 (예)
+devops/Jenkinsfile.core-api        # Core API 빌드 → Harbor push → prj-deploy 태그 범프
+devops/Jenkinsfile.admin-web       # Admin 웹
+devops/Jenkinsfile.idp-api         # IDP API
+devops/Jenkinsfile.gitops-update   # GitOps 변경 승인 잡
+```
+
+### 도커를 이용한 로컬 빌드
 
 ```bash
 # 프로덕션 빌드
 pnpm build
 
-# 도커 이미지 빌드
-docker build -t prj-core-server:latest -f devops/Dockerfile.server .
-docker build -t prj-core-admin:latest -f devops/Dockerfile.admin .
+# 도커 이미지 빌드 (앱별 Dockerfile)
+docker build -t prj-core-core-api:latest -f devops/Dockerfile.core-api .
+docker build -t prj-core-admin-web:latest -f devops/Dockerfile.admin-web .
 ```
 
-### Kubernetes 배포
+### Kubernetes 배포 (GitOps)
 
-Kubernetes 환경에서는 OpenBao를 통해 환경 변수가 자동으로 주입됩니다:
+Kubernetes 배포에서는 런타임 `.env` 파일을 사용하지 않습니다.
 
-```
+- 차트·환경 설정: [prj-devops](https://github.com/kimjoongwon/prj-devops) (Helm + ArgoCD)
+- 이미지 태그: [prj-deploy](https://github.com/kimjoongwon/prj-deploy) (Jenkins 빌드가 커밋 SHA 태그를 범프)
+- 환경 변수: `prj-devops`에서 관리하는 OpenBao를 통해 주입
 
 ## 📚 추가 문서
 
-- [Prisma Schema 설계 가이드](./packages/prisma/prisma/models/task.example.md)
-- [API 문서](http://localhost:3000/api/docs) (서버 실행 후 접속)
-- [Storybook](http://localhost:6006) (Storybook 실행 후 접속)
+- [환경 변수 참조](./docs/env-reference.md)
+- [OIDC 클라이언트 ID 가이드](./docs/oidc-client-ids.guide.md)
+- [모바일 OIDC 플로우 가이드](./docs/mobile-oidc-flow.guide.md)
+- [CQRS UseCase 마이그레이션](./docs/backend/cqrs-usecase-migration.md)
+- [로컬 개발 환경 다이어그램](./docs/local-dev-environment.diagram.md)
+- [오케스트레이션 에이전트 관계 플로우](./docs/orchestration-agent-relationship-flow.md)
+- API 문서: `http://localhost:3006/api/docs` (core-api 실행 후 접속)
+- Storybook: `http://localhost:6006` (실행 후 접속)
 
 ## 🤝 기여하기
 
@@ -560,4 +533,3 @@ Kubernetes 환경에서는 OpenBao를 통해 환경 변수가 자동으로 주�
 ---
 
 **타입스크립트, 리액트, NestJS, Prisma로 만들어졌습니다 ❤️**
-```

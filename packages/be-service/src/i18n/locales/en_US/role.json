@@ -1,0 +1,22 @@
+{
+  "PLATFORM_ADMIN": {
+    "name": "Platform Admin",
+    "description": "Role responsible for operating the platform and accessing all spaces and system resources"
+  },
+  "COMPANY_MANAGER": {
+    "name": "Company Manager",
+    "description": "Role that manages branches, members, reservations, content, and other operational resources in a specific Company"
+  },
+  "MEMBER": {
+    "name": "Member",
+    "description": "Role that manages their own profile and reservations and can view facilities and content"
+  },
+  "category": {
+    "SHARED": "Shared",
+    "WORKSPACE": "Workspace",
+    "PUBLIC": "Public",
+    "PROJECT": "Project",
+    "TECHNICAL": "Technical",
+    "RESTRICTED": "Restricted"
+  }
+}

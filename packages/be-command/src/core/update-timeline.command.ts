@@ -1,0 +1,12 @@
+import type { UpdateTimelineCommandInput } from "@cocrepo/input";
+export class UpdateTimelineCommand implements UpdateTimelineCommandInput {
+	readonly name?: UpdateTimelineCommandInput["name"];
+	readonly description?: UpdateTimelineCommandInput["description"];
+
+	constructor(
+		readonly timelineId: bigint,
+		input: UpdateTimelineCommandInput,
+	) {
+		Object.assign(this, input);
+	}
+}

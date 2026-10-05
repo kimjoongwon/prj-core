@@ -1,0 +1,308 @@
+"use client";
+import {
+	useAssignInquiry,
+	useUpdateInquiry,
+	useUpdateInquiryPriority,
+	useUpdateInquiryStatus,
+} from "@cocrepo/api/core/inquiries";
+
+import { ADMIN_PATHS } from "@cocrepo/constant";
+import { createLogger } from "@cocrepo/toolkit";
+import type { Route } from "next";
+import { useRouter } from "next/navigation";
+import type { UseInquiryWebSocketReturn } from "./useInquiryDetailWebSocket";
+
+const logger = createLogger("[useInquiryDetailHandlers]");
+
+/**
+ * 문의 상세 페이지 이벤트 핸들러 훅
+ *
+ * @requires Orval API 훅 생성 후 아래와 같이 변경:
+ * 1. Mutation 훅 호출 (useUpdateInquiryStatus, useAssignInquiry 등)
+ * 2. mutateAsync로 API 호출
+ * 3. onSuccess에서 캐시 무효화 (React Query 자동 처리)
+ */
+export interface UseInquiryDetailHandlersOptions {
+	/** 문의 ID */
+	inquiryId: string;
+	/** 문의 상세 페이지 로컬 상태 */
+	inquiryState: {
+		replyContent: string;
+		setReplyContent: (content: string) => void;
+		startTyping: () => void;
+		stopTyping: () => void;
+		openKnowledgeBaseModal: () => void;
+		closeKnowledgeBaseModal: () => void;
+		isKnowledgeBaseModalOpen: boolean;
+	};
+	/** WebSocket 훅 반환값 */
+	ws: Pick<UseInquiryWebSocketReturn, "sendMessage" | "sendTypingStatus">;
+}
+
+/**
+ * useInquiryDetailHandlers 훅 반환값
+ */
+export interface UseInquiryDetailHandlersReturn {
+	/** 목록으로 이동 */
+	onClickBack: () => void;
+	/** 상태 변경 */
+	onChangeStatus: (status: string) => void;
+	/** 우선순위 변경 */
+	onChangePriority: (priority: string) => void;
+	/** 카테고리 변경 */
+	onChangeCategory: (category: string) => void;
+	/** 담당자 변경 */
+	onChangeAssignee: (assigneeId: string) => void;
+	/** 태그 추가 */
+	onTagAdd: (tag: string) => void;
+	/** 태그 삭제 */
+	onTagRemove: (tag: string) => void;
+	/** 메시지 전송 */
+	onSubmitReply: (content: string, attachments?: File[]) => void;
+	/** 타이핑 시작 */
+	onTypingStart: () => void;
+	/** 타이핑 중지 */
+	onTypingStop: () => void;
+	/** 지식베이스 검색 */
+	onClickSearchKnowledge: () => void;
+	/** 파일 첨부 */
+	onAttachFile: (files: File[]) => void;
+	/** 수정 페이지 이동 */
+	onClickEdit: () => void;
+	/** 삭제 요청 */
+	onClickDelete: () => void;
+	/** WebSocket 재연결 */
+	onClickReconnect: () => void;
+	/** 지식베이스 모달 상태 */
+	knowledgeBaseModal: {
+		isOpen: boolean;
+		open: () => void;
+		close: () => void;
+	};
+}
+
+/**
+ * 문의 상세 페이지 이벤트 핸들러 훅
+ *
+ * 페이지에서 발생하는 모든 이벤트를 처리하는 핸들러들을 제공합니다.
+ */
+export function useInquiryDetailHandlers(
+	options: UseInquiryDetailHandlersOptions,
+): UseInquiryDetailHandlersReturn {
+	const { inquiryId, inquiryState, ws } = options;
+	const router = useRouter();
+
+	const updateStatusMutation = useUpdateInquiryStatus();
+	const updatePriorityMutation = useUpdateInquiryPriority();
+	const assignMutation = useAssignInquiry();
+	const updateInquiryMutation = useUpdateInquiry();
+
+	// 목록으로 이동
+	const onClickBack = () => {
+		router.push(ADMIN_PATHS.INQUIRIES as Route);
+	};
+
+	/**
+	 * 상태 변경
+	 *
+	 * @requires Orval 훅 생성 후 아래와 같이 변경:
+	 * await updateStatusMutation.mutateAsync({ inquiryId, status });
+	 */
+	const onChangeStatus = async (status: string) => {
+		logger.info("상태 변경:", status);
+		try {
+			await updateStatusMutation.mutateAsync({
+				inquiryId,
+				data: {
+					status: status as
+						| "NEW"
+						| "OPEN"
+						| "IN_PROGRESS"
+						| "WAITING_CUSTOMER"
+						| "RESOLVED"
+						| "CLOSED"
+						| "ESCALATED",
+				},
+			});
+			logger.info("상태 변경 성공");
+		} catch (error) {
+			logger.error("상태 변경 실패:", String(error));
+			throw error;
+		}
+	};
+
+	/**
+	 * 우선순위 변경
+	 *
+	 * @requires Orval 훅 생성 후 아래와 같이 변경:
+	 * await updatePriorityMutation.mutateAsync({ inquiryId, priority });
+	 */
+	const onChangePriority = async (priority: string) => {
+		logger.info("우선순위 변경:", priority);
+		try {
+			await updatePriorityMutation.mutateAsync({
+				inquiryId,
+				data: { priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT" },
+			});
+			logger.info("우선순위 변경 성공");
+		} catch (error) {
+			logger.error("우선순위 변경 실패:", String(error));
+			throw error;
+		}
+	};
+
+	/**
+	 * 카테고리 변경
+	 *
+	 * @requires Orval 훅 생성 후 아래와 같이 변경:
+	 * await updateInquiryMutation.mutateAsync({ inquiryId, category });
+	 */
+	const onChangeCategory = async (category: string) => {
+		logger.info("카테고리 변경:", category);
+		try {
+			await updateInquiryMutation.mutateAsync({
+				inquiryId,
+				data: {
+					category: category as
+						| "GENERAL"
+						| "DELIVERY"
+						| "REFUND"
+						| "PRODUCT"
+						| "ACCOUNT"
+						| "TECHNICAL"
+						| "COMPLAINT"
+						| "OTHER",
+				},
+			});
+			logger.info("카테고리 변경 성공");
+		} catch (error) {
+			logger.error("카테고리 변경 실패:", String(error));
+			throw error;
+		}
+	};
+
+	/**
+	 * 담당자 변경
+	 *
+	 * @requires Orval 훅 생성 후 아래와 같이 변경:
+	 * await assignMutation.mutateAsync({ inquiryId, assigneeId });
+	 */
+	const onChangeAssignee = async (assigneeId: string) => {
+		logger.info("담당자 변경:", assigneeId);
+		try {
+			await assignMutation.mutateAsync({
+				inquiryId,
+				data: { assigneeId },
+			});
+			logger.info("담당자 변경 성공");
+		} catch (error) {
+			logger.error("담당자 변경 실패:", String(error));
+			throw error;
+		}
+	};
+
+	/**
+	 * 태그 추가
+	 *
+	 * @requires Orval 훅 생성 후 아래와 같이 변경:
+	 * await updateInquiryMutation.mutateAsync({ inquiryId, tags: [...currentTags, tag] });
+	 */
+	const onTagAdd = async (tag: string) => {
+		logger.info("태그 추가:", tag);
+		// TODO: Orval 훅 생성 후 아래 주석 해제
+	};
+
+	/**
+	 * 태그 삭제
+	 *
+	 * @requires Orval 훅 생성 후 아래와 같이 변경:
+	 * await updateInquiryMutation.mutateAsync({ inquiryId, tags: currentTags.filter(t => t !== tag) });
+	 */
+	const onTagRemove = async (tag: string) => {
+		logger.info("태그 삭제:", tag);
+		// TODO: Orval 훅 생성 후 아래 주석 해제
+	};
+
+	/**
+	 * 메시지 전송
+	 *
+	 * @requires Orval 훅 생성 후 아래와 같이 변경:
+	 * await sendMessageMutation.mutateAsync({ inquiryId, content, attachments });
+	 */
+	const onSubmitReply = (content: string, attachments?: File[]) => {
+		const attachmentCount = attachments?.length ?? 0;
+		logger.info("메시지 전송:", { content, attachmentCount });
+		ws.sendMessage(content, attachments);
+		inquiryState.setReplyContent("");
+		// TODO: Orval 훅 생성 후 REST API로도 전송
+		// try {
+		// 	await sendMessageMutation.mutateAsync({ inquiryId, content, attachments });
+		// } catch (error) {
+		// 	logger.error("메시지 전송 실패:", error);
+		// }
+	};
+
+	// 타이핑 시작
+	const onTypingStart = () => {
+		inquiryState.startTyping();
+		ws.sendTypingStatus(true);
+	};
+
+	// 타이핑 중지
+	const onTypingStop = () => {
+		inquiryState.stopTyping();
+		ws.sendTypingStatus(false);
+	};
+
+	// 지식베이스 검색 모달 열기
+	const onClickSearchKnowledge = () => {
+		inquiryState.openKnowledgeBaseModal();
+	};
+
+	// 파일 첨부
+	const onAttachFile = (files: File[]) => {
+		const fileNames = files.map((f) => f.name);
+		logger.info("파일 첨부:", fileNames.join(", "));
+		// TODO: 파일 업로드 API 연동
+	};
+
+	// 수정 페이지 이동
+	const onClickEdit = () => {
+		router.push(
+			ADMIN_PATHS.INQUIRIES_EDIT.replace("[inquiryId]", inquiryId) as Route,
+		);
+	};
+
+	const onClickDelete = () => {
+		logger.info("문의 삭제 요청:", inquiryId);
+	};
+
+	// WebSocket 재연결
+	const onClickReconnect = () => {
+		logger.info("WebSocket 재연결 요청");
+		// 재연결은 _client.tsx에서 처리
+	};
+
+	return {
+		onClickBack,
+		onChangeStatus,
+		onChangePriority,
+		onChangeCategory,
+		onChangeAssignee,
+		onTagAdd,
+		onTagRemove,
+		onSubmitReply,
+		onTypingStart,
+		onTypingStop,
+		onClickSearchKnowledge,
+		onAttachFile,
+		onClickEdit,
+		onClickDelete,
+		onClickReconnect,
+		knowledgeBaseModal: {
+			isOpen: inquiryState.isKnowledgeBaseModalOpen,
+			open: () => inquiryState.openKnowledgeBaseModal(),
+			close: () => inquiryState.closeKnowledgeBaseModal(),
+		},
+	};
+}

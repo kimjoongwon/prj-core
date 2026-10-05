@@ -1,6 +1,11 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { UsersService } from "@cocrepo/service";
-import { AuthConfig } from "@cocrepo/type";
+import { hydrateEntity, User as UserEntity } from "@cocrepo/entity";
+import type { User } from "@cocrepo/entity";
+import { AuthCacheService, UserService } from "@cocrepo/service";
+import {
+	parseBigIntJson,
+	stringifyBigIntJson,
+} from "@cocrepo/type/bigint-json";
 import {
 	Global,
 	Injectable,
@@ -10,8 +15,34 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
+import jwksRsa from "jwks-rsa";
 import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
+
+interface OidcServerConfig {
+	issuer: string;
+	jwksUri: string;
+	clientId: string;
+	clientSecret: string;
+}
+
+interface JwtHeader {
+	alg?: string;
+}
+
+const parseJwtHeader = (token?: string): JwtHeader | null => {
+	if (!token?.includes(".")) {
+		return null;
+	}
+
+	try {
+		return JSON.parse(
+			Buffer.from(token.split(".")[0], "base64url").toString(),
+		) as JwtHeader;
+	} catch {
+		return null;
+	}
+};
 
 @Global()
 @Injectable()
@@ -20,100 +51,88 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
 	constructor(
 		readonly config: ConfigService,
-		readonly usersService: UsersService,
+		readonly usersService: UserService,
 		private readonly cls: ClsService,
+		private readonly authCacheService: AuthCacheService,
 	) {
-		const authConfig = config.get<AuthConfig>("auth");
+		const oidcConfig = config.get<OidcServerConfig>("oidc");
+		const oidcIssuer = oidcConfig?.issuer || "http://localhost:3000";
+		const jwksSecretProvider = jwksRsa.passportJwtSecret({
+			jwksUri: oidcConfig?.jwksUri || "http://localhost:3000/oidc/jwks",
+			cache: true,
+			cacheMaxAge: 600000, // 10분
+			rateLimit: true,
+			jwksRequestsPerMinute: 10,
+		});
 
 		super({
 			jwtFromRequest: ExtractJwt.fromExtractors([
-				// 첫 번째로 쿠키에서 토큰을 추출 시도
+				// Authorization Bearer 헤더에서 토큰 추출 (Swagger 등 우선)
 				(req: Request) => {
-					this.logger.log("[쿠키 추출기] 호출됨");
-					this.logger.log(
-						`[쿠키 추출기] 전체 요청 쿠키: ${JSON.stringify(req.cookies)}`,
-					);
-					this.logger.log(
-						`[쿠키 추출기] 원본 쿠키 헤더: ${req.headers.cookie}`,
-					);
-
-					const token = req.cookies?.accessToken;
-
-					if (token) {
-						this.logger.log(
-							`[쿠키 추출기] ✅ 쿠키에서 토큰 발견 - 길이: ${token.length}`,
-						);
-						this.logger.log(
-							`[쿠키 추출기] 토큰 미리보기: ${token.substring(0, 30)}...`,
-						);
-						this.cls.set(CONTEXT_KEYS.TOKEN, token);
-						return token;
-					}
-					this.logger.log(
-						"[쿠키 추출기] ❌ 쿠키에서 accessToken을 찾을 수 없음",
-					);
-					return null;
-				},
-				// 두 번째로 Authorization 헤더에서 토큰을 추출 시도
-				(req: Request) => {
-					this.logger.log("[헤더 추출기] 호출됨");
-					this.logger.log(
-						`[헤더 추출기] Authorization 헤더: ${req.headers?.authorization}`,
-					);
-
 					const authHeader = req.headers?.authorization;
 					if (authHeader?.startsWith("Bearer ")) {
 						const token = authHeader.split(" ")[1];
-						this.logger.log(
-							`[헤더 추출기] ✅ 헤더에서 토큰 발견 - 길이: ${token.length}`,
-						);
-						this.logger.log(
-							`[헤더 추출기] 토큰 미리보기: ${token.substring(0, 30)}...`,
-						);
 						this.cls.set(CONTEXT_KEYS.TOKEN, token);
 						return token;
 					}
-					this.logger.log(
-						"[헤더 추출기] ❌ Authorization 헤더에서 Bearer 토큰을 찾을 수 없음",
-					);
+					return null;
+				},
+				// 쿠키에서 토큰 추출 (RS256 JWT만 허용)
+				(req: Request) => {
+					const token = req.cookies?.accessToken;
+					if (token?.includes(".")) {
+						const header = parseJwtHeader(token);
+						if (header?.alg !== "RS256") {
+							return null;
+						}
+						this.cls.set(CONTEXT_KEYS.TOKEN, token);
+						return token;
+					}
 					return null;
 				},
 			]),
-			secretOrKey: authConfig?.secret || "fallback-secret",
+			secretOrKeyProvider: jwksSecretProvider,
+			issuer: oidcIssuer,
+			algorithms: ["RS256"],
 		});
 	}
 
-	async validate(payload: { userId: string; iat: number; exp: number }) {
-		this.logger.error(
-			`JWT 검증이 호출됨, 페이로드: ${JSON.stringify(payload)}`,
+	async validate(payload: {
+		sub: string;
+		iat: number;
+		exp: number;
+	}): Promise<User> {
+		const userId = payload.sub;
+
+		// 1. Redis 캐시 조회 (실패 시 null → DB fallback)
+		const cached = await this.authCacheService.get(userId);
+		if (cached) {
+			this.logger.debug(`JWT 검증 - 캐시 히트: ${userId}`);
+			// 내부 캐시는 API 필드 변환 없이 원본 값과 User 동작을 복원합니다.
+			return hydrateEntity(
+				UserEntity,
+				parseBigIntJson<Partial<User>>(cached),
+			);
+		}
+
+		// 2. 캐시 미스 → DB 조회
+		this.logger.debug(`JWT 검증 - DB 조회: ${userId}`);
+		const user = await this.usersService.findByUserIdWithTenants(userId);
+
+		if (!user) {
+			this.logger.warn(`사용자를 찾을 수 없음: ${userId}`);
+			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+		}
+
+		// 3. Redis 캐시 저장 (실패해도 인증은 성공)
+		const nowSeconds = Math.floor(Date.now() / 1000);
+		const remainingSeconds = payload.exp - nowSeconds;
+		await this.authCacheService.set(
+			userId,
+			stringifyBigIntJson(user),
+			remainingSeconds,
 		);
 
-		try {
-			// Get user with tenant information for JWT validation
-			const user = await this.usersService.getByIdWithTenants(payload.userId);
-
-			if (!user) {
-				this.logger.error(
-					`사용자 ID로 사용자를 찾을 수 없음: ${payload.userId}`,
-				);
-				throw new UnauthorizedException("사용자를 찾을 수 없습니다");
-			}
-
-			this.logger.error(
-				`JWT 전략 - 사용자 발견: ${user.id}, 테넌트 수: ${user.tenants?.length || 0}`,
-			);
-			this.logger.error(
-				`JWT 전략 - 사용자 테넌트: ${JSON.stringify(user.tenants?.map((t) => ({ id: t.id })))}`,
-			);
-
-			// User 엔티티를 직접 반환 (도메인 로직 포함)
-			return user;
-		} catch (error) {
-			const errorMessage =
-				error instanceof Error ? error.message : "Unknown error";
-			const errorStack = error instanceof Error ? error.stack : "";
-			this.logger.error(`JWT 검증 중 오류 발생: ${errorMessage}`, errorStack);
-			throw error;
-		}
+		return user;
 	}
 }

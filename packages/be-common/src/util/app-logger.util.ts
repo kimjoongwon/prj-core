@@ -38,7 +38,11 @@ export class AppLogger extends Logger {
 	/**
 	 * 예쁜 포맷으로 개발 환경에서만 로그를 출력합니다.
 	 */
-	dev(message: any, data?: Record<string, any>, context?: string): void {
+	dev(
+		message: unknown,
+		data?: Record<string, unknown>,
+		context?: string,
+	): void {
 		if (this.isDevelopment) {
 			const emoji = EMOJIS.debug;
 			const coloredMessage = `${COLORS.cyan}${emoji} ${message}${COLORS.reset}`;
@@ -55,7 +59,11 @@ export class AppLogger extends Logger {
 	/**
 	 * 인증 관련 예쁜 로그
 	 */
-	auth(message: string, data?: Record<string, any>, context?: string): void {
+	auth(
+		message: string,
+		data?: Record<string, unknown>,
+		context?: string,
+	): void {
 		const emoji = EMOJIS.auth;
 		const coloredMessage = `${COLORS.magenta}${emoji} ${message}${COLORS.reset}`;
 
@@ -70,7 +78,11 @@ export class AppLogger extends Logger {
 	/**
 	 * 성공 로그
 	 */
-	success(message: string, data?: Record<string, any>, context?: string): void {
+	success(
+		message: string,
+		data?: Record<string, unknown>,
+		context?: string,
+	): void {
 		const emoji = EMOJIS.success;
 		const coloredMessage = `${COLORS.green}${emoji} ${message}${COLORS.reset}`;
 
@@ -114,7 +126,11 @@ export class AppLogger extends Logger {
 	/**
 	 * 요청 관련 로그
 	 */
-	request(message: string, data?: Record<string, any>, context?: string): void {
+	request(
+		message: string,
+		data?: Record<string, unknown>,
+		context?: string,
+	): void {
 		const emoji = EMOJIS.request;
 		const coloredMessage = `${COLORS.blue}${emoji} ${message}${COLORS.reset}`;
 
@@ -147,7 +163,7 @@ export class AppLogger extends Logger {
 	 */
 	database(
 		message: string,
-		data?: Record<string, any>,
+		data?: Record<string, unknown>,
 		context?: string,
 	): void {
 		const emoji = EMOJIS.database;
@@ -164,7 +180,11 @@ export class AppLogger extends Logger {
 	/**
 	 * 사용자 관련 로그
 	 */
-	user(message: string, data?: Record<string, any>, context?: string): void {
+	user(
+		message: string,
+		data?: Record<string, unknown>,
+		context?: string,
+	): void {
 		const emoji = EMOJIS.user;
 		const coloredMessage = `${COLORS.yellow}${emoji} ${message}${COLORS.reset}`;
 
@@ -183,7 +203,7 @@ export class AppLogger extends Logger {
 	/**
 	 * 조건부 로그 출력
 	 */
-	conditional(condition: boolean, message: any, context?: string): void {
+	conditional(condition: boolean, message: unknown, context?: string): void {
 		if (condition) {
 			super.log(message, context);
 		}
@@ -194,7 +214,7 @@ export class AppLogger extends Logger {
 	 */
 	logSimple(
 		message: string,
-		data?: Record<string, any>,
+		data?: Record<string, unknown>,
 		context?: string,
 	): void {
 		if (data) {
@@ -205,13 +225,15 @@ export class AppLogger extends Logger {
 		}
 	}
 
-	private prettifyData(data: Record<string, any>): string {
+	private prettifyData(data: Record<string, unknown>): string {
 		const simplified = this.simplifyObject(data);
 		return `${COLORS.gray}${JSON.stringify(simplified, null, this.isDevelopment ? 2 : 0)}${COLORS.reset}`;
 	}
 
-	private simplifyObject(obj: Record<string, any>): Record<string, any> {
-		const simplified: Record<string, any> = {};
+	private simplifyObject(
+		obj: Record<string, unknown>,
+	): Record<string, unknown> {
+		const simplified: Record<string, unknown> = {};
 
 		for (const [key, value] of Object.entries(obj)) {
 			if (value === null || value === undefined) {

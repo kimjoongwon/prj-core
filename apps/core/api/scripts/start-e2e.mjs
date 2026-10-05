@@ -1,0 +1,155 @@
+import { spawn } from "node:child_process";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const apiRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const DEFAULT_E2E_DATABASE_NAME = "plate_e2e";
+
+function loadEnvFile() {
+	const envPath = resolve(apiRoot, ".env");
+
+	if (!existsSync(envPath)) {
+		return;
+	}
+
+	for (const line of readFileSync(envPath, "utf8").split(/\r?\n/)) {
+		const trimmedLine = line.trim();
+
+		if (!trimmedLine || trimmedLine.startsWith("#")) {
+			continue;
+		}
+
+		const separatorIndex = trimmedLine.indexOf("=");
+		if (separatorIndex < 0) {
+			continue;
+		}
+
+		const key = trimmedLine.slice(0, separatorIndex).trim();
+		const rawValue = trimmedLine.slice(separatorIndex + 1).trim();
+		const value = rawValue.replace(/^["']|["']$/g, "");
+
+		if (!process.env[key]) {
+			process.env[key] = value;
+		}
+	}
+}
+
+function getE2eDatabaseUrl() {
+	const explicitDatabaseUrl =
+		process.env.E2E_DATABASE_URL ?? process.env.TEST_DATABASE_URL;
+
+	if (explicitDatabaseUrl) {
+		return explicitDatabaseUrl;
+	}
+
+	if (process.env.DATABASE_URL) {
+		return toDefaultE2eDatabaseUrl(process.env.DATABASE_URL);
+	}
+
+	throw new Error(
+		"E2E_DATABASE_URL, TEST_DATABASE_URL, or DATABASE_URL is required for core-api start:e2e.",
+	);
+}
+
+function toDefaultE2eDatabaseUrl(databaseUrl) {
+	const parsedUrl = new URL(databaseUrl);
+	const databaseName = decodeURIComponent(
+		parsedUrl.pathname.replace(/^\//, ""),
+	);
+
+	if (!databaseName) {
+		throw new Error("DATABASE_URL must include a database name.");
+	}
+
+	parsedUrl.pathname = `/${encodeURIComponent(DEFAULT_E2E_DATABASE_NAME)}`;
+	return parsedUrl.toString();
+}
+
+function getOrigin(url) {
+	if (!url) {
+		return undefined;
+	}
+
+	return new URL(url).origin;
+}
+
+function applyOidcAdminEnv() {
+	const adminOrigin = getOrigin(process.env.E2E_ADMIN_BASE_URL);
+
+	if (!adminOrigin) {
+		return;
+	}
+
+	process.env.OIDC_ADMIN_BASE_URL = adminOrigin;
+	process.env.OIDC_ADMIN_REDIRECT_URI = `${adminOrigin}/api/v1/auth/callback?clientId=admin-web`;
+	process.env.OIDC_ADMIN_LOGIN_URL = `${adminOrigin}/admin/auth/login`;
+	process.env.OIDC_ADMIN_DEFAULT_RETURN_TO = `${adminOrigin}/admin/dashboard`;
+
+	// 발급자는 idp-api지만 issuer 식별자는 로그인 UI origin(idp-web)이다 —
+	// core-api의 JwtStrategy iss 검증과 JWKS 조회를 그 기준에 맞춘다(admin
+	// origin에는 더 이상 /oidc 프록시가 없으니 JWKS는 idp-api를 직접 가리킨다).
+	const idpIssuerOrigin = getOrigin(
+		process.env.E2E_IDP_WEB_BASE_URL ?? "http://localhost:3008",
+	);
+	const idpApiOrigin = getOrigin(
+		process.env.E2E_IDP_API_BASE_URL ?? "http://localhost:3007",
+	);
+	process.env.OIDC_ISSUER = idpIssuerOrigin;
+	process.env.OIDC_JWKS_URI ??= `${idpApiOrigin}/oidc/jwks`;
+}
+
+loadEnvFile();
+applyOidcAdminEnv();
+
+const databaseUrl = getE2eDatabaseUrl();
+
+process.env.DATABASE_URL = databaseUrl;
+process.env.DIRECT_URL =
+	process.env.E2E_DIRECT_URL ?? process.env.TEST_DIRECT_URL ?? databaseUrl;
+process.env.NODE_ENV = "test";
+process.env.ENABLE_NEST_DEVTOOLS = "false";
+process.env.APP_PORT =
+	process.env.CORE_API_PORT ?? process.env.APP_PORT ?? "3006";
+process.env.SMTP_SECURE = process.env.SMTP_SECURE ?? "false";
+
+const child = spawn(
+	"pnpm",
+	[
+		"exec",
+		"nest",
+		"build",
+		"--webpack",
+		"--webpackPath",
+		"webpack.config.js",
+		"--watch",
+	],
+	{
+		cwd: apiRoot,
+		env: process.env,
+		stdio: "inherit",
+	},
+);
+
+let isShuttingDown = false;
+
+function stopChild(signal) {
+	if (isShuttingDown) {
+		return;
+	}
+
+	isShuttingDown = true;
+	child.kill(signal);
+}
+
+process.on("SIGINT", () => stopChild("SIGINT"));
+process.on("SIGTERM", () => stopChild("SIGTERM"));
+
+child.on("exit", (code, signal) => {
+	if (signal) {
+		process.exit(1);
+		return;
+	}
+
+	process.exit(code ?? 0);
+});

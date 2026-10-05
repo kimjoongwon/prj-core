@@ -1,0 +1,60 @@
+import { ValidationUtil } from "@cocrepo/decorator";
+import { registerAs } from "@nestjs/config";
+import { IsEmail, IsEnum, IsNumber, IsString, IsUrl } from "class-validator";
+import { AppConfig } from "./config.type";
+
+enum Environment {
+	Development = "development",
+	Production = "production",
+	Test = "test",
+}
+
+class EnvironmentVariablesValidator {
+	@IsEnum(Environment)
+	NODE_ENV!: Environment;
+
+	@IsString()
+	APP_NAME!: string;
+
+	@IsEmail()
+	APP_ADMIN_EMAIL!: string;
+
+	@IsNumber()
+	APP_PORT!: number;
+
+	@IsString()
+	API_PREFIX!: string;
+
+	@IsUrl({ require_tld: false })
+	FRONTEND_DOMAIN!: string;
+
+	@IsUrl({ require_tld: false })
+	BACKEND_DOMAIN!: string;
+
+	@IsString()
+	APP_FALLBACK_LANGUAGE!: string;
+
+	@IsString()
+	APP_HEADER_LANGUAGE!: string;
+}
+
+export default registerAs<AppConfig>("app", () => {
+	ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
+
+	return {
+		nodeEnv: process.env.NODE_ENV || "development",
+		name: process.env.APP_NAME || "Plate",
+		workingDirectory: process.cwd(),
+		backendDomain: process.env.BACKEND_DOMAIN ?? "http://localhost",
+		port: Number(process.env.APP_PORT) || 3006,
+		apiPrefix: process.env.API_PREFIX || "api",
+		fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || "en",
+		headerLanguage: process.env.APP_HEADER_LANGUAGE || "x-custom-lang",
+		...(process.env.APP_ADMIN_EMAIL
+			? { adminEmail: process.env.APP_ADMIN_EMAIL }
+			: {}),
+		...(process.env.FRONTEND_DOMAIN
+			? { frontendDomain: process.env.FRONTEND_DOMAIN }
+			: {}),
+	};
+});

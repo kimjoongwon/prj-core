@@ -1,0 +1,203 @@
+if (env.CHANGE_ID || env.BRANCH_NAME != 'main' || env.TRUSTED_DEPLOYMENT != 'true') {
+    error('배포는 main 보호 브랜치의 승인된 내부 job에서만 실행할 수 있습니다.')
+}
+def HARBOR_REGISTRY = env.HARBOR_REGISTRY
+def HARBOR_CREDENTIAL_ID = env.HARBOR_CREDENTIAL_ID
+def CONFIGURED_GITOPS_UPDATE_JOB = env.GITOPS_UPDATE_JOB
+if (!HARBOR_REGISTRY || !HARBOR_CREDENTIAL_ID || !CONFIGURED_GITOPS_UPDATE_JOB) {
+    error('내부 배포 설정(HARBOR_REGISTRY, HARBOR_CREDENTIAL_ID, GITOPS_UPDATE_JOB)이 필요합니다.')
+}
+
+// Buzz #cicd 채널 알림 (게이트웨이: prj-devops docs/buzz-ci-integration.md)
+// - 메시지 줄 배열을 받아 JSON으로 게이트웨이에 POST한다(마지막에 Jenkins 빌드 링크 추가).
+// - BUZZ_NOTIFY_URL이 잡에 주입되지 않으면 조용히 건너뛴다.
+// - 알림은 best-effort: 게이트웨이 장애가 빌드 결과에 영향을 주지 않는다.
+def buzzNotify(List messageLines, Map opts = [:]) {
+    if (!env.BUZZ_NOTIFY_URL) {
+        echo '[buzz] BUZZ_NOTIFY_URL 미설정 — 알림 생략'
+        return ''
+    }
+    def credId = env.BUZZ_NOTIFY_CREDENTIAL_ID ?: 'buzz-notify-token'
+    def lines = messageLines + ["Jenkins: ${env.BUILD_URL}"]
+    def payload = [content: lines.join('\n')]
+    if (opts.replyTo) { payload.replyTo = opts.replyTo }
+    if (opts.linkKey) { payload.linkKey = opts.linkKey }
+    if (opts.mentions) { payload.mentions = opts.mentions }
+    writeFile file: '.buzz-notify.json', text: groovy.json.JsonOutput.toJson(payload)
+    try {
+        withCredentials([string(credentialsId: credId, variable: 'BUZZ_TOKEN')]) {
+            // buildctl(moby/buildkit) 컨테이너에는 curl이 없다 — wget 폴백으로 전송
+            // (containerCap=2 제한으로 알림 전용 컨테이너를 추가할 수 없음)
+            container('buildctl') {
+                sh '''#!/usr/bin/env bash
+                    set -uo pipefail
+                    # set +x: 토큰 평문 노출 차단
+                    set +x
+                    if command -v curl >/dev/null 2>&1; then
+                        curl -fsS -m 10 -X POST "${BUZZ_NOTIFY_URL}/send" \\
+                            -H "Authorization: Bearer ${BUZZ_TOKEN}" \\
+                            -H 'Content-Type: application/json' \\
+                            --data-binary @.buzz-notify.json \\
+                            -o .buzz-notify-resp.json \\
+                            || echo '[buzz] 알림 전송 실패 (curl, 무시됨)'
+                    elif command -v wget >/dev/null 2>&1; then
+                        wget -q -O .buzz-notify-resp.json \\
+                            --header="Authorization: Bearer ${BUZZ_TOKEN}" \\
+                            --header='Content-Type: application/json' \\
+                            --post-file=.buzz-notify.json \\
+                            "${BUZZ_NOTIFY_URL}/send" \\
+                            || echo '[buzz] 알림 전송 실패 (wget, 무시됨)'
+                    else
+                        echo '[buzz] curl/wget 없음 — 알림 생략'
+                    fi
+                '''
+            }
+        }
+    } finally {
+        sh 'rm -f .buzz-notify.json || true'
+    }
+    def eventId = ''
+    try {
+        if (fileExists('.buzz-notify-resp.json')) {
+            // 샌드박스는 JsonSlurper 생성을 차단하므로 정규식으로 event_id만 추출한다
+            def mt = (readFile('.buzz-notify-resp.json') =~ /"event_id\s*":\s*"([0-9a-f]{64})"/)
+            if (mt.find()) { eventId = mt.group(1) }
+        }
+    } catch (Exception e) {
+        echo "[buzz] 알림 응답 파싱 실패 (무시됨): ${e.message}"
+    }
+    sh 'rm -f .buzz-notify-resp.json || true'
+    return eventId
+}
+
+// 빌드 실패 알림에 멘션할 ZCode 공개키 (buzz #cicd 멤버 — hex, 게이트웨이 --mention)
+def ZCODE_HEX = '15d01a6721298f5fe8f6b4180cb6db42230a9e04127795650eecb7531152e991'
+
+// 알림용 소요시간 포맷 (ms → "1시간 2분" / "3분 4초" / "45초")
+def fmtDur(long ms) {
+    long s = Math.max(ms, 0L).intdiv(1000L)
+    if (s < 60L) { return "${s}초" }
+    long m = s.intdiv(60L)
+    s %= 60L
+    if (m < 60L) { return "${m}분 ${s}초" }
+    return "${m.intdiv(60L)}시간 ${m % 60L}분"
+}
+
+podTemplate(
+    containers: [
+        containerTemplate(
+            name: 'buildctl',
+            image: 'docker.io/moby/buildkit:v0.33.0-rootless@sha256:80b15f0735e87bab7bf59ec4d695dfb4a7cfb25521cf56dc75d6f256285b63ef',
+            ttyEnabled: true,
+            command: 'cat',
+            envVars: [
+                containerEnvVar(key: 'BUILDKIT_HOST', value: 'tcp://buildkitd.devops-tools.svc.cluster.local:1234')
+            ],
+            resourceLimitMemory: '3Gi',
+            resourceRequestMemory: '2Gi',
+            resourceLimitCpu: '1500m',
+            // CPU request는 미지정 시 limit과 같게 잡혀 PVC 고정 노드(node-02)에서 스케줄링이 막히므로 명시적으로 낮춤
+            resourceRequestCpu: '300m',
+        )
+        // 주의: 알림 전용 컨테이너를 추가하지 않는다 — cloud의 containerCap(2)는
+        // 파드당 컨테이너 수(jnlp 포함) 상한이라 3개가 되면 파드가 영구 스케줄 대기한다.
+        // 알림은 buildctl 컨테이너의 wget 폴백으로 전송한다.
+    ]
+) {
+    node(POD_LABEL) {
+        def ENV_NAME = 'prod'
+        // SHA-12 immutable tag: 이미지-빌드커밋 1:1 추적. 실제 값은 checkout 후에 확정한다.
+        def IMAGE_TAG = ''
+        def IMAGE_PATH = "${HARBOR_REGISTRY}/${ENV_NAME}/tool-storybook"
+        def STORYBOOK_DISABLE_CHROMATIC = 'true'
+        def GITOPS_APP = 'tool-storybook'
+        def GITOPS_UPDATE_JOB = CONFIGURED_GITOPS_UPDATE_JOB
+        // 알림용: 이미지 빌드 단계 소요시간 측정
+        def IMAGE_STAGE_START_MS = 0L
+        def IMAGE_STAGE_MS = 0L
+        // 범프/배포 알림을 이 빌드의 buzz 스레드로 묶는 용도
+        def BUILD_BUZZ_EVENT_ID = ''
+
+        stage('Validate Branch') {
+            if (env.BRANCH_NAME && env.BRANCH_NAME != 'main') {
+                error("tool-storybook only supports main branch because GitOps deployment exists only for prod.")
+            }
+        }
+
+        try {
+            stage('Checkout') {
+                deleteDir()
+                def scmVars = checkout scm
+                def commitSha = scmVars.GIT_COMMIT ?: env.GIT_COMMIT ?: ''
+                if (commitSha.length() < 12) {
+                    error("GIT_COMMIT을 확인할 수 없어 SHA 이미지 태그를 만들 수 없습니다: '${commitSha}'")
+                }
+                IMAGE_TAG = commitSha.substring(0, 12)
+            }
+
+            IMAGE_STAGE_START_MS = System.currentTimeMillis()
+            stage('Build and Push Image') {
+                container('buildctl') {
+                    // Harbor 인증은 buildkitd 데몬에 마운트된 시크릿으로 처리하므로 registry login 불필요
+                    sh """
+                        buildctl --addr "\$BUILDKIT_HOST" build \\
+                            --frontend dockerfile.v0 \\
+                            --local context=. \\
+                            --local dockerfile=. \\
+                            --opt filename=devops/Dockerfile.tool-storybook \\
+                            --opt build-arg:STORYBOOK_DISABLE_CHROMATIC=${STORYBOOK_DISABLE_CHROMATIC} \\
+                            --output type=image,name=${IMAGE_PATH}:${IMAGE_TAG},push=true \\
+                            --progress=plain
+                    """
+                }
+            }
+
+            IMAGE_STAGE_MS = System.currentTimeMillis() - IMAGE_STAGE_START_MS
+
+            // 빌드 성공 알림을 범프 트리거 앞에 보내, 범프/배포 알림을 같은 buzz 스레드로 묶는다
+            BUILD_BUZZ_EVENT_ID = buzzNotify([
+                "✅ **${GITOPS_APP}** (buildkit) 빌드 성공",
+                "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
+                "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
+                "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
+            ])
+
+            stage('Trigger GitOps Update Job') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    def gitCommit = env.GIT_COMMIT ?: ''
+                    build(
+                        job: GITOPS_UPDATE_JOB,
+                        wait: false,
+                        parameters: [
+                            string(name: 'APP_NAME', value: GITOPS_APP),
+                            string(name: 'IMAGE_TAG', value: IMAGE_TAG),
+                            string(name: 'DEPLOY_ENV', value: 'prod'),
+                            string(name: 'SOURCE_BUILD_URL', value: env.BUILD_URL ?: ''),
+                            string(name: 'SOURCE_COMMIT', value: gitCommit),
+                            string(name: 'SOURCE_BUZZ_EVENT_ID', value: BUILD_BUZZ_EVENT_ID ?: ''),
+                        ]
+                    )
+                    echo "Triggered ${GITOPS_UPDATE_JOB} with APP_NAME=${GITOPS_APP}, IMAGE_TAG=${IMAGE_TAG}"
+                }
+            }
+
+        } catch (Exception e) {
+            currentBuild.result = 'FAILURE'
+            throw e
+        } finally {
+            // 실패 시에만 알림(성공은 위에서 이미 전송) — @ZCode 멘션으로 자동 진단 트리거
+            try {
+                if (currentBuild.currentResult == 'FAILURE') {
+                    buzzNotify([
+                        "❌ **${GITOPS_APP}** (buildkit) 빌드 실패",
+                        "이미지: `${IMAGE_PATH}:${IMAGE_TAG ?: 'n/a'}`",
+                        "커밋: `${env.GIT_COMMIT ?: IMAGE_TAG ?: 'n/a'}`",
+                        "소요: 전체 ${fmtDur((long) currentBuild.duration)}" + (IMAGE_STAGE_MS > 0L ? " · 이미지 빌드+푸시 ${fmtDur(IMAGE_STAGE_MS)}" : ''),
+                    ], [mentions: [ZCODE_HEX]])
+                }
+            } catch (Exception notifyErr) {
+                echo "[buzz] 알림 단계 오류 (무시됨): ${notifyErr.message}"
+            }
+        }
+    }
+}

@@ -1,0 +1,31 @@
+// @data-type: MASTER
+// @description: User에 종속되는 사용자 인증 상태 1:1 상세 정보
+/// @displayName 사용자 상태
+model UserStatus {
+  userStatusId        String    @unique @default(ulid()) @map("user_status_id") @db.Char(26)
+  id                  BigInt    @id @default(autoincrement())
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 소속 사용자 내부 순번
+  userId              BigInt    @unique @map("user_id")
+  /// @displayName 활성 상태
+  isActive            Boolean   @default(true) @map("is_active")
+  /// @displayName 로그인 실패 횟수
+  failedLoginAttempts Int       @default(0) @map("failed_login_attempts")
+  /// @displayName 잠금 해제 시각
+  lockedUntil         DateTime? @map("locked_until") @db.Timestamptz(6)
+  /// @displayName 영구 잠금 여부
+  isPermanentlyLocked Boolean   @default(false) @map("is_permanently_locked")
+  /// @displayName 마지막 로그인 시각
+  lastLoginAt         DateTime? @map("last_login_at") @db.Timestamptz(6)
+  /// @displayName 마지막 로그인 IP
+  lastLoginIp         String?   @map("last_login_ip")
+  /// @displayName 현재 테넌트 ID
+  currentTenantId     BigInt?   @map("current_tenant_id")
+  currentTenant       Tenant?   @relation("UserStatusCurrentTenant", fields: [currentTenantId], references: [id], onDelete: SetNull)
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([currentTenantId])
+  @@map("user_statuses")
+}

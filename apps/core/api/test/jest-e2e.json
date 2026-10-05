@@ -1,0 +1,52 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "..",
+  "testEnvironment": "node",
+  "testMatch": ["**/*.e2e.ts"],
+  "transformIgnorePatterns": ["node_modules/(?!(lodash-es)/)"],
+  "transform": {
+    "generated/client/client\\.js$": "<rootDir>/test/transforms/prisma-esm-transform.js",
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        "tsconfig": {
+          "module": "commonjs",
+          "target": "es2022",
+          "esModuleInterop": true,
+          "allowSyntheticDefaultImports": true,
+          "experimentalDecorators": true,
+          "emitDecoratorMetadata": true,
+          "types": ["jest", "node", "multer"],
+          "skipLibCheck": true,
+          "strict": false
+        }
+      }
+    ]
+  },
+  "moduleNameMapper": {
+    "^@cocrepo/prisma$": "<rootDir>/../../../packages/be-prisma/dist/src",
+    "^@cocrepo/be-common$": "<rootDir>/../../../packages/be-common/dist",
+    "^@cocrepo/repository$": "<rootDir>/../../../packages/be-repository/dist",
+    "^@cocrepo/service$": "<rootDir>/../../../packages/be-service/dist",
+    "^@cocrepo/command$": "<rootDir>/../../../packages/be-command/dist",
+    "^@cocrepo/usecase$": "<rootDir>/../../../packages/be-usecase/dist",
+    "^@cocrepo/entity$": "<rootDir>/../../../packages/be-entity/dist",
+    "^@cocrepo/vo$": "<rootDir>/../../../packages/be-vo/dist",
+    "^@cocrepo/dto$": "<rootDir>/../../../packages/be-dto/dist",
+    "^@cocrepo/enum$": "<rootDir>/../../../packages/common-enum/dist",
+    "^@cocrepo/toolkit$": "<rootDir>/../../../packages/common-toolkit/dist",
+    "^@cocrepo/constant$": "<rootDir>/../../../packages/common-constant/dist",
+    "^@cocrepo/type$": "<rootDir>/../../../packages/common-type",
+    "^@cocrepo/decorator$": "<rootDir>/../../../packages/be-decorator/dist",
+    "^@shared$": "<rootDir>/src/shared/index",
+    "^@shared/(.*)$": "<rootDir>/src/shared/$1"
+  },
+  "setupFilesAfterEnv": ["<rootDir>/test/setup-e2e.ts"],
+  "testTimeout": 30000,
+  "maxWorkers": 1,
+  "forceExit": true,
+  "detectOpenHandles": true,
+  "clearMocks": true,
+  "resetMocks": true,
+  "restoreMocks": true
+}

@@ -1,0 +1,83 @@
+{
+  "name": "@cocrepo/api",
+  "version": "2.0.0",
+  "description": "Generated API client and types from OpenAPI specs",
+  "keywords": [
+    "api",
+    "openapi",
+    "react-query",
+    "typescript"
+  ],
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./assets": "./src/assets/index.ts",
+    "./core/*": "./src/core/*/index.ts",
+    "./core/client": "./src/core/client.ts",
+    "./idp/*": "./src/idp/*/index.ts",
+    "./idp/client": "./src/idp/client.ts",
+    "./server": "./src/server/index.ts"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "!dist/**/*.map",
+    "!dist/**/*.tsbuildinfo",
+    "!src/**/test/**",
+    "!src/**/tests/**",
+    "!src/**/*.test.*",
+    "!src/**/*.spec.*"
+  ],
+  "scripts": {
+    "codegen:clean": "node clean-orval-generated-files.mjs",
+    "codegen": "pnpm run codegen:clean && orval --config orval.config.mjs && node ./scripts/serialize-fetch-bodies.mjs && pnpm exec biome check --write src/core src/idp",
+    "codegen:server": "pnpm run codegen:clean && orval --config orval.config.mjs --project store && node ./scripts/serialize-fetch-bodies.mjs && pnpm exec biome check --write src/core src/idp",
+    "codegen:idp": "pnpm run codegen:clean && orval --config orval.config.mjs",
+    "codegen:local": "pnpm run codegen:clean && ORVAL_ENV=local orval --config orval.config.mjs && node ./scripts/serialize-fetch-bodies.mjs && pnpm exec biome check --write src/core src/idp",
+    "codegen:stg": "pnpm run codegen:clean && ORVAL_ENV=stg orval --config orval.config.mjs && node ./scripts/serialize-fetch-bodies.mjs && pnpm exec biome check --write src/core src/idp",
+    "codegen:prod": "pnpm run codegen:clean && ORVAL_ENV=prod orval --config orval.config.mjs && node ./scripts/serialize-fetch-bodies.mjs && pnpm exec biome check --write src/core src/idp",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "format": "biome check --write .",
+    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+    "type-check:prod": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+  },
+  "dependencies": {
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/type": "workspace:*"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "orval": "8.31.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "author": "kimjoongwon",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimjoongwon/prj-core.git",
+    "directory": "packages/fe-api"
+  },
+  "bugs": {
+    "url": "https://github.com/kimjoongwon/prj-core/issues"
+  },
+  "homepage": "https://github.com/kimjoongwon/prj-core/tree/main/packages/fe-api#readme",
+  "private": false
+}

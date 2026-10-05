@@ -1,0 +1,316 @@
+"use client";
+
+import type { ActionDto } from "@cocrepo/api/core/actions";
+import type {
+	DataGridQueryStates,
+	DataGridSetQueryStates,
+	InputConfig,
+} from "@cocrepo/type";
+import {
+	Button,
+	buildActionTableColumns,
+	DataGrid,
+	DataGridState,
+	HStack,
+	Screen,
+	Section,
+	SectionSurface,
+	Typography,
+	useT,
+	VStack,
+} from "@cocrepo/ui";
+import { Tabs } from "@heroui/react";
+import { KeyRound, Layers3, Plus, ShieldCheck } from "lucide-react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { type Key, type ReactNode, useEffect } from "react";
+
+const leftInputs: InputConfig[] = [
+	{
+		type: "search",
+		id: "search",
+		placeholder: "액션명 또는 표시명 검색",
+	},
+];
+export const adminActionsPageQueryInputs: InputConfig[] = [...leftInputs];
+const ACTION_GROUP_FILTER_ALL_KEY = "__all_actions";
+const actionGroupFilters = [
+	{
+		key: ACTION_GROUP_FILTER_ALL_KEY,
+		label: "전체",
+		description: "등록된 모든 권한 액션을 확인합니다.",
+	},
+	{
+		key: "crud",
+		label: "CRUD",
+		description: "생성, 조회, 수정, 삭제처럼 기본 데이터 조작에 쓰입니다.",
+	},
+	{
+		key: "visibility",
+		label: "표시/마스킹",
+		description: "민감 정보 노출 수준과 마스킹 조회 권한을 구분합니다.",
+	},
+	{
+		key: "bulk",
+		label: "일괄",
+		description: "가져오기, 내보내기처럼 여러 데이터를 한 번에 다룹니다.",
+	},
+	{
+		key: "workflow",
+		label: "워크플로우",
+		description: "접근, 승인, 반려 같은 운영 흐름의 상태 전환에 쓰입니다.",
+	},
+] as const;
+export interface ActionListScreenQueryStates extends DataGridQueryStates {
+	take: number;
+	skip: number;
+	search: string;
+	group: string;
+}
+export type ActionListScreenSetQueryStates = DataGridSetQueryStates;
+export interface ActionListScreenProps {
+	actions?: ActionDto[];
+	isLoading: boolean;
+	queryStates: ActionListScreenQueryStates;
+	setQueryStates: ActionListScreenSetQueryStates;
+	onClickCreateButton: () => void;
+	onClickActionRow: (actionId: bigint) => void;
+}
+function getActionGroupFilterKey(group: string) {
+	return group || ACTION_GROUP_FILTER_ALL_KEY;
+}
+function findActionGroupFilter(key: string) {
+	return (
+		actionGroupFilters.find((filter) => filter.key === key) ??
+		actionGroupFilters[0]
+	);
+}
+function getActionGroupQueryValue(key: Key) {
+	const selectedKey = String(key);
+	return selectedKey === ACTION_GROUP_FILTER_ALL_KEY ? null : selectedKey;
+}
+function filterActions(
+	actions: ActionDto[],
+	queryStates: ActionListScreenQueryStates,
+) {
+	const searchKeyword = queryStates.search?.trim().toLowerCase() ?? "";
+	const groupFilter = queryStates.group?.trim().toLowerCase() ?? "";
+	return actions.filter((action) => {
+		if (
+			searchKeyword &&
+			![action.name, action.displayName]
+				.filter(Boolean)
+				.some((value) => value!.toLowerCase().includes(searchKeyword))
+		) {
+			return false;
+		}
+		if (groupFilter && (action.group ?? "").toLowerCase() !== groupFilter) {
+			return false;
+		}
+		return true;
+	});
+}
+function paginateActions(
+	actions: ActionDto[],
+	queryStates: ActionListScreenQueryStates,
+) {
+	const start = Math.max(queryStates.skip, 0);
+	const end = start + Math.max(queryStates.take, 1);
+	return actions.slice(start, end);
+}
+export const ActionListScreen = observer(
+	({
+		actions,
+		isLoading,
+		queryStates,
+		setQueryStates,
+		onClickCreateButton,
+		onClickActionRow,
+	}: ActionListScreenProps) => {
+		const gridState = useLocalObservable(
+			() =>
+				new DataGridState({
+					queryStates,
+					setQueryStates,
+				}),
+		);
+		useEffect(() => {
+			gridState.syncQuery(queryStates, setQueryStates);
+		}, [gridState, queryStates, setQueryStates]);
+		const actionRows = actions ?? [];
+		const filteredActions = filterActions(actionRows, queryStates);
+		const visibleActions = paginateActions(filteredActions, queryStates);
+		const totalCount = filteredActions.length;
+		const handleActionRowClick = (action: ActionDto) => {
+			onClickActionRow(action.id);
+		};
+		const handleActionGroupFilterChange = (group: string | null) => {
+			void setQueryStates({
+				group,
+				skip: 0,
+			});
+		};
+		const actionTableColumns = buildActionTableColumns<ActionDto>({
+			onClickDetailButton: handleActionRowClick,
+		});
+		if (isLoading) {
+			return <ActionsScreenFallback />;
+		}
+		return (
+			<VStack>
+				<Screen.Header
+					title="권한 액션 목록"
+					description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
+					actions={
+						<Button
+							variant="primary"
+							startContent={<Plus className="h-4 w-4" />}
+							onPress={onClickCreateButton}
+						>
+							액션 등록
+						</Button>
+					}
+				/>
+				<ActionContextPanel />
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
+					<Section overflow="hidden">
+						<Section.Body>
+							<VStack>
+								<ActionGroupFilterTabs
+									selectedGroup={queryStates.group}
+									onChangeGroup={handleActionGroupFilterChange}
+								/>
+								<DataGrid
+									config={{
+										toolbar: {
+											leftInputs,
+										},
+										table: {
+											entity: "Action",
+											columns: actionTableColumns,
+											onRowClick: handleActionRowClick,
+											emptyMessage: "조건에 맞는 권한 액션이 없습니다.",
+										},
+									}}
+									rows={visibleActions}
+									totalCount={totalCount}
+									state={gridState}
+								/>
+							</VStack>
+						</Section.Body>
+					</Section>
+				</SectionSurface>
+			</VStack>
+		);
+	},
+);
+const ActionContextPanel = observer(() => {
+	return (
+		<SectionSurface className="rounded-2xl border-border/80 bg-surface">
+			<Section>
+				<Section.Body>
+					<VStack>
+						<Section.Header
+							title="권한 액션 카탈로그"
+							description="액션은 권한 규칙이 사용자의 동작을 판단할 때 참조하는 기준입니다."
+						/>
+						<div className="grid divide-y divide-border/80 overflow-hidden rounded-xl border border-border/80 bg-surface-secondary md:grid-cols-3 md:divide-x md:divide-y-0 md:divide-border/80">
+							<ActionContextItem
+								icon={<KeyRound className="h-5 w-5" />}
+								title="동작 단위"
+								description="액션은 역할과 정책에서 허용할 동작 단위입니다."
+							/>
+							<ActionContextItem
+								icon={<Layers3 className="h-5 w-5" />}
+								title="Ability 조합"
+								description="Ability = 대상 + 액션 조합으로 실제 권한을 구성합니다."
+							/>
+							<ActionContextItem
+								icon={<ShieldCheck className="h-5 w-5" />}
+								title="시스템 액션"
+								description="시스템 액션은 기본 제공 항목이며 수정/삭제가 제한됩니다."
+							/>
+						</div>
+					</VStack>
+				</Section.Body>
+			</Section>
+		</SectionSurface>
+	);
+});
+interface ActionContextItemProps {
+	icon: ReactNode;
+	title: string;
+	description: string;
+}
+const ActionContextItem = observer(
+	({ icon, title, description }: ActionContextItemProps) => {
+		const t = useT();
+		return (
+			<HStack alignItems="start" className="border-border/80 p-4 md:border-b-0">
+				<span className="rounded-lg bg-accent/10 p-2 text-accent">{icon}</span>
+				<VStack>
+					<Typography type="body-sm" weight="semibold">
+						{t(title)}
+					</Typography>
+					<Typography type="body-sm" color="muted">
+						{t(description)}
+					</Typography>
+				</VStack>
+			</HStack>
+		);
+	},
+);
+interface ActionGroupFilterTabsProps {
+	selectedGroup: string;
+	onChangeGroup: (group: string | null) => void;
+}
+const ActionGroupFilterTabs = observer(
+	({ selectedGroup, onChangeGroup }: ActionGroupFilterTabsProps) => {
+		const t = useT();
+		const selectedKey = getActionGroupFilterKey(selectedGroup);
+		const selectedFilter = findActionGroupFilter(selectedKey);
+		const handleSelectionChange = (key: Key) => {
+			onChangeGroup(getActionGroupQueryValue(key));
+		};
+		return (
+			<VStack>
+				<Tabs
+					aria-label={t("권한 액션 그룹 필터")}
+					selectedKey={selectedKey}
+					onSelectionChange={handleSelectionChange}
+					variant="secondary"
+				>
+					<Tabs.List>
+						{actionGroupFilters.map((filter) => (
+							<Tabs.Tab key={filter.key} id={filter.key}>
+								{t(filter.label)}
+							</Tabs.Tab>
+						))}
+					</Tabs.List>
+				</Tabs>
+				<div className="rounded-lg border border-border bg-surface-secondary p-4">
+					<Typography type="body-sm" weight="semibold">
+						{t(selectedFilter.label)} {t("액션")}
+					</Typography>
+					<Typography.Paragraph size="sm" color="muted" className="mt-1">
+						{t(selectedFilter.description)}
+					</Typography.Paragraph>
+				</div>
+			</VStack>
+		);
+	},
+);
+const ActionsScreenFallback = observer(() => {
+	return (
+		<VStack>
+			<Screen.Header
+				title="권한 액션 목록"
+				description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
+			/>
+			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
+				<Section>
+					<Section.Body>{null}</Section.Body>
+				</Section>
+			</SectionSurface>
+		</VStack>
+	);
+});

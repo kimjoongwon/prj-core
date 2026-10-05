@@ -1,0 +1,49 @@
+import { range } from "es-toolkit";
+import { cloneDeep, get, set } from "es-toolkit/compat";
+
+// Object property utilities
+export function getProperty(
+	object: unknown,
+	path: string | string[],
+	defaultValue?: unknown,
+): unknown {
+	return get(object, path, defaultValue);
+}
+
+export function setProperty(
+	object: object,
+	path: string | string[],
+	value: unknown,
+): object {
+	return set(object, path, value);
+}
+
+// Deep cloning utility
+export function deepClone<T>(value: T): T {
+	return cloneDeep(value);
+}
+
+// Array utilities
+export function createRange(
+	start: number,
+	end?: number,
+	step?: number,
+): number[] {
+	if (end === undefined) {
+		return range(start);
+	}
+
+	if (step === undefined) {
+		return range(start, end);
+	}
+
+	return range(start, end, step);
+}
+
+// Tool object for useFormField compatibility
+export const tools = {
+	get: getProperty,
+	set: setProperty,
+	clone: deepClone,
+	range: createRange,
+};

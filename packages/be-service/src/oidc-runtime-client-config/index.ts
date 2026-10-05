@@ -1,0 +1,149 @@
+import { OIDC_RUNTIME_MANAGED_CLIENT_IDS } from "@cocrepo/constant";
+
+interface RuntimeOidcClientConfig {
+	clientId: string;
+	redirectUri?: string;
+	redirectUris?: string[];
+	loginUrl?: string | null;
+	defaultReturnTo?: string | null;
+	postLogoutRedirectUris?: string[] | null;
+}
+
+interface RuntimeManagedOidcClientEnvConfig {
+	baseUrlEnv?: string;
+	defaultReturnToEnv?: string;
+	defaultReturnToPath?: string;
+	loginUrlEnv?: string;
+	loginUrlPath?: string;
+	postLogoutRedirectUriEnv?: string;
+	redirectUriEnv: string;
+	redirectUriPath?: string;
+}
+
+const RUNTIME_MANAGED_OIDC_CLIENT_ENV_CONFIG: Record<
+	string,
+	RuntimeManagedOidcClientEnvConfig
+> = {
+	"admin-web": {
+		baseUrlEnv: "OIDC_ADMIN_BASE_URL",
+		redirectUriEnv: "OIDC_ADMIN_REDIRECT_URI",
+		redirectUriPath: "/api/v1/auth/callback?clientId=admin-web",
+		loginUrlEnv: "OIDC_ADMIN_LOGIN_URL",
+		loginUrlPath: "/admin/auth/login",
+		postLogoutRedirectUriEnv: "OIDC_ADMIN_POST_LOGOUT_REDIRECT_URI",
+		defaultReturnToEnv: "OIDC_ADMIN_DEFAULT_RETURN_TO",
+		defaultReturnToPath: "/admin/dashboard",
+	},
+	"storybook-web": {
+		baseUrlEnv: "OIDC_STORYBOOK_BASE_URL",
+		redirectUriEnv: "OIDC_STORYBOOK_REDIRECT_URI",
+		redirectUriPath: "/api/v1/auth/callback?clientId=storybook-web",
+		loginUrlEnv: "OIDC_STORYBOOK_LOGIN_URL",
+		loginUrlPath: "/__storybook_auth/login",
+		postLogoutRedirectUriEnv: "OIDC_STORYBOOK_POST_LOGOUT_REDIRECT_URI",
+		defaultReturnToEnv: "OIDC_STORYBOOK_DEFAULT_RETURN_TO",
+		defaultReturnToPath: "/",
+	},
+	"user-mobile": {
+		redirectUriEnv: "OIDC_USER_MOBILE_REDIRECT_URI",
+	},
+	"swagger-web": {
+		baseUrlEnv: "OIDC_ISSUER",
+		redirectUriEnv: "OIDC_SWAGGER_REDIRECT_URI",
+		redirectUriPath: "/api/oauth2-redirect.html",
+	},
+};
+
+export const RUNTIME_MANAGED_OIDC_CLIENT_IDS: readonly string[] =
+	OIDC_RUNTIME_MANAGED_CLIENT_IDS;
+
+export const isRuntimeManagedOidcClientId = (clientId: string) =>
+	RUNTIME_MANAGED_OIDC_CLIENT_IDS.includes(clientId);
+
+export function applyRuntimeManagedOidcClientConfig<
+	TClient extends RuntimeOidcClientConfig,
+>(client: TClient): TClient {
+	const envConfig = RUNTIME_MANAGED_OIDC_CLIENT_ENV_CONFIG[client.clientId];
+	if (!envConfig) {
+		return client;
+	}
+
+	const redirectUri = resolveRuntimeUrl(
+		envConfig.redirectUriEnv,
+		envConfig.baseUrlEnv,
+		envConfig.redirectUriPath,
+	);
+	const loginUrl = resolveRuntimeUrl(
+		envConfig.loginUrlEnv,
+		envConfig.baseUrlEnv,
+		envConfig.loginUrlPath,
+	);
+	// post_logout_redirect_uri는 명시 env가 없으면 로그인 화면으로 돌아간다(시드 규칙과 동일).
+	const postLogoutRedirectUri =
+		resolveRuntimeUrl(
+			envConfig.postLogoutRedirectUriEnv,
+			envConfig.baseUrlEnv,
+			envConfig.loginUrlPath,
+		) ?? client.loginUrl ?? undefined;
+	const defaultReturnTo = resolveRuntimeUrl(
+		envConfig.defaultReturnToEnv,
+		envConfig.baseUrlEnv,
+		envConfig.defaultReturnToPath,
+	);
+	const existingRedirectUris =
+		client.redirectUris ?? (client.redirectUri ? [client.redirectUri] : []);
+	const redirectUris = redirectUri
+		? uniqueValues([redirectUri, ...existingRedirectUris])
+		: existingRedirectUris;
+
+	return {
+		...client,
+		...("redirectUris" in client ? { redirectUris } : {}),
+		...("redirectUri" in client
+			? { redirectUri: redirectUris[0] ?? client.redirectUri }
+			: {}),
+		...(loginUrl ? { loginUrl } : {}),
+		...(postLogoutRedirectUri
+			? {
+					postLogoutRedirectUris: uniqueValues([
+						postLogoutRedirectUri,
+						...(client.postLogoutRedirectUris ?? []),
+					]),
+				}
+			: {}),
+		...(defaultReturnTo ? { defaultReturnTo } : {}),
+	} as TClient;
+}
+
+function resolveRuntimeUrl(
+	explicitEnvName?: string,
+	baseUrlEnvName?: string,
+	pathname?: string,
+): string | undefined {
+	const explicitUrl = explicitEnvName
+		? normalizeOptionalEnv(process.env[explicitEnvName])
+		: undefined;
+	if (explicitUrl) {
+		return explicitUrl;
+	}
+
+	const baseUrl = baseUrlEnvName
+		? normalizeOptionalEnv(process.env[baseUrlEnvName])
+		: undefined;
+	if (!baseUrl || !pathname) {
+		return undefined;
+	}
+
+	const normalizedBaseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+	const normalizedPathname = pathname.replace(/^\/+/, "");
+	return new URL(normalizedPathname, normalizedBaseUrl).toString();
+}
+
+function normalizeOptionalEnv(value?: string): string | undefined {
+	const trimmed = value?.trim();
+	return trimmed ? trimmed : undefined;
+}
+
+function uniqueValues(values: string[]): string[] {
+	return [...new Set(values.filter(Boolean))];
+}

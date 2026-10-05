@@ -1,0 +1,102 @@
+# ============================================================================
+# 🏗️ BASE STAGE: 기본 환경 설정
+# ============================================================================
+# Node.js 24.21.0 / Alpine 3.24 multi-arch 이미지를 digest로 고정
+FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS base
+
+# 📦 PNPM 버전을 인자로 받아서 설정
+ARG PNPM_VERSION=10.34.5
+ARG TURBO_VERSION=2.9.14
+
+# 🔧 PNPM 홈 디렉토리를 전역 bin 경로로 설정
+ENV PNPM_HOME=/usr/local/bin
+
+# 📋 Node.js Corepack을 활성화하여 PNPM 패키지 매니저 설정
+# - corepack enable: Node.js 패키지 매니저 관리 도구 활성화
+# - corepack prepare: 특정 버전의 PNPM 준비 및 활성화
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+
+# 🛠️ Alpine Linux 시스템 종속성 설치
+# - libc6-compat: GNU libc 호환성 라이브러리 (Node.js 네이티브 모듈 호환성)
+# - apk 캐시 정리로 이미지 크기 최적화
+RUN apk add --update --no-cache libc6-compat && rm -rf /var/cache/apk/*
+
+# 🎯 전역 도구 설치
+# - turbo: Monorepo 빌드 시스템 최적화 도구 (관리자 앱 빌드용)
+RUN pnpm add -g turbo@${TURBO_VERSION}
+
+# 📂 작업 디렉토리 설정
+WORKDIR /app
+
+# ============================================================================
+# 🔍 SETUP STAGE: 종속성 분석 및 프로젝트 구조 최적화
+# ============================================================================
+FROM base AS setup
+
+# 📋 전체 프로젝트 파일 복사
+COPY . .
+
+# 🎯 Turbo를 사용해 관리자 앱만을 위한 최소한의 종속성 트리 생성
+# - --scope=admin-web: 관리자 앱과 관련된 패키지만 추출
+# - --docker: Docker 최적화된 출력 구조 생성
+RUN turbo prune --scope=admin-web --docker
+
+# ============================================================================
+# 🏭 BUILDER STAGE: Next.js 애플리케이션 빌드
+# ============================================================================
+FROM base AS builder
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
+# 📂 작업 디렉토리 설정
+WORKDIR /app
+
+# 📦 1단계: package.json + lockfile만 복사해서 의존성 레이어 캐싱
+# (의존성 변경 없으면 이 레이어가 캐시 히트 → pnpm install 스킵)
+COPY --from=setup /app/out/json/ ./
+
+# --store-dir /cache/pnpm-store --prefer-offline: pnpm 스토어를 PVC 영속 캐시에 두고 캐시 우선 조회
+RUN pnpm install --frozen-lockfile --store-dir /cache/pnpm-store --prefer-offline
+
+# 📦 2단계: 소스 복사 (코드 변경 시에도 위 install 레이어는 캐시 유지)
+COPY --from=setup /app/out/full/ ./
+
+# 🚀 Next.js 빌드 (next build가 TypeScript 타입체크를 포함)
+# --concurrency=2: 병렬 빌드로 빌드 시간 단축
+RUN pnpm exec turbo build --concurrency=2 --cache-dir=/cache/turbo --filter=admin-web...
+
+# ============================================================================
+# 🚀 PRODUCTION STAGE: Next.js 서버 실행
+# ============================================================================
+FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS runner
+
+# 📂 작업 디렉토리 설정
+WORKDIR /app
+
+# 🔒 보안을 위한 non-root 사용자 설정
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# 📦 Next.js standalone 빌드 결과물 복사
+# - standalone: 최소화된 Node.js 서버
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/web/.next/standalone ./
+
+# 📦 정적 파일 복사
+# - static: CSS, JS, 이미지 등 정적 자산
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/web/.next/static ./apps/admin/web/.next/static
+
+# 📦 public 폴더 복사 (존재하는 경우)
+COPY --from=builder --chown=nextjs:nodejs /app/apps/admin/web/public ./apps/admin/web/public
+
+# 🔧 환경 변수 설정
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# 👤 non-root 사용자로 전환
+USER nextjs
+
+# 🌐 포트 3000 노출
+EXPOSE 3000
+
+# 🎯 Next.js 서버 실행
+CMD ["node", "apps/admin/web/server.js"]

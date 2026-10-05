@@ -1,0 +1,60 @@
+{
+  "name": "@cocrepo/constant",
+  "version": "2.0.0",
+  "description": "Shared Constant and Configuration Values",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "!dist/**/*.map",
+    "!dist/**/*.tsbuildinfo",
+    "!src/**/test/**",
+    "!src/**/tests/**",
+    "!src/**/*.test.*",
+    "!src/**/*.spec.*"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./auth/password-rules": {
+      "types": "./dist/auth/password-rules.d.ts",
+      "require": "./dist/auth/password-rules.js",
+      "import": "./dist/esm/auth/password-rules.js",
+      "default": "./dist/esm/auth/password-rules.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "generate:admin-route-catalog": "node ./scripts/generate-admin-route-catalog.mjs",
+    "start:dev": "node ./scripts/start-dev.mjs",
+    "build": "pnpm run generate:admin-route-catalog && rm -rf dist && tsc --build --force && tsc -p tsconfig.esm.json && node scripts/write-esm-package-json.mjs",
+    "test": "node --test ./test/package-exports.test.cjs",
+    "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
+    "format": "biome check --write .",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+  },
+  "keywords": [],
+  "author": "kimjoongwon",
+  "license": "ISC",
+  "dependencies": {
+    "@cocrepo/type": "workspace:*"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimjoongwon/prj-core.git",
+    "directory": "packages/common-constant"
+  }
+}

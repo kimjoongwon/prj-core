@@ -1,0 +1,104 @@
+import { observer } from "mobx-react-lite";
+import { type ReactNode } from "react";
+import { View, type ViewProps } from "react-native";
+import { tv } from "tailwind-variants";
+import { Icon } from "../../icon";
+import { HStack, VStack } from "../../rhythm";
+import { Chip } from "../Chip";
+import { Typography } from "../Typography";
+
+export interface CommunityPostCardProps extends Omit<ViewProps, "children"> {
+	authorName: ReactNode;
+	createdAtLabel: ReactNode;
+	isMine?: boolean;
+	isPinned?: boolean;
+	text: ReactNode;
+	title?: ReactNode;
+}
+
+export const CommunityPostCard = observer((props: CommunityPostCardProps) => {
+	const {
+		authorName,
+		createdAtLabel,
+		isMine = false,
+		isPinned = false,
+		style,
+		text,
+		title,
+		...viewProps
+	} = props;
+
+	return (
+		<View
+			{...viewProps}
+			accessibilityRole="summary"
+			className={classNames.root()}
+			style={style}
+		>
+			<VStack>
+				<HStack alignItems="center" justifyContent="between">
+					<HStack alignItems="center" className="flex-1">
+						<Icon name="users" size="xs" tone="accent" />
+						<Typography
+							className={classNames.author()}
+							numberOfLines={1}
+							type="body-sm"
+						>
+							{authorName}
+						</Typography>
+						<Typography className={classNames.dot()} type="body-sm">
+							·
+						</Typography>
+						<Typography
+							className={classNames.createdAt()}
+							numberOfLines={1}
+							type="body-sm"
+						>
+							{createdAtLabel}
+						</Typography>
+					</HStack>
+					<HStack alignItems="center">
+						{isPinned ? (
+							<Chip color="warning" size="sm" variant="soft">
+								공지
+							</Chip>
+						) : null}
+						{isMine ? (
+							<Chip color="accent" size="sm" variant="soft">
+								내 글
+							</Chip>
+						) : null}
+					</HStack>
+				</HStack>
+				{title ? (
+					<Typography
+						className={classNames.title()}
+						numberOfLines={2}
+						type="body-sm"
+					>
+						{title}
+					</Typography>
+				) : null}
+				<Typography className={classNames.text()} numberOfLines={6} type="body-sm">
+					{text}
+				</Typography>
+			</VStack>
+		</View>
+	);
+});
+
+CommunityPostCard.displayName = "CommunityPostCard";
+
+const communityPostCardClassNames = tv({
+	slots: {
+		author:
+			"max-w-[128px] text-[13px] font-extrabold leading-5 text-foreground",
+		createdAt: "text-xs leading-4 text-muted",
+		dot: "text-xs leading-4 text-muted",
+		root: "rounded-xl border border-border bg-surface p-4",
+		text: "text-[13px] leading-5 text-surface-foreground",
+		title: "text-base font-extrabold leading-6 text-foreground",
+	},
+});
+
+const classNames = communityPostCardClassNames();

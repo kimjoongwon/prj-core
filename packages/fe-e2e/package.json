@@ -1,0 +1,46 @@
+{
+  "name": "@cocrepo/e2e",
+  "version": "1.0.0",
+  "description": "Shared Playwright E2E helpers",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "types": "./index.ts",
+  "files": [
+    "src",
+    "index.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "echo 'Build not needed - using source files directly'",
+    "start:dev": "echo 'Development mode - no build needed'",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "format": "biome check --write . --no-errors-on-unmatched",
+    "type-check": "tsc --noEmit",
+    "type-check:prod": "echo 'Production type check not applicable for @cocrepo/e2e'",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf .turbo && rm -rf node_modules",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@cocrepo/type": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "private": true
+}

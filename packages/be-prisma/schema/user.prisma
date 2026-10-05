@@ -1,0 +1,59 @@
+// @data-type: MASTER
+// @aggregate-root: true
+// @description: 독립적으로 존재하는 핵심 사용자 도메인 객체
+/// @displayName 사용자
+model User {
+  userId                       String                @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id                           BigInt                @id @default(autoincrement())
+  updatedAt                    DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt                    DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  removedAt                    DateTime?             @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 전화번호
+  phone                        String                @unique
+  /// @displayName 이름
+  name                         String                @unique
+  /// @displayName 이메일
+  email                        String                @unique
+  /// @displayName 비밀번호
+  password                     String
+  /// @displayName 비밀번호 변경일
+  passwordChangedAt            DateTime?             @map("password_changed_at") @db.Timestamptz(6)
+  /// @displayName 사용자 상태
+  status                       UserStatus?
+  profiles                     Profile[]
+  tenants                      Tenant[]              @relation("TenantUser")
+  tenantAccessRequests         TenantAccessRequest[] @relation("TenantAccessRequestRequester")
+  reviewedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestReviewer")
+  classification               UserClassification?
+  associations                 UserAssociation[]
+  passwordHistory              PasswordHistory[]
+  authAuditLogs                AuthAuditLog[]
+  emailVerifications           EmailVerification[]
+  // CreatedBy 관계
+  createdCategories            Category[]
+  createdGroups                Group[]
+  createdContents              Content[]
+  createdTimelines             Timeline[]
+  createdTasks                 Task[]
+  createdSafeWallets           SafeWallet[]
+  createdRoutines              Routine[]
+  instructedPrograms           Program[]             @relation("ProgramInstructor")
+  reservations                 Reservation[]         @relation("ReservationUser")
+  createdPolicies              Policy[]
+  createdReservations          Reservation[]         @relation("ReservationCreatedBy")
+  // Asset 도메인 CreatedBy 관계
+  createdAssets                Asset[]
+  createdFolders               Folder[]
+  createdAlbums                Album[]
+  createdAlbumEntries          AlbumEntry[]
+  createdDerivatives           Derivative[]
+  // Inquiry 도메인
+  customerInquiries            Inquiry[]             @relation("InquiryCustomer")
+  assignedInquiries            Inquiry[]             @relation("InquiryAssignee")
+  createdInquiries             Inquiry[]             @relation("InquiryCreatedBy")
+  inquiryMessages              InquiryMessage[]
+  inquiryParticipants          InquiryParticipant[]
+  createdThreads               InquiryThread[]
+
+  @@map("users")
+}

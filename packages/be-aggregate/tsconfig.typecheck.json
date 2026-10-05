@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "noEmit": true,
+    "types": ["jest", "node"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "__tests__/**/*.ts",
+    "../be-input/src/**/*.ts",
+    "../be-prisma/src/generated/client/enums.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

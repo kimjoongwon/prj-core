@@ -1,0 +1,197 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { getCurrentUrl, getUserAgent, navigateTo, reload } from "../Browser";
+
+// Mock browser globals
+const mockDocument = {
+	cookie: "test1=value1; test2=value2; test3=value3",
+};
+
+const mockWindow = {
+	location: {
+		hostname: "example.com",
+		href: "https://example.com/path",
+		protocol: "https:",
+		port: "443",
+		pathname: "/path",
+		search: "?param=value",
+		hash: "#section",
+		replace: vi.fn(),
+		reload: vi.fn(),
+	},
+};
+
+const mockNavigator = {
+	userAgent:
+		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+};
+
+const mockLocalStorage = {
+	clear: vi.fn(),
+};
+
+const mockSessionStorage = {
+	clear: vi.fn(),
+};
+
+const defineGlobal = (key: string, value: unknown) => {
+	Object.defineProperty(globalThis, key, {
+		value,
+		configurable: true,
+		writable: true,
+	});
+};
+
+describe("BrowserUtil", () => {
+	beforeEach(() => {
+		// Reset mocks
+		vi.clearAllMocks();
+
+		// Reset window.location properties for each test
+		mockWindow.location.href = "https://example.com/path";
+
+		// Setup global mocks
+		defineGlobal("document", mockDocument);
+		defineGlobal("window", mockWindow);
+		defineGlobal("navigator", mockNavigator);
+		defineGlobal("localStorage", mockLocalStorage);
+		defineGlobal("sessionStorage", mockSessionStorage);
+	});
+
+	afterEach(() => {
+		// Clean up mocks
+		Reflect.deleteProperty(globalThis, "document");
+		Reflect.deleteProperty(globalThis, "window");
+		Reflect.deleteProperty(globalThis, "navigator");
+		Reflect.deleteProperty(globalThis, "localStorage");
+		Reflect.deleteProperty(globalThis, "sessionStorage");
+	});
+
+	describe("navigateTo", () => {
+		it("새 URL로 이동해야 한다", () => {
+			// Mock the href setter
+			let hrefValue = mockWindow.location.href;
+			Object.defineProperty(mockWindow.location, "href", {
+				get: () => hrefValue,
+				set: (value: string) => {
+					hrefValue = value;
+				},
+				configurable: true,
+			});
+
+			navigateTo("/new-page");
+
+			expect(hrefValue).toBe("/new-page");
+		});
+
+		it("replace 옵션으로 이동해야 한다", () => {
+			navigateTo("/new-page", true);
+
+			expect(mockWindow.location.replace).toHaveBeenCalledWith("/new-page");
+		});
+
+		it("window가 없으면 경고를 출력해야 한다", () => {
+			Reflect.deleteProperty(globalThis, "window");
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+			navigateTo("/new-page");
+
+			expect(consoleSpy).toHaveBeenCalledWith(
+				"window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.",
+			);
+
+			consoleSpy.mockRestore();
+		});
+	});
+
+	describe("reload", () => {
+		it("페이지를 새로고침해야 한다", () => {
+			reload();
+
+			expect(mockWindow.location.reload).toHaveBeenCalledOnce();
+		});
+
+		it("window가 없으면 경고를 출력해야 한다", () => {
+			Reflect.deleteProperty(globalThis, "window");
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+			reload();
+
+			expect(consoleSpy).toHaveBeenCalledWith(
+				"window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.",
+			);
+
+			consoleSpy.mockRestore();
+		});
+	});
+
+	describe("getCurrentUrl", () => {
+		it("현재 URL 정보를 반환해야 한다", () => {
+			const result = getCurrentUrl();
+
+			expect(result).toEqual({
+				href: "https://example.com/path",
+				protocol: "https:",
+				hostname: "example.com",
+				port: "443",
+				pathname: "/path",
+				search: "?param=value",
+				hash: "#section",
+			});
+		});
+
+		it("window가 없으면 null을 반환해야 한다", () => {
+			Reflect.deleteProperty(globalThis, "window");
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+			const result = getCurrentUrl();
+
+			expect(result).toBeNull();
+			expect(consoleSpy).toHaveBeenCalledWith(
+				"window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.",
+			);
+
+			consoleSpy.mockRestore();
+		});
+	});
+
+	describe("getUserAgent", () => {
+		it("사용자 에이전트 정보를 분석해야 한다", () => {
+			const result = getUserAgent();
+
+			expect(result).toEqual({
+				userAgent: expect.stringContaining("Chrome"),
+				isMobile: false,
+				isTablet: false,
+				isDesktop: true,
+				browser: "Chrome",
+				os: "macOS",
+			});
+		});
+
+		it("모바일 사용자 에이전트를 인식해야 한다", () => {
+			defineGlobal("navigator", {
+				userAgent:
+					"Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15",
+			});
+
+			const result = getUserAgent();
+
+			expect(result?.isMobile).toBe(true);
+			expect(result?.isDesktop).toBe(false);
+		});
+
+		it("navigator가 없으면 null을 반환해야 한다", () => {
+			Reflect.deleteProperty(globalThis, "navigator");
+			const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+			const result = getUserAgent();
+
+			expect(result).toBeNull();
+			expect(consoleSpy).toHaveBeenCalledWith(
+				"navigator가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.",
+			);
+
+			consoleSpy.mockRestore();
+		});
+	});
+});

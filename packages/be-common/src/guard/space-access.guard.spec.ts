@@ -1,0 +1,277 @@
+import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
+import {
+	BadRequestException,
+	ExecutionContext,
+	ForbiddenException,
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { Test, TestingModule } from "@nestjs/testing";
+import { ClsService } from "nestjs-cls";
+import { SpaceAccessGuard } from "./space-access.guard";
+
+describe("SpaceAccessGuard", () => {
+	let guard: SpaceAccessGuard;
+	let mockReflector: jest.Mocked<Reflector>;
+	let mockClsService: { get: jest.Mock; set: jest.Mock };
+	type MockTenant = {
+		id: bigint;
+		spaceId?: bigint;
+		role: { name: string };
+		space?: {
+			id?: bigint;
+			classification?: {
+				category?: {
+					name?: string;
+				};
+			};
+		};
+	};
+	type MockUser = {
+		id: bigint;
+		email: string;
+		tenants?: MockTenant[] | null;
+	};
+
+	const createMockExecutionContext = (): ExecutionContext => {
+		const handler = jest.fn();
+		Object.defineProperty(handler, "name", { value: "testHandler" });
+
+		class TestController {}
+
+		return {
+			switchToHttp: () => ({
+				getRequest: () => ({}),
+			}),
+			getHandler: () => handler,
+			getClass: () => TestController,
+		} as unknown as ExecutionContext;
+	};
+
+	const createMockUser = (overrides: Partial<MockUser> = {}): MockUser => ({
+		id: 101n,
+		email: "test@example.com",
+		tenants: [
+			{
+				id: 201n,
+				spaceId: 301n,
+				role: { name: "MEMBER" },
+			},
+		],
+		...overrides,
+	});
+
+	beforeEach(async () => {
+		mockReflector = {
+			get: jest.fn(),
+			getAllAndOverride: jest.fn(),
+			getAllAndMerge: jest.fn(),
+		} as unknown as jest.Mocked<Reflector>;
+
+		mockClsService = {
+			get: jest.fn(),
+			set: jest.fn(),
+		};
+
+		const module: TestingModule = await Test.createTestingModule({
+			providers: [
+				SpaceAccessGuard,
+				{ provide: Reflector, useValue: mockReflector },
+				{ provide: ClsService, useValue: mockClsService },
+			],
+		}).compile();
+
+		guard = module.get<SpaceAccessGuard>(SpaceAccessGuard);
+	});
+
+	it("가드가 정의되어야 한다", () => {
+		expect(guard).toBeDefined();
+	});
+
+	describe("canActivate", () => {
+		describe("데코레이터에 의한 skip", () => {
+			it("@PublicRoute 데코레이터가 있으면 true를 반환해야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockImplementation((key: string) => {
+					if (key === PUBLIC_ROUTE_KEY) return true;
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When
+				const result = guard.canActivate(context);
+
+				// Then
+				expect(result).toBe(true);
+				expect(mockReflector.getAllAndOverride).toHaveBeenCalledWith(
+					PUBLIC_ROUTE_KEY,
+					[context.getHandler(), context.getClass()],
+				);
+			});
+
+			it("@SkipSpaceCheck 데코레이터가 있으면 true를 반환해야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockImplementation((key: string) => {
+					if (key === PUBLIC_ROUTE_KEY) return false;
+					if (key === SKIP_SPACE_CHECK_KEY) return true;
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When
+				const result = guard.canActivate(context);
+
+				// Then
+				expect(result).toBe(true);
+				expect(mockReflector.getAllAndOverride).toHaveBeenCalledWith(
+					SKIP_SPACE_CHECK_KEY,
+					[context.getHandler(), context.getClass()],
+				);
+			});
+		});
+
+		describe("비인증 요청 처리", () => {
+			it("비인증 요청(user=undefined)이면 true를 반환해야 한다 (JwtAuthGuard가 처리)", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
+				mockClsService.get.mockReturnValue(undefined);
+				const context = createMockExecutionContext();
+
+				// When
+				const result = guard.canActivate(context);
+
+				// Then
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("x-tenant-id 헤더 검증", () => {
+			it("인증된 사용자가 x-tenant-id 없이 요청하면 BadRequestException을 던져야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
+				const user = createMockUser();
+				mockClsService.get.mockImplementation((key: string) => {
+					if (key === CONTEXT_KEYS.AUTH_USER) return user;
+					if (key === CONTEXT_KEYS.TENANT_ID) return undefined;
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When & Then
+				expect(() => guard.canActivate(context)).toThrow(BadRequestException);
+				expect(() => guard.canActivate(context)).toThrow(
+					"x-tenant-id 헤더가 필요합니다",
+				);
+			});
+
+			it("인증 + x-tenant-id + 해당 tenant가 있으면 true를 반환해야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
+				const user = createMockUser();
+				mockClsService.get.mockImplementation((key: string) => {
+					if (key === CONTEXT_KEYS.AUTH_USER) return user;
+					if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When
+				const result = guard.canActivate(context);
+
+				// Then
+				expect(result).toBe(true);
+				expect(mockClsService.set).toHaveBeenCalledWith(
+					CONTEXT_KEYS.SPACE_ID,
+					301n,
+				);
+			});
+
+			it("tenant.space.id에서 Space ID를 파생하면 true를 반환해야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
+				const user = createMockUser({
+					tenants: [
+						{
+							id: 201n,
+							spaceId: undefined,
+							space: { id: 301n },
+							role: { name: "MEMBER" },
+						},
+					],
+				});
+				mockClsService.get.mockImplementation((key: string) => {
+					if (key === CONTEXT_KEYS.AUTH_USER) return user;
+					if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When
+				const result = guard.canActivate(context);
+
+				// Then
+				expect(result).toBe(true);
+				expect(mockClsService.set).toHaveBeenCalledWith(
+					CONTEXT_KEYS.SPACE_ID,
+					301n,
+				);
+			});
+
+			it("인증 + x-tenant-id + 해당 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
+				const user = createMockUser();
+				mockClsService.get.mockImplementation((key: string) => {
+					if (key === CONTEXT_KEYS.AUTH_USER) return user;
+					if (key === CONTEXT_KEYS.TENANT_ID) return 999n;
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When & Then
+				expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
+				expect(() => guard.canActivate(context)).toThrow(
+					"해당 Tenant에 대한 접근 권한이 없습니다",
+				);
+			});
+		});
+
+		describe("tenants가 비정상인 경우", () => {
+			it("인증 + x-tenant-id + tenants가 null이면 ForbiddenException을 던져야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
+				const user = createMockUser({ tenants: null });
+				mockClsService.get.mockImplementation((key: string) => {
+					if (key === CONTEXT_KEYS.AUTH_USER) return user;
+					if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When & Then
+				expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
+				expect(() => guard.canActivate(context)).toThrow(
+					"사용자에게 할당된 테넌트가 없습니다",
+				);
+			});
+
+			it("인증 + x-tenant-id + tenants가 undefined이면 ForbiddenException을 던져야 한다", () => {
+				// Given
+				mockReflector.getAllAndOverride.mockReturnValue(undefined);
+				const user = createMockUser({ tenants: undefined });
+				mockClsService.get.mockImplementation((key: string) => {
+					if (key === CONTEXT_KEYS.AUTH_USER) return user;
+					if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+					return undefined;
+				});
+				const context = createMockExecutionContext();
+
+				// When & Then
+				expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
+				expect(() => guard.canActivate(context)).toThrow(
+					"사용자에게 할당된 테넌트가 없습니다",
+				);
+			});
+		});
+	});
+});
