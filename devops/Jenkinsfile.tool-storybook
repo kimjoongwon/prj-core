@@ -29,8 +29,8 @@ def buzzNotify(List messageLines, Map opts = [:]) {
             // buildctl(moby/buildkit) 컨테이너에는 curl이 없다 — wget 폴백으로 전송
             // (containerCap=2 제한으로 알림 전용 컨테이너를 추가할 수 없음)
             container('buildctl') {
-                sh '''#!/usr/bin/env bash
-                    set -uo pipefail
+                sh '''#!/bin/sh
+                    set -u
                     # set +x: 토큰 평문 노출 차단
                     set +x
                     if command -v curl >/dev/null 2>&1; then
