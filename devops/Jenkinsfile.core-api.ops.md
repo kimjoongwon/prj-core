@@ -14,15 +14,15 @@
 | 항목 | 설명 |
 |------|------|
 | 빌드 대상 | `core-api` |
-| 이미지 경로 | `HARBOR_REGISTRY/prod/core-api` — SHA-12 커밋 태그만 push (`latest` 없음) |
+| 이미지 경로 | `HARBOR_REGISTRY/{prod,stg}/core-api` — SHA-12 커밋 태그만 push (`latest` 없음) |
 | 브랜치 정책 | `main`(prod)·`stg` 허용 (2026-10-05 stg 재가동으로 복원 — B구조 buildkit 유지), 그 외 브랜치/PR은 즉시 실패 |
 | 빌드 방식 | `buildctl --addr tcp://buildkitd.devops-tools.svc.cluster.local:1234`로 원격 buildkitd 빌드 (Podman 미사용) |
 | 실행 컨테이너 | `docker.io/moby/buildkit:v0.33.0-rootless` digest 고정, `privileged` 아님, PVC 마운트 없음 |
 | 캐시 저장 | BuildKit 캐시는 buildkitd 데몬의 PVC에 저장되어 빌드 간 재사용됨 |
-| Harbor 인증 | Jenkinsfile에 registry login 없음. buildkitd 데몬에 마운트된 시크릿으로 처리 (런북 참조) |
+| Harbor 인증 | Jenkinsfile에 registry login 없음. **push 자격은 클라이언트(buildctl) 컨테이너에 마운트된 `buildkit-client-config`가 전달**(원격 buildkit 인증은 클라이언트 side — 2026-10-05 실증). 데몬용 `buildkit-registry-config`와 세트 (런북 참조) |
 | 실행 Stage | `Validate Branch` → `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
 | GitOps 트리거 | 보호된 내부 job이 주입하는 `GITOPS_UPDATE_JOB` 환경변수 |
-| 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV=prod`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT`, `SOURCE_BUZZ_EVENT_ID` |
+| 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV=ENV_NAME` (prod/stg), `SOURCE_BUILD_URL`, `SOURCE_COMMIT`, `SOURCE_BUZZ_EVENT_ID` |
 | 알림 | buzz #cicd 채널 성공/실패 알림. 성공 알림 `event_id`를 `SOURCE_BUZZ_EVENT_ID`로 전달해 범프/배포 알림을 같은 스레드로 묶고, 실패 시 @ZCode 멘션 |
 | 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
 
