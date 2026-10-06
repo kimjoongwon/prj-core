@@ -1,5 +1,12 @@
 # 프로젝트 공통 규칙
 
+## 배포·운영 (2026-10-05)
+
+- `stg`/`main`은 브랜치 보호(관리자 포함 직접 푸시 차단) — **무조건 PR 경유**. 흐름: feature → stg PR → 세션 리뷰 → 사용자 승인 머지 → stg 배포 → stg→main PR → 사용자 승인 → prod 자동 배포(push-router).
+- 작업은 git worktree에서. 이미지 태그 = 커밋 SHA 12자, 빌드·범프는 Jenkins 잡(`devops/Jenkinsfile.*`, 잡별 노트는 `*.ops.md`).
+- 전체 파이프라인·인프라·시크릿 지식은 **워크스페이스 루트 `~/dev/AGENTS.md`와 OpenBao `secret/docs/*`가 진입점** — 배포·인프라 작업 시 먼저 읽을 것.
+- 빌드/배포 문서: `docs/build-deploy-runbook.md`, `docs/env-reference.md`.
+
 ## 문서 범위
 
 - 이 문서는 저장소 전체에 적용되는 공통 작업 규칙만 소유합니다.
