@@ -20,7 +20,7 @@
 | 빌드 방식 | `buildctl --addr tcp://buildkitd.devops-tools.svc.cluster.local:1234`로 원격 buildkitd 빌드 (Podman 미사용) |
 | 실행 컨테이너 | `docker.io/moby/buildkit:v0.33.0-rootless` digest 고정, `privileged` 아님, PVC 마운트 없음 |
 | 캐시 저장 | BuildKit 캐시는 buildkitd 데몬의 PVC에 저장되어 빌드 간 재사용됨 |
-| Harbor 인증 | Jenkinsfile에 registry login 없음. buildkitd 데몬에 마운트된 시크릿으로 처리 (런북 참조) |
+| Harbor 인증 | Jenkinsfile에 registry login 없음. **push 자격은 클라이언트(buildctl) 컨테이너에 마운트된 `buildkit-client-config`가 전달**(원격 buildkit 인증은 클라이언트 side — 2026-10-05 실증). 데몬용 `buildkit-registry-config`와 세트 (런북 참조) |
 | 빌드 인자 | `STORYBOOK_DISABLE_CHROMATIC=true` (파일럿에서 `STORYBOOK_BUILD_NOFILE` build-arg는 제거됨 — Dockerfile 기본값과 RUN 내 ulimit 폴백이 처리) |
 | 실행 Stage | `Validate Branch` → `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
 | GitOps 트리거 | 보호된 내부 job이 주입하는 `GITOPS_UPDATE_JOB` 환경변수 |
@@ -39,7 +39,7 @@
 
 ## 운영 노트
 
-- 파일럿 잡 항목은 prj-devops main(d5baa2b)에서 본체 `tool-storybook-build` 잡으로 병합되었습니다(regions 승계, 파일럿 잡 scriptPath 변경·정리 불필요). 남은 외부 조치는 Jenkins 차트 `helm upgrade` 적용 1건뿐입니다.
+- 파일럿 잡 항목은 prj-devops main(d5baa2b)에서 본체 `tool-storybook-build` 잡으로 병합되었습니다(regions 승계, 파일럿 잡 scriptPath 변경·정리 불필요). 과거 남은 외부 조치는 Jenkins 차트 `helm upgrade` 적용이었으나 완료됨. 현재 잔여는 **Jenkins 재시작 후 push-router 잡 1회 수동 실행**(GWT 트리거 재등록)뿐입니다.
 - 함정: 적용 직후 첫 gitops 범프 빌드는 선언적 파라미터가 한 번 지워져 `TRUSTED_DEPLOYMENT != 'true'`로 실패할 수 있습니다. 파라미터를 명시해 재실행하면 됩니다(prj-devops docs/buzz-ci-integration.md).
 - 적용 후 첫 앱 빌드에서 buildctl 파드 프로비저닝(구 파일럿 잡의 containerCap 라벨 대기 이력)을 관찰합니다. 검증 관점: 같은 커밋으로 2회 빌드해 `--progress=plain` 로그에서 pnpm/turbo 스텝의 `CACHED` 표시를 확인하고 빌드 시간을 비교하며, 이미지 push 성공을 확인합니다.
 - watch-item: BuildKit은 빌드별 ulimit 상향이 불가합니다. Storybook 빌드의 `nofile=65536` 요구가 buildkitd 데몬 기본값으로 충분한지 관찰합니다. 부족하면 빌드 실패(EMFILE)로 나타나며, 이 경우 Dockerfile RUN 내 ulimit 폴백 로직 점검이 필요합니다.

@@ -26,7 +26,7 @@
   podman 방식은 제거됨(이력은 prj-devops `docs/jenkins-build-speed-runbook.md`).
 - 잡 파라미터(`TRUSTED_DEPLOYMENT=true`, `HARBOR_REGISTRY`, `HARBOR_CREDENTIAL_ID`, `GITOPS_UPDATE_JOB`, `BUZZ_NOTIFY_URL`)는
   Job DSL 루프가 **전 잡에 동일 주입** — 개별 잡 설정은 손볼 일이 없다.
-- 태그 정책: 커밋 SHA 앞 12자리(immutable), prod 전용, latest 없음, main 브랜치만.
+- 태그 정책: 커밋 SHA 앞 12자리(immutable), prod 전용 → **prod+stg** (4서비스앱 main/stg 병행, 2026-10-05), latest 없음.
 - 빌드 성공 → gitops-update 잡이 prj-deploy 태그 범프 → ArgoCD 동기화.
 
 ### 웹훅 다운 시 수동 빌드·배포 절차 (실측 레시피)

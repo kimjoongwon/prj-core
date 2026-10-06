@@ -28,12 +28,12 @@
 **PRJ Core**는 필라테스, 헬스, 요가 등 다양한 피트니스 및 서비스 예약을 지원하는 멀티 도메인 예약 플랫폼입니다. Turborepo와 pnpm 워크스페이스를 활용한 Monorepo 아키텍처로 구성되어 있으며, 코드 재사용성과 개발 효율성을 극대화합니다.
 
 > **⚠️ 중요 안내**  
-> 이 프로젝트는 **학습 및 연구 목적**으로 제작되었습니다.
+> 이 프로젝트는 **실운영 플랫폼**입니다 (stg/prod 2단계 배포, 2026-10 기준 전 서비스 운영 중).
 >
 > - SI 프로젝트 수행을 위한 기본 기술 스택 학습
 > - 모노레포 아키텍처 및 현대적인 개발 방법론 연구
 > - 보안상 모든 환경 변수는 커밋되어 있지 않으며, 이미 커밋된 환경 변수는 전부 무효화(invalid)되었습니다.
-> - 실제 배포용 프로젝트가 아닌 기술 학습을 위한 레퍼런스 프로젝트입니다.
+> - 2026-10-05부터 **private 저장소**로 전환되었습니다.
 
 ### 핵심 설계 원칙
 
@@ -65,7 +65,7 @@
 
 ### 파일 관리
 
-- 📁 **S3 통합**: AWS S3를 통한 이미지/영상 관리
+- 📁 **오브젝트 스토리지**: Cloudflare R2 (S3 호환, `OBJECT_STORAGE_*` env — 아직 배포 환경 미구성)
 - 📤 **업로드 UX**: react-dropzone 기반 드래그 앤 드롭 업로드
 
 ### 인증 & IDP
@@ -112,7 +112,7 @@
 | **Authorization**    | CASL            | 6.x  | 권한 관리           |
 | **Validation**       | class-validator | 0.14 | DTO 검증            |
 | **API Docs**         | Swagger         | 11.4 | OpenAPI 문서화      |
-| **File Storage**     | AWS S3          | 3.x  | 파일 스토리지       |
+| **File Storage**     | Cloudflare R2 (S3호환) | — | 파일 스토리지(배포 미구성) |
 | **Email**            | Nodemailer      | 7.x  | 이메일 발송         |
 | **Logging**          | Pino (nestjs-pino) | 4.x | 고성능 로깅       |
 
@@ -277,6 +277,7 @@ pnpm start -- core-api admin-web proposal-web
 1. **저장소 클론**
 
 ```bash
+# private 저장소 — 접근 권한 필요
 git clone https://github.com/kimjoongwon/prj-core.git
 cd prj-core
 ```
