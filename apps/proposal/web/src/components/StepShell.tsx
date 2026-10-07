@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, VStack, Typography, Container } from "@cocrepo/ui";
+import { Button, VStack, HStack, Typography, Container } from "@cocrepo/ui";
 
 interface StepShellProps {
   title: string;
@@ -26,34 +26,35 @@ export function StepShell({
   children,
 }: StepShellProps) {
   return (
-    <Container width="content" className="flex min-h-[calc(100vh-120px)] flex-col justify-between">
-      <VStack gap="page" alignItems="center">
+    <Container width="page" className="flex min-h-[calc(100vh-120px)] flex-col justify-between py-6">
+      <VStack gap="section">
         <VStack gap="dense" alignItems="center">
-          <Typography.Heading level={2} className="text-center">
+          <Typography.Heading level={2} align="center">
             {title}
           </Typography.Heading>
-          <p className="text-center text-foreground/60">{description}</p>
+          <Typography.Paragraph size="sm" color="muted" align="center">
+            {description}
+          </Typography.Paragraph>
         </VStack>
-        <div className="w-full">{children}</div>
+        <VStack gap="section">{children}</VStack>
       </VStack>
-      <div className="sticky bottom-0 flex items-center justify-between border-t border-separator bg-background/80 py-4 backdrop-blur">
-        <div>
+
+      <div className="sticky bottom-0 mt-6 border-t border-separator bg-background/80 py-4 backdrop-blur">
+        <HStack justifyContent="between" fullWidth>
           {onPrev ? (
-            <Button variant="outline" size="md" onPress={onPrev}>
+            <Button variant="outline" size="md" onClick={onPrev}>
               ← 이전
             </Button>
           ) : (
             <span />
           )}
-        </div>
-        <span className="text-xs text-foreground/40">
-          {stepNumber} / {totalSteps}
-        </span>
-        <div>
-          <Button variant="primary" size="md" isDisabled={!canNext} onPress={onNext}>
+          <Typography.Paragraph size="xs" color="muted">
+            {stepNumber} / {totalSteps}
+          </Typography.Paragraph>
+          <Button variant="primary" size="md" isDisabled={!canNext} onClick={onNext}>
             {isLastStep ? "결과 보기 ✓" : "다음 →"}
           </Button>
-        </div>
+        </HStack>
       </div>
     </Container>
   );

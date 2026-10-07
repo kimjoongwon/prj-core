@@ -1,50 +1,41 @@
 "use client";
 
+import { HStack } from "@cocrepo/ui";
 import { Check } from "lucide-react";
 
 interface StepperProps {
   currentStep: number;
   totalSteps: number;
-  labels: string[];
 }
 
-export function Stepper({ currentStep, totalSteps, labels }: StepperProps) {
+export function Stepper({ currentStep, totalSteps }: StepperProps) {
   return (
-    <div className="flex items-center justify-center gap-1 overflow-x-auto px-4 py-4">
+    <HStack gap="dense" justifyContent="center" fullWidth className="py-4">
       {Array.from({ length: totalSteps }).map((_, i) => {
         const isDone = i < currentStep;
         const isCurrent = i === currentStep;
         return (
-          <div key={labels[i]} className="flex items-center">
+          <HStack key={i} gap="dense" alignItems="center">
             {i > 0 && (
-              <div
-                className={`h-0.5 w-6 sm:w-10 ${
-                  isDone ? "bg-accent" : "bg-separator"
-                }`}
-              />
+              <span className={`h-px w-8 ${isDone ? "bg-accent" : "bg-separator"}`} />
             )}
-            <button
-              type="button"
-              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all sm:h-8 sm:w-8 ${
+            <span
+              className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold transition-all ${
                 isCurrent
-                  ? "bg-accent text-accent-foreground scale-110"
+                  ? "scale-110 bg-accent text-accent-foreground"
                   : isDone
                     ? "bg-accent-soft text-accent"
                     : "bg-surface-secondary text-foreground/40"
               }`}
             >
               {isDone ? <Check className="h-3.5 w-3.5" /> : i + 1}
-            </button>
+            </span>
             {i < totalSteps - 1 && (
-              <div
-                className={`h-0.5 w-6 sm:w-10 ${
-                  i < currentStep - 1 ? "bg-accent" : "bg-separator"
-                }`}
-              />
+              <span className={`h-px w-8 ${i < currentStep ? "bg-accent" : "bg-separator"}`} />
             )}
-          </div>
+          </HStack>
         );
       })}
-    </div>
+    </HStack>
   );
 }

@@ -16,13 +16,15 @@ interface SummaryViewProps {
 
 function SummaryRow({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-separator py-3 last:border-0">
-      <span className="shrink-0 text-sm font-semibold text-foreground/50">{label}</span>
-      <div className="text-right">
-        <p className="text-sm font-bold">{value}</p>
-        {note && <p className="text-xs text-foreground/50">{note}</p>}
-      </div>
-    </div>
+    <HStack justifyContent="between" fullWidth className="border-b border-separator py-3 last:border-0">
+      <Typography.Paragraph size="sm" color="muted" className="shrink-0 font-semibold">
+        {label}
+      </Typography.Paragraph>
+      <VStack gap="flush" alignItems="end">
+        <Typography.Paragraph size="sm" className="font-bold">{value}</Typography.Paragraph>
+        {note && <Typography.Paragraph size="xs" color="muted">{note}</Typography.Paragraph>}
+      </VStack>
+    </HStack>
   );
 }
 
@@ -34,10 +36,12 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
   const totalMonthly = (infra?.monthlyCost ?? 0) + aiMonthly;
 
   return (
-    <Container width="content">
+    <Container width="content" className="py-8">
       <VStack gap="page" alignItems="center">
-        <Typography.Heading level={2}>최종 기술 스택</Typography.Heading>
-        <p className="text-foreground/60">선택하신 구성입니다. 인쇄하여 계약서에 첨부할 수 있습니다.</p>
+        <Typography.Heading level={2} align="center">최종 기술 스택</Typography.Heading>
+        <Typography.Paragraph size="sm" color="muted" align="center">
+          선택하신 구성입니다. 인쇄하여 계약서에 첨부할 수 있습니다.
+        </Typography.Paragraph>
 
         <Card className="w-full p-6">
           <VStack gap="section">
@@ -51,22 +55,22 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
               value={selection.aiService ? "FastAPI + LangChain + pgvector" : "불필요"}
               note={selection.aiService ? "Python 서버 별도 운영" : undefined}
             />
-            <div className="mt-2 rounded-xl bg-accent-soft p-4">
+            <div className="mt-2 rounded-lg bg-accent-soft p-4">
               <HStack justifyContent="between" fullWidth>
-                <span className="font-bold">예상 월 비용</span>
-                <span className="text-xl font-bold text-accent">
+                <Typography.Paragraph size="sm" className="font-bold">예상 월 비용</Typography.Paragraph>
+                <Typography.Heading level={3} className="text-accent">
                   ~{totalMonthly.toLocaleString()}원
-                </span>
+                </Typography.Heading>
               </HStack>
             </div>
           </VStack>
         </Card>
 
         <Card className="w-full p-6">
-          <Typography.Heading level={4} className="mb-3">
-            아키텍처 요약
-          </Typography.Heading>
-          <pre className="overflow-x-auto rounded-lg bg-surface-secondary p-4 text-xs leading-relaxed">
+          <VStack gap="block">
+            <Typography.Heading level={4}>아키텍처 요약</Typography.Heading>
+            <div className="overflow-x-auto rounded-lg bg-surface-secondary p-4">
+              <pre className="text-xs leading-relaxed text-foreground/80">
 {`┌─────────────────────────────────────────────┐
 │                사용자                        │
 │           (iOS / Android / Web)              │
@@ -84,21 +88,22 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
 ┌──────▼──────┐    ┌─────────▼───────────────┐
 │ PostgreSQL  │    │ Cloudflare R2           │
 │   (DB)      │    │   (파일 저장 + CDN)      │
-└─────────────┘    └─────────────────────────┘
-${selection.aiService ? `
+└─────────────┘    └─────────────────────────┘${selection.aiService ? `
 ┌─────────────────────────────────────────────┐
 │  AI 서버: FastAPI (Python) + LangChain      │
 │  백엔드와 별도 프로세스로 운영               │
 └─────────────────────────────────────────────┘` : ""}`}
-          </pre>
+              </pre>
+            </div>
+          </VStack>
         </Card>
 
-        <HStack gap="block" className="pb-8">
-          <Button variant="outline" size="md" onPress={onReset} startContent={<RotateCcw className="h-4 w-4" />}>
-            다시 선택
+        <HStack gap="inline" className="pb-8">
+          <Button variant="outline" size="md" onClick={onReset}>
+            <RotateCcw className="h-4 w-4" /> 다시 선택
           </Button>
-          <Button variant="primary" size="md" onPress={() => window.print()} startContent={<Printer className="h-4 w-4" />}>
-            인쇄 / PDF 저장
+          <Button variant="primary" size="md" onClick={() => window.print()}>
+            <Printer className="h-4 w-4" /> 인쇄 / PDF 저장
           </Button>
         </HStack>
       </VStack>
