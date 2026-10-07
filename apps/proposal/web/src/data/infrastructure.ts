@@ -1,0 +1,83 @@
+import type { StepData } from "./types";
+
+export const infrastructureStep: StepData = {
+  id: "infrastructure",
+  title: "인프라 (호스팅)",
+  description: "서버를 어디에 둘지 선택해주세요.",
+  options: [
+    {
+      id: "vercel",
+      name: "Vercel",
+      vendor: "Vercel Inc.",
+      tagline: "프론트엔드 특화 — 설정 없이 배포",
+      pros: [
+        "Git push만 하면 자동 배포 (CI/CD 불필요)",
+        "CDN 전 세계 자동 적용",
+        "HTTPS·도메인 자동 설정",
+      ],
+      cons: ["백엔드 커스텀 제약 (WebSocket·장기 프로세스)", "트래픽 많아지면 비용 증가"],
+      costRange: "월 0원 (Hobby) ~ $20 (Pro)",
+      bestFor: "프론트엔드 위주 + 빠른 시작",
+      monthlyCost: 0,
+    },
+    {
+      id: "eks",
+      name: "AWS EKS",
+      vendor: "Amazon",
+      tagline: "관리형 Kubernetes — 엔터프라이즈급",
+      pros: [
+        "무한 확장성 (오토스케일링)",
+        "AWS 생태계 통합 (S3, RDS, CloudFront)",
+        "대규모 트래픽 안정 처리",
+      ],
+      cons: ["초기 설정 복잡", "월 최소 ~15만원 (클러스터 비용)", "전문 인력 필요"],
+      costRange: "월 15만원 ~",
+      bestFor: "대규모 + 엔터프라이즈",
+      monthlyCost: 150000,
+    },
+    {
+      id: "vultr",
+      name: "Vultr",
+      vendor: "Vultr Holdings",
+      tagline: "저렴한 클라우드 VPS",
+      pros: [
+        "월 $5~ 시작 (가성비)",
+        "심플한 UI — 관리 부담 적음",
+        "한국 리전(도쿄) 사용 가능",
+      ],
+      cons: ["확장성 제한 (수동)", "관리 도구 부족", "장애 시 대응 자체 해결"],
+      costRange: "월 $5~ (~7천원)",
+      bestFor: "소규모 + 비용 최소화",
+      monthlyCost: 7000,
+    },
+    {
+      id: "home-server",
+      name: "집 컴퓨터",
+      vendor: "자체 관리",
+      tagline: "물리 서버 — 최대 제어권",
+      pros: [
+        "하드웨어 비용 1회 (장기 최저)",
+        "네트워크 완전 제어",
+        "데이터 물리적 소유",
+      ],
+      cons: ["전기비 + 관리 부담", "인터넷 회선 속도 의존", "장애 시 직접 대응 (하드웨어 포함)"],
+      costRange: "전기료 월 ~2만원 + 초기 하드웨어",
+      bestFor: "실험 + 학습 + 최대 제어",
+      monthlyCost: 20000,
+    },
+  ],
+  comparison: [
+    { label: "월 비용", values: { vercel: "0원~ (트래픽 따라)", eks: "15만원~", vultr: "7천원~", "home-server": "전기료 ~2만원" } },
+    { label: "설정 난이도", values: { vercel: "매우 쉬움", eks: "어려움", vultr: "보통", "home-server": "어려움 (OS부터)" } },
+    { label: "확장성", values: { vercel: "자동 (Vercel 관리)", eks: "자동 (Kubernetes)", vultr: "수동", "home-server": "하드웨어 교체 필요" } },
+    { label: "백엔드 지원", values: { vercel: "제약 (Serverless)", eks: "완전 자유", vultr: "자유 (VPS)", "home-server": "완전 자유" } },
+    { label: "장애 대응", values: { vercel: "Vercel가 처리", eks: "AWS + 자체", vultr: "자체", "home-server": "100% 자체" } },
+    { label: "적합 규모", values: { vercel: "소~중 (프론트)", eks: "중~대 (풀스택)", vultr: "소", "home-server": "소 (실험)" } },
+  ],
+  recommendations: [
+    { scenario: "프론트엔드 위주, 빠른 시작", pick: "vercel", reason: "설정 없이 배포, 무료 시작" },
+    { scenario: "대규모 서비스, 엔터프라이즈", pick: "eks", reason: "확장성 + AWS 생태계" },
+    { scenario: "저예산, 간단한 서비스", pick: "vultr", reason: "월 7천원으로 시작" },
+    { scenario: "학습 목적, 최대 제어", pick: "home-server", reason: "물리 서버로 모든 것 실험" },
+  ],
+};
