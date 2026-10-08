@@ -3,7 +3,8 @@ import type { StepData } from "./types";
 export const infrastructureStep: StepData = {
   id: "infrastructure",
   title: "인프라 (호스팅)",
-  description: "서버를 어디에 둘지 선택해주세요. K8s 선택 시 Jenkins+ArgoCD+Grafana로 CI/CD 및 환경 분리 운영이 가능합니다.",
+  description:
+    "서버를 어디에 둘지 선택해주세요. K8s 기반 선택 시 실제 구축 경험이 있는 풀 스택을 제안합니다.",
   options: [
     {
       id: "vercel",
@@ -69,29 +70,29 @@ export const infrastructureStep: StepData = {
       id: "home-server",
       name: "집 컴퓨터 (K8s)",
       vendor: "자체 관리",
-      tagline: "자체 Kubernetes 클러스터 — 최대 제어권",
+      tagline: "자체 Kubernetes 클러스터 — 풀 스택 CI/CD 실운영",
       pros: [
-        "Jenkins + ArgoCD + Grafana + Harbor 풀 스택 자체 구축",
-        "local → stg → prod 3단계 환경 분리 운영 가능",
-        "하드웨어 비용 1회 지불 — 장기 최저 TCO",
-        "네트워크·데이터 완전 제어",
-        "K8s 운영 경험 축적 — 이후 클라우드 이전 쉬움",
+        "실제 구축·운영 중인 풀 스택: Jenkins·ArgoCD·Grafana·Harbor·OpenBao·Loki·Tempo",
+        "local → stg → prod 3단계 환경 분리 운영 경험 보유",
+        "GitOps 배포 — PR 머지 → 자동 빌드·배포·알림까지 무인",
+        "하드웨어 비용 1회 — 장기 최저 TCO",
+        "K8s 운영 노하우 축적 — 이후 클라우드(EKS) 이전 쉬움",
       ],
       cons: [
         "전기비 + 인터넷 회선 비용",
         "인터넷 회선 속도·안정성 의존",
         "장애 시 직접 대응 (하드웨어 교체 포함)",
-        "초기 셋업에 시간 소요 (OS, K8s, CI/CD 도구)",
+        "초기 셋업에 시간 소요",
       ],
       costRange: "전기료+회선 월 ~3만원 + 초기 하드웨어",
-      bestFor: "실험 + 학습 + 최대 제어 + K8s 경험",
+      bestFor: "풀 스택 CI/CD + K8s 경험 + 비용 최적화",
       monthlyCost: 30000,
     },
   ],
   comparison: [
     { label: "월 비용", values: { vercel: "0원~ (트래픽 따라)", eks: "15만원~", vultr: "7천원~", "home-server": "전기료+회선 ~3만원" } },
     { label: "CI/CD 도구", values: { vercel: "Vercel 자체 (Git push)", eks: "Jenkins + ArgoCD (GitOps)", vultr: "직접 구축 필요", "home-server": "Jenkins + ArgoCD 자체 구축" } },
-    { label: "모니터링", values: { vercel: "Vercel Analytics", eks: "Grafana + Prometheus + CloudWatch", vultr: "직접 구축", "home-server": "Grafana + Prometheus + Loki" } },
+    { label: "모니터링", values: { vercel: "Vercel Analytics", eks: "Grafana + Prometheus + CloudWatch", vultr: "직접 구축", "home-server": "Grafana + Loki + Tempo + Alloy" } },
     { label: "환경 분리", values: { vercel: "preview / production (2단계)", eks: "local / stg / prod (3단계)", vultr: "수동 디렉터리 분리", "home-server": "local / stg / prod (3단계)" } },
     { label: "설정 난이도", values: { vercel: "매우 쉬움", eks: "어려움 (AWS 콘솔)", vultr: "보통", "home-server": "어려움 (OS부터)" } },
     { label: "확장성", values: { vercel: "자동 (Vercel 관리)", eks: "자동 (Kubernetes HPA)", vultr: "수동", "home-server": "하드웨어 교체 필요" } },
@@ -103,7 +104,60 @@ export const infrastructureStep: StepData = {
     { scenario: "프론트엔드 위주, 빠른 시작", pick: "vercel", reason: "설정 없이 배포, 무료 시작" },
     { scenario: "대규모 + CI/CD 자동화", pick: "eks", reason: "Jenkins+ArgoCD+Grafana 풀 스택, 3단계 환경" },
     { scenario: "저예산, 간단한 서비스", pick: "vultr", reason: "월 7천원으로 시작" },
-    { scenario: "K8s 학습 + 자체 클러스터", pick: "home-server", reason: "물리 서버에 K8s 구축, CI/CD 도구 직접 운영" },
+    { scenario: "풀 스택 CI/CD 실운영", pick: "home-server", reason: "Jenkins·ArgoCD·Grafana·Harbor·OpenBao·관측 스택 실제 구축 경험" },
     { scenario: "나중에 클라우드 이전 예정", pick: "home-server", reason: "K8s 경험 축적 후 EKS로 스무스 이전" },
+  ],
+};
+
+// 집 컴퓨터(K8s) 선택 시 표시되는 상세 구성 요약
+export const homeServerStack = {
+  title: "집 컴퓨터 K8s — 실제 구축·운영 중인 스택",
+  categories: [
+    {
+      name: "CI/CD",
+      tools: [
+        { name: "Jenkins", role: "빌드·이미지 push·GitOps 범프 트리거" },
+        { name: "ArgoCD", role: "GitOps 배포 (Git push → 자동 배포)" },
+        { name: "BuildKit", role: "컨테이너 이미지 빌드 (원격 빌더)" },
+        { name: "Harbor", role: "프라이빗 레지스트리 (이미지 저장)" },
+      ],
+    },
+    {
+      name: "관측 (Observability)",
+      tools: [
+        { name: "Grafana", role: "대시보드·시각화" },
+        { name: "Loki", role: "로그 수집·검색" },
+        { name: "Tempo", role: "분산 트레이싱" },
+        { name: "Prometheus", role: "메트릭 수집·알림" },
+        { name: "OTel Collector", role: "텔레메트리 파이프라인" },
+        { name: "Alloy", role: "에이전트 (메트릭/로그/트레이스)" },
+      ],
+    },
+    {
+      name: "보안·시크릿",
+      tools: [
+        { name: "OpenBao", role: "시크릿 관리 (Vault fork) + ESO 동기화" },
+        { name: "cert-manager", role: "TLS 인증서 자동 발급·갱신" },
+      ],
+    },
+    {
+      name: "네트워크",
+      tools: [
+        { name: "Cloudflare Tunnel", role: "외부 노출 (도메인·HTTPS)" },
+        { name: "MetalLB", role: "LoadBalancer (내부 서비스 노출)" },
+        { name: "Ingress (nginx)", role: "경로 기반 라우팅" },
+      ],
+    },
+    {
+      name: "스토리지",
+      tools: [{ name: "OpenEBS", role: "영구 볼륨 (hostpath PV)" }],
+    },
+    {
+      name: "AI 도구",
+      tools: [
+        { name: "PR-Agent", role: "AI 코드 리뷰 (PR 웹훅 → 자동 리뷰)" },
+        { name: "buzz-gateway", role: "CI/CD 알림 (Nostr 메신저 연동)" },
+      ],
+    },
   ],
 };

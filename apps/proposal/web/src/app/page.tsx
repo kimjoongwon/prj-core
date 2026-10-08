@@ -3,14 +3,14 @@
 import { useState, useCallback } from "react";
 import { Button, Container, VStack, HStack, Typography, Chip } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { Rocket, CheckCircle2, Pencil } from "lucide-react";
+import { Rocket, CheckCircle2, Pencil, Server } from "lucide-react";
 import { Stepper } from "../components/Stepper";
 import { StepShell } from "../components/StepShell";
 import { ChoiceCard } from "../components/ChoiceCard";
 import { SummaryView } from "../components/SummaryView";
 import { frontendStep } from "../data/frontend";
 import { backendStep } from "../data/backend";
-import { infrastructureStep } from "../data/infrastructure";
+import { infrastructureStep, homeServerStack } from "../data/infrastructure";
 import { storageStep, databaseStep } from "../data/fixed";
 import { aiServiceStep, aiStack } from "../data/ai-service";
 import type { SelectionState } from "../data/types";
@@ -133,6 +133,36 @@ export default function Page() {
           </div>
           {renderComparisonTable(stepData.options.map((o) => o.name), stepData.comparison)}
           {renderRecommendations(stepData.recommendations)}
+          {step === 3 && selection.infrastructure === "home-server" && (
+            <Card className="w-full p-6">
+              <VStack gap="section">
+                <HStack gap="inline" alignItems="center">
+                  <Server className="h-5 w-5 text-accent" />
+                  <Typography.Heading level={4}>{homeServerStack.title}</Typography.Heading>
+                </HStack>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {homeServerStack.categories.map((cat) => (
+                    <div key={cat.name} className="rounded-lg bg-surface-secondary p-4">
+                      <VStack gap="dense" alignItems="start">
+                        <Typography.Paragraph size="sm" className="font-bold text-accent">
+                          {cat.name}
+                        </Typography.Paragraph>
+                        {cat.tools.map((tool) => (
+                          <HStack key={tool.name} gap="inline" alignItems="start">
+                            <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+                            <VStack gap="flush" alignItems="start">
+                              <Typography.Paragraph size="xs" className="font-semibold">{tool.name}</Typography.Paragraph>
+                              <Typography.Paragraph size="xs" color="muted">{tool.role}</Typography.Paragraph>
+                            </VStack>
+                          </HStack>
+                        ))}
+                      </VStack>
+                    </div>
+                  ))}
+                </div>
+              </VStack>
+            </Card>
+          )}
         </>
       );
     }
