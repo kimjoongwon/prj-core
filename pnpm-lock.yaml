@@ -982,12 +982,6 @@ importers:
 
   apps/proposal/web:
     dependencies:
-      '@cocrepo/toolkit':
-        specifier: workspace:^
-        version: link:../../../packages/common-toolkit
-      '@cocrepo/type':
-        specifier: workspace:^
-        version: link:../../../packages/common-type
       '@cocrepo/ui':
         specifier: workspace:^1.5.0
         version: link:../../../packages/fe-ui
@@ -1019,9 +1013,6 @@ importers:
         specifier: 'catalog:'
         version: 19.2.5(react@19.2.5)
     devDependencies:
-      '@next/bundle-analyzer':
-        specifier: ^16.1.6
-        version: 16.1.6
       '@tailwindcss/postcss':
         specifier: 'catalog:'
         version: 4.3.3
