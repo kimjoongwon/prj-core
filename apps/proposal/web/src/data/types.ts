@@ -29,7 +29,8 @@ export interface SelectionState {
   backend: string | null;
   infrastructure: string | null;
   aiService: boolean;
+  designTool: string | null;
 }
 
-export const TOTAL_STEPS = 7;
+export const TOTAL_STEPS = 8;
 export const RESULT_STEP = TOTAL_STEPS + 1;

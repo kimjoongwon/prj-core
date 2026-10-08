@@ -3,16 +3,18 @@
 import { useState, useCallback } from "react";
 import { Button, Container, VStack, HStack, Typography, Chip } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { Rocket, CheckCircle2, Pencil, Server } from "lucide-react";
+import { Rocket, CheckCircle2, Pencil, Server, Eye } from "lucide-react";
 import { Stepper } from "../components/Stepper";
 import { StepShell } from "../components/StepShell";
 import { ChoiceCard } from "../components/ChoiceCard";
 import { SummaryView } from "../components/SummaryView";
 import { frontendStep } from "../data/frontend";
 import { backendStep } from "../data/backend";
+import { designStep } from "../data/design";
 import { infrastructureStep, homeServerStack } from "../data/infrastructure";
 import { storageStep, databaseStep } from "../data/fixed";
 import { aiServiceStep, aiStack } from "../data/ai-service";
+import { transparencyFeatures } from "../data/transparency";
 import type { SelectionState } from "../data/types";
 import { TOTAL_STEPS } from "../data/types";
 
@@ -20,6 +22,7 @@ const STEP_META = [
   { title: "", description: "" },
   { title: frontendStep.title, description: frontendStep.description },
   { title: backendStep.title, description: backendStep.description },
+  { title: designStep.title, description: designStep.description },
   { title: infrastructureStep.title, description: infrastructureStep.description },
   { title: storageStep.title, description: storageStep.description },
   { title: databaseStep.title, description: databaseStep.description },
@@ -32,6 +35,7 @@ const INITIAL: SelectionState = {
   backend: null,
   infrastructure: null,
   aiService: false,
+  designTool: null,
 };
 
 export default function Page() {
@@ -49,7 +53,8 @@ export default function Page() {
   const canNext = () => {
     if (step === 1) return selection.frontend !== null;
     if (step === 2) return selection.backend !== null;
-    if (step === 3) return selection.infrastructure !== null;
+    if (step === 3) return selection.designTool !== null;
+    if (step === 4) return selection.infrastructure !== null;
     return true;
   };
 
@@ -115,10 +120,22 @@ export default function Page() {
   );
 
   const renderStepContent = () => {
-    if (step === 1 || step === 2 || step === 3) {
-      const stepData = step === 1 ? frontendStep : step === 2 ? backendStep : infrastructureStep;
-      const field = step === 1 ? "frontend" : step === 2 ? "backend" : "infrastructure";
-      const selected = step === 1 ? selection.frontend : step === 2 ? selection.backend : selection.infrastructure;
+    if (step >= 1 && step <= 7) {
+      const stepData =
+        step === 1 ? frontendStep
+        : step === 2 ? backendStep
+        : step === 3 ? designStep
+        : infrastructureStep;
+      const field =
+        step === 1 ? "frontend"
+        : step === 2 ? "backend"
+        : step === 3 ? "designTool"
+        : "infrastructure";
+      const selected =
+        step === 1 ? selection.frontend
+        : step === 2 ? selection.backend
+        : step === 3 ? selection.designTool
+        : selection.infrastructure;
       return (
         <>
           <div className="grid gap-4 md:grid-cols-2">
@@ -133,7 +150,28 @@ export default function Page() {
           </div>
           {renderComparisonTable(stepData.options.map((o) => o.name), stepData.comparison)}
           {renderRecommendations(stepData.recommendations)}
-          {step === 3 && selection.infrastructure && selection.infrastructure !== "vercel" && (
+          {step === 3 && (
+            <Card className="w-full border-2 border-accent bg-accent-soft p-5">
+              <VStack gap="section">
+                <HStack gap="inline" alignItems="center">
+                  <Eye className="h-5 w-5 text-accent" />
+                  <Typography.Heading level={4}>{transparencyFeatures.title}</Typography.Heading>
+                </HStack>
+                <Typography.Paragraph size="sm">{transparencyFeatures.description}</Typography.Paragraph>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {transparencyFeatures.channels.map((ch) => (
+                    <div key={ch.name} className="rounded-lg bg-surface p-3">
+                      <VStack gap="dense" alignItems="start">
+                        <Typography.Paragraph size="sm" className="font-bold text-accent">{ch.name}</Typography.Paragraph>
+                        <Typography.Paragraph size="xs" color="muted">{ch.detail}</Typography.Paragraph>
+                      </VStack>
+                    </div>
+                  ))}
+                </div>
+              </VStack>
+            </Card>
+          )}
+          {step === 4 && selection.infrastructure && selection.infrastructure !== "vercel" && (
             <Card className="w-full p-6">
               <VStack gap="section">
                 <HStack gap="inline" alignItems="center">
@@ -170,8 +208,8 @@ export default function Page() {
       );
     }
 
-    if (step === 4 || step === 5) {
-      const stepData = step === 4 ? storageStep : databaseStep;
+    if (step === 5 || step === 6) {
+      const stepData = step === 5 ? storageStep : databaseStep;
       return (
         <>
           <div className="grid gap-4 md:grid-cols-2">
@@ -184,7 +222,7 @@ export default function Page() {
       );
     }
 
-    if (step === 6) {
+    if (step === 7) {
       return (
         <>
           <div className="grid gap-4 md:grid-cols-2">
@@ -229,15 +267,17 @@ export default function Page() {
       );
     }
 
-    if (step === 7) {
+    if (step === 8) {
+      const designTool = designStep.options.find((o) => o.id === selection.designTool);
       const reviewItems = [
         { step: 1, label: "📱 프론트엔드", value: fe?.name, note: fe?.tagline },
         { step: 2, label: "⚙️ 백엔드", value: be?.name, note: be?.tagline },
-        { step: 3, label: "☁️ 인프라", value: infra?.name, note: infra?.costRange },
-        { step: 4, label: "📦 저장소", value: "Cloudflare R2", note: "10GB 무료 · 송신 무료" },
-        { step: 5, label: "🗄️ 데이터베이스", value: "PostgreSQL", note: "ACID 준수 · JSONB · 무료" },
+        { step: 3, label: "🎨 디자인·기획", value: designTool?.name, note: designTool?.tagline },
+        { step: 4, label: "☁️ 인프라", value: infra?.name, note: infra?.costRange },
+        { step: 5, label: "📦 저장소", value: "Cloudflare R2", note: "10GB 무료 · 송신 무료" },
+        { step: 6, label: "🗄️ 데이터베이스", value: "PostgreSQL", note: "ACID 준수 · JSONB · 무료" },
         {
-          step: 6,
+          step: 7,
           label: "🤖 AI 서비스",
           value: selection.aiService ? "필요 (FastAPI + LangChain)" : "불필요",
           note: selection.aiService ? "Python 서버 별도 운영" : undefined,
@@ -301,7 +341,7 @@ export default function Page() {
               프로젝트에 사용할 기술을 단계별로 선택해주세요. 모든 선택이 끝나면 검토 후 최종 구성을 확인할 수 있습니다.
             </Typography.Paragraph>
             <HStack gap="inline" className="flex-wrap justify-center">
-              {["프론트엔드", "백엔드", "인프라", "저장소", "DB", "AI", "검토"].map((label) => (
+              {["프론트엔드", "백엔드", "디자인", "인프라", "저장소", "DB", "AI", "검토"].map((label) => (
                 <Chip key={label} size="sm">{label}</Chip>
               ))}
             </HStack>
