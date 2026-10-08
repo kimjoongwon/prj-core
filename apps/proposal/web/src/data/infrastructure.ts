@@ -111,7 +111,7 @@ export const infrastructureStep: StepData = {
 
 // 집 컴퓨터(K8s) 선택 시 표시되는 상세 구성 요약
 export const homeServerStack = {
-  title: "집 컴퓨터 K8s — 실제 구축·운영 중인 스택",
+  title: "기본 제공 K8s 스택 — Vercel 제외 전체 선택지 포함",
   categories: [
     {
       name: "CI/CD",

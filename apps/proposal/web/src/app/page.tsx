@@ -133,13 +133,16 @@ export default function Page() {
           </div>
           {renderComparisonTable(stepData.options.map((o) => o.name), stepData.comparison)}
           {renderRecommendations(stepData.recommendations)}
-          {step === 3 && selection.infrastructure === "home-server" && (
+          {step === 3 && selection.infrastructure && selection.infrastructure !== "vercel" && (
             <Card className="w-full p-6">
               <VStack gap="section">
                 <HStack gap="inline" alignItems="center">
                   <Server className="h-5 w-5 text-accent" />
-                  <Typography.Heading level={4}>{homeServerStack.title}</Typography.Heading>
+                  <Typography.Heading level={4}>기본 제공 K8s 스택</Typography.Heading>
                 </HStack>
+                <Typography.Paragraph size="sm" color="muted">
+                  Vercel 제외 모든 인프라 선택지에 아래 스택이 기본 포함됩니다.
+                </Typography.Paragraph>
                 <div className="grid gap-4 md:grid-cols-2">
                   {homeServerStack.categories.map((cat) => (
                     <div key={cat.name} className="rounded-lg bg-surface-secondary p-4">
