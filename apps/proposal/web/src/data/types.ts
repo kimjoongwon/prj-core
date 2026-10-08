@@ -32,3 +32,4 @@ export interface SelectionState {
 }
 
 export const TOTAL_STEPS = 7;
+export const RESULT_STEP = TOTAL_STEPS + 1;

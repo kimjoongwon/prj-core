@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { Button, Container, VStack, HStack, Typography, Chip } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { Rocket, CheckCircle2 } from "lucide-react";
+import { Rocket, CheckCircle2, Pencil } from "lucide-react";
 import { Stepper } from "../components/Stepper";
 import { StepShell } from "../components/StepShell";
 import { ChoiceCard } from "../components/ChoiceCard";
@@ -14,7 +14,9 @@ import { infrastructureStep } from "../data/infrastructure";
 import { storageStep, databaseStep } from "../data/fixed";
 import { aiServiceStep, aiStack } from "../data/ai-service";
 import type { SelectionState } from "../data/types";
-import { TOTAL_STEPS } from "../data/types";
+import { TOTAL_STEPS, RESULT_STEP } from "../data/types";
+
+const STEP_LABELS = ["시작", "프론트엔드", "백엔드", "인프라", "저장소", "DB", "AI", "검토", "결과"];
 
 const INITIAL: SelectionState = {
   frontend: null,
@@ -27,12 +29,13 @@ export default function Page() {
   const [step, setStep] = useState(0);
   const [selection, setSelection] = useState<SelectionState>(INITIAL);
 
-  const next = useCallback(() => setStep((s) => Math.min(s + 1, TOTAL_STEPS + 1)), []);
+  const next = useCallback(() => setStep((s) => Math.min(s + 1, RESULT_STEP)), []);
   const prev = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
   const reset = useCallback(() => {
     setStep(0);
     setSelection(INITIAL);
   }, []);
+  const goTo = useCallback((target: number) => setStep(target), []);
 
   const canNext = () => {
     if (step === 1) return selection.frontend !== null;
@@ -44,6 +47,24 @@ export default function Page() {
   const select = (field: keyof SelectionState, value: string) => {
     setSelection((prev) => ({ ...prev, [field]: value }));
   };
+
+  const fe = frontendStep.options.find((o) => o.id === selection.frontend);
+  const be = backendStep.options.find((o) => o.id === selection.backend);
+  const infra = infrastructureStep.options.find((o) => o.id === selection.infrastructure);
+
+  const reviewItems = [
+    { step: 1, label: "📱 프론트엔드", value: fe?.name, note: fe?.tagline },
+    { step: 2, label: "⚙️ 백엔드", value: be?.name, note: be?.tagline },
+    { step: 3, label: "☁️ 인프라", value: infra?.name, note: infra?.costRange },
+    { step: 4, label: "📦 저장소", value: "Cloudflare R2", note: "10GB 무료 · 송신 무료" },
+    { step: 5, label: "🗄️ 데이터베이스", value: "PostgreSQL", note: "ACID 준수 · JSONB · 무료" },
+    {
+      step: 6,
+      label: "🤖 AI 서비스",
+      value: selection.aiService ? "필요 (FastAPI + LangChain)" : "불필요",
+      note: selection.aiService ? "Python 서버 별도 운영" : undefined,
+    },
+  ];
 
   const renderComparisonTable = (
     headers: string[],
@@ -113,10 +134,10 @@ export default function Page() {
             <Typography.Heading level={1} align="center">기술 스택 선택</Typography.Heading>
             <Typography.Paragraph size="base" color="muted" align="center">
               프로젝트에 사용할 기술을 단계별로 선택해주세요. 각 단계에서 비교 자료를 보여드리고,
-              모든 선택이 끝나면 최종 구성과 예상 비용을 확인할 수 있습니다.
+              모든 선택이 끝나면 검토 후 최종 구성을 확인할 수 있습니다.
             </Typography.Paragraph>
             <HStack gap="inline" className="flex-wrap justify-center">
-              {["프론트엔드", "백엔드", "인프라", "저장소", "DB", "AI"].map((label) => (
+              {["프론트엔드", "백엔드", "인프라", "저장소", "DB", "AI", "검토"].map((label) => (
                 <Chip key={label} size="sm">{label}</Chip>
               ))}
             </HStack>
@@ -127,153 +148,171 @@ export default function Page() {
         </Container>
       )}
 
-      {step === 1 && (
+      {step >= 1 && step <= 6 && (
         <StepShell
-          title={frontendStep.title}
-          description={frontendStep.description}
-          stepNumber={1} totalSteps={TOTAL_STEPS}
-          canNext={canNext()} onNext={next} onPrev={prev}
+          title={
+            step === 1 ? frontendStep.title
+            : step === 2 ? backendStep.title
+            : step === 3 ? infrastructureStep.title
+            : step === 4 ? storageStep.title
+            : step === 5 ? databaseStep.title
+            : aiServiceStep.title
+          }
+          description={
+            step === 1 ? frontendStep.description
+            : step === 2 ? backendStep.description
+            : step === 3 ? infrastructureStep.description
+            : step === 4 ? storageStep.description
+            : step === 5 ? databaseStep.description
+            : aiServiceStep.description
+          }
+          stepNumber={step} totalSteps={TOTAL_STEPS}
+          canNext={canNext()} onNext={next} onPrev={step > 0 ? prev : undefined}
+          isLastStep={step === TOTAL_STEPS}
         >
-          <div className="grid gap-4 md:grid-cols-2">
-            {frontendStep.options.map((opt) => (
-              <ChoiceCard
-                key={opt.id}
-                selected={selection.frontend === opt.id}
-                onSelect={() => select("frontend", opt.id)}
-                option={opt}
-              />
-            ))}
-          </div>
-          {renderComparisonTable(frontendStep.options.map((o) => o.name), frontendStep.comparison)}
-          {renderRecommendations(frontendStep.recommendations)}
-        </StepShell>
-      )}
+          {(step === 1 || step === 2 || step === 3) && (() => {
+            const stepData = step === 1 ? frontendStep : step === 2 ? backendStep : infrastructureStep;
+            const field = step === 1 ? "frontend" : step === 2 ? "backend" : "infrastructure";
+            const selected = step === 1 ? selection.frontend : step === 2 ? selection.backend : selection.infrastructure;
+            return (
+              <>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {stepData.options.map((opt) => (
+                    <ChoiceCard
+                      key={opt.id}
+                      selected={selected === opt.id}
+                      onSelect={() => select(field, opt.id)}
+                      option={opt}
+                    />
+                  ))}
+                </div>
+                {renderComparisonTable(stepData.options.map((o) => o.name), stepData.comparison)}
+                {renderRecommendations(stepData.recommendations)}
+              </>
+            );
+          })()}
 
-      {step === 2 && (
-        <StepShell
-          title={backendStep.title}
-          description={backendStep.description}
-          stepNumber={2} totalSteps={TOTAL_STEPS}
-          canNext={canNext()} onNext={next} onPrev={prev}
-        >
-          <div className="grid gap-4 md:grid-cols-2">
-            {backendStep.options.map((opt) => (
-              <ChoiceCard
-                key={opt.id}
-                selected={selection.backend === opt.id}
-                onSelect={() => select("backend", opt.id)}
-                option={opt}
-              />
-            ))}
-          </div>
-          {renderComparisonTable(backendStep.options.map((o) => o.name), backendStep.comparison)}
-          {renderRecommendations(backendStep.recommendations)}
-        </StepShell>
-      )}
+          {(step === 4 || step === 5) && (() => {
+            const stepData = step === 4 ? storageStep : databaseStep;
+            return (
+              <>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {stepData.options.map((opt) => (
+                    <ChoiceCard key={opt.id} selected onSelect={() => {}} option={opt} />
+                  ))}
+                </div>
+                {renderComparisonTable(stepData.options.map((o) => o.name), stepData.comparison)}
+              </>
+            );
+          })()}
 
-      {step === 3 && (
-        <StepShell
-          title={infrastructureStep.title}
-          description={infrastructureStep.description}
-          stepNumber={3} totalSteps={TOTAL_STEPS}
-          canNext={canNext()} onNext={next} onPrev={prev}
-        >
-          <div className="grid gap-4 md:grid-cols-2">
-            {infrastructureStep.options.map((opt) => (
-              <ChoiceCard
-                key={opt.id}
-                selected={selection.infrastructure === opt.id}
-                onSelect={() => select("infrastructure", opt.id)}
-                option={opt}
-              />
-            ))}
-          </div>
-          {renderComparisonTable(infrastructureStep.options.map((o) => o.name), infrastructureStep.comparison)}
-          {renderRecommendations(infrastructureStep.recommendations)}
-        </StepShell>
-      )}
-
-      {step === 4 && (
-        <StepShell
-          title={storageStep.title}
-          description={storageStep.description}
-          stepNumber={4} totalSteps={TOTAL_STEPS}
-          canNext onNext={next} onPrev={prev}
-        >
-          <div className="grid gap-4 md:grid-cols-2">
-            {storageStep.options.map((opt) => (
-              <ChoiceCard key={opt.id} selected onSelect={() => {}} option={opt} />
-            ))}
-          </div>
-          {renderComparisonTable(storageStep.options.map((o) => o.name), storageStep.comparison)}
-        </StepShell>
-      )}
-
-      {step === 5 && (
-        <StepShell
-          title={databaseStep.title}
-          description={databaseStep.description}
-          stepNumber={5} totalSteps={TOTAL_STEPS}
-          canNext onNext={next} onPrev={prev}
-        >
-          <div className="grid gap-4 md:grid-cols-2">
-            {databaseStep.options.map((opt) => (
-              <ChoiceCard key={opt.id} selected onSelect={() => {}} option={opt} />
-            ))}
-          </div>
-          {renderComparisonTable(databaseStep.options.map((o) => o.name), databaseStep.comparison)}
-        </StepShell>
-      )}
-
-      {step === 6 && (
-        <StepShell
-          title={aiServiceStep.title}
-          description={aiServiceStep.description}
-          stepNumber={6} totalSteps={TOTAL_STEPS}
-          canNext onNext={next} onPrev={prev}
-        >
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card
-              onClick={() => setSelection((p) => ({ ...p, aiService: false }))}
-              className={`cursor-pointer border-2 p-5 ${
-                !selection.aiService ? "border-accent bg-accent-soft" : "border-border"
-              }`}
-            >
-              <VStack gap="inline" alignItems="start">
-                <Typography.Heading level={4}>불필요</Typography.Heading>
-                <Typography.Paragraph size="sm" color="muted">AI 기능 없이 일반 웹서비스만 구축</Typography.Paragraph>
-              </VStack>
-            </Card>
-            <Card
-              onClick={() => setSelection((p) => ({ ...p, aiService: true }))}
-              className={`cursor-pointer border-2 p-5 ${
-                selection.aiService ? "border-accent bg-accent-soft" : "border-border"
-              }`}
-            >
-              <VStack gap="inline" alignItems="start">
-                <Typography.Heading level={4}>필요</Typography.Heading>
-                <Typography.Paragraph size="sm" color="muted">챗봇·추천·문서검색 등 AI 기능 포함</Typography.Paragraph>
-              </VStack>
-            </Card>
-          </div>
-          {selection.aiService && (
-            <Card className="w-full p-4">
-              <VStack gap="dense" alignItems="start">
-                <Typography.Paragraph size="sm" className="font-semibold">AI 스택 구성</Typography.Paragraph>
-                {aiStack.map((tech) => (
-                  <HStack key={tech.id} gap="inline" alignItems="center">
-                    <CheckCircle2 className="h-4 w-4 text-accent" />
-                    <Typography.Paragraph size="sm" className="font-medium">{tech.name}</Typography.Paragraph>
-                    <Typography.Paragraph size="sm" color="muted">— {tech.tagline}</Typography.Paragraph>
-                  </HStack>
-                ))}
-              </VStack>
-            </Card>
+          {step === 6 && (
+            <>
+              <div className="grid gap-4 md:grid-cols-2">
+                <Card
+                  onClick={() => setSelection((p) => ({ ...p, aiService: false }))}
+                  className={`cursor-pointer border-2 p-5 ${
+                    !selection.aiService ? "border-accent bg-accent-soft" : "border-border"
+                  }`}
+                >
+                  <VStack gap="inline" alignItems="start">
+                    <Typography.Heading level={4}>불필요</Typography.Heading>
+                    <Typography.Paragraph size="sm" color="muted">AI 기능 없이 일반 웹서비스만 구축</Typography.Paragraph>
+                  </VStack>
+                </Card>
+                <Card
+                  onClick={() => setSelection((p) => ({ ...p, aiService: true }))}
+                  className={`cursor-pointer border-2 p-5 ${
+                    selection.aiService ? "border-accent bg-accent-soft" : "border-border"
+                  }`}
+                >
+                  <VStack gap="inline" alignItems="start">
+                    <Typography.Heading level={4}>필요</Typography.Heading>
+                    <Typography.Paragraph size="sm" color="muted">챗봇·추천·문서검색 등 AI 기능 포함</Typography.Paragraph>
+                  </VStack>
+                </Card>
+              </div>
+              {selection.aiService && (
+                <Card className="w-full p-4">
+                  <VStack gap="dense" alignItems="start">
+                    <Typography.Paragraph size="sm" className="font-semibold">AI 스택 구성</Typography.Paragraph>
+                    {aiStack.map((tech) => (
+                      <HStack key={tech.id} gap="inline" alignItems="center">
+                        <CheckCircle2 className="h-4 w-4 text-accent" />
+                        <Typography.Paragraph size="sm" className="font-medium">{tech.name}</Typography.Paragraph>
+                        <Typography.Paragraph size="sm" color="muted">— {tech.tagline}</Typography.Paragraph>
+                      </HStack>
+                    ))}
+                  </VStack>
+                </Card>
+              )}
+            </>
           )}
         </StepShell>
       )}
 
-      {step === TOTAL_STEPS + 1 && (
+      {step === 7 && (
+        <Container width="content" className="py-8">
+          <VStack gap="page" alignItems="center">
+            <Typography.Heading level={2} align="center">선택 검토</Typography.Heading>
+            <Typography.Paragraph size="sm" color="muted" align="center">
+              모든 선택을 확인해주세요. 수정하려면 각 항목의 ✏️ 버튼을 누르면 해당 단계로 돌아갑니다.
+            </Typography.Paragraph>
+
+            <Card className="w-full p-6">
+              <VStack gap="section">
+                {reviewItems.map((item) => (
+                  <HStack
+                    key={item.step}
+                    justifyContent="between"
+                    fullWidth
+                    className="border-b border-separator pb-3 last:border-0 last:pb-0"
+                  >
+                    <VStack gap="flush" alignItems="start">
+                      <Typography.Paragraph size="sm" color="muted" className="font-semibold">
+                        {item.label}
+                      </Typography.Paragraph>
+                      <VStack gap="flush" alignItems="start">
+                        <Typography.Paragraph size="base" className="font-bold">
+                          {item.value ?? "미선택"}
+                        </Typography.Paragraph>
+                        {item.note && (
+                          <Typography.Paragraph size="xs" color="muted">{item.note}</Typography.Paragraph>
+                        )}
+                      </VStack>
+                    </VStack>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => goTo(item.step)}
+                      isIconOnly
+                      aria-label="수정"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                  </HStack>
+                ))}
+              </VStack>
+            </Card>
+
+            <HStack gap="inline" className="pb-8">
+              <Button variant="outline" size="md" onClick={prev}>
+                ← 이전
+              </Button>
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={next}
+                isDisabled={!selection.frontend || !selection.backend || !selection.infrastructure}
+              >
+                최종 결과 보기 ✓
+              </Button>
+            </HStack>
+          </VStack>
+        </Container>
+      )}
+
+      {step === RESULT_STEP && (
         <SummaryView selection={selection} onReset={reset} />
       )}
     </main>
