@@ -36,6 +36,9 @@ RUN addgroup --system --gid 1001 nodejs && \
 
 COPY --from=builder --chown=nextjs:nodejs /app/apps/idp/web/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/idp/web/.next/static ./apps/idp/web/.next/static
+# standalone 출력은 public/을 포함하지 않으므로 런타임 이미지에 별도 복사가 필요하다.
+# 없으면 인증 화면의 /brand/plate-mark.svg 등 정적 자산이 404로 깨진다.
+COPY --from=builder --chown=nextjs:nodejs /app/apps/idp/web/public ./apps/idp/web/public
 
 ENV NODE_ENV=production
 ENV PORT=3008

@@ -19,6 +19,7 @@
 | builder 단계 | `out/json`을 먼저 복사한 뒤 prune된 워크스페이스 기준으로 `pnpm install --no-frozen-lockfile --prefer-offline` 실행, `out/full` 복원 후 로컬 `turbo`(`pnpm exec turbo build --filter=idp-web...`)로 `idp-web` 의존 그래프만 빌드 |
 | 러너 단계 | `CMD ["node", "apps/idp/web/server.js"]` |
 | 런타임 | `PORT=3008`, `HOSTNAME=0.0.0.0` |
+| 정적 자산 | 러너 단계에서 `.next/standalone`, `.next/static`, `public/`을 함께 복사 — standalone 출력은 `public/`을 자동 포함하지 않아 별도 복사가 없으면 인증 화면의 `/brand/plate-mark.svg`가 404 |
 
 ## 구현 체크리스트
 
@@ -33,6 +34,7 @@
 
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
+| 2026-10-09 | 러너 단계에 `public/` 복사 추가 — standalone 출력이 `public/`을 포함하지 않아 배포 이미지에서 로그인 화면 로고(`/brand/plate-mark.svg`)가 깨지던 버그 수정 | zcode |
 | 2026-03-17 | Docker 컨텍스트에서 루트 `out/`을 제외하고, `builder` 단계의 Turbo 실행을 `--filter=idp-web...`로 제한해 stale prune 산출물과 비의존 워크스페이스 빌드 간섭을 방지 | codex |
 | 2026-03-09 | `builder` 단계의 Turbo 실행을 `pnpm exec turbo build`로 전환해 전역 설치본 의존을 `setup` 단계의 prune으로 한정 | codex |
 | 2026-03-09 | `idp-web` Docker 빌드에서 `*.e2e.ts` 삭제와 `NEXT_IGNORE_BUILD_ERRORS` 환경 설정을 제거하고, 앱 설정에서 테스트 파일 제외 및 정상 타입 체크를 수행하도록 정리 | codex |
