@@ -15,7 +15,7 @@
 |------|------|
 | 빌드 대상 | `core-api` |
 | 이미지 경로 | `HARBOR_REGISTRY/{prod,stg}/core-api` — SHA-12 커밋 태그만 push (`latest` 없음) |
-| 브랜치 정책 | `main`(prod)·`stg` 허용 (2026-10-05 stg 재가동으로 복원 — B구조 buildkit 유지), 그 외 브랜치/PR은 즉시 실패 |
+| 브랜치 정책 | `main`(prod)·`stg` 허용 (2026-10-05 stg 재가동으로 복원 — B구조 buildkit 유지), 그 외 브랜치/PR은 즉시 실패. **체크아웃은 `BRANCH_NAME` 브랜치 기준**(2026-10-09 — 이전엔 잡 정의 SCM(main)을 그대로 빌드해 stg 빌드가 main 커밋을 태깅함) |
 | 빌드 방식 | `buildctl --addr tcp://buildkitd.devops-tools.svc.cluster.local:1234`로 원격 buildkitd 빌드 (Podman 미사용) |
 | 실행 컨테이너 | `docker.io/moby/buildkit:v0.33.0-rootless` digest 고정, `privileged` 아님, PVC 마운트 없음 |
 | 캐시 저장 | BuildKit 캐시는 buildkitd 데몬의 PVC에 저장되어 빌드 간 재사용됨 |
@@ -49,3 +49,4 @@ buildkitd 데몬이 단일 장애점이므로 데몬 장애 시 이 잡의 빌�
 | 일자 | 내용 | 작성자 |
 |------|------|--------|
 | 2026-10-04 | Podman → BuildKit B구조 전환 · 2026-10-05 | stg 재가동으로 stg 빌드 지원 복원 | zcode |
+| 2026-10-09 | stg 빌드가 잡 정의 SCM(main)을 체크아웃하던 버그 수정 — Checkout 스테이지가 `BRANCH_NAME` 브랜치를 직접 체크아웃하도록 변경 | zcode |

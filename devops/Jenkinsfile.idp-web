@@ -133,7 +133,15 @@ podTemplate(
         try {
             stage('Checkout') {
                 deleteDir()
-                def scmVars = checkout scm
+                // 잡 정의 SCM의 BranchSpec은 항상 main이라 checkout scm은 BRANCH_NAME과 무관하게
+                // main을 체크아웃한다. 빌드 대상 커밋은 검증을 통과한 BRANCH_NAME 브랜치에서 가져온다.
+                def scmVars = checkout scmGit(
+                    branches: [[name: "*/${env.BRANCH_NAME}"]],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/kimjoongwon/prj-core.git',
+                        credentialsId: 'github-app-credential',
+                    ]],
+                )
                 def commitSha = scmVars.GIT_COMMIT ?: env.GIT_COMMIT ?: ''
                 if (commitSha.length() < 12) {
                     error("GIT_COMMIT을 확인할 수 없어 SHA 이미지 태그를 만들 수 없습니다: '${commitSha}'")
