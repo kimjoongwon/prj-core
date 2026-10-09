@@ -10,7 +10,7 @@ import { Transform } from "class-transformer";
  */
 export class LoginPayloadDto extends LoginSchema {
 	@ApiProperty({
-		example: "ceo@f45training.co.kr",
+		example: "ceo@example.com",
 		description: "사용자 이메일",
 	})
 	@Transform(({ value }) =>

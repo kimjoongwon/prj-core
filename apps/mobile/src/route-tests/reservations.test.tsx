@@ -134,7 +134,7 @@ describe("mobile reservations tab route", () => {
             idempotencyKey: "idem-1",
             memo: null,
             occurrenceStartAt: new Date("2026-05-09T10:00:00.000Z"),
-            program: { name: "F45 Strength" },
+            program: { name: "팀핏 Strength" },
             programId: 1n,
             removedAt: null,
             session: { name: "Morning Class" },
@@ -172,7 +172,7 @@ describe("mobile reservations tab route", () => {
         "예약 확정과 대기 상태를 실제 Reservation API 기준으로 확인합니다.",
       ),
     ).toBeTruthy();
-    expect(screen.getByText("F45 Strength")).toBeTruthy();
+    expect(screen.getByText("팀핏 Strength")).toBeTruthy();
     expect(screen.getByText("예약 확정")).toBeTruthy();
     expect(screen.queryByText("스튜디오 촬영 상담")).toBeNull();
     expect(mockUseGetMyReservations).toHaveBeenCalledWith(

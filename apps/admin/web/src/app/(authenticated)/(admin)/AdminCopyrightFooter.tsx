@@ -14,7 +14,7 @@ export const AdminCopyrightFooter = () => {
 				<span aria-hidden="true">·</span>
 				<span>사업자등록번호 123-45-67890</span>
 				<span aria-hidden="true">·</span>
-				<span>서울특별시 성동구 성수이로 88, 8층</span>
+				<span>서울특별시 성동구 샘플로 88, 8층</span>
 			</address>
 
 			<a

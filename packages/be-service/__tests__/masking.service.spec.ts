@@ -25,15 +25,15 @@ describe("MaskingService", () => {
 				preset: MASKING_PRESETS.EMAIL,
 			};
 
-			it("이메일 주소를 마스킹해야 한다: minsu.kim92@gmail.com -> min***@gmail.com", () => {
+			it("이메일 주소를 마스킹해야 한다: minsu.kim92@example.com -> min***@example.com", () => {
 				// Given
-				const email = "minsu.kim92@gmail.com";
+				const email = "minsu.kim92@example.com";
 
 				// When
 				const result = service.applyMasking(email, emailConfig);
 
 				// Then
-				expect(result).toBe("min***@gmail.com");
+				expect(result).toBe("min***@example.com");
 			});
 
 			it("짧은 로컬 파트를 마스킹해야 한다: ab@test.com -> ab***@test.com", () => {
@@ -98,15 +98,15 @@ describe("MaskingService", () => {
 				expect(result).toBe("010-****-9012");
 			});
 
-			it("숫자만 있는 전화번호를 마스킹해야 한다: 01056789012 -> 010****9012", () => {
+			it("숫자만 있는 전화번호를 마스킹해야 한다: 01000000004 -> 010****0004", () => {
 				// Given
-				const phone = "01056789012";
+				const phone = "01000000004";
 
 				// When
 				const result = service.applyMasking(phone, phoneConfig);
 
 				// Then
-				expect(result).toBe("010****9012");
+				expect(result).toBe("010****0004");
 			});
 
 			it("지역번호가 있는 전화번호를 마스킹해야 한다: 02-1234-5678 -> 02-****-5678", () => {
@@ -519,7 +519,7 @@ describe("MaskingService", () => {
 			// Given
 			const user = {
 				name: "김민수",
-				email: "minsu.kim92@gmail.com",
+				email: "minsu.kim92@example.com",
 				age: 30,
 			};
 			const fieldsToMask = new Map<string, ActionConfig>([
@@ -533,7 +533,7 @@ describe("MaskingService", () => {
 			// Then
 			expect(result).toEqual({
 				name: "김*수",
-				email: "min***@gmail.com",
+				email: "min***@example.com",
 				age: 30,
 			});
 		});

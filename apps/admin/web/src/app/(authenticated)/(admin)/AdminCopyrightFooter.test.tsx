@@ -10,9 +10,7 @@ describe("AdminCopyrightFooter", () => {
 		expect(screen.getByText("All rights reserved.")).toBeVisible();
 		expect(screen.getByText("대표 김중원")).toBeVisible();
 		expect(screen.getByText("사업자등록번호 123-45-67890")).toBeVisible();
-		expect(
-			screen.getByText("서울특별시 성동구 성수이로 88, 8층"),
-		).toBeVisible();
+		expect(screen.getByText("서울특별시 성동구 샘플로 88, 8층")).toBeVisible();
 		expect(
 			screen.getByRole("link", { name: "support@plate.example" }),
 		).toHaveAttribute("href", "mailto:support@plate.example");

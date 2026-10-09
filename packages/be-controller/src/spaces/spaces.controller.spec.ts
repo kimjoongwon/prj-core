@@ -99,10 +99,10 @@ describe("SpacesController", () => {
 	it("createSpace는 CreateSpaceCommand로 FitnessCenter 생성 payload를 전달해야 한다", async () => {
 		// Given
 		const dto: CreateSpaceWithFitnessCenterDto = {
-			name: "F45 광화문",
+			name: "팀핏 광화문",
 			label: "광화문점",
-			address: "서울 종로구 세종대로 1",
-			phone: "02-1234-5678",
+			address: "서울 종로구 샘플로 1",
+			phone: "02-0000-0001",
 			email: "gwanghwamun@example.com",
 			contentLanguageCode: "ko_KR" as never,
 			businessNo: "123-45-67890",
@@ -129,9 +129,9 @@ describe("SpacesController", () => {
 	it("updateSpaceFitnessCenter는 UpdateSpaceFitnessCenterCommand로 FitnessCenter 수정 payload를 전달해야 한다", async () => {
 		// Given
 		const dto: UpdateFitnessCenterDto = {
-			name: "F45 광화문 리뉴얼",
+			name: "팀핏 광화문 리뉴얼",
 			label: "광화문 리뉴얼점",
-			address: "서울 종로구 세종대로 11",
+			address: "서울 종로구 샘플로 11",
 			phone: "02-0000-0000",
 			email: "renewal@example.com",
 			imageFileId: "next-image-file-id",

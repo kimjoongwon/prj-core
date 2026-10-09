@@ -31,7 +31,7 @@ export const Default: Story = {
 				isSelected
 				onPressSpace={() => undefined}
 				space={{
-					address: "서울특별시 강남구 테헤란로 123",
+					address: "서울특별시 강남구 샘플로 123",
 					id: "gangnam",
 					name: "강남 리포머 센터",
 				}}
@@ -40,7 +40,7 @@ export const Default: Story = {
 				accessory={<Icon name="arrowRight" size="sm" tone="muted" />}
 				onPressSpace={() => undefined}
 				space={{
-					address: "서울특별시 마포구 양화로 45",
+					address: "서울특별시 마포구 샘플로 45",
 					id: "hongdae",
 					name: "홍대 밸런스 스튜디오",
 				}}

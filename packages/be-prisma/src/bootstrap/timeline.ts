@@ -256,8 +256,8 @@ export async function createTimelineSessionExerciseDomainData(
 		for (const exerciseCatalog of exerciseCatalogSeedData) {
 			const shouldInclude =
 				hashToInt(`${fitnessCenterName}:${exerciseCatalog.code}:include`, 100) <
-				(fitnessCenterName.includes("F45") ||
-				fitnessCenterName.includes("크로스핏")
+				(fitnessCenterName.includes("팀핏") ||
+				fitnessCenterName.includes("리프트하우스")
 					? 78
 					: 62);
 

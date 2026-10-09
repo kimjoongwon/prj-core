@@ -161,8 +161,8 @@ export interface AssetSeedData {
 export const imageAssetSeedData: AssetSeedData[] = [
 	// 로고 이미지
 	{
-		originalName: "f45-logo-primary.png",
-		storageKey: "assets/images/logo/f45-logo-primary-2024.png",
+		originalName: "teamfit-logo-primary.png",
+		storageKey: "assets/images/logo/teamfit-logo-primary-2024.png",
 		kind: "IMAGE",
 		mimeType: "image/png",
 		extension: "png",
@@ -172,8 +172,8 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
-		originalName: "f45-logo-white.png",
-		storageKey: "assets/images/logo/f45-logo-white-2024.png",
+		originalName: "teamfit-logo-white.png",
+		storageKey: "assets/images/logo/teamfit-logo-white-2024.png",
 		kind: "IMAGE",
 		mimeType: "image/png",
 		extension: "png",
@@ -193,8 +193,8 @@ export const imageAssetSeedData: AssetSeedData[] = [
 		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
 	{
-		originalName: "crossfit-logo-official.png",
-		storageKey: "assets/images/logo/crossfit-logo-official.png",
+		originalName: "lifthouse-logo-official.png",
+		storageKey: "assets/images/logo/lifthouse-logo-official.png",
 		kind: "IMAGE",
 		mimeType: "image/png",
 		extension: "png",
@@ -274,8 +274,8 @@ export const imageAssetSeedData: AssetSeedData[] = [
 export const videoAssetSeedData: AssetSeedData[] = [
 	// 클래스 영상
 	{
-		originalName: "f45-training-intro.mp4",
-		storageKey: "assets/videos/class/f45-training-intro-2024.mp4",
+		originalName: "teamfit-training-intro.mp4",
+		storageKey: "assets/videos/class/teamfit-training-intro-2024.mp4",
 		kind: "VIDEO",
 		mimeType: "video/mp4",
 		extension: "mp4",
@@ -418,7 +418,7 @@ export interface ImageDetailSeedData {
 export const imageDetailSeedData: ImageDetailSeedData[] = [
 	// 로고 이미지
 	{
-		storageKey: "assets/images/logo/f45-logo-primary-2024.png",
+		storageKey: "assets/images/logo/teamfit-logo-primary-2024.png",
 		width: 800,
 		height: 400,
 		orientation: 1,
@@ -426,7 +426,7 @@ export const imageDetailSeedData: ImageDetailSeedData[] = [
 		hasAlpha: true,
 	},
 	{
-		storageKey: "assets/images/logo/f45-logo-white-2024.png",
+		storageKey: "assets/images/logo/teamfit-logo-white-2024.png",
 		width: 800,
 		height: 400,
 		orientation: 1,
@@ -442,7 +442,7 @@ export const imageDetailSeedData: ImageDetailSeedData[] = [
 		hasAlpha: true,
 	},
 	{
-		storageKey: "assets/images/logo/crossfit-logo-official.png",
+		storageKey: "assets/images/logo/lifthouse-logo-official.png",
 		width: 1024,
 		height: 512,
 		orientation: 1,
@@ -527,7 +527,7 @@ export interface VideoDetailSeedData {
 export const videoDetailSeedData: VideoDetailSeedData[] = [
 	// 클래스 영상
 	{
-		storageKey: "assets/videos/class/f45-training-intro-2024.mp4",
+		storageKey: "assets/videos/class/teamfit-training-intro-2024.mp4",
 		width: 1920,
 		height: 1080,
 		durationMs: 180000, // 3분
@@ -684,10 +684,10 @@ export interface DerivativeSeedData {
 export const derivativeSeedData: DerivativeSeedData[] = [
 	// 이미지 썸네일 (THUMBNAIL)
 	{
-		sourceStorageKey: "assets/images/logo/f45-logo-primary-2024.png",
+		sourceStorageKey: "assets/images/logo/teamfit-logo-primary-2024.png",
 		kind: "THUMBNAIL",
 		profile: "small",
-		storageKey: "assets/derivatives/thumbnails/f45-logo-primary-thumb.png",
+		storageKey: "assets/derivatives/thumbnails/teamfit-logo-primary-thumb.png",
 		mimeType: "image/png",
 		sizeBytes: 12500,
 		width: 150,
@@ -748,10 +748,10 @@ export const derivativeSeedData: DerivativeSeedData[] = [
 
 	// 비디오 썸네일 (THUMBNAIL)
 	{
-		sourceStorageKey: "assets/videos/class/f45-training-intro-2024.mp4",
+		sourceStorageKey: "assets/videos/class/teamfit-training-intro-2024.mp4",
 		kind: "THUMBNAIL",
 		profile: "default",
-		storageKey: "assets/derivatives/thumbnails/f45-training-intro-thumb.jpg",
+		storageKey: "assets/derivatives/thumbnails/teamfit-training-intro-thumb.jpg",
 		mimeType: "image/jpeg",
 		sizeBytes: 25000,
 		width: 320,
@@ -780,10 +780,10 @@ export const derivativeSeedData: DerivativeSeedData[] = [
 
 	// 비디오 프리뷰 (PREVIEW) - 낮은 해상도 스트리밍용
 	{
-		sourceStorageKey: "assets/videos/class/f45-training-intro-2024.mp4",
+		sourceStorageKey: "assets/videos/class/teamfit-training-intro-2024.mp4",
 		kind: "PREVIEW",
 		profile: "lowres",
-		storageKey: "assets/derivatives/previews/f45-training-intro-preview.mp4",
+		storageKey: "assets/derivatives/previews/teamfit-training-intro-preview.mp4",
 		mimeType: "video/mp4",
 		sizeBytes: 25000000,
 		width: 640,
@@ -825,7 +825,7 @@ export const albumSeedData: AlbumSeedData[] = [
 	{
 		name: "브랜드 에셋",
 		description: "Plate 및 파트너 브랜드 로고, 아이덴티티 에셋 모음",
-		coverStorageKey: "assets/images/logo/f45-logo-primary-2024.png",
+		coverStorageKey: "assets/images/logo/teamfit-logo-primary-2024.png",
 		sortOrder: 0,
 		createdByEmail: resolveSystemAdminSeedData()[0].email,
 	},
@@ -866,15 +866,15 @@ export const albumEntrySeedData: AlbumEntrySeedData[] = [
 	// 브랜드 에셋 앨범
 	{
 		albumName: "브랜드 에셋",
-		assetStorageKey: "assets/images/logo/f45-logo-primary-2024.png",
+		assetStorageKey: "assets/images/logo/teamfit-logo-primary-2024.png",
 		position: 0,
-		caption: "F45 메인 로고",
+		caption: "팀핏 메인 로고",
 	},
 	{
 		albumName: "브랜드 에셋",
-		assetStorageKey: "assets/images/logo/f45-logo-white-2024.png",
+		assetStorageKey: "assets/images/logo/teamfit-logo-white-2024.png",
 		position: 1,
-		caption: "F45 화이트 로고 (어두운 배경용)",
+		caption: "팀핏 화이트 로고 (어두운 배경용)",
 	},
 	{
 		albumName: "브랜드 에셋",
@@ -884,9 +884,9 @@ export const albumEntrySeedData: AlbumEntrySeedData[] = [
 	},
 	{
 		albumName: "브랜드 에셋",
-		assetStorageKey: "assets/images/logo/crossfit-logo-official.png",
+		assetStorageKey: "assets/images/logo/lifthouse-logo-official.png",
 		position: 3,
-		caption: "크로스핏 공식 로고",
+		caption: "리프트하우스 공식 로고",
 	},
 
 	// 웹사이트 배너 앨범
@@ -930,9 +930,9 @@ export const albumEntrySeedData: AlbumEntrySeedData[] = [
 	},
 	{
 		albumName: "클래스 홍보 영상",
-		assetStorageKey: "assets/videos/class/f45-training-intro-2024.mp4",
+		assetStorageKey: "assets/videos/class/teamfit-training-intro-2024.mp4",
 		position: 2,
-		caption: "F45 트레이닝 소개 영상",
+		caption: "팀핏 트레이닝 소개 영상",
 	},
 	{
 		albumName: "클래스 홍보 영상",

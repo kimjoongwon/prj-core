@@ -49,7 +49,7 @@ export class SignUpPayloadDto {
 	@StringField({
 		minLength: 2,
 		maxLength: 255,
-		example: "서울특별시 강남구 테헤란로 123",
+		example: "서울특별시 강남구 샘플로 123",
 		description: "주소 (2-255자)",
 	})
 	address: string;

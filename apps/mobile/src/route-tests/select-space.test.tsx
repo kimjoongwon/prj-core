@@ -93,11 +93,11 @@ const branchSpace = {
   contentLanguageCode: "ko_KR",
   createdAt: "2026-05-17T00:00:00.000Z",
   fitnessCenter: {
-    address: "서울 강남구 테헤란로",
+    address: "서울 강남구 샘플로",
     company: {
-      address: "서울 강남구 테헤란로",
+      address: "서울 강남구 샘플로",
       logoImageFileId: "company-logo-branch",
-      name: "F45",
+      name: "팀핏",
     },
     createdAt: "2026-05-17T00:00:00.000Z",
     email: "gangnam@example.com",
@@ -150,7 +150,7 @@ describe("mobile select space route", () => {
     render(<SpaceSelectRoute />);
 
     expect(screen.getByText("status:ready")).toBeTruthy();
-    expect(screen.getByText("강남점:서울 강남구 테헤란로")).toBeTruthy();
+    expect(screen.getByText("강남점:서울 강남구 샘플로")).toBeTruthy();
     expect(screen.queryByText(/플랫폼 운영본부/)).toBeNull();
 
     fireEvent.press(screen.getByLabelText("space-201"));
