@@ -15,7 +15,7 @@
 |------|------|
 | 빌드 대상 | `idp-api` |
 | 이미지 경로 | `HARBOR_REGISTRY/{prod,stg}/idp-api` — SHA-12 커밋 태그만 push (`latest` 없음) |
-| 브랜치 정책 | `main`(prod)·`stg` 허용 (2026-10-05 stg 재가동으로 복원 — B구조 buildkit 유지), 그 외 브랜치/PR은 즉시 실패 |
+| 브랜치 정책 | `main`(prod)·`stg` 허용 (2026-10-05 stg 재가동으로 복원 — B구조 buildkit 유지), 그 외 브랜치/PR은 즉시 실패. **체크아웃은 `BRANCH_NAME` 브랜치 기준**(2026-10-09 — 이전엔 잡 정의 SCM(main)을 그대로 빌드해 stg 빌드가 main 커밋을 태깅함) |
 | 빌드 방식 | `buildctl --addr tcp://buildkitd.devops-tools.svc.cluster.local:1234`로 원격 buildkitd 빌드 (Podman 미사용) |
 | 실행 컨테이너 | `docker.io/moby/buildkit:v0.33.0-rootless` digest 고정, `privileged` 아님, PVC 마운트 없음 |
 | 캐시 저장 | BuildKit 캐시는 buildkitd 데몬의 PVC에 저장되어 빌드 간 재사용됨 |
@@ -53,3 +53,4 @@ buildkitd 데몬이 단일 장애점이므로 데몬 장애 시 이 잡의 빌�
 | 2026-03-08 | 기존 단일 Job 내 GitOps push 단계를 제거하고 비동기 분리 Job 트리거 구조로 변경 | codex |
 | 2026-10-04 | Podman 빌드에서 BuildKit(buildctl 원격 빌더) B구조로 전환, 하드코딩 registry/credential/job 폴백 제거 및 헤더 게이트 신규 적용 | zcode |
 | 2026-10-04 | 운영 노트 정정 — app-build-jobs Job DSL 파라미터 주입 이미 완료 반영, 남은 외부 조치를 Jenkins 차트 helm upgrade 1건으로 확정 | zcode |
+| 2026-10-09 | stg 빌드가 잡 정의 SCM(main)을 체크아웃하던 버그 수정 — Checkout 스테이지가 `BRANCH_NAME` 브랜치를 직접 체크아웃하도록 변경 | zcode |
