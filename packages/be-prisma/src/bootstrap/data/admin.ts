@@ -28,7 +28,7 @@ export const agreementSeedData: AgreementSeedData[] = [
 		version: "1.0.0",
 		isRequired: true,
 		content: `제1조 (목적)
-이 약관은 F45 Training Korea(이하 "회사")가 제공하는 피트니스 서비스의 이용조건 및 절차에 관한 사항을 규정함을 목적으로 합니다.
+이 약관은 팀핏 트레이닝 코리아(이하 "회사")가 제공하는 피트니스 서비스의 이용조건 및 절차에 관한 사항을 규정함을 목적으로 합니다.
 
 제2조 (용어의 정의)
 1. "서비스"란 회사가 제공하는 피트니스 관련 서비스를 말합니다.
@@ -104,20 +104,20 @@ export interface UserAgreementMappingData {
 export const userAgreementMapping: UserAgreementMappingData[] = [
 	// COMPANY_MANAGER 계정 - 필수 + 마케팅 동의
 	{
-		userEmail: "manager.gwanghwamun@f45.kr",
+		userEmail: "manager.gwanghwamun@example.com",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "MARKETING_CONSENT"],
 	},
 	{
-		userEmail: "manager.gangnam@f45.kr",
+		userEmail: "manager.gangnam@example.com",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "MARKETING_CONSENT"],
 	},
 	{
-		userEmail: "manager.itaewon@crossfit.kr",
+		userEmail: "manager.itaewon@example.com",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "LOCATION_CONSENT"],
 	},
 	// MEMBER 계정 - 다양한 동의 패턴 (테스트 시나리오)
 	{
-		userEmail: "minsu.kim92@gmail.com",
+		userEmail: "minsu.kim92@example.com",
 		agreements: [
 			"TERMS_OF_SERVICE",
 			"PRIVACY_POLICY",
@@ -126,23 +126,23 @@ export const userAgreementMapping: UserAgreementMappingData[] = [
 		], // 모든 동의
 	},
 	{
-		userEmail: "seoyeon_lee@naver.com",
+		userEmail: "seoyeon_lee@example.com",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY"], // 필수만 동의
 	},
 	{
-		userEmail: "yejun.park@kakao.com",
+		userEmail: "yejun.park@example.com",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "MARKETING_CONSENT"], // 마케팅만 추가
 	},
 	{
-		userEmail: "jiwoo0315@gmail.com",
+		userEmail: "jiwoo0315@example.com",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "LOCATION_CONSENT"], // 위치만 추가
 	},
 	{
-		userEmail: "hayoon.jung@naver.com",
+		userEmail: "hayoon.jung@example.com",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY"], // 필수만 동의
 	},
 	{
-		userEmail: "doyoon.kang@gmail.com",
+		userEmail: "doyoon.kang@example.com",
 		agreements: [
 			"TERMS_OF_SERVICE",
 			"PRIVACY_POLICY",

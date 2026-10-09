@@ -3,6 +3,7 @@ import { resolveSystemAdminSeedData } from "../bootstrap/data/system-users";
 /**
  * dev/stg에서 쓰는 사용자/피트니스센터 데모 데이터입니다.
  *
+ * 브랜드·지점명·주소·전화번호·이메일은 전부 실존하지 않는 가상의 데모 값입니다.
  * 이 파일의 핵심 참조 키는 `email`, `fitnessCenter name`입니다. bootstrap 로직은 이 문자열을 기준으로
  * user, fitnessCenter, membership 관계를 이어 붙이므로 값 변경 시 후속 매핑도 함께 봐야 합니다.
  */
@@ -37,8 +38,8 @@ export const userSeedData: UserSeedData[] = [
 	})),
 	// COMPANY_MANAGER 3명 - 각 지점 관리자
 	{
-		email: "manager.gwanghwamun@f45.kr",
-		phone: "01023456789",
+		email: "manager.gwanghwamun@example.com",
+		phone: "01000000001",
 		password: "Admin123!@#",
 		profile: {
 			name: "이점장",
@@ -47,8 +48,8 @@ export const userSeedData: UserSeedData[] = [
 		role: "COMPANY_MANAGER",
 	},
 	{
-		email: "manager.gangnam@f45.kr",
-		phone: "01034567890",
+		email: "manager.gangnam@example.com",
+		phone: "01000000002",
 		password: "Admin123!@#",
 		profile: {
 			name: "박매니저",
@@ -57,8 +58,8 @@ export const userSeedData: UserSeedData[] = [
 		role: "COMPANY_MANAGER",
 	},
 	{
-		email: "manager.itaewon@crossfit.kr",
-		phone: "01045678901",
+		email: "manager.itaewon@example.com",
+		phone: "01000000003",
 		password: "Admin123!@#",
 		profile: {
 			name: "최코치",
@@ -68,8 +69,8 @@ export const userSeedData: UserSeedData[] = [
 	},
 	// MEMBER 6명 - 실제 회원들
 	{
-		email: "minsu.kim92@gmail.com",
-		phone: "01056789012",
+		email: "minsu.kim92@example.com",
+		phone: "01000000004",
 		password: "User123!@#",
 		profile: {
 			name: "김민수",
@@ -78,8 +79,8 @@ export const userSeedData: UserSeedData[] = [
 		role: "MEMBER",
 	},
 	{
-		email: "seoyeon_lee@naver.com",
-		phone: "01067890123",
+		email: "seoyeon_lee@example.com",
+		phone: "01000000005",
 		password: "User123!@#",
 		profile: {
 			name: "이서연",
@@ -88,8 +89,8 @@ export const userSeedData: UserSeedData[] = [
 		role: "MEMBER",
 	},
 	{
-		email: "yejun.park@kakao.com",
-		phone: "01078901234",
+		email: "yejun.park@example.com",
+		phone: "01000000006",
 		password: "User123!@#",
 		profile: {
 			name: "박예준",
@@ -98,8 +99,8 @@ export const userSeedData: UserSeedData[] = [
 		role: "MEMBER",
 	},
 	{
-		email: "jiwoo0315@gmail.com",
-		phone: "01089012345",
+		email: "jiwoo0315@example.com",
+		phone: "01000000007",
 		password: "User123!@#",
 		profile: {
 			name: "최지우",
@@ -108,8 +109,8 @@ export const userSeedData: UserSeedData[] = [
 		role: "MEMBER",
 	},
 	{
-		email: "hayoon.jung@naver.com",
-		phone: "01090123456",
+		email: "hayoon.jung@example.com",
+		phone: "01000000008",
 		password: "User123!@#",
 		profile: {
 			name: "정하윤",
@@ -118,8 +119,8 @@ export const userSeedData: UserSeedData[] = [
 		role: "MEMBER",
 	},
 	{
-		email: "doyoon.kang@gmail.com",
-		phone: "01001234567",
+		email: "doyoon.kang@example.com",
+		phone: "01000000009",
 		password: "User123!@#",
 		profile: {
 			name: "강도윤",
@@ -129,7 +130,7 @@ export const userSeedData: UserSeedData[] = [
 	},
 ];
 
-// 현실적인 피트니스 센터 데이터 (11개: System 1 + Branch 10)
+// 현실적인 구성의 가상 피트니스 센터 데이터 (11개: System 1 + Branch 10)
 export const fitnessCenterSeedData: FitnessCenterSeedData[] = [
 	// 플랫폼 운영본부 (System Space FitnessCenter)
 	{
@@ -141,88 +142,88 @@ export const fitnessCenterSeedData: FitnessCenterSeedData[] = [
 		businessNo: "000-00-00000",
 		isSystem: true,
 	},
-	// F45 Training 지점들
+	// 팀핏 트레이닝 지점들
 	{
-		name: "F45 광화문",
+		name: "팀핏 광화문",
 		label: "본점",
-		address: "서울시 종로구 세종대로 175 광화문D타워 B1",
-		phone: "02-1234-5678",
-		email: "gwanghwamun@f45training.co.kr",
+		address: "서울시 종로구 샘플로 12 샘플빌딩 B1",
+		phone: "02-0000-0001",
+		email: "gwanghwamun@example.com",
 		businessNo: "101-86-12345",
 	},
 	{
-		name: "F45 강남1호",
+		name: "팀핏 강남1호",
 		label: "지점",
-		address: "서울시 강남구 테헤란로 152 강남파이낸스센터 B2",
-		phone: "02-2345-6789",
-		email: "gangnam1@f45training.co.kr",
+		address: "서울시 강남구 샘플로 21 샘플타워 B2",
+		phone: "02-0000-0002",
+		email: "gangnam1@example.com",
 		businessNo: "102-86-23456",
 	},
 	{
-		name: "F45 삼성",
+		name: "팀핏 삼성",
 		label: "지점",
-		address: "서울시 강남구 삼성로 512 삼성타워 B1",
-		phone: "02-3456-7890",
-		email: "samsung@f45training.co.kr",
+		address: "서울시 강남구 샘플로 51 샘플센터 B1",
+		phone: "02-0000-0003",
+		email: "samsung@example.com",
 		businessNo: "103-86-34567",
 	},
 	{
-		name: "F45 잠실",
+		name: "팀핏 잠실",
 		label: "지점",
-		address: "서울시 송파구 올림픽로 300 롯데월드타워 B2",
-		phone: "02-4567-8901",
-		email: "jamsil@f45training.co.kr",
+		address: "서울시 송파구 샘플로 100 샘플타워 B2",
+		phone: "02-0000-0004",
+		email: "jamsil@example.com",
 		businessNo: "104-86-45678",
 	},
-	// 크로스핏 박스들
+	// 리프트하우스 지점들
 	{
-		name: "크로스핏 이태원",
+		name: "리프트하우스 이태원",
 		label: "본점",
-		address: "서울시 용산구 이태원로 200 크로스핏빌딩 2층",
-		phone: "02-5678-9012",
-		email: "itaewon@crossfit.kr",
+		address: "서울시 용산구 샘플로 20 샘플빌딩 2층",
+		phone: "02-0000-0005",
+		email: "itaewon@example.com",
 		businessNo: "201-87-56789",
 	},
 	{
-		name: "크로스핏 마포",
+		name: "리프트하우스 마포",
 		label: "지점",
-		address: "서울시 마포구 양화로 45 메세나폴리스 B1",
-		phone: "02-6789-0123",
-		email: "mapo@crossfit.kr",
+		address: "서울시 마포구 샘플로 45 샘플센터 B1",
+		phone: "02-0000-0006",
+		email: "mapo@example.com",
 		businessNo: "202-87-67890",
 	},
-	// 애니타임 피트니스
+	// 올데이피트니스
 	{
-		name: "애니타임피트니스 역삼",
+		name: "올데이피트니스 역삼",
 		label: "본점",
-		address: "서울시 강남구 역삼로 134 역삼빌딩 3층",
-		phone: "02-7890-1234",
-		email: "yeoksam@anytimefitness.kr",
+		address: "서울시 강남구 샘플로 134 샘플빌딩 3층",
+		phone: "02-0000-0007",
+		email: "yeoksam@example.com",
 		businessNo: "301-88-78901",
 	},
 	{
-		name: "애니타임피트니스 신논현",
+		name: "올데이피트니스 신논현",
 		label: "지점",
-		address: "서울시 강남구 강남대로 472 신논현타워 4층",
-		phone: "02-8901-2345",
-		email: "sinnonhyeon@anytimefitness.kr",
+		address: "서울시 강남구 샘플로 47 샘플타워 4층",
+		phone: "02-0000-0008",
+		email: "sinnonhyeon@example.com",
 		businessNo: "302-88-89012",
 	},
-	// 스포애니
+	// 스포라운지
 	{
-		name: "스포애니 홍대",
+		name: "스포라운지 홍대",
 		label: "본점",
-		address: "서울시 마포구 홍익로 25 홍대스포츠센터 2층",
-		phone: "02-9012-3456",
-		email: "hongdae@spoany.co.kr",
+		address: "서울시 마포구 샘플로 25 샘플스포츠센터 2층",
+		phone: "02-0000-0009",
+		email: "hongdae@example.com",
 		businessNo: "401-89-90123",
 	},
 	{
-		name: "스포애니 건대",
+		name: "스포라운지 건대",
 		label: "지점",
-		address: "서울시 광진구 능동로 120 건대입구역빌딩 B1",
-		phone: "02-0123-4567",
-		email: "kondae@spoany.co.kr",
+		address: "서울시 광진구 샘플로 120 샘플빌딩 B1",
+		phone: "02-0000-0010",
+		email: "kondae@example.com",
 		businessNo: "402-89-01234",
 	},
 ];
@@ -244,43 +245,43 @@ export const userFitnessCenterMapping: UserFitnessCenterMappingData[] = [
 		userEmail: resolveSystemAdminSeedData()[0].email,
 		fitnessCenterNames: ["플랫폼 운영본부"],
 	},
-	// COMPANY_MANAGER - 담당 지점만 (F45 계열)
+	// COMPANY_MANAGER - 담당 지점만 (팀핏 계열)
 	{
-		userEmail: "manager.gwanghwamun@f45.kr",
-		fitnessCenterNames: ["F45 광화문"],
+		userEmail: "manager.gwanghwamun@example.com",
+		fitnessCenterNames: ["팀핏 광화문"],
 	},
 	{
-		userEmail: "manager.gangnam@f45.kr",
-		fitnessCenterNames: ["F45 강남1호", "F45 삼성"], // 강남 지역 담당
+		userEmail: "manager.gangnam@example.com",
+		fitnessCenterNames: ["팀핏 강남1호", "팀핏 삼성"], // 강남 지역 담당
 	},
-	// COMPANY_MANAGER - 크로스핏 담당
+	// COMPANY_MANAGER - 리프트하우스 담당
 	{
-		userEmail: "manager.itaewon@crossfit.kr",
-		fitnessCenterNames: ["크로스핏 이태원", "크로스핏 마포"],
+		userEmail: "manager.itaewon@example.com",
+		fitnessCenterNames: ["리프트하우스 이태원", "리프트하우스 마포"],
 	},
 	// MEMBER - 가입한 지점 (일반 회원)
 	{
-		userEmail: "minsu.kim92@gmail.com",
-		fitnessCenterNames: ["F45 광화문"], // 광화문 회원
+		userEmail: "minsu.kim92@example.com",
+		fitnessCenterNames: ["팀핏 광화문"], // 광화문 회원
 	},
 	{
-		userEmail: "seoyeon_lee@naver.com",
-		fitnessCenterNames: ["F45 강남1호"], // 강남 회원
+		userEmail: "seoyeon_lee@example.com",
+		fitnessCenterNames: ["팀핏 강남1호"], // 강남 회원
 	},
 	{
-		userEmail: "yejun.park@kakao.com",
-		fitnessCenterNames: ["크로스핏 이태원"], // 크로스핏 회원
+		userEmail: "yejun.park@example.com",
+		fitnessCenterNames: ["리프트하우스 이태원"], // 리프트하우스 회원
 	},
 	{
-		userEmail: "jiwoo0315@gmail.com",
-		fitnessCenterNames: ["애니타임피트니스 역삼", "애니타임피트니스 신논현"], // 다중 지점 회원
+		userEmail: "jiwoo0315@example.com",
+		fitnessCenterNames: ["올데이피트니스 역삼", "올데이피트니스 신논현"], // 다중 지점 회원
 	},
 	{
-		userEmail: "hayoon.jung@naver.com",
-		fitnessCenterNames: ["스포애니 홍대"], // 스포애니 회원
+		userEmail: "hayoon.jung@example.com",
+		fitnessCenterNames: ["스포라운지 홍대"], // 스포라운지 회원
 	},
 	{
-		userEmail: "doyoon.kang@gmail.com",
-		fitnessCenterNames: ["F45 잠실", "스포애니 건대"], // 다중 브랜드 회원 (엣지 케이스)
+		userEmail: "doyoon.kang@example.com",
+		fitnessCenterNames: ["팀핏 잠실", "스포라운지 건대"], // 다중 브랜드 회원 (엣지 케이스)
 	},
 ];

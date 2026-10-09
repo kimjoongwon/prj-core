@@ -28,7 +28,7 @@ const createCardItem = (
 	id: "program-1:today",
 	level: "INTERMEDIATE",
 	previewExerciseTags: ["Squat", "Row"],
-	programName: "F45 Strength",
+	programName: "팀핏 Strength",
 	routineLabel: "Lower body",
 	sessionName: "Morning Class",
 	status: "AVAILABLE",
@@ -93,7 +93,7 @@ describe("ReservationHomeScreen", () => {
 		renderWithDesignSystem(<ReservationHomeScreen {...props} />);
 
 		expect(screen.getByText("예약 현황")).toBeTruthy();
-		expect(screen.getByText("F45 Strength")).toBeTruthy();
+		expect(screen.getByText("팀핏 Strength")).toBeTruthy();
 		expect(screen.getByText("예약 가능")).toBeTruthy();
 
 		const allFilter = screen.getByLabelText("filter-all");
