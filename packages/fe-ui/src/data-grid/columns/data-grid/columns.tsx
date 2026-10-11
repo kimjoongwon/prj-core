@@ -162,7 +162,7 @@ export const actionNameColumn = createNameColumn<ActionDto>({
 	fieldKey: "actionKey",
 	accessorKey: "name",
 	size: 200,
-	isRequired: true,
+	enableHiding: false,
 	nameVariant: "identifier",
 });
 
@@ -173,7 +173,6 @@ export const actionDisplayNameColumn = createDisplayNameColumn<ActionDto>({
 /** 액션 그룹을 색상 Chip으로 보여주는 컬럼입니다. */
 export const actionGroupColumn = createGroupColumn<ActionDto>({
 	size: 120,
-	align: "center",
 	cell: ({ row }) => {
 		const group = row.original.group;
 		return (
@@ -187,7 +186,6 @@ export const actionGroupColumn = createGroupColumn<ActionDto>({
 
 export const actionOrderColumn = createPresetColumn<ActionDto>("order", {
 	size: 80,
-	align: "center",
 });
 
 export const actionCreatedAtColumn = createCreatedAtColumn<ActionDto>({
@@ -215,7 +213,7 @@ export function buildActionTableColumns<
 			fieldKey: "actionKey",
 			accessorKey: "name",
 			size: 200,
-			isRequired: true,
+			enableHiding: false,
 			nameVariant: "identifier",
 		}),
 		createDisplayNameColumn<TRow>({
@@ -223,7 +221,6 @@ export function buildActionTableColumns<
 		}),
 		createGroupColumn<TRow>({
 			size: 120,
-			align: "center",
 			cell: ({ row }) => {
 				const group = row.original.group ?? undefined;
 				return (
@@ -249,7 +246,7 @@ export function buildActionTableColumns<
 	return buildColumns<TRow>(
 		...columns,
 		createActionsColumn<TRow>({
-			label: "상세",
+			header: "상세",
 			size: 100,
 			cell: ({ row }) => (
 				<ActionButtonCell
@@ -302,7 +299,6 @@ export function buildUserListTableColumns<
 		}),
 		createPresetColumn<TRow>("role", {
 			size: 120,
-			align: "center",
 			cell: ({ row }) => {
 				const firstRole = row.original.tenants?.[0]?.role;
 				const roleLabel = getRoleLabel(firstRole);
@@ -332,7 +328,7 @@ export const subjectNameColumn = createNameColumn<SubjectDto>({
 	fieldKey: "subjectKey",
 	accessorKey: "name",
 	size: 220,
-	isRequired: true,
+	enableHiding: false,
 	nameVariant: "identifier",
 });
 
@@ -435,9 +431,9 @@ export function buildSubjectTableColumns<
 >() {
 	return buildColumns<TRow>(
 		createDisplayNameColumn<TRow>({
-			label: "대상",
+			header: "대상",
 			size: 220,
-			isRequired: true,
+			enableHiding: false,
 			cell: ({ row }) => (
 				<SummaryCell
 					primary={getSubjectDisplayLabel(row.original)}
@@ -446,9 +442,8 @@ export function buildSubjectTableColumns<
 			),
 		}),
 		createGroupColumn<TRow>({
-			label: "유형",
+			header: "유형",
 			size: 120,
-			align: "center",
 			cell: ({ row }) => {
 				const group = row.original.group;
 				return (
@@ -460,7 +455,7 @@ export function buildSubjectTableColumns<
 			},
 		}),
 		createPresetColumn<TRow>("description", {
-			label: "설명",
+			header: "설명",
 			size: 360,
 			cell: ({ row }) => (
 				<DefaultCell
@@ -484,7 +479,7 @@ export const adminRoleNameColumn = createNameColumn<RoleDto>({
 	fieldKey: "roleKey",
 	accessorKey: "name",
 	size: 180,
-	isRequired: true,
+	enableHiding: false,
 	nameVariant: "identifier",
 	cell: ({ row }) => renderRoleName(row.original.name),
 });
@@ -526,7 +521,7 @@ export function buildAdminRoleTableColumns<
 				fieldKey: "roleKey",
 				accessorKey: "name",
 				size: 180,
-				isRequired: true,
+				enableHiding: false,
 				nameVariant: "identifier",
 				cell: ({ row }) => renderRoleName(row.original.name),
 			}),
@@ -561,7 +556,7 @@ export function buildAbilityListTableColumns<
 >() {
 	return buildColumnsWithDefaultCreatedAt<TRow>([
 		createNameColumn<TRow>({
-			label: "규칙",
+			header: "규칙",
 			size: 240,
 			cell: ({ row }) => (
 				<SummaryCell
@@ -573,7 +568,7 @@ export function buildAbilityListTableColumns<
 			),
 		}),
 		createPresetColumn<TRow>("subjectLabel", {
-			label: "대상",
+			header: "대상",
 			size: 160,
 			cell: ({ row }) => (
 				<DefaultCell
@@ -586,7 +581,7 @@ export function buildAbilityListTableColumns<
 			),
 		}),
 		createPresetColumn<TRow>("actionLabel", {
-			label: "행동",
+			header: "행동",
 			size: 140,
 			cell: ({ row }) => (
 				<DefaultCell
@@ -597,9 +592,8 @@ export function buildAbilityListTableColumns<
 			),
 		}),
 		createPresetColumn<TRow>("fieldCount", {
-			label: "적용 범위",
+			header: "적용 범위",
 			size: 120,
-			align: "center",
 			cell: ({ row }) => {
 				const fieldCount = row.original.fields.length;
 				return (
@@ -611,9 +605,8 @@ export function buildAbilityListTableColumns<
 			},
 		}),
 		createPresetColumn<TRow>("hasConditions", {
-			label: "조건",
+			header: "조건",
 			size: 100,
-			align: "center",
 			cell: ({ row }) => (
 				<BooleanCell
 					value={Boolean(
@@ -657,7 +650,6 @@ export function buildTaskTableColumns<
 			}),
 			createPresetColumn<TRow>("isSchedulable", {
 				size: 110,
-				align: "center",
 				cell: ({ row }) => (
 					<BooleanCell
 						value={Boolean(row.original.exercise.videoFileId)}
@@ -671,7 +663,6 @@ export function buildTaskTableColumns<
 			createPresetColumn<TRow, TRow["exercise"]["duration"]>("duration", {
 				accessorKey: "exercise.duration",
 				size: 100,
-				align: "center",
 				cell: ({ getValue }) => (
 					<DefaultCell value={formatDuration(getValue())} />
 				),
@@ -679,7 +670,6 @@ export function buildTaskTableColumns<
 			createPresetColumn<TRow, TRow["exercise"]["count"]>("count", {
 				accessorKey: "exercise.count",
 				size: 80,
-				align: "center",
 				cell: ({ getValue }) => <DefaultCell value={`${getValue()}회`} />,
 			}),
 			createDescriptionColumn<TRow>({
@@ -775,7 +765,7 @@ export function buildTemplateTableColumns<
 	return buildColumns<TRow>(
 		createPresetColumn<TRow>("code", {
 			size: 220,
-			isRequired: true,
+			enableHiding: false,
 			cell: ({ row }) => (
 				<ActionButtonCell
 					align="start"
@@ -828,14 +818,13 @@ export function buildSpaceTableColumns<
 		createLabelColumn<TRow>({
 			accessorKey: "fitnessCenter.label",
 			size: 120,
-			align: "center",
 			cell: ({ row }) => (
 				<ChipCell label={row.original.fitnessCenter?.label} color="default" />
 			),
 		}),
 		defineColumn<TRow, TRow["contentLanguageCode"]>({
-			field: "contentLanguageCode",
-			label: "콘텐츠 언어",
+			accessorKey: "contentLanguageCode",
+			header: "콘텐츠 언어",
 			size: 130,
 			cell: ({ getValue }) => (
 				<ChipCell
@@ -932,7 +921,7 @@ export function buildAssetTableColumns<
 		[
 			createPresetColumn<TRow>("originalName", {
 				size: 280,
-				isRequired: true,
+				enableHiding: false,
 				cell: ({ row }) =>
 					mode === "picker" ? (
 						<DefaultCell value={row.original.originalName} />
@@ -947,7 +936,6 @@ export function buildAssetTableColumns<
 			}),
 			createPresetColumn<TRow>("kind", {
 				size: 100,
-				align: "center",
 				cell: ({ row }) => (
 					<ChipCell
 						label={getAssetKindLabel(row.original.kind)}
@@ -971,7 +959,6 @@ export function buildAssetTableColumns<
 			}),
 			createPresetColumn<TRow, TRow["sizeBytes"]>("sizeBytes", {
 				size: 120,
-				align: "right",
 				cell: ({ getValue }) => (
 					<DefaultCell value={formatAssetBytes(getValue())} />
 				),
@@ -980,7 +967,6 @@ export function buildAssetTableColumns<
 		[
 			createActionsColumn<TRow>({
 				size: 220,
-				align: "center",
 				cell: ({ row }) => {
 					if (mode === "picker") {
 						const isSelected = row.original.id === selectedAssetId;
@@ -1044,7 +1030,7 @@ export function buildInquiryTableColumns<
 	return buildColumns<TRow>(
 		createPresetColumn<TRow>("customerName", {
 			size: 180,
-			isRequired: true,
+			enableHiding: false,
 			cell: ({ row }) => (
 				<ProfileAvatarCell
 					name={row.original.customerId ?? "고객"}
@@ -1054,7 +1040,7 @@ export function buildInquiryTableColumns<
 		}),
 		createPresetColumn<TRow, TRow["title"]>("title", {
 			size: 260,
-			isRequired: true,
+			enableHiding: false,
 			cell: ({ getValue }) => <DefaultCell value={getValue()} lineClamp={2} />,
 		}),
 		createStatusColumn<TRow>({
@@ -1073,7 +1059,6 @@ export function buildInquiryTableColumns<
 		}),
 		createPresetColumn<TRow>("category", {
 			size: 140,
-			align: "center",
 			cell: ({ getValue }) => {
 				const category = String(getValue() ?? "");
 				return (
@@ -1086,7 +1071,6 @@ export function buildInquiryTableColumns<
 		}),
 		createPresetColumn<TRow>("channel", {
 			size: 120,
-			align: "center",
 			cell: ({ getValue }) => {
 				const channel = String(getValue() ?? "");
 				return (
@@ -1099,7 +1083,6 @@ export function buildInquiryTableColumns<
 		}),
 		createPresetColumn<TRow>("priority", {
 			size: 130,
-			align: "center",
 			cell: ({ getValue }) => {
 				const priority = String(getValue() ?? "");
 				const config = INQUIRY_PRIORITY_CONFIG[
@@ -1114,14 +1097,12 @@ export function buildInquiryTableColumns<
 		}),
 		createPresetColumn<TRow>("assigneeName", {
 			size: 150,
-			align: "center",
 			cell: ({ row }) => (
 				<DefaultCell value={row.original.assigneeId} placeholder="미배정" />
 			),
 		}),
 		createPresetColumn<TRow>("sentiment", {
 			size: 100,
-			align: "center",
 			cell: ({ getValue }) => {
 				const sentiment = String(getValue() ?? "");
 				const config = INQUIRY_SENTIMENT_CONFIG[
@@ -1136,7 +1117,6 @@ export function buildInquiryTableColumns<
 		}),
 		createPresetColumn<TRow>("slaStatus", {
 			size: 120,
-			align: "center",
 			cell: ({ row }) => (
 				<TimeRemainingCell
 					status={getInquirySlaStatus(row.original)}
@@ -1147,7 +1127,6 @@ export function buildInquiryTableColumns<
 		}),
 		createPresetColumn<TRow>("unreadCount", {
 			size: 100,
-			align: "center",
 			cell: ({ getValue }) => {
 				const unreadCount = Number(getValue() ?? 0);
 
@@ -1251,26 +1230,24 @@ export function buildStaticTranslationTableColumns<
 }) {
 	return buildColumns<TRow>(
 		defineColumn<TRow, TRow["languageCode"]>({
-			field: "languageCode",
-			label: "언어",
+			accessorKey: "languageCode",
+			header: "언어",
 			size: 110,
-			align: "center",
 			cell: ({ getValue }) => (
 				<ChipCell label={getStaticTranslationLanguageLabel(getValue())} />
 			),
 		}),
 		defineColumn<TRow, TRow["key"]>({
-			field: "key",
-			label: "번역 키",
+			accessorKey: "key",
+			header: "번역 키",
 			size: 260,
-			isRequired: true,
+			enableHiding: false,
 			cell: ({ getValue }) => <DefaultCell value={getValue()} mono truncate />,
 		}),
 		defineColumn<TRow, TRow["category"]>({
-			field: "category",
-			label: "카테고리",
+			accessorKey: "category",
+			header: "카테고리",
 			size: 130,
-			align: "center",
 			cell: ({ getValue }) => {
 				const category = getValue();
 				return (
@@ -1282,17 +1259,16 @@ export function buildStaticTranslationTableColumns<
 			},
 		}),
 		defineColumn<TRow, TRow["text"]>({
-			field: "text",
-			label: "번역문",
+			accessorKey: "text",
+			header: "번역문",
 			size: 420,
-			isRequired: true,
+			enableHiding: false,
 			cell: ({ getValue }) => <DefaultCell value={getValue()} lineClamp={2} />,
 		}),
 		defineColumn<TRow, TRow["isTranslated"]>({
-			field: "isTranslated",
-			label: "완료",
+			accessorKey: "isTranslated",
+			header: "완료",
 			size: 100,
-			align: "center",
 			cell: ({ getValue }) => (
 				<BooleanCell
 					value={getValue()}
@@ -1304,13 +1280,13 @@ export function buildStaticTranslationTableColumns<
 			),
 		}),
 		defineColumn<TRow, TRow["updatedAt"]>({
-			field: "updatedAt",
-			label: "수정일",
+			accessorKey: "updatedAt",
+			header: "수정일",
 			size: 150,
 			cell: ({ getValue }) => <DateTimeCell value={getValue()} />,
 		}),
 		createActionsColumn<TRow>({
-			label: "관리",
+			header: "관리",
 			size: 120,
 			cell: ({ row }) => (
 				<ActionGroupCell>
@@ -1428,7 +1404,7 @@ export const oidcClientIdColumn = createPresetColumn<
 	OidcClientDto["clientId"]
 >("clientId", {
 	size: 200,
-	isRequired: true,
+	enableHiding: false,
 	cell: ({ getValue }) => <DefaultCell value={getValue()} mono />,
 });
 
@@ -1515,7 +1491,7 @@ export function buildOidcClientTableColumns<
 	return buildColumns<TRow>(
 		createPresetColumn<TRow, TRow["clientId"]>("clientId", {
 			size: 200,
-			isRequired: true,
+			enableHiding: false,
 			cell: ({ getValue }) => <DefaultCell value={getValue()} mono />,
 		}),
 		createPresetColumn<TRow>("name", {
@@ -1632,7 +1608,6 @@ export function buildIdpAccountTableColumns<
 		}),
 		createPresetColumn<TRow>("isPermanentlyLocked", {
 			size: 100,
-			align: "center",
 			cell: ({ row }) => {
 				const config = getLockStatusConfig(row.original);
 				return <ChipCell label={config.label} color={config.color} />;
@@ -1642,7 +1617,6 @@ export function buildIdpAccountTableColumns<
 			"failedLoginAttempts",
 			{
 				size: 80,
-				align: "center",
 				cell: ({ getValue }) => {
 					const count = getValue();
 					return (
@@ -1719,14 +1693,13 @@ export function buildEmailVerificationTableColumns<
 	return buildColumns<TRow>(
 		createEmailColumn<TRow>({
 			size: 240,
-			isRequired: true,
+			enableHiding: false,
 		}),
 		createNameColumn<TRow>({
 			size: 160,
 		}),
 		createPresetColumn<TRow, TRow["status"]>("status", {
 			size: 120,
-			align: "center",
 			cell: ({ getValue }) => {
 				const status = getValue();
 				const config = Object.keys(EMAIL_VERIFICATION_STATUS_CONFIG).includes(
@@ -1745,7 +1718,6 @@ export function buildEmailVerificationTableColumns<
 		}),
 		createPresetColumn<TRow, TRow["lastSendStatus"]>("lastSendStatus", {
 			size: 120,
-			align: "center",
 			cell: ({ getValue }) => {
 				const status = getValue();
 				if (!status) {
@@ -1765,7 +1737,6 @@ export function buildEmailVerificationTableColumns<
 		}),
 		createPresetColumn<TRow, TRow["sendCount"]>("sendCount", {
 			size: 90,
-			align: "center",
 			cell: ({ getValue }) => <DefaultCell value={getValue()} tabular />,
 		}),
 		createPresetColumn<TRow, TRow["expiresAt"]>("expiresAt", {
@@ -1777,10 +1748,9 @@ export function buildEmailVerificationTableColumns<
 			cell: ({ getValue }) => <DateTimeCell value={getValue()} />,
 		}),
 		defineColumn<TRow>({
-			field: "actions",
-			label: "",
+			accessorKey: "actions",
+			header: "",
 			size: 120,
-			align: "center",
 			cell: ({ row }) => {
 				const verification = row.original;
 
@@ -1812,7 +1782,7 @@ export const authAuditLogCreatedAtColumn =
 		fieldKey: "occurredAt",
 		accessorKey: "createdAt",
 		size: 170,
-		isRequired: true,
+		enableHiding: false,
 	});
 
 export const authAuditLogEmailColumn = createEmailColumn<AuthAuditLogDto>();
@@ -1823,7 +1793,6 @@ export const authAuditLogResultColumn = createPresetColumn<
 	AuthAuditLogDto["result"]
 >("result", {
 	size: 100,
-	align: "center",
 	cell: ({ getValue }) => {
 		const config = getAuditResultConfig(getValue());
 		return <ChipCell label={config.label} color={config.color} />;
@@ -1873,12 +1842,11 @@ export function buildAuthAuditLogTableColumns<
 			fieldKey: "occurredAt",
 			accessorKey: "createdAt",
 			size: 170,
-			isRequired: true,
+			enableHiding: false,
 		}),
 		createEmailColumn<TRow>(),
 		createPresetColumn<TRow, TRow["result"]>("result", {
 			size: 100,
-			align: "center",
 			cell: ({ getValue }) => {
 				const config = getAuditResultConfig(getValue());
 				return <ChipCell label={config.label} color={config.color} />;
@@ -1918,7 +1886,7 @@ export function buildOidcSessionTableColumns<
 		[
 			createPresetColumn<TRow, TRow["key"]>("key", {
 				size: 140,
-				isRequired: true,
+				enableHiding: false,
 				/** 긴 세션 키는 앞부분만 노출하고 전체 값은 title로 보존합니다. */
 				cell: ({ getValue }) => {
 					const key = getValue();

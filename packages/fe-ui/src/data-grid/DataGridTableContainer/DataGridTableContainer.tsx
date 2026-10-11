@@ -2,19 +2,17 @@
 
 import type { ReactNode } from "react";
 
-export interface TableContainerProps {
+export interface DataGridTableContainerProps {
 	children: ReactNode;
 	columnWidths: number[];
 	isSelectable?: boolean;
-	ariaLabel: string;
 }
 
-function DataGridTableRoot({
+function DataGridTableContainerView({
 	children,
 	columnWidths,
 	isSelectable = false,
-	ariaLabel,
-}: TableContainerProps) {
+}: DataGridTableContainerProps) {
 	const minimumTableWidth = columnWidths.reduce(
 		(totalWidth, columnWidth) => totalWidth + columnWidth,
 		isSelectable ? 44 : 0,
@@ -25,7 +23,6 @@ function DataGridTableRoot({
 			<div className="overflow-hidden rounded border border-border bg-surface">
 				<div className="overflow-x-auto">
 					<table
-						aria-label={ariaLabel}
 						className="w-full table-fixed border-collapse text-left"
 						style={{ minWidth: minimumTableWidth }}
 					>
@@ -43,4 +40,4 @@ function DataGridTableRoot({
 	);
 }
 
-export const TableContainer = DataGridTableRoot;
+export const DataGridTableContainer = DataGridTableContainerView;

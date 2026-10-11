@@ -1,9 +1,23 @@
 "use client";
 
+import { makeAutoObservable } from "mobx";
 import type { ReactNode } from "react";
 import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
-import type { DataGridActionBarState } from "../state/DataGridActionBarState";
+import type { DataGridState } from "../DataGrid";
+
+export class DataGridActionBarState {
+	constructor(readonly state: DataGridState) {
+		makeAutoObservable(this, { state: false }, { autoBind: true });
+	}
+
+	get selectedCount() {
+		return (
+			this.state.selection?.selectedKeys?.size ??
+			this.state.table.selectedKeys.size
+		);
+	}
+}
 
 export interface DataGridActionBarProps {
 	state: DataGridActionBarState;

@@ -2,11 +2,11 @@
 
 import type { AssetDto } from "@cocrepo/api/assets";
 import type {
-	DataGridColumnConfig,
 	DataGridQueryStates,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Modal, useOverlayState } from "@heroui/react";
 import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -189,7 +189,7 @@ function AssetsGridFallback({
 }: {
 	queryStates: AssetBrowserQueryStates;
 	setQueryStates: AssetBrowserSetQueryStates;
-	columns: DataGridColumnConfig<AssetBrowserAsset>[];
+	columns: ColumnDef<AssetBrowserAsset, any>[];
 	leftInputs: InputConfig[];
 }) {
 	const gridState = useLocalObservable(

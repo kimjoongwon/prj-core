@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { DataGridState } from "../../data-grid";
 import {
 	CategoryEditor,
 	type CategoryEditorDataGridState,
 	type CategoryEditorRow,
 } from "./CategoryEditor";
-import { DataGridChangesState, DataGridState } from "../../data-grid";
 
 const meta = {
 	title: "input/CategoryEditor",
@@ -29,18 +29,48 @@ type Story = StoryObj<typeof meta>;
 const editableApiRows: CategoryEditorRow[] = [
 	{ id: "category-role", name: "운영자 역할", parentId: null, sortOrder: 0 },
 	{ id: "category-space", name: "공용 공간", parentId: null, sortOrder: 1 },
-	{ id: "category-space-team", name: "팀 공간", parentId: "category-space", sortOrder: 0 },
-	{ id: "category-space-team-admin", name: "관리자 공간", parentId: "category-space-team", sortOrder: 0 },
-	{ id: "category-space-personal", name: "개인 공간", parentId: "category-space", sortOrder: 1 },
+	{
+		id: "category-space-team",
+		name: "팀 공간",
+		parentId: "category-space",
+		sortOrder: 0,
+	},
+	{
+		id: "category-space-team-admin",
+		name: "관리자 공간",
+		parentId: "category-space-team",
+		sortOrder: 0,
+	},
+	{
+		id: "category-space-personal",
+		name: "개인 공간",
+		parentId: "category-space",
+		sortOrder: 1,
+	},
 	{ id: "category-asset", name: "자산", parentId: null, sortOrder: 2 },
 ];
 
 const readOnlyApiRows: CategoryEditorRow[] = [
 	{ id: "category-user", name: "사용자", parentId: null, sortOrder: 0 },
 	{ id: "category-space", name: "공용 공간", parentId: null, sortOrder: 1 },
-	{ id: "category-space-team", name: "팀 공간", parentId: "category-space", sortOrder: 0 },
-	{ id: "category-space-team-admin", name: "관리자 공간", parentId: "category-space-team", sortOrder: 0 },
-	{ id: "category-space-personal", name: "개인 공간", parentId: "category-space", sortOrder: 1 },
+	{
+		id: "category-space-team",
+		name: "팀 공간",
+		parentId: "category-space",
+		sortOrder: 0,
+	},
+	{
+		id: "category-space-team-admin",
+		name: "관리자 공간",
+		parentId: "category-space-team",
+		sortOrder: 0,
+	},
+	{
+		id: "category-space-personal",
+		name: "개인 공간",
+		parentId: "category-space",
+		sortOrder: 1,
+	},
 ];
 
 function createCategoryDataGridState(): CategoryEditorDataGridState {
@@ -49,8 +79,11 @@ function createCategoryDataGridState(): CategoryEditorDataGridState {
 		setQueryStates: async () => new URLSearchParams(),
 		toolbar: {},
 		groupPanel: { show: "never" },
-		table: { entity: "Category", columns: [], emptyMessage: "카테고리가 없습니다." },
-		changes: new DataGridChangesState(),
+		table: {
+			entity: "Category",
+			columns: [],
+			emptyMessage: "카테고리가 없습니다.",
+		},
 	}) as CategoryEditorDataGridState;
 }
 
@@ -64,10 +97,10 @@ const CategoryEditorStory = observer(function CategoryEditorStory({
 	// API 응답 원본은 rows에만 두고, 저장 전 변경은 dataGridState.changes에 둡니다.
 	const [rows, setRows] = useState<CategoryEditorRow[]>(() => [...initialRows]);
 	const [dataGridState] = useState(createCategoryDataGridState);
-	const changesSnapshot = dataGridState.changes.toJSON<CategoryEditorRow>();
+	const changesSnapshot = dataGridState.toJSON<CategoryEditorRow>();
 
 	const saveSnapshot = () => {
-		const snapshot = dataGridState.changes.toJSON<CategoryEditorRow>();
+		const snapshot = dataGridState.toJSON<CategoryEditorRow>();
 		const updatedById = new Map(
 			snapshot.updated.map((update) => [update.id, update.changes]),
 		);
@@ -80,7 +113,7 @@ const CategoryEditorStory = observer(function CategoryEditorStory({
 			...snapshot.created,
 		]);
 		// 실제 Feature/Screen도 서버 저장 성공 후 같은 경계에서 snapshot을 비웁니다.
-		dataGridState.changes.clear();
+		dataGridState.clear();
 	};
 
 	return (

@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridEditTrigger } from "@cocrepo/type";
+import type { DataGridEditTrigger, SelectionConfig } from "@cocrepo/type";
 import {
 	SortableContext,
 	useSortable,
@@ -11,23 +11,18 @@ import { flexRender, type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { type CSSProperties, type KeyboardEvent, useEffect } from "react";
-import { Typography } from "../../../data-display/Typography";
-import { type Translate, translateNode } from "../../../i18n";
-import { EditorCell } from "../../cell/EditorCell";
-import { HierarchyCell } from "../../cell/HierarchyCell";
-import { SelectionCell } from "../../cell/SelectionCell";
-import { getColumnAlignClassName } from "../../columns/columnConfig";
-import { DataGridEmptyRow } from "../../DataGridEmptyRow";
+import { Typography } from "../../data-display/Typography";
+import { type Translate, translateNode } from "../../i18n";
+import { EditorCell } from "../cell/EditorCell";
+import { HierarchyCell } from "../cell/HierarchyCell";
+import { SelectionCell } from "../cell/SelectionCell";
 import type {
 	DataGridEditingCell,
 	DataGridEditingState,
 	DataGridTableBodyState,
 	DataGridTableState,
-} from "../../state/DataGridState";
-import type { DataGridBodyRow } from "../../state/grouping";
-import type { DataGridSelectionMode } from "../../state/selection";
-import { getColumnWidthStyle } from "../columnSizing";
-import type { Key } from "../rowKeys";
+	Key,
+} from "../DataGrid";
 
 const DATA_CELL_CLASS_NAME =
 	"border-r border-b border-border px-3 py-0 align-middle text-[13px] text-foreground";
@@ -37,11 +32,11 @@ const CLICKABLE_ROW_CLASS_NAME =
 	"cursor-pointer hover:bg-surface-hover focus-within:bg-surface-hover";
 const DEFAULT_ROW_HOVER_CLASS_NAME = "hover:bg-surface-hover";
 
-export interface TableBodyProps<T extends { id: Key }> {
+export interface DataGridTableBodyProps<T extends { id: Key }> {
 	state: DataGridTableBodyState;
 	config: DataGridTableState;
-	rows: DataGridBodyRow<T>[];
-	selectionMode: DataGridSelectionMode;
+	rows: Row<T>[];
+	selectionMode: Exclude<SelectionConfig["mode"], "none"> | undefined;
 	tableColumnCount: number;
 }
 
@@ -152,10 +147,8 @@ interface DataGridDataRowProps<T extends { id: Key }> {
 	) => void;
 	row: Row<T>;
 	isSelected: boolean;
-	selectionMode: DataGridSelectionMode;
+	selectionMode: Exclude<SelectionConfig["mode"], "none"> | undefined;
 	isRowMoveEnabled: boolean;
-	activeRowId?: string | null;
-	projectedDepth?: number | null;
 	editingCell: DataGridEditingCell | null;
 	onEditingCellChange: DataGridEditingState["setEditingCell"];
 	onMoveToAdjacentCell: (
@@ -174,8 +167,6 @@ function DataGridDataRowView<T extends { id: Key }>({
 	row,
 	isSelected,
 	selectionMode,
-	activeRowId,
-	projectedDepth,
 	editingCell,
 	onEditingCellChange,
 	onMoveToAdjacentCell,
@@ -250,7 +241,7 @@ function DataGridDataRowView<T extends { id: Key }>({
 				/>
 			) : null}
 			{row.getVisibleCells().map((cell) => {
-				const alignClassName = getColumnAlignClassName(cell.column.columnDef);
+				const alignClassName = "";
 				const editable = cell.column.columnDef.meta?.editable;
 				const isEditable = Boolean(
 					onCellValueChange &&
@@ -372,11 +363,7 @@ function DataGridDataRowView<T extends { id: Key }>({
 				const renderedContent = cell.column.columnDef.meta?.rowExpander ? (
 					<HierarchyCell
 						rowLabel={String(cell.getValue() ?? row.original.id)}
-						depth={
-							activeRowId === row.id && projectedDepth != null
-								? projectedDepth
-								: row.depth
-						}
+						depth={row.depth}
 						canExpand={row.getCanExpand()}
 						isExpanded={row.getIsExpanded()}
 						onToggle={row.getToggleExpandedHandler()}
@@ -413,7 +400,6 @@ function DataGridDataRowView<T extends { id: Key }>({
 						]
 							.filter(Boolean)
 							.join(" ")}
-						style={getColumnWidthStyle(cell.column.getSize())}
 						tabIndex={isEditable && !isEditing ? 0 : undefined}
 						onClick={
 							isEditable && !isEditing && triggers.includes("click")
@@ -471,20 +457,18 @@ function DataGridDataRow<T extends { id: Key }>(
 	);
 }
 
-function TableBodyView<T extends { id: Key }>({
+function DataGridTableBodyView<T extends { id: Key }>({
 	state,
 	config,
 	rows,
 	selectionMode,
 	tableColumnCount,
-}: TableBodyProps<T>) {
+}: DataGridTableBodyProps<T>) {
 	const rowConfig = config;
 	const bodyRows = rows;
 	const selectedKeys = state.selectedKeys;
 	const t: Translate = (value) => value;
 	const isRowMoveEnabled = Boolean(rowConfig.onRowMove);
-	const activeRowId = undefined;
-	const projectedDepth = undefined;
 	const onCellValueChange = state.changeCellValue;
 	const onRowSelectionChange = (rowKey: string, isSelected: boolean) =>
 		state.changeRowSelection(
@@ -542,10 +526,11 @@ function TableBodyView<T extends { id: Key }>({
 		>
 			<tbody>
 				{bodyRows.length === 0 ? (
-					<DataGridEmptyRow
-						colSpan={tableColumnCount}
-						emptyMessage={rowConfig.emptyMessage}
-					/>
+					<tr>
+						<td className={DATA_CELL_CLASS_NAME} colSpan={tableColumnCount}>
+							{rowConfig.emptyMessage}
+						</td>
+					</tr>
 				) : (
 					bodyRows.map((row) => {
 						const isSelected = selectedKeySet.has(row.id);
@@ -570,8 +555,6 @@ function TableBodyView<T extends { id: Key }>({
 								isSelected={isSelected}
 								selectionMode={selectionMode}
 								isRowMoveEnabled={isRowMoveEnabled}
-								activeRowId={activeRowId}
-								projectedDepth={projectedDepth}
 								editingCell={editingCell}
 								onEditingCellChange={state.editing.setEditingCell}
 								onMoveToAdjacentCell={moveToAdjacentCell}
@@ -585,4 +568,6 @@ function TableBodyView<T extends { id: Key }>({
 	);
 }
 
-export const TableBody = observer(TableBodyView) as typeof TableBodyView;
+export const DataGridTableBody = observer(
+	DataGridTableBodyView,
+) as typeof DataGridTableBodyView;

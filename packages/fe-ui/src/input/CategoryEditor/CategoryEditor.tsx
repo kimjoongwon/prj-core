@@ -1,6 +1,6 @@
 "use client";
 
-import { CategoryFormSchema, validateFieldSync } from "@cocrepo/schema";
+import { CategoryFormSchema } from "@cocrepo/schema";
 import type {
 	DataGridEditRequest,
 	DataGridExpandRequest,
@@ -10,11 +10,7 @@ import { ButtonGroup } from "@heroui/react";
 import type { CellContext } from "@tanstack/react-table";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import {
-	DataGrid,
-	type DataGridChangesState,
-	DataGridState,
-} from "../../data-grid";
+import { DataGrid, DataGridState } from "../../data-grid";
 import { DataGridLoading } from "../../data-grid/DataGridLoading";
 import { Button } from "../Button";
 
@@ -27,9 +23,7 @@ export interface CategoryEditorRow {
 }
 
 /** CategoryEditor의 생성·수정·삭제 delta를 보관하는 외부 grid 상태입니다. */
-export type CategoryEditorDataGridState = DataGridState & {
-	changes: DataGridChangesState;
-};
+export type CategoryEditorDataGridState = DataGridState;
 
 export interface CategoryEditorProps extends InputStateProps {
 	/** 상위 Feature 또는 Screen이 보관하는 API 원본 행입니다. */
@@ -67,14 +61,14 @@ class State {
 
 	get categoryRowsWithChanges() {
 		const categoryChangesSnapshot =
-			this.dataGridState.changes.toJSON<CategoryEditorRow>();
+			this.dataGridState.toJSON<CategoryEditorRow>();
 		const deletedCategoryIds = new Set(categoryChangesSnapshot.deleted);
 		const originalCategoryIds = new Set(
 			this.rows.map((categoryRow) => categoryRow.id),
 		);
 		const existingCategoryRows = this.rows
 			.filter((categoryRow) => !deletedCategoryIds.has(categoryRow.id))
-			.map((categoryRow) => this.dataGridState.changes.getRow(categoryRow));
+			.map((categoryRow) => this.dataGridState.getRow(categoryRow));
 		const createdCategoryRows = categoryChangesSnapshot.created.filter(
 			(categoryRow) => !originalCategoryIds.has(categoryRow.id),
 		);
@@ -109,7 +103,7 @@ class State {
 	}
 
 	deleteCategory(categoryId: string) {
-		this.dataGridState.changes.deleteRow(categoryId);
+		this.dataGridState.deleteRow(categoryId);
 	}
 
 	private addCategory(parentCategoryRow: CategoryEditorRow | null) {
@@ -122,7 +116,7 @@ class State {
 			siblingCategoryRows.length,
 		);
 
-		this.dataGridState.changes.addRow(newCategoryRow);
+		this.dataGridState.addRow(newCategoryRow);
 		if (parentCategoryRow) {
 			this.expandRequest = {
 				rowId: parentCategoryRow.id,
@@ -133,10 +127,7 @@ class State {
 			rowId: newCategoryRow.id,
 			columnId: "name",
 			requestId,
-		} satisfies Pick<
-			ConstructorParameters<typeof DataGridState>[0],
-			"toolbar" | "groupPanel" | "table"
-		>;
+		};
 	}
 
 	private issueRequestId() {
@@ -198,35 +189,16 @@ export const CategoryEditor = observer(
 				entity: "Category",
 				columns: [
 					{
-						field: "name",
-						label: "이름",
-						isRequired: true,
-						rowExpander: true,
-						...(isReadOnly
-							? {}
-							: {
-									editable: {
-										editor: {
-											type: "text",
-											placeholder: "카테고리 이름 입력",
-										},
-										triggers: ["click", "enter", "f2"],
-										validate: ({ value }) =>
-											validateFieldSync(
-												CategoryFormSchema,
-												{ name: value },
-												"name",
-											)?.messages[0],
-									},
-								}),
+						accessorKey: "name",
+						header: "이름",
+						enableHiding: false,
 					},
 					...(isReadOnly
 						? []
 						: [
 								{
-									field: "actions",
-									label: "관리",
-									align: "center" as const,
+									accessorKey: "actions",
+									header: "관리",
 									cell: ({
 										row: categoryRow,
 									}: CellContext<CategoryEditorRow, unknown>) => (
@@ -255,14 +227,16 @@ export const CategoryEditor = observer(
 				expandRequest: state.expandRequest,
 				editRequest: state.editRequest,
 			},
-		};
+		} satisfies Pick<
+			ConstructorParameters<typeof DataGridState>[0],
+			"toolbar" | "groupPanel" | "table"
+		>;
 		const gridState = new DataGridState({
 			queryStates: {},
 			setQueryStates: async () => new URLSearchParams(),
 			...config,
 			rows: state.rootCategoryRows,
 			totalCount,
-			changes: dataGridState.changes,
 		});
 
 		return isLoading ? <DataGridLoading /> : <DataGrid state={gridState} />;

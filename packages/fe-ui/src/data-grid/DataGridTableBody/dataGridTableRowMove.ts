@@ -1,6 +1,6 @@
 import type { DataGridRowMoveEvent } from "@cocrepo/type";
 import { arrayMove } from "@dnd-kit/sortable";
-import type { Key } from "../rowKeys";
+import type { Key } from "../DataGrid";
 
 export interface DataGridMoveItem<TData extends { id: Key }> {
 	id: string;

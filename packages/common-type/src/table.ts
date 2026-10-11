@@ -1,4 +1,3 @@
-import type { ColumnDef, RowData } from "@tanstack/react-table";
 import type { ComponentType, ReactNode } from "react";
 
 // ============================================
@@ -78,8 +77,6 @@ export interface DataGridSelectionState {
 	clear?: () => void;
 }
 
-export type DataGridEditTrigger = "click" | "doubleClick" | "enter" | "f2";
-
 export type DataGridEditorType =
 	| "text"
 	| "number"
@@ -112,36 +109,6 @@ export interface DataGridEditValidationContext<TData, TValue = unknown> {
 
 export type DataGridEditValidationResult = string | null | undefined;
 
-/** 편집 renderer가 현재 행과 값을 읽고 완료 또는 취소하는 데 필요한 값입니다. */
-export interface DataGridEditCellContext<TData, TValue = unknown> {
-	row: TData;
-	field: string;
-	value: TValue;
-	initialValue: TValue;
-	errorMessage?: string;
-	isValidating: boolean;
-	onValueChange: (value: TValue) => void;
-	onFinish: (direction?: "next" | "previous") => void;
-	onCancel: () => void;
-}
-
-/** DataGrid가 제공하는 셀 편집 계약입니다. */
-export interface DataGridEditableConfig<TData, TValue = unknown> {
-	editor?: DataGridEditorConfig;
-	triggers?: DataGridEditTrigger[];
-	isEnabled?: (row: TData) => boolean;
-	validate?: (
-		context: DataGridEditValidationContext<TData, TValue>,
-	) => DataGridEditValidationResult | Promise<DataGridEditValidationResult>;
-	onCommit?: (
-		context: DataGridEditValidationContext<TData, TValue>,
-	) => void | Promise<void>;
-	onCancel?: (
-		context: DataGridEditValidationContext<TData, TValue>,
-	) => void | Promise<void>;
-	render?: (context: DataGridEditCellContext<TData, TValue>) => ReactNode;
-}
-
 /** 행 이동 후 상위 데이터가 적용할 부모와 형제 순서입니다. */
 export interface DataGridRowMoveEvent<TData> {
 	row: TData;
@@ -172,50 +139,6 @@ export interface DataGridGroupPanelConfig {
 export interface DataGridGroupableColumnItem {
 	id: string;
 	label: string;
-}
-
-// ============================================
-// DataGridColumnConfig (TanStack Table ColumnDef 확장)
-// ============================================
-
-/**
- * TanStack Table의 ColumnDef를 확장한 컬럼 설정
- * 기본 ColumnDef의 모든 기능을 사용하면서 추가 메타데이터 제공
- */
-export interface DataGridColumnConfig<TData, TValue = unknown>
-	extends Omit<ColumnDef<TData, TValue>, "id"> {
-	/** 필드명 (ColumnDef의 id로도 사용됨) */
-	field: keyof TData | string;
-
-	/** 표시 라벨 (header의 기본값) */
-	label: string;
-
-	/** 필수 여부 (필수 컬럼은 디바이스와 관계없이 항상 표시) */
-	isRequired?: boolean;
-
-	/** 정렬 방향 */
-	align?: "left" | "center" | "right";
-
-	/** 정렬 가능 여부 */
-	isSortable?: boolean;
-
-	/** AG Grid `rowGroup`처럼 해당 컬럼을 기본 row grouping 기준으로 사용 */
-	rowGroup?: boolean;
-
-	/** AG Grid `enableRowGroup`처럼 panel에서 grouping 기준으로 선택 가능 */
-	enableRowGroup?: boolean;
-
-	/** 컬럼 header 아래에 표시할 필터 입력 */
-	headerInput?: InputConfig;
-
-	/** header 아래 floating filter row에 `headerInput`을 노출할지 여부 */
-	floatingFilter?: boolean;
-
-	/** 계층 행의 펼침 버튼과 들여쓰기를 표시할 컬럼 */
-	rowExpander?: boolean;
-
-	/** 셀 클릭 시 사용할 인라인 편집 렌더러 */
-	editable?: DataGridEditableConfig<TData, TValue>;
 }
 
 // ============================================
@@ -349,31 +272,3 @@ export interface SelectionConfig {
 	};
 }
 
-// ============================================
-// TanStack Table 메타 타입 확장
-// ============================================
-
-declare module "@tanstack/react-table" {
-	interface ColumnMeta<TData extends RowData, TValue> {
-		/** 필수 컬럼 여부 */
-		isRequired?: boolean;
-		/** 정렬 방향 */
-		align?: "left" | "center" | "right";
-		/** 표시 라벨 */
-		label?: string;
-		/** 정렬 가능 여부 */
-		isSortable?: boolean;
-		/** 기본 row grouping 컬럼 여부 */
-		rowGroup?: boolean;
-		/** row group panel에서 선택 가능한 컬럼 여부 */
-		enableRowGroup?: boolean;
-		/** 컬럼 header filter 입력 */
-		headerInput?: InputConfig;
-		/** header 아래 floating filter row 표시 여부 */
-		floatingFilter?: boolean;
-		/** 계층 행 펼침과 들여쓰기 표시 여부 */
-		rowExpander?: boolean;
-		/** 셀 인라인 편집 계약 */
-		editable?: DataGridEditableConfig<TData, TValue>;
-	}
-}

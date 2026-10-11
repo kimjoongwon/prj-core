@@ -1,6 +1,10 @@
 "use client";
 
-import type { DataGridGroupableColumnItem } from "@cocrepo/type";
+import type {
+	DataGridGroupableColumnItem,
+	DataGridGroupPanelConfig,
+} from "@cocrepo/type";
+import type { GroupingState, Updater } from "@tanstack/react-table";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -9,15 +13,37 @@ import {
 	Plus,
 	X,
 } from "lucide-react";
+import { makeAutoObservable } from "mobx";
 import type { DragEvent } from "react";
 import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
-import type { DataGridGroupPanelState } from "../state/DataGridGroupPanelState";
+import type { DataGridState } from "../DataGrid";
 
 type RowGroupPanelShow = "never" | "always" | "onlyWhenGrouping";
 
 const GROUP_COLUMN_DATA_TYPE = "application/x-cocrepo-data-grid-column-id";
+
+export class DataGridGroupPanelState {
+	show?: DataGridGroupPanelConfig["show"];
+
+	constructor(
+		readonly state: DataGridState,
+		config: DataGridGroupPanelConfig = {},
+	) {
+		this.show = config.show;
+		makeAutoObservable(this, { state: false, show: false }, { autoBind: true });
+	}
+
+	changeGrouping(nextGrouping: Updater<GroupingState>) {
+		const grouping = this.state.table.getGroupingState();
+		const updatedGrouping =
+			typeof nextGrouping === "function"
+				? nextGrouping(grouping)
+				: nextGrouping;
+		return this.state.querySetter({ groupBy: updatedGrouping, skip: 0 });
+	}
+}
 
 export interface DataGridGroupPanelProps {
 	state: DataGridGroupPanelState;

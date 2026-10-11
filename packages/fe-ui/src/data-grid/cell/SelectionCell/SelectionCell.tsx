@@ -1,7 +1,7 @@
 "use client";
 
+import type { SelectionConfig } from "@cocrepo/type";
 import { useT } from "../../../i18n";
-import type { DataGridSelectionMode } from "../../state/selection";
 
 const DATA_GRID_SELECTION_COLUMN_LABEL = "행 선택";
 
@@ -9,7 +9,7 @@ export interface SelectionCellProps {
 	entity: string;
 	isSelected: boolean;
 	rowKey: string;
-	selectionMode: Exclude<DataGridSelectionMode, undefined>;
+	selectionMode: Exclude<SelectionConfig["mode"], "none">;
 	onSelectionChange: (rowKey: string, isSelected: boolean) => void;
 }
 

@@ -1,14 +1,14 @@
 "use client";
 
+import type { SortDirection } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import type { ReactNode } from "react";
 import { translateNode, useT } from "../../../i18n";
 import { Button } from "../../../input/Button/Button";
-import type { DataGridSortDirection } from "../../state/sorting";
 
 export interface ColumnSortInputProps {
 	label: ReactNode;
-	sortDirection: DataGridSortDirection;
+	sortDirection: SortDirection | null;
 	onToggle: () => void;
 }
 

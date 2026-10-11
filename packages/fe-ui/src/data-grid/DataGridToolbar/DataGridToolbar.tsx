@@ -1,33 +1,56 @@
 "use client";
 
-import type { DataGridColumnSettingItem, InputConfig } from "@cocrepo/type";
-import type { RowData, Table as TanStackTable } from "@tanstack/react-table";
-import { DataGridColumnSettings } from "../DataGridColumnSettings";
+import type { InputConfig } from "@cocrepo/type";
+import { makeAutoObservable } from "mobx";
+import { observer } from "mobx-react-lite";
+import type { DataGridState } from "../DataGrid";
 import { InputRenderer } from "../input/InputRenderer";
-import type { DataGridToolbarState } from "../state/DataGridToolbarState";
 
-const DATA_GRID_COLUMN_SETTINGS_INPUT_ID = "__data-grid-column-settings";
+const emptyInputConfigs: InputConfig[] = [];
 
-export interface DataGridToolbarProps<TData extends RowData> {
+export class DataGridToolbarState {
+	leftInputs = emptyInputConfigs;
+	rightInputs = emptyInputConfigs;
+
+	constructor(
+		readonly state: DataGridState,
+		leftInputs = emptyInputConfigs,
+		rightInputs = emptyInputConfigs,
+	) {
+		this.leftInputs = leftInputs;
+		this.rightInputs = rightInputs;
+		makeAutoObservable(
+			this,
+			{
+				state: false,
+				leftInputs: false,
+				rightInputs: false,
+			},
+			{ autoBind: true },
+		);
+	}
+
+	get queryValues() {
+		return this.state.queryStates;
+	}
+
+	changeQuery(values: Record<string, unknown | null>) {
+		return this.state.querySetter(values);
+	}
+}
+
+export interface DataGridToolbarProps {
 	state: DataGridToolbarState;
 	leftInputs?: InputConfig[];
 	rightInputs?: InputConfig[];
-	settingsColumns: DataGridColumnSettingItem[];
-	table: TanStackTable<TData>;
 }
 
-export function DataGridToolbarView<TData extends RowData>({
+export function DataGridToolbarView({
 	state,
 	leftInputs = [],
 	rightInputs = [],
-	settingsColumns,
-	table,
-}: DataGridToolbarProps<TData>) {
-	const shouldRenderColumnSettings = settingsColumns.length > 0;
-	const shouldRenderToolbar =
-		leftInputs.length > 0 ||
-		rightInputs.length > 0 ||
-		shouldRenderColumnSettings;
+}: DataGridToolbarProps) {
+	const shouldRenderToolbar = leftInputs.length > 0 || rightInputs.length > 0;
 
 	if (!shouldRenderToolbar) {
 		return null;
@@ -54,14 +77,11 @@ export function DataGridToolbarView<TData extends RowData>({
 						onQueryChange={state.changeQuery}
 					/>
 				))}
-				{shouldRenderColumnSettings ? (
-					<DataGridColumnSettings
-						columns={settingsColumns}
-						table={table}
-						key={DATA_GRID_COLUMN_SETTINGS_INPUT_ID}
-					/>
-				) : null}
 			</div>
 		</div>
 	);
 }
+
+export const DataGridToolbar = observer(
+	DataGridToolbarView,
+) as typeof DataGridToolbarView;

@@ -1,1 +1,0 @@
-export { DataGridTableHeaderState } from "../DataGridState";

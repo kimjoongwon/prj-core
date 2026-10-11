@@ -1,9 +1,49 @@
 "use client";
 
+import type {
+	PaginationState,
+	RowData,
+	Table as TanStackTable,
+	Updater,
+} from "@tanstack/react-table";
+import { makeAutoObservable } from "mobx";
 import { useT } from "../../i18n";
 import { Pagination } from "../../input/Pagination/Pagination";
-import type { RowData, Table as TanStackTable } from "@tanstack/react-table";
-import type { DataGridPaginationState } from "../state/DataGridPaginationState";
+import type { DataGridState } from "../DataGrid";
+
+export class DataGridPaginationState {
+	totalCount = 0;
+
+	constructor(
+		readonly state: DataGridState,
+		totalCount = 0,
+	) {
+		this.totalCount = totalCount;
+		makeAutoObservable(this, { state: false }, { autoBind: true });
+	}
+
+	toTablePaginationState(): PaginationState {
+		const skip = Number(this.state.queryStates.skip) || 0;
+		const pageSize = Number(this.state.queryStates.take) || 20;
+		return { pageIndex: Math.floor(skip / pageSize), pageSize };
+	}
+
+	changeTablePagination(nextPagination: Updater<PaginationState>) {
+		const currentPagination = this.toTablePaginationState();
+		const updatedPagination =
+			typeof nextPagination === "function"
+				? nextPagination(currentPagination)
+				: nextPagination;
+		return this.state.querySetter({
+			skip: updatedPagination.pageIndex * updatedPagination.pageSize,
+			take: updatedPagination.pageSize,
+		});
+	}
+
+	setTotalCount(totalCount: number) {
+		this.totalCount = totalCount;
+	}
+}
 
 type DataGridPageItem =
 	| {
