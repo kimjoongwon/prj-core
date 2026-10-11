@@ -114,7 +114,7 @@ export const SpaceListScreen = observer(
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
+			gridState.queryStates = queryStates;
 		}, [gridState, queryStates, setQueryStates]);
 		const spaceRows = spaces ?? [];
 		const filteredRows = filterRows(

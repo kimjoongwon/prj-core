@@ -18,6 +18,7 @@ import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import { buildOidcClientTableColumns } from "../../data-grid/columns";
+import { DataGridLoading } from "../../data-grid/DataGridLoading";
 import { Button } from "../../input/Button/Button";
 
 /**
@@ -60,12 +61,21 @@ export const OidcClientListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					toolbar: { leftInputs },
+					table: {
+						entity: "OidcClient",
+						columns: oidcClientTableColumns,
+						emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
+					},
+					rows: oidcClients ?? [],
+					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const oidcClientRows = oidcClients ?? [];
+			gridState.queryStates = queryStates;
+			gridState.rows = oidcClients ?? [];
+			gridState.pagination.setTotalCount(totalCount);
+		}, [gridState, queryStates, oidcClients, totalCount]);
 		return (
 			<VStack>
 				<Screen.Header
@@ -84,22 +94,7 @@ export const OidcClientListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "OidcClient",
-										columns: oidcClientTableColumns,
-										emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
-									},
-								}}
-								rows={oidcClientRows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							{isLoading ? <DataGridLoading /> : <DataGrid state={gridState} />}
 						</Section.Body>
 					</Section>
 				</SectionSurface>

@@ -1,6 +1,5 @@
 "use client";
 
-import type { DataGridConfig, DataGridTableConfig } from "@cocrepo/type";
 import {
 	closestCenter,
 	DndContext,
@@ -13,65 +12,99 @@ import {
 	getCoreRowModel,
 	getExpandedRowModel,
 	getGroupedRowModel,
-	type Table as TanStackTable,
+	type SortingState,
+	type Updater,
 	useReactTable,
 } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import {
+	getColumnSettingItems,
+	getGroupableColumnItems,
+	toColumnDefs,
+} from "./columns/columnConfig";
 import { DataGridActionBar } from "./DataGridActionBar";
 import { DataGridContainer } from "./DataGridContainer";
 import { DataGridGroupPanel } from "./DataGridGroupPanel";
-import { DataGridLoading } from "./DataGridLoading";
 import { DataGridPagination } from "./DataGridPagination";
 import { DataGridToolbar } from "./DataGridToolbar";
-import { Table, TableBody, TableContainer, TableHeader } from "./Table";
 import { DataGridChangesState } from "./state/DataGridChangesState";
 import {
 	DataGridActionBarState,
-	DataGridColumnsState,
 	DataGridGroupPanelState,
 	DataGridPaginationState,
-	DataGridQueryState,
 	DataGridSelectionState,
 	DataGridState,
 	DataGridTableBodyState,
 	DataGridTableHeaderState,
 	DataGridTableState,
 	DataGridToolbarState,
-	type DataGridStateOptions,
 } from "./state/DataGridState";
-import {
-	getGroupingColumnIds,
-	getVisibleColumnConfigs,
-	toColumnDefs,
-} from "./columns/columnConfig";
+import { getQuerySortValue, getTableSortingState } from "./state/sorting";
+import { Table, TableBody, TableContainer, TableHeader } from "./Table";
 import { createDataGridRowKeyAdapter, type Key } from "./Table/rowKeys";
 
-export interface DataGridProps<T extends { id: Key }> {
-	config: DataGridConfig<T>;
-	state: DataGridState;
-	rows: T[];
-	totalCount: number;
-	isLoading?: boolean;
-}
-
-function DataGridTableContent<T extends { id: Key }>({
-	config,
+export const DataGrid = observer(function DataGrid({
 	state,
-	table,
 }: {
-	config: DataGridTableConfig<T>;
 	state: DataGridState;
-	table: TanStackTable<T>;
 }) {
-	const tableColumnStateKey = JSON.stringify(state.columns.toJSON());
-	const headers = table.getFlatHeaders();
+	const renderedRows = state.getRenderedRows<{ id: Key }>(
+		state.rows as { id: Key }[],
+	);
+	useEffect(() => {
+		state.table.applyExpansionRequest(state.table.expandRequest);
+	}, [state, state.table.expandRequest?.requestId]);
+	const grouping = state.table.getGroupingState();
+	const sorting = getTableSortingState(state.queryStates);
+	const pagination = state.pagination.toTablePaginationState();
+	const settingsColumns = getColumnSettingItems(state.table.columns);
+	const groupableColumns = getGroupableColumnItems(state.table.columns);
+	const getRowId = createDataGridRowKeyAdapter(renderedRows);
+	const sensors = useSensors(
+		useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+		useSensor(KeyboardSensor),
+	);
+	const table = useReactTable({
+		data: renderedRows,
+		columns: toColumnDefs<{ id: Key }>(state.table.columns),
+		state: { expanded: state.table.expanded, grouping, sorting, pagination },
+		getRowId,
+		getSubRows: state.table.getSubRows,
+		getCoreRowModel: getCoreRowModel(),
+		getExpandedRowModel: getExpandedRowModel(),
+		getGroupedRowModel: getGroupedRowModel(),
+		// 페이지 초기화는 nuqs query가 소유하므로 행 재계산으로 내부 페이지 갱신을 예약하지 않습니다.
+		autoResetPageIndex: false,
+		autoResetExpanded: false,
+		onExpandedChange: state.table.setExpanded,
+		onGroupingChange: (nextGrouping) =>
+			state.groupPanel.changeGrouping(
+				typeof nextGrouping === "function"
+					? nextGrouping(grouping)
+					: nextGrouping,
+			),
+		onSortingChange: (nextSorting: Updater<SortingState>) => {
+			const updatedSorting =
+				typeof nextSorting === "function" ? nextSorting(sorting) : nextSorting;
+			void state.querySetter({
+				sort: getQuerySortValue(updatedSorting),
+				skip: 0,
+			});
+		},
+		onPaginationChange: state.pagination.changeTablePagination,
+	});
+	const headers = table
+		.getFlatHeaders()
+		.filter((header) => header.column.getIsVisible());
 	const rows = table.getRowModel().rows;
 	const visibleRowKeys = table.getCoreRowModel().rows.map((row) => row.id);
 	const selectionMode =
-		config.selection?.mode === "none" ? undefined : config.selection?.mode;
+		state.table.selection?.mode === "none"
+			? undefined
+			: state.table.selection?.mode;
 	const tableColumnCount = headers.length + (selectionMode ? 1 : 0);
-
-	return (
+	const tableContent = (
 		<TableContainer
 			ariaLabel="데이터 테이블"
 			columnWidths={table
@@ -80,39 +113,31 @@ function DataGridTableContent<T extends { id: Key }>({
 			isSelectable={Boolean(selectionMode)}
 		>
 			<TableHeader
-				key={`header-${tableColumnStateKey}`}
 				state={state.table.header}
-				config={config}
 				headers={headers}
 				visibleRowKeys={visibleRowKeys}
+				onColumnSizingChange={(columnId, size) => {
+					const column = table.getColumn(columnId);
+					if (size == null) {
+						column?.resetSize();
+						return;
+					}
+					table.setColumnSizing((currentSizing) => ({
+						...currentSizing,
+						[columnId]: size,
+					}));
+				}}
 			/>
 			<TableBody
-				key={`body-${tableColumnStateKey}`}
 				state={state.table.body}
-				config={config}
+				config={state.table}
 				rows={rows}
 				selectionMode={selectionMode}
 				tableColumnCount={tableColumnCount}
 			/>
 		</TableContainer>
 	);
-}
-
-function DataGridRowMoveTableComposition<T extends { id: Key }>({
-	config,
-	state,
-	table,
-}: {
-	config: DataGridTableConfig<T>;
-	state: DataGridState;
-	table: TanStackTable<T>;
-}) {
-	const sensors = useSensors(
-		useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-		useSensor(KeyboardSensor),
-	);
-
-	return (
+	const tableRegion = state.table.onRowMove ? (
 		<DndContext
 			collisionDetection={closestCenter}
 			sensors={sensors}
@@ -122,115 +147,41 @@ function DataGridRowMoveTableComposition<T extends { id: Key }>({
 						table.getRowModel().rows,
 						String(active.id),
 						String(over.id),
-						config.onRowMove,
+						state.table.onRowMove,
 					);
 				}
 			}}
 		>
-			<DataGridTableContent config={config} state={state} table={table} />
+			{tableContent}
 		</DndContext>
-	);
-}
-
-function DataGridTableComposition<T extends { id: Key }>({
-	config,
-	state,
-	table,
-}: {
-	config: DataGridTableConfig<T>;
-	state: DataGridState;
-	table: TanStackTable<T>;
-}) {
-	return config.onRowMove ? (
-		<DataGridRowMoveTableComposition
-			config={config}
-			state={state}
-			table={table}
-		/>
 	) : (
-		<DataGridTableContent config={config} state={state} table={table} />
+		tableContent
 	);
-}
 
-/** 완성형 API가 표준 compound 조립과 같은 root state를 사용하도록 연결합니다. */
-const DataGridStandardComposition = observer(
-	function DataGridStandardComposition<T extends { id: Key }>({
-		config,
-		state,
-		rows,
-		totalCount,
-		isLoading,
-	}: DataGridProps<T>) {
-		const tableConfig = config.table;
-		const renderedRows = state.getRenderedRows<T>(rows);
-		const grouping = getGroupingColumnIds(
-			tableConfig.columns,
-			state.columns,
-			state.query.values,
-		);
-		const getRowId = createDataGridRowKeyAdapter(renderedRows);
-		const table = useReactTable({
-			data: renderedRows,
-			columns: toColumnDefs(
-				getVisibleColumnConfigs(tableConfig.columns, state.columns),
-				state.columns,
-			),
-			state: { expanded: state.expanded, grouping },
-			getRowId,
-			getSubRows: tableConfig.getSubRows,
-			getCoreRowModel: getCoreRowModel(),
-			getExpandedRowModel: getExpandedRowModel(),
-			getGroupedRowModel: getGroupedRowModel(),
-			// 페이지 초기화는 Query facade가 소유하므로 행 재계산으로 내부 페이지 갱신을 예약하지 않습니다.
-			autoResetPageIndex: false,
-			autoResetExpanded: false,
-			onExpandedChange: state.setExpanded,
-		});
-
-		if (isLoading) {
-			return (
-				<DataGridContainer>
-					<DataGridLoading />
-				</DataGridContainer>
-			);
-		}
-
-		return (
-			<DataGridContainer>
-				<DataGridToolbar
-					columns={tableConfig.columns}
-					config={config.toolbar}
-					state={state.toolbar}
-				/>
-				<DataGridGroupPanel
-					columns={tableConfig.columns}
-					config={config.groupPanel}
-					state={state.groupPanel}
-				/>
-				<DataGridTableComposition
-					config={tableConfig}
-					state={state}
-					table={table}
-				/>
-				<DataGridPagination state={state.pagination} totalCount={totalCount} />
-				<DataGridActionBar
-					state={state.actionBar}
-					showCount={tableConfig.selection?.actionBar?.showCount}
-				/>
-			</DataGridContainer>
-		);
-	},
-);
-
-export const DataGrid = Object.assign(DataGridStandardComposition, {
-	Container: DataGridContainer,
-	Toolbar: DataGridToolbar,
-	GroupPanel: DataGridGroupPanel,
-	Pagination: DataGridPagination,
-	ActionBar: DataGridActionBar,
-	Loading: DataGridLoading,
+	return (
+		<DataGridContainer>
+			<DataGridToolbar
+				leftInputs={state.toolbar.leftInputs}
+				rightInputs={state.toolbar.rightInputs}
+				settingsColumns={settingsColumns}
+				table={table}
+				state={state.toolbar}
+			/>
+			<DataGridGroupPanel
+				groupableColumns={groupableColumns}
+				grouping={grouping}
+				show={state.groupPanel.show}
+				state={state.groupPanel}
+			/>
+			{tableRegion}
+			<DataGridPagination state={state.pagination} table={table} />
+			<DataGridActionBar
+				state={state.actionBar}
+				showCount={state.table.selection?.actionBar?.showCount}
+			/>
+		</DataGridContainer>
+	);
 });
-
 export { Table };
 
 export * from "./cell";
@@ -241,13 +192,10 @@ export {
 	getDataGridRowKey,
 } from "./Table/rowKeys";
 export { DataGridChangesState };
-export type { DataGridStateOptions };
 export {
 	DataGridActionBarState,
-	DataGridColumnsState,
 	DataGridGroupPanelState,
 	DataGridPaginationState,
-	DataGridQueryState,
 	DataGridSelectionState,
 	DataGridState,
 	DataGridTableBodyState,

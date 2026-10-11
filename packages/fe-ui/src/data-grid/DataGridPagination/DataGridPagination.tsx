@@ -2,6 +2,7 @@
 
 import { useT } from "../../i18n";
 import { Pagination } from "../../input/Pagination/Pagination";
+import type { RowData, Table as TanStackTable } from "@tanstack/react-table";
 import type { DataGridPaginationState } from "../state/DataGridPaginationState";
 
 type DataGridPageItem =
@@ -14,9 +15,9 @@ type DataGridPageItem =
 			key: string;
 	  };
 
-export interface DataGridPaginationProps {
+export interface DataGridPaginationProps<TData extends RowData> {
 	state: DataGridPaginationState;
-	totalCount: number;
+	table: TanStackTable<TData>;
 }
 
 /** 전체 건수와 페이지 크기에서 1부터 시작하는 총 페이지 수를 계산합니다. */
@@ -68,14 +69,15 @@ function getPageItems(
 }
 
 /** DataGrid 하단의 전체 건수와 페이지 이동 컨트롤을 렌더링합니다. */
-export function DataGridPaginationView({
+export function DataGridPaginationView<TData extends RowData>({
 	state,
-	totalCount,
-}: DataGridPaginationProps) {
+	table,
+}: DataGridPaginationProps<TData>) {
 	const t = useT();
-	const { currentPage, take } = state;
-	const totalPages = getTotalPages(totalCount, take);
-	const page = Math.min(Math.max(1, currentPage), totalPages);
+	const { pageIndex, pageSize } = table.getState().pagination;
+	const { totalCount } = state;
+	const totalPages = getTotalPages(totalCount, pageSize);
+	const page = Math.min(Math.max(1, pageIndex + 1), totalPages);
 	const pageItems = getPageItems(page, totalPages);
 	const isPreviousDisabled = page <= 1;
 	const isNextDisabled = page >= totalPages;
@@ -94,7 +96,7 @@ export function DataGridPaginationView({
 					<Pagination.Previous
 						isDisabled={isPreviousDisabled}
 						onPress={() => {
-							void state.changePage(Math.max(1, page - 1));
+							table.setPageIndex(Math.max(0, page - 2));
 						}}
 					>
 						<Pagination.PreviousIcon />
@@ -111,7 +113,7 @@ export function DataGridPaginationView({
 							<Pagination.Link
 								isActive={item.page === page}
 								onPress={() => {
-									void state.changePage(item.page);
+									table.setPageIndex(item.page - 1);
 								}}
 							>
 								{item.page}
@@ -123,7 +125,7 @@ export function DataGridPaginationView({
 					<Pagination.Next
 						isDisabled={isNextDisabled}
 						onPress={() => {
-							void state.changePage(Math.min(totalPages, page + 1));
+							table.setPageIndex(Math.min(totalPages - 1, page));
 						}}
 					>
 						<span>Next</span>

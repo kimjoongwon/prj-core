@@ -131,15 +131,24 @@ export const ActionListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					toolbar: { leftInputs },
+					table: {
+						entity: "Action",
+						columns: buildActionTableColumns<ActionDto>(),
+						emptyMessage: "조건에 맞는 권한 액션이 없습니다.",
+					},
+					rows: actions ?? [],
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
+			gridState.queryStates = queryStates;
+			gridState.rows = actions ?? [];
+		}, [gridState, queryStates, actions]);
 		const actionRows = actions ?? [];
 		const filteredActions = filterActions(actionRows, queryStates);
-		const visibleActions = paginateActions(filteredActions, queryStates);
 		const totalCount = filteredActions.length;
+		gridState.rows = paginateActions(filteredActions, queryStates);
+		gridState.pagination.setTotalCount(totalCount);
 		const handleActionRowClick = (action: ActionDto) => {
 			onClickActionRow(action.id);
 		};
@@ -149,7 +158,7 @@ export const ActionListScreen = observer(
 				skip: 0,
 			});
 		};
-		const actionTableColumns = buildActionTableColumns<ActionDto>({
+		gridState.table.columns = buildActionTableColumns<ActionDto>({
 			onClickDetailButton: handleActionRowClick,
 		});
 		if (isLoading) {
@@ -179,22 +188,7 @@ export const ActionListScreen = observer(
 									selectedGroup={queryStates.group}
 									onChangeGroup={handleActionGroupFilterChange}
 								/>
-								<DataGrid
-									config={{
-										toolbar: {
-											leftInputs,
-										},
-										table: {
-											entity: "Action",
-											columns: actionTableColumns,
-											onRowClick: handleActionRowClick,
-											emptyMessage: "조건에 맞는 권한 액션이 없습니다.",
-										},
-									}}
-									rows={visibleActions}
-									totalCount={totalCount}
-									state={gridState}
-								/>
+								<DataGrid state={gridState} />
 							</VStack>
 						</Section.Body>
 					</Section>

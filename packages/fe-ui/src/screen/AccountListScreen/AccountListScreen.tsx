@@ -17,6 +17,7 @@ import {
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
+import { DataGridLoading } from "../../data-grid/DataGridLoading";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -61,18 +62,24 @@ export const AccountListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					toolbar: { leftInputs },
+					table: {
+						entity: "IdpAccount",
+						columns: buildIdpAccountTableColumns<IdpAccountDto>({
+							onClickUnlockAccount: (account) =>
+								onClickUnlockAccountButton(account.id),
+						}),
+						emptyMessage: "등록된 계정이 없습니다.",
+					},
+					rows: accounts ?? [],
+					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const accountRows = accounts ?? [];
-		const onClickUnlockAccount = (account: IdpAccountDto) => {
-			onClickUnlockAccountButton(account.id);
-		};
-		const columns = buildIdpAccountTableColumns<IdpAccountDto>({
-			onClickUnlockAccount,
-		});
+			gridState.queryStates = queryStates;
+			gridState.rows = accounts ?? [];
+			gridState.pagination.setTotalCount(totalCount);
+		}, [gridState, queryStates, accounts, totalCount]);
 		return (
 			<VStack>
 				<Screen.Header
@@ -82,22 +89,7 @@ export const AccountListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "IdpAccount",
-										columns,
-										emptyMessage: "등록된 계정이 없습니다.",
-									},
-								}}
-								rows={accountRows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							{isLoading ? <DataGridLoading /> : <DataGrid state={gridState} />}
 						</Section.Body>
 					</Section>
 				</SectionSurface>

@@ -98,7 +98,7 @@ export const TaskListScreen = observer(
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
+			gridState.queryStates = queryStates;
 		}, [gridState, queryStates, setQueryStates]);
 		const taskRows = tasks ?? [];
 		const onClickDeleteButton = (taskId: bigint) => {

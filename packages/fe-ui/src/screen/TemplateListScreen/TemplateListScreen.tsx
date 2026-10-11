@@ -77,16 +77,24 @@ export const TemplateListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					toolbar: { leftInputs },
+					table: {
+						entity: "Template",
+						columns: buildTemplateTableColumns<TemplateDto>({
+							onClickTemplateCode,
+							onToggleTemplateStatusSwitch,
+						}),
+						emptyMessage: "등록된 템플릿이 없습니다.",
+					},
+					rows: templates ?? [],
+					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const templateRows = templates ?? [];
-		const columns = buildTemplateTableColumns<TemplateDto>({
-			onClickTemplateCode,
-			onToggleTemplateStatusSwitch,
-		});
+			gridState.queryStates = queryStates;
+			gridState.rows = templates ?? [];
+			gridState.pagination.setTotalCount(totalCount);
+		}, [gridState, queryStates, templates, totalCount]);
 		if (isLoading) {
 			return <TemplatesScreenFallback />;
 		}
@@ -108,21 +116,7 @@ export const TemplateListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "Template",
-										columns,
-										emptyMessage: "등록된 템플릿이 없습니다.",
-									},
-								}}
-								rows={templateRows}
-								totalCount={totalCount}
-								state={gridState}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

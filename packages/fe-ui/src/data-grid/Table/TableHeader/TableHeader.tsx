@@ -1,6 +1,5 @@
 "use client";
 
-import type { DataGridTableConfig } from "@cocrepo/type";
 import { flexRender, type Header } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
 import { Typography } from "../../../data-display/Typography";
@@ -9,7 +8,6 @@ import { getColumnAlignClassName } from "../../columns/columnConfig";
 import { ColumnFilterInput } from "../../input/ColumnFilterInput";
 import { ColumnResizerInput } from "../../input/ColumnResizerInput";
 import { ColumnSortInput } from "../../input/ColumnSortInput";
-import { getSortDirection } from "../../state/sorting";
 import type { DataGridTableHeaderState } from "../../state/table/DataGridTableHeaderState";
 import { getColumnWidthStyle } from "../columnSizing";
 import type { Key } from "../rowKeys";
@@ -27,9 +25,9 @@ const SELECTION_FILTER_CELL_CLASS_NAME =
 
 export interface TableHeaderProps<T extends { id: Key }> {
 	state: DataGridTableHeaderState;
-	config: DataGridTableConfig<T>;
 	headers: Header<T, unknown>[];
 	visibleRowKeys: string[];
+	onColumnSizingChange: (columnId: string, size: number | null) => void;
 }
 
 function getHeaderLabel<T extends object>(header: Header<T, unknown>) {
@@ -53,11 +51,11 @@ function getSelectionAriaChecked(
 /** Header 전용 facade에서 정렬, filter, resize와 visible selection을 렌더링합니다. */
 function TableHeaderView<T extends { id: Key }>({
 	state,
-	config,
 	headers,
 	visibleRowKeys,
+	onColumnSizingChange,
 }: TableHeaderProps<T>) {
-	const selectionMode = state.getSelectionMode(config);
+	const selectionMode = state.getSelectionMode();
 	const isAllVisibleRowsSelected =
 		state.isAllVisibleRowsSelected(visibleRowKeys);
 	const isSomeVisibleRowsSelected =
@@ -85,7 +83,6 @@ function TableHeaderView<T extends { id: Key }>({
 									state.changeVisibleSelection(
 										visibleRowKeys,
 										event.currentTarget.checked,
-										config.selection?.onSelectionChange,
 									)
 								}
 								ref={(input) => {
@@ -107,10 +104,7 @@ function TableHeaderView<T extends { id: Key }>({
 						header.column.columnDef,
 					);
 					const label = header.isPlaceholder ? null : getHeaderLabel(header);
-					const sortDirection = getSortDirection(
-						header.column.id,
-						state.sortValues,
-					);
+					const sortDirection = header.column.getIsSorted() || null;
 					const isSortable = header.column.columnDef.meta?.isSortable === true;
 					return (
 						<th
@@ -119,15 +113,13 @@ function TableHeaderView<T extends { id: Key }>({
 							className={[HEADER_CELL_CLASS_NAME, alignClassName]
 								.filter(Boolean)
 								.join(" ")}
-							style={getColumnWidthStyle(header.column.columnDef)}
+							style={getColumnWidthStyle(header.column.getSize())}
 						>
 							{label == null ? null : isSortable ? (
 								<ColumnSortInput
 									label={label}
 									sortDirection={sortDirection}
-									onToggle={() =>
-										void state.changeSort(header.column.id, sortDirection)
-									}
+									onToggle={() => header.column.toggleSorting()}
 								/>
 							) : (
 								translateNode(label, t)
@@ -136,7 +128,7 @@ function TableHeaderView<T extends { id: Key }>({
 								columnId={header.column.id}
 								maxSize={header.column.columnDef.maxSize}
 								minSize={header.column.columnDef.minSize}
-								onColumnSizingChange={state.changeColumnSizing}
+								onColumnSizingChange={onColumnSizingChange}
 							/>
 						</th>
 					);
@@ -159,12 +151,12 @@ function TableHeaderView<T extends { id: Key }>({
 								className={[HEADER_FILTER_CELL_CLASS_NAME, alignClassName]
 									.filter(Boolean)
 									.join(" ")}
-								style={getColumnWidthStyle(header.column.columnDef)}
+								style={getColumnWidthStyle(header.column.getSize())}
 							>
 								{headerInput ? (
 									<ColumnFilterInput
 										config={headerInput}
-										queryValues={state.rootQueryValues}
+										queryValues={state.queryValues}
 										onQueryChange={state.changeQuery}
 									/>
 								) : null}

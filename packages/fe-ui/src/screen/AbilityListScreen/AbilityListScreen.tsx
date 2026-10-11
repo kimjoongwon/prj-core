@@ -221,7 +221,7 @@ export const AbilityListScreen = observer(
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
+			gridState.queryStates = queryStates;
 		}, [gridState, queryStates, setQueryStates]);
 		const abilityRows = abilities ?? [];
 		const subjectOptionIds = new Set(

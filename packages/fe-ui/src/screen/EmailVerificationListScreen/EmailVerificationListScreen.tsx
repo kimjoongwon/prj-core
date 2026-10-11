@@ -17,6 +17,7 @@ import {
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
+import { DataGridLoading } from "../../data-grid/DataGridLoading";
 
 const EMAIL_VERIFICATION_STATUS_OPTIONS = [
 	{
@@ -83,20 +84,33 @@ export const EmailVerificationListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					toolbar: { leftInputs },
+					table: {
+						entity: "EmailVerification",
+						columns: buildEmailVerificationTableColumns<EmailVerificationDto>({
+							onClickResendEmailVerification: (verification) =>
+								onClickResendEmailVerificationButton(verification.id),
+						}),
+						emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
+					},
+					rows: verifications ?? [],
+					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const rows = verifications ?? [];
+			gridState.queryStates = queryStates;
+			gridState.rows = verifications ?? [];
+			gridState.pagination.setTotalCount(totalCount);
+		}, [gridState, queryStates, verifications, totalCount]);
 		const onClickResendEmailVerification = (
 			verification: EmailVerificationDto,
 		): void => {
 			onClickResendEmailVerificationButton(verification.id);
 		};
-		const columns = buildEmailVerificationTableColumns<EmailVerificationDto>({
-			onClickResendEmailVerification,
-		});
+		gridState.table.columns =
+			buildEmailVerificationTableColumns<EmailVerificationDto>({
+				onClickResendEmailVerification,
+			});
 		return (
 			<VStack>
 				<Screen.Header
@@ -106,22 +120,7 @@ export const EmailVerificationListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "EmailVerification",
-										columns,
-										emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
-									},
-								}}
-								rows={rows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							{isLoading ? <DataGridLoading /> : <DataGrid state={gridState} />}
 						</Section.Body>
 					</Section>
 				</SectionSurface>

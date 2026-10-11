@@ -32,14 +32,12 @@ DataGrid를 하나의 완성형 컴포넌트로만 소비하는 구조에서, �
 </DataGrid.Container>
 ```
 
-`DataGrid.Container`와 `Table.Container`는 UI 배치와 markup만 담당한다. 이 컴포넌트들은 query, selection, columns 또는 changes를 직접 받거나 변경하지 않는다.
+`DataGrid.Container`와 `Table.Container`는 UI 배치와 markup만 담당한다. 이 컴포넌트들은 query, selection 또는 changes를 직접 받거나 변경하지 않는다. 컬럼 표시·순서·크기와 grouping 동작 상태는 TanStack Table이 관리한다.
 
 ## 목표 상태 트리
 
 ```text
 DataGridState
-|- query: DataGridQueryState
-|- columns: DataGridColumnsState
 |- selection: DataGridSelectionState
 |- changes: DataGridChangesState
 |- toolbar: DataGridToolbarState
@@ -58,16 +56,16 @@ DataGridState
 
 ### DataGridState
 
-- query, column, selection, changes의 canonical 값을 소유한다.
-- URL query 동기화 callback과 외부 selection callback을 보유한다.
+- selection과 changes의 canonical 값을 소유한다. Query 값과 갱신은 route의 nuqs가 소유한다.
+- 외부 selection callback을 보유한다.
 - 하위 facade state를 한 번 생성하고 동일 인스턴스를 유지한다.
-- 하위 state가 필요한 canonical 값 또는 변경 동작을 위임받을 수 있게 한다.
+- nuqs query 객체 참조를 깊은 observable 상태로 복제하지 않는다. 정렬·그룹·페이지 상태는 TanStack Table API와 nuqs setter를 연결한다.
 
 ### 하위 state
 
-- `DataGridToolbarState`는 검색, filter, column 설정에 필요한 query와 column 동작만 노출한다.
+- `DataGridToolbarState`는 검색과 filter query callback만 연결한다. query 값은 nuqs가 소유하고, 컬럼 설정 UI는 TanStack Table 인스턴스를 사용한다.
 - `DataGridGroupPanelState`는 grouping 표시와 grouping 변경 동작만 노출한다.
-- `DataGridTableHeaderState`는 header 렌더링, sort, column sizing, column visibility 관련 동작만 노출한다.
+- `DataGridTableHeaderState`는 header 렌더링, sort, visible selection 동작을 노출한다. 컬럼 크기와 표시 상태는 TanStack Table API를 사용한다.
 - `DataGridTableBodyState`는 row rendering, selection, hierarchy, inline edit, row move 관련 동작만 노출한다.
 - `DataGridTableFooterState`는 합계 또는 소계처럼 실제 table footer 요구사항이 있을 때만 상태를 가진다. 요구사항이 없으면 비어 있거나 렌더하지 않는다.
 - `DataGridPaginationState`는 `skip`, `take`, `totalCount`와 page 변경 동작만 노출한다.
@@ -115,8 +113,6 @@ packages/fe-ui/src/data-grid/
 |- DataGrid.tsx                         # 선택 사항: 표준 compound 조합의 thin wrapper
 |- state/
 |  |- DataGridState.ts
-|  |- DataGridQueryState.ts
-|  |- DataGridColumnsState.ts
 |  |- DataGridSelectionState.ts
 |  |- DataGridChangesState.ts
 |  |- DataGridToolbarState.ts
@@ -206,16 +202,16 @@ export const Table = {
 | 컴포넌트 | state prop | 책임 |
 | --- | --- | --- |
 | `DataGrid.Container` | 없음 | Grid 전체 layout과 children 배치 |
-| `DataGrid.Toolbar` | `DataGridToolbarState` | query input과 column 설정 |
+| `DataGrid.Toolbar` | `DataGridToolbarState` | query input; column settings는 TanStack Table API 사용 |
 | `DataGrid.GroupPanel` | `DataGridGroupPanelState` | grouping 표시와 변경 |
 | `Table.Container` | 없음 | `<table>` 계열 markup과 Header, Body, Footer 배치 |
-| `Table.Header` | `DataGridTableHeaderState` | header, sort, resize, visibility |
+| `Table.Header` | `DataGridTableHeaderState` | header, sort; resize는 TanStack Table API 사용 |
 | `Table.Body` | `DataGridTableBodyState` | row, cell, selection, editing, hierarchy, row move |
 | `Table.Footer` | `DataGridTableFooterState` | 합계, 소계 등 table footer 정보 |
 | `DataGrid.Pagination` | `DataGridPaginationState` | 페이지 이동과 범위 표시 |
 | `DataGrid.ActionBar` | `DataGridActionBarState` | 선택 결과 action 표현 |
 
-`DataGrid.Container`와 `Table.Container`에 state prop을 추가하지 않는다. 상태가 없어도 필요한 정적 UI 설정은 일반 prop 또는 children으로 전달할 수 있지만, query, column, selection, changes 같은 DataGrid 상태를 소유하거나 전달받지 않는다.
+`DataGrid.Container`와 `Table.Container`에 state prop을 추가하지 않는다. 상태가 없어도 필요한 정적 UI 설정은 일반 prop 또는 children으로 전달할 수 있지만, query, selection, changes 같은 DataGrid 상태를 소유하거나 전달받지 않는다.
 
 ### 기존 경로 이동 원칙
 
@@ -313,7 +309,7 @@ DataGrid compound state 리팩터링 계획의 2단계를 수행한다.
 
 - Container 계열 컴포넌트는 `state` prop을 받지 않는다.
 - 상태가 있는 leaf는 전체 `DataGridState`가 아니라 자기 책임의 하위 state만 받는다.
-- query, columns, selection, changes의 상태 원천은 하나이며 복제 또는 동기화 코드가 없다.
+- query는 nuqs, selection과 changes는 DataGrid가 소유하며 값 복제 상태를 두지 않는다. 컬럼 interaction state는 TanStack Table이 관리한다.
 - `Table`은 `DataGrid.Table.*`가 아닌 독립 두 단계 compound namespace로 제공된다.
 - pagination은 `Table.Footer`와 분리된 Grid 수준 구성 요소다.
 - URL query 변경, selection 변경, edit commit, row move 결과가 기존과 같은 상위 callback 계약을 유지한다.

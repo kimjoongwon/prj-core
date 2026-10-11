@@ -140,7 +140,7 @@ export const OidcSessionListScreen = observer(
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
+			gridState.queryStates = queryStates;
 		}, [gridState, queryStates, setQueryStates]);
 		const sessionRows = sessions ?? [];
 		const byModelType = (stats?.byModelType ?? {}) as Record<string, number>;

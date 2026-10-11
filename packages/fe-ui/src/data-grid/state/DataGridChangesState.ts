@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, observable } from "mobx";
 import type { Key } from "../Table/rowKeys";
 
 const objectPrototype = Object.prototype;
@@ -27,7 +27,15 @@ export class DataGridChangesState {
 	constructor() {
 		makeAutoObservable<this, "originalValues">(
 			this,
-			{ originalValues: false },
+			{
+				created: observable.ref,
+				updated: observable.ref,
+				deleted: observable.ref,
+				isDeleted: false,
+				getRow: false,
+				getCreatedRows: false,
+				originalValues: false,
+			},
 			{ autoBind: true },
 		);
 	}

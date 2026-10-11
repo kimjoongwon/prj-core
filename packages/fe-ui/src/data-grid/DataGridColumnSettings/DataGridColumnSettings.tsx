@@ -1,9 +1,7 @@
 "use client";
 
-import type {
-	DataGridColumnConfig,
-	DataGridColumnsStateSnapshot,
-} from "@cocrepo/type";
+import type { DataGridColumnSettingItem } from "@cocrepo/type";
+import type { RowData, Table as TanStackTable } from "@tanstack/react-table";
 import { Popover } from "@heroui/react";
 import { Settings2 } from "lucide-react";
 import { Typography } from "../../data-display/Typography";
@@ -11,30 +9,16 @@ import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 
-export interface DataGridColumnSettingsProps<T> {
-	columns: DataGridColumnConfig<T>[];
-	columnState: DataGridColumnsStateSnapshot;
-	onColumnChange: (columns: DataGridColumnsStateSnapshot) => void;
+export interface DataGridColumnSettingsProps<TData extends RowData> {
+	columns: DataGridColumnSettingItem[];
+	table: TanStackTable<TData>;
 }
 
-function getColumnId<T>(column: DataGridColumnConfig<T>) {
-	return String(column.field);
-}
-
-export function DataGridColumnSettingsView<T>({
+export function DataGridColumnSettingsView<TData extends RowData>({
 	columns,
-	columnState,
-	onColumnChange,
-}: DataGridColumnSettingsProps<T>) {
+	table,
+}: DataGridColumnSettingsProps<TData>) {
 	const t = useT();
-
-	const handleVisibilityChange = (columnId: string, isVisible: boolean) => {
-		const nextVisibility = {
-			...columnState.visibility,
-			[columnId]: isVisible,
-		};
-		onColumnChange({ ...columnState, visibility: nextVisibility });
-	};
 
 	return (
 		<Popover>
@@ -55,18 +39,18 @@ export function DataGridColumnSettingsView<T>({
 					</div>
 					<div className="flex flex-col gap-2">
 						{columns.map((column) => {
-							const columnId = getColumnId(column);
 							const isRequired = column.isRequired === true;
+							const tableColumn = table.getColumn(column.id);
 							const isVisible =
-								isRequired || columnState.visibility[columnId] !== false;
+								isRequired || tableColumn?.getIsVisible() !== false;
 
 							return (
 								<Checkbox
-									key={columnId}
+									key={column.id}
 									isSelected={isVisible}
-									isDisabled={isRequired}
+									isDisabled={isRequired || !tableColumn}
 									onChange={(nextVisible) =>
-										handleVisibilityChange(columnId, nextVisible)
+										tableColumn?.toggleVisibility(nextVisible)
 									}
 									classNames={{
 										content: "text-sm font-medium",

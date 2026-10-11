@@ -67,56 +67,6 @@ export type DataGridSetQueryStates = (
 	options?: { history?: "push" | "replace" },
 ) => Promise<URLSearchParams>;
 
-export interface DataGridQueryState {
-	/** 페이지 또는 route 가 소유한 query state 값 */
-	values: DataGridQueryStates;
-
-	/** 페이지 또는 route 가 소유한 query state setter */
-	setValues: DataGridSetQueryStates;
-}
-
-export interface DataGridColumnsStateSnapshot {
-	order: string[];
-	visibility: Record<string, boolean>;
-	sizing: Record<string, number>;
-	grouping?: string[];
-}
-
-export interface DataGridColumnsState extends DataGridColumnsStateSnapshot {
-	/** row grouping 컬럼 id 목록 */
-	grouping: string[];
-
-	/** grouping 상태가 config 기본값을 덮어썼는지 여부 */
-	isGroupingCustomized?: boolean;
-
-	/** 컬럼 표시 순서 변경 */
-	setOrder?: (order: string[]) => void;
-
-	/** 컬럼 표시 여부 변경 */
-	setVisibility?: (visibility: Record<string, boolean>) => void;
-
-	/** 단일 컬럼 표시 여부 변경 */
-	setColumnVisibility?: (columnId: string, isVisible: boolean) => void;
-
-	/** 컬럼 너비 변경 */
-	setSizing?: (sizing: Record<string, number>) => void;
-
-	/** 단일 컬럼 너비 변경 */
-	setColumnSizing?: (columnId: string, size: number | null) => void;
-
-	/** row grouping 컬럼 변경 */
-	setGrouping?: (grouping: string[]) => void;
-
-	/** 단일 컬럼 row grouping 여부 변경 */
-	setColumnGrouping?: (columnId: string, isGrouped: boolean) => void;
-
-	/** 저장 snapshot 복원 */
-	restore?: (snapshot?: unknown) => void;
-
-	/** 저장 가능한 snapshot 반환 */
-	toJSON?: () => DataGridColumnsStateSnapshot;
-}
-
 export interface DataGridSelectionState {
 	/** 선택된 키 목록 */
 	selectedKeys?: Set<string>;
@@ -126,20 +76,6 @@ export interface DataGridSelectionState {
 
 	/** 선택 초기화 핸들러 */
 	clear?: () => void;
-}
-
-export interface DataGridState {
-	/** 컬럼 표시, 순서, 크기 상태 */
-	columns: DataGridColumnsState;
-
-	/** 검색/필터/페이지네이션 query 상태 */
-	query: DataGridQueryState;
-
-	/** row selection 같은 grid interaction 상태 */
-	selection?: DataGridSelectionState;
-
-	/** 저장 전 행 생성·수정·삭제 내역 */
-	changes?: DataGridChangesState;
 }
 
 export type DataGridEditTrigger = "click" | "doubleClick" | "enter" | "f2";
@@ -220,30 +156,22 @@ export interface DataGridToolbarConfig {
 	rightInputs?: InputConfig[];
 }
 
+/** ColumnSettings가 컬럼 표시 여부를 토글하는 데 필요한 최소 컬럼 정보입니다. */
+export interface DataGridColumnSettingItem {
+	id: string;
+	label: string;
+	isRequired?: boolean;
+}
+
 /** DataGrid의 grouping panel 표시 정책을 선언합니다. */
 export interface DataGridGroupPanelConfig {
 	show?: "never" | "always" | "onlyWhenGrouping";
 }
 
-/** 독립 Table과 DataGrid 본문이 공유하는 선언형 계약입니다. */
-export interface DataGridTableConfig<T> {
-	entity: string;
-	columns: DataGridColumnConfig<T>[];
-	selection?: SelectionConfig;
-	responsive?: ResponsiveConfig<T>;
-	onRowClick?: (row: T) => void;
-	getSubRows?: (row: T, index: number) => T[] | undefined;
-	expandRequest?: DataGridExpandRequest;
-	editRequest?: DataGridEditRequest;
-	onRowMove?: (event: DataGridRowMoveEvent<T>) => void;
-	emptyMessage?: string;
-}
-
-/** ownership별 설정을 조합하는 DataGrid 최상위 선언 계약입니다. */
-export interface DataGridConfig<T> {
-	toolbar?: DataGridToolbarConfig;
-	groupPanel?: DataGridGroupPanelConfig;
-	table: DataGridTableConfig<T>;
+/** GroupPanel이 그룹 기준으로 제안할 수 있는 최소 컬럼 정보입니다. */
+export interface DataGridGroupableColumnItem {
+	id: string;
+	label: string;
 }
 
 // ============================================
@@ -411,9 +339,6 @@ export interface SelectionConfig {
 	/** 선택 모드 */
 	mode: "none" | "single" | "multiple";
 
-	/** 선택된 키 목록 (DataGridState.selection 우선) */
-	selectedKeys?: Set<string>;
-
 	/** 선택 변경 핸들러 (DataGridState.selection 우선) */
 	onSelectionChange?: (keys: Set<string>) => void;
 
@@ -421,24 +346,7 @@ export interface SelectionConfig {
 	actionBar?: {
 		/** 선택된 항목 수 표시 */
 		showCount?: boolean;
-		/** 액션 버튼들 */
-		actions?: InputConfig[];
 	};
-}
-
-// ============================================
-// ResponsiveConfig (반응형 설정)
-// ============================================
-
-/**
- * 반응형 설정
- */
-export interface ResponsiveConfig<T> {
-	/** 모바일 카드 뷰 사용 여부 */
-	mobileCardView?: boolean;
-
-	/** 카드 렌더러 */
-	cardRender?: (row: T) => ReactNode;
 }
 
 // ============================================

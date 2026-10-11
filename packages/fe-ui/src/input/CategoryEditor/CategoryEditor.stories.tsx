@@ -47,6 +47,9 @@ function createCategoryDataGridState(): CategoryEditorDataGridState {
 	return new DataGridState({
 		queryStates: { skip: 0, take: 20 },
 		setQueryStates: async () => new URLSearchParams(),
+		toolbar: {},
+		groupPanel: { show: "never" },
+		table: { entity: "Category", columns: [], emptyMessage: "카테고리가 없습니다." },
 		changes: new DataGridChangesState(),
 	}) as CategoryEditorDataGridState;
 }

@@ -1,4 +1,5 @@
 import type { DataGridQueryStates } from "@cocrepo/type";
+import type { SortingState } from "@tanstack/react-table";
 
 export type DataGridSortDirection = "asc" | "desc" | null;
 
@@ -13,28 +14,15 @@ export function getQuerySortValues(queryValues: DataGridQueryStates) {
 	return [];
 }
 
-export function getSortDirection(
-	columnId: string,
-	sortValues: string[],
-): DataGridSortDirection {
-	if (sortValues.includes(columnId)) {
-		return "asc";
-	}
-	if (sortValues.includes(`-${columnId}`)) {
-		return "desc";
-	}
-	return null;
+export function getTableSortingState(queryValues: DataGridQueryStates): SortingState {
+	return getQuerySortValues(queryValues).map((sortValue) => ({
+		id: sortValue.startsWith("-") ? sortValue.slice(1) : sortValue,
+		desc: sortValue.startsWith("-"),
+	}));
 }
 
-export function getNextSortValues(
-	columnId: string,
-	currentDirection: DataGridSortDirection,
-) {
-	if (currentDirection === null) {
-		return [columnId];
-	}
-	if (currentDirection === "asc") {
-		return [`-${columnId}`];
-	}
-	return null;
+export function getQuerySortValue(sorting: SortingState) {
+	return sorting.length === 0
+		? null
+		: sorting.map(({ id, desc }) => (desc ? `-${id}` : id));
 }

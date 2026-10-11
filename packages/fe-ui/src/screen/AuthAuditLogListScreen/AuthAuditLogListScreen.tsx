@@ -133,7 +133,7 @@ export const AuthAuditLogListScreen = observer(
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
+			gridState.queryStates = queryStates;
 		}, [gridState, queryStates, setQueryStates]);
 		const logRows = logs ?? [];
 		return (

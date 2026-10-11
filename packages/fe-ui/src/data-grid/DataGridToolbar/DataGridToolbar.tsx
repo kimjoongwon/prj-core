@@ -1,30 +1,29 @@
 "use client";
 
-import type {
-	DataGridColumnConfig,
-	DataGridToolbarConfig,
-} from "@cocrepo/type";
+import type { DataGridColumnSettingItem, InputConfig } from "@cocrepo/type";
+import type { RowData, Table as TanStackTable } from "@tanstack/react-table";
 import { DataGridColumnSettings } from "../DataGridColumnSettings";
 import { InputRenderer } from "../input/InputRenderer";
-import type { Key } from "../Table/rowKeys";
 import type { DataGridToolbarState } from "../state/DataGridToolbarState";
 
 const DATA_GRID_COLUMN_SETTINGS_INPUT_ID = "__data-grid-column-settings";
 
-export interface DataGridToolbarProps<T extends { id: Key }> {
+export interface DataGridToolbarProps<TData extends RowData> {
 	state: DataGridToolbarState;
-	config?: DataGridToolbarConfig;
-	columns: DataGridColumnConfig<T>[];
+	leftInputs?: InputConfig[];
+	rightInputs?: InputConfig[];
+	settingsColumns: DataGridColumnSettingItem[];
+	table: TanStackTable<TData>;
 }
 
-export function DataGridToolbarView<T extends { id: Key }>({
+export function DataGridToolbarView<TData extends RowData>({
 	state,
-	config,
-	columns,
-}: DataGridToolbarProps<T>) {
-	const leftInputs = config?.leftInputs ?? [];
-	const rightInputs = config?.rightInputs ?? [];
-	const shouldRenderColumnSettings = columns.length > 0;
+	leftInputs = [],
+	rightInputs = [],
+	settingsColumns,
+	table,
+}: DataGridToolbarProps<TData>) {
+	const shouldRenderColumnSettings = settingsColumns.length > 0;
 	const shouldRenderToolbar =
 		leftInputs.length > 0 ||
 		rightInputs.length > 0 ||
@@ -57,9 +56,8 @@ export function DataGridToolbarView<T extends { id: Key }>({
 				))}
 				{shouldRenderColumnSettings ? (
 					<DataGridColumnSettings
-						columns={columns}
-						columnState={state.columnState}
-						onColumnChange={state.changeColumns}
+						columns={settingsColumns}
+						table={table}
 						key={DATA_GRID_COLUMN_SETTINGS_INPUT_ID}
 					/>
 				) : null}

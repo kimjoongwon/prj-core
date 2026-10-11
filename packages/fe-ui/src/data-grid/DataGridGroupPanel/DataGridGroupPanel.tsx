@@ -1,9 +1,6 @@
 "use client";
 
-import type {
-	DataGridColumnConfig,
-	DataGridGroupPanelConfig,
-} from "@cocrepo/type";
+import type { DataGridGroupableColumnItem } from "@cocrepo/type";
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -16,27 +13,23 @@ import type { DragEvent } from "react";
 import { Typography } from "../../data-display/Typography";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
-import {
-	getColumnConfigId,
-	getRowGroupableColumnConfigs,
-} from "../columns/columnConfig";
 import type { DataGridGroupPanelState } from "../state/DataGridGroupPanelState";
-import type { Key } from "../Table/rowKeys";
 
-type RowGroupPanelShow = NonNullable<DataGridGroupPanelConfig["show"]>;
+type RowGroupPanelShow = "never" | "always" | "onlyWhenGrouping";
 
 const GROUP_COLUMN_DATA_TYPE = "application/x-cocrepo-data-grid-column-id";
 
-export interface DataGridGroupPanelProps<T extends { id: Key }> {
+export interface DataGridGroupPanelProps {
 	state: DataGridGroupPanelState;
-	config?: DataGridGroupPanelConfig;
-	columns: DataGridColumnConfig<T>[];
+	grouping: string[];
+	groupableColumns: DataGridGroupableColumnItem[];
+	show?: RowGroupPanelShow;
 }
 
-function shouldRenderGroupPanel<T>(
-	rowGroupPanelShow: DataGridGroupPanelConfig["show"],
+function shouldRenderGroupPanel(
+	rowGroupPanelShow: RowGroupPanelShow | undefined,
 	grouping: string[],
-	groupableColumns: DataGridColumnConfig<T>[],
+	groupableColumns: DataGridGroupableColumnItem[],
 ) {
 	const panelShow: RowGroupPanelShow = rowGroupPanelShow ?? "never";
 
@@ -47,10 +40,6 @@ function shouldRenderGroupPanel<T>(
 		return grouping.length > 0;
 	}
 	return true;
-}
-
-function getColumnLabel<T>(column: DataGridColumnConfig<T>) {
-	return column.label;
 }
 
 function getGroupingWithColumn(
@@ -94,29 +83,27 @@ function getDragColumnId(event: DragEvent<HTMLElement>) {
 	);
 }
 
-export function DataGridGroupPanelView<T extends { id: Key }>({
+export function DataGridGroupPanelView({
 	state,
-	config,
-	columns,
-}: DataGridGroupPanelProps<T>) {
-	const grouping = state.getGrouping(columns);
-	const rowGroupPanelShow = config?.show;
+	grouping,
+	groupableColumns,
+	show,
+}: DataGridGroupPanelProps) {
 	const onGroupingChange = state.changeGrouping;
 	const t = useT();
-	const groupableColumns = getRowGroupableColumnConfigs(columns);
 	const groupableColumnMap = new Map(
-		groupableColumns.map((column) => [getColumnConfigId(column), column]),
+		groupableColumns.map((column) => [column.id, column]),
 	);
 	const activeColumns = grouping
 		.map((columnId) => groupableColumnMap.get(columnId))
-		.filter((column): column is DataGridColumnConfig<T> => Boolean(column));
-	const activeColumnIds = new Set(activeColumns.map(getColumnConfigId));
+		.filter((column): column is DataGridGroupableColumnItem => Boolean(column));
+	const activeColumnIds = new Set(activeColumns.map((column) => column.id));
 	const inactiveColumns = groupableColumns.filter(
-		(column) => !activeColumnIds.has(getColumnConfigId(column)),
+		(column) => !activeColumnIds.has(column.id),
 	);
 	const canChangeGrouping = true;
 
-	if (!shouldRenderGroupPanel(rowGroupPanelShow, grouping, groupableColumns)) {
+	if (!shouldRenderGroupPanel(show, grouping, groupableColumns)) {
 		return null;
 	}
 
@@ -159,63 +146,58 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 						onDrop={(event) => handleDrop(event)}
 					>
 						{activeColumns.length > 0 ? (
-							activeColumns.map((column, index) => {
-								const columnId = getColumnConfigId(column);
-								const label = getColumnLabel(column);
-
-								return (
-									<li
-										key={columnId}
-										draggable={canChangeGrouping}
-										onDragStart={(event) => handleDragStart(event, columnId)}
-										onDragOver={(event) => event.preventDefault()}
-										onDrop={(event) => handleDrop(event, index)}
-										className="inline-flex h-6 items-center gap-1 rounded border border-accent/20 bg-accent-soft px-1.5"
+							activeColumns.map((column, index) => (
+								<li
+									key={column.id}
+									draggable={canChangeGrouping}
+									onDragStart={(event) => handleDragStart(event, column.id)}
+									onDragOver={(event) => event.preventDefault()}
+									onDrop={(event) => handleDrop(event, index)}
+									className="inline-flex h-6 items-center gap-1 rounded border border-accent/20 bg-accent-soft px-1.5"
+								>
+									<GripVertical className="size-3.5 text-muted" aria-hidden />
+									<Typography
+										className="text-accent-soft-foreground"
+										type="body-xs"
+										weight="medium"
 									>
-										<GripVertical className="size-3.5 text-muted" aria-hidden />
-										<Typography
-											className="text-accent-soft-foreground"
-											type="body-xs"
-											weight="medium"
-										>
-											{t(label)}
-										</Typography>
-										<Button
-											aria-label={`${label} 그룹 왼쪽으로 이동`}
-											className="h-5 min-w-5 rounded px-0"
-											isDisabled={index === 0}
-											isIconOnly
-											size="sm"
-											variant="ghost"
-											onPress={() => handleMoveGroup(columnId, -1)}
-										>
-											<ArrowLeft className="size-3" />
-										</Button>
-										<Button
-											aria-label={`${label} 그룹 오른쪽으로 이동`}
-											className="h-5 min-w-5 rounded px-0"
-											isDisabled={index === activeColumns.length - 1}
-											isIconOnly
-											size="sm"
-											variant="ghost"
-											onPress={() => handleMoveGroup(columnId, 1)}
-										>
-											<ArrowRight className="size-3" />
-										</Button>
-										<Button
-											aria-label={`${label} 그룹 제거`}
-											className="h-5 min-w-5 rounded px-0"
-											isDisabled={!canChangeGrouping}
-											isIconOnly
-											size="sm"
-											variant="ghost"
-											onPress={() => handleRemoveGroup(columnId)}
-										>
-											<X className="size-3" />
-										</Button>
-									</li>
-								);
-							})
+										{t(column.label)}
+									</Typography>
+									<Button
+										aria-label={`${column.label} 그룹 왼쪽으로 이동`}
+										className="h-5 min-w-5 rounded px-0"
+										isDisabled={index === 0}
+										isIconOnly
+										size="sm"
+										variant="ghost"
+										onPress={() => handleMoveGroup(column.id, -1)}
+									>
+										<ArrowLeft className="size-3" />
+									</Button>
+									<Button
+										aria-label={`${column.label} 그룹 오른쪽으로 이동`}
+										className="h-5 min-w-5 rounded px-0"
+										isDisabled={index === activeColumns.length - 1}
+										isIconOnly
+										size="sm"
+										variant="ghost"
+										onPress={() => handleMoveGroup(column.id, 1)}
+									>
+										<ArrowRight className="size-3" />
+									</Button>
+									<Button
+										aria-label={`${column.label} 그룹 제거`}
+										className="h-5 min-w-5 rounded px-0"
+										isDisabled={!canChangeGrouping}
+										isIconOnly
+										size="sm"
+										variant="ghost"
+										onPress={() => handleRemoveGroup(column.id)}
+									>
+										<X className="size-3" />
+									</Button>
+								</li>
+							))
 						) : (
 							<li>
 								<Typography color="muted" type="body-xs">
@@ -228,27 +210,22 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 
 				{inactiveColumns.length > 0 ? (
 					<div className="flex flex-wrap items-center gap-1.5 lg:justify-end">
-						{inactiveColumns.map((column) => {
-							const columnId = getColumnConfigId(column);
-							const label = getColumnLabel(column);
-
-							return (
-								<Button
-									key={columnId}
-									aria-label={`${label} 그룹 추가`}
-									className="h-7 rounded px-2 text-xs"
-									isDisabled={!canChangeGrouping}
-									size="sm"
-									variant="outline"
-									onPress={() =>
-										onGroupingChange(getGroupingWithColumn(grouping, columnId))
-									}
-								>
-									<Plus className="size-3" aria-hidden />
-									{label}
-								</Button>
-							);
-						})}
+						{inactiveColumns.map((column) => (
+							<Button
+								key={column.id}
+								aria-label={`${column.label} 그룹 추가`}
+								className="h-7 rounded px-2 text-xs"
+								isDisabled={!canChangeGrouping}
+								size="sm"
+								variant="outline"
+								onPress={() =>
+									onGroupingChange(getGroupingWithColumn(grouping, column.id))
+								}
+							>
+								<Plus className="size-3" aria-hidden />
+								{column.label}
+							</Button>
+						))}
 					</div>
 				) : null}
 			</div>

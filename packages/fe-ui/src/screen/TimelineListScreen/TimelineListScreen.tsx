@@ -73,16 +73,27 @@ export const TimelineListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					toolbar: { leftInputs },
+					table: {
+						entity: "Timeline",
+						columns: buildTimelineTableColumns<TimelineDto>({
+							onDeleteTimeline,
+						}),
+						emptyMessage: "등록된 타임라인이 없습니다.",
+					},
+					rows: timelines ?? [],
+					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const timelineRows = timelines ?? [];
+			gridState.queryStates = queryStates;
+			gridState.rows = timelines ?? [];
+			gridState.pagination.setTotalCount(totalCount);
+		}, [gridState, queryStates, timelines, totalCount]);
 		const onClickDeleteIcon = (timelineId: bigint) => {
 			void onDeleteTimeline(timelineId);
 		};
-		const columns = buildTimelineTableColumns<TimelineDto>({
+		gridState.table.columns = buildTimelineTableColumns<TimelineDto>({
 			onClickDeleteButton: onClickDeleteIcon,
 		});
 		if (isLoading) {
@@ -106,21 +117,7 @@ export const TimelineListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "Timeline",
-										columns,
-										emptyMessage: "등록된 타임라인이 없습니다.",
-									},
-								}}
-								rows={timelineRows}
-								totalCount={totalCount}
-								state={gridState}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

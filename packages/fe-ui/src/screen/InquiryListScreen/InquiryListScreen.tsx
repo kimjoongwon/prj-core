@@ -233,7 +233,7 @@ export const InquiryListScreen = observer(
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
+			gridState.queryStates = queryStates;
 		}, [gridState, queryStates, setQueryStates]);
 		const inquiryRows = inquiries ?? [];
 		const columns = buildInquiryTableColumns<InquiryDto>();

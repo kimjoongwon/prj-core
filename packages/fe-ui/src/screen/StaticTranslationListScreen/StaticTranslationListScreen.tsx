@@ -200,7 +200,7 @@ export const StaticTranslationListScreen = observer(
 			onClickDeleteButton: handleDeleteTranslation,
 		});
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
+			gridState.queryStates = queryStates;
 		}, [gridState, queryStates, setQueryStates]);
 		function handleOpenCreateModal() {
 			setEditingTranslation(null);

@@ -1,10 +1,4 @@
-import type {
-	DataGridConfig,
-	DataGridGroupPanelConfig,
-	DataGridQueryStates,
-	DataGridTableConfig,
-	DataGridToolbarConfig,
-} from "@cocrepo/type";
+import type { DataGridQueryStates } from "@cocrepo/type";
 import { vi } from "vitest";
 import { DataGridSelectionState, DataGridState } from "../state/DataGridState";
 
@@ -20,9 +14,9 @@ export const dataGridTestRows: DataGridTestRow[] = [
 ];
 
 interface DataGridTestConfigOverrides {
-	toolbar?: DataGridToolbarConfig;
-	groupPanel?: DataGridGroupPanelConfig;
-	table?: Partial<DataGridTableConfig<DataGridTestRow>>;
+	table?: Partial<
+		NonNullable<ConstructorParameters<typeof DataGridState>[0]["table"]>
+	>;
 }
 
 export function createDataGridTestConfig(
@@ -41,38 +35,27 @@ export function createDataGridTestConfig(
 			emptyMessage: "No rows",
 			...overrides.table,
 		},
-	} as DataGridConfig<DataGridTestRow>;
+	} satisfies {
+		toolbar?: ConstructorParameters<typeof DataGridState>[0]["toolbar"];
+		groupPanel?: ConstructorParameters<typeof DataGridState>[0]["groupPanel"];
+		table: NonNullable<DataGridTestConfigOverrides["table"]>;
+	};
 }
 
 export function createDataGridTestState(
 	queryStates: DataGridQueryStates = { skip: 0, take: 20 },
+	config: DataGridTestConfigOverrides = {},
 ) {
 	const selection = new DataGridSelectionState();
 	const setQueryStates = vi.fn(async () => new URLSearchParams());
 	const state = new DataGridState({
 		queryStates,
 		setQueryStates,
+		...createDataGridTestConfig(config),
+		rows: dataGridTestRows,
+		totalCount: dataGridTestRows.length,
 		selection,
 	});
 
 	return { state, selection, setQueryStates };
-}
-
-export function createDataGridTableMock(
-	rowIds = dataGridTestRows.map((row) => String(row.id)),
-) {
-	const rows = rowIds.map((id) => ({
-		id,
-		getIsGrouped: () => false,
-		getParentRow: () => undefined,
-		depth: 0,
-	}));
-
-	return {
-		getCoreRowModel: () => ({ rows }),
-		getRowModel: () => ({ rows }),
-		getFlatHeaders: () => [],
-		getVisibleLeafColumns: () => [],
-		setOptions: vi.fn(),
-	};
 }

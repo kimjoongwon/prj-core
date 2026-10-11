@@ -1,5 +1,3 @@
-import type { Row } from "@tanstack/react-table";
-
 /** DTO 식별자는 bigint를 유지하고, React/TanStack 경계에서만 문자열 key로 변환합니다. */
 export type Key = string | number | bigint;
 
@@ -37,6 +35,3 @@ export function createDataGridRowKeyAdapter<T extends { id: Key }>(rows: T[]) {
 		getDataGridRowKey(row, index, idCounts, parent?.id);
 }
 
-export function getVisibleRowKeys<T extends { id: Key }>(tableRows: Row<T>[]) {
-	return tableRows.filter((row) => !row.getIsGrouped()).map((row) => row.id);
-}

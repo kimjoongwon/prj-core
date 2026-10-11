@@ -200,7 +200,7 @@ function AssetsGridFallback({
 			}),
 	);
 	useEffect(() => {
-		gridState.syncQuery(queryStates, setQueryStates);
+		gridState.queryStates = queryStates;
 	}, [gridState, queryStates, setQueryStates]);
 	return (
 		<div className={assetsLayoutClassName}>
@@ -276,7 +276,7 @@ export const AssetBrowser = observer(
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
+			gridState.queryStates = queryStates;
 		}, [gridState, queryStates, setQueryStates]);
 		const fileInputRef = useRef<HTMLInputElement | null>(null);
 		const createFolderModal = useOverlayState();

@@ -93,16 +93,28 @@ export const RoutineListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					toolbar: { leftInputs },
+					table: {
+						entity: "Routine",
+						columns: buildRoutineTableColumns<RoutineDto>({
+							onClickRoutineName,
+							onDeleteRoutine,
+						}),
+						emptyMessage: "등록된 루틴이 없습니다.",
+					},
+					rows: routines ?? [],
+					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const routineRows = routines ?? [];
+			gridState.queryStates = queryStates;
+			gridState.rows = routines ?? [];
+			gridState.pagination.setTotalCount(totalCount);
+		}, [gridState, queryStates, routines, totalCount]);
 		const onClickDeleteButton = (routineId: bigint) => {
 			void onDeleteRoutine(routineId);
 		};
-		const columns = buildRoutineTableColumns<RoutineDto>({
+		gridState.table.columns = buildRoutineTableColumns<RoutineDto>({
 			onClickRoutineName,
 			onClickDeleteButton,
 		});
@@ -127,21 +139,7 @@ export const RoutineListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "Routine",
-										columns,
-										emptyMessage: "등록된 루틴이 없습니다.",
-									},
-								}}
-								rows={routineRows}
-								totalCount={totalCount}
-								state={gridState}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

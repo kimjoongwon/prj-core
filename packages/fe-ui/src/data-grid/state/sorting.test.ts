@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { getNextSortValues, getSortDirection } from "./sorting";
+import { getQuerySortValue, getTableSortingState } from "./sorting";
 
 describe("정렬 상태", () => {
-	it("현재 정렬 방향에 따라 다음 조회 값을 만든다", () => {
-		expect(getSortDirection("name", ["-name"])).toBe("desc");
-		expect(getNextSortValues("name", "desc")).toBeNull();
+	it("nuqs 정렬 값을 TanStack Table 상태로 변환하고 다시 직렬화한다", () => {
+		const sorting = getTableSortingState({ sort: ["name", "-createdAt"] });
+
+		expect(sorting).toEqual([
+			{ id: "name", desc: false },
+			{ id: "createdAt", desc: true },
+		]);
+		expect(getQuerySortValue(sorting)).toEqual(["name", "-createdAt"]);
+		expect(getQuerySortValue([])).toBeNull();
 	});
 });

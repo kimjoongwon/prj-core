@@ -1,14 +1,9 @@
 import type {
 	DataGridColumnConfig,
-	DataGridColumnsState,
-	DataGridQueryStates,
+	DataGridColumnSettingItem,
+	DataGridGroupableColumnItem,
 } from "@cocrepo/type";
 import type { ColumnDef } from "@tanstack/react-table";
-import {
-	filterGroupByColumnIds,
-	getQueryGroupByValues,
-	hasQueryGroupBy,
-} from "../state/grouping";
 
 /**
  * 서로 다른 TValue를 가진 ColumnDef를 한 배열로 다루는 TanStack 경계입니다.
@@ -42,46 +37,6 @@ export function getColumnConfigId<TData, TValue>(
 	return String(config.field);
 }
 
-export function getOrderedColumnConfigs<
-	TData,
-	const TConfigs extends HeterogeneousDataGridColumns<TData>,
->(
-	configs: TConfigs & HeterogeneousDataGridColumns<TData>,
-	columnsState: DataGridColumnsState,
-): TConfigs[number][] {
-	const typedConfigs = configs as TConfigs;
-	const configById = new Map<string, TConfigs[number]>(
-		typedConfigs.map((config) => [getColumnConfigId(config), config]),
-	);
-	const orderedConfigs = columnsState.order
-		.map((columnId) => configById.get(columnId))
-		.filter((config): config is TConfigs[number] => Boolean(config));
-	const orderedIds = new Set(orderedConfigs.map(getColumnConfigId));
-	const remainingConfigs = typedConfigs.filter(
-		(config) => !orderedIds.has(getColumnConfigId(config)),
-	);
-
-	return [...orderedConfigs, ...remainingConfigs];
-}
-
-export function getVisibleColumnConfigs<
-	TData,
-	const TConfigs extends HeterogeneousDataGridColumns<TData>,
->(
-	configs: TConfigs & HeterogeneousDataGridColumns<TData>,
-	columnsState: DataGridColumnsState,
-): TConfigs[number][] {
-	return getOrderedColumnConfigs<TData, TConfigs>(configs, columnsState).filter(
-		(config) => {
-			if (config.isRequired) {
-				return true;
-			}
-
-			return columnsState.visibility[getColumnConfigId(config)] !== false;
-		},
-	);
-}
-
 export function isRowGroupableColumn<TData>(
 	config: HeterogeneousDataGridColumnConfig<TData>,
 ) {
@@ -98,40 +53,29 @@ export function getRowGroupableColumnConfigs<TData>(
 	return configs.filter(isRowGroupableColumn);
 }
 
-export function getDefaultGroupingColumnIds<TData>(
+/** ColumnSettings가 표시 토글에 필요한 최소 정보로 전체 컬럼을 변환합니다. */
+export function getColumnSettingItems<TData>(
 	configs: HeterogeneousDataGridColumns<TData>,
-) {
-	return configs
-		.filter((config) => config.rowGroup === true)
-		.map(getColumnConfigId);
+): DataGridColumnSettingItem[] {
+	return configs.map((config) => ({
+		id: getColumnConfigId(config),
+		label: config.label,
+		isRequired: config.isRequired,
+	}));
 }
 
-export function getGroupingColumnIds<TData>(
+/** GroupPanel이 그룹 후보로 제안할 groupable 컬럼만 최소 정보로 변환합니다. */
+export function getGroupableColumnItems<TData>(
 	configs: HeterogeneousDataGridColumns<TData>,
-	columnsState: DataGridColumnsState,
-	queryValues?: DataGridQueryStates,
-) {
-	const visibleColumnIds = new Set(configs.map(getColumnConfigId));
-	const queryGrouping = queryValues
-		? filterGroupByColumnIds(getQueryGroupByValues(queryValues), [...configs])
-		: [];
-	const stateGrouping = columnsState.grouping.filter((columnId) =>
-		visibleColumnIds.has(columnId),
-	);
-
-	if (columnsState.isGroupingCustomized === true) {
-		return stateGrouping;
-	}
-	if (queryValues && hasQueryGroupBy(queryValues)) {
-		return queryGrouping;
-	}
-
-	return getDefaultGroupingColumnIds(configs);
+): DataGridGroupableColumnItem[] {
+	return getRowGroupableColumnConfigs(configs).map((config) => ({
+		id: getColumnConfigId(config),
+		label: config.label,
+	}));
 }
 
 function toColumnDef<TData, TValue = unknown>(
 	config: DataGridColumnConfig<TData, TValue>,
-	columnsState: DataGridColumnsState,
 ): ColumnDef<TData, TValue> {
 	const {
 		field,
@@ -153,11 +97,6 @@ function toColumnDef<TData, TValue = unknown>(
 			: (field as string);
 	const header = "header" in columnDefProps ? columnDefProps.header : label;
 	const columnId = String(field);
-	const columnSize =
-		columnsState.sizing[columnId] ??
-		("size" in columnDefProps && typeof columnDefProps.size === "number"
-			? columnDefProps.size
-			: undefined);
 
 	return {
 		id: columnId,
@@ -177,16 +116,16 @@ function toColumnDef<TData, TValue = unknown>(
 			...("meta" in columnDefProps ? columnDefProps.meta : {}),
 		},
 		...columnDefProps,
+		enableHiding: isRequired ? false : columnDefProps.enableHiding,
 		enableGrouping:
 			columnDefProps.enableGrouping ??
 			(rowGroup === true || enableRowGroup === true),
-		size: columnSize,
+		sortDescFirst: false,
 	} as ColumnDef<TData, TValue>;
 }
 
 export function toColumnDefs<TData>(
 	configs: HeterogeneousDataGridColumns<TData>,
-	columnsState: DataGridColumnsState,
 ): ColumnDef<TData, unknown>[] {
-	return configs.map((config) => toColumnDef(config, columnsState));
+	return configs.map((config) => toColumnDef(config));
 }

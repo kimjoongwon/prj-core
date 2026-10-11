@@ -60,13 +60,20 @@ export const RoleListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					table: {
+						entity: "Role",
+						columns: buildAdminRoleTableColumns<RoleDto>(),
+						emptyMessage: "등록된 역할이 없습니다.",
+					},
+					rows: roles ?? [],
+					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const roleRows = roles ?? [];
-		const columns = buildAdminRoleTableColumns<RoleDto>();
+			gridState.queryStates = queryStates;
+			gridState.rows = roles ?? [];
+			gridState.pagination.setTotalCount(totalCount);
+		}, [gridState, queryStates, roles, totalCount]);
 		if (isLoading) {
 			return <RolesScreenFallback />;
 		}
@@ -91,18 +98,7 @@ export const RoleListScreen = observer(
 						<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 							<Section overflow="hidden">
 								<Section.Body>
-									<DataGrid
-										config={{
-											table: {
-												entity: "Role",
-												columns,
-												emptyMessage: "등록된 역할이 없습니다.",
-											},
-										}}
-										rows={roleRows}
-										totalCount={totalCount}
-										state={gridState}
-									/>
+									<DataGrid state={gridState} />
 								</Section.Body>
 							</Section>
 						</SectionSurface>

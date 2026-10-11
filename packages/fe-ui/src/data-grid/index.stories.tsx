@@ -1,6 +1,5 @@
 import type {
 	DataGridColumnConfig,
-	DataGridConfig,
 	DataGridQueryStates,
 	DataGridRowMoveEvent,
 	DataGridSetQueryStates,
@@ -9,6 +8,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { ChipCell } from "./cell";
+import { DataGridLoading } from "./DataGridLoading";
 import { DataGrid, DataGridSelectionState, DataGridState } from "./index";
 
 interface StoryRow {
@@ -112,7 +112,7 @@ class StoryDataGridFixture {
 					([, value]) => value !== null && value !== undefined && value !== "",
 				),
 			);
-			this.state.syncQuery(currentQueryValues, setQueryStates);
+			this.state.queryStates = currentQueryValues;
 
 			const searchParams = new URLSearchParams();
 			for (const [key, value] of Object.entries(currentQueryValues)) {
@@ -127,6 +127,8 @@ class StoryDataGridFixture {
 		this.state = new DataGridState({
 			queryStates: currentQueryValues,
 			setQueryStates,
+			...createStoryConfig("default"),
+			rows,
 			selection: this.selection,
 		});
 		makeAutoObservable(
@@ -191,7 +193,10 @@ type StoryArgs = {
 function createStoryConfig(
 	mode: StoryMode,
 	onRowMove?: (event: DataGridRowMoveEvent<StoryRow>) => void,
-): DataGridConfig<StoryRow> {
+): Pick<
+	ConstructorParameters<typeof DataGridState>[0],
+	"groupPanel" | "table"
+> {
 	const isHierarchy = mode === "hierarchy" || mode === "row-move";
 	const isEditable = mode === "inline-edit";
 
@@ -349,27 +354,17 @@ const DataGridStory = observer(function DataGridStory({
 	const fixture = useLocalObservable(
 		() => new StoryDataGridFixture(rows, queryValues, selectedKeys),
 	);
-	const filteredRows = filterStoryRows(
-		fixture.rows,
-		fixture.state.query.values,
-	);
-	const sortedRows = sortStoryRows(filteredRows, fixture.state.query.values);
+	const filteredRows = filterStoryRows(fixture.rows, fixture.state.queryStates);
+	const sortedRows = sortStoryRows(filteredRows, fixture.state.queryStates);
 	const renderedRows =
 		mode === "hierarchy"
-			? filterHierarchyStoryRows(fixture.rows, fixture.state.query.values)
+			? filterHierarchyStoryRows(fixture.rows, fixture.state.queryStates)
 			: mode === "row-move"
 				? rows
-				: paginateStoryRows(sortedRows, fixture.state.query.values);
+				: paginateStoryRows(sortedRows, fixture.state.queryStates);
+	fixture.state.rows = renderedRows;
 
-	return (
-		<DataGrid
-			config={createStoryConfig(mode, fixture.applyRowMove)}
-			state={fixture.state}
-			rows={renderedRows}
-			totalCount={sortedRows.length}
-			isLoading={isLoading}
-		/>
-	);
+	return isLoading ? <DataGridLoading /> : <DataGrid state={fixture.state} />;
 });
 
 const meta = {

@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridEditTrigger, DataGridTableConfig } from "@cocrepo/type";
+import type { DataGridEditTrigger } from "@cocrepo/type";
 import {
 	SortableContext,
 	useSortable,
@@ -22,6 +22,7 @@ import type {
 	DataGridEditingCell,
 	DataGridEditingState,
 	DataGridTableBodyState,
+	DataGridTableState,
 } from "../../state/DataGridState";
 import type { DataGridBodyRow } from "../../state/grouping";
 import type { DataGridSelectionMode } from "../../state/selection";
@@ -38,14 +39,14 @@ const DEFAULT_ROW_HOVER_CLASS_NAME = "hover:bg-surface-hover";
 
 export interface TableBodyProps<T extends { id: Key }> {
 	state: DataGridTableBodyState;
-	config: DataGridTableConfig<T>;
+	config: DataGridTableState;
 	rows: DataGridBodyRow<T>[];
 	selectionMode: DataGridSelectionMode;
 	tableColumnCount: number;
 }
 
 function getRowInteractionProps<T extends { id: Key }>(
-	config: DataGridTableConfig<T>,
+	config: DataGridTableState,
 	row: Row<T>,
 ) {
 	if (!config.onRowClick) {
@@ -143,7 +144,7 @@ function DataGridGroupRow<T extends { id: Key }>({
 }
 
 interface DataGridDataRowProps<T extends { id: Key }> {
-	config: DataGridTableConfig<T>;
+	config: DataGridTableState;
 	onCellValueChange?: <TField extends keyof T>(
 		row: T,
 		field: TField,
@@ -412,7 +413,7 @@ function DataGridDataRowView<T extends { id: Key }>({
 						]
 							.filter(Boolean)
 							.join(" ")}
-						style={getColumnWidthStyle(cell.column.columnDef)}
+						style={getColumnWidthStyle(cell.column.getSize())}
 						tabIndex={isEditable && !isEditing ? 0 : undefined}
 						onClick={
 							isEditable && !isEditing && triggers.includes("click")

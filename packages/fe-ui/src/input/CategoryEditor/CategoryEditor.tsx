@@ -1,24 +1,21 @@
 "use client";
 
-import {
-	CategoryFormSchema,
-	validateFieldSync,
-} from "@cocrepo/schema";
+import { CategoryFormSchema, validateFieldSync } from "@cocrepo/schema";
 import type {
-	DataGridConfig,
 	DataGridEditRequest,
 	DataGridExpandRequest,
 	InputStateProps,
 } from "@cocrepo/type";
-import type { CellContext } from "@tanstack/react-table";
 import { ButtonGroup } from "@heroui/react";
+import type { CellContext } from "@tanstack/react-table";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import {
 	DataGrid,
 	type DataGridChangesState,
-	type DataGridState,
+	DataGridState,
 } from "../../data-grid";
+import { DataGridLoading } from "../../data-grid/DataGridLoading";
 import { Button } from "../Button";
 
 /** CategoryFormSchema의 name을 편집하는 DataGrid 행입니다. */
@@ -136,7 +133,10 @@ class State {
 			rowId: newCategoryRow.id,
 			columnId: "name",
 			requestId,
-		};
+		} satisfies Pick<
+			ConstructorParameters<typeof DataGridState>[0],
+			"toolbar" | "groupPanel" | "table"
+		>;
 	}
 
 	private issueRequestId() {
@@ -179,7 +179,7 @@ export const CategoryEditor = observer(
 	}: CategoryEditorProps) => {
 		const state = useLocalObservable(() => new State(rows, dataGridState));
 		state.setSource(rows, dataGridState);
-		const config: DataGridConfig<CategoryEditorRow> = {
+		const config = {
 			toolbar: {
 				rightInputs: isReadOnly
 					? []
@@ -197,74 +197,74 @@ export const CategoryEditor = observer(
 			table: {
 				entity: "Category",
 				columns: [
-				{
-					field: "name",
-					label: "이름",
-					isRequired: true,
-					rowExpander: true,
-					...(isReadOnly
-						? {}
-						: {
-								editable: {
-									editor: {
-										type: "text",
-										placeholder: "카테고리 이름 입력",
+					{
+						field: "name",
+						label: "이름",
+						isRequired: true,
+						rowExpander: true,
+						...(isReadOnly
+							? {}
+							: {
+									editable: {
+										editor: {
+											type: "text",
+											placeholder: "카테고리 이름 입력",
+										},
+										triggers: ["click", "enter", "f2"],
+										validate: ({ value }) =>
+											validateFieldSync(
+												CategoryFormSchema,
+												{ name: value },
+												"name",
+											)?.messages[0],
 									},
-									triggers: ["click", "enter", "f2"],
-									validate: ({ value }) =>
-										validateFieldSync(
-											CategoryFormSchema,
-											{ name: value },
-											"name",
-										)?.messages[0],
+								}),
+					},
+					...(isReadOnly
+						? []
+						: [
+								{
+									field: "actions",
+									label: "관리",
+									align: "center" as const,
+									cell: ({
+										row: categoryRow,
+									}: CellContext<CategoryEditorRow, unknown>) => (
+										<ButtonGroup variant="secondary">
+											<Button
+												onPress={() =>
+													state.addChildCategory(categoryRow.original)
+												}
+											>
+												추가
+											</Button>
+											<ButtonGroup.Separator />
+											<Button
+												onPress={() =>
+													state.deleteCategory(categoryRow.original.id)
+												}
+											>
+												삭제
+											</Button>
+										</ButtonGroup>
+									),
 								},
-							}),
-				},
-				...(isReadOnly
-					? []
-					: [
-							{
-								field: "actions",
-								label: "관리",
-								align: "center" as const,
-								cell: ({
-									row: categoryRow,
-								}: CellContext<CategoryEditorRow, unknown>) => (
-									<ButtonGroup variant="secondary">
-										<Button
-											onPress={() =>
-												state.addChildCategory(categoryRow.original)
-											}
-										>
-											추가
-										</Button>
-										<ButtonGroup.Separator />
-										<Button
-											onPress={() =>
-												state.deleteCategory(categoryRow.original.id)
-											}
-										>
-											삭제
-										</Button>
-									</ButtonGroup>
-								),
-							},
-						]),
+							]),
 				],
 				getSubRows: state.getCategorySubRows,
 				expandRequest: state.expandRequest,
 				editRequest: state.editRequest,
 			},
 		};
+		const gridState = new DataGridState({
+			queryStates: {},
+			setQueryStates: async () => new URLSearchParams(),
+			...config,
+			rows: state.rootCategoryRows,
+			totalCount,
+			changes: dataGridState.changes,
+		});
 
-		return (
-			<DataGrid
-				config={config}
-				state={dataGridState}
-				rows={state.rootCategoryRows}
-				totalCount={totalCount}
-				isLoading={isLoading}
-			/>
-		);
+		return isLoading ? <DataGridLoading /> : <DataGrid state={gridState} />;
 	},
 );

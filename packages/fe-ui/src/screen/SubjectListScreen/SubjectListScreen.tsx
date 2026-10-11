@@ -181,18 +181,25 @@ export const SubjectListScreen = observer(
 				new DataGridState({
 					queryStates,
 					setQueryStates,
+					toolbar: { leftInputs },
+					table: {
+						entity: "Subject",
+						columns: subjectTableColumns,
+						onRowClick: (subject) => onClickSubject(subject.id),
+						emptyMessage: "조회된 대상이 없습니다.",
+					},
+					rows: subjects ?? [],
 				}),
 		);
 		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
+			gridState.queryStates = queryStates;
+			gridState.rows = subjects ?? [];
+		}, [gridState, queryStates, subjects]);
 		const subjectRows = subjects ?? [];
 		const filteredSubjects = filterSubjects(subjectRows, queryStates);
-		const visibleSubjects = paginateSubjects(filteredSubjects, queryStates);
 		const totalCount = filteredSubjects.length;
-		const handleRowClick = (subject: SubjectDto) => {
-			onClickSubject(subject.id);
-		};
+		gridState.rows = paginateSubjects(filteredSubjects, queryStates);
+		gridState.pagination.setTotalCount(totalCount);
 		const handleSubjectGroupFilterChange = (group: string | null) => {
 			void setQueryStates({
 				group,
@@ -216,22 +223,7 @@ export const SubjectListScreen = observer(
 									selectedGroup={queryStates.group}
 									onChangeGroup={handleSubjectGroupFilterChange}
 								/>
-								<DataGrid
-									config={{
-										toolbar: {
-											leftInputs,
-										},
-										table: {
-											entity: "Subject",
-											columns: subjectTableColumns,
-											onRowClick: handleRowClick,
-											emptyMessage: "조회된 대상이 없습니다.",
-										},
-									}}
-									rows={visibleSubjects}
-									totalCount={totalCount}
-									state={gridState}
-								/>
+								<DataGrid state={gridState} />
 							</VStack>
 						</Section.Body>
 					</Section>
