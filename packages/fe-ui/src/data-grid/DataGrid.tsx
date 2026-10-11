@@ -224,20 +224,7 @@ export class DataGridState {
 		setQueryStates: DataGridSetQueryStates;
 		toolbar?: DataGridToolbarConfig;
 		groupPanel?: DataGridGroupPanelConfig;
-		table?: {
-			entity: string;
-			columns: ColumnDef<never, never>[];
-			selection?: SelectionConfig;
-			onRowClick?: (row: DataGridRow) => void;
-			getSubRows?: (
-				row: DataGridRow,
-				index: number,
-			) => DataGridRow[] | undefined;
-			expandRequest?: DataGridExpandRequest;
-			editRequest?: DataGridEditRequest;
-			onRowMove?: (event: DataGridRowMoveEvent<DataGridRow>) => void;
-			emptyMessage?: string;
-		};
+		table?: DataGridTableState;
 		rows?: DataGridRow[];
 		leftInputs?: InputConfig[];
 		rightInputs?: InputConfig[];
