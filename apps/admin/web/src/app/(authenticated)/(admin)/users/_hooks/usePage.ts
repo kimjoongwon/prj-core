@@ -18,6 +18,7 @@ export const usePage = () => {
 		dataGrid: new DataGridState({
 			queryStates: { take, skip },
 			setQueryStates,
+			rows: getUsersSuspenseData?.data ?? [],
 		}),
 	}));
 

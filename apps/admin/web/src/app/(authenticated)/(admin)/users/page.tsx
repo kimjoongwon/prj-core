@@ -6,9 +6,9 @@ import { usePage } from "./_hooks/usePage";
 
 function UsersPageRoute() {
 	const page = usePage();
-	const { state, users } = page;
+	const { state } = page;
 
-	return <UserListScreen users={users} state={state} />;
+	return <UserListScreen state={state} />;
 }
 
 export default observer(UsersPageRoute);

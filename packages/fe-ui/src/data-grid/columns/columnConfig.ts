@@ -2,11 +2,13 @@ import type {
 	DataGridColumnSettingItem,
 	DataGridGroupableColumnItem,
 } from "@cocrepo/type";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { TableOptions } from "@tanstack/react-table";
 
-type HeterogeneousColumnDefs<TData> = ColumnDef<TData, never>[];
+type HeterogeneousColumnDefs<TData> = NonNullable<
+	TableOptions<TData>["columns"]
+>;
 
-function getColumnId<TData>(columnDef: ColumnDef<TData, never>) {
+function getColumnId<TData>(columnDef: HeterogeneousColumnDefs<TData>[number]) {
 	if (columnDef.id) return columnDef.id;
 	if ("accessorKey" in columnDef && columnDef.accessorKey)
 		return String(columnDef.accessorKey).replaceAll(".", "_");
@@ -14,7 +16,7 @@ function getColumnId<TData>(columnDef: ColumnDef<TData, never>) {
 }
 
 function getColumnHeader<TData>(
-	columnDef: ColumnDef<TData, never>,
+	columnDef: HeterogeneousColumnDefs<TData>[number],
 	id: string,
 ) {
 	return typeof columnDef.header === "string" ? columnDef.header : id;

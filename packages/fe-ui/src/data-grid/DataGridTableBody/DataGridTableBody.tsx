@@ -9,6 +9,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { flexRender, type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
+import { makeAutoObservable, observable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { type CSSProperties, type KeyboardEvent, useEffect } from "react";
 import { Typography } from "../../data-display/Typography";
@@ -16,13 +17,81 @@ import { type Translate, translateNode } from "../../i18n";
 import { EditorCell } from "../cell/EditorCell";
 import { HierarchyCell } from "../cell/HierarchyCell";
 import { SelectionCell } from "../cell/SelectionCell";
-import type {
-	DataGridEditingCell,
-	DataGridEditingState,
-	DataGridTableBodyState,
-	DataGridTableState,
-	Key,
-} from "../DataGrid";
+import type { DataGridState, DataGridTableState, Key } from "../DataGrid";
+
+/** Inline editor의 draft와 validation 상태를 유지합니다. */
+export interface DataGridEditingCell {
+	rowId: string;
+	columnId: string;
+	initialValue: unknown;
+	draftValue: unknown;
+	errorMessage?: string;
+	isValidating: boolean;
+}
+
+export class DataGridEditingState {
+	editingCell: DataGridEditingCell | null = null;
+
+	constructor() {
+		makeAutoObservable(
+			this,
+			{ editingCell: observable.ref },
+			{ autoBind: true },
+		);
+	}
+
+	setEditingCell(
+		nextEditingCell:
+			| DataGridEditingCell
+			| null
+			| ((current: DataGridEditingCell | null) => DataGridEditingCell | null),
+	) {
+		this.editingCell =
+			typeof nextEditingCell === "function"
+				? nextEditingCell(this.editingCell)
+				: nextEditingCell;
+	}
+}
+
+/** Table body가 row, selection, editing, hierarchy를 위임하는 facade입니다. */
+export class DataGridTableBodyState<TData extends { id: Key } = { id: Key }> {
+	readonly editing = new DataGridEditingState();
+
+	constructor(readonly state: DataGridState<TData>) {
+		makeAutoObservable(this, { state: false }, { autoBind: true });
+	}
+
+	get selectedKeys() {
+		return Array.from(
+			this.state.selection?.selectedKeys ?? this.state.table.selectedKeys,
+		);
+	}
+
+	changeCellValue<TField extends keyof TData>(
+		row: TData,
+		field: TField,
+		value: TData[TField],
+	) {
+		this.state.setValue(row, field, value);
+	}
+
+	changeRowSelection(
+		rowKey: string,
+		isSelected: boolean,
+		onSelectionChange?: (selectedKeys: Set<string>) => void,
+	) {
+		const nextSelectedKeys = isSelected
+			? [...this.selectedKeys, rowKey]
+			: this.selectedKeys.filter((key) => key !== rowKey);
+		const nextSelection = new Set(nextSelectedKeys);
+		if (this.state.selection?.setSelectedKeys) {
+			this.state.selection.setSelectedKeys(nextSelection);
+		} else {
+			this.state.table.setSelectedKeys(nextSelection);
+		}
+		onSelectionChange?.(nextSelection);
+	}
+}
 
 const DATA_CELL_CLASS_NAME =
 	"border-r border-b border-border px-3 py-0 align-middle text-[13px] text-foreground";
@@ -33,15 +102,15 @@ const CLICKABLE_ROW_CLASS_NAME =
 const DEFAULT_ROW_HOVER_CLASS_NAME = "hover:bg-surface-hover";
 
 export interface DataGridTableBodyProps<T extends { id: Key }> {
-	state: DataGridTableBodyState;
-	config: DataGridTableState;
+	state: DataGridTableBodyState<T>;
+	config: DataGridTableState<T>;
 	rows: Row<T>[];
 	selectionMode: Exclude<SelectionConfig["mode"], "none"> | undefined;
 	tableColumnCount: number;
 }
 
 function getRowInteractionProps<T extends { id: Key }>(
-	config: DataGridTableState,
+	config: DataGridTableState<T>,
 	row: Row<T>,
 ) {
 	if (!config.onRowClick) {
@@ -139,7 +208,7 @@ function DataGridGroupRow<T extends { id: Key }>({
 }
 
 interface DataGridDataRowProps<T extends { id: Key }> {
-	config: DataGridTableState;
+	config: DataGridTableState<T>;
 	onCellValueChange?: <TField extends keyof T>(
 		row: T,
 		field: TField,
@@ -457,117 +526,116 @@ function DataGridDataRow<T extends { id: Key }>(
 	);
 }
 
-function DataGridTableBodyView<T extends { id: Key }>({
-	state,
-	config,
-	rows,
-	selectionMode,
-	tableColumnCount,
-}: DataGridTableBodyProps<T>) {
-	const rowConfig = config;
-	const bodyRows = rows;
-	const selectedKeys = state.selectedKeys;
-	const t: Translate = (value) => value;
-	const isRowMoveEnabled = Boolean(rowConfig.onRowMove);
-	const onCellValueChange = state.changeCellValue;
-	const onRowSelectionChange = (rowKey: string, isSelected: boolean) =>
-		state.changeRowSelection(
-			rowKey,
-			isSelected,
-			rowConfig.selection?.onSelectionChange,
-		);
-	const selectedKeySet = new Set(selectedKeys);
-	const editingCell = state.editing.editingCell;
-	const sortableRowIds = bodyRows
-		.filter((row) => !row.getIsGrouped())
-		.map((row) => row.id);
-	const moveToAdjacentCell = (
-		rowId: string,
-		columnId: string,
-		direction: "next" | "previous",
-	) => {
-		const editableCells = bodyRows.flatMap((row) =>
-			row.getIsGrouped()
-				? []
-				: row.getVisibleCells().flatMap((cell) => {
-						const editable = cell.column.columnDef.meta?.editable;
-						if (
-							!onCellValueChange ||
-							!editable ||
-							!(editable.isEnabled?.(row.original) ?? true)
-						) {
-							return [];
-						}
+export const DataGridTableBody = observer(
+	<T extends { id: Key }>({
+		state,
+		config,
+		rows,
+		selectionMode,
+		tableColumnCount,
+	}: DataGridTableBodyProps<T>) => {
+		const rowConfig = config;
+		const bodyRows = rows;
+		const selectedKeys = state.selectedKeys;
+		const t: Translate = (value) => value;
+		const isRowMoveEnabled = Boolean(rowConfig.onRowMove);
+		const onCellValueChange = state.changeCellValue;
+		const onRowSelectionChange = (rowKey: string, isSelected: boolean) =>
+			state.changeRowSelection(
+				rowKey,
+				isSelected,
+				rowConfig.selection?.onSelectionChange,
+			);
+		const selectedKeySet = new Set(selectedKeys);
+		const editingCell = state.editing.editingCell;
+		const sortableRowIds = bodyRows
+			.filter((row) => !row.getIsGrouped())
+			.map((row) => row.id);
+		const moveToAdjacentCell = (
+			rowId: string,
+			columnId: string,
+			direction: "next" | "previous",
+		) => {
+			const editableCells = bodyRows.flatMap((row) =>
+				row.getIsGrouped()
+					? []
+					: row.getVisibleCells().flatMap((cell) => {
+							const editable = cell.column.columnDef.meta?.editable;
+							if (
+								!onCellValueChange ||
+								!editable ||
+								!(editable.isEnabled?.(row.original) ?? true)
+							) {
+								return [];
+							}
 
-						return [{ row, cell }];
-					}),
-		);
-		const currentIndex = editableCells.findIndex(
-			({ row, cell }) => row.id === rowId && cell.column.id === columnId,
-		);
-		const next = editableCells[currentIndex + (direction === "next" ? 1 : -1)];
-		if (!next) {
-			return;
-		}
+							return [{ row, cell }];
+						}),
+			);
+			const currentIndex = editableCells.findIndex(
+				({ row, cell }) => row.id === rowId && cell.column.id === columnId,
+			);
+			const next =
+				editableCells[currentIndex + (direction === "next" ? 1 : -1)];
+			if (!next) {
+				return;
+			}
 
-		state.editing.setEditingCell({
-			rowId: next.row.id,
-			columnId: next.cell.column.id,
-			initialValue: next.cell.getValue(),
-			draftValue: next.cell.getValue(),
-			isValidating: false,
-		});
-	};
+			state.editing.setEditingCell({
+				rowId: next.row.id,
+				columnId: next.cell.column.id,
+				initialValue: next.cell.getValue(),
+				draftValue: next.cell.getValue(),
+				isValidating: false,
+			});
+		};
 
-	return (
-		<SortableContext
-			items={sortableRowIds}
-			strategy={verticalListSortingStrategy}
-		>
-			<tbody>
-				{bodyRows.length === 0 ? (
-					<tr>
-						<td className={DATA_CELL_CLASS_NAME} colSpan={tableColumnCount}>
-							{rowConfig.emptyMessage}
-						</td>
-					</tr>
-				) : (
-					bodyRows.map((row) => {
-						const isSelected = selectedKeySet.has(row.id);
+		return (
+			<SortableContext
+				items={sortableRowIds}
+				strategy={verticalListSortingStrategy}
+			>
+				<tbody>
+					{bodyRows.length === 0 ? (
+						<tr>
+							<td className={DATA_CELL_CLASS_NAME} colSpan={tableColumnCount}>
+								{rowConfig.emptyMessage}
+							</td>
+						</tr>
+					) : (
+						bodyRows.map((row) => {
+							const isSelected = selectedKeySet.has(row.id);
 
-						if (row.getIsGrouped()) {
+							if (row.getIsGrouped()) {
+								return (
+									<DataGridGroupRow
+										key={row.id}
+										row={row}
+										tableColumnCount={tableColumnCount}
+										t={t}
+									/>
+								);
+							}
+
 							return (
-								<DataGridGroupRow
+								<DataGridDataRow
 									key={row.id}
+									config={rowConfig}
+									onCellValueChange={onCellValueChange}
 									row={row}
-									tableColumnCount={tableColumnCount}
-									t={t}
+									isSelected={isSelected}
+									selectionMode={selectionMode}
+									isRowMoveEnabled={isRowMoveEnabled}
+									editingCell={editingCell}
+									onEditingCellChange={state.editing.setEditingCell}
+									onMoveToAdjacentCell={moveToAdjacentCell}
+									onRowSelectionChange={onRowSelectionChange}
 								/>
 							);
-						}
-
-						return (
-							<DataGridDataRow
-								key={row.id}
-								config={rowConfig}
-								onCellValueChange={onCellValueChange}
-								row={row}
-								isSelected={isSelected}
-								selectionMode={selectionMode}
-								isRowMoveEnabled={isRowMoveEnabled}
-								editingCell={editingCell}
-								onEditingCellChange={state.editing.setEditingCell}
-								onMoveToAdjacentCell={moveToAdjacentCell}
-								onRowSelectionChange={onRowSelectionChange}
-							/>
-						);
-					})
-				)}
-			</tbody>
-		</SortableContext>
-	);
-}
-
-export const DataGridTableBody = observer(
-	DataGridTableBodyView,
-) as typeof DataGridTableBodyView;
+						})
+					)}
+				</tbody>
+			</SortableContext>
+		);
+	},
+);

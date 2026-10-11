@@ -3,13 +3,10 @@
 import type {
 	DataGridEditRequest,
 	DataGridExpandRequest,
-	DataGridGroupPanelConfig,
 	DataGridQueryStates,
 	DataGridRowMoveEvent,
 	DataGridSelectionState,
 	DataGridSetQueryStates,
-	DataGridToolbarConfig,
-	InputConfig,
 	SelectionConfig,
 } from "@cocrepo/type";
 import type { DragEndEvent } from "@dnd-kit/core";
@@ -22,34 +19,36 @@ import {
 	useSensors,
 } from "@dnd-kit/core";
 import {
-	type ColumnDef,
 	type ExpandedState,
 	type GroupingState,
 	getCoreRowModel,
 	getExpandedRowModel,
 	getGroupedRowModel,
 	type SortingState,
+	type TableOptions,
 	type Updater,
 	useReactTable,
 } from "@tanstack/react-table";
 import { makeAutoObservable, observable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { getGroupableColumnItems } from "./columns/columnConfig";
 import {
-	DataGridActionBarView as DataGridActionBar,
+	DataGridActionBar,
 	DataGridActionBarState,
 } from "./DataGridActionBar/DataGridActionBar";
 import { DataGridContainer } from "./DataGridContainer";
 import {
-	DataGridGroupPanelView as DataGridGroupPanel,
+	DataGridGroupPanel,
 	DataGridGroupPanelState,
 } from "./DataGridGroupPanel/DataGridGroupPanel";
 import {
-	DataGridPaginationView as DataGridPagination,
+	DataGridPagination,
 	DataGridPaginationState,
 } from "./DataGridPagination/DataGridPagination";
-import { DataGridTableBody } from "./DataGridTableBody/DataGridTableBody";
+import {
+	DataGridTableBody,
+	DataGridTableBodyState,
+} from "./DataGridTableBody/DataGridTableBody";
 import { getDataGridRowMoveEvent } from "./DataGridTableBody/dataGridTableRowMove";
 import { DataGridTableContainer } from "./DataGridTableContainer/DataGridTableContainer";
 import { DataGridTableHeader } from "./DataGridTableHeader/DataGridTableHeader";
@@ -61,18 +60,22 @@ import {
 const objectPrototype = Object.prototype;
 
 export type Key = string | number | bigint;
+type DataGridRow = { id: Key };
+type DataGridColumns<TData extends DataGridRow> = NonNullable<
+	TableOptions<TData>["columns"]
+>;
 
-export const DataGrid = observer(function DataGrid({
+export function DataGrid<TData extends { id: Key }>({
 	state,
 }: {
-	state: DataGridState;
+	state: DataGridState<TData>;
 }) {
-	const renderedRows = state.getRenderedRows<{ id: Key }>(
-		state.rows as { id: Key }[],
-	);
+	const renderedRows = state.getRenderedRows(state.rows);
+
 	useEffect(() => {
 		state.table.applyExpansionRequest(state.table.expandRequest);
 	}, [state, state.table.expandRequest?.requestId]);
+
 	const grouping = state.table.getGroupingState();
 	const querySort = state.queryStates.sort;
 	const sortValues = Array.isArray(querySort)
@@ -84,31 +87,27 @@ export const DataGrid = observer(function DataGrid({
 		id: sortValue.startsWith("-") ? sortValue.slice(1) : sortValue,
 		desc: sortValue.startsWith("-"),
 	}));
-	const pagination = state.pagination.toTablePaginationState();
-	const groupableColumns = getGroupableColumnItems(state.table.columns);
+	const pagination = state.pagination?.toTablePaginationState();
 	const sensors = useSensors(
 		useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
 		useSensor(KeyboardSensor),
 	);
+
 	const table = useReactTable({
 		data: renderedRows,
-		columns: state.table.columns as unknown as ColumnDef<
-			{ id: Key },
-			unknown
-		>[],
+		columns: state.table.columns,
 		state: { expanded: state.table.expanded, grouping, sorting, pagination },
 		getRowId: (row) => String(row.id),
 		getSubRows: state.table.getSubRows,
 		getCoreRowModel: getCoreRowModel(),
 		getExpandedRowModel: getExpandedRowModel(),
 		getGroupedRowModel: getGroupedRowModel(),
-		// 페이지 초기화는 nuqs query가 소유하므로 행 재계산으로 내부 페이지 갱신을 예약하지 않습니다.
 		autoResetPageIndex: false,
 		autoResetExpanded: false,
 		onExpandedChange: state.table.setExpanded,
-		onGroupingChange: state.groupPanel.changeGrouping,
+		onGroupingChange: state.groupPanel?.changeGrouping,
 		onSortingChange: state.table.changeSorting,
-		onPaginationChange: state.pagination.changeTablePagination,
+		onPaginationChange: state.pagination?.changeTablePagination,
 	});
 
 	const headerGroups = table.getHeaderGroups();
@@ -148,17 +147,10 @@ export const DataGrid = observer(function DataGrid({
 
 	return (
 		<DataGridContainer>
-			<DataGridToolbar
-				leftInputs={state.toolbar.leftInputs}
-				rightInputs={state.toolbar.rightInputs}
-				state={state.toolbar}
-			/>
-			<DataGridGroupPanel
-				groupableColumns={groupableColumns}
-				grouping={grouping}
-				show={state.groupPanel.show}
-				state={state.groupPanel}
-			/>
+			{state.toolbar ? <DataGridToolbar state={state.toolbar} /> : null}
+			{state.groupPanel ? (
+				<DataGridGroupPanel state={state.groupPanel} />
+			) : null}
 			{state.table.onRowMove ? (
 				<DndContext
 					collisionDetection={closestCenter}
@@ -170,22 +162,26 @@ export const DataGrid = observer(function DataGrid({
 			) : (
 				tableContent
 			)}
-			<DataGridPagination state={state.pagination} table={table} />
-			<DataGridActionBar
-				state={state.actionBar}
-				showCount={state.table.selection?.actionBar?.showCount}
-			/>
+			{state.pagination ? (
+				<DataGridPagination state={state.pagination} />
+			) : null}
+			{state.actionBar ? <DataGridActionBar state={state.actionBar} /> : null}
 		</DataGridContainer>
 	);
-});
+}
 
 function hasOwnField(value: Record<string, unknown>, field: string) {
 	return objectPrototype.hasOwnProperty.call(value, field);
 }
 
 const DATA_GRID_GROUP_BY_QUERY_KEY = "groupBy";
-
-type DataGridRow = { id: Key };
+type DataGridTableRowMoveData<TData extends DataGridRow> = {
+	id: string;
+	depth: number;
+	original: TData;
+	getIsGrouped: () => boolean;
+	getParentRow: () => { id: string } | undefined;
+};
 
 interface DataGridChangesSnapshot<TData extends { id: Key }> {
 	created: TData[];
@@ -193,81 +189,54 @@ interface DataGridChangesSnapshot<TData extends { id: Key }> {
 	deleted: Key[];
 }
 
-export class DataGridState {
-	readonly querySetter: DataGridSetQueryStates;
+export class DataGridState<TData extends DataGridRow = DataGridRow> {
 	queryStates: DataGridQueryStates;
-	rows: DataGridRow[];
+	querySetter: DataGridSetQueryStates;
+	rows: TData[] = [];
 	selection?: DataGridSelectionState;
-	created: Array<{ id: Key }> = [];
-	updated: Array<{ id: Key; changes: Record<string, unknown> }> = [];
+	created: TData[] = [];
+	updated: Array<{ id: Key; changes: Partial<TData> }> = [];
 	deleted: Key[] = [];
-	private originalValues = new Map<Key, Record<string, unknown>>();
-	readonly toolbar: DataGridToolbarState;
-	readonly groupPanel: DataGridGroupPanelState;
-	readonly table: DataGridTableState;
-	readonly pagination: DataGridPaginationState;
-	readonly actionBar: DataGridActionBarState;
+	originalValues = new Map<Key, Record<string, unknown>>();
+	toolbar?: DataGridToolbarState;
+	groupPanel?: DataGridGroupPanelState;
+	table: DataGridTableState<TData>;
+	pagination?: DataGridPaginationState;
+	actionBar?: DataGridActionBarState;
 
 	constructor({
 		queryStates,
 		setQueryStates,
-		toolbar,
-		leftInputs,
-		rightInputs,
-		groupPanel,
-		table = { entity: "", columns: [] },
 		rows = [],
-		totalCount = 0,
-		selection,
+		toolbar,
+		groupPanel,
+		table,
+		pagination,
+		actionBar,
 	}: {
 		queryStates: DataGridQueryStates;
 		setQueryStates: DataGridSetQueryStates;
-		toolbar?: DataGridToolbarConfig;
-		groupPanel?: DataGridGroupPanelConfig;
-		table?: DataGridTableState;
-		rows?: DataGridRow[];
-		leftInputs?: InputConfig[];
-		rightInputs?: InputConfig[];
-		totalCount?: number;
-		selection?: DataGridSelectionState;
+		rows?: TData[];
+		toolbar?: DataGridToolbarState;
+		groupPanel?: DataGridGroupPanelState;
+		table: DataGridTableOptions<TData>;
+		pagination?: DataGridPaginationState;
+		actionBar?: DataGridActionBarState;
 	}) {
 		this.queryStates = queryStates;
 		this.querySetter = setQueryStates;
 		this.rows = rows;
-		this.selection = selection;
-		this.toolbar = new DataGridToolbarState(
-			this,
-			leftInputs ?? toolbar?.leftInputs,
-			rightInputs ?? toolbar?.rightInputs,
-		);
-		this.groupPanel = new DataGridGroupPanelState(this, groupPanel);
+		this.toolbar = toolbar;
+		this.groupPanel = groupPanel;
 		this.table = new DataGridTableState(this, table);
-		this.pagination = new DataGridPaginationState(this, totalCount);
-		this.actionBar = new DataGridActionBarState(this);
-
-		makeAutoObservable<this, "originalValues">(
-			this,
-			{
-				querySetter: false,
-				queryStates: observable.ref,
-				rows: observable.ref,
-				selection: observable.ref,
-				created: observable.ref,
-				updated: observable.ref,
-				deleted: observable.ref,
-				originalValues: false,
-				toolbar: false,
-				groupPanel: false,
-				table: false,
-				pagination: false,
-				actionBar: false,
-				getRenderedRows: false,
-			},
-			{ autoBind: true },
-		);
+		this.pagination = pagination;
+		this.actionBar = actionBar;
+		makeAutoObservable<this, "originalValues">(this, undefined, {
+			autoBind: true,
+		});
 	}
 
-	addRow<TData extends { id: Key }>(row: TData) {
+	addRow(row: TData) {
 		const createdIndex = this.created.findIndex(({ id }) => id === row.id);
 		const nextRow = { ...row };
 		this.created =
@@ -279,7 +248,7 @@ export class DataGridState {
 		this.deleted = this.deleted.filter((rowId) => rowId !== row.id);
 	}
 
-	setValue<TData extends { id: Key }, TField extends keyof TData>(
+	setValue<TField extends keyof TData>(
 		row: TData,
 		field: TField,
 		value: TData[TField],
@@ -301,12 +270,13 @@ export class DataGridState {
 			this.originalValues.set(row.id, originalFields);
 		}
 		const updateIndex = this.updated.findIndex(({ id }) => id === row.id);
-		const currentChanges =
+		const currentChanges: Partial<TData> =
 			updateIndex >= 0 ? { ...this.updated[updateIndex].changes } : {};
+		const currentChangeFields = currentChanges as Record<string, unknown>;
 		if (Object.is(value, originalFields[fieldName])) {
-			delete currentChanges[fieldName];
+			delete currentChangeFields[fieldName];
 		} else {
-			currentChanges[fieldName] = value;
+			currentChangeFields[fieldName] = value;
 		}
 		if (Object.keys(currentChanges).length === 0) {
 			this.updated = this.updated.filter(({ id }) => id !== row.id);
@@ -339,7 +309,7 @@ export class DataGridState {
 		this.originalValues.clear();
 	}
 
-	getRow<TData extends { id: Key }>(row: TData): TData {
+	getRow(row: TData): TData {
 		const createdRow = this.created.find(({ id }) => id === row.id);
 		const update = this.updated.find(({ id }) => id === row.id);
 		if (!createdRow && !update) return row;
@@ -350,7 +320,7 @@ export class DataGridState {
 		} as TData;
 	}
 
-	toJSON<TData extends { id: Key }>(): DataGridChangesSnapshot<TData> {
+	toJSON(): DataGridChangesSnapshot<TData> {
 		return {
 			created: this.created.map((row) => ({ ...row })) as TData[],
 			updated: this.updated.map((update) => ({
@@ -362,8 +332,8 @@ export class DataGridState {
 	}
 
 	/** 원본 행과 변경 내역을 합친 현재 렌더링 행을 반환합니다. */
-	getRenderedRows<T extends { id: Key }>(rows: T[]) {
-		const createdRows = this.created as T[];
+	getRenderedRows(rows: TData[]) {
+		const createdRows = this.created;
 		return [
 			...rows
 				.filter((row) => !this.deleted.includes(row.id))
@@ -376,31 +346,39 @@ export class DataGridState {
 }
 
 /** Table namespace의 책임별 facade를 보관합니다. */
-export class DataGridTableState {
+type DataGridTableOptions<TData extends DataGridRow> = {
+	entity: string;
+	columns: DataGridColumns<TData>;
+	selection?: SelectionConfig;
+	onRowClick?: (row: TData) => void;
+	getSubRows?: (row: TData, index: number) => TData[] | undefined;
+	expandRequest?: DataGridExpandRequest;
+	editRequest?: DataGridEditRequest;
+	onRowMove?: (event: DataGridRowMoveEvent<TData>) => void;
+	emptyMessage?: string;
+};
+
+export class DataGridTableState<TData extends DataGridRow = DataGridRow> {
 	expanded: ExpandedState = {};
 	selectedKeys = new Set<string>();
 	entity: string;
-	columns: ColumnDef<never, never>[];
+	columns: DataGridColumns<TData>;
 	selection?: SelectionConfig;
-	onRowClick?: (row: DataGridRow) => void;
-	getSubRows?: (row: DataGridRow, index: number) => DataGridRow[] | undefined;
+	onRowClick?: (row: TData) => void;
+	getSubRows?: (row: TData, index: number) => TData[] | undefined;
 	expandRequest?: DataGridExpandRequest;
 	editRequest?: DataGridEditRequest;
-	onRowMove?: (event: DataGridRowMoveEvent<DataGridRow>) => void;
+	onRowMove?: (event: DataGridRowMoveEvent<TData>) => void;
 	emptyMessage?: string;
-	readonly header: DataGridTableHeaderState;
-	readonly body: DataGridTableBodyState;
-	private rowMoveRows: Array<{
-		id: string;
-		depth: number;
-		original: DataGridRow;
-		getIsGrouped: () => boolean;
-		getParentRow: () => { id: string } | undefined;
-	}> = [];
+	readonly header: DataGridTableHeaderState<TData>;
+	readonly body: DataGridTableBodyState<TData>;
+	private rowMoveRows: DataGridTableRowMoveData<TData>[] = [];
 
 	constructor(
-		readonly state: DataGridState,
-		{
+		readonly state: DataGridState<TData>,
+		options: DataGridTableOptions<TData>,
+	) {
+		const {
 			entity,
 			columns,
 			selection,
@@ -410,21 +388,7 @@ export class DataGridTableState {
 			editRequest,
 			onRowMove,
 			emptyMessage,
-		}: {
-			entity: string;
-			columns: ColumnDef<never, never>[];
-			selection?: SelectionConfig;
-			onRowClick?: (row: DataGridRow) => void;
-			getSubRows?: (
-				row: DataGridRow,
-				index: number,
-			) => DataGridRow[] | undefined;
-			expandRequest?: DataGridExpandRequest;
-			editRequest?: DataGridEditRequest;
-			onRowMove?: (event: DataGridRowMoveEvent<DataGridRow>) => void;
-			emptyMessage?: string;
-		},
-	) {
+		} = options;
 		this.entity = entity;
 		this.columns = columns;
 		this.selection = selection;
@@ -492,7 +456,7 @@ export class DataGridTableState {
 		});
 	}
 
-	setRowMoveRows(rows: DataGridTableState["rowMoveRows"]) {
+	setRowMoveRows(rows: DataGridTableRowMoveData<TData>[]) {
 		this.rowMoveRows = rows;
 	}
 
@@ -554,8 +518,8 @@ export class DataGridTableState {
 }
 
 /** Table header가 sort, resize, visibility와 visible selection을 위임하는 facade입니다. */
-export class DataGridTableHeaderState {
-	constructor(readonly state: DataGridState) {
+export class DataGridTableHeaderState<TData extends { id: Key } = { id: Key }> {
+	constructor(readonly state: DataGridState<TData>) {
 		makeAutoObservable(this, { state: false }, { autoBind: true });
 	}
 
@@ -605,76 +569,4 @@ export class DataGridTableHeaderState {
 	}
 }
 
-/** Inline editor의 draft와 validation 상태를 유지합니다. */
-export interface DataGridEditingCell {
-	rowId: string;
-	columnId: string;
-	initialValue: unknown;
-	draftValue: unknown;
-	errorMessage?: string;
-	isValidating: boolean;
-}
-
-export class DataGridEditingState {
-	editingCell: DataGridEditingCell | null = null;
-
-	constructor() {
-		makeAutoObservable(
-			this,
-			{ editingCell: observable.ref },
-			{ autoBind: true },
-		);
-	}
-
-	setEditingCell(
-		nextEditingCell:
-			| DataGridEditingCell
-			| null
-			| ((current: DataGridEditingCell | null) => DataGridEditingCell | null),
-	) {
-		this.editingCell =
-			typeof nextEditingCell === "function"
-				? nextEditingCell(this.editingCell)
-				: nextEditingCell;
-	}
-}
-
-/** Table body가 row, selection, editing, hierarchy를 위임하는 facade입니다. */
-export class DataGridTableBodyState {
-	readonly editing = new DataGridEditingState();
-
-	constructor(readonly state: DataGridState) {
-		makeAutoObservable(this, { state: false }, { autoBind: true });
-	}
-
-	get selectedKeys() {
-		return Array.from(
-			this.state.selection?.selectedKeys ?? this.state.table.selectedKeys,
-		);
-	}
-
-	changeCellValue<T extends { id: Key }, TField extends keyof T>(
-		row: T,
-		field: TField,
-		value: T[TField],
-	) {
-		this.state.setValue(row, field, value);
-	}
-
-	changeRowSelection(
-		rowKey: string,
-		isSelected: boolean,
-		onSelectionChange?: (selectedKeys: Set<string>) => void,
-	) {
-		const nextSelectedKeys = isSelected
-			? [...this.selectedKeys, rowKey]
-			: this.selectedKeys.filter((key) => key !== rowKey);
-		const nextSelection = new Set(nextSelectedKeys);
-		if (this.state.selection?.setSelectedKeys) {
-			this.state.selection.setSelectedKeys(nextSelection);
-		} else {
-			this.state.table.setSelectedKeys(nextSelection);
-		}
-		onSelectionChange?.(nextSelection);
-	}
-}
+export default observer(DataGrid);

@@ -41,15 +41,10 @@ export class DataGridToolbarState {
 
 export interface DataGridToolbarProps {
 	state: DataGridToolbarState;
-	leftInputs?: InputConfig[];
-	rightInputs?: InputConfig[];
 }
 
-export function DataGridToolbarView({
-	state,
-	leftInputs = [],
-	rightInputs = [],
-}: DataGridToolbarProps) {
+export const DataGridToolbar = observer(({ state }: DataGridToolbarProps) => {
+	const { leftInputs, rightInputs } = state;
 	const shouldRenderToolbar = leftInputs.length > 0 || rightInputs.length > 0;
 
 	if (!shouldRenderToolbar) {
@@ -80,8 +75,4 @@ export function DataGridToolbarView({
 			</div>
 		</div>
 	);
-}
-
-export const DataGridToolbar = observer(
-	DataGridToolbarView,
-) as typeof DataGridToolbarView;
+});
