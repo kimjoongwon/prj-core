@@ -54,22 +54,7 @@ export class DataGridTableState<TData extends DataGridRow = DataGridRow> {
 		this.onRowClick = onRowClick;
 		this.getSubRows = getSubRows;
 		this.editRequest = editRequest;
-		makeAutoObservable(
-			this,
-			{
-				state: false,
-				expandedRowIds: observable.ref,
-				selectedRowKeys: observable.ref,
-				columns: observable.ref,
-				selection: observable.ref,
-				getGrouping: false,
-				onRowClick: false,
-				getSubRows: false,
-				editRequest: observable.ref,
-				header: false,
-			},
-			{ autoBind: true },
-		);
+		makeAutoObservable(this, undefined, { autoBind: true });
 		this.header = header;
 	}
 
