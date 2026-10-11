@@ -2,7 +2,7 @@
 
 import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -51,7 +51,7 @@ const leftInputs: InputConfig[] = [
 ];
 export const adminEmailVerificationsPageQueryInputs = [...leftInputs];
 export interface EmailVerificationListScreenQueryStates
-	extends DataGridQueryStates {
+	extends DataGridQueryState {
 	take: number;
 	skip: number;
 	email: string;
@@ -82,7 +82,7 @@ export const EmailVerificationListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					toolbar: { leftInputs },
 					table: {
@@ -91,14 +91,13 @@ export const EmailVerificationListScreen = observer(
 							onClickResendEmailVerification: (verification) =>
 								onClickResendEmailVerificationButton(verification.id),
 						}),
-						emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
 					},
 					rows: verifications ?? [],
 					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = verifications ?? [];
 			gridState.pagination.setTotalCount(totalCount);
 		}, [gridState, queryStates, verifications, totalCount]);

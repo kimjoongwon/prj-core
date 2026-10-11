@@ -69,12 +69,11 @@ const userFixtures: UserDto[] = [
 const defaultArgs = {
 	state: {
 		dataGrid: new DataGridState({
-			queryStates: { page: 1, take: 10, skip: 0, search: "" },
+			query: { page: 1, take: 10, skip: 0, search: "" },
 			setQueryStates: async () => new URLSearchParams(),
 			table: {
 				entity: "User",
 				columns: buildUserListTableColumns<UserDto>(),
-				emptyMessage: "조회된 이용자가 없습니다.",
 			},
 			rows: userFixtures,
 			totalCount: 12,

@@ -15,7 +15,7 @@ export class DataGridActionBarState {
 	get selectedCount() {
 		return (
 			this.state.selection?.selectedKeys?.size ??
-			this.state.table.selectedKeys.size
+			this.state.table.selectedRowKeys.size
 		);
 	}
 

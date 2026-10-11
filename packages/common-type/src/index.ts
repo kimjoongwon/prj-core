@@ -303,7 +303,7 @@ export type {
 	DataGridExpandRequest,
 	DataGridGroupableColumnItem,
 	DataGridGroupPanelConfig,
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridRowData,
 	DataGridRowKey,
 	DataGridRowMoveEvent,

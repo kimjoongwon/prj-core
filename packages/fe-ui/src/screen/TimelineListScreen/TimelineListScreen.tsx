@@ -2,7 +2,7 @@
 
 import type { TimelineDto } from "@cocrepo/api/core/timelines";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -28,7 +28,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const adminTimelinesPageQueryInputs = [...leftInputs];
-export interface TimelineListScreenQueryStates extends DataGridQueryStates {
+export interface TimelineListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -71,7 +71,7 @@ export const TimelineListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					toolbar: { leftInputs },
 					table: {
@@ -79,14 +79,13 @@ export const TimelineListScreen = observer(
 						columns: buildTimelineTableColumns<TimelineDto>({
 							onDeleteTimeline,
 						}),
-						emptyMessage: "등록된 타임라인이 없습니다.",
 					},
 					rows: timelines ?? [],
 					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = timelines ?? [];
 			gridState.pagination.setTotalCount(totalCount);
 		}, [gridState, queryStates, timelines, totalCount]);

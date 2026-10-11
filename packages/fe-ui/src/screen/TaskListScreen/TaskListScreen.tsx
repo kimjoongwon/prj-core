@@ -1,7 +1,7 @@
 "use client";
 
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -46,7 +46,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const adminTasksPageQueryInputs = [...leftInputs];
-export interface TaskListScreenQueryStates extends DataGridQueryStates {
+export interface TaskListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -93,12 +93,12 @@ export const TaskListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const taskRows = tasks ?? [];
 		const onClickDeleteButton = (taskId: bigint) => {
@@ -137,7 +137,6 @@ export const TaskListScreen = observer(
 									table: {
 										entity: "Task",
 										columns,
-										emptyMessage: "등록된 태스크가 없습니다.",
 									},
 								}}
 								rows={taskRows}

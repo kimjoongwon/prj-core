@@ -1,37 +1,12 @@
 "use client";
 
 import type {
-	DataGridEditRequest,
-	DataGridExpandRequest,
-	DataGridQueryStates,
-	DataGridRowMoveEvent,
 	DataGridSelectionState,
 	DataGridSetQueryStates,
-	SelectionConfig,
 } from "@cocrepo/type";
-import type { DragEndEvent } from "@dnd-kit/core";
-import {
-	closestCenter,
-	DndContext,
-	KeyboardSensor,
-	PointerSensor,
-	useSensor,
-	useSensors,
-} from "@dnd-kit/core";
-import {
-	type ExpandedState,
-	type GroupingState,
-	getCoreRowModel,
-	getExpandedRowModel,
-	getGroupedRowModel,
-	type SortingState,
-	type TableOptions,
-	type Updater,
-	useReactTable,
-} from "@tanstack/react-table";
-import { makeAutoObservable, observable } from "mobx";
+import { type SortingState } from "@tanstack/react-table";
+import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
 import {
 	DataGridActionBar,
 	DataGridActionBarState,
@@ -46,12 +21,9 @@ import {
 	DataGridPaginationState,
 } from "./DataGridPagination/DataGridPagination";
 import {
-	DataGridTableBody,
-	DataGridTableBodyState,
-} from "./DataGridTableBody/DataGridTableBody";
-import { getDataGridRowMoveEvent } from "./DataGridTableBody/dataGridTableRowMove";
-import { DataGridTableContainer } from "./DataGridTableContainer/DataGridTableContainer";
-import { DataGridTableHeader } from "./DataGridTableHeader/DataGridTableHeader";
+	DataGridTable,
+	type DataGridTableState,
+} from "./DataGridTable/DataGridTable";
 import {
 	DataGridToolbar,
 	DataGridToolbarState,
@@ -61,107 +33,66 @@ const objectPrototype = Object.prototype;
 
 export type Key = string | number | bigint;
 type DataGridRow = { id: Key };
-type DataGridColumns<TData extends DataGridRow> = NonNullable<
-	TableOptions<TData>["columns"]
->;
 
+/** nuqs의 query 값을 DataGrid와 TanStack Table이 사용하는 형태로 해석합니다. */
+export class DataGridQueryState {
+	filters: { [x: string]: unknown } = {};
+	sort: SortingState = [];
+	pagination: {
+		take: number;
+		skip: number;
+	} = { take: 20, skip: 0 };
+
+	/** 원본 query 값에서 필터, 정렬, 페이지 값을 초기화합니다. */
+	constructor(query: { [x: string]: unknown }) {
+		this.update(query);
+		makeAutoObservable(this, {}, { autoBind: true });
+	}
+
+	/** TanStack Table의 정렬 상태를 query의 `field` 또는 `-field` 표기로 변환합니다. */
+	getSortQueryValues(sorting: SortingState) {
+		return sorting.map(({ id, desc }) => (desc ? `-${id}` : id));
+	}
+
+	/** 바뀐 원본 query를 필터, 정렬, 페이지 상태로 다시 파싱합니다. */
+	update(query: { [x: string]: unknown }) {
+		const { sort, take, skip } = query;
+		this.filters = { ...query };
+		delete this.filters.sort;
+		delete this.filters.take;
+		delete this.filters.skip;
+		delete this.filters.page;
+		const sortValues = Array.isArray(sort)
+			? sort.filter((value): value is string => typeof value === "string")
+			: typeof sort === "string" && sort.length > 0
+				? [sort]
+				: [];
+		this.sort = sortValues.map((sortValue) => ({
+			id: sortValue.startsWith("-") ? sortValue.slice(1) : sortValue,
+			desc: sortValue.startsWith("-"),
+		}));
+
+		const pageSize = Number(take);
+		const pageOffset = Number(skip);
+		this.pagination = {
+			take: Number.isFinite(pageSize) && pageSize > 0 ? pageSize : 20,
+			skip: Number.isFinite(pageOffset) && pageOffset > 0 ? pageOffset : 0,
+		};
+	}
+}
+/** DataGridState가 보유한 설정과 데이터를 TanStack Table UI로 렌더링합니다. */
 export function DataGrid<TData extends { id: Key }>({
 	state,
 }: {
 	state: DataGridState<TData>;
 }) {
-	const renderedRows = state.getRenderedRows(state.rows);
-
-	useEffect(() => {
-		state.table.applyExpansionRequest(state.table.expandRequest);
-	}, [state, state.table.expandRequest?.requestId]);
-
-	const grouping = state.table.getGroupingState();
-	const querySort = state.queryStates.sort;
-	const sortValues = Array.isArray(querySort)
-		? querySort.filter((value): value is string => typeof value === "string")
-		: typeof querySort === "string" && querySort.length > 0
-			? [querySort]
-			: [];
-	const sorting: SortingState = sortValues.map((sortValue) => ({
-		id: sortValue.startsWith("-") ? sortValue.slice(1) : sortValue,
-		desc: sortValue.startsWith("-"),
-	}));
-	const pagination = state.pagination?.toTablePaginationState();
-	const sensors = useSensors(
-		useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-		useSensor(KeyboardSensor),
-	);
-
-	const table = useReactTable({
-		data: renderedRows,
-		columns: state.table.columns,
-		state: { expanded: state.table.expanded, grouping, sorting, pagination },
-		getRowId: (row) => String(row.id),
-		getSubRows: state.table.getSubRows,
-		getCoreRowModel: getCoreRowModel(),
-		getExpandedRowModel: getExpandedRowModel(),
-		getGroupedRowModel: getGroupedRowModel(),
-		autoResetPageIndex: false,
-		autoResetExpanded: false,
-		onExpandedChange: state.table.setExpanded,
-		onGroupingChange: state.groupPanel?.changeGrouping,
-		onSortingChange: state.table.changeSorting,
-		onPaginationChange: state.pagination?.changeTablePagination,
-	});
-
-	const headerGroups = table.getHeaderGroups();
-	const rows = table.getRowModel().rows;
-	state.table.setRowMoveRows(rows);
-
-	const visibleRowKeys = table.getCoreRowModel().rows.map((row) => row.id);
-	const selectionMode =
-		state.table.selection?.mode === "none"
-			? undefined
-			: state.table.selection?.mode;
-	const tableColumnCount =
-		table.getVisibleLeafColumns().length + (selectionMode ? 1 : 0);
-
-	const tableContent = (
-		<DataGridTableContainer
-			columnWidths={table
-				.getVisibleLeafColumns()
-				.map((column) => column.getSize())}
-			isSelectable={Boolean(selectionMode)}
-		>
-			<DataGridTableHeader
-				state={state.table.header}
-				headerGroups={headerGroups}
-				visibleRowKeys={visibleRowKeys}
-				table={table}
-			/>
-			<DataGridTableBody
-				state={state.table.body}
-				config={state.table}
-				rows={rows}
-				selectionMode={selectionMode}
-				tableColumnCount={tableColumnCount}
-			/>
-		</DataGridTableContainer>
-	);
-
 	return (
 		<DataGridContainer>
 			{state.toolbar ? <DataGridToolbar state={state.toolbar} /> : null}
 			{state.groupPanel ? (
 				<DataGridGroupPanel state={state.groupPanel} />
 			) : null}
-			{state.table.onRowMove ? (
-				<DndContext
-					collisionDetection={closestCenter}
-					sensors={sensors}
-					onDragEnd={state.table.completeRowMove}
-				>
-					{tableContent}
-				</DndContext>
-			) : (
-				tableContent
-			)}
+			<DataGridTable state={state} />
 			{state.pagination ? (
 				<DataGridPagination state={state.pagination} />
 			) : null}
@@ -170,18 +101,10 @@ export function DataGrid<TData extends { id: Key }>({
 	);
 }
 
+/** 객체가 상속된 속성이 아닌 자체 속성을 갖는지 확인합니다. */
 function hasOwnField(value: Record<string, unknown>, field: string) {
 	return objectPrototype.hasOwnProperty.call(value, field);
 }
-
-const DATA_GRID_GROUP_BY_QUERY_KEY = "groupBy";
-type DataGridTableRowMoveData<TData extends DataGridRow> = {
-	id: string;
-	depth: number;
-	original: TData;
-	getIsGrouped: () => boolean;
-	getParentRow: () => { id: string } | undefined;
-};
 
 interface DataGridChangesSnapshot<TData extends { id: Key }> {
 	created: TData[];
@@ -190,7 +113,7 @@ interface DataGridChangesSnapshot<TData extends { id: Key }> {
 }
 
 export class DataGridState<TData extends DataGridRow = DataGridRow> {
-	queryStates: DataGridQueryStates;
+	query: DataGridQueryState;
 	querySetter: DataGridSetQueryStates;
 	rows: TData[] = [];
 	selection?: DataGridSelectionState;
@@ -204,8 +127,9 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 	pagination?: DataGridPaginationState;
 	actionBar?: DataGridActionBarState;
 
+	/** DataGrid의 query, 데이터와 선택적 영역 상태를 구성합니다. */
 	constructor({
-		queryStates,
+		query,
 		setQueryStates,
 		rows = [],
 		toolbar,
@@ -214,21 +138,21 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 		pagination,
 		actionBar,
 	}: {
-		queryStates: DataGridQueryStates;
+		query: DataGridQueryState;
 		setQueryStates: DataGridSetQueryStates;
 		rows?: TData[];
 		toolbar?: DataGridToolbarState;
 		groupPanel?: DataGridGroupPanelState;
-		table: DataGridTableOptions<TData>;
+		table: DataGridTableState<TData>;
 		pagination?: DataGridPaginationState;
 		actionBar?: DataGridActionBarState;
 	}) {
-		this.queryStates = queryStates;
+		this.query = query;
 		this.querySetter = setQueryStates;
 		this.rows = rows;
 		this.toolbar = toolbar;
 		this.groupPanel = groupPanel;
-		this.table = new DataGridTableState(this, table);
+		this.table = table;
 		this.pagination = pagination;
 		this.actionBar = actionBar;
 		makeAutoObservable<this, "originalValues">(this, undefined, {
@@ -236,6 +160,7 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 		});
 	}
 
+	/** 새 행을 생성 변경으로 등록하고 같은 ID의 삭제 표시를 취소합니다. */
 	addRow(row: TData) {
 		const createdIndex = this.created.findIndex(({ id }) => id === row.id);
 		const nextRow = { ...row };
@@ -248,6 +173,7 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 		this.deleted = this.deleted.filter((rowId) => rowId !== row.id);
 	}
 
+	/** 행 필드의 원본 값을 보존하고 변경분을 기록합니다. */
 	setValue<TField extends keyof TData>(
 		row: TData,
 		field: TField,
@@ -291,6 +217,7 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 				: [...this.updated, nextUpdate];
 	}
 
+	/** 새 행은 생성 목록에서 제거하고 기존 행은 삭제 변경으로 기록합니다. */
 	deleteRow(rowId: Key) {
 		const isCreated = this.created.some(({ id }) => id === rowId);
 		if (isCreated) {
@@ -302,6 +229,7 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 		this.originalValues.delete(rowId);
 	}
 
+	/** 현재까지 기록한 생성·수정·삭제 변경을 모두 비웁니다. */
 	clear() {
 		this.created = [];
 		this.updated = [];
@@ -309,6 +237,7 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 		this.originalValues.clear();
 	}
 
+	/** 행 원본에 해당 행의 생성 또는 수정 값을 덮어쓴 결과를 반환합니다. */
 	getRow(row: TData): TData {
 		const createdRow = this.created.find(({ id }) => id === row.id);
 		const update = this.updated.find(({ id }) => id === row.id);
@@ -320,6 +249,7 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 		} as TData;
 	}
 
+	/** 현재 변경 내역을 외부에서 전달할 수 있는 복사본으로 반환합니다. */
 	toJSON(): DataGridChangesSnapshot<TData> {
 		return {
 			created: this.created.map((row) => ({ ...row })) as TData[],
@@ -331,8 +261,9 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 		};
 	}
 
-	/** 원본 행과 변경 내역을 합친 현재 렌더링 행을 반환합니다. */
-	getRenderedRows(rows: TData[]) {
+	/** 원본 행에 생성·수정·삭제 변경사항을 반영한 행을 반환합니다. */
+	/** 원본 행 목록에 수정 내용을 적용하고 삭제 행은 제외한 렌더링 목록을 반환합니다. */
+	combineRowsWithChanges(rows: TData[]) {
 		const createdRows = this.created;
 		return [
 			...rows
@@ -342,230 +273,6 @@ export class DataGridState<TData extends DataGridRow = DataGridRow> {
 				.map((row) => ({ ...row }))
 				.filter((createdRow) => !rows.some((row) => row.id === createdRow.id)),
 		];
-	}
-}
-
-/** Table namespace의 책임별 facade를 보관합니다. */
-type DataGridTableOptions<TData extends DataGridRow> = {
-	entity: string;
-	columns: DataGridColumns<TData>;
-	selection?: SelectionConfig;
-	onRowClick?: (row: TData) => void;
-	getSubRows?: (row: TData, index: number) => TData[] | undefined;
-	expandRequest?: DataGridExpandRequest;
-	editRequest?: DataGridEditRequest;
-	onRowMove?: (event: DataGridRowMoveEvent<TData>) => void;
-	emptyMessage?: string;
-};
-
-export class DataGridTableState<TData extends DataGridRow = DataGridRow> {
-	expanded: ExpandedState = {};
-	selectedKeys = new Set<string>();
-	entity: string;
-	columns: DataGridColumns<TData>;
-	selection?: SelectionConfig;
-	onRowClick?: (row: TData) => void;
-	getSubRows?: (row: TData, index: number) => TData[] | undefined;
-	expandRequest?: DataGridExpandRequest;
-	editRequest?: DataGridEditRequest;
-	onRowMove?: (event: DataGridRowMoveEvent<TData>) => void;
-	emptyMessage?: string;
-	readonly header: DataGridTableHeaderState<TData>;
-	readonly body: DataGridTableBodyState<TData>;
-	private rowMoveRows: DataGridTableRowMoveData<TData>[] = [];
-
-	constructor(
-		readonly state: DataGridState<TData>,
-		options: DataGridTableOptions<TData>,
-	) {
-		const {
-			entity,
-			columns,
-			selection,
-			onRowClick,
-			getSubRows,
-			expandRequest,
-			editRequest,
-			onRowMove,
-			emptyMessage,
-		} = options;
-		this.entity = entity;
-		this.columns = columns;
-		this.selection = selection;
-		this.onRowClick = onRowClick;
-		this.getSubRows = getSubRows;
-		this.expandRequest = expandRequest;
-		this.editRequest = editRequest;
-		this.onRowMove = onRowMove;
-		this.emptyMessage = emptyMessage;
-		makeAutoObservable(
-			this,
-			{
-				state: false,
-				expanded: observable.ref,
-				selectedKeys: observable.ref,
-				entity: false,
-				columns: observable.ref,
-				selection: observable.ref,
-				getGroupingState: false,
-				onRowClick: false,
-				getSubRows: false,
-				expandRequest: observable.ref,
-				editRequest: observable.ref,
-				onRowMove: false,
-				emptyMessage: false,
-				header: false,
-				body: false,
-			},
-			{ autoBind: true },
-		);
-		this.header = new DataGridTableHeaderState(state);
-		this.body = new DataGridTableBodyState(state);
-	}
-
-	setExpanded(nextExpanded: Updater<ExpandedState>) {
-		this.expanded =
-			typeof nextExpanded === "function"
-				? nextExpanded(this.expanded)
-				: nextExpanded;
-	}
-
-	changeSorting(nextSorting: Updater<SortingState>) {
-		const sortValues = Array.isArray(this.state.queryStates.sort)
-			? this.state.queryStates.sort.filter(
-					(value): value is string => typeof value === "string",
-				)
-			: typeof this.state.queryStates.sort === "string" &&
-					this.state.queryStates.sort.length > 0
-				? [this.state.queryStates.sort]
-				: [];
-		const currentSorting = sortValues.map((sortValue) => ({
-			id: sortValue.startsWith("-") ? sortValue.slice(1) : sortValue,
-			desc: sortValue.startsWith("-"),
-		}));
-		const updatedSorting =
-			typeof nextSorting === "function"
-				? nextSorting(currentSorting)
-				: nextSorting;
-		void this.state.querySetter({
-			sort:
-				updatedSorting.length === 0
-					? null
-					: updatedSorting.map(({ id, desc }) => (desc ? `-${id}` : id)),
-			skip: 0,
-		});
-	}
-
-	setRowMoveRows(rows: DataGridTableRowMoveData<TData>[]) {
-		this.rowMoveRows = rows;
-	}
-
-	completeRowMove(event: DragEndEvent) {
-		const { active, over } = event;
-		if (!over || !this.onRowMove || active.id === over.id) return;
-		const bodyRows = this.rowMoveRows;
-		const activeRow = bodyRows.find((row) => row.id === String(active.id));
-		if (!activeRow) return;
-		const moveEvent = getDataGridRowMoveEvent(
-			bodyRows
-				.filter((row) => !row.getIsGrouped())
-				.map((row) => ({
-					id: row.id,
-					parentId: row.getParentRow()?.id ?? null,
-					depth: row.depth,
-					original: row.original,
-				})),
-			String(active.id),
-			String(over.id),
-			{
-				depth: activeRow.depth,
-				parentId: activeRow.getParentRow()?.id ?? null,
-			},
-		);
-		if (moveEvent) this.onRowMove(moveEvent);
-	}
-
-	applyExpansionRequest(request: DataGridExpandRequest | undefined) {
-		if (!request) return;
-
-		const expandedRows =
-			typeof this.expanded === "object" && this.expanded !== null
-				? this.expanded
-				: {};
-		this.expanded = {
-			...expandedRows,
-			[String(request.rowId)]: true,
-		};
-	}
-
-	setSelectedKeys(selectedKeys: Set<string>) {
-		this.selectedKeys = selectedKeys;
-	}
-
-	getGroupingState(): GroupingState {
-		const queryStates = this.state.queryStates;
-		if (Object.hasOwn(queryStates, DATA_GRID_GROUP_BY_QUERY_KEY)) {
-			const queryGrouping = queryStates[DATA_GRID_GROUP_BY_QUERY_KEY];
-			return Array.isArray(queryGrouping)
-				? queryGrouping.filter(
-						(columnId): columnId is string => typeof columnId === "string",
-					)
-				: [];
-		}
-
-		return [];
-	}
-}
-
-/** Table header가 sort, resize, visibility와 visible selection을 위임하는 facade입니다. */
-export class DataGridTableHeaderState<TData extends { id: Key } = { id: Key }> {
-	constructor(readonly state: DataGridState<TData>) {
-		makeAutoObservable(this, { state: false }, { autoBind: true });
-	}
-
-	getSelectionMode(): Exclude<SelectionConfig["mode"], "none"> | undefined {
-		const selectionMode = this.state.table.selection?.mode;
-		return selectionMode === "none" ? undefined : selectionMode;
-	}
-
-	get selectedKeys() {
-		return Array.from(
-			this.state.selection?.selectedKeys ?? this.state.table.selectedKeys,
-		);
-	}
-
-	get queryValues() {
-		return this.state.queryStates;
-	}
-
-	isAllVisibleRowsSelected(visibleRowKeys: string[]) {
-		const selectedKeySet = new Set(this.selectedKeys);
-		return (
-			visibleRowKeys.length > 0 &&
-			visibleRowKeys.every((rowKey) => selectedKeySet.has(rowKey))
-		);
-	}
-
-	isSomeVisibleRowsSelected(visibleRowKeys: string[]) {
-		const selectedKeySet = new Set(this.selectedKeys);
-		return visibleRowKeys.some((rowKey) => selectedKeySet.has(rowKey));
-	}
-
-	changeQuery(values: Record<string, unknown | null>) {
-		return this.state.querySetter(values);
-	}
-
-	changeVisibleSelection(visibleRowKeys: string[], isSelected: boolean) {
-		const nextSelectedKeys = isSelected
-			? Array.from(new Set([...this.selectedKeys, ...visibleRowKeys]))
-			: this.selectedKeys.filter((key) => !visibleRowKeys.includes(key));
-		const nextSelection = new Set(nextSelectedKeys);
-		if (this.state.selection?.setSelectedKeys) {
-			this.state.selection.setSelectedKeys(nextSelection);
-		} else {
-			this.state.table.setSelectedKeys(nextSelection);
-		}
-		this.state.table.selection?.onSelectionChange?.(nextSelection);
 	}
 }
 

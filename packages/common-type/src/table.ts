@@ -4,7 +4,7 @@ import type { ComponentType, ReactNode } from "react";
 // DataGrid 메인 인터페이스
 // ============================================
 
-export type DataGridQueryStates = Record<string, unknown>;
+export type DataGridQueryState = Record<string, unknown>;
 export type DataGridRowKey = string | number;
 
 /** DataGrid가 렌더링하고 변경을 추적할 수 있는 최소 행 계약입니다. */
@@ -271,4 +271,3 @@ export interface SelectionConfig {
 		showCount?: boolean;
 	};
 }
-

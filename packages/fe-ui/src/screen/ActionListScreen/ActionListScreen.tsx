@@ -2,7 +2,7 @@
 
 import type { ActionDto } from "@cocrepo/api/core/actions";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -60,7 +60,7 @@ const actionGroupFilters = [
 		description: "접근, 승인, 반려 같은 운영 흐름의 상태 전환에 쓰입니다.",
 	},
 ] as const;
-export interface ActionListScreenQueryStates extends DataGridQueryStates {
+export interface ActionListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -129,19 +129,18 @@ export const ActionListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					toolbar: { leftInputs },
 					table: {
 						entity: "Action",
 						columns: buildActionTableColumns<ActionDto>(),
-						emptyMessage: "조건에 맞는 권한 액션이 없습니다.",
 					},
 					rows: actions ?? [],
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = actions ?? [];
 		}, [gridState, queryStates, actions]);
 		const actionRows = actions ?? [];

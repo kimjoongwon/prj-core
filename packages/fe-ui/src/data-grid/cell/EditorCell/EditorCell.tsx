@@ -1,16 +1,24 @@
 "use client";
 
-import type {
-	DataGridEditCellContext,
-	DataGridEditorConfig,
-	DataGridEditorOption,
-} from "@cocrepo/type";
+import type { DataGridEditorConfig, DataGridEditorOption } from "@cocrepo/type";
 import type { ChangeEvent, KeyboardEvent, ReactNode } from "react";
 import { Typography } from "../../../data-display/Typography";
 
+interface EditorCellContext<TData, TValue> {
+	row: TData;
+	field: string;
+	value: TValue;
+	initialValue: TValue;
+	errorMessage?: string;
+	isValidating: boolean;
+	onValueChange: (value: TValue) => void;
+	onFinish: (direction?: "next" | "previous") => void;
+	onCancel: () => void;
+}
+
 interface EditorCellProps<TData, TValue> {
 	config: DataGridEditorConfig;
-	context: DataGridEditCellContext<TData, TValue>;
+	context: EditorCellContext<TData, TValue>;
 }
 
 const EDITOR_CLASS_NAME =

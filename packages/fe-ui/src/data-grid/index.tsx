@@ -1,10 +1,9 @@
 export * from "./cell";
 export * from "./columns";
-export type { Key } from "./DataGrid";
 export {
 	DataGrid,
+	DataGridQueryState,
 	DataGridState,
-	DataGridTableHeaderState,
-	DataGridTableState,
 } from "./DataGrid";
-export { DataGridTableBodyState } from "./DataGridTableBody/DataGridTableBody";
+export { DataGridTableState } from "./DataGridTable/DataGridTable";
+export { DataGridTableHeaderState } from "./DataGridTableHeader/DataGridTableHeader";

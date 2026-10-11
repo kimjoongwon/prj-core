@@ -31,7 +31,7 @@ export class DataGridToolbarState {
 	}
 
 	get queryValues() {
-		return this.state.queryStates;
+		return this.state.query.filters;
 	}
 
 	changeQuery(values: Record<string, unknown | null>) {

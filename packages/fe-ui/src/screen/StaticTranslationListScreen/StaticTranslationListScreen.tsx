@@ -2,7 +2,7 @@
 
 import type { TranslationResponseDto } from "@cocrepo/api/core/model";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -39,7 +39,7 @@ export interface StaticTranslationForm {
 	isTranslated: boolean;
 }
 export interface StaticTranslationListScreenQueryStates
-	extends DataGridQueryStates {
+	extends DataGridQueryState {
 	take: number;
 	skip: number;
 	key: string;
@@ -177,7 +177,7 @@ export const StaticTranslationListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 				}),
 		);
@@ -200,7 +200,7 @@ export const StaticTranslationListScreen = observer(
 			onClickDeleteButton: handleDeleteTranslation,
 		});
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		function handleOpenCreateModal() {
 			setEditingTranslation(null);
@@ -326,7 +326,6 @@ export const StaticTranslationListScreen = observer(
 									table: {
 										entity: "Translation",
 										columns,
-										emptyMessage: "등록된 정적 번역이 없습니다.",
 									},
 								}}
 								rows={rows}

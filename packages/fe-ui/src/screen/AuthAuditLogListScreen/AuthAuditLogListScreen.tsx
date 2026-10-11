@@ -2,7 +2,7 @@
 
 import type { AuthAuditLogDto } from "@cocrepo/api/idp/auth";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -31,7 +31,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const idpConsoleAuthAuditLogsPageQueryInputs = [...leftInputs];
-export interface AuthAuditLogListScreenQueryStates extends DataGridQueryStates {
+export interface AuthAuditLogListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	email: string;
@@ -128,12 +128,12 @@ export const AuthAuditLogListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const logRows = logs ?? [];
 		return (
@@ -181,7 +181,6 @@ export const AuthAuditLogListScreen = observer(
 									table: {
 										entity: "AuthAuditLog",
 										columns: authAuditLogTableColumns,
-										emptyMessage: "조회된 감사 로그가 없습니다.",
 									},
 								}}
 								rows={logRows}

@@ -38,7 +38,7 @@ export class DataGridGroupPanelState {
 	}
 
 	changeGrouping(nextGrouping: Updater<GroupingState>) {
-		const grouping = this.state.table.getGroupingState();
+		const grouping = this.state.table.getGrouping();
 		const updatedGrouping =
 			typeof nextGrouping === "function"
 				? nextGrouping(grouping)
@@ -47,7 +47,7 @@ export class DataGridGroupPanelState {
 	}
 
 	get grouping() {
-		return this.state.table.getGroupingState();
+		return this.state.table.getGrouping();
 	}
 
 	get groupableColumns() {

@@ -3,7 +3,7 @@
 import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
 import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -46,7 +46,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const idpConsoleOidcSessionsPageQueryInputs = [...leftInputs];
-export interface OidcSessionListScreenQueryStates extends DataGridQueryStates {
+export interface OidcSessionListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	modelType: string;
@@ -135,12 +135,12 @@ export const OidcSessionListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const sessionRows = sessions ?? [];
 		const byModelType = (stats?.byModelType ?? {}) as Record<string, number>;
@@ -244,7 +244,6 @@ export const OidcSessionListScreen = observer(
 									table: {
 										entity: "OidcSession",
 										columns,
-										emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
 									},
 								}}
 								rows={sessionRows}

@@ -2,7 +2,7 @@
 
 import type { InquiryDto } from "@cocrepo/api/core/inquiries";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 	SelectOption,
@@ -39,7 +39,7 @@ const statusInput: InputConfig = {
 	},
 };
 export const adminInquiriesPageQueryInputs = [searchInput, statusInput];
-export interface InquiryListScreenQueryStates extends DataGridQueryStates {
+export interface InquiryListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -228,12 +228,12 @@ export const InquiryListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const inquiryRows = inquiries ?? [];
 		const columns = buildInquiryTableColumns<InquiryDto>();
@@ -297,7 +297,6 @@ export const InquiryListScreen = observer(
 											onRowClick: (inquiry) => {
 												onClickInquiryRow(inquiry.id);
 											},
-											emptyMessage: "표시할 문의가 없습니다.",
 										},
 									}}
 									rows={inquiryRows}

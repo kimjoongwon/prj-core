@@ -15,10 +15,7 @@ import {
 	useUploadAsset,
 } from "@cocrepo/api/assets";
 import { useApp } from "@cocrepo/store";
-import type {
-	DataGridQueryStates,
-	DataGridSetQueryStates,
-} from "@cocrepo/type";
+import type { DataGridQueryState, DataGridSetQueryStates } from "@cocrepo/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { isWireId } from "./wire-id";
@@ -29,7 +26,7 @@ export interface AssetBrowserFolder {
 	parentFolderId?: string | null;
 }
 
-export interface AssetBrowserQueryStates extends DataGridQueryStates {
+export interface AssetBrowserQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;

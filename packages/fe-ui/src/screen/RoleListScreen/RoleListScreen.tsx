@@ -1,10 +1,7 @@
 "use client";
 
 import type { RoleDto } from "@cocrepo/api/core/roles";
-import type {
-	DataGridQueryStates,
-	DataGridSetQueryStates,
-} from "@cocrepo/type";
+import type { DataGridQueryState, DataGridSetQueryStates } from "@cocrepo/type";
 import {
 	buildAdminRoleTableColumns,
 	DataGrid,
@@ -18,7 +15,7 @@ import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Button } from "../../input/Button/Button";
-export interface RoleListScreenQueryStates extends DataGridQueryStates {
+export interface RoleListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 }
@@ -58,19 +55,18 @@ export const RoleListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					table: {
 						entity: "Role",
 						columns: buildAdminRoleTableColumns<RoleDto>(),
-						emptyMessage: "등록된 역할이 없습니다.",
 					},
 					rows: roles ?? [],
 					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = roles ?? [];
 			gridState.pagination.setTotalCount(totalCount);
 		}, [gridState, queryStates, roles, totalCount]);

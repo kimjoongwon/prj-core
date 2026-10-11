@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryState, InputConfig } from "@cocrepo/type";
 import { Search } from "lucide-react";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -9,7 +9,7 @@ import { useT } from "../../i18n";
 
 interface SearchInputProps {
 	config: InputConfig;
-	queryValues: DataGridQueryStates;
+	queryValues: DataGridQueryState;
 	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 

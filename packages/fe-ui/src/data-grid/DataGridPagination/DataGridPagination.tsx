@@ -19,8 +19,7 @@ export class DataGridPaginationState {
 	}
 
 	toTablePaginationState(): PaginationState {
-		const skip = Number(this.state.queryStates.skip) || 0;
-		const pageSize = Number(this.state.queryStates.take) || 20;
+		const { skip, take: pageSize } = this.state.query.pagination;
 		return { pageIndex: Math.floor(skip / pageSize), pageSize };
 	}
 

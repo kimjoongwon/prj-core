@@ -2,12 +2,12 @@
 
 import type { AssetDto } from "@cocrepo/api/assets";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
-import type { ColumnDef } from "@tanstack/react-table";
 import { Modal, useOverlayState } from "@heroui/react";
+import type { ColumnDef } from "@tanstack/react-table";
 import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
@@ -95,7 +95,7 @@ export const assetBrowserQueryInputs: InputConfig[] = [
 		placeholder: "폴더",
 	},
 ];
-export interface AssetBrowserQueryStates extends DataGridQueryStates {
+export interface AssetBrowserQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -144,22 +144,6 @@ const assetsSidebarPanelClassName =
 	"overflow-hidden rounded-2xl border border-border/70 bg-default/70 shadow-sm";
 const assetsGridPanelClassName =
 	"min-w-0 rounded-2xl border border-border/70 bg-surface px-4 py-4 shadow-sm sm:px-5 sm:py-5";
-const getAssetEmptyMessage = (
-	folders: FolderTreeItem[],
-	selectedFolderId: string | null,
-	t: (key: string) => string,
-) => {
-	if (!selectedFolderId) {
-		return t("등록된 에셋이 없습니다.");
-	}
-	const selectedFolder = folders.find(
-		(folder) => folder.id === selectedFolderId,
-	);
-	if (!selectedFolder) {
-		return t("선택한 폴더에 등록된 에셋이 없습니다.");
-	}
-	return `${selectedFolder.name} ${t("폴더에 등록된 에셋이 없습니다.")}`;
-};
 export function isUploadActionDisabled({
 	isSpaceReady,
 	hasSelectedSpace,
@@ -195,12 +179,12 @@ function AssetsGridFallback({
 	const gridState = useLocalObservable(
 		() =>
 			new DataGridState({
-				queryStates,
+				query: queryStates,
 				setQueryStates,
 			}),
 	);
 	useEffect(() => {
-		gridState.queryStates = queryStates;
+		gridState.query.update(queryStates);
 	}, [gridState, queryStates, setQueryStates]);
 	return (
 		<div className={assetsLayoutClassName}>
@@ -216,7 +200,6 @@ function AssetsGridFallback({
 						table: {
 							entity: "Asset",
 							columns,
-							emptyMessage: "등록된 에셋이 없습니다.",
 						},
 					}}
 					rows={[]}
@@ -271,12 +254,12 @@ export const AssetBrowser = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const fileInputRef = useRef<HTMLInputElement | null>(null);
 		const createFolderModal = useOverlayState();
@@ -447,7 +430,6 @@ export const AssetBrowser = observer(
 			selectedAssetId,
 			onClickSelectAssetButton,
 		});
-		const emptyMessage = getAssetEmptyMessage(folders, selectedFolderId, t);
 		const browserContent = (
 			<>
 				<Surface className="overflow-hidden rounded-3xl border-border/80 bg-surface">
@@ -485,7 +467,6 @@ export const AssetBrowser = observer(
 										table: {
 											entity: "Asset",
 											columns,
-											emptyMessage,
 										},
 									}}
 									rows={assets}

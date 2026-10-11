@@ -2,7 +2,7 @@
 
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -71,7 +71,7 @@ const subjectGroupFilters = [
 	},
 ] as const;
 export const adminSubjectsPageQueryInputs: InputConfig[] = [...leftInputs];
-export interface SubjectListScreenQueryStates extends DataGridQueryStates {
+export interface SubjectListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -179,20 +179,19 @@ export const SubjectListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					toolbar: { leftInputs },
 					table: {
 						entity: "Subject",
 						columns: subjectTableColumns,
 						onRowClick: (subject) => onClickSubject(subject.id),
-						emptyMessage: "조회된 대상이 없습니다.",
 					},
 					rows: subjects ?? [],
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = subjects ?? [];
 		}, [gridState, queryStates, subjects]);
 		const subjectRows = subjects ?? [];

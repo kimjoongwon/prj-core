@@ -2,7 +2,7 @@
 
 import type { IdpAccountDto } from "@cocrepo/api/idp/idp-accounts";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -30,7 +30,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const idpConsoleAccountsPageQueryInputs = [...leftInputs];
-export interface AccountListScreenQueryStates extends DataGridQueryStates {
+export interface AccountListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -60,7 +60,7 @@ export const AccountListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					toolbar: { leftInputs },
 					table: {
@@ -69,14 +69,13 @@ export const AccountListScreen = observer(
 							onClickUnlockAccount: (account) =>
 								onClickUnlockAccountButton(account.id),
 						}),
-						emptyMessage: "등록된 계정이 없습니다.",
 					},
 					rows: accounts ?? [],
 					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = accounts ?? [];
 			gridState.pagination.setTotalCount(totalCount);
 		}, [gridState, queryStates, accounts, totalCount]);

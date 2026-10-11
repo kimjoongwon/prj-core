@@ -2,7 +2,7 @@
 
 import type { RoutineDto } from "@cocrepo/api/core/routines";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -45,7 +45,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const adminRoutinesPageQueryInputs = [...leftInputs];
-export interface RoutineListScreenQueryStates extends DataGridQueryStates {
+export interface RoutineListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -91,7 +91,7 @@ export const RoutineListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					toolbar: { leftInputs },
 					table: {
@@ -100,14 +100,13 @@ export const RoutineListScreen = observer(
 							onClickRoutineName,
 							onDeleteRoutine,
 						}),
-						emptyMessage: "등록된 루틴이 없습니다.",
 					},
 					rows: routines ?? [],
 					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = routines ?? [];
 			gridState.pagination.setTotalCount(totalCount);
 		}, [gridState, queryStates, routines, totalCount]);

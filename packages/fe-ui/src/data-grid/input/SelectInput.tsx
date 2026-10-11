@@ -1,12 +1,12 @@
 "use client";
 
-import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryState, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 
 interface SelectInputProps {
 	config: InputConfig;
-	queryValues: DataGridQueryStates;
+	queryValues: DataGridQueryState;
 	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 

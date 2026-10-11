@@ -2,7 +2,7 @@
 
 import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -32,7 +32,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const idpConsoleOidcClientsPageQueryInputs = [...leftInputs];
-export interface OidcClientListScreenQueryStates extends DataGridQueryStates {
+export interface OidcClientListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -59,20 +59,19 @@ export const OidcClientListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					toolbar: { leftInputs },
 					table: {
 						entity: "OidcClient",
 						columns: oidcClientTableColumns,
-						emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
 					},
 					rows: oidcClients ?? [],
 					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = oidcClients ?? [];
 			gridState.pagination.setTotalCount(totalCount);
 		}, [gridState, queryStates, oidcClients, totalCount]);

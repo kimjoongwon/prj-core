@@ -1,11 +1,7 @@
 "use client";
 
 import { CategoryFormSchema } from "@cocrepo/schema";
-import type {
-	DataGridEditRequest,
-	DataGridExpandRequest,
-	InputStateProps,
-} from "@cocrepo/type";
+import type { DataGridEditRequest, InputStateProps } from "@cocrepo/type";
 import { ButtonGroup } from "@heroui/react";
 import type { CellContext } from "@tanstack/react-table";
 import { makeAutoObservable } from "mobx";
@@ -39,7 +35,6 @@ class State {
 	rows: CategoryEditorRow[];
 	dataGridState: CategoryEditorDataGridState;
 	requestSequence = 0;
-	expandRequest?: DataGridExpandRequest;
 	editRequest?: DataGridEditRequest;
 
 	constructor(
@@ -118,10 +113,7 @@ class State {
 
 		this.dataGridState.addRow(newCategoryRow);
 		if (parentCategoryRow) {
-			this.expandRequest = {
-				rowId: parentCategoryRow.id,
-				requestId,
-			};
+			this.dataGridState.table.ensureRowExpanded(parentCategoryRow.id);
 		}
 		this.editRequest = {
 			rowId: newCategoryRow.id,
@@ -224,7 +216,6 @@ export const CategoryEditor = observer(
 							]),
 				],
 				getSubRows: state.getCategorySubRows,
-				expandRequest: state.expandRequest,
 				editRequest: state.editRequest,
 			},
 		} satisfies Pick<
@@ -232,7 +223,7 @@ export const CategoryEditor = observer(
 			"toolbar" | "groupPanel" | "table"
 		>;
 		const gridState = new DataGridState({
-			queryStates: {},
+			query: {},
 			setQueryStates: async () => new URLSearchParams(),
 			...config,
 			rows: state.rootCategoryRows,

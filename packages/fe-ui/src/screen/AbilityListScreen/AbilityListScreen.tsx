@@ -1,10 +1,7 @@
 "use client";
 
 import type { AbilityResponseDto } from "@cocrepo/api/core/abilities";
-import type {
-	DataGridQueryStates,
-	DataGridSetQueryStates,
-} from "@cocrepo/type";
+import type { DataGridQueryState, DataGridSetQueryStates } from "@cocrepo/type";
 import {
 	DataGrid,
 	DataGridState,
@@ -41,7 +38,7 @@ export interface AbilityListScreenFilters {
 	selectedActionId: string;
 	selectedInverted: string;
 }
-export interface AbilityListScreenQueryStates extends DataGridQueryStates {
+export interface AbilityListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -124,10 +121,7 @@ function MetricCard({
 						</div>
 					) : null}
 					<div className="flex flex-1 flex-col">
-						<Typography
-							type="body-sm"
-							color="muted"
-						>
+						<Typography type="body-sm" color="muted">
 							{title}
 						</Typography>
 						<Typography.Heading level={3} className={styles.value}>
@@ -172,9 +166,7 @@ const AbilityListScreenFallback = observer(() => {
 					<Section.Body>
 						<HStack alignItems="center" justifyContent="center">
 							<Spinner size="sm" />
-							<Typography color="muted">
-								로딩 중...
-							</Typography>
+							<Typography color="muted">로딩 중...</Typography>
 						</HStack>
 					</Section.Body>
 				</Section>
@@ -184,9 +176,7 @@ const AbilityListScreenFallback = observer(() => {
 					<Section.Body>
 						<HStack alignItems="center" justifyContent="center">
 							<Spinner size="sm" />
-							<Typography color="muted">
-								로딩 중...
-							</Typography>
+							<Typography color="muted">로딩 중...</Typography>
 						</HStack>
 					</Section.Body>
 				</Section>
@@ -216,12 +206,12 @@ export const AbilityListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const abilityRows = abilities ?? [];
 		const subjectOptionIds = new Set(
@@ -420,10 +410,7 @@ export const AbilityListScreen = observer(
 											</Chip>
 										) : null}
 										{!activeFilters ? (
-											<Typography
-												type="body-sm"
-												color="muted"
-											>
+											<Typography type="body-sm" color="muted">
 												적용된 필터가 없습니다.
 											</Typography>
 										) : null}
@@ -457,10 +444,6 @@ export const AbilityListScreen = observer(
 											entity: "Ability",
 											columns: abilityListTableColumns,
 											onRowClick: handleAbilityRowClick,
-											emptyMessage:
-												totalCount === 0
-													? "등록된 권한이 없습니다."
-													: "검색 조건에 맞는 권한이 없습니다.",
 										},
 									}}
 									rows={abilityRows}

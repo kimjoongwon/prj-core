@@ -2,7 +2,7 @@
 
 import type { SpaceDto } from "@cocrepo/api/core/spaces";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -42,7 +42,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const adminSpacesPageQueryInputs = [...leftInputs];
-export interface SpaceListScreenQueryStates extends DataGridQueryStates {
+export interface SpaceListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -109,12 +109,12 @@ export const SpaceListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const spaceRows = spaces ?? [];
 		const filteredRows = filterRows(
@@ -157,7 +157,6 @@ export const SpaceListScreen = observer(
 									table: {
 										entity: "Space",
 										columns,
-										emptyMessage: "등록된 공간이 없습니다.",
 									},
 								}}
 								rows={filteredRows}

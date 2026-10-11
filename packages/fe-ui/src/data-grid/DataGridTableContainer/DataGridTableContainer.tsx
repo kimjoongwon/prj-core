@@ -1,18 +1,28 @@
 "use client";
 
+import type { Table as ReactTable } from "@tanstack/react-table";
 import type { ReactNode } from "react";
+import type { Key } from "../DataGrid";
+import type { DataGridTableState } from "../DataGridTable/DataGridTable";
 
-export interface DataGridTableContainerProps {
+export interface DataGridTableContainerProps<TData extends { id: Key }> {
 	children: ReactNode;
-	columnWidths: number[];
-	isSelectable?: boolean;
+	table: {
+		state: DataGridTableState<TData>;
+		instance: ReactTable<TData>;
+	};
 }
 
-function DataGridTableContainerView({
+function DataGridTableContainerView<TData extends { id: Key }>({
 	children,
-	columnWidths,
-	isSelectable = false,
-}: DataGridTableContainerProps) {
+	table,
+}: DataGridTableContainerProps<TData>) {
+	const columnWidths = table.instance
+		.getVisibleLeafColumns()
+		.map((column) => column.getSize());
+	const isSelectable =
+		table.state.selection?.mode !== undefined &&
+		table.state.selection.mode !== "none";
 	const minimumTableWidth = columnWidths.reduce(
 		(totalWidth, columnWidth) => totalWidth + columnWidth,
 		isSelectable ? 44 : 0,

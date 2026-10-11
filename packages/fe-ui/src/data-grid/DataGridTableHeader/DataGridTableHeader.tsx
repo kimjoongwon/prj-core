@@ -1,22 +1,69 @@
 "use client";
 
-import {
-	flexRender,
-	type Header,
-	type HeaderGroup,
-	type Table,
-} from "@tanstack/react-table";
+import type { SelectionConfig } from "@cocrepo/type";
+import { flexRender, type Header, type Table } from "@tanstack/react-table";
+import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { Typography } from "../../data-display/Typography";
 import { type Translate, translateNode } from "../../i18n";
-import type { DataGridTableHeaderState, Key } from "../DataGrid";
+import type { DataGridState, Key } from "../DataGrid";
 import { ColumnResizerInput } from "../input/ColumnResizerInput";
 import { ColumnSortInput } from "../input/ColumnSortInput";
 
+/** Table 헤더의 query와 선택 상호작용 상태를 관리합니다. */
+export class DataGridTableHeaderState<TData extends { id: Key } = { id: Key }> {
+	constructor(readonly state: DataGridState<TData>) {
+		makeAutoObservable(this, { state: false }, { autoBind: true });
+	}
+
+	getSelectionMode(): Exclude<SelectionConfig["mode"], "none"> | undefined {
+		const selectionMode = this.state.table.selection?.mode;
+		return selectionMode === "none" ? undefined : selectionMode;
+	}
+
+	get selectedKeys() {
+		return Array.from(
+			this.state.selection?.selectedKeys ?? this.state.table.selectedRowKeys,
+		);
+	}
+
+	get queryValues() {
+		return this.state.query.filters;
+	}
+
+	isAllVisibleRowsSelected(visibleRowKeys: string[]) {
+		const selectedKeySet = new Set(this.selectedKeys);
+		return (
+			visibleRowKeys.length > 0 &&
+			visibleRowKeys.every((rowKey) => selectedKeySet.has(rowKey))
+		);
+	}
+
+	isSomeVisibleRowsSelected(visibleRowKeys: string[]) {
+		const selectedKeySet = new Set(this.selectedKeys);
+		return visibleRowKeys.some((rowKey) => selectedKeySet.has(rowKey));
+	}
+
+	changeQuery(values: Record<string, unknown | null>) {
+		return this.state.querySetter(values);
+	}
+
+	changeVisibleSelection(visibleRowKeys: string[], isSelected: boolean) {
+		const nextSelectedKeys = isSelected
+			? Array.from(new Set([...this.selectedKeys, ...visibleRowKeys]))
+			: this.selectedKeys.filter((key) => !visibleRowKeys.includes(key));
+		const nextSelection = new Set(nextSelectedKeys);
+		if (this.state.selection?.setSelectedKeys) {
+			this.state.selection.setSelectedKeys(nextSelection);
+		} else {
+			this.state.table.setSelectedRowKeys(nextSelection);
+		}
+		this.state.table.selection?.onSelectionChange?.(nextSelection);
+	}
+}
+
 export interface DataGridTableHeaderProps<T extends { id: Key }> {
 	state: DataGridTableHeaderState<T>;
-	headerGroups: HeaderGroup<T>[];
-	visibleRowKeys: string[];
 	table: Table<T>;
 }
 
@@ -34,12 +81,9 @@ function getSelectionAriaChecked(
 
 /** Header 전용 facade에서 정렬, filter, resize와 visible selection을 렌더링합니다. */
 export const DataGridTableHeader = observer(
-	<T extends { id: Key }>({
-		state,
-		headerGroups,
-		visibleRowKeys,
-		table,
-	}: DataGridTableHeaderProps<T>) => {
+	<T extends { id: Key }>({ state, table }: DataGridTableHeaderProps<T>) => {
+		const headerGroups = table.getHeaderGroups();
+		const visibleRowKeys = table.getCoreRowModel().rows.map((row) => row.id);
 		const selectionMode = state.getSelectionMode();
 		const isAllVisibleRowsSelected =
 			state.isAllVisibleRowsSelected(visibleRowKeys);

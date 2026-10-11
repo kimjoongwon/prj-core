@@ -2,7 +2,7 @@
 
 import type { TemplateDto } from "@cocrepo/api/core/templates";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
@@ -28,7 +28,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const adminTemplatesPageQueryInputs = [...leftInputs];
-export interface TemplateListScreenQueryStates extends DataGridQueryStates {
+export interface TemplateListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -75,7 +75,7 @@ export const TemplateListScreen = observer(
 		const gridState = useLocalObservable(
 			() =>
 				new DataGridState({
-					queryStates,
+					query: queryStates,
 					setQueryStates,
 					toolbar: { leftInputs },
 					table: {
@@ -84,14 +84,13 @@ export const TemplateListScreen = observer(
 							onClickTemplateCode,
 							onToggleTemplateStatusSwitch,
 						}),
-						emptyMessage: "등록된 템플릿이 없습니다.",
 					},
 					rows: templates ?? [],
 					totalCount,
 				}),
 		);
 		useEffect(() => {
-			gridState.queryStates = queryStates;
+			gridState.query.update(queryStates);
 			gridState.rows = templates ?? [];
 			gridState.pagination.setTotalCount(totalCount);
 		}, [gridState, queryStates, templates, totalCount]);

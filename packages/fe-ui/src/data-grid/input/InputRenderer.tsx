@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryState, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { ButtonInput } from "./ButtonInput";
 import { ChipGroupInput } from "./ChipGroupInput";
@@ -12,7 +12,7 @@ import { SelectInput } from "./SelectInput";
 
 export interface InputRendererProps {
 	config: InputConfig;
-	queryValues: DataGridQueryStates;
+	queryValues: DataGridQueryState;
 	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 
