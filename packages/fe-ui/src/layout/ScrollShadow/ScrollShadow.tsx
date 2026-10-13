@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	ScrollShadow as HeroScrollShadow,
 	scrollShadowVariants,

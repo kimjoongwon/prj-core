@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Separator as HeroSeparator,
 	separatorVariants,
