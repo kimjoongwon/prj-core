@@ -107,15 +107,17 @@ function MyComponent() {
 `@cocrepo/api` 패키지를 통한 API 통신:
 
 ```typescript
-import { useGetUsers, useCreateUser } from '@cocrepo/api';
+import { useGetUsersSuspense } from '@cocrepo/api/core/users';
 
 function UsersPage() {
-  const { data: users, isLoading } = useGetUsers();
-  const createUser = useCreateUser();
+  const { data: response } = useGetUsersSuspense();
+  const users = response.data ?? [];
 
   // ...
 }
 ```
+
+목록 조회 대기는 해당 route의 `loading.tsx` 또는 `Suspense` 경계가 담당합니다. Mutation의 진행 상태는 기존 mutation hook의 `isPending`으로 표시합니다.
 
 ## 라우팅
 

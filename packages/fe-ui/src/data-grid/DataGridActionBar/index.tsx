@@ -1,2 +1,4 @@
-export type { DataGridActionBarProps } from "./DataGridActionBar";
-export { DataGridActionBar, DataGridActionBarState } from "./DataGridActionBar";
+export {
+	DataGridActionBar,
+	type DataGridActionBarProps,
+} from "./DataGridActionBar";

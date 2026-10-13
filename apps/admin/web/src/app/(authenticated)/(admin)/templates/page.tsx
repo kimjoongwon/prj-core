@@ -2,7 +2,7 @@
 
 import {
 	getGetTemplatesQueryKey,
-	useGetTemplates,
+	useGetTemplatesSuspense,
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
 import { TemplateListScreen } from "@cocrepo/ui";
@@ -29,16 +29,15 @@ export default observer(function TemplatesPageRoute() {
 		search: parseAsString.withDefault(""),
 		isActive: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetTemplates(
+	const { data: response } = useGetTemplatesSuspense(
 		getTemplatesParams(queryStates),
 	);
 	const toggleMutation = useToggleTemplateStatus();
 
 	return (
 		<TemplateListScreen
-			templates={response?.data}
-			totalCount={response?.meta?.total ?? 0}
-			isLoading={isLoading}
+			templates={response.data ?? []}
+			totalCount={response.meta?.total ?? 0}
 			isToggling={toggleMutation.isPending}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}

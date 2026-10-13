@@ -24,7 +24,6 @@ const baseArgs = {
 	folders,
 	queryStates,
 	setQueryStates: async () => new URLSearchParams(),
-	isLoading: false,
 	isSpaceReady: true,
 	hasSelectedSpace: true,
 	isRemoving: false,

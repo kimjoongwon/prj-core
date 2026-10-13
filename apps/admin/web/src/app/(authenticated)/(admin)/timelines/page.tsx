@@ -3,7 +3,7 @@
 import {
 	getGetTimelinesQueryKey,
 	useDeleteTimeline,
-	useGetTimelines,
+	useGetTimelinesSuspense,
 } from "@cocrepo/api/core/timelines";
 import { TimelineListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
@@ -28,14 +28,13 @@ export default observer(function TimelinesPageRoute() {
 		search: parseAsString.withDefault(""),
 	});
 	const timelineParams = getTimelineParams(queryStates);
-	const { data: response, isLoading } = useGetTimelines(timelineParams);
+	const { data: response } = useGetTimelinesSuspense(timelineParams);
 	const deleteMutation = useDeleteTimeline();
 
 	return (
 		<TimelineListScreen
-			timelines={response?.data}
-			totalCount={response?.meta?.total ?? 0}
-			isLoading={isLoading}
+			timelines={response.data ?? []}
+			totalCount={response.meta?.total ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickCreateButton={() => {

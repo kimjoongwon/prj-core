@@ -4,7 +4,7 @@ import { useUnlockAccount } from "@cocrepo/api/idp/auth";
 import {
 	getGetIdpAccountQueryKey,
 	getGetIdpAccountsQueryKey,
-	useGetIdpAccounts,
+	useGetIdpAccountsSuspense,
 } from "@cocrepo/api/idp/idp-accounts";
 import { AccountListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
@@ -24,7 +24,7 @@ export default observer(function AccountsPageRoute() {
 		skip: queryStates.skip,
 		search: queryStates.search || undefined,
 	};
-	const { data: response, isLoading } = useGetIdpAccounts(queryParams);
+	const { data: response } = useGetIdpAccountsSuspense(queryParams);
 	const { mutateAsync: unlockAccount } = useUnlockAccount({
 		mutation: {
 			onSuccess: (_data, variables) => {
@@ -49,9 +49,8 @@ export default observer(function AccountsPageRoute() {
 
 	return (
 		<AccountListScreen
-			accounts={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading}
+			accounts={response.data ?? []}
+			totalCount={response.meta?.totalCount ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickUnlockAccountButton={(userId) => {

@@ -1,9 +1,14 @@
 export * from "./cell";
 export * from "./columns";
 export {
+	createDataGridState,
+	DATA_GRID_DEFAULT_PAGE_SIZE,
 	DataGrid,
-	DataGridQueryState,
-	DataGridState,
+	type DataGridQueryState,
+	type DataGridState,
+	type DataGridStateConfig,
 } from "./DataGrid";
-export { DataGridTableState } from "./DataGridTable/DataGridTable";
-export { DataGridTableHeaderState } from "./DataGridTableHeader/DataGridTableHeader";
+export type {
+	DataGridTableConfig,
+	DataGridTableState,
+} from "./DataGridTable/DataGridTable";

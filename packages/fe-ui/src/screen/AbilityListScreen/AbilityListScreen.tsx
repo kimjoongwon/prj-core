@@ -3,13 +3,13 @@
 import type { AbilityResponseDto } from "@cocrepo/api/core/abilities";
 import type { DataGridQueryState, DataGridSetQueryStates } from "@cocrepo/type";
 import {
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	SectionSurface,
 	Typography,
 } from "@cocrepo/ui";
-import { Card, ListBox, Spinner } from "@heroui/react";
+import { Card, ListBox } from "@heroui/react";
 import {
 	Ban,
 	FilterX,
@@ -19,8 +19,8 @@ import {
 	ShieldCheck,
 	SlidersHorizontal,
 } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type ReactNode, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { type ReactNode, useMemo } from "react";
 import { Chip } from "../../data-display";
 import { buildAbilityListTableColumns } from "../../data-grid/columns";
 import { Button } from "../../input/Button/Button";
@@ -56,13 +56,12 @@ export interface AbilityListScreenSummary {
 	fieldScoped: number;
 }
 export interface AbilityListScreenProps {
-	abilities?: AbilityResponseDto[];
+	abilities: AbilityResponseDto[];
 	totalCount: number;
 	summary: AbilityListScreenSummary;
 	subjects: AbilityListScreenOption[];
 	actions: AbilityListScreenOption[];
 	filters: AbilityListScreenFilters;
-	isLoading: boolean;
 	queryStates: AbilityListScreenQueryStates;
 	setQueryStates: AbilityListScreenSetQueryStates;
 	onChangeSearchTerm: (value: string) => void;
@@ -158,32 +157,6 @@ function hasActiveFilters(filters: AbilityListScreenFilters) {
 			filters.selectedInverted,
 	);
 }
-const AbilityListScreenFallback = observer(() => {
-	return (
-		<VStack gap="page">
-			<SectionSurface className="rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>
-						<HStack alignItems="center" justifyContent="center">
-							<Spinner size="sm" />
-							<Typography color="muted">로딩 중...</Typography>
-						</HStack>
-					</Section.Body>
-				</Section>
-			</SectionSurface>
-			<SectionSurface className="rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>
-						<HStack alignItems="center" justifyContent="center">
-							<Spinner size="sm" />
-							<Typography color="muted">로딩 중...</Typography>
-						</HStack>
-					</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-});
 export const AbilityListScreen = observer(
 	({
 		abilities,
@@ -192,7 +165,6 @@ export const AbilityListScreen = observer(
 		subjects,
 		actions,
 		filters,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onChangeSearchTerm,
@@ -203,17 +175,20 @@ export const AbilityListScreen = observer(
 		onClickAbilityRow,
 		onClickCreateButton,
 	}: AbilityListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<AbilityResponseDto>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					table: {
+						rows: abilities,
+						columns: abilityListTableColumns,
+						row: { onClick: (ability) => onClickAbilityRow(ability.id) },
+					},
 				}),
+			[abilities, totalCount, queryStates, setQueryStates, onClickAbilityRow],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const abilityRows = abilities ?? [];
 		const subjectOptionIds = new Set(
 			subjects.map((subject) => String(subject.id)),
 		);
@@ -228,9 +203,6 @@ export const AbilityListScreen = observer(
 		);
 		const selectedRuleTypeLabel = getRuleTypeLabel(filters.selectedInverted);
 		const activeFilters = hasActiveFilters(filters);
-		const handleAbilityRowClick = (ability: AbilityResponseDto) => {
-			onClickAbilityRow(ability.id);
-		};
 		const handleSearchClear = () => {
 			onChangeSearchTerm("");
 		};
@@ -243,9 +215,6 @@ export const AbilityListScreen = observer(
 		const handleInvertedSelectionChange = (value: string | number | null) => {
 			onChangeInverted(typeof value === "string" ? value : "");
 		};
-		if (isLoading) {
-			return <AbilityListScreenFallback />;
-		}
 		return (
 			<VStack gap="page">
 				<Screen.Header
@@ -438,18 +407,7 @@ export const AbilityListScreen = observer(
 										description="행을 선택하면 상세 정보와 JSON 조건을 확인할 수 있습니다."
 									/>
 								</div>
-								<DataGrid
-									config={{
-										table: {
-											entity: "Ability",
-											columns: abilityListTableColumns,
-											onRowClick: handleAbilityRowClick,
-										},
-									}}
-									rows={abilityRows}
-									totalCount={totalCount}
-									state={gridState}
-								/>
+								<DataGrid state={gridState} />
 							</Section.Body>
 						</Section>
 					</SectionSurface>

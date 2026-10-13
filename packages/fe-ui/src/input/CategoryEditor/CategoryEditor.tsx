@@ -6,8 +6,19 @@ import { ButtonGroup } from "@heroui/react";
 import type { CellContext } from "@tanstack/react-table";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { DataGrid, DataGridState } from "../../data-grid";
-import { DataGridLoading } from "../../data-grid/DataGridLoading";
+import {
+	createDataGridState,
+	DataGrid,
+	type DataGridState,
+	type DataGridStateConfig,
+} from "../../data-grid";
+import { ensureRowExpanded } from "../../data-grid/DataGridTable/useHandlers";
+import {
+	addRow,
+	deleteRow,
+	getChangesSnapshot,
+	getRow,
+} from "../../data-grid/useHandlers";
 import { Button } from "../Button";
 
 /** CategoryFormSchema의 name을 편집하는 DataGrid 행입니다. */
@@ -19,16 +30,15 @@ export interface CategoryEditorRow {
 }
 
 /** CategoryEditor의 생성·수정·삭제 delta를 보관하는 외부 grid 상태입니다. */
-export type CategoryEditorDataGridState = DataGridState;
+export type CategoryEditorDataGridState = DataGridState<CategoryEditorRow>;
 
 export interface CategoryEditorProps extends InputStateProps {
 	/** 상위 Feature 또는 Screen이 보관하는 API 원본 행입니다. */
 	rows: CategoryEditorRow[];
-	/** 상위 계층이 toJSON<CategoryEditorRow>() snapshot을 소비할 grid 상태입니다. */
+	/** 상위 계층이 getChangesSnapshot() snapshot을 소비할 grid 상태입니다. */
 	dataGridState: CategoryEditorDataGridState;
 	/** API 목록 조회 결과의 전체 행 수입니다. */
 	totalCount: number;
-	isLoading?: boolean;
 }
 
 class State {
@@ -55,15 +65,14 @@ class State {
 	}
 
 	get categoryRowsWithChanges() {
-		const categoryChangesSnapshot =
-			this.dataGridState.toJSON<CategoryEditorRow>();
+		const categoryChangesSnapshot = getChangesSnapshot(this.dataGridState);
 		const deletedCategoryIds = new Set(categoryChangesSnapshot.deleted);
 		const originalCategoryIds = new Set(
 			this.rows.map((categoryRow) => categoryRow.id),
 		);
 		const existingCategoryRows = this.rows
 			.filter((categoryRow) => !deletedCategoryIds.has(categoryRow.id))
-			.map((categoryRow) => this.dataGridState.getRow(categoryRow));
+			.map((categoryRow) => getRow(this.dataGridState, categoryRow));
 		const createdCategoryRows = categoryChangesSnapshot.created.filter(
 			(categoryRow) => !originalCategoryIds.has(categoryRow.id),
 		);
@@ -98,7 +107,7 @@ class State {
 	}
 
 	deleteCategory(categoryId: string) {
-		this.dataGridState.deleteRow(categoryId);
+		deleteRow(this.dataGridState, categoryId);
 	}
 
 	private addCategory(parentCategoryRow: CategoryEditorRow | null) {
@@ -111,9 +120,9 @@ class State {
 			siblingCategoryRows.length,
 		);
 
-		this.dataGridState.addRow(newCategoryRow);
+		addRow(this.dataGridState, newCategoryRow);
 		if (parentCategoryRow) {
-			this.dataGridState.table.ensureRowExpanded(parentCategoryRow.id);
+			ensureRowExpanded(this.dataGridState.table, parentCategoryRow.id);
 		}
 		this.editRequest = {
 			rowId: newCategoryRow.id,
@@ -157,7 +166,6 @@ export const CategoryEditor = observer(
 		rows,
 		dataGridState,
 		totalCount,
-		isLoading = false,
 		isReadOnly = false,
 	}: CategoryEditorProps) => {
 		const state = useLocalObservable(() => new State(rows, dataGridState));
@@ -178,7 +186,7 @@ export const CategoryEditor = observer(
 			},
 			groupPanel: { show: "never" },
 			table: {
-				entity: "Category",
+				rows: state.rootCategoryRows,
 				columns: [
 					{
 						accessorKey: "name",
@@ -216,20 +224,19 @@ export const CategoryEditor = observer(
 							]),
 				],
 				getSubRows: state.getCategorySubRows,
-				editRequest: state.editRequest,
+				row: { editRequest: state.editRequest },
 			},
 		} satisfies Pick<
-			ConstructorParameters<typeof DataGridState>[0],
+			DataGridStateConfig<CategoryEditorRow>,
 			"toolbar" | "groupPanel" | "table"
 		>;
-		const gridState = new DataGridState({
+		const gridState = createDataGridState<CategoryEditorRow>({
 			query: {},
 			setQueryStates: async () => new URLSearchParams(),
 			...config,
-			rows: state.rootCategoryRows,
-			totalCount,
+			pagination: { totalCount },
 		});
 
-		return isLoading ? <DataGridLoading /> : <DataGrid state={gridState} />;
+		return <DataGrid state={gridState} />;
 	},
 );

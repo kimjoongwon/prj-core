@@ -1,9 +1,8 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { TemplateListScreen } from "./TemplateListScreen";
 
 const defaultArgs: ComponentProps<typeof TemplateListScreen> = {
-	isLoading: false,
 	isToggling: false,
 	onClickCreateButton: () => undefined,
 	onClickTemplateCode: () => undefined,
@@ -37,11 +36,6 @@ const defaultArgs: ComponentProps<typeof TemplateListScreen> = {
 	totalCount: 12,
 };
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	templates: [],
@@ -67,10 +61,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

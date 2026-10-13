@@ -146,12 +146,15 @@ Worker는 상세 탐색과 명령 출력을 자신의 thread에 남기고 최종
 - 이름만 읽어도 해당 코드가 어떤 데이터를 대상으로 무엇을 반환하는지 추론할 수 있어야 합니다.
 - 함수 추출은 추출한 이름이 호출 문맥과 도메인 책임을 드러낼 때만 수행합니다.
 
-## 컴포넌트 상태와 객체지향적 명명
+## 컴포넌트 상태 팩토리와 명명
 
-- React 컴포넌트의 로컬 상태는 `[ComponentName]State` 클래스가 관리합니다.
-- 컴포넌트 파일 상단에 `[ComponentName]State` 클래스를 선언하고, 상태와 변경 동작을 클래스에 함께 둡니다.
-- 컴포넌트에서는 `useLocalObservable(() => new [ComponentName]State())`로 상태 인스턴스를 생성합니다.
-- State 클래스 이름은 컴포넌트의 데이터와 책임을 드러냅니다.
+- React 컴포넌트의 로컬 상태는 `create[ComponentName]State` 팩토리 함수가 만드는 observable 객체가 관리합니다.
+- 컴포넌트 파일 상단에 팩토리를 선언하고, 상태 필드와 변경 동작을 하나의 객체 리터럴에 함께 둡니다. 팩토리는 `makeAutoObservable(객체, 비관찰 오버라이드, { autoBind: true, name })`로 감싸 반환합니다.
+- 같은 이름의 `[ComponentName]State` 타입을 `ReturnType<typeof create[ComponentName]State>` 기반으로 export해 소비처의 타입 import를 유지합니다.
+- 컴포넌트에서는 `useLocalObservable(() => create[ComponentName]State(...))`로 상태 인스턴스를 생성합니다.
+- 상태 객체의 외부 참조(부모 상태, 구성 값)는 클로저로 캡처하거나 오버라이드로 비관찰 필드에 두어 observable 그래프에 순환이 생기지 않게 합니다.
+- 렌더에서 읽지 않는 값은 observable 밖(클로저 변수)에 두어 관찰 범위를 최소화합니다.
+- State 이름은 컴포넌트의 데이터와 책임을 드러냅니다.
   - 예: `DataGridState`, `CategoryEditorState`
 - 함수와 변수는 데이터 구조보다 객체의 상태와 책임을 표현해야 합니다.
 - boolean 값은 `is`, `has`, `can`, `should`로 시작해 상태나 가능 여부를 드러냅니다.

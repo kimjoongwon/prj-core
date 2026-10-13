@@ -1,5 +1,5 @@
 export type { DataGridPaginationProps } from "./DataGridPagination";
 export {
 	DataGridPagination,
-	DataGridPaginationState,
+	type DataGridPaginationState,
 } from "./DataGridPagination";

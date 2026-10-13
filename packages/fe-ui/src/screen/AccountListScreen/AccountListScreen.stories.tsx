@@ -1,5 +1,5 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { AccountListScreen } from "./AccountListScreen";
 
 const defaultArgs: ComponentProps<typeof AccountListScreen> = {
@@ -27,16 +27,10 @@ const defaultArgs: ComponentProps<typeof AccountListScreen> = {
 			lockedUntil: new Date("locked-until-1"),
 		},
 	],
-	isLoading: false,
 	onClickUnlockAccountButton: () => undefined,
 	queryStates: { page: 1, take: 10, skip: 0, search: "" },
 	setQueryStates: async () => new URLSearchParams(),
 	totalCount: 12,
-};
-
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
 };
 
 const emptyStateArgs = {
@@ -64,10 +58,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

@@ -1,12 +1,17 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { SpaceListScreen } from "./SpaceListScreen";
 
 const defaultArgs: ComponentProps<typeof SpaceListScreen> = {
-	isLoading: false,
 	onClickCreateButton: () => undefined,
 	onClickSpaceFitnessCenterName: () => undefined,
-	queryStates: { page: 1, take: 10, skip: 0, search: "", contentLanguageCode: "" },
+	queryStates: {
+		page: 1,
+		take: 10,
+		skip: 0,
+		search: "",
+		contentLanguageCode: "",
+	},
 	setQueryStates: async () => new URLSearchParams(),
 	spaces: [
 		{
@@ -31,7 +36,7 @@ const defaultArgs: ComponentProps<typeof SpaceListScreen> = {
 					phone: "02-1234-5678",
 					email: "company@example.com",
 					address: "company-address-1",
-						name: "샘플 운영사 1",
+					name: "샘플 운영사 1",
 				},
 				email: "center1@example.com",
 				name: "샘플 피트니스 센터 1",
@@ -61,7 +66,7 @@ const defaultArgs: ComponentProps<typeof SpaceListScreen> = {
 					phone: "02-1234-5678",
 					email: "company@example.com",
 					address: "company-address-2",
-						name: "샘플 운영사 2",
+					name: "샘플 운영사 2",
 				},
 				email: "center2@example.com",
 				name: "샘플 피트니스 센터 2",
@@ -71,11 +76,6 @@ const defaultArgs: ComponentProps<typeof SpaceListScreen> = {
 		},
 	],
 	totalCount: 12,
-};
-
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
 };
 
 const emptyStateArgs = {
@@ -103,10 +103,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

@@ -1,5 +1,5 @@
 export type { DataGridGroupPanelProps } from "./DataGridGroupPanel";
 export {
 	DataGridGroupPanel,
-	DataGridGroupPanelState,
+	type DataGridGroupPanelState,
 } from "./DataGridGroupPanel";

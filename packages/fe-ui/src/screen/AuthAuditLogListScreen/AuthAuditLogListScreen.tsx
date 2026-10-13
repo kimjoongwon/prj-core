@@ -7,8 +7,8 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	HStack,
 	Screen,
 	Section,
@@ -18,8 +18,8 @@ import {
 } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
 import { CheckCircle, Lock, XCircle } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type ReactNode, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { type ReactNode, useMemo } from "react";
 import { buildAuthAuditLogTableColumns } from "../../data-grid/columns";
 
 /** 좌측 입력 정의 */
@@ -44,9 +44,8 @@ export interface AuthAuditLogListScreenStats {
 	totalCount: number;
 }
 export interface AuthAuditLogListScreenProps {
-	logs?: AuthAuditLogDto[];
+	logs: AuthAuditLogDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: AuthAuditLogListScreenQueryStates;
 	setQueryStates: AuthAuditLogListScreenSetQueryStates;
 	stats?: AuthAuditLogListScreenStats;
@@ -120,22 +119,24 @@ export const AuthAuditLogListScreen = observer(
 	({
 		logs,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		stats,
 	}: AuthAuditLogListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<AuthAuditLogDto>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: logs,
+						columns: authAuditLogTableColumns,
+					},
 				}),
+			[logs, totalCount, queryStates, setQueryStates],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const logRows = logs ?? [];
 		return (
 			<VStack>
 				<Screen.Header
@@ -173,21 +174,7 @@ export const AuthAuditLogListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "AuthAuditLog",
-										columns: authAuditLogTableColumns,
-									},
-								}}
-								rows={logRows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

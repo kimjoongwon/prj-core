@@ -1,31 +1,13 @@
-import { formatDateTime } from "@cocrepo/toolkit";
 import { Typography } from "../../../data-display/Typography";
+import { useHandlers } from "./useHandlers";
 
-interface ExpiryCellProps {
+export interface ExpiryCellProps {
 	/** 생성 DTO의 만료 시간 */
 	expiresAt: Date | null | undefined;
 }
 
 /** 셀 마크업(text-[13px])과 동일한 크기를 유지하는 폴백 클래스입니다. */
 const DATA_CELL_SIZE_FALLBACK_CLASS_NAME = "text-[13px]";
-
-/**
- * 남은 시간 계산
- */
-const getRelativeTime = (expiresAt: Date): string => {
-	const now = new Date();
-	const diff = expiresAt.getTime() - now.getTime();
-
-	if (diff <= 0) return "만료됨";
-
-	const minutes = Math.floor(diff / (1000 * 60));
-	const hours = Math.floor(minutes / 60);
-	const days = Math.floor(hours / 24);
-
-	if (days > 0) return `${days}d ${hours % 24}h 남음`;
-	if (hours > 0) return `${hours}h ${minutes % 60}m 남음`;
-	return `${minutes}m 남음`;
-};
 
 /**
  * 만료 시간 + 남은 시간을 표시하는 Cell 컴포넌트
@@ -38,8 +20,11 @@ const getRelativeTime = (expiresAt: Date): string => {
  * <ExpiryCell expiresAt={null} /> // "-"
  * ```
  */
-export const ExpiryCell = ({ expiresAt }: ExpiryCellProps) => {
-	if (!expiresAt || Number.isNaN(expiresAt.getTime())) {
+export const ExpiryCell = (state: ExpiryCellProps) => {
+	const handlers = useHandlers(state);
+	const { isEmpty, relativeTime, expiresAtText, isExpired } =
+		handlers.getExpiryPresentation();
+	if (isEmpty) {
 		return (
 			<Typography
 				className={DATA_CELL_SIZE_FALLBACK_CLASS_NAME}
@@ -51,12 +36,9 @@ export const ExpiryCell = ({ expiresAt }: ExpiryCellProps) => {
 		);
 	}
 
-	const relativeTime = getRelativeTime(expiresAt);
-	const isExpired = relativeTime === "만료됨";
-
 	return (
 		<div className="flex flex-col gap-0.5">
-			<Typography type="body-sm">{formatDateTime(expiresAt)}</Typography>
+			<Typography type="body-sm">{expiresAtText}</Typography>
 			<Typography
 				className={isExpired ? "text-danger" : "text-success"}
 				type="body-xs"

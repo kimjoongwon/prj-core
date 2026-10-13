@@ -15,11 +15,11 @@ import {
 import { Card } from "@heroui/react";
 import { ImageIcon, PlayCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import {
-	AssetBrowser,
 	type AssetBrowserAsset,
-	type AssetBrowserProps,
+	AssetBrowserModal,
 } from "../../domain/asset/AssetBrowser";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
@@ -34,20 +34,8 @@ export interface TaskCreateScreenProps {
 	contentLanguageCode?: string | null;
 	selectedImageAsset?: ExerciseMediaAsset;
 	selectedVideoAsset?: ExerciseMediaAsset;
-	assetBrowserProps: Omit<
-		AssetBrowserProps,
-		| "mode"
-		| "presentation"
-		| "title"
-		| "description"
-		| "isOpen"
-		| "onClose"
-		| "selectedAssetId"
-		| "onSelectAsset"
-	>;
+	assetBrowser: ReactNode;
 	assetBrowserTitle: string;
-	assetBrowserDescription: string;
-	assetBrowserSelectedAssetId?: string;
 	isAssetBrowserOpen: boolean;
 	errors: Record<string, string>;
 	isSchedulable: boolean;
@@ -62,7 +50,6 @@ export interface TaskCreateScreenProps {
 	onOpenImagePicker: () => void;
 	onOpenVideoPicker: () => void;
 	onCloseAssetBrowser: () => void;
-	onSelectAssetFromBrowser: (asset: ExerciseMediaAsset) => void;
 	onClickClearImageAssetButton: () => void;
 	onClickClearVideoAssetButton: () => void;
 	onClickCancelButton: () => void;
@@ -204,10 +191,8 @@ export const TaskCreateScreen = observer(
 		contentLanguageCode,
 		selectedImageAsset,
 		selectedVideoAsset,
-		assetBrowserProps,
+		assetBrowser,
 		assetBrowserTitle,
-		assetBrowserDescription,
-		assetBrowserSelectedAssetId,
 		isAssetBrowserOpen,
 		errors,
 		isSchedulable,
@@ -222,7 +207,6 @@ export const TaskCreateScreen = observer(
 		onOpenImagePicker,
 		onOpenVideoPicker,
 		onCloseAssetBrowser,
-		onSelectAssetFromBrowser,
 		onClickClearImageAssetButton,
 		onClickClearVideoAssetButton,
 		onClickCancelButton,
@@ -398,17 +382,13 @@ export const TaskCreateScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-				<AssetBrowser
-					{...assetBrowserProps}
-					mode="picker"
-					presentation="modal"
+				<AssetBrowserModal
 					title={t(assetBrowserTitle)}
-					description={t(assetBrowserDescription)}
 					isOpen={isAssetBrowserOpen}
 					onClose={onCloseAssetBrowser}
-					selectedAssetId={assetBrowserSelectedAssetId}
-					onSelectAsset={onSelectAssetFromBrowser}
-				/>
+				>
+					{assetBrowser}
+				</AssetBrowserModal>
 			</VStack>
 		);
 	},

@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { AuthAuditLogListScreen } from "./AuthAuditLogListScreen";
 
 const defaultArgs = {
-	isLoading: false,
 	logs: [
 		{
 			email: "member1@example.com",
@@ -34,11 +33,6 @@ const defaultArgs = {
 	totalCount: 12,
 };
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	logs: [],
@@ -61,10 +55,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs as never,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs as never,

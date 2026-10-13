@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetActions } from "@cocrepo/api/core/actions";
+import { useGetActionsSuspense } from "@cocrepo/api/core/actions";
 import { ActionListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -15,7 +15,7 @@ export default observer(function ActionsPageRoute() {
 		search: parseAsString.withDefault(""),
 		group: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetActions(undefined);
+	const { data: response } = useGetActionsSuspense(undefined);
 	const onClickCreateButton = () => {
 		router.push("/actions/new" as Route);
 	};
@@ -25,8 +25,7 @@ export default observer(function ActionsPageRoute() {
 
 	return (
 		<ActionListScreen
-			actions={response?.data}
-			isLoading={isLoading}
+			actions={response.data ?? []}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickCreateButton={onClickCreateButton}

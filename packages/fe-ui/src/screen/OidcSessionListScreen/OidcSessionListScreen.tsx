@@ -9,8 +9,8 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildOidcSessionTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	HStack,
 	Screen,
 	Section,
@@ -20,8 +20,8 @@ import {
 } from "@cocrepo/ui";
 import { AlertDialog, Card } from "@heroui/react";
 import { Activity, Trash2 } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type ReactNode, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { type ReactNode, useMemo } from "react";
 import { Button } from "../../input/Button/Button";
 
 /**
@@ -58,9 +58,8 @@ export interface OidcSessionListScreenStats {
 	byModelType: Record<string, number>;
 }
 export interface OidcSessionListScreenProps {
-	sessions?: OidcSessionDto[];
+	sessions: OidcSessionDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: OidcSessionListScreenQueryStates;
 	setQueryStates: OidcSessionListScreenSetQueryStates;
 	stats?: OidcSessionListScreenStats;
@@ -123,7 +122,6 @@ export const OidcSessionListScreen = observer(
 	({
 		sessions,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		stats,
@@ -132,29 +130,32 @@ export const OidcSessionListScreen = observer(
 		onClickRevokeByGrantButton,
 		onClickRevokeAllButton,
 	}: OidcSessionListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<OidcSessionDto>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: sessions,
+						columns: buildOidcSessionTableColumns<OidcSessionDto>({
+							onClickGrantId: onClickRevokeByGrantButton,
+							onClickRevokeSession: onRevokeSession,
+						}),
+					},
 				}),
+			[
+				sessions,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				onRevokeSession,
+				onClickRevokeByGrantButton,
+			],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const sessionRows = sessions ?? [];
 		const byModelType = (stats?.byModelType ?? {}) as Record<string, number>;
-		const onClickRevokeSession = (key: string) => {
-			onRevokeSession(key);
-		};
-		const onClickGrantId = (grantId: string) => {
-			onClickRevokeByGrantButton(grantId);
-		};
 		const isRevokeAllDisabled = totalCount === 0 || isRevokingAll;
-		const columns = buildOidcSessionTableColumns<OidcSessionDto>({
-			onClickGrantId,
-			onClickRevokeSession,
-		});
 		return (
 			<VStack>
 				<Screen.Header
@@ -236,21 +237,7 @@ export const OidcSessionListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "OidcSession",
-										columns,
-									},
-								}}
-								rows={sessionRows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

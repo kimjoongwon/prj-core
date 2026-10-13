@@ -3,7 +3,7 @@
 import {
 	getGetRoutinesQueryKey,
 	useDeleteRoutine,
-	useGetRoutines,
+	useGetRoutinesSuspense,
 } from "@cocrepo/api/core/routines";
 import { RoutineListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
@@ -30,14 +30,13 @@ export default observer(function RoutinesPageRoute() {
 		spaceScope: parseAsString.withDefault(""),
 	});
 	const routineParams = getRoutineParams(queryStates);
-	const { data: response, isLoading } = useGetRoutines(routineParams);
+	const { data: response } = useGetRoutinesSuspense(routineParams);
 	const deleteMutation = useDeleteRoutine();
 
 	return (
 		<RoutineListScreen
-			routines={response?.data}
-			totalCount={response?.meta?.total ?? 0}
-			isLoading={isLoading}
+			routines={response.data ?? []}
+			totalCount={response.meta?.total ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickCreateButton={() => {

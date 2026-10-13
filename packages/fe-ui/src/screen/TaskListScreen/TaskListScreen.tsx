@@ -7,8 +7,8 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildTaskTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
@@ -17,8 +17,8 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 import { Button } from "../../input/Button/Button";
 
 const leftInputs: InputConfig[] = [
@@ -54,35 +54,18 @@ export interface TaskListScreenQueryStates extends DataGridQueryState {
 }
 export type TaskListScreenSetQueryStates = DataGridSetQueryStates;
 export interface TaskListScreenProps {
-	tasks?: TaskTableRow[];
+	tasks: TaskTableRow[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: TaskListScreenQueryStates;
 	setQueryStates: TaskListScreenSetQueryStates;
 	onClickCreateButton: () => void;
 	onClickTaskName: (taskId: bigint) => void;
 	onDeleteTask: (taskId: bigint) => Promise<void>;
 }
-function TasksScreenFallback() {
-	return (
-		<VStack gap="page">
-			<Screen.Header
-				title="태스크 목록"
-				description="시스템에 등록된 태스크와 운동 detail을 관리합니다."
-			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>{null}</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-}
 export const TaskListScreen = observer(
 	({
 		tasks,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
@@ -90,27 +73,32 @@ export const TaskListScreen = observer(
 		onDeleteTask,
 	}: TaskListScreenProps) => {
 		const t = useT();
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<TaskTableRow>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: tasks,
+						columns: buildTaskTableColumns<TaskTableRow>({
+							onClickTaskName,
+							onClickDeleteButton: (taskId) => {
+								void onDeleteTask(taskId);
+							},
+						}),
+					},
 				}),
+			[
+				tasks,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				onClickTaskName,
+				onDeleteTask,
+			],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const taskRows = tasks ?? [];
-		const onClickDeleteButton = (taskId: bigint) => {
-			void onDeleteTask(taskId);
-		};
-		const columns = buildTaskTableColumns<TaskTableRow>({
-			onClickTaskName,
-			onClickDeleteButton,
-		});
-		if (isLoading) {
-			return <TasksScreenFallback />;
-		}
 		return (
 			<VStack gap="page">
 				<Screen.Header
@@ -129,20 +117,7 @@ export const TaskListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "Task",
-										columns,
-									},
-								}}
-								rows={taskRows}
-								totalCount={totalCount}
-								state={gridState}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

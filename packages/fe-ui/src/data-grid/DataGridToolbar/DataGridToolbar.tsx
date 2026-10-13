@@ -1,75 +1,44 @@
 "use client";
 
-import type { InputConfig } from "@cocrepo/type";
-import { makeAutoObservable } from "mobx";
+import type { DataGridSetQueryStates, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import type { DataGridState } from "../DataGrid";
+import type { DataGridQueryState } from "../DataGrid";
 import { InputRenderer } from "../input/InputRenderer";
+import { useHandlers } from "./useHandlers";
 
-const emptyInputConfigs: InputConfig[] = [];
-
-export class DataGridToolbarState {
-	leftInputs = emptyInputConfigs;
-	rightInputs = emptyInputConfigs;
-
-	constructor(
-		readonly state: DataGridState,
-		leftInputs = emptyInputConfigs,
-		rightInputs = emptyInputConfigs,
-	) {
-		this.leftInputs = leftInputs;
-		this.rightInputs = rightInputs;
-		makeAutoObservable(
-			this,
-			{
-				state: false,
-				leftInputs: false,
-				rightInputs: false,
-			},
-			{ autoBind: true },
-		);
-	}
-
-	get queryValues() {
-		return this.state.query.filters;
-	}
-
-	changeQuery(values: Record<string, unknown | null>) {
-		return this.state.querySetter(values);
-	}
+/** Toolbar의 입력 설정과 공유 query 데이터입니다. */
+export interface DataGridToolbarState {
+	leftInputs: InputConfig[];
+	rightInputs: InputConfig[];
+	query: DataGridQueryState;
+	querySetter: DataGridSetQueryStates;
 }
-
 export interface DataGridToolbarProps {
 	state: DataGridToolbarState;
 }
 
 export const DataGridToolbar = observer(({ state }: DataGridToolbarProps) => {
-	const { leftInputs, rightInputs } = state;
-	const shouldRenderToolbar = leftInputs.length > 0 || rightInputs.length > 0;
-
-	if (!shouldRenderToolbar) {
-		return null;
-	}
-
+	const handlers = useHandlers(state);
+	if (!handlers.shouldRender) return null;
 	return (
 		<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3">
 			<div className="flex flex-wrap items-center gap-2">
-				{leftInputs.map((input) => (
+				{state.leftInputs.map((input) => (
 					<InputRenderer
 						key={input.id}
 						config={input}
-						queryValues={state.queryValues}
-						onQueryChange={state.changeQuery}
+						queryValues={handlers.queryValues}
+						onQueryChange={handlers.changeQuery}
 					/>
 				))}
 			</div>
 			<div className="flex items-center gap-2">
-				{rightInputs.map((input) => (
+				{state.rightInputs.map((input) => (
 					<InputRenderer
 						key={input.id}
 						config={input}
-						queryValues={state.queryValues}
-						onQueryChange={state.changeQuery}
+						queryValues={handlers.queryValues}
+						onQueryChange={handlers.changeQuery}
 					/>
 				))}
 			</div>

@@ -1,60 +1,78 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { TaskCreateScreen } from "./TaskCreateScreen";
+import {
+	AssetBrowser,
+	type AssetBrowserAsset,
+} from "../../domain/asset/AssetBrowser";
+import {
+	TaskCreateScreen,
+	type TaskCreateScreenProps,
+} from "./TaskCreateScreen";
 
-const defaultArgs = {
-	assetBrowserDescription:
-		"스토리북에서 확인할 asset browser description 예시입니다.",
-	assetBrowserProps: {
-		assets: [
-			{
-				createdAt: "2026-04-14T09:00:00.000Z",
-				id: "item-1",
-				kind: "IMAGE",
-				mimeType: "샘플 mime type 1",
-				originalName: "샘플 original name 1",
-				publicUrl: "https://example.com/public-url-1",
-				sizeBytes: 1024,
-				status: "UPLOADING",
-			},
-			{
-				createdAt: "2026-04-14T09:00:00.000Z",
-				id: "item-1",
-				kind: "IMAGE",
-				mimeType: "샘플 mime type 1",
-				originalName: "샘플 original name 1",
-				publicUrl: "https://example.com/public-url-1",
-				sizeBytes: 1024,
-				status: "UPLOADING",
-			},
-		],
-		folders: [
-			{
-				id: "item-1",
-				parentFolderId: "parent-folder-1",
-			},
-			{
-				id: "item-1",
-				parentFolderId: "parent-folder-1",
-			},
-		],
-		hasSelectedSpace: false,
-		isCreatingFolder: false,
-		isLoading: false,
-		isRemoving: false,
-		isRemovingFolder: false,
-		isSpaceReady: false,
-		isUpdatingFolder: false,
-		isUploadingAsset: false,
-		onCreateFolder: async (..._args: never[]) => undefined,
-		onDeleteAsset: async (..._args: never[]) => undefined,
-		onDeleteFolder: async (..._args: never[]) => undefined,
-		onRenameFolder: async (..._args: never[]) => undefined,
-		onUploadAsset: async (..._args: never[]) => undefined,
-		queryStates: { page: 1, take: 10, skip: 0, search: "" },
-		setQueryStates: (..._args: never[]) => undefined,
-		totalCount: 12,
-	},
-	assetBrowserSelectedAssetId: "asset-browser-selected-asset-1",
+const sampleImageAsset: AssetBrowserAsset = {
+	id: "item-1",
+	spaceId: "1",
+	folderId: "1",
+	kind: "IMAGE",
+	status: "UPLOADING",
+	originalName: "샘플 이미지",
+	storageKey: "sample-image",
+	extension: "png",
+	checksum: null,
+	metadata: null,
+	createdById: null,
+	mimeType: "image/png",
+	publicUrl: "https://example.com/public-url-1",
+	sizeBytes: 1024,
+	createdAt: "2026-04-14T09:00:00.000Z",
+	updatedAt: "2026-04-14T09:00:00.000Z",
+};
+
+const defaultArgs: TaskCreateScreenProps = {
+	name: "샘플 운동명",
+	assetBrowser: (
+		<AssetBrowser
+			mode="picker"
+			title="에셋 선택"
+			description="스토리북에서 확인할 에셋 브라우저입니다."
+			{...{
+				assets: [sampleImageAsset],
+				folders: [
+					{
+						id: "item-1",
+						name: "운동 자료",
+						parentFolderId: "parent-folder-1",
+					},
+					{
+						id: "item-1",
+						name: "운동 자료",
+						parentFolderId: "parent-folder-1",
+					},
+				],
+				hasSelectedSpace: false,
+				isCreatingFolder: false,
+				isRemoving: false,
+				isRemovingFolder: false,
+				isSpaceReady: false,
+				isUpdatingFolder: false,
+				isUploadingAsset: false,
+				onCreateFolder: async () => undefined,
+				onDeleteAsset: async () => undefined,
+				onDeleteFolder: async () => undefined,
+				onRenameFolder: async () => undefined,
+				onUploadAsset: async () => undefined,
+				queryStates: {
+					take: 10,
+					skip: 0,
+					search: "",
+					kind: "",
+					status: "",
+					folderId: "",
+				},
+				setQueryStates: async () => new URLSearchParams(),
+				totalCount: 12,
+			}}
+		/>
+	),
 	assetBrowserTitle: "샘플 asset browser title",
 	count: 12,
 	description: "스토리북에서 확인할 description 예시입니다.",
@@ -64,41 +82,22 @@ const defaultArgs = {
 	isAssetBrowserOpen: false,
 	isSchedulable: false,
 	isSubmitPending: false,
-	onChangeCountInput: (..._args: never[]) => undefined,
-	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
-	onChangeDurationMinInput: (..._args: never[]) => undefined,
-	onChangeDurationSecInput: (..._args: never[]) => undefined,
-	onChangeImageFileIdInput: (..._args: never[]) => undefined,
-	onChangeNameInput: (..._args: never[]) => undefined,
-	onChangeVideoFileIdInput: (..._args: never[]) => undefined,
-	onClickCancelButton: (..._args: never[]) => undefined,
-	onClickClearImageAssetButton: (..._args: never[]) => undefined,
-	onClickClearVideoAssetButton: (..._args: never[]) => undefined,
-	onClickSaveButton: (..._args: never[]) => undefined,
-	onCloseAssetBrowser: (..._args: never[]) => undefined,
-	onOpenImagePicker: (..._args: never[]) => undefined,
-	onOpenVideoPicker: (..._args: never[]) => undefined,
-	onSelectAssetFromBrowser: (..._args: never[]) => undefined,
-	selectedImageAsset: {
-		createdAt: "2026-04-14T09:00:00.000Z",
-		id: "item-1",
-		kind: "IMAGE",
-		mimeType: "샘플 mime type 1",
-		originalName: "샘플 original name 1",
-		publicUrl: "https://example.com/public-url-1",
-		sizeBytes: 1024,
-		status: "UPLOADING",
-	},
-	selectedVideoAsset: {
-		createdAt: "2026-04-14T09:00:00.000Z",
-		id: "item-1",
-		kind: "IMAGE",
-		mimeType: "샘플 mime type 1",
-		originalName: "샘플 original name 1",
-		publicUrl: "https://example.com/public-url-1",
-		sizeBytes: 1024,
-		status: "UPLOADING",
-	},
+	onChangeCountInput: () => undefined,
+	onChangeDescriptionTextArea: () => undefined,
+	onChangeDurationMinInput: () => undefined,
+	onChangeDurationSecInput: () => undefined,
+	onChangeImageFileIdInput: () => undefined,
+	onChangeNameInput: () => undefined,
+	onChangeVideoFileIdInput: () => undefined,
+	onClickCancelButton: () => undefined,
+	onClickClearImageAssetButton: () => undefined,
+	onClickClearVideoAssetButton: () => undefined,
+	onClickSaveButton: () => undefined,
+	onCloseAssetBrowser: () => undefined,
+	onOpenImagePicker: () => undefined,
+	onOpenVideoPicker: () => undefined,
+	selectedImageAsset: sampleImageAsset,
+	selectedVideoAsset: sampleImageAsset,
 };
 
 const busyArgs = {
@@ -113,7 +112,7 @@ const meta = {
 		layout: "fullscreen",
 	},
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: defaultArgs,
 } satisfies Meta<typeof TaskCreateScreen>;
 
 export default meta;
@@ -123,5 +122,5 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Busy: Story = {
-	args: busyArgs as never,
+	args: busyArgs,
 };

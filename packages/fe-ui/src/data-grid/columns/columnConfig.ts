@@ -11,7 +11,7 @@ type HeterogeneousColumnDefs<TData> = NonNullable<
 function getColumnId<TData>(columnDef: HeterogeneousColumnDefs<TData>[number]) {
 	if (columnDef.id) return columnDef.id;
 	if ("accessorKey" in columnDef && columnDef.accessorKey)
-		return String(columnDef.accessorKey).replaceAll(".", "_");
+		return String(columnDef.accessorKey).replace(/\./g, "_");
 	return typeof columnDef.header === "string" ? columnDef.header : "";
 }
 

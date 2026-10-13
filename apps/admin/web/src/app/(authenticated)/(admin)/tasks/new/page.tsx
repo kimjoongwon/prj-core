@@ -8,6 +8,7 @@ import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
+import { AssetBrowserFeature } from "@/features/asset/AssetBrowserFeature";
 
 const AdminTasksNewRoute = observer(() => {
 	const t = useT();
@@ -25,7 +26,7 @@ const AdminTasksNewRoute = observer(() => {
 	}));
 	const {
 		activeAssetSlot,
-		assetBrowser,
+		assetBrowserOptions,
 		assetBrowserTitle,
 		assetBrowserDescription,
 		selectedAssetId,
@@ -147,10 +148,17 @@ const AdminTasksNewRoute = observer(() => {
 			contentLanguageCode={app.contentLanguageCode}
 			selectedImageAsset={selectedImageAsset}
 			selectedVideoAsset={selectedVideoAsset}
-			assetBrowserProps={assetBrowser}
+			assetBrowser={
+				<AssetBrowserFeature
+					{...assetBrowserOptions}
+					mode="picker"
+					title={t(assetBrowserTitle)}
+					description={t(assetBrowserDescription)}
+					selectedAssetId={selectedAssetId}
+					onSelectAsset={onSelectAsset}
+				/>
+			}
 			assetBrowserTitle={assetBrowserTitle}
-			assetBrowserDescription={assetBrowserDescription}
-			assetBrowserSelectedAssetId={selectedAssetId}
 			isAssetBrowserOpen={activeAssetSlot !== null}
 			errors={state.errors}
 			isSchedulable={state.videoFileId.trim().length > 0}
@@ -169,7 +177,6 @@ const AdminTasksNewRoute = observer(() => {
 				onOpenAssetBrowser("video");
 			}}
 			onCloseAssetBrowser={onCloseAssetBrowser}
-			onSelectAssetFromBrowser={onSelectAsset}
 			onClickClearImageAssetButton={() => {
 				state.imageFileId = "";
 			}}

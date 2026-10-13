@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetSubjects } from "@cocrepo/api/core/subjects";
+import { useGetSubjectsSuspense } from "@cocrepo/api/core/subjects";
 import { SubjectListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -15,7 +15,7 @@ export default observer(function SubjectsPageRoute() {
 		search: parseAsString.withDefault(""),
 		group: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetSubjects({
+	const { data: response } = useGetSubjectsSuspense({
 		group: queryStates.group || undefined,
 	});
 	const onClickSubjectRow = (subjectId: bigint) => {
@@ -24,8 +24,7 @@ export default observer(function SubjectsPageRoute() {
 
 	return (
 		<SubjectListScreen
-			subjects={response?.data}
-			isLoading={isLoading}
+			subjects={response.data ?? []}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickSubject={onClickSubjectRow}

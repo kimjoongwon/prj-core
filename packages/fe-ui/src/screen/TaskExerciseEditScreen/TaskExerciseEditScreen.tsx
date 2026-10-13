@@ -8,10 +8,7 @@ import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Typography } from "../../data-display/Typography";
 import { DateTimeCell } from "../../data-grid/cell";
-import {
-	AssetBrowser,
-	type AssetBrowserProps,
-} from "../../domain/asset/AssetBrowser";
+import { AssetBrowserModal } from "../../domain/asset/AssetBrowser";
 import {
 	TaskExerciseForm,
 	type TaskExerciseFormState,
@@ -44,20 +41,8 @@ export interface TaskExerciseEditScreenProps {
 	selectedVideoAsset?: ExerciseMediaAsset;
 	readOnly?: boolean;
 	metadata?: TaskExerciseEditScreenMetadata;
-	assetBrowserProps?: Omit<
-		AssetBrowserProps,
-		| "mode"
-		| "presentation"
-		| "title"
-		| "description"
-		| "isOpen"
-		| "onClose"
-		| "selectedAssetId"
-		| "onSelectAsset"
-	>;
+	assetBrowser?: ReactNode;
 	assetBrowserTitle?: string;
-	assetBrowserDescription?: string;
-	assetBrowserSelectedAssetId?: string;
 	isAssetBrowserOpen?: boolean;
 	isLoading: boolean;
 	isNotFound: boolean;
@@ -65,7 +50,6 @@ export interface TaskExerciseEditScreenProps {
 	onOpenImagePicker?: () => void;
 	onOpenVideoPicker?: () => void;
 	onCloseAssetBrowser?: () => void;
-	onSelectAssetFromBrowser?: (asset: ExerciseMediaAsset) => void;
 	onClickClearImageAssetButton?: () => void;
 	onClickClearVideoAssetButton?: () => void;
 	onClickCancelButton: () => void;
@@ -86,10 +70,8 @@ export const TaskExerciseEditScreen = observer(
 		selectedVideoAsset,
 		readOnly = false,
 		metadata,
-		assetBrowserProps,
+		assetBrowser,
 		assetBrowserTitle = "에셋 선택",
-		assetBrowserDescription = "운동에 연결할 에셋을 선택합니다.",
-		assetBrowserSelectedAssetId,
 		isAssetBrowserOpen = false,
 		isLoading,
 		isNotFound,
@@ -97,7 +79,6 @@ export const TaskExerciseEditScreen = observer(
 		onOpenImagePicker,
 		onOpenVideoPicker,
 		onCloseAssetBrowser,
-		onSelectAssetFromBrowser,
 		onClickClearImageAssetButton,
 		onClickClearVideoAssetButton,
 		onClickCancelButton,
@@ -309,18 +290,14 @@ export const TaskExerciseEditScreen = observer(
 						</Section>
 					) : null}
 				</SectionSurface>
-				{assetBrowserProps ? (
-					<AssetBrowser
-						{...assetBrowserProps}
-						mode="picker"
-						presentation="modal"
+				{assetBrowser ? (
+					<AssetBrowserModal
 						title={assetBrowserTitle}
-						description={assetBrowserDescription}
 						isOpen={isAssetBrowserOpen}
 						onClose={onCloseAssetBrowser}
-						selectedAssetId={assetBrowserSelectedAssetId}
-						onSelectAsset={onSelectAssetFromBrowser}
-					/>
+					>
+						{assetBrowser}
+					</AssetBrowserModal>
 				) : null}
 			</VStack>
 		);

@@ -1,279 +1,208 @@
 "use client";
 
 import type {
-	DataGridSelectionState,
+	DataGridGroupPanelConfig,
 	DataGridSetQueryStates,
+	DataGridToolbarConfig,
 } from "@cocrepo/type";
-import { type SortingState } from "@tanstack/react-table";
-import { makeAutoObservable } from "mobx";
+import type { SortingState } from "@tanstack/react-table";
+import { observable } from "mobx";
 import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
 import {
 	DataGridActionBar,
-	DataGridActionBarState,
+	type DataGridActionBarState,
 } from "./DataGridActionBar/DataGridActionBar";
 import { DataGridContainer } from "./DataGridContainer";
 import {
 	DataGridGroupPanel,
-	DataGridGroupPanelState,
+	type DataGridGroupPanelState,
 } from "./DataGridGroupPanel/DataGridGroupPanel";
 import {
 	DataGridPagination,
-	DataGridPaginationState,
+	type DataGridPaginationState,
 } from "./DataGridPagination/DataGridPagination";
 import {
 	DataGridTable,
+	type DataGridTableConfig,
 	type DataGridTableState,
 } from "./DataGridTable/DataGridTable";
+import type { DataGridTableRowState } from "./DataGridTableRow/DataGridTableRow";
 import {
 	DataGridToolbar,
-	DataGridToolbarState,
+	type DataGridToolbarState,
 } from "./DataGridToolbar/DataGridToolbar";
+import { parseQuery } from "./useHandlers";
 
-const objectPrototype = Object.prototype;
-
+/** query에 take 값이 없을 때 사용하는 기본 페이지 크기입니다. */
+export const DATA_GRID_DEFAULT_PAGE_SIZE = 20;
 export type Key = string | number | bigint;
-type DataGridRow = { id: Key };
+export type DataGridRow = { id: Key };
 
-/** nuqs의 query 값을 DataGrid와 TanStack Table이 사용하는 형태로 해석합니다. */
-export class DataGridQueryState {
-	filters: { [x: string]: unknown } = {};
-	sort: SortingState = [];
-	pagination: {
-		take: number;
-		skip: number;
-	} = { take: 20, skip: 0 };
-
-	/** 원본 query 값에서 필터, 정렬, 페이지 값을 초기화합니다. */
-	constructor(query: { [x: string]: unknown }) {
-		this.update(query);
-		makeAutoObservable(this, {}, { autoBind: true });
-	}
-
-	/** TanStack Table의 정렬 상태를 query의 `field` 또는 `-field` 표기로 변환합니다. */
-	getSortQueryValues(sorting: SortingState) {
-		return sorting.map(({ id, desc }) => (desc ? `-${id}` : id));
-	}
-
-	/** 바뀐 원본 query를 필터, 정렬, 페이지 상태로 다시 파싱합니다. */
-	update(query: { [x: string]: unknown }) {
-		const { sort, take, skip } = query;
-		this.filters = { ...query };
-		delete this.filters.sort;
-		delete this.filters.take;
-		delete this.filters.skip;
-		delete this.filters.page;
-		const sortValues = Array.isArray(sort)
-			? sort.filter((value): value is string => typeof value === "string")
-			: typeof sort === "string" && sort.length > 0
-				? [sort]
-				: [];
-		this.sort = sortValues.map((sortValue) => ({
-			id: sortValue.startsWith("-") ? sortValue.slice(1) : sortValue,
-			desc: sortValue.startsWith("-"),
-		}));
-
-		const pageSize = Number(take);
-		const pageOffset = Number(skip);
-		this.pagination = {
-			take: Number.isFinite(pageSize) && pageSize > 0 ? pageSize : 20,
-			skip: Number.isFinite(pageOffset) && pageOffset > 0 ? pageOffset : 0,
-		};
-	}
+/** nuqs의 원본 query를 해석한 필터·정렬·페이지 데이터입니다. */
+export interface DataGridQueryState {
+	filters: { [x: string]: unknown };
+	sort: SortingState;
+	pagination: { take: number; skip: number };
 }
-/** DataGridState가 보유한 설정과 데이터를 TanStack Table UI로 렌더링합니다. */
-export function DataGrid<TData extends { id: Key }>({
+
+/** createDataGridState가 조립에 사용하는 DataGrid 전체 설정입니다. */
+export interface DataGridStateConfig<TData extends DataGridRow = DataGridRow> {
+	query?: { [x: string]: unknown };
+	setQueryStates: DataGridSetQueryStates;
+	pagination?: { totalCount?: number };
+	actionBar?: { showCount?: boolean; actions?: ReactNode };
+	toolbar?: DataGridToolbarConfig;
+	groupPanel?: DataGridGroupPanelConfig;
+	table?: DataGridTableConfig<TData>;
+}
+
+/** DataGrid의 데이터와 외부 주입 설정만 보유합니다. */
+export interface DataGridState<TData extends DataGridRow = DataGridRow> {
+	query: DataGridQueryState;
+	querySetter: DataGridSetQueryStates;
+	created: TData[];
+	updated: Array<{ id: Key; changes: Partial<TData> }>;
+	deleted: Key[];
+	originalValues: Map<Key, Record<string, unknown>>;
+	toolbar: DataGridToolbarState;
+	groupPanel: DataGridGroupPanelState<TData>;
+	table: DataGridTableState<TData>;
+	pagination: DataGridPaginationState;
+	actionBar: DataGridActionBarState<TData>;
+}
+
+/** 전체 상태를 조립하는 위치에서 각 데이터 객체를 observable로 초기화합니다. */
+export function createDataGridState<TData extends DataGridRow = DataGridRow>({
+	query: initialQuery,
+	setQueryStates,
+	pagination,
+	actionBar,
+	toolbar,
+	groupPanel,
+	table,
+}: DataGridStateConfig<TData>): DataGridState<TData> {
+	const query = observable<DataGridQueryState>(
+		parseQuery(initialQuery),
+		undefined,
+		{ name: "DataGridQueryState" },
+	);
+	const tableState = observable<DataGridTableState<TData>>(
+		{
+			expandedRowIds: {},
+			selectedRowKeys: new Set<string>(),
+			rows: table?.rows ?? [],
+			columns: table?.columns ?? [],
+			selection: table?.selection,
+			selectionSource: table?.selectionSource,
+			getSubRows: table?.getSubRows,
+			row: observable<DataGridTableRowState<TData>>(
+				{
+					editingCell: null,
+					editRequest: table?.row?.editRequest,
+					onClick: table?.row?.onClick,
+				},
+				{
+					editingCell: observable.ref,
+					editRequest: observable.ref,
+					onClick: false,
+				},
+				{ name: "DataGridTableRowState" },
+			),
+			// TanStack 인스턴스는 라이브러리에서 관리하므로 observable 변환에서 제외합니다.
+			instance: undefined,
+		},
+		{
+			columns: observable.ref,
+			selection: false,
+			selectionSource: observable.ref,
+			getSubRows: false,
+			row: false,
+			instance: false,
+		},
+		{ name: "DataGridTableState" },
+	);
+	return observable<DataGridState<TData>>(
+		{
+			query,
+			querySetter: setQueryStates,
+			created: [],
+			updated: [],
+			deleted: [],
+			// handler를 여러 곳에서 사용해도 원본값을 공유하며 렌더 관찰에서는 제외합니다.
+			originalValues: new Map<Key, Record<string, unknown>>(),
+			table: tableState,
+			toolbar: observable<DataGridToolbarState>(
+				{
+					query,
+					querySetter: setQueryStates,
+					leftInputs: toolbar?.leftInputs ?? [],
+					rightInputs: toolbar?.rightInputs ?? [],
+				},
+				{
+					query: false,
+					querySetter: false,
+					leftInputs: false,
+					rightInputs: false,
+				},
+				{ name: "DataGridToolbarState" },
+			),
+			groupPanel: observable<DataGridGroupPanelState<TData>>(
+				{
+					query,
+					querySetter: setQueryStates,
+					table: tableState,
+					show: groupPanel?.show,
+				},
+				{ query: false, querySetter: false, table: false, show: false },
+				{ name: "DataGridGroupPanelState" },
+			),
+			pagination: observable<DataGridPaginationState>(
+				{
+					query,
+					querySetter: setQueryStates,
+					totalCount: pagination?.totalCount ?? 0,
+				},
+				{ query: false, querySetter: false },
+				{ name: "DataGridPaginationState" },
+			),
+			actionBar: observable<DataGridActionBarState<TData>>(
+				{
+					table: tableState,
+					showCount: actionBar?.showCount ?? true,
+					actions: actionBar?.actions,
+				},
+				{ table: false, actions: observable.ref },
+				{ name: "DataGridActionBarState" },
+			),
+		},
+		{
+			querySetter: false,
+			originalValues: false,
+			table: false,
+			toolbar: false,
+			groupPanel: false,
+			pagination: false,
+			actionBar: false,
+		},
+		{ name: "DataGridState" },
+	);
+}
+
+/** DataGridState의 데이터와 영역 설정을 렌더링합니다. */
+export function DataGrid<TData extends DataGridRow>({
 	state,
 }: {
 	state: DataGridState<TData>;
 }) {
 	return (
 		<DataGridContainer>
-			{state.toolbar ? <DataGridToolbar state={state.toolbar} /> : null}
-			{state.groupPanel ? (
-				<DataGridGroupPanel state={state.groupPanel} />
-			) : null}
+			<DataGridToolbar state={state.toolbar} />
+			<DataGridGroupPanel state={state.groupPanel} />
 			<DataGridTable state={state} />
-			{state.pagination ? (
-				<DataGridPagination state={state.pagination} />
-			) : null}
-			{state.actionBar ? <DataGridActionBar state={state.actionBar} /> : null}
+			<DataGridPagination state={state.pagination} />
+			<DataGridActionBar state={state.actionBar} />
 		</DataGridContainer>
 	);
 }
-
-/** 객체가 상속된 속성이 아닌 자체 속성을 갖는지 확인합니다. */
-function hasOwnField(value: Record<string, unknown>, field: string) {
-	return objectPrototype.hasOwnProperty.call(value, field);
-}
-
-interface DataGridChangesSnapshot<TData extends { id: Key }> {
-	created: TData[];
-	updated: Array<{ id: Key; changes: Partial<TData> }>;
-	deleted: Key[];
-}
-
-export class DataGridState<TData extends DataGridRow = DataGridRow> {
-	query: DataGridQueryState;
-	querySetter: DataGridSetQueryStates;
-	rows: TData[] = [];
-	selection?: DataGridSelectionState;
-	created: TData[] = [];
-	updated: Array<{ id: Key; changes: Partial<TData> }> = [];
-	deleted: Key[] = [];
-	originalValues = new Map<Key, Record<string, unknown>>();
-	toolbar?: DataGridToolbarState;
-	groupPanel?: DataGridGroupPanelState;
-	table: DataGridTableState<TData>;
-	pagination?: DataGridPaginationState;
-	actionBar?: DataGridActionBarState;
-
-	/** DataGrid의 query, 데이터와 선택적 영역 상태를 구성합니다. */
-	constructor({
-		query,
-		setQueryStates,
-		rows = [],
-		toolbar,
-		groupPanel,
-		table,
-		pagination,
-		actionBar,
-	}: {
-		query: DataGridQueryState;
-		setQueryStates: DataGridSetQueryStates;
-		rows?: TData[];
-		toolbar?: DataGridToolbarState;
-		groupPanel?: DataGridGroupPanelState;
-		table: DataGridTableState<TData>;
-		pagination?: DataGridPaginationState;
-		actionBar?: DataGridActionBarState;
-	}) {
-		this.query = query;
-		this.querySetter = setQueryStates;
-		this.rows = rows;
-		this.toolbar = toolbar;
-		this.groupPanel = groupPanel;
-		this.table = table;
-		this.pagination = pagination;
-		this.actionBar = actionBar;
-		makeAutoObservable<this, "originalValues">(this, undefined, {
-			autoBind: true,
-		});
-	}
-
-	/** 새 행을 생성 변경으로 등록하고 같은 ID의 삭제 표시를 취소합니다. */
-	addRow(row: TData) {
-		const createdIndex = this.created.findIndex(({ id }) => id === row.id);
-		const nextRow = { ...row };
-		this.created =
-			createdIndex >= 0
-				? this.created.map((createdRow, index) =>
-						index === createdIndex ? nextRow : createdRow,
-					)
-				: [...this.created, nextRow];
-		this.deleted = this.deleted.filter((rowId) => rowId !== row.id);
-	}
-
-	/** 행 필드의 원본 값을 보존하고 변경분을 기록합니다. */
-	setValue<TField extends keyof TData>(
-		row: TData,
-		field: TField,
-		value: TData[TField],
-	) {
-		const fieldName = String(field);
-		const createdIndex = this.created.findIndex(({ id }) => id === row.id);
-		if (createdIndex >= 0) {
-			this.created = this.created.map((createdRow, index) =>
-				index === createdIndex
-					? { ...createdRow, [fieldName]: value }
-					: createdRow,
-			);
-			return;
-		}
-
-		const originalFields = this.originalValues.get(row.id) ?? {};
-		if (!hasOwnField(originalFields, fieldName)) {
-			originalFields[fieldName] = row[field];
-			this.originalValues.set(row.id, originalFields);
-		}
-		const updateIndex = this.updated.findIndex(({ id }) => id === row.id);
-		const currentChanges: Partial<TData> =
-			updateIndex >= 0 ? { ...this.updated[updateIndex].changes } : {};
-		const currentChangeFields = currentChanges as Record<string, unknown>;
-		if (Object.is(value, originalFields[fieldName])) {
-			delete currentChangeFields[fieldName];
-		} else {
-			currentChangeFields[fieldName] = value;
-		}
-		if (Object.keys(currentChanges).length === 0) {
-			this.updated = this.updated.filter(({ id }) => id !== row.id);
-			return;
-		}
-		const nextUpdate = { id: row.id, changes: currentChanges };
-		this.updated =
-			updateIndex >= 0
-				? this.updated.map((update, index) =>
-						index === updateIndex ? nextUpdate : update,
-					)
-				: [...this.updated, nextUpdate];
-	}
-
-	/** 새 행은 생성 목록에서 제거하고 기존 행은 삭제 변경으로 기록합니다. */
-	deleteRow(rowId: Key) {
-		const isCreated = this.created.some(({ id }) => id === rowId);
-		if (isCreated) {
-			this.created = this.created.filter(({ id }) => id !== rowId);
-		} else if (!this.deleted.includes(rowId)) {
-			this.deleted = [...this.deleted, rowId];
-		}
-		this.updated = this.updated.filter(({ id }) => id !== rowId);
-		this.originalValues.delete(rowId);
-	}
-
-	/** 현재까지 기록한 생성·수정·삭제 변경을 모두 비웁니다. */
-	clear() {
-		this.created = [];
-		this.updated = [];
-		this.deleted = [];
-		this.originalValues.clear();
-	}
-
-	/** 행 원본에 해당 행의 생성 또는 수정 값을 덮어쓴 결과를 반환합니다. */
-	getRow(row: TData): TData {
-		const createdRow = this.created.find(({ id }) => id === row.id);
-		const update = this.updated.find(({ id }) => id === row.id);
-		if (!createdRow && !update) return row;
-		return {
-			...row,
-			...(createdRow ?? {}),
-			...(update?.changes ?? {}),
-		} as TData;
-	}
-
-	/** 현재 변경 내역을 외부에서 전달할 수 있는 복사본으로 반환합니다. */
-	toJSON(): DataGridChangesSnapshot<TData> {
-		return {
-			created: this.created.map((row) => ({ ...row })) as TData[],
-			updated: this.updated.map((update) => ({
-				id: update.id,
-				changes: { ...update.changes } as Partial<TData>,
-			})),
-			deleted: [...this.deleted],
-		};
-	}
-
-	/** 원본 행에 생성·수정·삭제 변경사항을 반영한 행을 반환합니다. */
-	/** 원본 행 목록에 수정 내용을 적용하고 삭제 행은 제외한 렌더링 목록을 반환합니다. */
-	combineRowsWithChanges(rows: TData[]) {
-		const createdRows = this.created;
-		return [
-			...rows
-				.filter((row) => !this.deleted.includes(row.id))
-				.map((row) => this.getRow(row)),
-			...createdRows
-				.map((row) => ({ ...row }))
-				.filter((createdRow) => !rows.some((row) => row.id === createdRow.id)),
-		];
-	}
-}
-
 export default observer(DataGrid);

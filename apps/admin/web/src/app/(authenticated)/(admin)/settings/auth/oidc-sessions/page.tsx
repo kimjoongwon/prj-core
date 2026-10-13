@@ -3,8 +3,8 @@
 import {
 	getGetOidcSessionStatsQueryKey,
 	getGetOidcSessionsQueryKey,
-	useGetOidcSessionStats,
-	useGetOidcSessions,
+	useGetOidcSessionStatsSuspense,
+	useGetOidcSessionsSuspense,
 	useRevokeAllOidcSessions,
 	useRevokeOidcSession,
 	useRevokeOidcSessionsByGrant,
@@ -32,8 +32,8 @@ export default observer(function OidcSessionsPageRoute() {
 		modelType: queryStates.modelType || undefined,
 		accountId: queryStates.accountId || undefined,
 	};
-	const { data: response, isLoading } = useGetOidcSessions(queryParams);
-	const { data: statsResponse } = useGetOidcSessionStats();
+	const { data: response } = useGetOidcSessionsSuspense(queryParams);
+	const { data: statsResponse } = useGetOidcSessionStatsSuspense();
 
 	const invalidateSessionQueries = () => {
 		queryClient.invalidateQueries({
@@ -97,15 +97,12 @@ export default observer(function OidcSessionsPageRoute() {
 
 	return (
 		<OidcSessionListScreen
-			sessions={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading}
+			sessions={response.data ?? []}
+			totalCount={response.meta?.totalCount ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			stats={
-				statsResponse?.data
-					? mapOidcSessionStats(statsResponse.data)
-					: undefined
+				statsResponse.data ? mapOidcSessionStats(statsResponse.data) : undefined
 			}
 			isRevokingAll={isRevokingAll}
 			onRevokeSession={(key) => {

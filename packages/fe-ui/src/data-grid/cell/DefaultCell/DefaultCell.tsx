@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Typography } from "../../../data-display/Typography";
-import { type Translate, useT } from "../../../i18n";
+import { useHandlers } from "./useHandlers";
 
 export interface DefaultCellProps {
 	/** 표시할 값 */
@@ -29,36 +29,6 @@ export interface DefaultCellProps {
 	title?: string;
 }
 
-const joinClassNames = (...values: Array<string | false | null | undefined>) =>
-	values.filter(Boolean).join(" ");
-
-function translateDisplayValue(value: string, t: Translate) {
-	const minutesSeconds = value.match(/^(\d+)분\s+(\d+)초$/);
-	if (minutesSeconds) {
-		return t("{{minutes}}분 {{seconds}}초", undefined, {
-			minutes: minutesSeconds[1],
-			seconds: minutesSeconds[2],
-		});
-	}
-
-	const seconds = value.match(/^(\d+)초$/);
-	if (seconds) {
-		return t("{{seconds}}초", undefined, { seconds: seconds[1] });
-	}
-
-	const count = value.match(/^(\d+)회$/);
-	if (count) {
-		return t("{{count}}회", undefined, { count: count[1] });
-	}
-
-	const itemCount = value.match(/^(\d+)개$/);
-	if (itemCount) {
-		return t("{{count}}개", undefined, { count: itemCount[1] });
-	}
-
-	return t(value);
-}
-
 /**
  * DefaultCell 컴포넌트
  * 기본 텍스트/숫자 값을 표시합니다. 빈 값은 "-"로 표시됩니다.
@@ -70,35 +40,35 @@ function translateDisplayValue(value: string, t: Translate) {
  * <DefaultCell value="" /> // "-"
  * ```
  */
-export const DefaultCell = observer(function DefaultCell({
-	value,
-	placeholder = "-",
-	mono = false,
-	size = "sm",
-	tone = "default",
-	weight = "normal",
-	truncate = false,
-	lineClamp,
-	tabular = false,
-	className,
-	title,
-}: DefaultCellProps) {
-	const t = useT();
-	const isEmptyValue = value === null || value === undefined || value === "";
-	const displayValue = isEmptyValue ? placeholder : String(value);
-	const translatedDisplayValue = translateDisplayValue(displayValue, t);
-	const translatedTitle = title ? t(title) : title;
+export const DefaultCell = observer(function DefaultCell(
+	state: DefaultCellProps,
+) {
+	const {
+		mono = false,
+		size = "sm",
+		tone = "default",
+		weight = "normal",
+		truncate = false,
+		lineClamp,
+		tabular = false,
+		className,
+	} = state;
+	const handlers = useHandlers(state);
+	const { isEmptyValue, translatedDisplayValue, translatedTitle } =
+		handlers.getDisplayPresentation();
 
 	return (
 		<div className="min-w-0">
 			<Typography
-				className={joinClassNames(
+				className={[
 					mono && "font-mono",
 					tabular && "tabular-nums",
 					lineClamp === 1 && "line-clamp-1",
 					lineClamp === 2 && "line-clamp-2",
 					className,
-				)}
+				]
+					.filter(Boolean)
+					.join(" ")}
 				color={isEmptyValue || tone === "muted" ? "muted" : "default"}
 				title={translatedTitle}
 				truncate={truncate}

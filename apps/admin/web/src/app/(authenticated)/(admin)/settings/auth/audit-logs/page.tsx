@@ -1,8 +1,8 @@
 "use client";
 
 import {
-	useGetAuthAuditLogStats,
-	useGetAuthAuditLogs,
+	useGetAuthAuditLogStatsSuspense,
+	useGetAuthAuditLogsSuspense,
 } from "@cocrepo/api/idp/auth";
 import {
 	AuthAuditLogListScreen,
@@ -17,22 +17,21 @@ export default observer(function AuthAuditLogsPageRoute() {
 		skip: parseAsInteger.withDefault(0),
 		email: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetAuthAuditLogs({
+	const { data: response } = useGetAuthAuditLogsSuspense({
 		take: queryStates.take,
 		skip: queryStates.skip,
 		email: queryStates.email || undefined,
 	});
-	const { data: statsResponse } = useGetAuthAuditLogStats();
+	const { data: statsResponse } = useGetAuthAuditLogStatsSuspense();
 
 	return (
 		<AuthAuditLogListScreen
-			logs={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading}
+			logs={response.data ?? []}
+			totalCount={response.meta?.totalCount ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			stats={
-				statsResponse?.data ? mapAuditLogStats(statsResponse.data) : undefined
+				statsResponse.data ? mapAuditLogStats(statsResponse.data) : undefined
 			}
 		/>
 	);
