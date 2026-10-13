@@ -17,6 +17,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { AssetBrowserFeature } from "@/features/asset/AssetBrowserFeature";
 
 type TaskExerciseEditScreenParams = {
 	taskId: string;
@@ -45,7 +46,7 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	const exercise = response?.data as ExerciseDto | undefined;
 	const {
 		activeAssetSlot,
-		assetBrowser,
+		assetBrowserOptions,
 		assetBrowserTitle,
 		assetBrowserDescription,
 		selectedAssetId,
@@ -148,10 +149,17 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 			contentLanguageCode={app.contentLanguageCode}
 			selectedImageAsset={selectedImageAsset}
 			selectedVideoAsset={selectedVideoAsset}
-			assetBrowserProps={assetBrowser}
+			assetBrowser={
+				<AssetBrowserFeature
+					{...assetBrowserOptions}
+					mode="picker"
+					title={assetBrowserTitle}
+					description={assetBrowserDescription}
+					selectedAssetId={selectedAssetId}
+					onSelectAsset={onSelectAsset}
+				/>
+			}
 			assetBrowserTitle={assetBrowserTitle}
-			assetBrowserDescription={assetBrowserDescription}
-			assetBrowserSelectedAssetId={selectedAssetId}
 			isAssetBrowserOpen={activeAssetSlot !== null}
 			isLoading={isLoading}
 			isNotFound={!isLoading && !exercise}
@@ -163,7 +171,6 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 				onOpenAssetBrowser("video");
 			}}
 			onCloseAssetBrowser={onCloseAssetBrowser}
-			onSelectAssetFromBrowser={onSelectAsset}
 			onClickClearImageAssetButton={() => {
 				state.imageFileId = "";
 			}}

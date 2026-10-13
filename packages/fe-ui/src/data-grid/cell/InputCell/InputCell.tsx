@@ -1,12 +1,7 @@
 "use client";
 
 import { cn, Input, type InputRootProps } from "@heroui/react";
-import type {
-	ChangeEvent,
-	KeyboardEvent,
-	MouseEvent,
-	PointerEvent,
-} from "react";
+import { useHandlers } from "./useHandlers";
 
 export interface InputCellProps
 	extends Omit<
@@ -28,42 +23,18 @@ export interface InputCellProps
 }
 
 /** DataGrid 셀 안에서 문자열 또는 숫자를 가볍게 편집합니다. */
-export function InputCell({
-	value,
-	type = "text",
-	autoFocus = true,
-	className,
-	onValueChange,
-	onFinish,
-	onCancel,
-	...inputProps
-}: InputCellProps) {
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const nextValue = event.currentTarget.value;
-		onValueChange(
-			type === "number" && nextValue !== "" ? Number(nextValue) : nextValue,
-		);
-	};
-
-	const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-		event.stopPropagation();
-
-		if (event.key === "Enter") {
-			event.preventDefault();
-			onFinish();
-		}
-
-		if (event.key === "Escape") {
-			event.preventDefault();
-			onCancel();
-		}
-	};
-
-	const stopMousePropagation = (
-		event: MouseEvent<HTMLInputElement> | PointerEvent<HTMLInputElement>,
-	) => {
-		event.stopPropagation();
-	};
+export function InputCell(state: InputCellProps) {
+	const {
+		value,
+		type = "text",
+		autoFocus = true,
+		className,
+		onValueChange,
+		onFinish,
+		onCancel,
+		...inputProps
+	} = state;
+	const handlers = useHandlers(state);
 
 	return (
 		<Input
@@ -74,10 +45,10 @@ export function InputCell({
 			type={type}
 			value={value == null ? "" : String(value)}
 			onBlur={onFinish}
-			onChange={handleChange}
-			onClick={stopMousePropagation}
-			onKeyDown={handleKeyDown}
-			onPointerDown={stopMousePropagation}
+			onChange={handlers.changeValue}
+			onClick={handlers.stopMousePropagation}
+			onKeyDown={handlers.completeFromKeyboard}
+			onPointerDown={handlers.stopMousePropagation}
 		/>
 	);
 }

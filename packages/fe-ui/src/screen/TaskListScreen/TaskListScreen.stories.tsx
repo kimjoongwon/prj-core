@@ -1,13 +1,18 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { TaskListScreen } from "./TaskListScreen";
 
 const defaultArgs: ComponentProps<typeof TaskListScreen> = {
-	isLoading: false,
 	onClickCreateButton: () => undefined,
 	onClickTaskName: () => undefined,
 	onDeleteTask: async () => undefined,
-	queryStates: { page: 1, take: 10, skip: 0, search: "", spaceScope: "CURRENT" },
+	queryStates: {
+		page: 1,
+		take: 10,
+		skip: 0,
+		search: "",
+		spaceScope: "CURRENT",
+	},
 	setQueryStates: async () => new URLSearchParams(),
 	tasks: [
 		{
@@ -35,11 +40,6 @@ const defaultArgs: ComponentProps<typeof TaskListScreen> = {
 	totalCount: 12,
 };
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	tasks: [],
@@ -65,10 +65,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

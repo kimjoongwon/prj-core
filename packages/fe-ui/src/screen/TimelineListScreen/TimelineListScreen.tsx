@@ -8,16 +8,16 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildTimelineTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 import { Button } from "../../input/Button/Button";
 
 const leftInputs: InputConfig[] = [
@@ -35,69 +35,40 @@ export interface TimelineListScreenQueryStates extends DataGridQueryState {
 }
 export type TimelineListScreenSetQueryStates = DataGridSetQueryStates;
 export interface TimelineListScreenProps {
-	timelines?: TimelineDto[];
+	timelines: TimelineDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: TimelineListScreenQueryStates;
 	setQueryStates: TimelineListScreenSetQueryStates;
 	onClickCreateButton: () => void;
 	onDeleteTimeline: (timelineId: bigint) => Promise<void>;
 }
-function TimelinesScreenFallback() {
-	return (
-		<VStack gap="page">
-			<Screen.Header
-				title="타임라인"
-				description="학기/시즌 단위 타임라인을 관리합니다."
-			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>{null}</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-}
 export const TimelineListScreen = observer(
 	({
 		timelines,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
 		onDeleteTimeline,
 	}: TimelineListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<TimelineDto>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
 					toolbar: { leftInputs },
 					table: {
-						entity: "Timeline",
+						rows: timelines,
 						columns: buildTimelineTableColumns<TimelineDto>({
-							onDeleteTimeline,
+							onClickDeleteButton: (timelineId) => {
+								void onDeleteTimeline(timelineId);
+							},
 						}),
 					},
-					rows: timelines ?? [],
-					totalCount,
 				}),
+			[timelines, totalCount, queryStates, setQueryStates, onDeleteTimeline],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-			gridState.rows = timelines ?? [];
-			gridState.pagination.setTotalCount(totalCount);
-		}, [gridState, queryStates, timelines, totalCount]);
-		const onClickDeleteIcon = (timelineId: bigint) => {
-			void onDeleteTimeline(timelineId);
-		};
-		gridState.table.columns = buildTimelineTableColumns<TimelineDto>({
-			onClickDeleteButton: onClickDeleteIcon,
-		});
-		if (isLoading) {
-			return <TimelinesScreenFallback />;
-		}
 		return (
 			<VStack gap="page">
 				<Screen.Header

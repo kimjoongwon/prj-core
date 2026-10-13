@@ -8,16 +8,16 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildRoutineTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 import { Button } from "../../input/Button/Button";
 
 const leftInputs: InputConfig[] = [
@@ -53,73 +53,50 @@ export interface RoutineListScreenQueryStates extends DataGridQueryState {
 }
 export type RoutineListScreenSetQueryStates = DataGridSetQueryStates;
 export interface RoutineListScreenProps {
-	routines?: RoutineDto[];
+	routines: RoutineDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: RoutineListScreenQueryStates;
 	setQueryStates: RoutineListScreenSetQueryStates;
 	onClickCreateButton: () => void;
 	onClickRoutineName: (routineId: bigint) => void;
 	onDeleteRoutine: (routineId: bigint) => Promise<void>;
 }
-function RoutinesScreenFallback() {
-	return (
-		<VStack gap="page">
-			<Screen.Header
-				title="루틴"
-				description="운동 루틴(커리큘럼)을 관리합니다."
-			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>{null}</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-}
 export const RoutineListScreen = observer(
 	({
 		routines,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
 		onClickRoutineName,
 		onDeleteRoutine,
 	}: RoutineListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<RoutineDto>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
 					toolbar: { leftInputs },
 					table: {
-						entity: "Routine",
+						rows: routines,
 						columns: buildRoutineTableColumns<RoutineDto>({
 							onClickRoutineName,
-							onDeleteRoutine,
+							onClickDeleteButton: (routineId) => {
+								void onDeleteRoutine(routineId);
+							},
 						}),
 					},
-					rows: routines ?? [],
-					totalCount,
 				}),
+			[
+				routines,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				onClickRoutineName,
+				onDeleteRoutine,
+			],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-			gridState.rows = routines ?? [];
-			gridState.pagination.setTotalCount(totalCount);
-		}, [gridState, queryStates, routines, totalCount]);
-		const onClickDeleteButton = (routineId: bigint) => {
-			void onDeleteRoutine(routineId);
-		};
-		gridState.table.columns = buildRoutineTableColumns<RoutineDto>({
-			onClickRoutineName,
-			onClickDeleteButton,
-		});
-		if (isLoading) {
-			return <RoutinesScreenFallback />;
-		}
 		return (
 			<VStack gap="page">
 				<Screen.Header

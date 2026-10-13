@@ -7,18 +7,17 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 import { buildOidcClientTableColumns } from "../../data-grid/columns";
-import { DataGridLoading } from "../../data-grid/DataGridLoading";
 import { Button } from "../../input/Button/Button";
 
 /**
@@ -39,9 +38,8 @@ export interface OidcClientListScreenQueryStates extends DataGridQueryState {
 }
 export type OidcClientListScreenSetQueryStates = DataGridSetQueryStates;
 export interface OidcClientListScreenProps {
-	oidcClients?: OidcClientDto[];
+	oidcClients: OidcClientDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: OidcClientListScreenQueryStates;
 	setQueryStates: OidcClientListScreenSetQueryStates;
 	onClickCreateButton: () => void;
@@ -51,30 +49,24 @@ export const OidcClientListScreen = observer(
 	({
 		oidcClients,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
 	}: OidcClientListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<OidcClientDto>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
 					toolbar: { leftInputs },
 					table: {
-						entity: "OidcClient",
+						rows: oidcClients,
 						columns: oidcClientTableColumns,
 					},
-					rows: oidcClients ?? [],
-					totalCount,
 				}),
+			[oidcClients, totalCount, queryStates, setQueryStates],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-			gridState.rows = oidcClients ?? [];
-			gridState.pagination.setTotalCount(totalCount);
-		}, [gridState, queryStates, oidcClients, totalCount]);
 		return (
 			<VStack>
 				<Screen.Header
@@ -93,7 +85,7 @@ export const OidcClientListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							{isLoading ? <DataGridLoading /> : <DataGrid state={gridState} />}
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

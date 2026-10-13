@@ -3,6 +3,7 @@
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "../../../input/Button/Button";
+import { useHandlers } from "./useHandlers";
 
 export interface HierarchyCellProps {
 	children: ReactNode;
@@ -14,15 +15,10 @@ export interface HierarchyCellProps {
 }
 
 /** 계층 행의 이동 핸들, 들여쓰기, 펼침 버튼과 실제 셀 내용을 조합합니다. */
-export function HierarchyCell({
-	children,
-	depth,
-	rowLabel,
-	canExpand,
-	isExpanded,
-	onToggle,
-}: HierarchyCellProps) {
+export function HierarchyCell(state: HierarchyCellProps) {
+	const { children, depth, rowLabel, canExpand, isExpanded } = state;
 	const railWidth = depth * 18 + 24;
+	const handlers = useHandlers(state);
 
 	return (
 		<div className="relative flex min-h-10 min-w-0 items-stretch gap-2">
@@ -43,8 +39,8 @@ export function HierarchyCell({
 						isIconOnly
 						size="sm"
 						variant="ghost"
-						onClick={(event) => event.stopPropagation()}
-						onPress={onToggle}
+						onClick={handlers.stopClickPropagation}
+						onPress={handlers.toggleExpanded}
 					>
 						<ChevronRight
 							className={[

@@ -1,5 +1,5 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { InquiryListScreen } from "./InquiryListScreen";
 
 const defaultArgs: ComponentProps<typeof InquiryListScreen> = {
@@ -60,7 +60,6 @@ const defaultArgs: ComponentProps<typeof InquiryListScreen> = {
 			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 		},
 	],
-	isLoading: false,
 	onClickInquiryRow: () => undefined,
 	onClickNewInquiry: () => undefined,
 	onClickStatusFilter: () => undefined,
@@ -81,11 +80,6 @@ const defaultArgs: ComponentProps<typeof InquiryListScreen> = {
 		{ label: "종료", value: "CLOSED" },
 	],
 	totalCount: 12,
-};
-
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
 };
 
 const emptyStateArgs = {
@@ -114,10 +108,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

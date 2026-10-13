@@ -1,13 +1,18 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { RoutineListScreen } from "./RoutineListScreen";
 
 const defaultArgs: ComponentProps<typeof RoutineListScreen> = {
-	isLoading: false,
 	onClickCreateButton: () => undefined,
 	onClickRoutineName: () => undefined,
 	onDeleteRoutine: async () => undefined,
-	queryStates: { page: 1, take: 10, skip: 0, search: "", spaceScope: "CURRENT" },
+	queryStates: {
+		page: 1,
+		take: 10,
+		skip: 0,
+		search: "",
+		spaceScope: "CURRENT",
+	},
 	routines: [
 		{
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
@@ -36,11 +41,6 @@ const defaultArgs: ComponentProps<typeof RoutineListScreen> = {
 	totalCount: 12,
 };
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	routines: [],
@@ -66,10 +66,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

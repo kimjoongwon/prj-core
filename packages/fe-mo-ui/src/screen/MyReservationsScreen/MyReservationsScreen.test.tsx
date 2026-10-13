@@ -25,7 +25,7 @@ const createProps = (
 			id: "reservation-1",
 			metaLabel: "10:00 · Gangnam Studio · Morning Class",
 			statusLabel: "예약 확정",
-			title: "F45 Strength",
+			title: "팀핏 Strength",
 		},
 	],
 	onPressRetry: jest.fn(),
@@ -53,7 +53,7 @@ describe("MyReservationsScreen", () => {
 		renderWithDesignSystem(<MyReservationsScreen {...createProps()} />);
 
 		expect(screen.getByText("내 예약")).toBeTruthy();
-		expect(screen.getByText("F45 Strength")).toBeTruthy();
+		expect(screen.getByText("팀핏 Strength")).toBeTruthy();
 		expect(screen.getByText("예약 확정")).toBeTruthy();
 		expect(
 			screen.getByText("10:00 · Gangnam Studio · Morning Class"),

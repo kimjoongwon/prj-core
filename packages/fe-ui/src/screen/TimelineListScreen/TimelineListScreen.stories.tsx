@@ -1,9 +1,8 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { TimelineListScreen } from "./TimelineListScreen";
 
 const defaultArgs: ComponentProps<typeof TimelineListScreen> = {
-	isLoading: false,
 	onClickCreateButton: () => undefined,
 	onDeleteTimeline: async () => undefined,
 	queryStates: { page: 1, take: 10, skip: 0, search: "" },
@@ -33,11 +32,6 @@ const defaultArgs: ComponentProps<typeof TimelineListScreen> = {
 	totalCount: 12,
 };
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	timelines: [],
@@ -63,10 +57,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

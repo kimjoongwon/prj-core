@@ -1,5 +1,5 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { ActionListScreen } from "./ActionListScreen";
 
 const defaultArgs: ComponentProps<typeof ActionListScreen> = {
@@ -45,16 +45,10 @@ const defaultArgs: ComponentProps<typeof ActionListScreen> = {
 			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 		},
 	],
-	isLoading: false,
 	onClickActionRow: () => undefined,
 	onClickCreateButton: () => undefined,
 	queryStates: { page: 1, take: 10, skip: 0, search: "", group: "" },
 	setQueryStates: async () => new URLSearchParams(),
-};
-
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
 };
 
 const emptyStateArgs = {
@@ -81,10 +75,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

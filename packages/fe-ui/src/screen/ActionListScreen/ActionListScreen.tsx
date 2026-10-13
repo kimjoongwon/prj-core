@@ -9,8 +9,8 @@ import type {
 import {
 	Button,
 	buildActionTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	HStack,
 	Screen,
 	Section,
@@ -21,8 +21,8 @@ import {
 } from "@cocrepo/ui";
 import { Tabs } from "@heroui/react";
 import { KeyRound, Layers3, Plus, ShieldCheck } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type Key, type ReactNode, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { type Key, type ReactNode, useMemo } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -68,8 +68,7 @@ export interface ActionListScreenQueryStates extends DataGridQueryState {
 }
 export type ActionListScreenSetQueryStates = DataGridSetQueryStates;
 export interface ActionListScreenProps {
-	actions?: ActionDto[];
-	isLoading: boolean;
+	actions: ActionDto[];
 	queryStates: ActionListScreenQueryStates;
 	setQueryStates: ActionListScreenSetQueryStates;
 	onClickCreateButton: () => void;
@@ -120,49 +119,32 @@ function paginateActions(
 export const ActionListScreen = observer(
 	({
 		actions,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
 		onClickActionRow,
 	}: ActionListScreenProps) => {
-		const gridState = useLocalObservable(
-			() =>
-				new DataGridState({
-					query: queryStates,
-					setQueryStates,
-					toolbar: { leftInputs },
-					table: {
-						entity: "Action",
-						columns: buildActionTableColumns<ActionDto>(),
-					},
-					rows: actions ?? [],
-				}),
-		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-			gridState.rows = actions ?? [];
-		}, [gridState, queryStates, actions]);
-		const actionRows = actions ?? [];
-		const filteredActions = filterActions(actionRows, queryStates);
-		const totalCount = filteredActions.length;
-		gridState.rows = paginateActions(filteredActions, queryStates);
-		gridState.pagination.setTotalCount(totalCount);
-		const handleActionRowClick = (action: ActionDto) => {
-			onClickActionRow(action.id);
-		};
+		const gridState = useMemo(() => {
+			const filteredActions = filterActions(actions, queryStates);
+			return createDataGridState<ActionDto>({
+				query: queryStates,
+				setQueryStates,
+				pagination: { totalCount: filteredActions.length },
+				toolbar: { leftInputs },
+				table: {
+					rows: paginateActions(filteredActions, queryStates),
+					columns: buildActionTableColumns<ActionDto>({
+						onClickDetailButton: (action) => onClickActionRow(action.id),
+					}),
+				},
+			});
+		}, [actions, queryStates, setQueryStates, onClickActionRow]);
 		const handleActionGroupFilterChange = (group: string | null) => {
 			void setQueryStates({
 				group,
 				skip: 0,
 			});
 		};
-		gridState.table.columns = buildActionTableColumns<ActionDto>({
-			onClickDetailButton: handleActionRowClick,
-		});
-		if (isLoading) {
-			return <ActionsScreenFallback />;
-		}
 		return (
 			<VStack>
 				<Screen.Header
@@ -292,18 +274,3 @@ const ActionGroupFilterTabs = observer(
 		);
 	},
 );
-const ActionsScreenFallback = observer(() => {
-	return (
-		<VStack>
-			<Screen.Header
-				title="권한 액션 목록"
-				description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
-			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>{null}</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-});

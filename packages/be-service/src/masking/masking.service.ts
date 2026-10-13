@@ -14,8 +14,8 @@ import { MASKING_PRESET_FIELD_NAMES } from "./masking-preset-field-names";
  * @example
  * // 프리셋 사용
  * const config = { type: "masking", preset: "PRESET_EMAIL" };
- * maskingService.applyMasking("minsu.kim92@gmail.com", config);
- * // 결과: "min***@gmail.com"
+ * maskingService.applyMasking("minsu.kim92@example.com", config);
+ * // 결과: "min***@example.com"
  *
  * // 커스텀 패턴 사용
  * const config = { type: "masking", pattern: "^(.{3}).*(.{2})$", replacement: "$1***$2" };
@@ -168,13 +168,13 @@ export class MaskingService {
 	 * @returns 마스킹이 적용된 새 객체
 	 *
 	 * @example
-	 * const user = { name: "김민수", email: "minsu.kim92@gmail.com", age: 30 };
+	 * const user = { name: "김민수", email: "minsu.kim92@example.com", age: 30 };
 	 * const fieldsToMask = new Map([
 	 *   ["name", { type: "masking", preset: "PRESET_NAME" }],
 	 *   ["email", { type: "masking", preset: "PRESET_EMAIL" }],
 	 * ]);
 	 * const masked = maskingService.maskFields(user, fieldsToMask);
-	 * // 결과: { name: "김*수", email: "min***@gmail.com", age: 30 }
+	 * // 결과: { name: "김*수", email: "min***@example.com", age: 30 }
 	 */
 	maskFields<T extends object>(
 		data: T,
@@ -223,7 +223,7 @@ export class MaskingService {
 	 * 이메일 마스킹
 	 *
 	 * @example
-	 * "minsu.kim92@gmail.com" → "min***@gmail.com"
+	 * "minsu.kim92@example.com" → "min***@example.com"
 	 */
 	private maskEmail(email: string): string {
 		const atIndex = email.indexOf("@");

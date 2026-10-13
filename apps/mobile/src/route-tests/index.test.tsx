@@ -348,7 +348,7 @@ const createFeedItem = (overrides: Record<string, unknown> = {}) => ({
   myReservationStatus: undefined,
   previewExerciseNames: ["Squat", "Row"],
   programId: 1n,
-  programName: "F45 Strength",
+  programName: "팀핏 Strength",
   routineLabelSnapshot: "Lower body",
   sessionId: 1n,
   sessionName: "Morning Class",
@@ -369,7 +369,7 @@ const createReservation = (overrides: Record<string, unknown> = {}) => ({
   idempotencyKey: "idem-1",
   memo: null,
   occurrenceStartAt: new Date(`${todayKey}T10:00:00.000Z`),
-  program: { name: "F45 Strength" },
+  program: { name: "팀핏 Strength" },
   programId: 1n,
   removedAt: null,
   session: { name: "Morning Class" },
@@ -454,7 +454,7 @@ describe("mobile reservation booking routes", () => {
     render(<HomeTabRoute />);
 
     expect(screen.getByText("오늘의 수업")).toBeTruthy();
-    expect(screen.getByText("F45 Strength")).toBeTruthy();
+    expect(screen.getByText("팀핏 Strength")).toBeTruthy();
     expect(screen.getAllByText("예약 가능").length).toBeGreaterThan(0);
     expect(screen.queryByText(/백엔드 핸드오프/)).toBeNull();
     expect(mockUseGetReservationBookingFeed).toHaveBeenCalledWith(
@@ -545,7 +545,7 @@ describe("mobile reservation booking routes", () => {
     render(<ReservationsTabRoute />);
 
     expect(screen.getByText("내 예약")).toBeTruthy();
-    expect(screen.getByText("F45 Strength")).toBeTruthy();
+    expect(screen.getByText("팀핏 Strength")).toBeTruthy();
     expect(screen.getByText("예약 확정")).toBeTruthy();
     expect(screen.queryByText("헤어 케어 예약")).toBeNull();
     expect(mockUseGetMyReservations).toHaveBeenCalledWith(

@@ -1,5 +1,5 @@
 import type { UserDto } from "@cocrepo/api/core/users";
-import { buildUserListTableColumns, DataGridState } from "@cocrepo/ui";
+import { buildUserListTableColumns, createDataGridState } from "@cocrepo/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 import { UserListScreen, type UserListScreenProps } from "./UserListScreen";
 
@@ -68,34 +68,29 @@ const userFixtures: UserDto[] = [
 
 const defaultArgs = {
 	state: {
-		dataGrid: new DataGridState({
+		dataGrid: createDataGridState<UserDto>({
 			query: { page: 1, take: 10, skip: 0, search: "" },
 			setQueryStates: async () => new URLSearchParams(),
 			table: {
-				entity: "User",
+				rows: userFixtures,
 				columns: buildUserListTableColumns<UserDto>(),
 			},
-			rows: userFixtures,
-			totalCount: 12,
+			pagination: { totalCount: 12 },
 		}),
 	},
-	users: userFixtures,
 } satisfies UserListScreenProps;
 
 const meta = {
 	title: "screen/UserListScreen",
 	component: UserListScreen,
 	argTypes: {
-		users: { control: false },
+		state: { control: false },
 	},
 	parameters: {
 		layout: "fullscreen",
 	},
 	tags: ["autodocs"],
-	args: {
-		users: defaultArgs.users,
-		totalCount: 12,
-	},
+	args: defaultArgs,
 } satisfies Meta<typeof UserListScreen>;
 
 export default meta;

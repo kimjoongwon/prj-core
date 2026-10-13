@@ -8,16 +8,15 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildIdpAccountTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
-import { DataGridLoading } from "../../data-grid/DataGridLoading";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -37,9 +36,8 @@ export interface AccountListScreenQueryStates extends DataGridQueryState {
 }
 export type AccountListScreenSetQueryStates = DataGridSetQueryStates;
 export interface AccountListScreenProps {
-	accounts?: IdpAccountDto[];
+	accounts: IdpAccountDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: AccountListScreenQueryStates;
 	setQueryStates: AccountListScreenSetQueryStates;
 	onClickUnlockAccountButton: (userId: bigint) => void;
@@ -52,33 +50,33 @@ export const AccountListScreen = observer(
 	({
 		accounts,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickUnlockAccountButton,
 	}: AccountListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<IdpAccountDto>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
 					toolbar: { leftInputs },
 					table: {
-						entity: "IdpAccount",
+						rows: accounts,
 						columns: buildIdpAccountTableColumns<IdpAccountDto>({
 							onClickUnlockAccount: (account) =>
 								onClickUnlockAccountButton(account.id),
 						}),
 					},
-					rows: accounts ?? [],
-					totalCount,
 				}),
+			[
+				accounts,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				onClickUnlockAccountButton,
+			],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-			gridState.rows = accounts ?? [];
-			gridState.pagination.setTotalCount(totalCount);
-		}, [gridState, queryStates, accounts, totalCount]);
 		return (
 			<VStack>
 				<Screen.Header
@@ -88,7 +86,7 @@ export const AccountListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							{isLoading ? <DataGridLoading /> : <DataGrid state={gridState} />}
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

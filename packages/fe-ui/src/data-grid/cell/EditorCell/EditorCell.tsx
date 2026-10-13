@@ -1,8 +1,9 @@
 "use client";
 
-import type { DataGridEditorConfig, DataGridEditorOption } from "@cocrepo/type";
-import type { ChangeEvent, KeyboardEvent, ReactNode } from "react";
+import type { DataGridEditorConfig } from "@cocrepo/type";
+import type { ReactNode } from "react";
 import { Typography } from "../../../data-display/Typography";
+import { useHandlers } from "./useHandlers";
 
 interface EditorCellContext<TData, TValue> {
 	row: TData;
@@ -16,21 +17,13 @@ interface EditorCellContext<TData, TValue> {
 	onCancel: () => void;
 }
 
-interface EditorCellProps<TData, TValue> {
+export interface EditorCellProps<TData, TValue> {
 	config: DataGridEditorConfig;
 	context: EditorCellContext<TData, TValue>;
 }
 
 const EDITOR_CLASS_NAME =
 	"box-border h-9 min-w-0 w-full overflow-x-auto rounded-none border border-field-border-focus bg-field px-2 text-[13px] text-field-foreground outline-none focus-field-ring";
-
-function getOptions(config: DataGridEditorConfig) {
-	return config.options ?? [];
-}
-
-function getDatalistId(field: string) {
-	return `data-grid-editor-${field.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
-}
 
 function EditorError({ message }: { message?: string }) {
 	return message ? (
@@ -43,120 +36,79 @@ function EditorError({ message }: { message?: string }) {
 	) : null;
 }
 
-function getTextValue(value: unknown) {
-	return value == null ? "" : String(value);
-}
-
-export function EditorCell<TData, TValue>({
-	config,
-	context,
-}: EditorCellProps<TData, TValue>) {
-	const { type, placeholder } = config;
-	const {
-		value,
-		errorMessage,
-		isValidating,
-		onValueChange,
-		onFinish,
-		onCancel,
-	} = context;
-	const label = context.field;
-	const ariaInvalid = Boolean(errorMessage);
-
-	const handleKeyDown = (
-		event: KeyboardEvent<HTMLInputElement | HTMLSelectElement>,
-	) => {
-		if (event.key === "Escape") {
-			event.preventDefault();
-			event.stopPropagation();
-			onCancel();
-			return;
-		}
-		if (event.key === "Enter") {
-			event.preventDefault();
-			event.stopPropagation();
-			onFinish();
-			return;
-		}
-		if (event.key === "Tab") {
-			onFinish(event.shiftKey ? "previous" : "next");
-		}
-	};
-
-	const wrapper = (control: ReactNode) => (
+function EditorControl({
+	children,
+	errorMessage,
+}: {
+	children: ReactNode;
+	errorMessage?: string;
+}) {
+	return (
 		<div className="relative flex min-w-0 w-full items-center overflow-visible">
-			{control}
+			{children}
 			<EditorError message={errorMessage} />
 		</div>
 	);
+}
+
+export function EditorCell<TData, TValue>(
+	state: EditorCellProps<TData, TValue>,
+) {
+	const { config, context } = state;
+	const { type, placeholder } = config;
+	const { value, errorMessage, isValidating } = context;
+	const label = context.field;
+	const ariaInvalid = Boolean(errorMessage);
+	const handlers = useHandlers(state);
+	const { options, selectedValues, textValue, datalistId, inputType } =
+		handlers.getEditorPresentation();
 
 	if (type === "boolean") {
-		return wrapper(
-			<input
-				aria-label={label}
-				aria-invalid={ariaInvalid}
-				className="mx-auto size-4 accent-current text-accent"
-				type="checkbox"
-				checked={Boolean(value)}
-				disabled={isValidating}
-				onChange={(event) => {
-					onValueChange(event.currentTarget.checked as TValue);
-					onFinish();
-				}}
-				onKeyDown={handleKeyDown}
-			/>,
+		return (
+			<EditorControl errorMessage={errorMessage}>
+				<input
+					aria-label={label}
+					aria-invalid={ariaInvalid}
+					className="mx-auto size-4 accent-current text-accent"
+					type="checkbox"
+					checked={Boolean(value)}
+					disabled={isValidating}
+					onChange={handlers.changeBoolean}
+					onKeyDown={handlers.completeFromKeyboard}
+				/>
+			</EditorControl>
 		);
 	}
 
 	if (type === "select" || type === "multi-select") {
 		const multiple = type === "multi-select";
-		const selectedValues = new Set(
-			Array.isArray(value) ? value.map(String) : [getTextValue(value)],
-		);
-
-		return wrapper(
-			<select
-				aria-label={label}
-				aria-invalid={ariaInvalid}
-				className={`${EDITOR_CLASS_NAME} ${multiple ? "h-20" : ""}`}
-				multiple={multiple}
-				disabled={isValidating}
-				value={multiple ? Array.from(selectedValues) : getTextValue(value)}
-				onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-					const nextValue = multiple
-						? Array.from(event.currentTarget.selectedOptions).map(
-								(option) => option.value,
-							)
-						: event.currentTarget.value;
-					onValueChange(nextValue as TValue);
-					onFinish();
-				}}
-				onKeyDown={handleKeyDown}
-			>
-				{!multiple && config.allowEmpty !== false ? (
-					<option value="">{placeholder ?? "선택"}</option>
-				) : null}
-				{getOptions(config).map((option: DataGridEditorOption) => (
-					<option key={option.value} value={option.value}>
-						{option.label}
-					</option>
-				))}
-			</select>,
+		return (
+			<EditorControl errorMessage={errorMessage}>
+				<select
+					aria-label={label}
+					aria-invalid={ariaInvalid}
+					className={`${EDITOR_CLASS_NAME} ${multiple ? "h-20" : ""}`}
+					multiple={multiple}
+					disabled={isValidating}
+					value={multiple ? selectedValues : textValue}
+					onChange={handlers.changeSelection}
+					onKeyDown={handlers.completeFromKeyboard}
+				>
+					{!multiple && config.allowEmpty !== false ? (
+						<option value="">{placeholder ?? "선택"}</option>
+					) : null}
+					{options.map((option) => (
+						<option key={option.value} value={option.value}>
+							{option.label}
+						</option>
+					))}
+				</select>
+			</EditorControl>
 		);
 	}
 
-	const inputType =
-		type === "number"
-			? "number"
-			: type === "date"
-				? "date"
-				: type === "date-time"
-					? "datetime-local"
-					: "text";
-	const datalistId = getDatalistId(label);
-
-	return wrapper(
-		<>
+	return (
+		<EditorControl errorMessage={errorMessage}>
 			<input
 				aria-label={label}
 				aria-invalid={ariaInvalid}
@@ -165,27 +117,20 @@ export function EditorCell<TData, TValue>({
 				list={type === "autocomplete" ? datalistId : undefined}
 				placeholder={placeholder}
 				type={inputType}
-				value={getTextValue(value)}
-				onChange={(event) => {
-					const nextValue = event.currentTarget.value;
-					const normalizedValue =
-						type === "number" && nextValue !== ""
-							? Number(nextValue)
-							: nextValue;
-					onValueChange(normalizedValue as TValue);
-				}}
-				onKeyDown={handleKeyDown}
-				onBlur={() => onFinish()}
+				value={textValue}
+				onChange={handlers.changeInput}
+				onKeyDown={handlers.completeFromKeyboard}
+				onBlur={handlers.finishFromBlur}
 			/>
 			{type === "autocomplete" ? (
 				<datalist id={datalistId}>
-					{getOptions(config).map((option: DataGridEditorOption) => (
+					{options.map((option) => (
 						<option key={option.value} value={option.value}>
 							{option.label}
 						</option>
 					))}
 				</datalist>
 			) : null}
-		</>,
+		</EditorControl>
 	);
 }

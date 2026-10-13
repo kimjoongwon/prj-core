@@ -9,14 +9,20 @@ import type {
 import { Modal, useOverlayState } from "@heroui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Upload } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { observer } from "mobx-react-lite";
+import {
+	type ChangeEvent,
+	useCallback,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { AssetPreviewDialog } from "../../../data-display/AssetPreview";
 import { Typography } from "../../../data-display/Typography";
 import {
 	buildAssetTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 } from "../../../data-grid";
 import { EmptyState } from "../../../feedback";
 import { useT } from "../../../i18n";
@@ -117,7 +123,6 @@ export interface AssetBrowserProps {
 	folders: FolderTreeItem[];
 	queryStates: AssetBrowserQueryStates;
 	setQueryStates: AssetBrowserSetQueryStates;
-	isLoading: boolean;
 	isSpaceReady: boolean;
 	hasSelectedSpace: boolean;
 	isRemoving: boolean;
@@ -173,39 +178,27 @@ function AssetsGridFallback({
 }: {
 	queryStates: AssetBrowserQueryStates;
 	setQueryStates: AssetBrowserSetQueryStates;
-	columns: ColumnDef<AssetBrowserAsset, any>[];
+	columns: ColumnDef<AssetBrowserAsset, unknown>[];
 	leftInputs: InputConfig[];
 }) {
-	const gridState = useLocalObservable(
+	const gridState = useMemo(
 		() =>
-			new DataGridState({
+			createDataGridState<AssetBrowserAsset>({
 				query: queryStates,
 				setQueryStates,
+				pagination: { totalCount: 0 },
+				toolbar: { leftInputs },
+				table: { rows: [], columns },
 			}),
+		[queryStates, setQueryStates, columns, leftInputs],
 	);
-	useEffect(() => {
-		gridState.query.update(queryStates);
-	}, [gridState, queryStates, setQueryStates]);
 	return (
 		<div className={assetsLayoutClassName}>
 			<div className={assetsSidebarPanelClassName}>
 				<FolderTree folders={[]} isLoading className="bg-transparent" />
 			</div>
 			<div className={assetsGridPanelClassName}>
-				<DataGrid
-					config={{
-						toolbar: {
-							leftInputs,
-						},
-						table: {
-							entity: "Asset",
-							columns,
-						},
-					}}
-					rows={[]}
-					totalCount={0}
-					state={gridState}
-				/>
+				<DataGrid state={gridState} />
 			</div>
 		</div>
 	);
@@ -227,12 +220,11 @@ export const AssetBrowser = observer(
 		presentation = "inline",
 		title,
 		description,
-		assets = [],
+		assets,
 		totalCount,
 		folders,
 		queryStates,
 		setQueryStates,
-		isLoading,
 		isSpaceReady,
 		hasSelectedSpace,
 		isRemoving,
@@ -251,16 +243,6 @@ export const AssetBrowser = observer(
 		onDeleteFolder,
 	}: AssetBrowserProps) => {
 		const t = useT();
-		const gridState = useLocalObservable(
-			() =>
-				new DataGridState({
-					query: queryStates,
-					setQueryStates,
-				}),
-		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-		}, [gridState, queryStates, setQueryStates]);
 		const fileInputRef = useRef<HTMLInputElement | null>(null);
 		const createFolderModal = useOverlayState();
 		const renameFolderModal = useOverlayState();
@@ -402,18 +384,27 @@ export const AssetBrowser = observer(
 			setUploadRequirementMessage(null);
 			void onUploadAsset(selectedFile, selectedFolderId);
 		};
-		const onClickDeleteAssetButton = (assetId: string) => {
-			if (previewingAsset?.id === assetId) {
-				setPreviewingAsset(null);
-			}
-			void onDeleteAsset(assetId);
-		};
-		const onClickPreviewAssetButton = (asset: AssetBrowserAsset) => {
-			setPreviewingAsset(asset);
-		};
-		const onClickSelectAssetButton = (asset: AssetBrowserAsset) => {
-			void onSelectAsset?.(asset);
-		};
+		const onClickDeleteAssetButton = useCallback(
+			(assetId: string) => {
+				setPreviewingAsset((previewingAsset) =>
+					previewingAsset?.id === assetId ? null : previewingAsset,
+				);
+				void onDeleteAsset(assetId);
+			},
+			[onDeleteAsset],
+		);
+		const onClickPreviewAssetButton = useCallback(
+			(asset: AssetBrowserAsset) => {
+				setPreviewingAsset(asset);
+			},
+			[],
+		);
+		const onClickSelectAssetButton = useCallback(
+			(asset: AssetBrowserAsset) => {
+				void onSelectAsset?.(asset);
+			},
+			[onSelectAsset],
+		);
 		const onSelectFolder = (folder: FolderTreeItem | null) => {
 			setUploadRequirementMessage(null);
 			void setQueryStates({
@@ -421,15 +412,44 @@ export const AssetBrowser = observer(
 				skip: 0,
 			});
 		};
-		const columns = buildAssetTableColumns<AssetBrowserAsset>({
-			isRemoving,
-			onClickDeleteAssetButton,
-			onClickPreviewAssetButton:
-				mode === "manage" ? onClickPreviewAssetButton : undefined,
-			mode,
-			selectedAssetId,
-			onClickSelectAssetButton,
-		});
+		const columns = useMemo(
+			() =>
+				buildAssetTableColumns<AssetBrowserAsset>({
+					isRemoving,
+					onClickDeleteAssetButton,
+					onClickPreviewAssetButton:
+						mode === "manage" ? onClickPreviewAssetButton : undefined,
+					mode,
+					selectedAssetId,
+					onClickSelectAssetButton,
+				}),
+			[
+				isRemoving,
+				onClickDeleteAssetButton,
+				onClickPreviewAssetButton,
+				onClickSelectAssetButton,
+				mode,
+				selectedAssetId,
+			],
+		);
+		const gridState = useMemo(
+			() =>
+				createDataGridState<AssetBrowserAsset>({
+					query: queryStates,
+					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs: visibleLeftInputs },
+					table: { rows: assets, columns },
+				}),
+			[
+				queryStates,
+				setQueryStates,
+				totalCount,
+				visibleLeftInputs,
+				assets,
+				columns,
+			],
+		);
 		const browserContent = (
 			<>
 				<Surface className="overflow-hidden rounded-3xl border-border/80 bg-surface">
@@ -459,21 +479,7 @@ export const AssetBrowser = observer(
 								/>
 							</div>
 							<div className={assetsGridPanelClassName}>
-								<DataGrid
-									config={{
-										toolbar: {
-											leftInputs: visibleLeftInputs,
-										},
-										table: {
-											entity: "Asset",
-											columns,
-										},
-									}}
-									rows={assets}
-									totalCount={totalCount}
-									state={gridState}
-									isLoading={isLoading}
-								/>
+								<DataGrid state={gridState} />
 							</div>
 						</div>
 					)}

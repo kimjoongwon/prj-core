@@ -1,14 +1,20 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { OidcSessionListScreen } from "./OidcSessionListScreen";
 
 const defaultArgs: ComponentProps<typeof OidcSessionListScreen> = {
-	isLoading: false,
 	isRevokingAll: false,
 	onClickRevokeAllButton: () => undefined,
 	onClickRevokeByGrantButton: () => undefined,
 	onRevokeSession: () => undefined,
-	queryStates: { page: 1, take: 10, skip: 0, search: "", modelType: "", accountId: "" },
+	queryStates: {
+		page: 1,
+		take: 10,
+		skip: 0,
+		search: "",
+		modelType: "",
+		accountId: "",
+	},
 	sessions: [
 		{
 			accountId: "account-1",
@@ -37,11 +43,6 @@ const defaultArgs: ComponentProps<typeof OidcSessionListScreen> = {
 	totalCount: 12,
 };
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	sessions: [],
@@ -68,10 +69,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

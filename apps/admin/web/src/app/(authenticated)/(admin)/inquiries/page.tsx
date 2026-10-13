@@ -2,9 +2,9 @@
 
 import {
 	type InquiryStatus,
-	useGetCreateInquiryForm,
-	useGetInquiries,
-	useGetInquiryStats,
+	useGetCreateInquiryFormSuspense,
+	useGetInquiriesSuspense,
+	useGetInquiryStatsSuspense,
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import { InquiryListScreen } from "@cocrepo/ui";
@@ -27,10 +27,9 @@ export default observer(function InquiriesPageRoute() {
 		search: parseAsString.withDefault(""),
 		inquiryStatus: parseAsString.withDefault(""),
 	});
-	const { data: filterBootstrapResponse, isLoading: isLoadingFilterBootstrap } =
-		useGetCreateInquiryForm();
+	const { data: filterBootstrapResponse } = useGetCreateInquiryFormSuspense();
 	const statusOptions = mapSelectOptions(
-		filterBootstrapResponse?.data?.options.status,
+		filterBootstrapResponse.data?.options.status,
 	);
 	const inquiryParams = {
 		take: getNumberQueryValue(queryStates.take, 20),
@@ -41,10 +40,8 @@ export default observer(function InquiriesPageRoute() {
 			statusOptions,
 		),
 	};
-	const { data: inquiriesResponse, isLoading: isLoadingInquiries } =
-		useGetInquiries(inquiryParams);
-	const { data: statsResponse, isLoading: isLoadingStats } =
-		useGetInquiryStats();
+	const { data: inquiriesResponse } = useGetInquiriesSuspense(inquiryParams);
+	const { data: statsResponse } = useGetInquiryStatsSuspense();
 	const activeStatus =
 		typeof queryStates.inquiryStatus === "string"
 			? queryStates.inquiryStatus
@@ -52,20 +49,17 @@ export default observer(function InquiriesPageRoute() {
 
 	return (
 		<InquiryListScreen
-			inquiries={inquiriesResponse?.data}
-			totalCount={inquiriesResponse?.meta?.total ?? 0}
+			inquiries={inquiriesResponse.data ?? []}
+			totalCount={inquiriesResponse.meta?.total ?? 0}
 			stats={{
-				total: statsResponse?.data?.total ?? 0,
-				newCount: statsResponse?.data?.new ?? 0,
-				inProgress: statsResponse?.data?.inProgress ?? 0,
-				resolved: statsResponse?.data?.resolved ?? 0,
-				slaBreached: statsResponse?.data?.slaBreached ?? 0,
+				total: statsResponse.data?.total ?? 0,
+				newCount: statsResponse.data?.new ?? 0,
+				inProgress: statsResponse.data?.inProgress ?? 0,
+				resolved: statsResponse.data?.resolved ?? 0,
+				slaBreached: statsResponse.data?.slaBreached ?? 0,
 			}}
 			statusOptions={statusOptions}
 			activeStatus={activeStatus}
-			isLoading={
-				isLoadingInquiries || isLoadingStats || isLoadingFilterBootstrap
-			}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickNewInquiry={() => {

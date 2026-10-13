@@ -7,8 +7,8 @@ import type {
 	InputConfig,
 } from "@cocrepo/type";
 import {
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
@@ -17,8 +17,8 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { Tabs } from "@heroui/react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type Key, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { type Key, useMemo } from "react";
 import { buildSubjectTableColumns } from "../../data-grid/columns";
 
 const leftInputs: InputConfig[] = [
@@ -79,8 +79,7 @@ export interface SubjectListScreenQueryStates extends DataGridQueryState {
 }
 export type SubjectListScreenSetQueryStates = DataGridSetQueryStates;
 export interface SubjectListScreenProps {
-	subjects?: SubjectDto[];
-	isLoading: boolean;
+	subjects: SubjectDto[];
 	queryStates: SubjectListScreenQueryStates;
 	setQueryStates: SubjectListScreenSetQueryStates;
 	onClickSubject: (subjectId: bigint) => void;
@@ -171,43 +170,30 @@ const SubjectGroupFilterTabs = observer(
 export const SubjectListScreen = observer(
 	({
 		subjects,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickSubject,
 	}: SubjectListScreenProps) => {
-		const gridState = useLocalObservable(
-			() =>
-				new DataGridState({
-					query: queryStates,
-					setQueryStates,
-					toolbar: { leftInputs },
-					table: {
-						entity: "Subject",
-						columns: subjectTableColumns,
-						onRowClick: (subject) => onClickSubject(subject.id),
-					},
-					rows: subjects ?? [],
-				}),
-		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-			gridState.rows = subjects ?? [];
-		}, [gridState, queryStates, subjects]);
-		const subjectRows = subjects ?? [];
-		const filteredSubjects = filterSubjects(subjectRows, queryStates);
-		const totalCount = filteredSubjects.length;
-		gridState.rows = paginateSubjects(filteredSubjects, queryStates);
-		gridState.pagination.setTotalCount(totalCount);
+		const gridState = useMemo(() => {
+			const filteredSubjects = filterSubjects(subjects, queryStates);
+			return createDataGridState<SubjectDto>({
+				query: queryStates,
+				setQueryStates,
+				pagination: { totalCount: filteredSubjects.length },
+				toolbar: { leftInputs },
+				table: {
+					rows: paginateSubjects(filteredSubjects, queryStates),
+					columns: subjectTableColumns,
+					row: { onClick: (subject) => onClickSubject(subject.id) },
+				},
+			});
+		}, [subjects, queryStates, setQueryStates, onClickSubject]);
 		const handleSubjectGroupFilterChange = (group: string | null) => {
 			void setQueryStates({
 				group,
 				skip: 0,
 			});
 		};
-		if (isLoading) {
-			return <SubjectsScreenFallback />;
-		}
 		return (
 			<VStack gap="page">
 				<Screen.Header
@@ -231,18 +217,3 @@ export const SubjectListScreen = observer(
 		);
 	},
 );
-const SubjectsScreenFallback = observer(function SubjectsScreenFallback() {
-	return (
-		<VStack gap="page">
-			<Screen.Header
-				title="권한 대상 목록"
-				description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
-			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>{null}</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-});

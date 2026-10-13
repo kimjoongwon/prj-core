@@ -9,8 +9,8 @@ import type {
 import {
 	Button,
 	buildStaticTranslationTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	HStack,
 	Screen,
 	Section,
@@ -22,8 +22,8 @@ import {
 } from "@cocrepo/ui";
 import { Modal, useOverlayState } from "@heroui/react";
 import { Languages, Plus, RefreshCcw } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type FormEvent, useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
+import { type FormEvent, useMemo, useState } from "react";
 import { Select } from "../../input/Select/Select";
 import { Switch } from "../../input/Switch/Switch";
 export type StaticTranslationLanguageCode =
@@ -49,9 +49,8 @@ export interface StaticTranslationListScreenQueryStates
 }
 export type StaticTranslationListScreenSetQueryStates = DataGridSetQueryStates;
 export interface StaticTranslationListScreenProps {
-	translations?: TranslationResponseDto[];
+	translations: TranslationResponseDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: StaticTranslationListScreenQueryStates;
 	setQueryStates: StaticTranslationListScreenSetQueryStates;
 	onCreateTranslation: (form: StaticTranslationForm) => Promise<void>;
@@ -164,7 +163,6 @@ export const StaticTranslationListScreen = observer(
 	({
 		translations,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onCreateTranslation,
@@ -174,18 +172,10 @@ export const StaticTranslationListScreen = observer(
 		onInvalidateTranslationCache,
 	}: StaticTranslationListScreenProps) => {
 		const t = useT();
-		const gridState = useLocalObservable(
-			() =>
-				new DataGridState({
-					query: queryStates,
-					setQueryStates,
-				}),
-		);
 		const formModal = useOverlayState();
 		const [editingTranslation, setEditingTranslation] =
 			useState<TranslationResponseDto | null>(null);
 		const [form, setForm] = useState<StaticTranslationForm>(createEmptyForm);
-		const rows = translations ?? [];
 		const selectedLanguageCode = toStaticTranslationLanguageCode(
 			queryStates.languageCode,
 		);
@@ -195,21 +185,40 @@ export const StaticTranslationListScreen = observer(
 			!form.key.trim() ||
 			!form.text.trim() ||
 			!form.category.trim();
-		const columns = buildStaticTranslationTableColumns<TranslationResponseDto>({
-			onClickEditButton: handleOpenEditModal,
-			onClickDeleteButton: handleDeleteTranslation,
-		});
-		useEffect(() => {
-			gridState.query.update(queryStates);
-		}, [gridState, queryStates, setQueryStates]);
+		const gridState = useMemo(
+			() =>
+				createDataGridState<TranslationResponseDto>({
+					query: queryStates,
+					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: translations,
+						columns: buildStaticTranslationTableColumns<TranslationResponseDto>(
+							{
+								onClickEditButton: (translation) => {
+									setEditingTranslation(translation);
+									setForm(createFormFromTranslation(translation));
+									formModal.open();
+								},
+								onClickDeleteButton: (translation) =>
+									onDeleteTranslation(translation.id),
+							},
+						),
+					},
+				}),
+			[
+				translations,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				onDeleteTranslation,
+				formModal.open,
+			],
+		);
 		function handleOpenCreateModal() {
 			setEditingTranslation(null);
 			setForm(createEmptyForm());
-			formModal.open();
-		}
-		function handleOpenEditModal(translation: TranslationResponseDto) {
-			setEditingTranslation(translation);
-			setForm(createFormFromTranslation(translation));
 			formModal.open();
 		}
 		function handleCloseFormModal() {
@@ -272,11 +281,6 @@ export const StaticTranslationListScreen = observer(
 			}
 			handleCloseFormModal();
 		}
-		async function handleDeleteTranslation(
-			translation: TranslationResponseDto,
-		) {
-			await onDeleteTranslation(translation.id);
-		}
 		async function handleInvalidateLanguageCache() {
 			if (!selectedLanguageCode) {
 				return;
@@ -318,21 +322,7 @@ export const StaticTranslationListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "Translation",
-										columns,
-									},
-								}}
-								rows={rows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

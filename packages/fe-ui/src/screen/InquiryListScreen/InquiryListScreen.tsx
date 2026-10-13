@@ -9,8 +9,8 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildInquiryTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	HStack,
 	Screen,
 	Section,
@@ -20,8 +20,8 @@ import {
 } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
 import { AlertTriangle, CheckCircle, Inbox, Loader2, Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type ReactNode, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { type ReactNode, useMemo } from "react";
 import { Button } from "../../input/Button/Button";
 
 const searchInput: InputConfig = {
@@ -54,12 +54,11 @@ export interface InquiryStats {
 	slaBreached: number;
 }
 export interface InquiryListScreenProps {
-	inquiries?: InquiryDto[];
+	inquiries: InquiryDto[];
 	totalCount: number;
 	stats: InquiryStats;
 	statusOptions: SelectOption[];
 	activeStatus?: string;
-	isLoading: boolean;
 	queryStates: InquiryListScreenQueryStates;
 	setQueryStates: InquiryListScreenSetQueryStates;
 	onClickNewInquiry: () => void;
@@ -200,17 +199,6 @@ function InquiryStatsGrid({
 		</div>
 	);
 }
-function InquiriesScreenFallback() {
-	return (
-		<VStack gap="page">
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>{null}</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-}
 export const InquiryListScreen = observer(
 	({
 		inquiries,
@@ -218,38 +206,42 @@ export const InquiryListScreen = observer(
 		stats,
 		statusOptions,
 		activeStatus,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickNewInquiry,
 		onClickInquiryRow,
 		onClickStatusFilter,
 	}: InquiryListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
+				createDataGridState<InquiryDto>({
 					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: {
+						leftInputs: [
+							searchInput,
+							{
+								...statusInput,
+								props: { ...statusInput.props, options: statusOptions },
+							},
+						],
+					},
+					table: {
+						rows: inquiries,
+						columns: buildInquiryTableColumns<InquiryDto>(),
+						row: { onClick: (inquiry) => onClickInquiryRow(inquiry.id) },
+					},
 				}),
+			[
+				inquiries,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				statusOptions,
+				onClickInquiryRow,
+			],
 		);
-		useEffect(() => {
-			gridState.query.update(queryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const inquiryRows = inquiries ?? [];
-		const columns = buildInquiryTableColumns<InquiryDto>();
-		const leftInputs: InputConfig[] = [
-			searchInput,
-			{
-				...statusInput,
-				props: {
-					...statusInput.props,
-					options: statusOptions,
-				},
-			},
-		];
-		if (isLoading) {
-			return <InquiriesScreenFallback />;
-		}
 		return (
 			<VStack gap="page">
 				<Screen.Header
@@ -286,23 +278,7 @@ export const InquiryListScreen = observer(
 								<div className="mb-4 border-b border-border/80 pb-4">
 									<Section.Header title="문의 목록" />
 								</div>
-								<DataGrid
-									config={{
-										toolbar: {
-											leftInputs,
-										},
-										table: {
-											entity: "Inquiry",
-											columns,
-											onRowClick: (inquiry) => {
-												onClickInquiryRow(inquiry.id);
-											},
-										},
-									}}
-									rows={inquiryRows}
-									totalCount={totalCount}
-									state={gridState}
-								/>
+								<DataGrid state={gridState} />
 							</Section.Body>
 						</Section>
 					</SectionSurface>

@@ -7,6 +7,7 @@ import {
 	ActionButtonCell,
 	type ActionButtonCellProps,
 } from "../ActionButtonCell";
+import { useHandlers } from "./useHandlers";
 
 export interface ConfirmActionCellProps {
 	title: string;
@@ -23,24 +24,22 @@ export interface ConfirmActionCellProps {
 	onConfirm: () => void | Promise<void>;
 }
 
-function getConfirmButtonVariant(status: ConfirmActionCellProps["status"]) {
-	return status === "danger" ? "danger" : "primary";
-}
-
 /** 확인 후 실행해야 하는 row action을 일관된 AlertDialog로 표시합니다. */
-export function ConfirmActionCell({
-	title,
-	description,
-	confirmLabel = "삭제",
-	triggerLabel = "삭제",
-	status = "danger",
-	triggerVariant = "danger-soft",
-	startContent,
-	isDisabled,
-	className,
-	tooltip,
-	onConfirm,
-}: ConfirmActionCellProps) {
+export function ConfirmActionCell(state: ConfirmActionCellProps) {
+	const {
+		title,
+		description,
+		confirmLabel = "삭제",
+		triggerLabel = "삭제",
+		status = "danger",
+		triggerVariant = "danger-soft",
+		startContent,
+		isDisabled,
+		className,
+		tooltip,
+		onConfirm,
+	} = state;
+	const handlers = useHandlers(state);
 	const triggerButtonProps: ActionButtonCellProps = {
 		variant: triggerVariant,
 		isDisabled,
@@ -72,7 +71,7 @@ export function ConfirmActionCell({
 						<AlertDialog.Footer>
 							<Button variant="ghost">취소</Button>
 							<Button
-								variant={getConfirmButtonVariant(status)}
+								variant={handlers.getConfirmButtonVariant()}
 								onPress={onConfirm}
 							>
 								{confirmLabel}

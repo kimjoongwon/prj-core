@@ -262,12 +262,6 @@ export interface SelectionConfig {
 	/** 선택 모드 */
 	mode: "none" | "single" | "multiple";
 
-	/** 선택 변경 핸들러 (DataGridState.selection 우선) */
+	/** 선택 변경 핸들러 (DataGridState.table.selectionSource 우선) */
 	onSelectionChange?: (keys: Set<string>) => void;
-
-	/** 선택 시 하단 액션바 */
-	actionBar?: {
-		/** 선택된 항목 수 표시 */
-		showCount?: boolean;
-	};
 }

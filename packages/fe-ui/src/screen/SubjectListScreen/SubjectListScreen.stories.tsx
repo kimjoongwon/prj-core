@@ -1,9 +1,8 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { SubjectListScreen } from "./SubjectListScreen";
 
 const defaultArgs: ComponentProps<typeof SubjectListScreen> = {
-	isLoading: false,
 	onClickSubject: () => undefined,
 	queryStates: { page: 1, take: 10, skip: 0, search: "", group: "" },
 	setQueryStates: () => Promise.resolve(new URLSearchParams()),
@@ -31,11 +30,6 @@ const defaultArgs: ComponentProps<typeof SubjectListScreen> = {
 	],
 };
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	subjects: [],
@@ -60,10 +54,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

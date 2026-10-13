@@ -1,7 +1,7 @@
 "use client";
 
 import { LanguageCode } from "@cocrepo/api/core/model";
-import { useGetSpaces } from "@cocrepo/api/core/spaces";
+import { useGetSpacesSuspense } from "@cocrepo/api/core/spaces";
 import { SpaceListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -21,7 +21,7 @@ export default observer(function SpacesPageRoute() {
 	)
 		? (queryStates.contentLanguageCode as LanguageCode)
 		: undefined;
-	const { data: response, isLoading } = useGetSpaces({
+	const { data: response } = useGetSpacesSuspense({
 		take: queryStates.take,
 		skip: queryStates.skip,
 		search: queryStates.search || undefined,
@@ -30,9 +30,8 @@ export default observer(function SpacesPageRoute() {
 
 	return (
 		<SpaceListScreen
-			spaces={response?.data}
-			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-			isLoading={isLoading}
+			spaces={response.data ?? []}
+			totalCount={response.meta?.total ?? response.data?.length ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickCreateButton={() => {

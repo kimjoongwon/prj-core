@@ -6,17 +6,17 @@ import { SpaceSelectionSheet } from "./index";
 
 const spaces = [
 	{
-		address: "서울특별시 강남구 테헤란로 123",
+		address: "서울특별시 강남구 샘플로 123",
 		id: "gangnam",
 		name: "강남 리포머 센터",
 	},
 	{
-		address: "서울특별시 마포구 양화로 45",
+		address: "서울특별시 마포구 샘플로 45",
 		id: "hongdae",
 		name: "홍대 밸런스 스튜디오",
 	},
 	{
-		address: "서울특별시 성동구 왕십리로 88",
+		address: "서울특별시 성동구 샘플로 88",
 		id: "seongsu",
 		name: "성수 모션 랩",
 	},

@@ -22,17 +22,17 @@ const baseScenario = {
 		role: "SPACE_MANAGER",
 		tenantId: "101",
 		spaceId: "201",
-		fitnessCenterName: "F45 강남1호",
+		fitnessCenterName: "팀핏 강남1호",
 		spaces: [
 			{
 				tenantId: "101",
 				spaceId: "201",
-				fitnessCenterName: "F45 강남1호",
+				fitnessCenterName: "팀핏 강남1호",
 			},
 			{
 				tenantId: "102",
 				spaceId: "202",
-				fitnessCenterName: "스포애니 홍대",
+				fitnessCenterName: "스포라운지 홍대",
 			},
 		],
 		abilities: ["read:user"],
@@ -67,9 +67,9 @@ describe("PlanningPreviewFrame", () => {
 			</PlanningPreviewFrame>,
 		);
 
-		fireEvent.click(screen.getByRole("button", { name: /F45 강남1호/ }));
+		fireEvent.click(screen.getByRole("button", { name: /팀핏 강남1호/ }));
 		fireEvent.click(
-			await screen.findByRole("option", { name: "스포애니 홍대" }),
+			await screen.findByRole("option", { name: "스포라운지 홍대" }),
 		);
 
 		expect(onSpaceChange).toHaveBeenCalledWith(
@@ -78,7 +78,7 @@ describe("PlanningPreviewFrame", () => {
 				spaceId: "202",
 			}),
 		);
-		expect(screen.getByRole("button", { name: /스포애니 홍대/ })).toBeTruthy();
+		expect(screen.getByRole("button", { name: /스포라운지 홍대/ })).toBeTruthy();
 	});
 
 	it("Given 시나리오가 있을 때, When 프레임을 렌더링하면, Then preview 영역을 표시한다", () => {

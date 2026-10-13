@@ -36,7 +36,6 @@ const defaultArgs = {
 	],
 	hasSelectedSpace: false,
 	isCreatingFolder: false,
-	isLoading: false,
 	isOpen: false,
 	isRemoving: false,
 	isRemovingFolder: false,
@@ -54,11 +53,6 @@ const defaultArgs = {
 	selectedAssetId: "asset-1",
 	setQueryStates: (..._args: never[]) => undefined,
 	totalCount: 12,
-};
-
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
 };
 
 const emptyStateArgs = {
@@ -83,10 +77,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs as never,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs as never,

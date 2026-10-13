@@ -1,8 +1,10 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { AbilityListScreen } from "./AbilityListScreen";
 
-const abilityFixtures: NonNullable<ComponentProps<typeof AbilityListScreen>["abilities"]> = [
+const abilityFixtures: NonNullable<
+	ComponentProps<typeof AbilityListScreen>["abilities"]
+> = [
 	{
 		actionId: 1n,
 		action: {
@@ -123,7 +125,6 @@ const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 		selectedInverted: "",
 		selectedSubjectId: "",
 	},
-	isLoading: false,
 	onChangeActionId: () => undefined,
 	onChangeInverted: () => undefined,
 	onChangeSearchTerm: () => undefined,
@@ -157,11 +158,6 @@ const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 		},
 	],
 	totalCount: 3,
-};
-
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
 };
 
 const filteredArgs = {
@@ -226,10 +222,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const Filtered: Story = {
 	args: filteredArgs,
