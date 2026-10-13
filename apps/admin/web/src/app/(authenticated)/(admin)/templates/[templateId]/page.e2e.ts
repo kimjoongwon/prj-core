@@ -51,21 +51,30 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 			await page.goto(`./templates/${templateId}`);
 			await page.waitForLoadState("networkidle");
 
-			// Then: 현재 활성 상태 (기본값 true) 확인
-			const toggle = page.getByRole("button", { name: "활성", exact: true });
-			await expect(toggle).toBeVisible();
+			// Then: 현재 활성 상태 (기본값 true)가 상태 Chip으로 표시되는지 확인
+			// 상세 페이지의 상태 정보 영역은 활성 상태를 Chip(활성/비활성)으로
+			// 보여주고 토글은 "상태 변경" 버튼이 담당한다(8f508f6e7 Chip 체계).
+			const activeStatusChip = page.getByText("활성", { exact: true });
+			await expect(activeStatusChip).toBeVisible();
 
-			// When: 토글 클릭 (PATCH 응답 대기)
+			// When: 상태 변경 버튼 클릭 (PATCH 응답 대기)
+			const toggleButton = page.getByRole("button", {
+				name: "상태 변경",
+				exact: true,
+			});
 			const toggleResponse = page.waitForResponse(
 				(resp) =>
 					resp.url().includes("/toggle-status") &&
 					resp.request().method() === "PATCH",
 			);
-			await toggle.press("Space");
+			await toggleButton.click();
 			const toggleResp = await toggleResponse;
 
 			// Then: 200 OK 응답 확인
 			expect(toggleResp.status()).toBe(200);
+
+			// And: 무효화된 상세 조회가 재수행되어 Chip이 비활성으로 전환된다
+			await expect(page.getByText("비활성", { exact: true })).toBeVisible();
 
 			// Cleanup: 템플릿 삭제
 			await page.request.delete(

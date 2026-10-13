@@ -23,22 +23,22 @@ test.describe("IDP 계정 목록 페이지", () => {
 		test("데이터 그리드 컬럼이 표시되어야 한다", async ({ page }) => {
 			// Then: DataGrid 컬럼 헤더 확인
 			await expect(
-				page.getByRole("columnheader", { name: /^이름 / }),
+				page.getByRole("columnheader", { name: "이름", exact: true }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("columnheader", { name: /^이메일 / }),
+				page.getByRole("columnheader", { name: "이메일", exact: true }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("columnheader", { name: /^활성 / }),
+				page.getByRole("columnheader", { name: "활성", exact: true }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("columnheader", { name: /^잠금 상태 / }),
+				page.getByRole("columnheader", { name: "잠금 상태", exact: true }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("columnheader", { name: /^실패 횟수 / }),
+				page.getByRole("columnheader", { name: "실패 횟수", exact: true }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("columnheader", { name: /^최종 로그인 / }),
+				page.getByRole("columnheader", { name: "최종 로그인", exact: true }),
 			).toBeVisible();
 		});
 

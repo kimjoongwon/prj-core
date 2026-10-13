@@ -13,6 +13,8 @@ export interface DataGridTableContainerProps<TData extends { id: Key }> {
 	};
 }
 
+const DATA_GRID_TABLE_LABEL = "데이터 테이블";
+
 function DataGridTableContainerView<TData extends { id: Key }>({
 	children,
 	table,
@@ -33,6 +35,7 @@ function DataGridTableContainerView<TData extends { id: Key }>({
 			<div className="overflow-hidden rounded border border-border bg-surface">
 				<div className="overflow-x-auto">
 					<table
+						aria-label={DATA_GRID_TABLE_LABEL}
 						className="w-full table-fixed border-collapse text-left"
 						style={{ minWidth: minimumTableWidth }}
 					>

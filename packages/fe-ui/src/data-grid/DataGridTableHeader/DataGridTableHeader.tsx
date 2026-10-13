@@ -53,11 +53,13 @@ export const DataGridTableHeader = <T extends DataGridRow>({
 						const label = header.isPlaceholder
 							? null
 							: handlers.getHeaderLabel(header);
+						const accessibleLabel = handlers.getHeaderAccessibleLabel(header);
 						const sortDirection = header.column.getIsSorted() || null;
 						const isSortable = header.column.getCanSort();
 						return (
 							<th
 								key={header.id}
+								aria-label={accessibleLabel ?? undefined}
 								colSpan={header.colSpan}
 								rowSpan={header.rowSpan}
 								scope="col"
