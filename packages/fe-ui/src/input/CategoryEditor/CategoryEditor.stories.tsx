@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { createDataGridState } from "../../data-grid";
+import { clearChanges, getChangesSnapshot } from "../../data-grid/useHandlers";
 import {
 	CategoryEditor,
 	type CategoryEditorDataGridState,
 	type CategoryEditorRow,
 } from "./CategoryEditor";
-import { DataGridChangesState, DataGridState } from "../../data-grid";
 
 const meta = {
 	title: "input/CategoryEditor",
@@ -29,26 +30,60 @@ type Story = StoryObj<typeof meta>;
 const editableApiRows: CategoryEditorRow[] = [
 	{ id: "category-role", name: "운영자 역할", parentId: null, sortOrder: 0 },
 	{ id: "category-space", name: "공용 공간", parentId: null, sortOrder: 1 },
-	{ id: "category-space-team", name: "팀 공간", parentId: "category-space", sortOrder: 0 },
-	{ id: "category-space-team-admin", name: "관리자 공간", parentId: "category-space-team", sortOrder: 0 },
-	{ id: "category-space-personal", name: "개인 공간", parentId: "category-space", sortOrder: 1 },
+	{
+		id: "category-space-team",
+		name: "팀 공간",
+		parentId: "category-space",
+		sortOrder: 0,
+	},
+	{
+		id: "category-space-team-admin",
+		name: "관리자 공간",
+		parentId: "category-space-team",
+		sortOrder: 0,
+	},
+	{
+		id: "category-space-personal",
+		name: "개인 공간",
+		parentId: "category-space",
+		sortOrder: 1,
+	},
 	{ id: "category-asset", name: "자산", parentId: null, sortOrder: 2 },
 ];
 
 const readOnlyApiRows: CategoryEditorRow[] = [
 	{ id: "category-user", name: "사용자", parentId: null, sortOrder: 0 },
 	{ id: "category-space", name: "공용 공간", parentId: null, sortOrder: 1 },
-	{ id: "category-space-team", name: "팀 공간", parentId: "category-space", sortOrder: 0 },
-	{ id: "category-space-team-admin", name: "관리자 공간", parentId: "category-space-team", sortOrder: 0 },
-	{ id: "category-space-personal", name: "개인 공간", parentId: "category-space", sortOrder: 1 },
+	{
+		id: "category-space-team",
+		name: "팀 공간",
+		parentId: "category-space",
+		sortOrder: 0,
+	},
+	{
+		id: "category-space-team-admin",
+		name: "관리자 공간",
+		parentId: "category-space-team",
+		sortOrder: 0,
+	},
+	{
+		id: "category-space-personal",
+		name: "개인 공간",
+		parentId: "category-space",
+		sortOrder: 1,
+	},
 ];
 
 function createCategoryDataGridState(): CategoryEditorDataGridState {
-	return new DataGridState({
-		queryStates: { skip: 0, take: 20 },
+	return createDataGridState<CategoryEditorRow>({
+		query: { skip: 0, take: 20 },
 		setQueryStates: async () => new URLSearchParams(),
-		changes: new DataGridChangesState(),
-	}) as CategoryEditorDataGridState;
+		toolbar: {},
+		groupPanel: { show: "never" },
+		table: {
+			columns: [],
+		},
+	});
 }
 
 const CategoryEditorStory = observer(function CategoryEditorStory({
@@ -58,13 +93,13 @@ const CategoryEditorStory = observer(function CategoryEditorStory({
 	initialRows: CategoryEditorRow[];
 	isReadOnly?: boolean;
 }) {
-	// API 응답 원본은 rows에만 두고, 저장 전 변경은 dataGridState.changes에 둡니다.
+	// API 응답 원본은 rows에만 두고, 저장 전 변경은 dataGridState에 둡니다.
 	const [rows, setRows] = useState<CategoryEditorRow[]>(() => [...initialRows]);
 	const [dataGridState] = useState(createCategoryDataGridState);
-	const changesSnapshot = dataGridState.changes.toJSON<CategoryEditorRow>();
+	const changesSnapshot = getChangesSnapshot(dataGridState);
 
 	const saveSnapshot = () => {
-		const snapshot = dataGridState.changes.toJSON<CategoryEditorRow>();
+		const snapshot = getChangesSnapshot(dataGridState);
 		const updatedById = new Map(
 			snapshot.updated.map((update) => [update.id, update.changes]),
 		);
@@ -77,7 +112,7 @@ const CategoryEditorStory = observer(function CategoryEditorStory({
 			...snapshot.created,
 		]);
 		// 실제 Feature/Screen도 서버 저장 성공 후 같은 경계에서 snapshot을 비웁니다.
-		dataGridState.changes.clear();
+		clearChanges(dataGridState);
 	};
 
 	return (
@@ -117,7 +152,7 @@ export const Editable: Story = {
 		docs: {
 			description: {
 				story:
-					"API 원본 rows를 렌더링하고, 새 행은 changes.addRow, 삭제는 deleteRow, inline edit는 changes.updated에 기록합니다. 변경 저장 시 snapshot을 rows에 반영한 뒤 changes.clear를 호출합니다.",
+					"API 원본 rows를 렌더링하고, 새 행은 created, 삭제는 deleted, inline edit는 updated에 기록합니다. 변경 저장 시 getChangesSnapshot 결과를 rows에 반영한 뒤 clearChanges를 호출합니다.",
 			},
 		},
 	},

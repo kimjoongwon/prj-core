@@ -2,21 +2,21 @@
 
 import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
 import {
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 import { buildOidcClientTableColumns } from "../../data-grid/columns";
 import { Button } from "../../input/Button/Button";
 
@@ -31,16 +31,15 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const idpConsoleOidcClientsPageQueryInputs = [...leftInputs];
-export interface OidcClientListScreenQueryStates extends DataGridQueryStates {
+export interface OidcClientListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
 }
 export type OidcClientListScreenSetQueryStates = DataGridSetQueryStates;
 export interface OidcClientListScreenProps {
-	oidcClients?: OidcClientDto[];
+	oidcClients: OidcClientDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: OidcClientListScreenQueryStates;
 	setQueryStates: OidcClientListScreenSetQueryStates;
 	onClickCreateButton: () => void;
@@ -50,22 +49,24 @@ export const OidcClientListScreen = observer(
 	({
 		oidcClients,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
 	}: OidcClientListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
-					queryStates,
+				createDataGridState<OidcClientDto>({
+					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: oidcClients,
+						columns: oidcClientTableColumns,
+					},
 				}),
+			[oidcClients, totalCount, queryStates, setQueryStates],
 		);
-		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const oidcClientRows = oidcClients ?? [];
 		return (
 			<VStack>
 				<Screen.Header
@@ -84,22 +85,7 @@ export const OidcClientListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "OidcClient",
-										columns: oidcClientTableColumns,
-										emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
-									},
-								}}
-								rows={oidcClientRows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

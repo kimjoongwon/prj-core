@@ -2,13 +2,13 @@
 
 import type { AuthAuditLogDto } from "@cocrepo/api/idp/auth";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
 import {
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	HStack,
 	Screen,
 	Section,
@@ -18,8 +18,8 @@ import {
 } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
 import { CheckCircle, Lock, XCircle } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type ReactNode, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { type ReactNode, useMemo } from "react";
 import { buildAuthAuditLogTableColumns } from "../../data-grid/columns";
 
 /** 좌측 입력 정의 */
@@ -31,7 +31,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const idpConsoleAuthAuditLogsPageQueryInputs = [...leftInputs];
-export interface AuthAuditLogListScreenQueryStates extends DataGridQueryStates {
+export interface AuthAuditLogListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	email: string;
@@ -44,9 +44,8 @@ export interface AuthAuditLogListScreenStats {
 	totalCount: number;
 }
 export interface AuthAuditLogListScreenProps {
-	logs?: AuthAuditLogDto[];
+	logs: AuthAuditLogDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: AuthAuditLogListScreenQueryStates;
 	setQueryStates: AuthAuditLogListScreenSetQueryStates;
 	stats?: AuthAuditLogListScreenStats;
@@ -120,22 +119,24 @@ export const AuthAuditLogListScreen = observer(
 	({
 		logs,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		stats,
 	}: AuthAuditLogListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
-					queryStates,
+				createDataGridState<AuthAuditLogDto>({
+					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: logs,
+						columns: authAuditLogTableColumns,
+					},
 				}),
+			[logs, totalCount, queryStates, setQueryStates],
 		);
-		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const logRows = logs ?? [];
 		return (
 			<VStack>
 				<Screen.Header
@@ -173,22 +174,7 @@ export const AuthAuditLogListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "AuthAuditLog",
-										columns: authAuditLogTableColumns,
-										emptyMessage: "조회된 감사 로그가 없습니다.",
-									},
-								}}
-								rows={logRows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

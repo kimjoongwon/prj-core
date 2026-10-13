@@ -2,22 +2,22 @@
 
 import type { TemplateDto } from "@cocrepo/api/core/templates";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
 import {
 	buildTemplateTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
 import { Plus } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 import { Button } from "../../input/Button/Button";
 
 const leftInputs: InputConfig[] = [
@@ -28,7 +28,7 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const adminTemplatesPageQueryInputs = [...leftInputs];
-export interface TemplateListScreenQueryStates extends DataGridQueryStates {
+export interface TemplateListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -36,9 +36,8 @@ export interface TemplateListScreenQueryStates extends DataGridQueryStates {
 }
 export type TemplateListScreenSetQueryStates = DataGridSetQueryStates;
 export interface TemplateListScreenProps {
-	templates?: TemplateDto[];
+	templates: TemplateDto[];
 	totalCount: number;
-	isLoading: boolean;
 	isToggling: boolean;
 	queryStates: TemplateListScreenQueryStates;
 	setQueryStates: TemplateListScreenSetQueryStates;
@@ -46,50 +45,40 @@ export interface TemplateListScreenProps {
 	onClickTemplateCode: (templateId: bigint) => void;
 	onToggleTemplateStatusSwitch: (templateId: bigint) => Promise<void>;
 }
-function TemplatesScreenFallback() {
-	return (
-		<VStack gap="page">
-			<Screen.Header
-				title="메시지 템플릿"
-				description="시스템에 등록된 메시지 템플릿을 관리합니다."
-			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>{null}</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-}
 export const TemplateListScreen = observer(
 	({
 		templates,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
 		onClickTemplateCode,
 		onToggleTemplateStatusSwitch,
 	}: TemplateListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
-					queryStates,
+				createDataGridState<TemplateDto>({
+					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: templates,
+						columns: buildTemplateTableColumns<TemplateDto>({
+							onClickTemplateCode,
+							onToggleTemplateStatusSwitch,
+						}),
+					},
 				}),
+			[
+				templates,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				onClickTemplateCode,
+				onToggleTemplateStatusSwitch,
+			],
 		);
-		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const templateRows = templates ?? [];
-		const columns = buildTemplateTableColumns<TemplateDto>({
-			onClickTemplateCode,
-			onToggleTemplateStatusSwitch,
-		});
-		if (isLoading) {
-			return <TemplatesScreenFallback />;
-		}
 		return (
 			<VStack gap="page">
 				<Screen.Header
@@ -108,21 +97,7 @@ export const TemplateListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "Template",
-										columns,
-										emptyMessage: "등록된 템플릿이 없습니다.",
-									},
-								}}
-								rows={templateRows}
-								totalCount={totalCount}
-								state={gridState}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

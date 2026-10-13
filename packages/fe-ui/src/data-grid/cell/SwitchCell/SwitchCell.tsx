@@ -1,10 +1,11 @@
 "use client";
 
-import { makeAutoObservable } from "mobx";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observable } from "mobx";
+import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import { Switch } from "../../../input/Switch/Switch";
 import type { SwitchProps } from "../../../input/Switch/Switch.props";
+import { useHandlers } from "./useHandlers";
 
 export interface SwitchCellProps
 	extends Omit<
@@ -32,32 +33,10 @@ const ALIGN_CLASS_NAME: Record<
 	end: "justify-end",
 };
 
-class SwitchCellState {
+/** SwitchCell이 보유하는 낙관적 선택값과 저장 진행 상태입니다. */
+export interface SwitchCellState {
 	optimisticSelected: boolean;
-	isLoading = false;
-
-	constructor(isSelected: boolean) {
-		this.optimisticSelected = isSelected;
-		makeAutoObservable(this, {}, { autoBind: true });
-	}
-
-	syncSelection(isSelected: boolean) {
-		this.optimisticSelected = isSelected;
-	}
-
-	async toggle(nextSelected: boolean, onToggle: SwitchCellProps["onToggle"]) {
-		const previousSelected = this.optimisticSelected;
-		this.optimisticSelected = nextSelected;
-		this.isLoading = true;
-
-		try {
-			await onToggle(nextSelected);
-		} catch {
-			this.optimisticSelected = previousSelected;
-		} finally {
-			this.isLoading = false;
-		}
-	}
+	isLoading: boolean;
 }
 
 /**
@@ -73,16 +52,18 @@ export const SwitchCell = observer(function SwitchCell({
 	unselectedLabel = "활성화",
 	...switchProps
 }: SwitchCellProps) {
-	const state = useLocalObservable(() => new SwitchCellState(isSelected));
+	const [state] = useState(() =>
+		observable<SwitchCellState>(
+			{ optimisticSelected: isSelected, isLoading: false },
+			undefined,
+			{ name: "SwitchCellState" },
+		),
+	);
+	const handlers = useHandlers(state);
 
 	useEffect(() => {
-		state.syncSelection(isSelected);
-	}, [isSelected, state]);
-
-	const handleToggle = async (nextSelected: boolean) => {
-		if (isDisabled || state.isLoading) return;
-		await state.toggle(nextSelected, onToggle);
-	};
+		handlers.syncSelection(isSelected);
+	}, [isSelected, handlers.syncSelection]);
 
 	return (
 		<div className={`flex w-full ${ALIGN_CLASS_NAME[align]}`}>
@@ -91,7 +72,7 @@ export const SwitchCell = observer(function SwitchCell({
 				size={size}
 				isSelected={state.optimisticSelected}
 				isDisabled={isDisabled || state.isLoading}
-				onValueChange={handleToggle}
+				onValueChange={handlers.getToggleHandler(onToggle, isDisabled)}
 				aria-label={state.optimisticSelected ? selectedLabel : unselectedLabel}
 			/>
 		</div>

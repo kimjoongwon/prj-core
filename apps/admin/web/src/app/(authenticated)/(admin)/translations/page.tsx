@@ -5,7 +5,7 @@ import {
 	getGetTranslationsQueryKey,
 	useCreateTranslation,
 	useDeleteTranslation,
-	useGetTranslations,
+	useGetTranslationsSuspense,
 	useInvalidateAllTranslationCache,
 	useInvalidateTranslationCache,
 	useUpdateTranslation,
@@ -34,11 +34,7 @@ export default observer(function TranslationsPageRoute() {
 		isTranslated: parseAsString.withDefault(""),
 	});
 	const queryParams = getTranslationsParams(queryStates);
-	const {
-		data: response,
-		isLoading,
-		isFetching,
-	} = useGetTranslations(queryParams);
+	const { data: response } = useGetTranslationsSuspense(queryParams);
 	const createMutation = useCreateTranslation();
 	const updateMutation = useUpdateTranslation();
 	const deleteMutation = useDeleteTranslation();
@@ -141,9 +137,8 @@ export default observer(function TranslationsPageRoute() {
 
 	return (
 		<StaticTranslationListScreen
-			translations={response?.data}
-			totalCount={response?.meta?.total ?? 0}
-			isLoading={isLoading || isFetching}
+			translations={response.data ?? []}
+			totalCount={response.meta?.total ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onCreateTranslation={onCreateTranslation}

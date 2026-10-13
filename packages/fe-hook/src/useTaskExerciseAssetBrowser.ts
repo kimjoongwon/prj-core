@@ -1,11 +1,11 @@
 "use client";
 
 import { type AssetDto, useGetAssetById } from "@cocrepo/api/assets";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { useState } from "react";
 import {
-	type AssetBrowserBindings,
 	type AssetBrowserNotify,
-	useAssetBrowser,
+	type UseAssetBrowserOptions,
 } from "./useAssetBrowser";
 import { isWireId } from "./wire-id";
 
@@ -21,7 +21,7 @@ export interface UseTaskExerciseAssetBrowserProps {
 
 export interface UseTaskExerciseAssetBrowserReturn {
 	activeAssetSlot: TaskAssetSlot;
-	assetBrowser: AssetBrowserBindings;
+	assetBrowserOptions: UseAssetBrowserOptions;
 	assetBrowserTitle: string;
 	assetBrowserDescription: string;
 	selectedAssetId?: string;
@@ -43,6 +43,10 @@ export function useTaskExerciseAssetBrowser({
 	onAssetBrowserNotify,
 }: UseTaskExerciseAssetBrowserProps): UseTaskExerciseAssetBrowserReturn {
 	const [activeAssetSlot, setActiveAssetSlot] = useState<TaskAssetSlot>(null);
+	const [, setAssetQueryStates] = useQueryStates({
+		search: parseAsString.withDefault(""),
+		skip: parseAsInteger.withDefault(0),
+	});
 	const { data: selectedImageAssetResponse } = useGetAssetById(imageFileId, {
 		query: {
 			enabled: imageFileId.trim().length > 0,
@@ -53,8 +57,7 @@ export function useTaskExerciseAssetBrowser({
 			enabled: videoFileId.trim().length > 0,
 		},
 	});
-	const assetBrowser = useAssetBrowser({
-		enabled: activeAssetSlot !== null,
+	const assetBrowserOptions: UseAssetBrowserOptions = {
 		forcedKind:
 			activeAssetSlot === "image"
 				? "IMAGE"
@@ -79,11 +82,11 @@ export function useTaskExerciseAssetBrowser({
 			}
 		},
 		onNotify: onAssetBrowserNotify,
-	});
+	};
 
 	const onOpenAssetBrowser = (slot: Exclude<TaskAssetSlot, null>) => {
 		setActiveAssetSlot(slot);
-		void assetBrowser.setQueryStates({
+		void setAssetQueryStates({
 			search: "",
 			skip: 0,
 		});
@@ -107,7 +110,7 @@ export function useTaskExerciseAssetBrowser({
 
 	return {
 		activeAssetSlot,
-		assetBrowser,
+		assetBrowserOptions,
 		assetBrowserTitle:
 			activeAssetSlot === "image"
 				? "이미지 에셋 선택"

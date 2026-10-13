@@ -1,7 +1,7 @@
 "use client";
 
 import type { AssetKind, AssetStatus } from "@cocrepo/api/assets";
-import type { DataGridColumnConfig } from "@cocrepo/type";
+import type { ColumnDef } from "@tanstack/react-table";
 import {
 	ChipCell,
 	DateTimeCell,
@@ -82,23 +82,15 @@ type PresetColumnKey = keyof typeof COLUMN_LABELS;
 
 /**
  * 서로 다른 accessor 값 타입을 가진 컬럼을 한 배열에 담는 경계입니다.
- * 개별 컬럼은 `DataGridColumnConfig<TData, TValue>`를 그대로 유지하고,
+ * 개별 컬럼은 TanStack `ColumnDef<TData, TValue>`를 그대로 유지하고,
  * 컬럼 모음에서만 TanStack의 heterogeneous ColumnDef 규칙을 따릅니다.
  */
-type HeterogeneousDataGridColumnConfig<TData> = DataGridColumnConfig<
-	TData,
-	// biome-ignore lint/suspicious/noExplicitAny: TanStack heterogeneous ColumnDef 배열의 TValue 경계입니다.
-	any
->;
-
-type HeterogeneousDataGridColumns<TData> =
-	HeterogeneousDataGridColumnConfig<TData>[];
+// biome-ignore lint/suspicious/noExplicitAny: TanStack ColumnDef is invariant in TValue for heterogeneous columns.
+type HeterogeneousDataGridColumns<TData> = ColumnDef<TData, any>[];
 
 export type ColumnOverrides<TData, TValue = unknown> = Partial<
-	Omit<DataGridColumnConfig<TData, TValue>, "field">
-> & {
-	accessorKey?: keyof TData | string;
-};
+	ColumnDef<TData, TValue>
+>;
 
 type NameColumnOverrides<TData> = ColumnOverrides<TData, string | null> & {
 	fieldKey?: "name" | "actionKey" | "subjectKey" | "roleKey";
@@ -114,7 +106,7 @@ type CreatedAtColumnOverrides<TData> = ColumnOverrides<TData, Date | null> & {
 
 /** DataGrid 컬럼 객체를 그대로 반환해 제네릭 정보를 보존합니다. */
 export function defineColumn<TData, TValue = unknown>(
-	column: DataGridColumnConfig<TData, TValue>,
+	column: ColumnDef<TData, TValue>,
 ) {
 	return column;
 }
@@ -138,10 +130,10 @@ export function buildColumnsWithDefaultCreatedAt<
 >(
 	leading: TLeading,
 	trailing: TTrailing = [] as unknown as TTrailing,
-): [...TLeading, DataGridColumnConfig<TData>, ...TTrailing] {
+): [...TLeading, ColumnDef<TData, any>, ...TTrailing] {
 	return [...leading, createCreatedAtColumn<TData>(), ...trailing] as [
 		...TLeading,
-		DataGridColumnConfig<TData>,
+		ColumnDef<TData, any>,
 		...TTrailing,
 	];
 }
@@ -153,12 +145,11 @@ export function createPresetColumn<TData, TValue = unknown>(
 		accessorKey?: keyof TData | string;
 	} = {},
 ) {
-	const { label = COLUMN_LABELS[fieldKey], accessorKey, ...rest } = overrides;
+	const { header = COLUMN_LABELS[fieldKey], ...rest } = overrides;
 
 	return defineColumn<TData, TValue>({
-		field: fieldKey,
-		label,
-		...(accessorKey ? { accessorKey } : {}),
+		accessorKey: fieldKey,
+		header,
 		...rest,
 	});
 }
@@ -169,12 +160,12 @@ export function createNameColumn<TData>(
 ) {
 	const {
 		fieldKey = "name",
-		accessorKey,
-		label = COLUMN_LABELS[fieldKey],
+		accessorKey = fieldKey,
+		header = COLUMN_LABELS[fieldKey],
 		nameVariant = "plain",
 		size = nameVariant === "plain" ? 150 : 200,
 		onClickName,
-		isRequired = true,
+		enableHiding = false,
 		cell,
 		...rest
 	} = overrides;
@@ -197,10 +188,10 @@ export function createNameColumn<TData>(
 				));
 
 	return createPresetColumn<TData, string | null>(fieldKey, {
-		label,
-		accessorKey,
+		header,
+		accessorKey: String(accessorKey),
 		size,
-		isRequired,
+		enableHiding,
 		cell: resolvedCell,
 		...rest,
 	});
@@ -211,13 +202,13 @@ export function createDisplayNameColumn<TData>(
 	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.displayName,
+		header = COLUMN_LABELS.displayName,
 		size = 180,
 		cell = ({ getValue }) => <DefaultCell value={getValue()} />,
 		...rest
 	} = overrides;
 	return createPresetColumn<TData, string | null>("displayName", {
-		label,
+		header,
 		size,
 		cell,
 		...rest,
@@ -229,13 +220,13 @@ export function createGroupColumn<TData>(
 	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.group,
+		header = COLUMN_LABELS.group,
 		size = 160,
 		cell = ({ getValue }) => <DefaultCell value={getValue()} />,
 		...rest
 	} = overrides;
 	return createPresetColumn<TData, string | null>("group", {
-		label,
+		header,
 		size,
 		cell,
 		...rest,
@@ -247,13 +238,13 @@ export function createLabelColumn<TData>(
 	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.label,
+		header = COLUMN_LABELS.label,
 		size = 150,
 		cell = ({ getValue }) => <DefaultCell value={getValue()} />,
 		...rest
 	} = overrides;
 	return createPresetColumn<TData, string | null>("label", {
-		label,
+		header,
 		size,
 		cell,
 		...rest,
@@ -265,7 +256,7 @@ export function createEmailColumn<TData>(
 	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.email,
+		header = COLUMN_LABELS.email,
 		size = 200,
 		cell = ({ getValue }) => (
 			<DefaultCell value={getValue()} tone="muted" truncate />
@@ -273,7 +264,7 @@ export function createEmailColumn<TData>(
 		...rest
 	} = overrides;
 	return createPresetColumn<TData, string | null>("email", {
-		label,
+		header,
 		size,
 		cell,
 		...rest,
@@ -285,13 +276,13 @@ export function createPhoneColumn<TData>(
 	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.phone,
+		header = COLUMN_LABELS.phone,
 		size = 140,
 		cell = ({ getValue }) => <PhoneCell value={getValue()} />,
 		...rest
 	} = overrides;
 	return createPresetColumn<TData, string | null>("phone", {
-		label,
+		header,
 		size,
 		cell,
 		...rest,
@@ -303,7 +294,7 @@ export function createDescriptionColumn<TData>(
 	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.description,
+		header = COLUMN_LABELS.description,
 		size = 250,
 		cell = ({ getValue }) => (
 			<DefaultCell value={getValue()} tone="muted" lineClamp={1} />
@@ -311,7 +302,7 @@ export function createDescriptionColumn<TData>(
 		...rest
 	} = overrides;
 	return createPresetColumn<TData, string | null>("description", {
-		label,
+		header,
 		size,
 		cell,
 		...rest,
@@ -325,13 +316,13 @@ export function createCreatedAtColumn<TData>(
 	const {
 		fieldKey = "createdAt",
 		accessorKey,
-		label = COLUMN_LABELS[fieldKey],
+		header = COLUMN_LABELS[fieldKey],
 		size = 150,
 		cell = ({ getValue }) => <DateTimeCell value={getValue()} />,
 		...rest
 	} = overrides;
 	return createPresetColumn<TData, Date | null>(fieldKey, {
-		label,
+		header,
 		accessorKey,
 		size,
 		cell,
@@ -344,9 +335,8 @@ export function createRemovedAtStatusColumn<
 	TData extends { removedAt?: Date | null },
 >(overrides: ColumnOverrides<TData> = {}) {
 	const {
-		label = COLUMN_LABELS.status,
+		header = COLUMN_LABELS.status,
 		size = 120,
-		align = "center",
 		cell = ({ row }) => (
 			<ChipCell
 				label={row.original.removedAt ? "탈퇴대기" : "활성"}
@@ -356,10 +346,9 @@ export function createRemovedAtStatusColumn<
 		...rest
 	} = overrides;
 	return defineColumn<TData>({
-		field: "removedAt",
-		label,
+		accessorKey: "removedAt",
+		header,
 		size,
-		align,
 		cell,
 		...rest,
 	});
@@ -370,15 +359,13 @@ export function createStatusColumn<TData>(
 	overrides: ColumnOverrides<TData> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.status,
+		header = COLUMN_LABELS.status,
 		size = 120,
-		align = "center",
 		...rest
 	} = overrides;
 	return createPresetColumn<TData>("status", {
-		label,
+		header,
 		size,
-		align,
 		...rest,
 	});
 }
@@ -388,15 +375,13 @@ export function createIsActiveColumn<TData>(
 	overrides: ColumnOverrides<TData> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.isActive,
+		header = COLUMN_LABELS.isActive,
 		size = 120,
-		align = "center",
 		...rest
 	} = overrides;
 	return createPresetColumn<TData>("isActive", {
-		label,
+		header,
 		size,
-		align,
 		...rest,
 	});
 }
@@ -406,15 +391,13 @@ export function createActionsColumn<TData>(
 	overrides: ColumnOverrides<TData> = {},
 ) {
 	const {
-		label = COLUMN_LABELS.actions,
+		header = COLUMN_LABELS.actions,
 		size = 80,
-		align = "center",
 		...rest
 	} = overrides;
 	return createPresetColumn<TData>("actions", {
-		label,
+		header,
 		size,
-		align,
 		...rest,
 	});
 }

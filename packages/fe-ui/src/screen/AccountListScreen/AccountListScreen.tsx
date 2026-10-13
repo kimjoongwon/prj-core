@@ -2,21 +2,21 @@
 
 import type { IdpAccountDto } from "@cocrepo/api/idp/idp-accounts";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
 import {
 	buildIdpAccountTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -29,16 +29,15 @@ const leftInputs: InputConfig[] = [
 	},
 ];
 export const idpConsoleAccountsPageQueryInputs = [...leftInputs];
-export interface AccountListScreenQueryStates extends DataGridQueryStates {
+export interface AccountListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
 }
 export type AccountListScreenSetQueryStates = DataGridSetQueryStates;
 export interface AccountListScreenProps {
-	accounts?: IdpAccountDto[];
+	accounts: IdpAccountDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: AccountListScreenQueryStates;
 	setQueryStates: AccountListScreenSetQueryStates;
 	onClickUnlockAccountButton: (userId: bigint) => void;
@@ -51,28 +50,33 @@ export const AccountListScreen = observer(
 	({
 		accounts,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickUnlockAccountButton,
 	}: AccountListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
-					queryStates,
+				createDataGridState<IdpAccountDto>({
+					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: accounts,
+						columns: buildIdpAccountTableColumns<IdpAccountDto>({
+							onClickUnlockAccount: (account) =>
+								onClickUnlockAccountButton(account.id),
+						}),
+					},
 				}),
+			[
+				accounts,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				onClickUnlockAccountButton,
+			],
 		);
-		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const accountRows = accounts ?? [];
-		const onClickUnlockAccount = (account: IdpAccountDto) => {
-			onClickUnlockAccountButton(account.id);
-		};
-		const columns = buildIdpAccountTableColumns<IdpAccountDto>({
-			onClickUnlockAccount,
-		});
 		return (
 			<VStack>
 				<Screen.Header
@@ -82,22 +86,7 @@ export const AccountListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "IdpAccount",
-										columns,
-										emptyMessage: "등록된 계정이 없습니다.",
-									},
-								}}
-								rows={accountRows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

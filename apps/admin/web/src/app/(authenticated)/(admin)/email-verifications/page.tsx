@@ -3,7 +3,7 @@
 import {
 	type EmailVerificationStatusType,
 	getGetEmailVerificationsQueryKey,
-	useGetEmailVerifications,
+	useGetEmailVerificationsSuspense,
 	useResendEmailVerification,
 } from "@cocrepo/api/idp/email-verifications";
 import { EmailVerificationListScreen } from "@cocrepo/ui";
@@ -28,11 +28,7 @@ export default observer(function EmailVerificationsPageRoute() {
 			? (queryStates.status as EmailVerificationStatusType)
 			: undefined,
 	};
-	const {
-		data: response,
-		isLoading,
-		isFetching,
-	} = useGetEmailVerifications(queryParams);
+	const { data: response } = useGetEmailVerificationsSuspense(queryParams);
 	const { mutateAsync: resendEmailVerification } = useResendEmailVerification({
 		mutation: {
 			onSuccess: () => {
@@ -54,9 +50,8 @@ export default observer(function EmailVerificationsPageRoute() {
 
 	return (
 		<EmailVerificationListScreen
-			verifications={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading || isFetching}
+			verifications={response.data ?? []}
+			totalCount={response.meta?.totalCount ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickResendEmailVerificationButton={(emailVerificationId) => {

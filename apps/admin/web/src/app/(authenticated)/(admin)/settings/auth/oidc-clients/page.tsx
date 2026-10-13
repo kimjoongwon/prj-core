@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetOidcClients } from "@cocrepo/api/idp/oidc-clients";
+import { useGetOidcClientsSuspense } from "@cocrepo/api/idp/oidc-clients";
 import { OidcClientListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -14,7 +14,7 @@ export default observer(function OidcClientsPageRoute() {
 		skip: parseAsInteger.withDefault(0),
 		search: parseAsString.withDefault(""),
 	});
-	const { data: response, isLoading } = useGetOidcClients({
+	const { data: response } = useGetOidcClientsSuspense({
 		take: queryStates.take,
 		skip: queryStates.skip,
 		search: queryStates.search || undefined,
@@ -22,9 +22,8 @@ export default observer(function OidcClientsPageRoute() {
 
 	return (
 		<OidcClientListScreen
-			oidcClients={response?.data}
-			totalCount={response?.meta?.totalCount ?? 0}
-			isLoading={isLoading}
+			oidcClients={response.data ?? []}
+			totalCount={response.meta?.totalCount ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickCreateButton={() => {

@@ -1,10 +1,7 @@
 "use client";
 
 import type { ServiceDocumentDto } from "@cocrepo/api/core/service-documents";
-import type {
-	DataGridQueryStates,
-	DataGridSetQueryStates,
-} from "@cocrepo/type";
+import type { DataGridQueryState, DataGridSetQueryStates } from "@cocrepo/type";
 import { ListBox, Spinner, Table } from "@heroui/react";
 import {
 	Archive,
@@ -34,7 +31,7 @@ type ServiceDocumentPlatformValue = ServiceDocumentDto["platform"];
 type ServiceDocumentStatusValue = ServiceDocumentDto["status"];
 type ServiceDocumentFormatValue = ServiceDocumentDto["format"];
 export interface ServiceDocumentListScreenQueryStates
-	extends DataGridQueryStates {
+	extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;

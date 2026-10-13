@@ -2,21 +2,21 @@
 
 import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
 import {
 	buildEmailVerificationTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
 
 const EMAIL_VERIFICATION_STATUS_OPTIONS = [
 	{
@@ -50,7 +50,7 @@ const leftInputs: InputConfig[] = [
 ];
 export const adminEmailVerificationsPageQueryInputs = [...leftInputs];
 export interface EmailVerificationListScreenQueryStates
-	extends DataGridQueryStates {
+	extends DataGridQueryState {
 	take: number;
 	skip: number;
 	email: string;
@@ -58,9 +58,8 @@ export interface EmailVerificationListScreenQueryStates
 }
 export type EmailVerificationListScreenSetQueryStates = DataGridSetQueryStates;
 export interface EmailVerificationListScreenProps {
-	verifications?: EmailVerificationDto[];
+	verifications: EmailVerificationDto[];
 	totalCount: number;
-	isLoading: boolean;
 	queryStates: EmailVerificationListScreenQueryStates;
 	setQueryStates: EmailVerificationListScreenSetQueryStates;
 	onClickResendEmailVerificationButton: (emailVerificationId: bigint) => void;
@@ -73,30 +72,33 @@ export const EmailVerificationListScreen = observer(
 	({
 		verifications,
 		totalCount,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickResendEmailVerificationButton,
 	}: EmailVerificationListScreenProps) => {
-		const gridState = useLocalObservable(
+		const gridState = useMemo(
 			() =>
-				new DataGridState({
-					queryStates,
+				createDataGridState<EmailVerificationDto>({
+					query: queryStates,
 					setQueryStates,
+					pagination: { totalCount },
+					toolbar: { leftInputs },
+					table: {
+						rows: verifications,
+						columns: buildEmailVerificationTableColumns<EmailVerificationDto>({
+							onClickResendEmailVerification: (verification) =>
+								onClickResendEmailVerificationButton(verification.id),
+						}),
+					},
 				}),
+			[
+				verifications,
+				totalCount,
+				queryStates,
+				setQueryStates,
+				onClickResendEmailVerificationButton,
+			],
 		);
-		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const rows = verifications ?? [];
-		const onClickResendEmailVerification = (
-			verification: EmailVerificationDto,
-		): void => {
-			onClickResendEmailVerificationButton(verification.id);
-		};
-		const columns = buildEmailVerificationTableColumns<EmailVerificationDto>({
-			onClickResendEmailVerification,
-		});
 		return (
 			<VStack>
 				<Screen.Header
@@ -106,22 +108,7 @@ export const EmailVerificationListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
-							<DataGrid
-								config={{
-									toolbar: {
-										leftInputs,
-									},
-									table: {
-										entity: "EmailVerification",
-										columns,
-										emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
-									},
-								}}
-								rows={rows}
-								totalCount={totalCount}
-								state={gridState}
-								isLoading={isLoading}
-							/>
+							<DataGrid state={gridState} />
 						</Section.Body>
 					</Section>
 				</SectionSurface>

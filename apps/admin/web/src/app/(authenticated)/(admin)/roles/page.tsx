@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetRoles } from "@cocrepo/api/core/roles";
+import { useGetRolesSuspense } from "@cocrepo/api/core/roles";
 import { RoleListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -13,13 +13,12 @@ export default observer(function RolesPageRoute() {
 		take: parseAsInteger.withDefault(20),
 		skip: parseAsInteger.withDefault(0),
 	});
-	const { data: response, isLoading } = useGetRoles();
+	const { data: response } = useGetRolesSuspense();
 
 	return (
 		<RoleListScreen
-			roles={response?.data}
-			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-			isLoading={isLoading}
+			roles={response.data ?? []}
+			totalCount={response.meta?.total ?? response.data?.length ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickCreateButton={() => {

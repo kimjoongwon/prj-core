@@ -2,15 +2,15 @@
 
 import type { ActionDto } from "@cocrepo/api/core/actions";
 import type {
-	DataGridQueryStates,
+	DataGridQueryState,
 	DataGridSetQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
 import {
 	Button,
 	buildActionTableColumns,
+	createDataGridState,
 	DataGrid,
-	DataGridState,
 	HStack,
 	Screen,
 	Section,
@@ -21,8 +21,8 @@ import {
 } from "@cocrepo/ui";
 import { Tabs } from "@heroui/react";
 import { KeyRound, Layers3, Plus, ShieldCheck } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { type Key, type ReactNode, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { type Key, type ReactNode, useMemo } from "react";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -60,7 +60,7 @@ const actionGroupFilters = [
 		description: "접근, 승인, 반려 같은 운영 흐름의 상태 전환에 쓰입니다.",
 	},
 ] as const;
-export interface ActionListScreenQueryStates extends DataGridQueryStates {
+export interface ActionListScreenQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -68,8 +68,7 @@ export interface ActionListScreenQueryStates extends DataGridQueryStates {
 }
 export type ActionListScreenSetQueryStates = DataGridSetQueryStates;
 export interface ActionListScreenProps {
-	actions?: ActionDto[];
-	isLoading: boolean;
+	actions: ActionDto[];
 	queryStates: ActionListScreenQueryStates;
 	setQueryStates: ActionListScreenSetQueryStates;
 	onClickCreateButton: () => void;
@@ -120,41 +119,32 @@ function paginateActions(
 export const ActionListScreen = observer(
 	({
 		actions,
-		isLoading,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
 		onClickActionRow,
 	}: ActionListScreenProps) => {
-		const gridState = useLocalObservable(
-			() =>
-				new DataGridState({
-					queryStates,
-					setQueryStates,
-				}),
-		);
-		useEffect(() => {
-			gridState.syncQuery(queryStates, setQueryStates);
-		}, [gridState, queryStates, setQueryStates]);
-		const actionRows = actions ?? [];
-		const filteredActions = filterActions(actionRows, queryStates);
-		const visibleActions = paginateActions(filteredActions, queryStates);
-		const totalCount = filteredActions.length;
-		const handleActionRowClick = (action: ActionDto) => {
-			onClickActionRow(action.id);
-		};
+		const gridState = useMemo(() => {
+			const filteredActions = filterActions(actions, queryStates);
+			return createDataGridState<ActionDto>({
+				query: queryStates,
+				setQueryStates,
+				pagination: { totalCount: filteredActions.length },
+				toolbar: { leftInputs },
+				table: {
+					rows: paginateActions(filteredActions, queryStates),
+					columns: buildActionTableColumns<ActionDto>({
+						onClickDetailButton: (action) => onClickActionRow(action.id),
+					}),
+				},
+			});
+		}, [actions, queryStates, setQueryStates, onClickActionRow]);
 		const handleActionGroupFilterChange = (group: string | null) => {
 			void setQueryStates({
 				group,
 				skip: 0,
 			});
 		};
-		const actionTableColumns = buildActionTableColumns<ActionDto>({
-			onClickDetailButton: handleActionRowClick,
-		});
-		if (isLoading) {
-			return <ActionsScreenFallback />;
-		}
 		return (
 			<VStack>
 				<Screen.Header
@@ -179,22 +169,7 @@ export const ActionListScreen = observer(
 									selectedGroup={queryStates.group}
 									onChangeGroup={handleActionGroupFilterChange}
 								/>
-								<DataGrid
-									config={{
-										toolbar: {
-											leftInputs,
-										},
-										table: {
-											entity: "Action",
-											columns: actionTableColumns,
-											onRowClick: handleActionRowClick,
-											emptyMessage: "조건에 맞는 권한 액션이 없습니다.",
-										},
-									}}
-									rows={visibleActions}
-									totalCount={totalCount}
-									state={gridState}
-								/>
+								<DataGrid state={gridState} />
 							</VStack>
 						</Section.Body>
 					</Section>
@@ -299,18 +274,3 @@ const ActionGroupFilterTabs = observer(
 		);
 	},
 );
-const ActionsScreenFallback = observer(() => {
-	return (
-		<VStack>
-			<Screen.Header
-				title="권한 액션 목록"
-				description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
-			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
-				<Section>
-					<Section.Body>{null}</Section.Body>
-				</Section>
-			</SectionSurface>
-		</VStack>
-	);
-});

@@ -7,18 +7,15 @@ import {
 	type FolderDto,
 	getGetFoldersQueryKey,
 	useCreateFolder,
-	useGetAssets,
-	useGetFolders,
+	useGetAssetsSuspense,
+	useGetFoldersSuspense,
 	useRemoveAsset,
 	useRemoveFolder,
 	useUpdateFolder,
 	useUploadAsset,
 } from "@cocrepo/api/assets";
 import { useApp } from "@cocrepo/store";
-import type {
-	DataGridQueryStates,
-	DataGridSetQueryStates,
-} from "@cocrepo/type";
+import type { DataGridQueryState, DataGridSetQueryStates } from "@cocrepo/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { isWireId } from "./wire-id";
@@ -29,7 +26,7 @@ export interface AssetBrowserFolder {
 	parentFolderId?: string | null;
 }
 
-export interface AssetBrowserQueryStates extends DataGridQueryStates {
+export interface AssetBrowserQueryStates extends DataGridQueryState {
 	take: number;
 	skip: number;
 	search: string;
@@ -65,12 +62,8 @@ export type AssetBrowserNotify = (
 ) => void;
 
 export interface AssetBrowserBindings {
-	assets?: AssetDto[];
-	totalCount: number;
-	folders: AssetBrowserFolder[];
 	queryStates: AssetBrowserQueryStates;
 	setQueryStates: DataGridSetQueryStates;
-	isLoading: boolean;
 	isSpaceReady: boolean;
 	hasSelectedSpace: boolean;
 	isRemoving: boolean;
@@ -89,34 +82,32 @@ export interface AssetBrowserBindings {
 }
 
 export interface UseAssetBrowserOptions {
-	enabled?: boolean;
 	forcedKind?: AssetKind;
 	forcedStatus?: AssetStatus;
 	onDeleteAssetSuccess?: (assetId: string) => void;
 	onNotify?: AssetBrowserNotify;
 }
 
+export interface AssetBrowserData {
+	assets?: AssetDto[];
+	totalCount: number;
+	folders: AssetBrowserFolder[];
+}
+
+export interface UseAssetBrowserDataOptions {
+	queryStates: AssetBrowserQueryStates;
+	forcedKind?: AssetKind;
+	forcedStatus?: AssetStatus;
+}
+
 /**
- * AssetBrowser feature에 필요한 조회, mutation, query-state binding을 제공합니다.
+ * 준비된 AssetBrowser feature에서 에셋과 폴더를 Suspense로 조회합니다.
  */
-export function useAssetBrowser({
-	enabled = true,
+export function useAssetBrowserData({
+	queryStates,
 	forcedKind,
 	forcedStatus,
-	onDeleteAssetSuccess,
-	onNotify,
-}: UseAssetBrowserOptions = {}): AssetBrowserBindings {
-	const queryClient = useQueryClient();
-	const app = useApp();
-	const account = app.account;
-	const [queryStates, setQueryStates] = useQueryStates({
-		take: parseAsInteger.withDefault(20),
-		skip: parseAsInteger.withDefault(0),
-		search: parseAsString.withDefault(""),
-		kind: parseAsString.withDefault(""),
-		status: parseAsString.withDefault(""),
-		folderId: parseAsString.withDefault(""),
-	});
+}: UseAssetBrowserDataOptions): AssetBrowserData {
 	const selectedFolderId =
 		typeof queryStates.folderId === "string" && queryStates.folderId
 			? queryStates.folderId
@@ -143,23 +134,37 @@ export function useAssetBrowser({
 		status: resolvedStatus,
 		folderId: selectedFolderId,
 	};
+	const { data: assetsResponse } = useGetAssetsSuspense(assetParams);
+	const { data: foldersResponse } = useGetFoldersSuspense();
+
+	return {
+		assets: assetsResponse.data,
+		totalCount: assetsResponse.meta?.total ?? 0,
+		folders: (foldersResponse.data ?? []).map(mapAssetBrowserFolder),
+	};
+}
+
+/**
+ * AssetBrowser의 공간 준비 상태, URL query와 mutation binding을 제공합니다.
+ * 조회는 준비 상태를 확인한 feature 자식이 useAssetBrowserData로 실행합니다.
+ */
+export function useAssetBrowser({
+	onDeleteAssetSuccess,
+	onNotify,
+}: UseAssetBrowserOptions = {}): AssetBrowserBindings {
+	const queryClient = useQueryClient();
+	const app = useApp();
+	const account = app.account;
+	const [queryStates, setQueryStates] = useQueryStates({
+		take: parseAsInteger.withDefault(20),
+		skip: parseAsInteger.withDefault(0),
+		search: parseAsString.withDefault(""),
+		kind: parseAsString.withDefault(""),
+		status: parseAsString.withDefault(""),
+		folderId: parseAsString.withDefault(""),
+	});
 	const isSpaceReady = account.isHydrated && account.isSelectionResolved;
 	const hasSelectedSpace = isWireId(account.currentTenantId);
-	const isQueryEnabled = isSpaceReady && hasSelectedSpace && enabled;
-
-	const { data: assetsResponse, isLoading: isLoadingAssets } = useGetAssets(
-		assetParams,
-		{
-			query: {
-				enabled: isQueryEnabled,
-			},
-		},
-	);
-	const { data: foldersResponse, isLoading: isLoadingFolders } = useGetFolders({
-		query: {
-			enabled: isQueryEnabled,
-		},
-	});
 	const removeAssetMutation = useRemoveAsset();
 	const uploadAssetMutation = useUploadAsset();
 	const createFolderMutation = useCreateFolder();
@@ -167,12 +172,8 @@ export function useAssetBrowser({
 	const removeFolderMutation = useRemoveFolder();
 
 	return {
-		assets: assetsResponse?.data,
-		totalCount: assetsResponse?.meta?.total ?? 0,
-		folders: (foldersResponse?.data ?? []).map(mapAssetBrowserFolder),
 		queryStates,
 		setQueryStates,
-		isLoading: isLoadingAssets || isLoadingFolders,
 		isSpaceReady,
 		hasSelectedSpace,
 		isRemoving: removeAssetMutation.isPending,

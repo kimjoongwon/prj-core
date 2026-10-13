@@ -2,10 +2,10 @@
 
 import {
 	type AbilityResponseDto,
-	useGetAbilities,
+	useGetAbilitiesSuspense,
 } from "@cocrepo/api/core/abilities";
-import { useGetActions } from "@cocrepo/api/core/actions";
-import { useGetSubjects } from "@cocrepo/api/core/subjects";
+import { useGetActionsSuspense } from "@cocrepo/api/core/actions";
+import { useGetSubjectsSuspense } from "@cocrepo/api/core/subjects";
 import { AbilityListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -100,14 +100,11 @@ export default observer(function AbilitiesPage() {
 		inverted: parseAsString.withDefault(""),
 	});
 
-	const { data: abilitiesResponse, isLoading: isAbilitiesLoading } =
-		useGetAbilities();
-	const { data: subjectsResponse, isLoading: isSubjectsLoading } =
-		useGetSubjects();
-	const { data: actionsResponse, isLoading: isActionsLoading } =
-		useGetActions();
+	const { data: abilitiesResponse } = useGetAbilitiesSuspense();
+	const { data: subjectsResponse } = useGetSubjectsSuspense();
+	const { data: actionsResponse } = useGetActionsSuspense();
 
-	const abilities = abilitiesResponse?.data ?? [];
+	const abilities = abilitiesResponse.data ?? [];
 	const filteredAbilities = filterAbilities(abilities, {
 		search: queryStates.search,
 		subjectId: queryStates.subjectId,
@@ -120,11 +117,11 @@ export default observer(function AbilitiesPage() {
 	);
 	const summary = buildAbilitySummary(abilities, filteredAbilities);
 
-	const subjects = (subjectsResponse?.data ?? []).map((subject) => ({
+	const subjects = (subjectsResponse.data ?? []).map((subject) => ({
 		id: subject.id,
 		label: subject.displayName || subject.name,
 	}));
-	const actions = (actionsResponse?.data ?? []).map((action) => ({
+	const actions = (actionsResponse.data ?? []).map((action) => ({
 		id: action.id,
 		label: action.displayName || action.name,
 	}));
@@ -142,7 +139,6 @@ export default observer(function AbilitiesPage() {
 				selectedActionId: queryStates.actionId,
 				selectedInverted: queryStates.inverted,
 			}}
-			isLoading={isAbilitiesLoading || isSubjectsLoading || isActionsLoading}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onChangeSearchTerm={(value) => {

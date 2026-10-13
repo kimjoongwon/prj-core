@@ -1,1 +1,5 @@
-export { SwitchCell, type SwitchCellProps } from "./SwitchCell";
+export {
+	SwitchCell,
+	type SwitchCellProps,
+	type SwitchCellState,
+} from "./SwitchCell";

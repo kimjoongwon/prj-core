@@ -1,9 +1,8 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { StaticTranslationListScreen } from "./StaticTranslationListScreen";
 
 const defaultArgs: ComponentProps<typeof StaticTranslationListScreen> = {
-	isLoading: false,
 	onCreateTranslation: () => Promise.resolve(),
 	onDeleteTranslation: () => Promise.resolve(),
 	onInvalidateAllTranslationCache: () => Promise.resolve(),
@@ -68,13 +67,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: {
-		...defaultArgs,
-		isLoading: true,
-	},
-};
 
 export const EmptyState: Story = {
 	args: {

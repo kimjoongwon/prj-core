@@ -3,7 +3,7 @@
 import {
 	getGetTasksQueryKey,
 	useDeleteTask,
-	useGetTasks,
+	useGetTasksSuspense,
 } from "@cocrepo/api/core/tasks";
 import { TaskListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
@@ -30,14 +30,13 @@ export default observer(function TasksPageRoute() {
 		spaceScope: parseAsString.withDefault(""),
 	});
 	const taskParams = getTaskParams(queryStates);
-	const { data: response, isLoading } = useGetTasks(taskParams);
+	const { data: response } = useGetTasksSuspense(taskParams);
 	const deleteMutation = useDeleteTask();
 
 	return (
 		<TaskListScreen
-			tasks={response?.data}
-			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-			isLoading={isLoading}
+			tasks={response.data ?? []}
+			totalCount={response.meta?.total ?? response.data?.length ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickCreateButton={() => {

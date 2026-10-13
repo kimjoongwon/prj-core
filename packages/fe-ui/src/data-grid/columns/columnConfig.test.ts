@@ -1,11 +1,5 @@
-import type { ColumnDef } from "@tanstack/react-table";
 import { describe, expect, it } from "vitest";
-import { DataGridColumnsState } from "../state/DataGridState";
-import {
-	getGroupingColumnIds,
-	getVisibleColumnConfigs,
-	toColumnDefs,
-} from "./columnConfig";
+import { getColumnSettingItems, getGroupableColumnItems } from "./columnConfig";
 import { buildColumns, defineColumn } from "./data-grid/dataGridFactory";
 
 type ProductRow = {
@@ -15,10 +9,10 @@ type ProductRow = {
 };
 
 const productNameColumn = defineColumn<ProductRow, string>({
-	field: "name",
-	label: "Name",
-	isRequired: true,
-	isSortable: true,
+	accessorKey: "name",
+	header: "Name",
+	enableHiding: false,
+	enableSorting: true,
 	cell: ({ getValue }) => {
 		const productName: string = getValue();
 		return productName;
@@ -26,8 +20,8 @@ const productNameColumn = defineColumn<ProductRow, string>({
 });
 
 const productStockColumn = defineColumn<ProductRow, number>({
-	field: "stock",
-	label: "Stock",
+	accessorKey: "stock",
+	header: "Stock",
 	cell: ({ getValue }) => {
 		const productStock: number = getValue();
 		return productStock;
@@ -35,9 +29,9 @@ const productStockColumn = defineColumn<ProductRow, number>({
 });
 
 const productStatusColumn = defineColumn<ProductRow, ProductRow["status"]>({
-	field: "status",
-	label: "Status",
-	enableRowGroup: true,
+	accessorKey: "status",
+	header: "Status",
+	enableGrouping: true,
 });
 
 const columns = buildColumns(
@@ -47,24 +41,14 @@ const columns = buildColumns(
 );
 
 describe("열 설정", () => {
-	it("상태로부터 표시 순서와 그룹 열 정의를 계산한다", () => {
-		const state = new DataGridColumnsState({
-			order: ["status", "name"],
-			visibility: { status: false, stock: false },
-		});
-		const visibleColumns = getVisibleColumnConfigs(columns, state);
-		const visibleColumn: (typeof columns)[number] | undefined =
-			visibleColumns[0];
-		expect(visibleColumns.map((column) => column.field)).toEqual(["name"]);
-		expect(
-			getGroupingColumnIds(columns, state, { groupBy: ["status"] }),
-		).toEqual(["status"]);
-
-		const columnDefs: ColumnDef<ProductRow, unknown>[] = toColumnDefs(
-			columns,
-			state,
-		);
-		expect(columnDefs[0]?.meta?.isSortable).toBe(true);
-		expect(visibleColumn).toBe(productNameColumn);
+	it("TanStack 컬럼 정의에 컬럼 정책을 반영한다", () => {
+		const columnDefs = columns;
+		expect(columnDefs[0]?.enableSorting).toBe(true);
+		expect(getColumnSettingItems(columnDefs)[0]?.isRequired).toBe(true);
+		expect(getGroupableColumnItems(columnDefs)).toEqual([
+			{ id: "name", label: "Name" },
+			{ id: "stock", label: "Stock" },
+			{ id: "status", label: "Status" },
+		]);
 	});
 });

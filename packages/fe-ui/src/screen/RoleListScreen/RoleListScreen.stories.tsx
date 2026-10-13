@@ -1,9 +1,8 @@
-import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentProps } from "react";
 import { RoleListScreen } from "./RoleListScreen";
 
 const defaultArgs: ComponentProps<typeof RoleListScreen> = {
-	isLoading: false,
 	onClickCreateButton: () => undefined,
 	queryStates: { page: 1, take: 10, skip: 0, search: "" },
 	roles: [
@@ -34,11 +33,6 @@ const defaultArgs: ComponentProps<typeof RoleListScreen> = {
 	totalCount: 12,
 };
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	roles: [],
@@ -64,10 +58,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
 
 export const EmptyState: Story = {
 	args: emptyStateArgs,

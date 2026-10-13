@@ -1,4 +1,5 @@
 import type { UserDto } from "@cocrepo/api/core/users";
+import { buildUserListTableColumns, createDataGridState } from "@cocrepo/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 import { UserListScreen, type UserListScreenProps } from "./UserListScreen";
 
@@ -66,33 +67,24 @@ const userFixtures: UserDto[] = [
 ];
 
 const defaultArgs = {
-	isLoading: false,
-	onChangeSearchValue: (_searchValue: string) => undefined,
-	onClearSearch: () => undefined,
-	queryStates: { page: 1, take: 10, skip: 0, search: "" },
-	searchValue: "샘플",
-	setQueryStates: async () => new URLSearchParams(),
-	totalCount: 12,
-	users: userFixtures,
+	state: {
+		dataGrid: createDataGridState<UserDto>({
+			query: { page: 1, take: 10, skip: 0, search: "" },
+			setQueryStates: async () => new URLSearchParams(),
+			table: {
+				rows: userFixtures,
+				columns: buildUserListTableColumns<UserDto>(),
+			},
+			pagination: { totalCount: 12 },
+		}),
+	},
 } satisfies UserListScreenProps;
-
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
-const emptyStateArgs = {
-	...defaultArgs,
-	users: [],
-	totalCount: 0,
-};
 
 const meta = {
 	title: "screen/UserListScreen",
 	component: UserListScreen,
-	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
 	argTypes: {
-		users: { control: false },
+		state: { control: false },
 	},
 	parameters: {
 		layout: "fullscreen",
@@ -106,11 +98,3 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Loading: Story = {
-	args: loadingArgs,
-};
-
-export const EmptyState: Story = {
-	args: emptyStateArgs,
-};

@@ -62,6 +62,13 @@ export function Example() {
 - Form: `LoginForm`, `ForgotPasswordForm`, `ResetPasswordForm`, `OidcClientForm`
 - Page: app-facing page UI such as `AssetListScreen`, `AssetDetailScreen`, `AccountListScreen`
 
+## DataGrid 상태와 조회 경계
+
+- `DataGrid`에는 `createDataGridState`로 구성한 `state`만 전달합니다. 상태 객체는 데이터와 주입 설정을 보유하고, 동작은 해당 컴포넌트의 `useHandlers(state)`가 소유합니다.
+- 원본 행은 `table.rows`, 전체 건수는 `pagination.totalCount`, 행 클릭·편집 요청은 `table.row`, 선택 액션 표시는 `actionBar`에 둡니다.
+- DataGrid 연관 목록은 상위 route 또는 feature에서 Suspense로 조회합니다. query·응답·건수 변경은 memoized `createDataGridState`의 입력으로 반영하며, effect로 조회 결과를 다시 대입하지 않습니다.
+- 조회 대기는 상위 Suspense 경계가 처리합니다. 저장·삭제·업로드 같은 mutation pending은 해당 동작의 UI에서 유지합니다.
+
 ## Storybook
 
 ```bash
