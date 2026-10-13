@@ -85,7 +85,8 @@ export const setValue = action(
 			return;
 		}
 		const originalFields = state.originalValues.get(row.id) ?? {};
-		if (!Object.hasOwn(originalFields, fieldName)) {
+		// Object.hasOwn은 ES2022 lib이 필요해 소비 앱(tsconfig lib ES2020) 컴파일을 깨므로 own-property 등가 검사로 대체합니다.
+		if (!Object.prototype.hasOwnProperty.call(originalFields, fieldName)) {
 			originalFields[fieldName] = row[field];
 			state.originalValues.set(row.id, originalFields);
 		}
