@@ -49,10 +49,25 @@ test.describe("로그아웃 플로우 @real", () => {
 		// 로그인 화면으로 내비게이션하려 하는데, 의도적 로그아웃 표시가 있으면
 		// 억제되고 OP end_session 체인이 완결돼야 한다(회귀: 억제가 없으면 SSO
 		// 자동 재개로 곧바로 대시보드로 돌아왔다).
+		//
+		// 늦은 users 요청의 해제는 고정 시간 지연이 아니라 로그아웃 응답
+		// 도착에 동기화한다. 서버가 부하 때문에 로그아웃(토큰 블랙리스트)을
+		// 고정 지연(구 5초) 안에 끝내지 못하면 재생 요청이 아직 유효한
+		// 토큰으로 200을 받아 경합 전제 자체가 깨졌다.
 		let lateUsersResponseStatus = 0;
+		let notifyLogoutResponseArrived: (() => void) | null = null;
+		const logoutResponseArrived = new Promise<void>((resolve) => {
+			notifyLogoutResponseArrived = resolve;
+		});
+		await page.route(/\/api\/v1\/auth\/logout/, async (route) => {
+			const response = await route.fetch();
+			notifyLogoutResponseArrived?.();
+			await route.fulfill({ response }).catch(() => {});
+		});
 		await page.route(/\/api\/v1\/users/, async (route) => {
-			// users 조회가 로그아웃 이후에 도착하도록 지연한다.
-			await new Promise((resolve) => setTimeout(resolve, 5000));
+			// users 조회가 서버의 로그아웃 처리(쿠키 만료 + 토큰 무효화)까지
+			// 끝난 뒤에 도착하도록 로그아웃 응답을 기다린다.
+			await logoutResponseArrived;
 			const response = await route.fetch();
 			lateUsersResponseStatus = response.status();
 			await route.fulfill({ response }).catch(() => {});
