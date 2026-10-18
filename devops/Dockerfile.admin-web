@@ -2,7 +2,7 @@
 # 🏗️ BASE STAGE: 기본 환경 설정
 # ============================================================================
 # Node.js 24.21.0 / Alpine 3.24 multi-arch 이미지를 digest로 고정
-FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS base
+FROM docker.io/library/node:24.22.0-alpine3.24@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f AS base
 
 # 📦 PNPM 버전을 인자로 받아서 설정
 ARG PNPM_VERSION=10.34.5
@@ -67,7 +67,7 @@ RUN pnpm exec turbo build --concurrency=2 --cache-dir=/cache/turbo --filter=admi
 # ============================================================================
 # 🚀 PRODUCTION STAGE: Next.js 서버 실행
 # ============================================================================
-FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS runner
+FROM docker.io/library/node:24.22.0-alpine3.24@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f AS runner
 
 # 📂 작업 디렉토리 설정
 WORKDIR /app
