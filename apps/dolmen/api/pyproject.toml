@@ -1,0 +1,24 @@
+[project]
+name = "dolmen-api"
+version = "0.1.0"
+description = "Dolmen — hello-agents 기반 에이전트 메모리·RAG 학습 데모 API"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.9",
+    "python-dotenv>=1.0",
+    "hello-agents>=0.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]

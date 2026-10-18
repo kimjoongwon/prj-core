@@ -139,6 +139,12 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "cache": true
     },
+    "dolmen-web#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "cache": true
+    },
     "idp-web#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
