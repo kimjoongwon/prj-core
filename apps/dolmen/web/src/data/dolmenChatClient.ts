@@ -1,9 +1,19 @@
 export type DolmenChatRole = "user" | "assistant";
 
+/** 답변 근거로 제시된 검색 청크(절 제목이 source 끝에 "§"로 붙어 온다). */
+export interface DolmenChatEvidence {
+	chunkId: string;
+	source: string;
+	version: string;
+	score: number;
+	snippet: string;
+}
+
 export interface DolmenChatMessage {
 	chatMessageId: string;
 	role: DolmenChatRole;
 	text: string;
+	evidence: DolmenChatEvidence[];
 }
 
 export function issueChatMessageId(): string {
@@ -19,24 +29,49 @@ const DOLMEN_CHAT_ENDPOINT = "/dolmen/api/chat";
 interface StreamDolmenChatReplyInput {
 	messageText: string;
 	sessionId: string;
+	onRetrievedEvidence: (retrievedEvidence: DolmenChatEvidence[]) => void;
 	onAssistantChunk: (chunkText: string) => void;
 	onReplyDone: () => void;
 	onReplyError: (errorMessage: string) => void;
 }
 
 interface DolmenChatStreamEvent {
-	type: "chunk" | "done" | "error";
+	type: "sources" | "chunk" | "done" | "error";
 	text?: string;
 	message?: string;
+	grounds?: DolmenChatStreamGround[];
+}
+
+interface DolmenChatStreamGround {
+	chunk_id: string;
+	source: string;
+	version: string;
+	score: number;
+	snippet: string;
+}
+
+/** API의 snake_case 근거 필드를 화면용 camelCase로 바꾼다. */
+function toDolmenChatEvidence(
+	streamGround: DolmenChatStreamGround,
+): DolmenChatEvidence {
+	return {
+		chunkId: streamGround.chunk_id,
+		source: streamGround.source,
+		version: streamGround.version,
+		score: streamGround.score,
+		snippet: streamGround.snippet,
+	};
 }
 
 /**
  * dolmen-api의 SSE 스트림(/api/chat)을 구독해 어시스턴트 답변을 조각 단위로 전달한다.
- * 스트림 도중 오류가 나면 onReplyError로 알리고 정상 종료는 onReplyDone으로만 알린다.
+ * 답변 전에 온 sources 이벤트는 근거 목록으로 onRetrievedEvidence에 전달하고,
+ * 스트림 도중 오류가 나면 onReplyError로 알리며 정상 종료는 onReplyDone으로만 알린다.
  */
 export async function streamDolmenChatReply({
 	messageText,
 	sessionId,
+	onRetrievedEvidence,
 	onAssistantChunk,
 	onReplyDone,
 	onReplyError,
@@ -70,6 +105,10 @@ export async function streamDolmenChatReply({
 		try {
 			streamEvent = JSON.parse(sseEventData) as DolmenChatStreamEvent;
 		} catch {
+			return;
+		}
+		if (streamEvent.type === "sources" && streamEvent.grounds) {
+			onRetrievedEvidence(streamEvent.grounds.map(toDolmenChatEvidence));
 			return;
 		}
 		if (streamEvent.type === "chunk" && streamEvent.text) {

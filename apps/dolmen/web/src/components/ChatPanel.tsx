@@ -6,6 +6,7 @@ import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRef } from "react";
 import {
+	type DolmenChatEvidence,
 	type DolmenChatMessage,
 	issueChatSessionId,
 	streamDolmenChatReply,
@@ -28,6 +29,7 @@ function createChatPanelState({ sessionId }: { sessionId: string }) {
 					chatMessageId: `chat-message-${crypto.randomUUID()}`,
 					role: "user",
 					text: messageText,
+					evidence: [],
 				});
 			},
 			beginAssistantReply() {
@@ -36,7 +38,17 @@ function createChatPanelState({ sessionId }: { sessionId: string }) {
 					chatMessageId: this.assistantReplyChatMessageId,
 					role: "assistant",
 					text: "",
+					evidence: [],
 				});
+			},
+			attachReplyEvidence(retrievedEvidence: DolmenChatEvidence[]) {
+				const assistantReplyMessage = this.chatMessages.find(
+					(chatMessage) =>
+						chatMessage.chatMessageId === this.assistantReplyChatMessageId,
+				);
+				if (assistantReplyMessage) {
+					assistantReplyMessage.evidence = retrievedEvidence;
+				}
 			},
 			appendAssistantReplyChunk(chunkText: string) {
 				const assistantReplyMessage = this.chatMessages.find(
@@ -70,6 +82,8 @@ function createChatPanelState({ sessionId }: { sessionId: string }) {
 				await streamDolmenChatReply({
 					messageText,
 					sessionId,
+					onRetrievedEvidence: (retrievedEvidence) =>
+						this.attachReplyEvidence(retrievedEvidence),
 					onAssistantChunk: (chunkText) =>
 						this.appendAssistantReplyChunk(chunkText),
 					onReplyDone: () => this.completeAssistantReply(),
