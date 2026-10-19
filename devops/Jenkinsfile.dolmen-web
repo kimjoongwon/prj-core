@@ -153,12 +153,15 @@ podTemplate(
             stage('Build and Push Image') {
                 container('buildctl') {
                     // Harbor 인증은 buildkitd 데몬에 마운트된 시크릿으로 처리하므로 registry login 불필요
+                    // DOLMEN_API_URL: Next standalone이 rewrites를 빌드 시점에 굽는다 —
+                    // 환경별 dolmen-api 서비스 DNS를 빌드 인자로 주입한다(서비스명=릴리스명=dolmen-api-<env>).
                     sh """
                         buildctl --addr "\$BUILDKIT_HOST" build \\
                             --frontend dockerfile.v0 \\
                             --local context=. \\
                             --local dockerfile=. \\
                             --opt filename=devops/Dockerfile.dolmen-web \\
+                            --opt build-arg:DOLMEN_API_URL=http://dolmen-api-${ENV_NAME}.plate-${ENV_NAME}.svc.cluster.local:3012 \\
                             --output type=image,name=${IMAGE_PATH}:${IMAGE_TAG},push=true \\
                             --progress=plain
                     """

@@ -18,6 +18,11 @@ RUN turbo prune --scope=dolmen-web --docker
 
 FROM base AS builder
 
+# Next standalone은 next.config(rewrites destination)을 빌드 시점에 직렬화한다 —
+# /dolmen/api/* 프록시 대상을 빌드 인자로 주입해야 런타임 500을 피한다.
+ARG DOLMEN_API_URL=http://localhost:3012
+ENV DOLMEN_API_URL=${DOLMEN_API_URL}
+
 WORKDIR /app
 COPY --from=setup /app/out/json/ ./
 # turbo prune output can retain stale importer metadata for excluded workspaces,
