@@ -1,0 +1,56 @@
+FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS base
+
+ARG PNPM_VERSION=10.34.5
+ARG TURBO_VERSION=2.9.14
+ENV PNPM_HOME=/usr/local/bin
+ENV PNPM_STORE_DIR=/pnpm/store
+
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+RUN apk add --update --no-cache libc6-compat && rm -rf /var/cache/apk/*
+RUN pnpm add -g turbo@${TURBO_VERSION}
+
+WORKDIR /app
+
+FROM base AS setup
+
+COPY . .
+RUN turbo prune --scope=live-web --docker
+
+FROM base AS builder
+
+WORKDIR /app
+COPY --from=setup /app/out/json/ ./
+# turbo prune output can retain stale importer metadata for excluded workspaces,
+# so Docker installs in the pruned tree must allow lockfile re-resolution.
+RUN pnpm install --store-dir /cache/pnpm-store --no-frozen-lockfile --prefer-offline
+COPY --from=setup /app/out/full/ ./
+# Mirror runtime assets into the standalone tree so the minimal server can serve
+# them without relying on extra runner-stage copies.
+RUN sh -c 'pnpm exec turbo build --cache-dir=/cache/turbo --filter=live-web... && \
+      if [ -d apps/live/web/.next/static ]; then \
+        mkdir -p apps/live/web/.next/standalone/apps/live/web/.next && \
+        cp -R apps/live/web/.next/static apps/live/web/.next/standalone/apps/live/web/.next/static; \
+      fi && \
+      if [ -d apps/live/web/public ]; then \
+        mkdir -p apps/live/web/.next/standalone/apps/live/web && \
+        cp -R apps/live/web/public apps/live/web/.next/standalone/apps/live/web/public; \
+      fi'
+
+FROM docker.io/library/node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2 AS runner
+
+WORKDIR /app
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/apps/live/web/.next/standalone ./
+
+ENV NODE_ENV=production
+ENV PORT=3013
+ENV HOSTNAME=0.0.0.0
+
+USER nextjs
+
+EXPOSE 3013
+
+CMD ["node", "apps/live/web/server.js"]

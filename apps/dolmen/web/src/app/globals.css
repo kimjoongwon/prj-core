@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+@source "../../../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}";
+@custom-variant dark (&:is(.dark *));
+
+:root,
+.light,
+.default,
+[data-theme="light"],
+[data-theme="default"] {
+  --accent: #3182f6;
+}
+
+.dark,
+[data-theme="dark"] {
+  --accent: #4593fc;
+}
+
+body {
+  font-family: "Pretendard", sans-serif;
+  height: 100vh;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.font-display {
+  font-family: "Pretendard", sans-serif;
+  letter-spacing: -0.03em;
+}

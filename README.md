@@ -33,7 +33,7 @@
 > - SI 프로젝트 수행을 위한 기본 기술 스택 학습
 > - 모노레포 아키텍처 및 현대적인 개발 방법론 연구
 > - 보안상 모든 환경 변수는 커밋되어 있지 않으며, 이미 커밋된 환경 변수는 전부 무효화(invalid)되었습니다.
-> - 2026-10-05부터 **private 저장소**로 전환되었습니다.
+> - 저장소는 **public**으로 공개되어 있습니다(2026-10-18 실측). 시크릿 무효화 정책은 위 항목을 따릅니다.
 
 ### 핵심 설계 원칙
 
@@ -277,7 +277,6 @@ pnpm start -- core-api admin-web proposal-web
 1. **저장소 클론**
 
 ```bash
-# private 저장소 — 접근 권한 필요
 git clone https://github.com/kimjoongwon/prj-core.git
 cd prj-core
 ```
