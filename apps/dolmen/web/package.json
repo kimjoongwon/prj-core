@@ -1,0 +1,36 @@
+{
+  "name": "dolmen-web",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "next dev --turbopack --port ${DOLMEN_WEB_PORT:-3013}",
+    "start:dev": "set -a; [ -f .env.local ] && . ./.env.local; set +a; next dev --turbopack --port \"${DOLMEN_WEB_PORT:-3013}\"",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc --noEmit",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "format": "biome check --write .",
+    "clean": "rm -rf node_modules && rm -rf .next"
+  },
+  "dependencies": {
+    "@cocrepo/ui": "workspace:^1.5.0",
+    "@heroui/react": "catalog:",
+    "@heroui/styles": "catalog:",
+    "framer-motion": "catalog:",
+    "lucide-react": "catalog:",
+    "mobx": "catalog:",
+    "mobx-react-lite": "catalog:",
+    "next": "^16.3.5",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

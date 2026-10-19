@@ -19,6 +19,8 @@
 | `admin-web` | `apps/admin/web/.env.local` | `apps/admin/web/.env.example` | Next.js Admin Web |
 | `idp-web` | `apps/idp/web/.env.local` | `apps/idp/web/.env.example` | Next.js IDP Web(로그인/동의 UI) |
 | `proposal-web` | `apps/proposal/web/.env.local` | `apps/proposal/web/.env.example` | Next.js Proposal Web |
+| `dolmen-api` | `apps/dolmen/api/.env` | `apps/dolmen/api/.env.example` | Python FastAPI(hello-agents 기반 에이전트 데모) |
+| `dolmen-web` | `apps/dolmen/web/.env.local` | `apps/dolmen/web/.env.example` | Next.js Dolmen Web(채팅 화면) |
 | `tool-storybook` | `apps/tool/storybook/.env` | 없음 | Storybook dev server |
 | `be-prisma` | `packages/be-prisma/.env` | `packages/be-prisma/.env.example` | Prisma CLI / bootstrap / data-migrate |
 
@@ -36,6 +38,21 @@
 | Object Storage | `OBJECT_STORAGE_PROVIDER`, `OBJECT_STORAGE_ACCESS_KEY`, `OBJECT_STORAGE_SECRET_KEY`, `OBJECT_STORAGE_API_TOKEN`, `OBJECT_STORAGE_REGION`, `OBJECT_STORAGE_BUCKET`, `OBJECT_STORAGE_ENDPOINT`, `OBJECT_STORAGE_PUBLIC_BASE_URL`, `OBJECT_STORAGE_FORCE_PATH_STYLE` | `OBJECT_STORAGE_PROVIDER`: 스토리지 벤더(`aws-s3`/`backblaze-b2`/`cloudflare-r2`). `OBJECT_STORAGE_ACCESS_KEY`: 접근 키. `OBJECT_STORAGE_SECRET_KEY`: 시크릿 키. `OBJECT_STORAGE_API_TOKEN`: 벤더 API 토큰(선택). `OBJECT_STORAGE_REGION`: 스토리지 리전. `OBJECT_STORAGE_BUCKET`: 기본 버킷 이름. `OBJECT_STORAGE_ENDPOINT`: 커스텀 엔드포인트. `OBJECT_STORAGE_PUBLIC_BASE_URL`: 공개 URL base. `OBJECT_STORAGE_FORCE_PATH_STYLE`: path-style URL 강제 여부. |
 | OIDC | `OIDC_ISSUER`, `OIDC_JWKS_URI`, `OIDC_JWKS_KEYS`, `OIDC_COOKIE_SECRET`, `OIDC_INTERACTION_BASE_URL`, `OIDC_ADMIN_BASE_URL`, `OIDC_ADMIN_CLIENT_SECRET`, `OIDC_ADMIN_REDIRECT_URI`, `OIDC_ADMIN_LOGIN_URL`, `OIDC_ADMIN_DEFAULT_RETURN_TO`, `OIDC_STORYBOOK_BASE_URL`, `OIDC_STORYBOOK_CLIENT_SECRET`, `OIDC_STORYBOOK_REDIRECT_URI`, `OIDC_STORYBOOK_LOGIN_URL`, `OIDC_STORYBOOK_DEFAULT_RETURN_TO` | `OIDC_ISSUER`: 발급자(idp-api)의 issuer base URL. 로컬은 idp-web origin(`http://localhost:3008`) — 발급자와 로그인 UI가 같은 origin이어야 interaction 세션 쿠키가 제출 XHR에 실려간다. `OIDC_JWKS_URI`: JWKS endpoint(발급자 것). core-api는 이 JWKS로 토큰을 검증만 한다. `OIDC_JWKS_KEYS`: provider가 사용할 JWKS JSON(idp-api). `OIDC_COOKIE_SECRET`: OIDC 세션 쿠키 서명 키. `OIDC_INTERACTION_BASE_URL`: 로그인(`/auth/login/:uid`)·동의(`/auth/consent/:uid`)·에러 화면 base URL(로컬=idp-web origin). `OIDC_ADMIN_BASE_URL`: admin redirect/login/default return URL을 조합하는 기준 base URL. `OIDC_ADMIN_*`: admin-web 전용 client 설정 및 개별 URL override. `OIDC_STORYBOOK_BASE_URL`: Storybook redirect/login/default return URL을 조합하는 기준 base URL. `OIDC_STORYBOOK_*`: Storybook OIDC client 설정 및 개별 URL override. |
 | Dev / Runtime | `ENABLE_NEST_DEVTOOLS`, `CORE_API_NEST_DEVTOOLS_PORT`, `DOCKER_ENV` | `ENABLE_NEST_DEVTOOLS`: Nest Devtools 활성화 여부. `CORE_API_NEST_DEVTOOLS_PORT`: Devtools UI 포트. `DOCKER_ENV`: Docker 환경 여부를 로그/운영 상태 표시용으로 구분할 때 사용합니다. |
+
+## apps/dolmen/api
+
+| 범주 | 키 | 설명 |
+| --- | --- | --- |
+| LLM | `LLM_API_KEY`, `LLM_MODEL_ID`, `LLM_BASE_URL` | hello-agents `HelloAgentsLLM`이 읽는 OpenAI 호환 LLM 접속 설정. 실제 키는 절대 커밋하지 않는다. |
+| App | `DOLMEN_API_PORT` | `pnpm start:dolmen-api`가 uvicorn 실행에 사용하는 포트(기본 3012). |
+| RAG | `DOLMEN_EMBEDDING_CACHE_DIR` | fastembed 임베딩 모델 캐시 경로(선택). 컨테이너 이미지의 `/opt/dolmen/embedding-cache`를 가리킨다. |
+
+## apps/dolmen/web
+
+| 범주 | 키 | 설명 |
+| --- | --- | --- |
+| App | `DOLMEN_WEB_PORT` | Next.js dev 서버 포트(기본 3013). |
+| API 연결 | `DOLMEN_API_URL` | Next rewrites가 `/dolmen/api/*` 를 프록시할 dolmen-api 주소(기본 `http://localhost:3012`). |
 
 ## apps/admin/web
 
