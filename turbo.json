@@ -139,6 +139,10 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "cache": true
     },
+    "live-web#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "public/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
+    },
     "dolmen-web#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
