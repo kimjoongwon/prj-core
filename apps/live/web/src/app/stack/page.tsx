@@ -200,8 +200,9 @@ export default function TechStackPage() {
 				</section>
 
 				<p className="pb-2 text-center text-[11px] text-zinc-600">
-					이 페이지의 스택은 제안용 구성이며, 데모 앱은 모든 외부 연동을
-					목업으로 대체해 비용 없이 시연합니다.
+					이 페이지의 스택은 제안용 구성입니다. 영상은 실제 SRS 미디어 서버
+					스트림이고, 카카오·PG·알림톡 등 나머지 외부 연동은 목업으로 대체해
+					비용 없이 시연합니다.
 				</p>
 			</main>
 		</div>

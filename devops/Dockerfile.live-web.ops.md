@@ -31,6 +31,7 @@
 ## 운영 노트
 
 - 이 앱은 외부 API 의존이 전혀 없는 시연 목업이라 빌드 환경변수·시크릿 주입이 필요 없다.
+- 영상은 클러스터의 SRS 미디어 서버(prj-devops `helm/applications/srs-server`) 실스트림을 재생한다. 재생 URL 기본값은 `/live-stream/live/livedemo.flv|.m3u8`이며 `LIVE_STREAM_FLV_URL`/`LIVE_STREAM_HLS_URL` 환경변수(values-prod extraEnv)로 재빌드 없이 교체할 수 있다. 스트림 미연결 시 `public/videos/live-loop.mp4`로 폴백한다.
 - `LIVE_DEMO_JWT_SECRET`은 시연용 목업 서명 키로 기본값(live-demo-mock-secret)을 그대로 사용한다 — 실서비스 전환 시 values-prod의 extraEnv로 교체한다.
 
 ## 변경 이력

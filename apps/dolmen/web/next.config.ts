@@ -1,8 +1,10 @@
 import path from "node:path";
 import type { NextConfig } from "next";
 
-const dolmenApiUrl = process.env.DOLMEN_API_URL ?? "http://localhost:3012";
-
+// /dolmen/api/* → dolmen-api 프록시는 next.config rewrites가 아니라
+// src/app/api/[...path]/route.ts 라우트 핸들러가 처리한다.
+// rewrites의 destination은 standalone 빌드 시점에 굳어져 환경별 이미지 재빌드가
+// 강제되지만, 라우트 핸들러는 요청 시점의 DOLMEN_API_URL env를 읽는다.
 const nextConfig: NextConfig = {
 	output: "standalone",
 	basePath: "/dolmen",
@@ -15,14 +17,6 @@ const nextConfig: NextConfig = {
 		"@cocrepo/type",
 		"@cocrepo/ui",
 	],
-	async rewrites() {
-		return [
-			{
-				source: "/api/:path*",
-				destination: `${dolmenApiUrl}/api/:path*`,
-			},
-		];
-	},
 };
 
 export default nextConfig;
