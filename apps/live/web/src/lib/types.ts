@@ -52,6 +52,8 @@ export type DemoBroadcast = {
 	ingestEndpoint: string;
 	streamKey: string;
 	playbackUrl: string;
+	playbackHlsUrl: string;
+	streamEngine: string;
 	isPrivateChannel: boolean;
 	playbackTokenTtlSeconds: number;
 	startedAt: string;

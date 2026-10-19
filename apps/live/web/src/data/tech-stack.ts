@@ -39,9 +39,9 @@ export const techStackGroups: TechStackGroup[] = [
 			},
 			{
 				name: "스트리밍 플레이어",
-				role: "Amazon IVS Player Web SDK — 저지연 라이브 재생 (자체 호스팅 시 OvenPlayer/hls.js로 동일 교체)",
+				role: "오픈소스 미디어 서버(SRS) 실스트림을 HTTP-FLV(mpegts.js)·HLS로 재생 — 관리형(Amazon IVS Player SDK)으로도 같은 자리에서 교체",
 				demoNote:
-					"데모는 로컬 루프 영상 + SDK 교체 지점을 코드에 마련해 두었습니다",
+					"지금 재생 중인 영상이 실제 SRS 서버 스트림입니다 (지연 1~3초, 플레이어 상단 칩에 표시)",
 			},
 			{
 				name: "실시간 채팅",
@@ -95,6 +95,12 @@ export const techStackGroups: TechStackGroup[] = [
 				demoNote: null,
 			},
 			{
+				name: "SRS 미디어 서버 (Kubernetes 배포)",
+				role: "RTMP 수신 → HTTP-FLV/HLS 송출. OBS 송출을 그대로 받으며, 관리형(IVS)으로 바꿀 땐 이 서버만 빠진다",
+				demoNote:
+					"데모 클러스터에 SRS v6 서버와 송출 푸셔가 실제로 떠 있습니다",
+			},
+			{
 				name: "Jenkins CI/CD",
 				role: "커밋→빌드→이미지 태그→배포 파이프라인 자동화",
 				demoNote: null,
@@ -136,6 +142,7 @@ export const streamingOptions: StreamingOption[] = [
 		highlights: [
 			"OvenMediaEngine(초저지연, 상용 라이선스 별매) · SRS/MediaMTX(MIT 라이선스)",
 			"CDN·서버 사양을 직접 조합해 단가 관리 (비트레이트 조절로 비용 절감)",
+			"이 데모의 영상이 바로 SRS로 송출·재생되고 있습니다",
 			"재생 보안은 CDN 서명 URL·시청 토큰으로 동일하게 구현",
 		],
 		costShape:
@@ -157,7 +164,7 @@ export const requirementMappingRows: RequirementMappingRow[] = [
 	},
 	{
 		requirement: "AWS IVS 채널 관리 및 재생 보안",
-		demo: "관리자 채널 카드 + 5분 만료 재생 토큰 자동 갱신",
+		demo: "SRS 채널(RTMP 수신) 정보 카드 + 5분 만료 재생 토큰 자동 갱신",
 		production: "IVS 채널 API·비공개 재생 (또는 자체 CDN 서명 URL)",
 	},
 	{
@@ -177,7 +184,7 @@ export const requirementMappingRows: RequirementMappingRow[] = [
 	},
 	{
 		requirement: "반응형 시청 레이아웃 · 플레이어 · 채팅",
-		demo: "모바일/데스크톱 전환, 목업 플레이어·채팅",
+		demo: "모바일/데스크톱 전환, SRS 실시간 스트림(HTTP-FLV) 재생 + 목업 채팅",
 		production: "IVS Player/Chat SDK (또는 오픈소스 미디어 서버)",
 	},
 	{
@@ -189,7 +196,7 @@ export const requirementMappingRows: RequirementMappingRow[] = [
 
 export const architectureFlowSteps: string[] = [
 	"시청자 웹·모바일 (Next.js 반응형 레이아웃)",
-	"스트리밍 엣지 — Amazon IVS 또는 자체 미디어 서버 + CDN (재생 토큰 인증)",
+	"스트리밍 엣지 — 자체 미디어 서버(데모: SRS) 또는 Amazon IVS + CDN (재생 토큰 인증)",
 	"API 서버 (NestJS — 인증·주문·재고·방송 관리)",
 	"데이터·큐 (PostgreSQL + Redis/BullMQ)",
 	"외부 연동 (카카오 로그인 · PG사 · 알림톡)",

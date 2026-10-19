@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { signJwt } from "@/lib/jwt";
-import { getLiveDemoStore } from "@/lib/mock-store";
+import { getPublicBroadcast } from "@/lib/mock-store";
 
 /**
  * 재생 보안 시연: 짧은 유효기간의 서명 재생 토큰 발급.
@@ -8,8 +8,7 @@ import { getLiveDemoStore } from "@/lib/mock-store";
  * 자체 CDN 서명 URL/쿠키 발급으로 이 지점을 교체한다.
  */
 export async function POST() {
-	const store = getLiveDemoStore();
-	const { broadcast } = store;
+	const broadcast = getPublicBroadcast();
 	const token = signJwt(
 		{ scope: "playback", channelId: broadcast.id },
 		broadcast.playbackTokenTtlSeconds,

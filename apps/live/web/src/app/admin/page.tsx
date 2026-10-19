@@ -381,6 +381,12 @@ const ChannelCard = observer(function ChannelCard({
 						value={broadcast.playbackUrl}
 						copyValue={broadcast.playbackUrl}
 					/>
+					<InfoRow
+						label="재생 URL (HLS)"
+						value={broadcast.playbackHlsUrl}
+						copyValue={broadcast.playbackHlsUrl}
+					/>
+					<InfoRow label="미디어 엔진" value={broadcast.streamEngine} />
 					<div className="rounded-xl bg-white/5 px-3 py-2">
 						<div className="flex items-center justify-between gap-2">
 							<span className="text-zinc-400">재생 토큰 정책</span>
