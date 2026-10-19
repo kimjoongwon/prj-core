@@ -2,6 +2,7 @@ import { broadcastSeed } from "@/data/broadcast";
 import { productsSeed } from "@/data/products";
 import type {
 	AlimTalkNotification,
+	DemoBroadcast,
 	DemoOrder,
 	DemoOrderStatus,
 	DemoProduct,
@@ -45,6 +46,19 @@ function seedLiveDemoStore(): LiveDemoStore {
 export function getLiveDemoStore(): LiveDemoStore {
 	globalRef.__liveDemoStore ??= seedLiveDemoStore();
 	return globalRef.__liveDemoStore;
+}
+
+/**
+ * 시청자/관리자에 노출하는 방송 정보. 재생 URL은 배포 환경변수로 덮어쓸 수 있어
+ * 미디어 서버 주소가 바뀌어도 이미지를 다시 빌드하지 않는다.
+ */
+export function getPublicBroadcast(): DemoBroadcast {
+	const { broadcast } = getLiveDemoStore();
+	return {
+		...broadcast,
+		playbackUrl: process.env.LIVE_STREAM_FLV_URL ?? broadcast.playbackUrl,
+		playbackHlsUrl: process.env.LIVE_STREAM_HLS_URL ?? broadcast.playbackHlsUrl,
+	};
 }
 
 export function resetLiveDemoStore(): void {

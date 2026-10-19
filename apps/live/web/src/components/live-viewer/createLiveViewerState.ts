@@ -42,6 +42,9 @@ export type PurchaseFlowStep =
 	| "success"
 	| "error";
 
+export type StreamStatus = "connecting" | "live" | "fallback";
+export type StreamTransport = "flv" | "hls" | null;
+
 export type PurchaseFlowState = {
 	productId: string;
 	quantity: number;
@@ -94,6 +97,9 @@ export function createLiveViewerState() {
 		latestCouponText: null as string | null,
 		latestCouponShownAt: 0,
 		mobilePanel: "products" as "products" | "chat",
+		// 실스트림 연결 상태 — SRS(HTTP-FLV/HLS) 연결 중/재생 중/로컬 영상 폴백
+		streamStatus: "connecting" as StreamStatus,
+		streamTransport: null as StreamTransport,
 
 		get selectedProduct(): DemoProduct | null {
 			if (!this.purchase) {
@@ -284,6 +290,11 @@ export function createLiveViewerState() {
 
 		setMobilePanel(panel: "products" | "chat") {
 			this.mobilePanel = panel;
+		},
+
+		setStreamStatus(status: StreamStatus, transport: StreamTransport = null) {
+			this.streamStatus = status;
+			this.streamTransport = transport;
 		},
 
 		applyProductUpdate(product: DemoProduct) {
