@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+@source "../../../../../packages/fe-ui/src/**/*.{js,ts,jsx,tsx}";
+@custom-variant dark (&:is(.dark *));
+
+body {
+  font-family: "Pretendard", sans-serif;
+  height: 100vh;
+}
+
+.font-display {
+  font-family: "Pretendard", sans-serif;
+  letter-spacing: -0.03em;
+}
+
+/* 시연용 라이브 화면은 어두운 쇼핑 라이브 무드로 고정 */
+html {
+  color-scheme: dark;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.live-dot {
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes chat-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-in {
+  animation: chat-in 0.18s ease-out;
+}
+
+@keyframes coupon-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.coupon-drop {
+  animation: coupon-drop 6s ease-in-out forwards;
+}
+
+/* 채팅 스크롤바 얇게 */
+.chat-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-scroll::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.15);
+}
