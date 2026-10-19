@@ -21,6 +21,7 @@
 | builder 단계 | `out/json` 복사 → `pnpm install --no-frozen-lockfile --prefer-offline` → `out/full` 복원 → `turbo build --filter=live-web...` → `.next/static`·`public`(루프 영상 포함)을 standalone 트리에 동봉 |
 | 러너 단계 | `CMD ["node", "apps/live/web/server.js"]` |
 | 런타임 | `PORT=3013`, `HOSTNAME=0.0.0.0`, nextuid 1001 |
+| 포트 비고 | dev 스크립트는 3014(dolmen-web 3013과 dev 충돌 회피). 컨테이너 PORT는 3013 유지 — 포드 단위로 분리되어 무충돌 |
 
 ## 구현 체크리스트
 
