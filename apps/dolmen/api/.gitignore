@@ -1,0 +1,12 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ruff_cache/
+.pytest_cache/
+
+# 로컬 RAG 인덱스(SQLite + Qdrant path + 임베딩 모델 캐시)
+.rag/
+
+# 로컬 시크릿 — 커밋 금지
+.env

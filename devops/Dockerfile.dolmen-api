@@ -1,0 +1,31 @@
+# Dolmen API (Python 3.12 + uv + FastAPI)
+# 임베딩 모델(paraphrase-multilingual-MiniLM-L12-v2, ~0.22GB)을 이미지에 미리 구워
+# 파드 기동 시 다운로드가 없게 한다(모델 경로: DOLMEN_EMBEDDING_CACHE_DIR).
+
+FROM docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 AS base
+
+ENV PYTHONUNBUFFERED=1 \
+    UV_LINK_MODE=copy \
+    DOLMEN_EMBEDDING_CACHE_DIR=/opt/dolmen/embedding-cache
+
+COPY --from=ghcr.io/astral-sh/uv:0.8.3 /uv /uvx /usr/local/bin/
+
+WORKDIR /srv/dolmen-api
+
+COPY apps/dolmen/api/pyproject.toml apps/dolmen/api/uv.lock ./
+RUN uv sync --frozen --no-dev
+
+COPY apps/dolmen/api/app ./app
+# demo-doc은 settings.DEMO_DOC_PATH가 ../demo-doc 로 찾는다
+COPY apps/dolmen/demo-doc /srv/demo-doc
+
+# 임베딩 모델 프리다운로드 (빌드 시점 네트워크 필요)
+RUN uv run --no-sync python -c "from fastembed import TextEmbedding; TextEmbedding('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2', cache_dir='/opt/dolmen/embedding-cache')"
+
+# 비루트 실행 — .rag(로컬 인덱스)는 런타임에 이 디렉터리 안에 생성된다
+RUN useradd --system --uid 1001 dolmen && mkdir -p /srv/dolmen-api/.rag && chown -R dolmen:dolmen /srv/dolmen-api
+USER dolmen
+
+EXPOSE 3012
+
+CMD [".venv/bin/uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "3012"]
