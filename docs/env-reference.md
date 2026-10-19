@@ -45,6 +45,7 @@
 | --- | --- | --- |
 | LLM | `LLM_API_KEY`, `LLM_MODEL_ID`, `LLM_BASE_URL` | hello-agents `HelloAgentsLLM`이 읽는 OpenAI 호환 LLM 접속 설정. 실제 키는 절대 커밋하지 않는다. |
 | App | `DOLMEN_API_PORT` | `pnpm start:dolmen-api`가 uvicorn 실행에 사용하는 포트(기본 3012). |
+| RAG | `DOLMEN_EMBEDDING_CACHE_DIR` | fastembed 임베딩 모델 캐시 경로(선택). 컨테이너 이미지의 `/opt/dolmen/embedding-cache`를 가리킨다. |
 
 ## apps/dolmen/web
 

@@ -8,6 +8,7 @@ Qdrant 서버 없이 로컬 파일 인덱스(.rag/)에서 동작한다. 클러�
 """
 
 import hashlib
+import os
 import re
 from dataclasses import dataclass
 
@@ -19,6 +20,9 @@ from app.settings import DOLMEN_API_DIR
 DOLMEN_RAG_DIR = DOLMEN_API_DIR / ".rag"
 DEMO_DOC_SOURCE = "moafit-onboarding-wiki.md"
 DEMO_DOC_PATH = DOLMEN_API_DIR.parent / "demo-doc" / "onboarding-wiki.md"
+
+# 임베딩 모델 캐시 경로(컨테이너 이미지에 모델을 구울 때 지정). 미지정 시 fastembed 기본 캐시.
+DOLMEN_EMBEDDING_CACHE_DIR = os.getenv("DOLMEN_EMBEDDING_CACHE_DIR") or None
 
 # 한국어 문장 유사도가 되는 다국어 모델. fastembed가 ONNX로 로컬 실행한다.
 # 참고: intfloat/multilingual-e5-large가 품질은 더 좋지만 외부 데이터 파일(model.onnx_data)을
@@ -79,11 +83,12 @@ class DolmenRagService:
     def __init__(self) -> None:
         DOLMEN_RAG_DIR.mkdir(parents=True, exist_ok=True)
         self.store = RAGStore(path=str(DOLMEN_RAG_DIR / "documents.db"))
-        # cache_dir를 지정하면 HF blob 레이아웃이 되며 ONNX external data
-        # 경로 검증이 깨진다 — 기본 캐시를 쓴다.
+        # cache_dir 미지정 시 fastembed 기본 캐시(각 OS 임시 디렉터리)를 쓴다.
+        # 컨테이너에서는 DOLMEN_EMBEDDING_CACHE_DIR로 이미지에 구운 모델 경로를 가리킨다.
         self.embedding = FastEmbedProvider(
             model_name=DOLMEN_EMBEDDING_MODEL_NAME,
             dimension=DOLMEN_EMBEDDING_DIMENSION,
+            cache_dir=DOLMEN_EMBEDDING_CACHE_DIR,
         )
         self.search_backend = QdrantSearch(
             store=self.store,
