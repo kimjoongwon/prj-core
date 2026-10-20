@@ -16,6 +16,30 @@ export interface DolmenChatMessage {
 	evidence: DolmenChatEvidence[];
 }
 
+/** 한 번의 질문에 대한 에이전트 처리 단계 — 활동 타임라인 패널이 실시간으로 그린다. */
+export type DolmenAgentActivityPhase =
+	| "searching"
+	| "generating"
+	| "done"
+	| "error";
+
+export interface DolmenAgentActivity {
+	activityId: string;
+	questionText: string;
+	phase: DolmenAgentActivityPhase;
+	startedAtMs: number;
+	/** 근거 검색이 끝난 시각(sources 이벤트 수신). 0이면 아직 검색 중 */
+	searchFinishedAtMs: number;
+	finishedAtMs: number;
+	retrievedEvidence: DolmenChatEvidence[];
+	replyCharacterCount: number;
+	errorText: string;
+}
+
+export function issueAgentActivityId(): string {
+	return `agent-activity-${crypto.randomUUID()}`;
+}
+
 export function issueChatMessageId(): string {
 	return `chat-message-${crypto.randomUUID()}`;
 }
