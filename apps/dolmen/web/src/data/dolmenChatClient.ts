@@ -33,6 +33,8 @@ export interface DolmenAgentActivity {
 	finishedAtMs: number;
 	retrievedEvidence: DolmenChatEvidence[];
 	replyCharacterCount: number;
+	/** 진행 중 상태 안내(예: 모델 혼잡 재시도). 첫 답변 조각이 오면 비운다 */
+	statusText: string;
 	errorText: string;
 }
 
@@ -54,13 +56,14 @@ interface StreamDolmenChatReplyInput {
 	messageText: string;
 	sessionId: string;
 	onRetrievedEvidence: (retrievedEvidence: DolmenChatEvidence[]) => void;
+	onReplyStatus: (statusMessage: string) => void;
 	onAssistantChunk: (chunkText: string) => void;
 	onReplyDone: () => void;
 	onReplyError: (errorMessage: string) => void;
 }
 
 interface DolmenChatStreamEvent {
-	type: "sources" | "chunk" | "done" | "error";
+	type: "sources" | "status" | "chunk" | "done" | "error";
 	text?: string;
 	message?: string;
 	grounds?: DolmenChatStreamGround[];
@@ -96,6 +99,7 @@ export async function streamDolmenChatReply({
 	messageText,
 	sessionId,
 	onRetrievedEvidence,
+	onReplyStatus,
 	onAssistantChunk,
 	onReplyDone,
 	onReplyError,
@@ -133,6 +137,10 @@ export async function streamDolmenChatReply({
 		}
 		if (streamEvent.type === "sources" && streamEvent.grounds) {
 			onRetrievedEvidence(streamEvent.grounds.map(toDolmenChatEvidence));
+			return;
+		}
+		if (streamEvent.type === "status" && streamEvent.message) {
+			onReplyStatus(streamEvent.message);
 			return;
 		}
 		if (streamEvent.type === "chunk" && streamEvent.text) {

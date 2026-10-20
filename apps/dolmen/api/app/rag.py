@@ -74,7 +74,10 @@ class RetrievedGround:
     source: str
     version: str
     score: float
+    # 화면 표시용 앞부분 발췌
     snippet: str
+    # LLM 프롬프트에 넣는 청크 원문 전체
+    content: str
 
 
 class DolmenRagService:
@@ -137,6 +140,7 @@ class DolmenRagService:
                 version=result.version,
                 score=round(result.score, 4),
                 snippet=result.content.strip()[:220],
+                content=result.content.strip(),
             )
             for result in retrieval_results
         ]
