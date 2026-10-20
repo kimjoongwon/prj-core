@@ -177,6 +177,12 @@ const AgentActivityCard = observer(function AgentActivityCard({
 				{agentActivity.phase === "done" ? (
 					<span> · 답변 {agentActivity.replyCharacterCount}자</span>
 				) : null}
+				{isInProgress && agentActivity.statusText.length > 0 ? (
+					<p className="mt-1 flex items-center gap-1 text-warning">
+						<Loader2 className="h-3 w-3 animate-spin" />
+						{agentActivity.statusText}
+					</p>
+				) : null}
 				{agentActivity.phase === "error" ? (
 					<p className="mt-1 line-clamp-3 text-danger">
 						{agentActivity.errorText}

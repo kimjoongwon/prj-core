@@ -72,12 +72,21 @@ function EvidenceList({
 export function ChatMessageItem({
 	chatMessage,
 	isStreaming = false,
+	streamingStatusText = "",
 }: {
 	chatMessage: DolmenChatMessage;
 	isStreaming?: boolean;
+	/** 재시도 등 진행 상태 안내 — 첫 답변 조각 전에만 보인다 */
+	streamingStatusText?: string;
 }) {
 	const isUserMessage = chatMessage.role === "user";
 	const isAwaitingFirstChunk = isStreaming && chatMessage.text.length === 0;
+	const awaitingMessage =
+		streamingStatusText.length > 0
+			? streamingStatusText
+			: chatMessage.evidence.length > 0
+				? `근거 ${chatMessage.evidence.length}개를 바탕으로 답변을 작성하고 있어요…`
+				: "위키에서 근거를 찾고 있어요…";
 
 	return (
 		<div
@@ -102,9 +111,7 @@ export function ChatMessageItem({
 				{isAwaitingFirstChunk ? (
 					<div className="flex items-center gap-2 text-sm text-foreground/60">
 						<Loader2 className="h-4 w-4 animate-spin text-accent" />
-						{chatMessage.evidence.length > 0
-							? `근거 ${chatMessage.evidence.length}개를 바탕으로 답변을 작성하고 있어요…`
-							: "위키에서 근거를 찾고 있어요…"}
+						{awaitingMessage}
 					</div>
 				) : (
 					<Typography.Paragraph className="whitespace-pre-wrap break-words text-sm">

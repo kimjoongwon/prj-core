@@ -69,8 +69,15 @@ function createChatPanelState({ sessionId }: { sessionId: string }) {
 					finishedAtMs: 0,
 					retrievedEvidence: [],
 					replyCharacterCount: 0,
+					statusText: "",
 					errorText: "",
 				});
+			},
+			noteAgentActivityStatus(statusText: string) {
+				const currentAgentActivity = this.currentAgentActivity;
+				if (currentAgentActivity) {
+					currentAgentActivity.statusText = statusText;
+				}
 			},
 			attachReplyEvidence(retrievedEvidence: DolmenChatEvidence[]) {
 				const assistantReplyMessage = this.assistantReplyMessage;
@@ -92,6 +99,7 @@ function createChatPanelState({ sessionId }: { sessionId: string }) {
 				const currentAgentActivity = this.currentAgentActivity;
 				if (currentAgentActivity) {
 					currentAgentActivity.phase = "generating";
+					currentAgentActivity.statusText = "";
 					currentAgentActivity.replyCharacterCount += chunkText.length;
 				}
 			},
@@ -134,6 +142,8 @@ function createChatPanelState({ sessionId }: { sessionId: string }) {
 					sessionId,
 					onRetrievedEvidence: (retrievedEvidence) =>
 						this.attachReplyEvidence(retrievedEvidence),
+					onReplyStatus: (statusMessage) =>
+						this.noteAgentActivityStatus(statusMessage),
 					onAssistantChunk: (chunkText) =>
 						this.appendAssistantReplyChunk(chunkText),
 					onReplyDone: () => this.completeAssistantReply(),
@@ -204,6 +214,9 @@ export const ChatPanel = observer(function ChatPanel() {
 									isStreaming={
 										chatMessage.chatMessageId ===
 										chatPanelState.assistantReplyChatMessageId
+									}
+									streamingStatusText={
+										chatPanelState.currentAgentActivity?.statusText ?? ""
 									}
 								/>
 							))}
