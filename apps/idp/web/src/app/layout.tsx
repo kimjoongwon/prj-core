@@ -1,3 +1,4 @@
+import { LayoutDebugOverlay } from "@cocrepo/ui";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -50,6 +51,7 @@ export default function RootLayout({
 			</head>
 			<body className="bg-background text-foreground min-h-screen antialiased">
 				<Providers>{children}</Providers>
+				<LayoutDebugOverlay />
 			</body>
 		</html>
 	);

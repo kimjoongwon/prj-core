@@ -31,6 +31,7 @@ const ScreenRoot = ({ children, className, ...props }: ScreenProps) => {
 	return (
 		<div
 			{...props}
+			data-layout="Screen"
 			className={joinClassNames(
 				"mx-auto flex w-full max-w-[1440px] flex-col gap-4",
 				className,
@@ -55,6 +56,7 @@ const ScreenHeader = ({
 	return (
 		<div
 			{...props}
+			data-screen-slot="header"
 			className={joinClassNames(
 				"min-w-0 border-separator border-b pb-4",
 				className,
@@ -89,6 +91,7 @@ const ScreenBody = ({ children, className, ...props }: ScreenSlotProps) => {
 	return (
 		<div
 			{...props}
+			data-screen-slot="body"
 			className={joinClassNames("flex min-w-0 flex-col gap-4", className)}
 		>
 			{children}
@@ -98,7 +101,11 @@ const ScreenBody = ({ children, className, ...props }: ScreenSlotProps) => {
 
 const ScreenFooter = ({ children, className, ...props }: ScreenSlotProps) => {
 	return (
-		<div {...props} className={joinClassNames("min-w-0", className)}>
+		<div
+			{...props}
+			data-screen-slot="footer"
+			className={joinClassNames("min-w-0", className)}
+		>
 			{children}
 		</div>
 	);

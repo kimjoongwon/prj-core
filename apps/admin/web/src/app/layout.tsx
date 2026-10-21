@@ -1,4 +1,4 @@
-import { AppModalHost } from "@cocrepo/ui";
+import { AppModalHost, LayoutDebugOverlay } from "@cocrepo/ui";
 import { App } from "@cocrepo/ui/layout";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
@@ -32,8 +32,9 @@ export default function ({ children }: { children: React.ReactNode }) {
 						<App.GlobalLayer>
 							<AppModalHost />
 						</App.GlobalLayer>
-						<App.PortalHost />
-					</App>
+					<App.PortalHost />
+					<LayoutDebugOverlay />
+				</App>
 				</Providers>
 			</body>
 		</html>

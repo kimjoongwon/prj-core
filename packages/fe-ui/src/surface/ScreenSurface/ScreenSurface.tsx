@@ -14,7 +14,12 @@ export const ScreenSurface = ({
 	...props
 }: ScreenSurfaceProps) => {
 	return (
-		<Surface className={className} variant={variant} {...props}>
+		<Surface
+			className={className}
+			variant={variant}
+			{...props}
+			data-layout="ScreenSurface"
+		>
 			{children}
 		</Surface>
 	);
