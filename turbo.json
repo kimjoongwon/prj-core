@@ -133,6 +133,12 @@
       "cache": false,
       "persistent": true
     },
+    "design-web#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "public/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "cache": true
+    },
     "proposal-web#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],

@@ -21,7 +21,7 @@
 
 ## 2. 이미지 빌드 흐름 (2026-10-04 B구조 통일 이후)
 
-- 전 6개 앱 빌드 잡(core-api, admin-web, proposal-web, idp-api, idp-web, tool-storybook)이
+- 전 10개 앱 빌드 잡(core-api, admin-web, proposal-web, design-web, live-web, tool-storybook, idp-api, idp-web, dolmen-api, dolmen-web)이
   `buildctl` 원격 빌더로 클러스터의 **buildkitd**(`devops-tools` 네임스페이스, 서비스 1234/TCP, amd64, 4Gi)에서 빌드한다.
   podman 방식은 제거됨(이력은 prj-devops `docs/jenkins-build-speed-runbook.md`).
 - 잡 파라미터(`TRUSTED_DEPLOYMENT=true`, `HARBOR_REGISTRY`, `HARBOR_CREDENTIAL_ID`, `GITOPS_UPDATE_JOB`, `BUZZ_NOTIFY_URL`)는
@@ -63,7 +63,7 @@ docker load -i /tmp/<app>.tar && docker push harbor.onjitda.com/prod/<app>:<SHA-
 
 ## 3. 운영 토폴로지·확인 경로
 
-- 진입: `onjitda.com`(메인: admin-web `/admin`, `/api/v1/auth|idp|oidc-clients|oidc-sessions` → idp-api, `/api` 폴백 → core-api, `/proposal`, `/story`)
+- 진입: `onjitda.com`(메인: admin-web `/admin`, `/api/v1/auth|idp|oidc-clients|oidc-sessions` → idp-api, `/api` 폴백 → core-api, `/proposal`, `/design`(디자인 링크 아카이브), `/live`(라이브커머스 데모), `/live-stream`(SRS 미디어), `/story`)
   / `idp.onjitda.com`(`/oidc`·`/api` → idp-api, `/` → idp-web).
   **`/oidc` 라우팅은 idp.onjitda.com 호스트에만 있다** — issuer가 메인 호스트를 가리키면 end_session 등이 404.
 - OIDC 체인(로그인·로그아웃): admin `/admin/auth/login` →(307)→ `/api/v1/auth/oidc/login` →(302)→ `{issuer}/oidc/auth`
