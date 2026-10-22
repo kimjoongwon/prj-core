@@ -2,7 +2,7 @@ import { Chip as HeroChip } from "@heroui/react";
 import type { ComponentProps, ReactNode } from "react";
 
 export interface ChipProps
-	extends Omit<ComponentProps<typeof HeroChip>, "children"> {
+	extends Omit<ComponentProps<typeof HeroChip<"span">>, "children"> {
 	children?: ReactNode;
 	startContent?: ReactNode;
 	endContent?: ReactNode;

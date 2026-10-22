@@ -9,6 +9,7 @@ import {
 	XCircle,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
 import type {
 	DolmenAgentActivity,
 	DolmenChatEvidence,
@@ -195,13 +196,16 @@ const AgentActivityCard = observer(function AgentActivityCard({
 
 export const AgentActivityPanel = observer(function AgentActivityPanel({
 	agentActivities,
+	avatar,
 }: {
 	agentActivities: DolmenAgentActivity[];
+	avatar?: ReactNode;
 }) {
 	const latestFirstActivities = [...agentActivities].reverse();
 
 	return (
 		<aside className="flex w-full flex-col gap-3 rounded-2xl border border-border bg-surface/40 p-4 lg:w-80">
+			{avatar}
 			<div className="flex items-center gap-2">
 				<Activity className="h-4 w-4 text-accent" />
 				<Typography.Heading level={2} className="text-sm font-semibold">
