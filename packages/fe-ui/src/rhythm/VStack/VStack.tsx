@@ -73,6 +73,8 @@ export const VStack = (props: VStackProps) => {
 
 	return (
 		<div
+			data-layout="VStack"
+			data-layout-gap={gap ?? "section"}
 			className={cn(
 				vStackVariants({
 					alignItems,

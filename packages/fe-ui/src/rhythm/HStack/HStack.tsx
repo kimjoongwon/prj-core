@@ -89,6 +89,8 @@ export const HStack = (props: HStackProps) => {
 				className,
 			)}
 			{...rest}
+			data-layout="HStack"
+			data-layout-gap={gap ?? "inline"}
 		>
 			{Children.toArray(children)}
 		</div>

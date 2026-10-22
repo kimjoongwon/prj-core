@@ -112,6 +112,7 @@ const SectionRoot = ({
 	return (
 		<section
 			{...props}
+			data-layout="Section"
 			className={joinClassNames(
 				"grid w-full min-w-0 grid-cols-1",
 				sectionInsetClassNames[inset],

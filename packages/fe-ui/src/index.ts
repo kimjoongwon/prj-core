@@ -3,6 +3,7 @@
 export type { Key } from "react-aria-components";
 export * from "./data-display";
 export * from "./data-grid";
+export * from "./debug";
 export * from "./design-system";
 export * from "./domain";
 export * from "./feedback";

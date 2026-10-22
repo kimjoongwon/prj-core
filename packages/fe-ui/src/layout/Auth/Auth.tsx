@@ -55,6 +55,7 @@ const AuthRoot = ({ children, className, ...props }: AuthProps) => {
 	return (
 		<div
 			{...props}
+			data-layout="Auth"
 			className={joinClassNames(
 				"flex min-h-screen w-full flex-col overflow-hidden bg-background text-foreground",
 				className,
@@ -75,7 +76,11 @@ export const AuthHeader = ({
 	...props
 }: AuthHeaderProps) => {
 	return (
-		<header {...props} className={joinClassNames("shrink-0", className)}>
+		<header
+			{...props}
+			data-layout="Auth.Header"
+			className={joinClassNames("shrink-0", className)}
+		>
 			{children}
 		</header>
 	);
@@ -93,6 +98,7 @@ export const AuthBody = ({
 	return (
 		<div
 			{...props}
+			data-layout="Auth.Body"
 			className={joinClassNames(
 				"flex min-h-0 w-full flex-1 flex-col overflow-hidden lg:flex-row",
 				className,
@@ -115,6 +121,7 @@ export const AuthAside = ({
 	return (
 		<aside
 			{...props}
+			data-layout="Auth.Aside"
 			className={joinClassNames(
 				"hidden min-h-0 min-w-0 flex-1 overflow-y-auto lg:block",
 				className,
@@ -133,6 +140,7 @@ export const AuthMain = ({ children, className, ...props }: AuthMainProps) => {
 	return (
 		<main
 			{...props}
+			data-layout="Auth.Main"
 			className={joinClassNames(
 				"flex min-h-0 min-w-0 flex-1 items-center justify-center overflow-y-auto bg-background px-4 py-10 sm:px-6",
 				className,
@@ -153,7 +161,11 @@ export const AuthFooter = ({
 	...props
 }: AuthFooterProps) => {
 	return (
-		<footer {...props} className={joinClassNames("shrink-0", className)}>
+		<footer
+			{...props}
+			data-layout="Auth.Footer"
+			className={joinClassNames("shrink-0", className)}
+		>
 			{children}
 		</footer>
 	);
@@ -175,6 +187,7 @@ export const AuthPanel = ({
 
 	return (
 		<Card
+			data-layout="Auth.Panel"
 			className={joinClassNames(
 				"w-full rounded-3xl border p-6 sm:p-8",
 				toneClass,
@@ -215,7 +228,7 @@ export const AuthPanelHeader = ({
 	) : null;
 
 	return (
-		<div className="mb-8 flex items-start gap-4">
+		<div data-layout="Auth.PanelHeader" className="mb-8 flex items-start gap-4">
 			{visual ? <div className="shrink-0">{visual}</div> : null}
 			<div className="min-w-0">
 				<Typography.Heading
