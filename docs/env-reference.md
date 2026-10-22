@@ -19,6 +19,7 @@
 | `admin-web` | `apps/admin/web/.env.local` | `apps/admin/web/.env.example` | Next.js Admin Web |
 | `idp-web` | `apps/idp/web/.env.local` | `apps/idp/web/.env.example` | Next.js IDP Web(로그인/동의 UI) |
 | `proposal-web` | `apps/proposal/web/.env.local` | `apps/proposal/web/.env.example` | Next.js Proposal Web |
+| `design-web` | 없음(정적 콘텐츠) | 없음 | Next.js Design Web(디자인 링크 디렉터리, 포트만 `DESIGN_WEB_PORT`) |
 | `dolmen-api` | `apps/dolmen/api/.env` | `apps/dolmen/api/.env.example` | Python FastAPI(hello-agents 기반 에이전트 데모) |
 | `dolmen-web` | `apps/dolmen/web/.env.local` | `apps/dolmen/web/.env.example` | Next.js Dolmen Web(채팅 화면) |
 | `tool-storybook` | `apps/tool/storybook/.env` | 없음 | Storybook dev server |
