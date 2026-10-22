@@ -68,7 +68,11 @@ const container = cva("mx-auto w-full", {
 export const Container = (props: ContainerProps) => {
 	const { className = "", children, width, containerQuery } = props;
 	return (
-		<div className={container({ className, width, containerQuery })}>
+		<div
+			data-layout="Container"
+			data-layout-width={width ?? "page"}
+			className={container({ className, width, containerQuery })}
+		>
 			{children}
 		</div>
 	);

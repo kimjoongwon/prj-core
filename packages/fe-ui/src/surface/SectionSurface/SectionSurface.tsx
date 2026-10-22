@@ -14,7 +14,12 @@ export const SectionSurface = ({
 	...props
 }: SectionSurfaceProps) => {
 	return (
-		<Surface className={className} variant={variant} {...props}>
+		<Surface
+			className={className}
+			variant={variant}
+			{...props}
+			data-layout="SectionSurface"
+		>
 			{children}
 		</Surface>
 	);

@@ -35,6 +35,7 @@ const AdminRoot = ({ children, className, ...props }: AdminProps) => {
 	return (
 		<div
 			{...props}
+			data-layout="Admin"
 			className={joinClassNames(
 				"flex h-screen w-full flex-col overflow-hidden bg-background text-foreground",
 				className,
@@ -57,6 +58,7 @@ export const AdminHeader = ({
 	return (
 		<header
 			{...props}
+			data-layout="Admin.Header"
 			className={joinClassNames(
 				"relative z-30 shrink-0 border-separator border-b bg-surface",
 				className,
@@ -81,6 +83,7 @@ export const AdminBody = ({
 	return (
 		<div
 			{...props}
+			data-layout="Admin.Body"
 			className={joinClassNames("flex min-h-0 w-full flex-1", className)}
 		>
 			{children}
@@ -100,6 +103,7 @@ export const AdminLeftAside = ({
 	return (
 		<aside
 			{...props}
+			data-layout="Admin.LeftAside"
 			className={joinClassNames(
 				"hidden h-full w-64 flex-none md:block",
 				className,
@@ -122,6 +126,7 @@ export const AdminRightAside = ({
 	return (
 		<aside
 			{...props}
+			data-layout="Admin.RightAside"
 			className={joinClassNames(
 				"hidden h-full w-80 flex-none xl:block",
 				className,
@@ -144,6 +149,7 @@ export const AdminMain = ({
 	return (
 		<main
 			{...props}
+			data-layout="Admin.Main"
 			className={joinClassNames(
 				"min-h-0 min-w-0 flex-1 overflow-y-auto bg-background p-4 pb-20 md:p-6 md:pb-6",
 				className,
@@ -164,7 +170,11 @@ export const AdminFooter = ({
 	...props
 }: AdminFooterProps) => {
 	return (
-		<footer {...props} className={joinClassNames("shrink-0", className)}>
+		<footer
+			{...props}
+			data-layout="Admin.Footer"
+			className={joinClassNames("shrink-0", className)}
+		>
 			{children}
 		</footer>
 	);

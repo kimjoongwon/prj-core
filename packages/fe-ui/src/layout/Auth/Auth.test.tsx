@@ -47,4 +47,27 @@ describe("Auth", () => {
 		expect(Auth.Main).toBe(AuthMain);
 		expect(Auth.Footer).toBe(AuthFooter);
 	});
+
+	it("Given auth panel When rendered Then layout marker reaches the Card root", () => {
+		render(
+			<Auth>
+				<AuthBody>
+					<AuthMain>
+						<Auth.Panel>
+							<Auth.PanelHeader title="로그인" />
+							panel content
+						</Auth.Panel>
+					</AuthMain>
+				</AuthBody>
+			</Auth>,
+		);
+
+		const panel = screen.getByText("panel content").closest("[data-layout]");
+		expect(panel?.getAttribute("data-layout")).toBe("Auth.Panel");
+		expect(
+			screen.getByText("로그인").closest("[data-layout]")?.getAttribute(
+				"data-layout",
+			),
+		).toBe("Auth.PanelHeader");
+	});
 });

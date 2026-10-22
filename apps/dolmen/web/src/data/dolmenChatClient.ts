@@ -16,6 +16,32 @@ export interface DolmenChatMessage {
 	evidence: DolmenChatEvidence[];
 }
 
+/** 한 번의 질문에 대한 에이전트 처리 단계 — 활동 타임라인 패널이 실시간으로 그린다. */
+export type DolmenAgentActivityPhase =
+	| "searching"
+	| "generating"
+	| "done"
+	| "error";
+
+export interface DolmenAgentActivity {
+	activityId: string;
+	questionText: string;
+	phase: DolmenAgentActivityPhase;
+	startedAtMs: number;
+	/** 근거 검색이 끝난 시각(sources 이벤트 수신). 0이면 아직 검색 중 */
+	searchFinishedAtMs: number;
+	finishedAtMs: number;
+	retrievedEvidence: DolmenChatEvidence[];
+	replyCharacterCount: number;
+	/** 진행 중 상태 안내(예: 모델 혼잡 재시도). 첫 답변 조각이 오면 비운다 */
+	statusText: string;
+	errorText: string;
+}
+
+export function issueAgentActivityId(): string {
+	return `agent-activity-${crypto.randomUUID()}`;
+}
+
 export function issueChatMessageId(): string {
 	return `chat-message-${crypto.randomUUID()}`;
 }
@@ -30,13 +56,14 @@ interface StreamDolmenChatReplyInput {
 	messageText: string;
 	sessionId: string;
 	onRetrievedEvidence: (retrievedEvidence: DolmenChatEvidence[]) => void;
+	onReplyStatus: (statusMessage: string) => void;
 	onAssistantChunk: (chunkText: string) => void;
 	onReplyDone: () => void;
 	onReplyError: (errorMessage: string) => void;
 }
 
 interface DolmenChatStreamEvent {
-	type: "sources" | "chunk" | "done" | "error";
+	type: "sources" | "status" | "chunk" | "done" | "error";
 	text?: string;
 	message?: string;
 	grounds?: DolmenChatStreamGround[];
@@ -72,6 +99,7 @@ export async function streamDolmenChatReply({
 	messageText,
 	sessionId,
 	onRetrievedEvidence,
+	onReplyStatus,
 	onAssistantChunk,
 	onReplyDone,
 	onReplyError,
@@ -109,6 +137,10 @@ export async function streamDolmenChatReply({
 		}
 		if (streamEvent.type === "sources" && streamEvent.grounds) {
 			onRetrievedEvidence(streamEvent.grounds.map(toDolmenChatEvidence));
+			return;
+		}
+		if (streamEvent.type === "status" && streamEvent.message) {
+			onReplyStatus(streamEvent.message);
 			return;
 		}
 		if (streamEvent.type === "chunk" && streamEvent.text) {
