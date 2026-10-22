@@ -6,8 +6,8 @@
 
 ## 역할
 
-`idp-web` 이미지를 원격 BuildKit 데몬(buildkitd)으로 빌드해 Harbor production 저장소에 푸시합니다.  
-빌드 성공 후에는 GitOps 반영 Job을 비동기로 트리거해 **prj-deploy**의 `prod/idp-web.yaml` 이미지 태그를 갱신합니다(2026-09-27 저장소 분리 이후).
+`idp-web` 이미지를 원격 BuildKit 데몬(buildkitd)으로 빌드해 Harbor의 브랜치별 prod/stg 저장소에 푸시합니다.
+빌드 성공 후에는 GitOps 반영 Job을 비동기로 트리거해 **prj-deploy**의 `{prod,stg}/idp-web.yaml` 이미지 태그를 갱신합니다. `main`은 prod, `stg`는 stg를 선택합니다.
 
 ## 공개 계약
 
@@ -24,22 +24,23 @@
 | GitOps 트리거 | 보호된 내부 job이 주입하는 `GITOPS_UPDATE_JOB` 환경변수 (기본값 폴백 제거 — 미주입 시 게이트에서 즉시 실패) |
 | 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV=ENV_NAME` (prod/stg), `SOURCE_BUILD_URL`, `SOURCE_COMMIT`, `SOURCE_BUZZ_EVENT_ID` |
 | 알림 | buzz #cicd 채널 성공/실패 알림. 성공 알림 `event_id`를 `SOURCE_BUZZ_EVENT_ID`로 전달해 범프/배포 알림을 같은 스레드로 묶고, 실패 시 @ZCode 멘션 |
-| 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
+| 실패 전파 정책 | 범프 호출 자체가 실패하면 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지. `wait: false`이므로 후속 범프 잡 실패·ArgoCD 실패는 전파되지 않음 |
 
 ## 구현 체크리스트
 
-- [x] 보안 게이트(main 전용 검사, `TRUSTED_DEPLOYMENT`, 내부 배포 환경변수 검증)를 통일된 B구조로 신규 적용함
+- [x] 보안 게이트(main/stg 허용 검사, `TRUSTED_DEPLOYMENT`, 내부 배포 환경변수 검증)를 통일된 B구조로 신규 적용함
 - [x] privileged 없는 buildctl 컨테이너로 빌드 방식을 교체함
 - [x] 빌드와 push를 `buildctl --output type=image,push=true` 단일 명령으로 수행함
 - [x] `Dockerfile.idp-web`는 수정 없이 dockerfile.v0 프론트엔드가 그대로 소비함
-- [x] prod GitOps 트리거 stage 계약(파라미터, 비동기, UNSTABLE 전파)을 기존 잡과 동일하게 유지함
+- [x] 환경별 GitOps 트리거 stage 계약(파라미터, 비동기, UNSTABLE 전파)을 기존 잡과 동일하게 유지함
 - [x] 하드코딩된 registry 주소(`harbor.onjitda.com`)·credential(`harbor`)·job 폴백(`/gitops-prod-image-bump`)을 env 주입 방식으로 통일함
 - [x] registry login 단계 제거, `latest` 태그 폐지(SHA-12 GitOps만 사용). stg 브랜치 빌드는 2026-10-05 재가동으로 복원됨
 
 ## 운영 노트
 
-- 전환 전 잡은 registry 주소·credential·GitOps job 이름을 하드코딩하고 헤더 게이트가 없었습니다. 전환 후 헤더 게이트가 소비하는 `TRUSTED_DEPLOYMENT=true`, `HARBOR_REGISTRY`, `HARBOR_CREDENTIAL_ID`, `GITOPS_UPDATE_JOB`는 prj-devops `helm/development-tools/jenkins/values.yaml`의 `app-build-jobs` Job DSL이 idp-* 잡을 포함한 전체 앱 빌드 잡(6종)에 이미 동일하게 주입하므로 잡 설정 변경은 필요 없습니다.
-- 과거 남은 외부 조치는 Jenkins 차트 `helm upgrade` 적용이었으나 완료됨. 현재 잔여는 **Jenkins 재시작 후 push-router 잡 1회 수동 실행**(GWT 트리거 재등록)뿐입니다(prj-devops main d5baa2b). 적용 직후 첫 gitops 범프 빌드는 선언적 파라미터가 한 번 지워져 `TRUSTED_DEPLOYMENT != 'true'`로 실패할 수 있으며, 이 경우 파라미터를 명시해 재실행하면 됩니다(prj-devops docs/buzz-ci-integration.md).
+- 2026-10-22 소스 대조: main push만 push-router가 경로 매칭하며, stg는 `<앱>-build`에서 `BRANCH_NAME=stg`로 수동 실행합니다. 자동 호출·배포 완료는 실제 Jenkins·ArgoCD 결과로 확인합니다.
+- 전환 전 잡은 registry 주소·credential·GitOps job 이름을 하드코딩하고 헤더 게이트가 없었습니다. 전환 후 헤더 게이트가 소비하는 `TRUSTED_DEPLOYMENT=true`, `HARBOR_REGISTRY`, `HARBOR_CREDENTIAL_ID`, `GITOPS_UPDATE_JOB`는 prj-devops `helm/development-tools/jenkins/values.yaml`의 `app-build-jobs` Job DSL이 idp-* 잡을 포함한 전체 앱 빌드 잡(10종)에 동일하게 선언합니다. values 변경은 Jenkins 차트를 별도로 적용해야 하며 실제 잡 반영은 확인해야 합니다.
+- Jenkins 차트 적용·재시작 뒤에는 **push-router 잡 1회 수동 실행**으로 GWT 트리거 등록을 확인합니다. 과거 적용 기록으로 현재 잡 상태를 단정하지 않습니다. 적용 직후 첫 gitops 범프 빌드는 선언적 파라미터가 한 번 지워져 `TRUSTED_DEPLOYMENT != 'true'`로 실패할 수 있으며, 이 경우 파라미터를 명시해 재실행하면 됩니다(prj-devops docs/buzz-ci-integration.md).
 - 적용 후 첫 앱 빌드에서는 buildctl 파드 프로비저닝(구 파일럿 잡의 containerCap 라벨 대기 이력)과 캐시 적중을 관찰합니다. 같은 커밋으로 2회 빌드해 `--progress=plain` 로그에서 캐시 재사용(`CACHED`)과 이미지 push 성공을 확인합니다.
 
 ## 잔여 위험

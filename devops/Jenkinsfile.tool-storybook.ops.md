@@ -26,7 +26,7 @@
 | GitOps 트리거 | 보호된 내부 job이 주입하는 `GITOPS_UPDATE_JOB` 환경변수 |
 | 트리거 파라미터 | `APP_NAME`, `IMAGE_TAG`, `DEPLOY_ENV=prod`, `SOURCE_BUILD_URL`, `SOURCE_COMMIT`, `SOURCE_BUZZ_EVENT_ID` |
 | 알림 | buzz #cicd 채널 성공/실패 알림. 성공 알림 `event_id`를 `SOURCE_BUZZ_EVENT_ID`로 전달해 범프/배포 알림을 같은 스레드로 묶고, 실패 시 @ZCode 멘션 |
-| 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
+| 실패 전파 정책 | 범프 호출 자체가 실패하면 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지. `wait: false`이므로 후속 범프 잡 실패·ArgoCD 실패는 전파되지 않음 |
 
 ## 구현 체크리스트
 
@@ -39,7 +39,7 @@
 
 ## 운영 노트
 
-- 파일럿 잡 항목은 prj-devops main(d5baa2b)에서 본체 `tool-storybook-build` 잡으로 병합되었습니다(regions 승계, 파일럿 잡 scriptPath 변경·정리 불필요). 과거 남은 외부 조치는 Jenkins 차트 `helm upgrade` 적용이었으나 완료됨. 현재 잔여는 **Jenkins 재시작 후 push-router 잡 1회 수동 실행**(GWT 트리거 재등록)뿐입니다.
+- 현재 DSL의 잡은 `tool-storybook-build`이며 push-router 자동 대상에는 없습니다. main 배포는 수동 실행합니다. Jenkins 차트 적용·재시작 뒤에는 잡 정의 및 push-router GWT 등록을 확인하며, 과거 파일럿 적용 기록으로 현재 런타임 상태를 단정하지 않습니다.
 - 함정: 적용 직후 첫 gitops 범프 빌드는 선언적 파라미터가 한 번 지워져 `TRUSTED_DEPLOYMENT != 'true'`로 실패할 수 있습니다. 파라미터를 명시해 재실행하면 됩니다(prj-devops docs/buzz-ci-integration.md).
 - 적용 후 첫 앱 빌드에서 buildctl 파드 프로비저닝(구 파일럿 잡의 containerCap 라벨 대기 이력)을 관찰합니다. 검증 관점: 같은 커밋으로 2회 빌드해 `--progress=plain` 로그에서 pnpm/turbo 스텝의 `CACHED` 표시를 확인하고 빌드 시간을 비교하며, 이미지 push 성공을 확인합니다.
 - watch-item: BuildKit은 빌드별 ulimit 상향이 불가합니다. Storybook 빌드의 `nofile=65536` 요구가 buildkitd 데몬 기본값으로 충분한지 관찰합니다. 부족하면 빌드 실패(EMFILE)로 나타나며, 이 경우 Dockerfile RUN 내 ulimit 폴백 로직 점검이 필요합니다.
