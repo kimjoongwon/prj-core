@@ -203,14 +203,14 @@ function DesignLinkDirectory({
 						{category.links.map((link) => (
 							<li
 								key={link.url}
-								className="group flex flex-col rounded-xl border border-zinc-200 bg-white p-5 transition-shadow hover:shadow-md"
+								className="group relative flex flex-col rounded-xl border border-zinc-200 bg-white p-5 transition-shadow hover:shadow-md"
 							>
 								<div className="flex items-start justify-between gap-3">
 									<a
 										href={link.url}
 										target="_blank"
 										rel="noopener noreferrer"
-										className="text-[15px] font-semibold text-zinc-900 underline-offset-4 decoration-blue-400 hover:underline"
+										className="text-[15px] font-semibold text-zinc-900 underline-offset-4 decoration-blue-400 hover:underline group-hover:underline after:absolute after:inset-0"
 									>
 										{link.name}
 									</a>
