@@ -3,9 +3,9 @@ import Providers from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "Dolmen — 온보딩 위키 어시스턴트",
+	title: "Dolmen · MOMO 이력서 면접 Q&A",
 	description:
-		"문서 검색(RAG)과 대화 기억을 갖춘 에이전트에게 온보딩 위키를 질문합니다.",
+		"면접관의 경력·프로젝트·기술·협업 질문에 MOMO가 등록된 이력서를 근거로 답합니다.",
 };
 
 export default function RootLayout({

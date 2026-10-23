@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
 		root: path.join(__dirname, "../../.."),
 	},
 	transpilePackages: [
+		"three",
 		"@cocrepo/schema",
 		"@cocrepo/toolkit",
 		"@cocrepo/type",

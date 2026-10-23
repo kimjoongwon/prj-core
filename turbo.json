@@ -151,7 +151,7 @@
     },
     "dolmen-web#build": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
+      "inputs": ["src/**", "public/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],
       "outputs": [".next/**", "!.next/cache/**"],
       "cache": true
     },
