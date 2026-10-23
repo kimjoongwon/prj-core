@@ -16,6 +16,10 @@ out
 **/.env
 **/.env.*
 !**/.env.example
+# Dolmen 비공개 이력서와 로컬 검색/실행 자료는 빌드 컨텍스트에도 보내지 않음
+apps/dolmen/api/private
+apps/dolmen/api/.rag
+apps/dolmen/api/.venv
 # 인증서, 개인 키와 브라우저 산출물 제외
 **/*.pem
 **/*.key

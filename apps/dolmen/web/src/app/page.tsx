@@ -2,15 +2,16 @@
 
 import { Chip, Container, Typography } from "@cocrepo/ui";
 import { Landmark } from "lucide-react";
-import { AgentStatusBar } from "@/components/AgentStatusBar";
-import { ChatPanel } from "@/components/ChatPanel";
+import { AgentStatusBar } from "../components/AgentStatusBar";
+import { ChatPanel } from "../components/ChatPanel";
 
-const TECH_HIGHLIGHTS = [
-	"hello-agents 에이전트",
-	"RAG · 절 단위 구조 청킹",
-	"로컬 임베딩(MiniLM 다국어)",
-	"근거 유사도 노출",
-	"SSE 실시간 스트리밍",
+const INTERVIEW_TOPICS = [
+	"경력",
+	"프로젝트",
+	"기술",
+	"협업",
+	"AI 활용",
+	"이력서 근거 기반 답변",
 ];
 
 export default function Page() {
@@ -24,20 +25,20 @@ export default function Page() {
 						</div>
 						<div className="flex flex-col gap-0.5">
 							<Typography.Heading level={1} weight="bold" className="text-2xl">
-								Dolmen
+								MOMO 이력서 Q&A
 							</Typography.Heading>
 							<Typography.Paragraph color="muted" className="text-sm">
-								위키를 읽고 근거와 함께 답하는 에이전트 — 검색과 판단 과정이
-								그대로 보입니다.
+								면접관의 경력·프로젝트·기술·협업 질문에, MOMO가 등록된 이력서를
+								근거로 답합니다.
 							</Typography.Paragraph>
 						</div>
 					</div>
 					<AgentStatusBar />
 				</div>
 				<div className="flex flex-wrap gap-2">
-					{TECH_HIGHLIGHTS.map((techHighlight) => (
-						<Chip key={techHighlight} size="sm" variant="soft" color="default">
-							{techHighlight}
+					{INTERVIEW_TOPICS.map((interviewTopic) => (
+						<Chip key={interviewTopic} size="sm" variant="soft" color="default">
+							{interviewTopic}
 						</Chip>
 					))}
 				</div>
@@ -47,8 +48,8 @@ export default function Page() {
 
 			<footer className="pb-4">
 				<Typography.Paragraph color="muted" className="text-xs">
-					데모 문서: 가상의 피트니스 예약 스타트업 「모아핏」 온보딩 위키(실제
-					회사 아님). 답변의 근거 절·유사도는 검색 결과를 그대로 보여줍니다.
+					MOMO는 등록된 이력서를 바탕으로 답하는 AI입니다. 답변의 이력서 출처를
+					함께 확인해 주세요. 이력서에 없는 내용은 추측하지 않습니다.
 				</Typography.Paragraph>
 			</footer>
 		</Container>

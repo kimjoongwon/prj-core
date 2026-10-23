@@ -6,25 +6,76 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import {
 	type DolmenHealthStatus,
-	type DolmenWikiIndexStatus,
+	type DolmenResumeStatus,
 	fetchDolmenHealthStatus,
-	fetchDolmenWikiIndexStatus,
+	fetchDolmenResumeStatus,
 } from "../data/dolmenHealthClient";
 
 const HEALTH_POLL_INTERVAL_MS = 12_000;
 
-function createAgentStatusBarState() {
+export function createAgentStatusBarState() {
+	let isActive = false;
+	let isRefreshPending = false;
+	let refreshSequence = 0;
 	return makeAutoObservable(
 		{
 			apiOnline: false,
 			llmConfigured: false,
-			wikiIndexStatus: null as DolmenWikiIndexStatus | null,
+			hasCheckedHealth: false,
+			resumeStatus: null as DolmenResumeStatus | null,
+			get resumeStatusLabel(): string {
+				if (!this.resumeStatus) return "이력서 확인 중…";
+				switch (this.resumeStatus.state) {
+					case "ready":
+						return `${this.resumeStatus.candidateName ? `${this.resumeStatus.candidateName}님 ` : ""}이력서 준비됨 · 근거 ${this.resumeStatus.sectionCount}개`;
+					case "unregistered":
+						return "이력서 등록 안 됨";
+					case "not-ready":
+						return "이력서 준비 실패";
+					default:
+						return "이력서 상태 확인 실패";
+				}
+			},
+			get resumeStatusColor(): "success" | "warning" | "danger" | "default" {
+				if (!this.resumeStatus) return "default";
+				if (this.resumeStatus.state === "ready") return "success";
+				if (this.resumeStatus.state === "unavailable") return "danger";
+				return "warning";
+			},
+			activate() {
+				isActive = true;
+			},
+			dispose() {
+				isActive = false;
+				isRefreshPending = false;
+				refreshSequence += 1;
+			},
 			applyHealthStatus(healthStatus: DolmenHealthStatus) {
 				this.apiOnline = healthStatus.apiOnline;
 				this.llmConfigured = healthStatus.llmConfigured;
+				this.hasCheckedHealth = true;
 			},
-			applyWikiIndexStatus(wikiIndexStatus: DolmenWikiIndexStatus | null) {
-				this.wikiIndexStatus = wikiIndexStatus;
+			applyResumeStatus(resumeStatus: DolmenResumeStatus) {
+				this.resumeStatus = resumeStatus;
+			},
+			async refreshStatuses() {
+				if (!isActive || isRefreshPending) return;
+				isRefreshPending = true;
+				const requestSequence = ++refreshSequence;
+				const canApplyStatus = () =>
+					isActive && requestSequence === refreshSequence;
+				try {
+					await Promise.all([
+						fetchDolmenHealthStatus().then((healthStatus) => {
+							if (canApplyStatus()) this.applyHealthStatus(healthStatus);
+						}),
+						fetchDolmenResumeStatus().then((resumeStatus) => {
+							if (canApplyStatus()) this.applyResumeStatus(resumeStatus);
+						}),
+					]);
+				} finally {
+					if (requestSequence === refreshSequence) isRefreshPending = false;
+				}
 			},
 		},
 		{},
@@ -40,20 +91,16 @@ export const AgentStatusBar = observer(function AgentStatusBar() {
 	);
 
 	useEffect(() => {
-		const refreshStatuses = () => {
-			void fetchDolmenHealthStatus().then((healthStatus) =>
-				agentStatusBarState.applyHealthStatus(healthStatus),
-			);
-			void fetchDolmenWikiIndexStatus().then((wikiIndexStatus) =>
-				agentStatusBarState.applyWikiIndexStatus(wikiIndexStatus),
-			);
-		};
-		refreshStatuses();
+		agentStatusBarState.activate();
+		void agentStatusBarState.refreshStatuses();
 		const pollTimer = window.setInterval(
-			refreshStatuses,
+			agentStatusBarState.refreshStatuses,
 			HEALTH_POLL_INTERVAL_MS,
 		);
-		return () => window.clearInterval(pollTimer);
+		return () => {
+			window.clearInterval(pollTimer);
+			agentStatusBarState.dispose();
+		};
 	}, [agentStatusBarState]);
 
 	return (
@@ -61,29 +108,44 @@ export const AgentStatusBar = observer(function AgentStatusBar() {
 			<Chip
 				size="sm"
 				variant="soft"
-				color={agentStatusBarState.apiOnline ? "success" : "danger"}
+				color={
+					!agentStatusBarState.hasCheckedHealth
+						? "default"
+						: agentStatusBarState.apiOnline
+							? "success"
+							: "danger"
+				}
 			>
-				{agentStatusBarState.apiOnline ? "API 연결됨" : "API 응답 없음"}
+				{!agentStatusBarState.hasCheckedHealth
+					? "서비스 연결 확인 중…"
+					: agentStatusBarState.apiOnline
+						? "서비스 연결됨"
+						: "서비스 연결 실패"}
 			</Chip>
 			<Chip
 				size="sm"
 				variant="soft"
-				color={agentStatusBarState.llmConfigured ? "success" : "warning"}
+				color={
+					!agentStatusBarState.hasCheckedHealth
+						? "default"
+						: agentStatusBarState.llmConfigured
+							? "success"
+							: "warning"
+				}
 			>
-				{agentStatusBarState.llmConfigured
-					? "모델 준비 완료"
-					: "모델 응답 대기 (공급자 상태)"}
+				{!agentStatusBarState.hasCheckedHealth
+					? "답변 설정 확인 중…"
+					: agentStatusBarState.llmConfigured
+						? "답변 연결 설정됨"
+						: "답변 연결 설정 필요"}
 			</Chip>
-			{agentStatusBarState.wikiIndexStatus ? (
-				<Chip size="sm" variant="soft" color="accent">
-					위키 {agentStatusBarState.wikiIndexStatus.wikiSectionCount}절 색인 ·
-					rev {agentStatusBarState.wikiIndexStatus.revision}
-				</Chip>
-			) : (
-				<Chip size="sm" variant="soft" color="default">
-					위키 색인 확인 중…
-				</Chip>
-			)}
+			<Chip
+				size="sm"
+				variant="soft"
+				color={agentStatusBarState.resumeStatusColor}
+			>
+				{agentStatusBarState.resumeStatusLabel}
+			</Chip>
 		</div>
 	);
 });

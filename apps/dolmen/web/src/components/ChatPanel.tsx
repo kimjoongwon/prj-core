@@ -289,10 +289,11 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 export type ChatPanelState = ReturnType<typeof createChatPanelState>;
 
 const SAMPLE_QUESTIONS = [
-	"연차는 며칠 제공되나요?",
-	"헬스 클래스는 몇 시간 전까지 무료로 취소할 수 있나요?",
-	"노트북 지급 기준이 궁금해요.",
-	"생일에 반차를 쓸 수 있나요?",
+	"어떤 경력과 역할을 경험했나요?",
+	"주요 프로젝트와 맡은 역할을 소개해 주세요.",
+	"어떤 기술을 사용했고 어떻게 활용했나요?",
+	"협업 경험과 일하는 방식을 알려 주세요.",
+	"AI를 업무에 활용한 경험이 있나요?",
 ];
 
 export const ChatPanel = observer(function ChatPanel() {
@@ -313,8 +314,8 @@ export const ChatPanel = observer(function ChatPanel() {
 					{chatPanelState.chatMessages.length === 0 ? (
 						<div className="flex h-full flex-col items-center justify-center gap-3 py-16 text-center">
 							<Typography.Paragraph color="muted">
-								온보딩 위키에 궁금한 점을 물어보세요. 에이전트가 위키를 검색해
-								근거와 함께 답합니다.
+								면접관님, 경력·프로젝트·기술·협업에 대해 질문해 주세요. MOMO가
+								등록된 이력서를 바탕으로 설명합니다.
 							</Typography.Paragraph>
 							<div className="flex flex-wrap justify-center gap-2">
 								{SAMPLE_QUESTIONS.map((sampleQuestion) => (
@@ -361,18 +362,20 @@ export const ChatPanel = observer(function ChatPanel() {
 				) : null}
 
 				<div className="flex items-end gap-2">
-					<TextArea
-						aria-label="질문 입력"
-						className="flex-1"
-						variant="bordered"
-						placeholder="질문을 입력하세요 (Enter 전송, Shift+Enter 줄바꿈)"
-						value={chatPanelState.draftMessage}
-						onChange={chatPanelState.setDraftMessage}
-						onFocus={chatPanelState.focusDraftInput}
-						onBlur={chatPanelState.blurDraftInput}
-						onKeyDown={chatPanelState.submitDraftOnEnter}
-						isDisabled={chatPanelState.isAssistantResponding}
-					/>
+					<div className="min-w-0 flex-1 [&>*]:w-full">
+						<TextArea
+							aria-label="질문 입력"
+							className="min-w-0 w-full"
+							variant="bordered"
+							placeholder="면접 질문을 입력하세요 (Enter 전송, Shift+Enter 줄바꿈)"
+							value={chatPanelState.draftMessage}
+							onChange={chatPanelState.setDraftMessage}
+							onFocus={chatPanelState.focusDraftInput}
+							onBlur={chatPanelState.blurDraftInput}
+							onKeyDown={chatPanelState.submitDraftOnEnter}
+							isDisabled={chatPanelState.isAssistantResponding}
+						/>
+					</div>
 					<Button
 						variant="primary"
 						isDisabled={

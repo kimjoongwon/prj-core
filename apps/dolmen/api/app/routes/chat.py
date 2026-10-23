@@ -20,8 +20,9 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
-from app.agent import DolmenConfigError, dolmen_agent_service
+from app.agent import DolmenConfigError, DolmenEmptyReplyError, dolmen_agent_service
 from app.rag import RetrievedGround, dolmen_rag_service
+from app.resume import ResumeUnavailableError
 from app.settings import missing_llm_env_names
 
 router = APIRouter(tags=["chat"])
@@ -70,20 +71,20 @@ async def read_health() -> dict:
 async def stream_chat_reply(chat_request_body: ChatRequestBody) -> StreamingResponse:
     def generate_reply_events() -> Iterator[str]:
         try:
+            reply_context = dolmen_rag_service().retrieve_reply_context(
+                query=chat_request_body.message, limit=RETRIEVED_GROUNDS_LIMIT
+            )
+        except ResumeUnavailableError as error:
+            yield format_sse_event({"type": "error", "message": error.message})
+            return
+
+        try:
             agent_service = dolmen_agent_service()
         except DolmenConfigError as error:
             yield format_sse_event({"type": "error", "message": str(error)})
             return
 
-        retrieved_grounds: list[RetrievedGround] = []
-        try:
-            rag_service = dolmen_rag_service()
-            rag_service.ensure_demo_document_ingested()
-            retrieved_grounds = rag_service.search_grounds(
-                query=chat_request_body.message, limit=RETRIEVED_GROUNDS_LIMIT
-            )
-        except Exception:  # noqa: BLE001 — 근거 검색 실패는 답변 스트림을 막지 않는다
-            retrieved_grounds = []
+        retrieved_grounds = reply_context.grounds
         if retrieved_grounds:
             yield format_sse_event(
                 {
@@ -113,13 +114,32 @@ async def stream_chat_reply(chat_request_body: ChatRequestBody) -> StreamingResp
                     chat_request_body.session_id,
                     chat_request_body.message,
                     retrieved_grounds,
+                    reply_context.resume_settings,
+                    reply_context.revision,
+                    reply_context.resume_pages,
                 ):
                     has_emitted_chunk = True
                     yield format_sse_event({"type": "chunk", "text": reply_chunk})
-            except Exception as error:  # noqa: BLE001 — 스트림 오류를 화면에 그대로 알려야 한다
+            except ResumeUnavailableError as error:
+                yield format_sse_event({"type": "error", "message": error.message})
+                return
+            except DolmenEmptyReplyError:
+                yield format_sse_event(
+                    {
+                        "type": "error",
+                        "message": "답변을 받지 못했습니다. 잠시 후 다시 질문해 주세요.",
+                    }
+                )
+                return
+            except Exception as error:  # noqa: BLE001 — 원인 대신 고정된 안전한 안내를 전달한다
                 is_last_attempt = attempt_index == max_attempt_count - 1
                 if has_emitted_chunk or not is_transient_llm_error(error) or is_last_attempt:
-                    yield format_sse_event({"type": "error", "message": f"답변 생성 실패: {error}"})
+                    yield format_sse_event(
+                        {
+                            "type": "error",
+                            "message": "답변 생성에 실패했습니다. 잠시 후 다시 질문해 주세요.",
+                        }
+                    )
                     return
                 continue
             yield format_sse_event({"type": "done"})

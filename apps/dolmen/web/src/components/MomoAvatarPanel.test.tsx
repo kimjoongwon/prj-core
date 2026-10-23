@@ -142,7 +142,7 @@ describe("MomoAvatarPanel", () => {
 			"/dolmen/momo/poster.webp",
 		);
 		expect(screen.getByRole("status")).toHaveTextContent(
-			"질문을 입력해 주세요",
+			"면접 질문을 입력해 주세요",
 		);
 		Object.defineProperty(motionPreference, "matches", { value: false });
 		act(() => {
@@ -173,7 +173,7 @@ describe("MomoAvatarPanel", () => {
 		expect(screen.queryByTestId("momo-canvas")).not.toBeInTheDocument();
 		expect(container.querySelector("img")).toBeInTheDocument();
 		expect(screen.getByRole("status")).toHaveTextContent(
-			"근거를 살펴보고 있어요",
+			"이력서에서 근거를 확인하고 있어요",
 		);
 		expect(consoleError).toHaveBeenCalled();
 	});

@@ -142,7 +142,7 @@ describe("ChatPanelState의 MOMO 연결", () => {
 
 	it("검색 근거와 재시도 상태만으로는 think를 벗어나지 않고 첫 chunk부터 speak한다", () => {
 		const chatState = createChatState();
-		chatState.setDraftMessage("연차는 며칠인가요?");
+		chatState.setDraftMessage("경력과 역할을 소개해 주세요.");
 		void chatState.submitDraftMessage();
 		const replyInput = latestReplyInput();
 		expect(chatState.momoMotion).toBe("think");
@@ -150,7 +150,7 @@ describe("ChatPanelState의 MOMO 연결", () => {
 		replyInput.onReplyStatus("모델이 혼잡해 다시 시도합니다");
 		expect(chatState.currentAgentActivity?.phase).toBe("generating");
 		expect(chatState.momoMotion).toBe("think");
-		replyInput.onAssistantChunk("연 15일입니다.");
+		replyInput.onAssistantChunk("이력서에 기재된 내용을 설명합니다.");
 		expect(chatState.momoMotion).toBe("speak");
 		replyInput.onReplyDone();
 		expect(chatState.momoMotion).toBe("happy");
@@ -161,9 +161,9 @@ describe("ChatPanelState의 MOMO 연결", () => {
 		const chatState = createChatState();
 		chatState.greetMomoIfIdle();
 		const greetingPlaybackId = chatState.momoPlaybackId;
-		chatState.setDraftMessage("연차?");
+		chatState.setDraftMessage("어떤 경험이 있나요?");
 		void chatState.submitDraftMessage();
-		latestReplyInput().onAssistantChunk("15일");
+		latestReplyInput().onAssistantChunk("등록된 이력서를 근거로 답합니다.");
 		latestReplyInput().onReplyDone();
 		chatState.finishMomoOneShot(greetingPlaybackId);
 		expect(chatState.momoMotion).toBe("happy");
@@ -220,6 +220,11 @@ describe("ChatPanelState의 MOMO 연결", () => {
 describe("ChatPanel의 입력과 수신 수명", () => {
 	it("focus/blur, 실제 전송과 unmount abort를 상태에 연결한다", () => {
 		const { unmount } = render(<ChatPanel />);
+		expect(
+			screen.getByText(
+				/면접관님, 경력·프로젝트·기술·협업에 대해 질문해 주세요/,
+			),
+		).toBeInTheDocument();
 		fireEvent.click(screen.getByRole("button", { name: "모델 준비" }));
 		expect(screen.getByTestId("momo-motion")).toHaveAttribute(
 			"data-motion",
@@ -236,17 +241,36 @@ describe("ChatPanel의 입력과 수신 수명", () => {
 			"data-motion",
 			"idle",
 		);
-		fireEvent.change(questionInput, { target: { value: "연차?" } });
+		fireEvent.click(
+			screen.getByRole("button", {
+				name: "주요 프로젝트와 맡은 역할을 소개해 주세요.",
+			}),
+		);
+		expect(questionInput).toHaveValue(
+			"주요 프로젝트와 맡은 역할을 소개해 주세요.",
+		);
 		fireEvent.click(screen.getByRole("button", { name: "전송" }));
+		expect(screen.getByText("면접관")).toBeInTheDocument();
 		expect(questionInput).toBeDisabled();
 		expect(screen.getByTestId("momo-motion")).toHaveAttribute(
 			"data-motion",
 			"think",
 		);
-		act(() => latestReplyInput().onAssistantChunk("연 15일"));
+		act(() =>
+			latestReplyInput().onAssistantChunk("이력서에 기재된 설명입니다."),
+		);
 		expect(screen.getByTestId("momo-motion")).toHaveAttribute(
 			"data-motion",
 			"speak",
+		);
+		act(() => latestReplyInput().onReplyError("이력서를 준비하지 못했어요."));
+		expect(screen.getByRole("alert")).toHaveTextContent(
+			"이력서를 준비하지 못했어요.",
+		);
+		expect(questionInput).not.toBeDisabled();
+		expect(screen.getByTestId("momo-motion")).toHaveAttribute(
+			"data-motion",
+			"idle",
 		);
 		const replySignal = latestReplyInput().signal;
 		unmount();

@@ -19,9 +19,9 @@ type AgentStepStatus = "pending" | "active" | "done" | "error";
 
 const AGENT_STEP_LABELS = [
 	"질문 접수",
-	"위키 검색",
-	"근거 선별",
-	"답변 생성",
+	"이력서 확인",
+	"근거 선택",
+	"답변 작성",
 ] as const;
 
 /** 활동 단계(phase)와 근거 유무로 4개 단계 각각의 표시 상태를 정한다. */
@@ -45,13 +45,6 @@ function deriveAgentStepStatuses(
 				"error",
 			];
 	}
-}
-
-function extractEvidenceSectionLabel(evidenceSource: string): string {
-	const sectionDelimiterIndex = evidenceSource.indexOf(" § ");
-	return sectionDelimiterIndex < 0
-		? evidenceSource
-		: evidenceSource.slice(sectionDelimiterIndex + 3);
 }
 
 function formatElapsedSeconds(elapsedMs: number): string {
@@ -84,7 +77,7 @@ function EvidenceScoreRow({
 		<li className="flex flex-col gap-1">
 			<div className="flex items-center justify-between gap-2 text-xs">
 				<span className="truncate text-foreground/80">
-					{extractEvidenceSectionLabel(evidenceItem.source)}
+					{evidenceItem.source}
 				</span>
 				<span className="shrink-0 tabular-nums text-foreground/50">
 					{evidenceItem.score.toFixed(2)}
@@ -169,11 +162,11 @@ const AgentActivityCard = observer(function AgentActivityCard({
 			<div className="text-[11px] text-foreground/55">
 				{agentActivity.searchFinishedAtMs > 0 ? (
 					<span>
-						검색 {formatElapsedSeconds(searchElapsedMs)} · 근거{" "}
+						이력서 확인 {formatElapsedSeconds(searchElapsedMs)} · 근거{" "}
 						{agentActivity.retrievedEvidence.length}개
 					</span>
 				) : (
-					<span>위키에서 근거를 찾는 중…</span>
+					<span>이력서에서 근거를 확인하는 중…</span>
 				)}
 				{agentActivity.phase === "done" ? (
 					<span> · 답변 {agentActivity.replyCharacterCount}자</span>
@@ -209,7 +202,7 @@ export const AgentActivityPanel = observer(function AgentActivityPanel({
 			<div className="flex items-center gap-2">
 				<Activity className="h-4 w-4 text-accent" />
 				<Typography.Heading level={2} className="text-sm font-semibold">
-					에이전트 활동
+					답변 진행 상황
 				</Typography.Heading>
 				<span className="ml-auto text-xs text-foreground/50">
 					{agentActivities.length}건
@@ -219,7 +212,7 @@ export const AgentActivityPanel = observer(function AgentActivityPanel({
 			{latestFirstActivities.length === 0 ? (
 				<div className="flex flex-col gap-3 py-6 text-center">
 					<Typography.Paragraph color="muted" className="text-xs">
-						질문을 보내면 에이전트가 거치는 단계가 여기에 실시간으로 나타납니다.
+						면접 질문에 답하는 진행 상황과 이력서 근거가 여기에 표시됩니다.
 					</Typography.Paragraph>
 					<ol className="flex items-center justify-between gap-1 px-2">
 						{AGENT_STEP_LABELS.map((stepLabel) => (

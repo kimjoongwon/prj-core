@@ -1,13 +1,14 @@
 [project]
 name = "dolmen-api"
 version = "0.1.0"
-description = "Dolmen — hello-agents 기반 에이전트 메모리·RAG 학습 데모 API"
+description = "Dolmen — 등록 이력서 근거로 면접관의 질문에 답하는 모모 API"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
     "pydantic>=2.9",
     "python-dotenv>=1.0",
+    "pypdf>=6.1,<7",
     "hello-agents[all,fastembed,qdrant]>=0.2.0",
 ]
 

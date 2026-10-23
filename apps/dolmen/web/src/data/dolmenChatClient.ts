@@ -1,6 +1,6 @@
 export type DolmenChatRole = "user" | "assistant";
 
-/** 답변 근거로 제시된 검색 청크(절 제목이 source 끝에 "§"로 붙어 온다). */
+/** 답변 근거로 제시된 이력서 발췌문과 쪽 출처. */
 export interface DolmenChatEvidence {
 	chunkId: string;
 	source: string;
