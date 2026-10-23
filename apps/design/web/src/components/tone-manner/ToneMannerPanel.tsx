@@ -144,6 +144,40 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 			</div>
 
 			<fieldset className="flex flex-col gap-2">
+				<legend className="text-xs font-semibold text-muted">
+					라이브 토큰 미리보기
+				</legend>
+				<div className="grid grid-cols-4 gap-1.5">
+					{toneMannerColorTokenDefinitions.map((tokenDefinition) => (
+						<div key={tokenDefinition.key} className="flex flex-col gap-1">
+							<span
+								className="h-8 w-full rounded-md border border-border"
+								style={{
+									backgroundColor: `var(${tokenDefinition.cssVariable})`,
+								}}
+							/>
+							<span className="text-center text-[10px] text-muted">
+								{tokenDefinition.label}
+							</span>
+						</div>
+					))}
+				</div>
+				<div className="flex items-center gap-2 pt-1">
+					<span
+						className="size-8 border border-border bg-accent"
+						style={{ borderRadius: "var(--radius)" }}
+					/>
+					<span
+						className="size-8 border border-border bg-surface"
+						style={{ borderRadius: "var(--field-radius)" }}
+					/>
+					<span className="text-[10px] text-muted">
+						반경(--radius) · 필드(--field-radius)
+					</span>
+				</div>
+			</fieldset>
+
+			<fieldset className="flex flex-col gap-2">
 				<legend className="text-xs font-semibold text-muted">프리셋</legend>
 				<div className="flex flex-wrap gap-1.5">
 					{toneMannerPresets.map((preset) => (
