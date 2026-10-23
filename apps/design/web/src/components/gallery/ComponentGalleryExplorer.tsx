@@ -85,7 +85,7 @@ const ComponentGalleryExplorer = observer(function ComponentGalleryExplorer() {
 
 	return (
 		<div className="min-h-dvh bg-background text-foreground">
-			<header className="mx-auto max-w-7xl px-5 pt-12 pb-8 sm:px-8">
+			<header className="mx-auto max-w-[1800px] px-5 pt-12 pb-8 sm:px-8">
 				<p className="text-sm font-medium tracking-wide text-accent">
 					PLATE UI KIT
 				</p>
@@ -122,7 +122,7 @@ const ComponentGalleryExplorer = observer(function ComponentGalleryExplorer() {
 					))}
 				</nav>
 			</header>
-			<div className="mx-auto flex max-w-7xl items-start gap-8 px-5 pb-24 sm:px-8">
+			<div className="mx-auto flex max-w-[1800px] items-start gap-8 px-5 pb-24 sm:px-8">
 				<div className="flex min-w-0 flex-1 flex-col gap-8">
 					<ButtonSection />
 					<FormInputSection />

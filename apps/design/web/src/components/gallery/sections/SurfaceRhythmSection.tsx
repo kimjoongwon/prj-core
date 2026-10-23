@@ -39,7 +39,10 @@ export default function SurfaceRhythmSection() {
 			title="표면·리듬"
 			description="컨텐츠를 담는 표면 변형과 VStack/HStack의 시맨틱 간격 체계입니다."
 		>
-			<GalleryExample label="Surface 변형" className="grid gap-3 sm:grid-cols-2">
+			<GalleryExample
+				label="Surface 변형"
+				className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"
+			>
 				{surfaceVariantOptions.map((variantOption) => (
 					<Surface key={variantOption.value} variant={variantOption.value}>
 						<div className="p-4 text-sm">{variantOption.label}</div>
