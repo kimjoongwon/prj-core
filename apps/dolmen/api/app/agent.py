@@ -368,16 +368,20 @@ class DolmenAgentService:
 
 
 _dolmen_agent_service: DolmenAgentService | None = None
+_dolmen_agent_service_lock = threading.Lock()
 
 
 def dolmen_agent_service() -> DolmenAgentService:
     global _dolmen_agent_service
-    if _dolmen_agent_service is None:
-        missing_env_names = missing_llm_env_names()
-        if missing_env_names:
-            raise DolmenConfigError(f"LLM 설정이 비어 있습니다: {', '.join(missing_env_names)}.")
-        _dolmen_agent_service = DolmenAgentService(HelloAgentsLLM())
-    return _dolmen_agent_service
+    with _dolmen_agent_service_lock:
+        if _dolmen_agent_service is None:
+            missing_env_names = missing_llm_env_names()
+            if missing_env_names:
+                raise DolmenConfigError(
+                    f"LLM 설정이 비어 있습니다: {', '.join(missing_env_names)}."
+                )
+            _dolmen_agent_service = DolmenAgentService(HelloAgentsLLM())
+        return _dolmen_agent_service
 
 
 def get_dolmen_llm() -> HelloAgentsLLM:
