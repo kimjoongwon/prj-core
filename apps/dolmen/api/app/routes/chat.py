@@ -9,8 +9,8 @@ text/event-stream 으로 JSON 이벤트를 흘려보낸다:
 - {"type": "debug", ...} — 개발 설정이 활성화된 경우 허용된 실행 정보만 추가
 
 무료 티어 모델은 혼잡(429 code 1305)·분당 제한(1302)이 잦아, 첫 조각이 나오기 전에
-그런 오류가 나면 백오프 후 재시도한다. 동기 제너레이터를 그대로 반환하면 Starlette가
-스레드풀에서 소비해 이벤트 루프를 막지 않는다.
+그런 오류가 나면 백오프 후 재시도한다. 동기 제너레이터는 worker에서 소비하고,
+기다리는 동안 SSE comment를 보내 이벤트 루프와 연결이 유지되게 한다.
 """
 
 import json
@@ -35,6 +35,7 @@ from app.debug import ChatDebugTrace, safe_error_details
 from app.evaluation import evaluate_answer
 from app.rag import RetrievedGround, dolmen_rag_service
 from app.resume import ResumeUnavailableError
+from app.routes.sse import KeepAliveStreamingResponse
 from app.settings import RETRIEVED_GROUNDS_LIMIT, is_debug_enabled, missing_llm_env_names
 
 router = APIRouter(tags=["chat"])
@@ -398,8 +399,4 @@ async def stream_chat_reply(chat_request_body: ChatRequestBody) -> StreamingResp
             yield format_sse_event({"type": "done"})
             return
 
-    return StreamingResponse(
-        generate_reply_events(),
-        media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-    )
+    return KeepAliveStreamingResponse(generate_reply_events())
