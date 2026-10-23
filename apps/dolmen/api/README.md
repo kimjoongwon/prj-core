@@ -30,6 +30,10 @@
 ## 채팅 실행 이벤트
 
 `POST /api/chat` 요청과 `sources`, `status`, `chunk`, `done`, `error` 이벤트의 필드는 유지한다.
+검색·모델 응답·재시도 대기 중에는 최대 15초마다 `: keep-alive` SSE comment를 전송해
+프록시의 유휴 연결 종료를 방지한다. comment는 JSON 이벤트가 아니며 화면에 표시하지 않는다.
+연결 취소 시 실행 중인 동기 SDK iterator가 반환한 뒤 iterator를 닫고 대화 기록과 세션을
+정리한다. 대기와 정리는 worker에서 실행해 이벤트 루프를 막지 않는다.
 개발 설정이 활성화되면 SSE의 JSON 데이터에 다음 형태를 추가한다.
 
 ```json
