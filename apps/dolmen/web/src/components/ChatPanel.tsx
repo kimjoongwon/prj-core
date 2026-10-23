@@ -17,6 +17,12 @@ import type {
 	DolmenClientObservation,
 	DolmenDebugEvent,
 } from "../data/dolmenDebug";
+import { getJudgeUnavailableReason } from "../data/dolmenDiagnostics";
+import {
+	type DolmenJudgeEvaluation,
+	DolmenJudgeRequestError,
+	judgeDolmenAnswer,
+} from "../data/dolmenEvaluationClient";
 import { ChatMessageItem } from "./ChatMessageItem";
 import { DeveloperDebugPanel } from "./DeveloperDebugPanel";
 import { MomoAvatarPanel } from "./MomoAvatarPanel";
@@ -26,6 +32,8 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 	let requestController: AbortController | undefined;
 	let momoOneShotTimer: ReturnType<typeof setTimeout> | undefined;
 	let isDisposed = false;
+	const judgeControllers = new Map<string, AbortController>();
+	const judgeTimers = new Map<string, ReturnType<typeof setTimeout>>();
 	return makeAutoObservable(
 		{
 			chatMessages: [] as DolmenChatMessage[],
@@ -55,6 +63,13 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 			},
 			dispose() {
 				isDisposed = true;
+				for (const timer of judgeTimers.values()) clearTimeout(timer);
+				judgeTimers.clear();
+				for (const [activityId, controller] of judgeControllers) {
+					controller.abort();
+					this.finishActivityJudge(activityId, null, "평가가 중단되었습니다.");
+				}
+				judgeControllers.clear();
 				requestController?.abort();
 				requestController = undefined;
 				this.cancelAssistantReply();
@@ -154,6 +169,11 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				this.agentActivities.push({
 					activityId: this.currentAgentActivityId,
 					questionText,
+					assistantMessageId: this.assistantReplyChatMessageId,
+					isJudgePending: false,
+					judgeEvaluation: null,
+					judgeError: "",
+					judgeUnavailableReason: "정상 완료된 답변에서만 평가할 수 있습니다.",
 					phase: "searching",
 					startedAtMs: Date.now(),
 					searchFinishedAtMs: 0,
@@ -220,12 +240,15 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 			},
 			completeAssistantReply() {
 				this.recordClientObservation("done_received");
-				const hasReplyText = (this.assistantReplyMessage?.text.length ?? 0) > 0;
+				const answer = this.assistantReplyMessage?.text ?? "";
+				const hasReplyText = answer.length > 0;
 				this.isAssistantResponding = false;
 				this.assistantReplyChatMessageId = "";
 				const currentAgentActivity = this.currentAgentActivity;
 				if (currentAgentActivity) {
 					currentAgentActivity.phase = "done";
+					currentAgentActivity.judgeUnavailableReason =
+						getJudgeUnavailableReason(currentAgentActivity, answer);
 					currentAgentActivity.finishedAtMs = Date.now();
 				}
 				this.currentAgentActivityId = "";
@@ -243,6 +266,8 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				const currentAgentActivity = this.currentAgentActivity;
 				if (currentAgentActivity) {
 					currentAgentActivity.phase = "error";
+					currentAgentActivity.judgeUnavailableReason =
+						getJudgeUnavailableReason(currentAgentActivity, "");
 					currentAgentActivity.errorText = errorMessage;
 					currentAgentActivity.finishedAtMs = Date.now();
 				}
@@ -253,6 +278,8 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				this.recordClientObservation("cancelled");
 				if (this.currentAgentActivity) {
 					this.currentAgentActivity.phase = "cancelled";
+					this.currentAgentActivity.judgeUnavailableReason =
+						getJudgeUnavailableReason(this.currentAgentActivity, "");
 					this.currentAgentActivity.finishedAtMs = Date.now();
 				}
 				this.chatMessages = this.chatMessages.filter(
@@ -263,6 +290,104 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				this.isAssistantResponding = false;
 				this.assistantReplyChatMessageId = "";
 				this.currentAgentActivityId = "";
+			},
+			submitSampleQuestion(question: string) {
+				if (isDisposed || this.isAssistantResponding) return;
+				this.setDraftMessage(question);
+				void this.submitDraftMessage();
+			},
+			finishActivityJudge(
+				activityId: string,
+				evaluation: DolmenJudgeEvaluation | null,
+				error: string,
+			) {
+				const activity = this.agentActivities.find(
+					(candidate) => candidate.activityId === activityId,
+				);
+				if (!activity) return;
+				activity.isJudgePending = false;
+				activity.judgeEvaluation = evaluation;
+				activity.judgeError = error;
+			},
+			cancelActivityJudge(
+				activityId: string,
+				message = "평가를 취소했습니다.",
+			) {
+				const controller = judgeControllers.get(activityId);
+				if (!controller) return;
+				judgeControllers.delete(activityId);
+				clearTimeout(judgeTimers.get(activityId));
+				judgeTimers.delete(activityId);
+				controller.abort();
+				this.finishActivityJudge(activityId, null, message);
+			},
+			async judgeActivity(activityId: string) {
+				const activity = this.agentActivities.find(
+					(candidate) => candidate.activityId === activityId,
+				);
+				if (isDisposed || !activity || activity.isJudgePending) return;
+				const answer =
+					this.chatMessages.find(
+						(message) => message.chatMessageId === activity.assistantMessageId,
+					)?.text ?? "";
+				activity.judgeUnavailableReason = getJudgeUnavailableReason(
+					activity,
+					answer,
+				);
+				if (activity.judgeUnavailableReason) return;
+				const context = activity.debugEvents.findLast(
+					(event) => event.context,
+				)?.context;
+				if (!context) return;
+				const controller = new AbortController();
+				judgeControllers.set(activityId, controller);
+				activity.isJudgePending = true;
+				activity.judgeError = "";
+				activity.judgeEvaluation = null;
+				const timeout = setTimeout(
+					() =>
+						this.cancelActivityJudge(
+							activityId,
+							"평가 대기 시간이 초과되었습니다. 다시 실행해 주세요.",
+						),
+					45_000,
+				);
+				judgeTimers.set(activityId, timeout);
+				const canApplyEvaluation = () =>
+					!isDisposed &&
+					!controller.signal.aborted &&
+					judgeControllers.get(activityId) === controller;
+				try {
+					const evaluation = await judgeDolmenAnswer(
+						{
+							question: activity.questionText,
+							answer,
+							status: "completed",
+							resumeRevision: context.revision,
+							groundChunkIds: activity.retrievedEvidence.map(
+								(ground) => ground.chunkId,
+							),
+						},
+						controller.signal,
+					);
+					if (canApplyEvaluation())
+						this.finishActivityJudge(activityId, evaluation, "");
+				} catch (error) {
+					if (canApplyEvaluation())
+						this.finishActivityJudge(
+							activityId,
+							null,
+							error instanceof DolmenJudgeRequestError
+								? error.message
+								: "평가 연결을 완료하지 못했습니다. 다시 실행해 주세요.",
+						);
+				} finally {
+					clearTimeout(timeout);
+					if (judgeControllers.get(activityId) === controller) {
+						judgeControllers.delete(activityId);
+						judgeTimers.delete(activityId);
+					}
+				}
 			},
 			async submitDraftMessage() {
 				const messageText = this.draftMessage.trim();
@@ -474,7 +599,13 @@ export const ChatPanel = observer(function ChatPanel() {
 				</div>
 			</section>
 
-			<DeveloperDebugPanel agentActivities={chatPanelState.agentActivities} />
+			<DeveloperDebugPanel
+				agentActivities={chatPanelState.agentActivities}
+				isChatPending={chatPanelState.isAssistantResponding}
+				onRunSampleQuestion={chatPanelState.submitSampleQuestion}
+				onJudgeActivity={chatPanelState.judgeActivity}
+				onCancelJudge={chatPanelState.cancelActivityJudge}
+			/>
 		</div>
 	);
 });

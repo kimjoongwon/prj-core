@@ -10,6 +10,14 @@ import {
 import type { ComponentProps, ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { streamDolmenChatReply } from "../data/dolmenChatClient";
+import { parseDolmenContextSnapshot } from "../data/dolmenContext";
+import type { DolmenJudgeEvaluation } from "../data/dolmenEvaluationClient";
+import { parseDolmenJudgeEvaluation } from "../data/dolmenEvaluationClient";
+import {
+	contextWireFixture,
+	judgeWireFixture,
+	TEST_REQUEST_ID,
+} from "../test/dolmenFixtures";
 import {
 	ChatPanel,
 	type ChatPanelState,
@@ -17,7 +25,15 @@ import {
 } from "./ChatPanel";
 import type { MomoAvatarPanelProps } from "./MomoAvatarPanel";
 
-const mocks = vi.hoisted(() => ({ streamReply: vi.fn() }));
+const mocks = vi.hoisted(() => ({
+	streamReply: vi.fn(),
+	judgeAnswer: vi.fn(),
+}));
+
+vi.mock("../data/dolmenEvaluationClient", async (importOriginal) => ({
+	...(await importOriginal<typeof import("../data/dolmenEvaluationClient")>()),
+	judgeDolmenAnswer: mocks.judgeAnswer,
+}));
 
 vi.mock("../data/dolmenHealthClient", () => ({
 	fetchDolmenHealthStatus: () => new Promise(() => {}),
@@ -143,6 +159,7 @@ function sendQuestionThroughComposer(question: string) {
 
 beforeEach(() => {
 	vi.useFakeTimers();
+	mocks.judgeAnswer.mockReset();
 	mocks.streamReply.mockReset();
 	mocks.streamReply.mockImplementation(() => new Promise(() => {}));
 });
@@ -297,6 +314,131 @@ describe("ChatPanelState의 MOMO 연결", () => {
 			{ event: "request_sent", elapsedMs: 0 },
 		]);
 		expect(chatState.assistantReplyMessage?.text).toBe("");
+	});
+	it("완료된 답변에서 명시 호출한 평가만 실행하고 중복 실행을 막는다", async () => {
+		const chatState = createChatState();
+		chatState.setDraftMessage("평가할 질문");
+		void chatState.submitDraftMessage();
+		latestReplyInput().onDebugEvent?.({
+			event: "context_built",
+			requestId: TEST_REQUEST_ID,
+			elapsedMs: 1,
+			details: {},
+			context: parseDolmenContextSnapshot(contextWireFixture()),
+		});
+		latestReplyInput().onAssistantChunk("평가할 합성 답변");
+		latestReplyInput().onReplyDone();
+		expect(mocks.judgeAnswer).not.toHaveBeenCalled();
+		const activity = chatState.agentActivities[0];
+		if (!activity) throw new Error("activity expected");
+		let finishEvaluation: (evaluation: DolmenJudgeEvaluation) => void =
+			() => {};
+		mocks.judgeAnswer.mockImplementation(
+			() =>
+				new Promise<DolmenJudgeEvaluation>((resolve) => {
+					finishEvaluation = resolve;
+				}),
+		);
+		const pending = chatState.judgeActivity(activity.activityId);
+		void chatState.judgeActivity(activity.activityId);
+		expect(activity.isJudgePending).toBe(true);
+		expect(mocks.judgeAnswer).toHaveBeenCalledTimes(1);
+		expect(mocks.judgeAnswer).toHaveBeenCalledWith(
+			{
+				question: "평가할 질문",
+				answer: "평가할 합성 답변",
+				status: "completed",
+				resumeRevision: 7,
+				groundChunkIds: [],
+			},
+			expect.any(AbortSignal),
+		);
+		const evaluation = parseDolmenJudgeEvaluation(judgeWireFixture());
+		if (!evaluation) throw new Error("evaluation expected");
+		finishEvaluation(evaluation);
+		await pending;
+		expect(activity.isJudgePending).toBe(false);
+		expect(activity.judgeEvaluation?.scores?.groundedness).toBe(4);
+	});
+
+	it("평가 취소와 dispose 후 늦은 응답을 무시하고 timer와 요청을 정리한다", async () => {
+		const chatState = createChatState();
+		chatState.setDraftMessage("질문");
+		void chatState.submitDraftMessage();
+		latestReplyInput().onDebugEvent?.({
+			event: "context_built",
+			requestId: TEST_REQUEST_ID,
+			elapsedMs: 1,
+			details: {},
+			context: parseDolmenContextSnapshot(contextWireFixture()),
+		});
+		latestReplyInput().onAssistantChunk("합성 답변");
+		latestReplyInput().onReplyDone();
+		const activity = chatState.agentActivities[0];
+		if (!activity) throw new Error("activity expected");
+		let finishEvaluation: (evaluation: DolmenJudgeEvaluation) => void =
+			() => {};
+		mocks.judgeAnswer.mockImplementation(
+			() =>
+				new Promise<DolmenJudgeEvaluation>((resolve) => {
+					finishEvaluation = resolve;
+				}),
+		);
+		const pending = chatState.judgeActivity(activity.activityId);
+		const signal = mocks.judgeAnswer.mock.calls[0]?.[1] as AbortSignal;
+		chatState.dispose();
+		expect(signal.aborted).toBe(true);
+		expect(activity.isJudgePending).toBe(false);
+		expect(vi.getTimerCount()).toBe(0);
+		const evaluation = parseDolmenJudgeEvaluation(judgeWireFixture());
+		if (!evaluation) throw new Error("evaluation expected");
+		finishEvaluation(evaluation);
+		await pending;
+		expect(activity.judgeEvaluation).toBeNull();
+	});
+
+	it("평가 timeout은 채팅 완료 상태를 바꾸지 않고 늦은 결과를 무시한다", async () => {
+		const chatState = createChatState();
+		chatState.setDraftMessage("질문");
+		void chatState.submitDraftMessage();
+		latestReplyInput().onDebugEvent?.({
+			event: "context_built",
+			requestId: TEST_REQUEST_ID,
+			elapsedMs: 1,
+			details: {},
+			context: parseDolmenContextSnapshot(contextWireFixture()),
+		});
+		latestReplyInput().onAssistantChunk("합성 답변");
+		latestReplyInput().onReplyDone();
+		const activity = chatState.agentActivities[0];
+		if (!activity) throw new Error("activity expected");
+		let finishEvaluation: (evaluation: DolmenJudgeEvaluation) => void =
+			() => {};
+		mocks.judgeAnswer.mockImplementation(
+			() =>
+				new Promise<DolmenJudgeEvaluation>((resolve) => {
+					finishEvaluation = resolve;
+				}),
+		);
+		const pending = chatState.judgeActivity(activity.activityId);
+		vi.advanceTimersByTime(45_000);
+		expect(activity.judgeError).toMatch(/대기 시간/);
+		expect(activity.phase).toBe("done");
+		expect(vi.getTimerCount()).toBe(0);
+		const evaluation = parseDolmenJudgeEvaluation(judgeWireFixture());
+		if (!evaluation) throw new Error("evaluation expected");
+		finishEvaluation(evaluation);
+		await pending;
+		expect(activity.judgeEvaluation).toBeNull();
+	});
+
+	it("회귀 샘플은 일반 채팅 전송을 한 번만 실행하며 평가를 자동 호출하지 않는다", () => {
+		const chatState = createChatState();
+		chatState.submitSampleQuestion("합성 회귀 질문");
+		chatState.submitSampleQuestion("중복 질문");
+		expect(mocks.streamReply).toHaveBeenCalledTimes(1);
+		expect(latestReplyInput().messageText).toBe("합성 회귀 질문");
+		expect(mocks.judgeAnswer).not.toHaveBeenCalled();
 	});
 });
 

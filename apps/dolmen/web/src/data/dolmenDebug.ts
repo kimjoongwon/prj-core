@@ -1,3 +1,12 @@
+import {
+	type DolmenContextSnapshot,
+	parseDolmenContextSnapshot,
+} from "./dolmenContext";
+import {
+	type DolmenRuleEvaluation,
+	parseDolmenRuleEvaluation,
+} from "./dolmenEvaluationClient";
+
 /** 개발 모드에서 서버가 공개한 관측 정보만 소비한다. */
 export const DOLMEN_DEBUG_EVENT_NAMES = [
 	"request_received",
@@ -8,13 +17,51 @@ export const DOLMEN_DEBUG_EVENT_NAMES = [
 	"first_chunk",
 	"reply_completed",
 	"reply_failed",
+	"context_built",
+	"answer_evaluated",
+	"reply_metrics",
 ] as const;
+
+export const DOLMEN_RUN_STATUSES = [
+	"completed",
+	"output_limit",
+	"max_iterations",
+	"cancelled",
+	"budget_exhausted",
+	"failed",
+	"running",
+	"unknown",
+] as const;
+export const DOLMEN_STOP_REASONS = [
+	"stop",
+	"length",
+	"max_tokens",
+	"max_output_tokens",
+	"tool_calls",
+	"content_filter",
+	"unknown",
+] as const;
+export interface DolmenReplyMetrics {
+	attempt: number;
+	runStatus: (typeof DOLMEN_RUN_STATUSES)[number];
+	stopReason?: (typeof DOLMEN_STOP_REASONS)[number];
+	promptTokens?: number;
+	completionTokens?: number;
+	totalTokens?: number;
+}
+const TOKEN_DETAIL_KEYS = new Set([
+	"prompt_tokens",
+	"completion_tokens",
+	"total_tokens",
+]);
 
 export interface DolmenDebugEvent {
 	event: (typeof DOLMEN_DEBUG_EVENT_NAMES)[number];
 	elapsedMs: number;
 	requestId: string;
 	details: Record<string, string | number | boolean>;
+	context?: DolmenContextSnapshot;
+	evaluation?: DolmenRuleEvaluation;
 }
 
 export interface DolmenClientObservation {
@@ -44,7 +91,9 @@ const NUMERIC_DETAIL_KEYS = new Set([
 ]);
 const ENUM_DETAIL_VALUES: Record<string, readonly string[]> = {
 	answer_path: ["model", "private_refusal", "no_evidence"],
-	stage: ["retrieval", "configuration", "reply"],
+	run_status: DOLMEN_RUN_STATUSES,
+	stop_reason: DOLMEN_STOP_REASONS,
+	stage: ["retrieval", "configuration", "context", "reply"],
 	reason: [
 		"resume_not_configured",
 		"resume_not_ready",
@@ -52,6 +101,9 @@ const ENUM_DETAIL_VALUES: Record<string, readonly string[]> = {
 		"model_initialization_failed",
 		"empty_reply",
 		"reply_error",
+		"context_budget_exceeded",
+		"output_limit",
+		"incomplete_reply",
 	],
 	error_category: [
 		"rate_limit",
@@ -83,12 +135,44 @@ export function parseDolmenDebugEvent(
 		Array.isArray(streamEvent.details)
 	)
 		return undefined;
+	if (streamEvent.event === "reply_metrics") {
+		const metrics = streamEvent.details as Record<string, unknown>;
+		if (
+			typeof metrics.attempt !== "number" ||
+			!Number.isSafeInteger(metrics.attempt) ||
+			metrics.attempt < 0 ||
+			!DOLMEN_RUN_STATUSES.includes(
+				metrics.run_status as (typeof DOLMEN_RUN_STATUSES)[number],
+			)
+		)
+			return undefined;
+	}
+	const context =
+		streamEvent.event === "context_built"
+			? parseDolmenContextSnapshot(streamEvent.context)
+			: undefined;
+	const evaluation =
+		streamEvent.event === "answer_evaluated"
+			? parseDolmenRuleEvaluation(streamEvent.evaluation)
+			: undefined;
+	if (
+		(streamEvent.event === "context_built" && !context) ||
+		(streamEvent.event === "answer_evaluated" && !evaluation)
+	)
+		return undefined;
 	const details: DolmenDebugEvent["details"] = {};
 	for (const [detailKey, detailValue] of Object.entries(streamEvent.details)) {
 		if (
 			NUMERIC_DETAIL_KEYS.has(detailKey) &&
 			typeof detailValue === "number" &&
 			Number.isFinite(detailValue) &&
+			detailValue >= 0
+		)
+			details[detailKey] = detailValue;
+		if (
+			TOKEN_DETAIL_KEYS.has(detailKey) &&
+			typeof detailValue === "number" &&
+			Number.isSafeInteger(detailValue) &&
 			detailValue >= 0
 		)
 			details[detailKey] = detailValue;
@@ -120,6 +204,8 @@ export function parseDolmenDebugEvent(
 		elapsedMs: streamEvent.elapsed_ms,
 		requestId: streamEvent.request_id,
 		details,
+		...(context ? { context } : {}),
+		...(evaluation ? { evaluation } : {}),
 	};
 }
 

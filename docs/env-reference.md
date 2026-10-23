@@ -47,6 +47,8 @@
 | LLM | `LLM_API_KEY`, `LLM_MODEL_ID`, `LLM_BASE_URL` | hello-agents `HelloAgentsLLM`이 읽는 OpenAI 호환 LLM 접속 설정. 실제 키는 절대 커밋하지 않는다. |
 | App | `DOLMEN_API_PORT` | `pnpm start:dolmen-api`가 uvicorn 실행에 사용하는 포트(기본 3012). |
 | 개발 관측 | `DOLMEN_DEBUG_ENABLED` | 기본 `false`. 서버에서 `true`로 켠 개발 환경에만 정제 데이터 요약과 허용된 SSE 실행 이벤트를 추가한다. 운영에서는 활성화하지 않는다. 상세는 `apps/dolmen/api/README.md`를 따른다. |
+| 컨텍스트 | `DOLMEN_CONTEXT_INPUT_TOKEN_LIMIT` | 기본 `32768`. 출력 예산을 이미 제외한 앱 입력 예산이다. UTF-8 바이트 기반 보수적 추정치로 제한하며, 제공자의 실제 토큰 수나 모델의 컨텍스트 한도를 뜻하지 않는다. |
+| 컨텍스트 | `DOLMEN_CONTEXT_OUTPUT_TOKEN_RESERVE` | 기본 `2048`. 답변 호출의 `max_tokens`로 전달하는 출력 예산이다. 입력 예산과 별도로 적용한다. |
 | RAG | `DOLMEN_EMBEDDING_CACHE_DIR` | fastembed 임베딩 모델 캐시 경로(선택). 컨테이너 이미지의 `/opt/dolmen/embedding-cache`를 가리킨다. |
 | 이력서 | `DOLMEN_RESUME_PATH` | 등록할 비공개 PDF의 서버 경로. 기본 `private/resume.pdf`, 상대 경로는 `apps/dolmen/api` 기준. PDF는 Git·컨테이너 이미지·웹 공개 경로에 포함하지 않고 운영에서는 별도 비공개 파일로 마운트한다. |
 | 지원자 | `DOLMEN_CANDIDATE_NAME` | 모모가 3인칭으로 소개할 지원자 이름. 로컬/서버 설정에서 공급하며 예시에는 실제 개인정보를 넣지 않는다. |

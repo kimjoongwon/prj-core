@@ -4,6 +4,12 @@ import type {
 	DolmenClientObservation,
 	DolmenDebugEvent,
 } from "../data/dolmenDebug";
+import {
+	getActivityContext,
+	getActivityReplyMetrics,
+} from "../data/dolmenDiagnostics";
+import { DeveloperContextPanel } from "./DeveloperContextPanel";
+import { DeveloperEvaluationPanel } from "./DeveloperEvaluationPanel";
 
 const SERVER_EVENT_LABELS: Record<DolmenDebugEvent["event"], string> = {
 	request_received: "요청 수신",
@@ -14,6 +20,9 @@ const SERVER_EVENT_LABELS: Record<DolmenDebugEvent["event"], string> = {
 	first_chunk: "첫 답변 조각 생성",
 	reply_completed: "답변 생성 종료",
 	reply_failed: "답변 처리 실패",
+	context_built: "GSSC 컨텍스트 구성",
+	answer_evaluated: "답변 규칙 검사",
+	reply_metrics: "모델 실행 상태·제공자 사용량",
 };
 const CLIENT_EVENT_LABELS: Record<DolmenClientObservation["event"], string> = {
 	request_sent: "요청 전송",
@@ -35,15 +44,22 @@ const PHASE_LABELS: Record<DolmenAgentActivity["phase"], string> = {
 export const DeveloperRequestCard = observer(function DeveloperRequestCard({
 	activity,
 	isLatest,
+	onJudgeActivity,
+	onCancelJudge,
 }: {
 	activity: DolmenAgentActivity;
 	isLatest: boolean;
+	onJudgeActivity?: (activityId: string) => void;
+	onCancelJudge?: (activityId: string) => void;
 }) {
 	const requestId = activity.debugEvents[0]?.requestId;
 	const phaseLabel =
 		activity.phase === "generating" && activity.replyCharacterCount > 0
 			? "답변 수신 중"
 			: PHASE_LABELS[activity.phase];
+	const failureReason = activity.debugEvents.findLast(
+		(event) => event.event === "reply_failed",
+	)?.details.reason;
 	return (
 		<details
 			open={isLatest}
@@ -61,6 +77,29 @@ export const DeveloperRequestCard = observer(function DeveloperRequestCard({
 				<p className="break-all text-foreground/60">
 					Request ID: {requestId || "미확인 · 서버 이벤트 미수신"}
 				</p>
+				{failureReason === "output_limit" ? (
+					<p className="text-danger">
+						출력 한도에 도달해 불완전 답변으로 종료되었습니다.
+					</p>
+				) : failureReason === "incomplete_reply" ? (
+					<p className="text-danger">
+						모델 실행이 정상 완료되지 않아 불완전 답변으로 종료되었습니다.
+					</p>
+				) : null}
+				<DeveloperContextPanel
+					context={getActivityContext(activity)}
+					replyMetrics={getActivityReplyMetrics(activity)}
+					answerPath={
+						activity.debugEvents.findLast(
+							(event) => event.event === "reply_attempt",
+						)?.details.answer_path
+					}
+				/>
+				<DeveloperEvaluationPanel
+					activity={activity}
+					onJudgeActivity={onJudgeActivity}
+					onCancelJudge={onCancelJudge}
+				/>
 				<details open>
 					<summary className="cursor-pointer font-medium">처리 로그</summary>
 					<div className="mt-2 space-y-2">

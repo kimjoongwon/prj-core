@@ -1,6 +1,11 @@
 // @vitest-environment node
 
 import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+	contextWireFixture,
+	ruleWireFixture,
+	TEST_REQUEST_ID,
+} from "../test/dolmenFixtures";
 import { streamDolmenChatReply } from "./dolmenChatClient";
 
 const sseEncoder = new TextEncoder();
@@ -517,5 +522,58 @@ describe("streamDolmenChatReply", () => {
 		]);
 		await streamDolmenChatReply(chatInput);
 		expect(chatInput.onReplyDone).toHaveBeenCalledOnce();
+	});
+	it("GSSC와 규칙 검사는 terminal 전에만 독립적으로 전달한다", async () => {
+		const chatInput = createChatInput();
+		const onDebugEvent = vi.fn();
+		const frame = (event: string, payload: Record<string, unknown>) =>
+			`data: ${JSON.stringify({ type: "debug", event, elapsed_ms: 2, request_id: TEST_REQUEST_ID, details: {}, ...payload })}\n\n`;
+		createSseResponse([
+			frame("context_built", { context: { malformed: true } }),
+			frame("context_built", { context: contextWireFixture() }),
+			frame("answer_evaluated", { evaluation: ruleWireFixture() }),
+			'data: {"type":"chunk","text":"본문"}\n\ndata: {"type":"done"}\n\n',
+			frame("answer_evaluated", { evaluation: ruleWireFixture() }),
+		]);
+		await streamDolmenChatReply({ ...chatInput, onDebugEvent });
+		expect(onDebugEvent).toHaveBeenCalledTimes(2);
+		expect(onDebugEvent.mock.calls[0]?.[0].context).toMatchObject({
+			revision: 7,
+			budget: { inputLimit: 1000 },
+		});
+		expect(onDebugEvent.mock.calls[1]?.[0].evaluation).toMatchObject({
+			status: "completed",
+		});
+		expect(chatInput.onAssistantChunk).toHaveBeenCalledExactlyOnceWith("본문");
+		expect(chatInput.onReplyDone).toHaveBeenCalledOnce();
+	});
+	it("부분 본문과 출력 한도 metrics 뒤 error를 정상 완료로 바꾸지 않는다", async () => {
+		const chatInput = createChatInput();
+		const onDebugEvent = vi.fn();
+		const eventFrame = (event: string, details: Record<string, unknown>) =>
+			`data: ${JSON.stringify({ type: "debug", event, elapsed_ms: 2, request_id: TEST_REQUEST_ID, details })}\n\n`;
+		createSseResponse([
+			'data: {"type":"chunk","text":"완료되지 않은 본문"}\n\n',
+			eventFrame("reply_metrics", {
+				attempt: 1,
+				run_status: "output_limit",
+				stop_reason: "length",
+				completion_tokens: 100,
+			}),
+			eventFrame("reply_failed", { reason: "output_limit", attempt: 1 }),
+			'data: {"type":"error","message":"출력 한도에 도달해 답변을 완료하지 못했습니다."}\n\n',
+			eventFrame("reply_metrics", {
+				attempt: 1,
+				run_status: "completed",
+				total_tokens: 200,
+			}),
+		]);
+		await streamDolmenChatReply({ ...chatInput, onDebugEvent });
+		expect(chatInput.onAssistantChunk).toHaveBeenCalledExactlyOnceWith(
+			"완료되지 않은 본문",
+		);
+		expect(onDebugEvent).toHaveBeenCalledTimes(2);
+		expect(chatInput.onReplyDone).not.toHaveBeenCalled();
+		expect(chatInput.onReplyError).toHaveBeenCalledOnce();
 	});
 });

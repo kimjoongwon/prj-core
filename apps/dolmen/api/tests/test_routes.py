@@ -73,7 +73,7 @@ class ResumeRouteTests(unittest.TestCase):
         with patch("app.routes.chat.dolmen_rag_service") as rag_factory:
             rag_factory.return_value.retrieve_reply_context.return_value = self.reply_context
             with patch("app.routes.chat.dolmen_agent_service") as agent_factory:
-                agent_factory.return_value.stream_assistant_reply.return_value = iter([
+                agent_factory.return_value.stream_assistant_reply_events.return_value = iter([
                     "가상지원자님은 ", "개발 경험이 있습니다. (2쪽)"
                 ])
                 response = self.client.post("/api/chat", json={
@@ -89,7 +89,7 @@ class ResumeRouteTests(unittest.TestCase):
         self.assertNotIn("정제된 공개 근거 본문", response.text)
         self.assertTrue(response.headers["content-type"].startswith("text/event-stream"))
         self.assertEqual(response.headers["x-accel-buffering"], "no")
-        agent_factory.return_value.stream_assistant_reply.assert_called_once_with(
+        agent_factory.return_value.stream_assistant_reply_events.assert_called_once_with(
             "synthetic-session", "경력은?", self.reply_context.grounds, self.settings, 7,
             self.reply_context.resume_pages
         )
@@ -98,7 +98,7 @@ class ResumeRouteTests(unittest.TestCase):
         with patch("app.routes.chat.dolmen_rag_service") as rag_factory:
             rag_factory.return_value.retrieve_reply_context.return_value = self.reply_context
             with patch("app.routes.chat.dolmen_agent_service") as agent_factory:
-                agent_factory.return_value.stream_assistant_reply.side_effect = RuntimeError(
+                agent_factory.return_value.stream_assistant_reply_events.side_effect = RuntimeError(
                     "PRIVATE_PROVIDER_EXCEPTION"
                 )
                 response = self.client.post("/api/chat", json={
@@ -113,7 +113,7 @@ class ResumeRouteTests(unittest.TestCase):
         with patch("app.routes.chat.dolmen_rag_service") as rag_factory:
             rag_factory.return_value.retrieve_reply_context.return_value = self.reply_context
             agent_service = Mock()
-            agent_service.stream_assistant_reply.side_effect = [
+            agent_service.stream_assistant_reply_events.side_effect = [
                 RuntimeError("rate limit"), iter(["재시도 답변"])
             ]
             with patch("app.routes.chat.dolmen_agent_service", return_value=agent_service):

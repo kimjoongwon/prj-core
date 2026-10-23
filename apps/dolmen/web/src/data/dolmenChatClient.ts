@@ -3,6 +3,7 @@ import {
 	type DolmenDebugEvent,
 	parseDolmenDebugEvent,
 } from "./dolmenDebug";
+import type { DolmenJudgeEvaluation } from "./dolmenEvaluationClient";
 
 export type DolmenChatRole = "user" | "assistant";
 
@@ -45,6 +46,11 @@ export interface DolmenAgentActivity {
 	errorText: string;
 	debugEvents: DolmenDebugEvent[];
 	clientObservations: DolmenClientObservation[];
+	assistantMessageId: string;
+	isJudgePending: boolean;
+	judgeEvaluation: DolmenJudgeEvaluation | null;
+	judgeError: string;
+	judgeUnavailableReason: string;
 }
 
 export function issueAgentActivityId(): string {

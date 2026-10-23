@@ -8,6 +8,7 @@ import {
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { DolmenResumeStatus } from "../data/dolmenHealthClient";
+import { activityFixture } from "../test/dolmenFixtures";
 import {
 	createDeveloperDebugPanelState,
 	DeveloperDebugPanel,
@@ -39,6 +40,8 @@ beforeEach(() => {
 
 afterEach(() => {
 	cleanup();
+	vi.unstubAllGlobals();
+	vi.restoreAllMocks();
 	vi.useRealTimers();
 });
 
@@ -147,5 +150,21 @@ describe("DeveloperDebugPanel의 이력서 상태", () => {
 		expect(
 			screen.getByText("테스트 지원자님 이력서 준비됨 · 근거 1개"),
 		).toBeVisible();
+	});
+	it("명시한 현재 브라우저 진단을 저장하고 Blob URL을 바로 정리한다", () => {
+		const createObjectURL = vi.fn().mockReturnValue("blob:test-diagnostics");
+		const revokeObjectURL = vi.fn();
+		vi.stubGlobal("URL", { createObjectURL, revokeObjectURL });
+		const click = vi
+			.spyOn(HTMLAnchorElement.prototype, "click")
+			.mockImplementation(() => {});
+		const state = createDeveloperDebugPanelState();
+		state.exportDiagnostics([activityFixture()]);
+		expect(createObjectURL).toHaveBeenCalledOnce();
+		expect(click).toHaveBeenCalledOnce();
+		expect(revokeObjectURL).toHaveBeenCalledExactlyOnceWith(
+			"blob:test-diagnostics",
+		);
+		expect(state.exportMessage).toMatch(/저장했습니다/);
 	});
 });

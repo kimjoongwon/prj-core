@@ -2,6 +2,7 @@
 
 import hashlib
 import os
+import re
 import threading
 from dataclasses import dataclass
 from pathlib import Path
@@ -43,6 +44,11 @@ class RetrievedGround:
     score: float
     snippet: str
     content: str
+
+    @property
+    def page_number(self) -> int:
+        match = re.search(r"등록 이력서 · (\d{1,4})쪽", self.source)
+        return int(match.group(1)) if match else 0
 
 
 @dataclass(frozen=True)

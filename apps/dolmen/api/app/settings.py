@@ -22,6 +22,24 @@ MAX_CHAT_SESSIONS = 50
 MAX_CHAT_HISTORY_TURNS = 2
 
 
+@dataclass(frozen=True)
+class ContextSettings:
+    # 출력 예약은 이미 제외한 앱 입력 예산이며 공급자의 모델 한도가 아니다.
+    input_token_limit: int = 32768
+    output_token_reserve: int = 2048
+
+
+def read_context_settings() -> ContextSettings:
+    try:
+        input_limit = int(os.getenv("DOLMEN_CONTEXT_INPUT_TOKEN_LIMIT", "32768"))
+        output_reserve = int(os.getenv("DOLMEN_CONTEXT_OUTPUT_TOKEN_RESERVE", "2048"))
+        if not 1 <= input_limit <= 1048576 or not 1 <= output_reserve <= 32768:
+            raise ValueError
+    except ValueError:
+        raise ValueError("컨텍스트 예산 설정은 허용 범위의 양의 정수여야 합니다.") from None
+    return ContextSettings(input_limit, output_reserve)
+
+
 def missing_llm_env_names() -> list[str]:
     return [env_name for env_name in REQUIRED_LLM_ENV_NAMES if not os.getenv(env_name)]
 

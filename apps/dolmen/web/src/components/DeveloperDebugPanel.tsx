@@ -4,6 +4,7 @@ import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import type { DolmenAgentActivity } from "../data/dolmenChatClient";
+import { serializeDolmenDiagnostics } from "../data/dolmenDiagnostics";
 import {
 	type DolmenHealthStatus,
 	type DolmenResumeStatus,
@@ -11,7 +12,9 @@ import {
 	fetchDolmenResumeStatus,
 } from "../data/dolmenHealthClient";
 import { DeveloperDataPanel } from "./DeveloperDataPanel";
+import { DeveloperOverviewPanel } from "./DeveloperOverviewPanel";
 import { DeveloperRequestCard } from "./DeveloperRequestCard";
+import { DeveloperSampleQuestions } from "./DeveloperSampleQuestions";
 
 const HEALTH_POLL_INTERVAL_MS = 12_000;
 
@@ -21,6 +24,7 @@ export function createDeveloperDebugPanelState() {
 	let refreshSequence = 0;
 	return makeAutoObservable(
 		{
+			exportMessage: "",
 			apiOnline: false,
 			llmConfigured: false,
 			hasCheckedHealth: false,
@@ -36,6 +40,24 @@ export function createDeveloperDebugPanelState() {
 						return "이력서 준비 실패";
 					default:
 						return "이력서 상태 확인 실패";
+				}
+			},
+			exportDiagnostics(activities: DolmenAgentActivity[]) {
+				let objectUrl: string | undefined;
+				try {
+					const payload = serializeDolmenDiagnostics(activities);
+					objectUrl = URL.createObjectURL(
+						new Blob([payload], { type: "application/json;charset=utf-8" }),
+					);
+					const downloadLink = document.createElement("a");
+					downloadLink.href = objectUrl;
+					downloadLink.download = "dolmen-browser-diagnostics.json";
+					downloadLink.click();
+					this.exportMessage = "현재 브라우저 진단 JSON을 저장했습니다.";
+				} catch {
+					this.exportMessage = "진단 JSON을 저장하지 못했습니다.";
+				} finally {
+					if (objectUrl) URL.revokeObjectURL(objectUrl);
 				}
 			},
 			activate() {
@@ -85,8 +107,16 @@ export type DeveloperDebugPanelState = ReturnType<
 
 export const DeveloperDebugPanel = observer(function DeveloperDebugPanel({
 	agentActivities,
+	isChatPending = false,
+	onRunSampleQuestion,
+	onJudgeActivity,
+	onCancelJudge,
 }: {
 	agentActivities: DolmenAgentActivity[];
+	isChatPending?: boolean;
+	onRunSampleQuestion?: (question: string) => void;
+	onJudgeActivity?: (activityId: string) => void;
+	onCancelJudge?: (activityId: string) => void;
 }) {
 	const developerDebugPanelState = useLocalObservable(() =>
 		createDeveloperDebugPanelState(),
@@ -149,6 +179,8 @@ export const DeveloperDebugPanel = observer(function DeveloperDebugPanel({
 							key={activity.activityId}
 							activity={activity}
 							isLatest={activityIndex === 0}
+							onJudgeActivity={onJudgeActivity}
+							onCancelJudge={onCancelJudge}
 						/>
 					))
 			)}
@@ -168,7 +200,40 @@ export const DeveloperDebugPanel = observer(function DeveloperDebugPanel({
 				</p>
 			</header>
 			<div className="max-h-[75dvh] min-h-0 min-w-0 space-y-3 overflow-y-auto overscroll-contain p-3">
+				<DeveloperOverviewPanel activities={agentActivities} />
+				<details className="rounded-xl border border-border p-3 text-xs">
+					<summary className="cursor-pointer font-semibold">
+						진단 JSON 내보내기
+					</summary>
+					<p className="mt-2 text-foreground/60">
+						현재 브라우저 요청의 관측·컨텍스트·평가만 저장합니다. 질문·답변
+						원문과 세션 ID는 제외합니다.
+					</p>
+					<button
+						type="button"
+						className="mt-2 rounded-lg border border-border px-3 py-1.5 disabled:opacity-50"
+						disabled={agentActivities.length === 0}
+						onClick={() =>
+							developerDebugPanelState.exportDiagnostics(agentActivities)
+						}
+					>
+						JSON 저장
+					</button>
+					{developerDebugPanelState.exportMessage ? (
+						<output className="mt-2 block">
+							{developerDebugPanelState.exportMessage}
+						</output>
+					) : null}
+				</details>
 				{agentActivities.length > 0 ? requestRecords : null}
+				<DeveloperSampleQuestions
+					isAvailable={
+						developerDebugPanelState.resumeStatus?.state === "ready" &&
+						!!developerDebugPanelState.resumeStatus.debug
+					}
+					isChatPending={isChatPending}
+					onRunSampleQuestion={onRunSampleQuestion}
+				/>
 				{registeredData}
 				{agentActivities.length === 0 ? requestRecords : null}
 			</div>

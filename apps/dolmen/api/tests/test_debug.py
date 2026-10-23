@@ -8,7 +8,7 @@ from uuid import UUID
 
 from fastapi.testclient import TestClient
 
-from app.agent import DolmenAgentService, DolmenConfigError
+from app.agent import DolmenAgentService, DolmenConfigError, build_resume_context
 from app.debug import ChatDebugTrace, safe_error_details
 from app.main import create_app
 from app.rag import ResumeReplyContext, RetrievedGround
@@ -108,6 +108,14 @@ class DebugRouteTests(unittest.TestCase):
         )
 
     def post_chat(self, agent_service, message="경력은?"):
+        if isinstance(agent_service, Mock):
+            original_stream = agent_service.stream_assistant_reply_events
+
+            def stream_with_context(*args):
+                yield build_resume_context(message, self.context)
+                yield from original_stream(*args)
+
+            agent_service.stream_assistant_reply_events = stream_with_context
         with patch("app.routes.chat.dolmen_rag_service") as rag_factory:
             rag_factory.return_value.retrieve_reply_context.return_value = self.context
             with patch("app.routes.chat.dolmen_agent_service", return_value=agent_service):
@@ -117,12 +125,13 @@ class DebugRouteTests(unittest.TestCase):
 
     def test_normal_debug_event_order_metadata_and_original_terminal_contract(self):
         agent_service = Mock()
-        agent_service.stream_assistant_reply.return_value = iter(["첫 조각", "다음 조각"])
+        agent_service.stream_assistant_reply_events.return_value = iter(["첫 조각", "다음 조각"])
         response = self.post_chat(agent_service)
         events = sse_events(response)
         self.assertEqual([event.get("event", event["type"]) for event in events], [
             "request_received", "retrieval_started", "context_ready", "sources",
-            "reply_attempt", "first_chunk", "chunk", "chunk", "reply_completed", "done",
+            "context_built", "reply_attempt", "first_chunk", "chunk", "chunk",
+            "answer_evaluated", "reply_completed", "done",
         ])
         debug_events = [event for event in events if event["type"] == "debug"]
         self.assertEqual(len({event["request_id"] for event in debug_events}), 1)
@@ -134,7 +143,9 @@ class DebugRouteTests(unittest.TestCase):
         })
         self.assertEqual(debug_events[-1]["details"]["reply_characters"], len("첫 조각다음 조각"))
         self.assertNotIn("PRIVATE_SESSION_ID", response.text)
-        self.assertNotIn("전체 정제 근거", response.text)
+        self.assertNotIn("전체 정제 근거", json.dumps([
+            event for event in events if event.get("event") != "context_built"
+        ], ensure_ascii=False))
         self.assertEqual(events[-1], {"type": "done"})
 
     def test_retrieval_failure_has_no_attempt_or_completion_and_one_error(self):
@@ -148,9 +159,9 @@ class DebugRouteTests(unittest.TestCase):
                 )
         events = sse_events(response)
         self.assertEqual([event.get("event", event["type"]) for event in events], [
-            "request_received", "retrieval_started", "reply_failed", "error",
+            "request_received", "retrieval_started", "reply_failed", "answer_evaluated", "error",
         ])
-        self.assertEqual(events[-2]["details"]["reason"], "resume_not_configured")
+        self.assertEqual(events[-3]["details"]["reason"], "resume_not_configured")
         agent_factory.assert_not_called()
 
     def test_configuration_failure_uses_safe_reason_without_raw_exception(self):
@@ -166,9 +177,9 @@ class DebugRouteTests(unittest.TestCase):
                             "/api/chat", json={"message": "경력?", "session_id": "s"}
                         )
                 events = sse_events(response)
-                self.assertEqual(events[-2]["event"], "reply_failed")
-                self.assertEqual(events[-2]["details"]["reason"], expected_reason)
-                self.assertEqual(events[-2]["details"]["stage"], "configuration")
+                self.assertEqual(events[-3]["event"], "reply_failed")
+                self.assertEqual(events[-3]["details"]["reason"], expected_reason)
+                self.assertEqual(events[-3]["details"]["stage"], "configuration")
                 self.assertEqual(events[-1]["type"], "error")
                 self.assertNotIn("reply_attempt", [event.get("event") for event in events])
                 self.assertNotIn("PRIVATE", response.text)
@@ -196,15 +207,15 @@ class DebugRouteTests(unittest.TestCase):
         error.code = "1305"
         error.status_code = 429
         agent_service = Mock()
-        agent_service.stream_assistant_reply.side_effect = [error, iter(["재시도 답변"])]
+        agent_service.stream_assistant_reply_events.side_effect = [error, iter(["재시도 답변"])]
         with patch("app.routes.chat.time.sleep") as sleep:
             response = self.post_chat(agent_service)
         events = sse_events(response)
         names = [event.get("event", event["type"]) for event in events]
         self.assertEqual(names, [
-            "request_received", "retrieval_started", "context_ready", "sources", "reply_attempt",
-            "retry_scheduled", "status", "reply_attempt", "first_chunk", "chunk",
-            "reply_completed", "done",
+            "request_received", "retrieval_started", "context_ready", "sources", "context_built",
+            "reply_attempt", "retry_scheduled", "status", "context_built", "reply_attempt",
+            "first_chunk", "chunk", "answer_evaluated", "reply_completed", "done",
         ])
         retry = next(event for event in events if event.get("event") == "retry_scheduled")
         self.assertEqual(retry["details"], {
@@ -222,17 +233,17 @@ class DebugRouteTests(unittest.TestCase):
             response = self.post_chat(DolmenAgentService(Mock()))
         events = sse_events(response)
         names = [event.get("event", event["type"]) for event in events]
-        self.assertEqual(names[-2:], ["reply_failed", "error"])
+        self.assertEqual(names[-3:], ["reply_failed", "answer_evaluated", "error"])
         self.assertNotIn("first_chunk", names)
         self.assertNotIn("reply_completed", names)
         self.assertNotIn("done", names)
-        self.assertEqual(events[-2]["details"]["reason"], "empty_reply")
+        self.assertEqual(events[-3]["details"]["reason"], "empty_reply")
 
     def test_trace_factory_or_emit_failure_cannot_change_answer_or_terminal(self):
         for failure_mode in ("factory", "emit"):
             with self.subTest(failure_mode=failure_mode):
                 agent_service = Mock()
-                agent_service.stream_assistant_reply.return_value = iter(["답변 유지"])
+                agent_service.stream_assistant_reply_events.return_value = iter(["답변 유지"])
                 with patch("app.routes.chat.ChatDebugTrace") as trace_factory:
                     if failure_mode == "factory":
                         trace_factory.side_effect = RuntimeError("PRIVATE_TRACE_FACTORY")
@@ -253,12 +264,12 @@ class DebugRouteTests(unittest.TestCase):
             raise RuntimeError("rate limit PRIVATE_EXCEPTION")
 
         agent_service = Mock()
-        agent_service.stream_assistant_reply.side_effect = partial_reply
+        agent_service.stream_assistant_reply_events.side_effect = partial_reply
         with patch("app.routes.chat.time.sleep") as sleep:
             response = self.post_chat(agent_service)
         events = sse_events(response)
         names = [event.get("event", event["type"]) for event in events]
-        self.assertEqual(names[-2:], ["reply_failed", "error"])
+        self.assertEqual(names[-3:], ["reply_failed", "answer_evaluated", "error"])
         self.assertNotIn("retry_scheduled", names)
         self.assertNotIn("reply_completed", names)
         self.assertEqual(names.count("first_chunk"), 1)
