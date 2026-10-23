@@ -1,182 +1,263 @@
-"""로컬 RAG 파이프라인.
-
-RAGStore(SQLite + 내장 청킹) → FastEmbed 로컬 임베딩 → QdrantSearch(path 모드)로
-Qdrant 서버 없이 로컬 파일 인덱스(.rag/)에서 동작한다. 클러스터 배포 시 url 모드로 전환한다.
-
-마크다운 문서는 H2(##) 절 단위로 잘라 절별 문서로 저장한다(구조 인식 청킹).
-절 제목이 source에 붙어 근거 표시에 "4. 휴가 정책" 같은 출처 라벨이 함께 보인다.
-"""
+"""등록 이력서만 검색하는 로컬 색인. 기존 .rag 위키 저장소와 분리한다."""
 
 import hashlib
 import os
 import re
+import threading
 from dataclasses import dataclass
+from pathlib import Path
 
 from hello_agents.retrieval import FastEmbedProvider, QdrantSearch, RAGStore
-from hello_agents.tools import RAGTool
 
-from app.settings import DOLMEN_API_DIR
+from app.resume import (
+    SANITIZER_VERSION,
+    ResumePage,
+    ResumeUnavailableError,
+    extract_sanitized_resume_pages,
+    read_resume_pdf_bytes,
+    split_resume_page_sections,
+)
+from app.settings import (
+    DOLMEN_API_DIR,
+    MAX_CHAT_HISTORY_TURNS,
+    MAX_CHAT_SESSIONS,
+    RESUME_CONTEXT_POLICY,
+    RETRIEVED_GROUNDS_LIMIT,
+    ResumeSettings,
+    is_debug_enabled,
+    read_debug_model_id,
+    read_resume_settings,
+)
 
-DOLMEN_RAG_DIR = DOLMEN_API_DIR / ".rag"
-DEMO_DOC_SOURCE = "moafit-onboarding-wiki.md"
-DEMO_DOC_PATH = DOLMEN_API_DIR.parent / "demo-doc" / "onboarding-wiki.md"
-
-# 임베딩 모델 캐시 경로(컨테이너 이미지에 모델을 구울 때 지정). 미지정 시 fastembed 기본 캐시.
+DOLMEN_RAG_DIR = DOLMEN_API_DIR / ".rag" / "resume"
 DOLMEN_EMBEDDING_CACHE_DIR = os.getenv("DOLMEN_EMBEDDING_CACHE_DIR") or None
-
-# 한국어 문장 유사도가 되는 다국어 모델. fastembed가 ONNX로 로컬 실행한다.
-# 참고: intfloat/multilingual-e5-large가 품질은 더 좋지만 외부 데이터 파일(model.onnx_data)을
-# 쓰는지라 fastembed 캐시 레이아웃에서 onnxruntime 경로 검증이 실패해 단일 ONNX 모델로 선택했다.
 DOLMEN_EMBEDDING_MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 DOLMEN_EMBEDDING_DIMENSION = 384
-
-SECTION_HEADING_PATTERN = re.compile(r"^##\s+")
-
-
-def compute_document_id(source: str) -> str:
-    """RAGStore 기본 규칙과 동일한 source SHA-256 앞 24자 식별자."""
-    return hashlib.sha256(source.encode()).hexdigest()[:24]
+RESUME_INDEX_VERSION = "resume-page-context-v2"
 
 
-def split_markdown_into_sections(markdown_text: str) -> list[tuple[str, str]]:
-    """H2(##) 제목 기준으로 (절 제목, 절 본문) 목록을 만든다. 제목 줄은 본문에 포함된다."""
-    sections: list[tuple[str, str]] = []
-    current_title = "머리말"
-    current_lines: list[str] = []
-
-    def flush_section() -> None:
-        section_text = "\n".join(current_lines).strip()
-        if section_text:
-            sections.append((current_title, section_text))
-
-    for markdown_line in markdown_text.splitlines():
-        if SECTION_HEADING_PATTERN.match(markdown_line):
-            flush_section()
-            current_title = markdown_line.lstrip("#").strip()
-            current_lines = [markdown_line]
-        else:
-            current_lines.append(markdown_line)
-    flush_section()
-    return sections
-
-
-@dataclass
-class IngestedDocumentSummary:
-    document_id: str
-    source: str
-    version: str
-    is_new_ingestion: bool
-
-
-@dataclass
+@dataclass(frozen=True)
 class RetrievedGround:
     chunk_id: str
     source: str
     version: str
     score: float
-    # 화면 표시용 앞부분 발췌
     snippet: str
-    # LLM 프롬프트에 넣는 청크 원문 전체
     content: str
+
+    @property
+    def page_number(self) -> int:
+        match = re.search(r"등록 이력서 · (\d{1,4})쪽", self.source)
+        return int(match.group(1)) if match else 0
+
+
+@dataclass(frozen=True)
+class ResumeReplyContext:
+    grounds: list[RetrievedGround]
+    revision: int
+    resume_settings: ResumeSettings
+    resume_pages: list[ResumePage]
 
 
 class DolmenRagService:
-    """문서 저장·청킹·임베딩·검색과 에이전트용 RAGTool를 제공한다."""
+    """공개 문서 쓰기 없이 서버에 등록된 PDF의 정제본만 색인한다."""
 
-    def __init__(self) -> None:
-        DOLMEN_RAG_DIR.mkdir(parents=True, exist_ok=True)
-        self.store = RAGStore(path=str(DOLMEN_RAG_DIR / "documents.db"))
-        # cache_dir 미지정 시 fastembed 기본 캐시(각 OS 임시 디렉터리)를 쓴다.
-        # 컨테이너에서는 DOLMEN_EMBEDDING_CACHE_DIR로 이미지에 구운 모델 경로를 가리킨다.
-        self.embedding = FastEmbedProvider(
-            model_name=DOLMEN_EMBEDDING_MODEL_NAME,
-            dimension=DOLMEN_EMBEDDING_DIMENSION,
-            cache_dir=DOLMEN_EMBEDDING_CACHE_DIR,
-        )
-        self.search_backend = QdrantSearch(
+    def __init__(
+        self,
+        resume_settings: ResumeSettings | None = None,
+        rag_dir: Path = DOLMEN_RAG_DIR,
+    ) -> None:
+        self.resume_settings = resume_settings or read_resume_settings()
+        self._rag_dir = rag_dir
+        self._lock = threading.RLock()
+        self._active_fingerprint: str | None = None
+        self._section_count = 0
+        self._resume_pages: list[ResumePage] = []
+        self.store = RAGStore(path=str(rag_dir / "documents.db"))
+        self.search_backend: QdrantSearch | None = None
+
+    def _create_search_backend(self) -> QdrantSearch:
+        return QdrantSearch(
             store=self.store,
-            embedding=self.embedding,
-            path=str(DOLMEN_RAG_DIR / "qdrant"),
-            collection="dolmen",
-        )
-        self.rag_tool = RAGTool(store=self.store, search_backend=self.search_backend)
-
-    def ingest_document(
-        self, text: str, source: str, version: str = "1", *, sync_index: bool = True
-    ) -> IngestedDocumentSummary:
-        document_id = self.store.add_document(text=text, source=source, version=version)
-        if sync_index:
-            self.search_backend.sync()
-        return IngestedDocumentSummary(
-            document_id=document_id,
-            source=source,
-            version=version,
-            is_new_ingestion=True,
+            embedding=FastEmbedProvider(
+                model_name=DOLMEN_EMBEDDING_MODEL_NAME,
+                dimension=DOLMEN_EMBEDDING_DIMENSION,
+                cache_dir=DOLMEN_EMBEDDING_CACHE_DIR,
+            ),
+            path=str(self._rag_dir / "qdrant"),
+            collection="dolmen_resume",
         )
 
-    def ingest_markdown_document(
-        self, markdown_text: str, source: str, version: str = "1"
-    ) -> list[IngestedDocumentSummary]:
-        """마크다운 원문을 H2 절 단위 문서로 나눠 저장하고 마지막에 인덱스를 한 번 동기화한다."""
-        section_summaries: list[IngestedDocumentSummary] = []
-        for section_title, section_text in split_markdown_into_sections(markdown_text):
-            section_summaries.append(
-                self.ingest_document(
-                    text=section_text,
-                    source=f"{source} § {section_title}",
-                    version=version,
-                    sync_index=False,
+    def ensure_resume_ingested(self) -> None:
+        """내용·정제 정책·작성 기준일이 바뀌면 이전 절을 철회한 뒤 새 색인으로 교체한다."""
+        with self._lock:
+            try:
+                pdf_bytes = read_resume_pdf_bytes(self.resume_settings)
+                fingerprint = hashlib.sha256(
+                    pdf_bytes
+                    + SANITIZER_VERSION.encode()
+                    + RESUME_INDEX_VERSION.encode()
+                    + self.resume_settings.candidate_name.encode()
+                    + self.resume_settings.updated_at.encode()
+                ).hexdigest()
+                if fingerprint == self._active_fingerprint:
+                    return
+                resume_pages = extract_sanitized_resume_pages(pdf_bytes)
+                expected_sections: dict[str, tuple[str, str]] = {}
+                for resume_page in resume_pages:
+                    for section_number, section_text in enumerate(
+                        split_resume_page_sections(resume_page), start=1
+                    ):
+                        document_id = (
+                            f"resume-page-{resume_page.page_number}-section-{section_number}"
+                        )
+                        source = f"등록 이력서 · {resume_page.page_number}쪽 · {section_number}절"
+                        expected_sections[document_id] = (source, section_text)
+                if not expected_sections:
+                    raise ValueError
+                _, active_chunks = self.store.snapshot()
+                active_document_ids = {chunk.document_id for chunk in active_chunks}
+                can_reuse_documents = active_document_ids == set(expected_sections) and all(
+                    chunk.version.startswith(f"{fingerprint}:") for chunk in active_chunks
                 )
-            )
-        self.search_backend.sync()
-        return section_summaries
+                if can_reuse_documents:
+                    can_reuse_documents = all(
+                        (stored_document.source, stored_document.content)
+                        == expected_sections[document_id]
+                        for document_id in active_document_ids
+                        for stored_document in [self.store.read_document(document_id)]
+                    )
+                if not can_reuse_documents:
+                    # RAGStore는 같은 id의 새 버전을 교체하고, 줄어든 절은 명시적으로 철회한다.
+                    # revision 접미사는 A→B→A로 되돌려도 철회된 과거 버전을 재사용하지 않게 한다.
+                    version = f"{fingerprint}:{self.store.revision + 1}"
+                    for document_id, (source, section_text) in expected_sections.items():
+                        self.store.add_document(
+                            text=section_text,
+                            source=source,
+                            version=version,
+                            document_id=document_id,
+                            chunk_size=max(len(section_text), 1),
+                            overlap=0,
+                        )
+                    for document_id in active_document_ids - set(expected_sections):
+                        self.store.deactivate_document(document_id)
+                if self.search_backend is None:
+                    self.search_backend = self._create_search_backend()
+                self.search_backend.sync()
+                self._active_fingerprint = fingerprint
+                self._section_count = len(expected_sections)
+                self._resume_pages = resume_pages
+            except ResumeUnavailableError:
+                self._active_fingerprint = None
+                self._resume_pages = []
+                raise
+            except Exception:
+                self._active_fingerprint = None
+                self._resume_pages = []
+                raise ResumeUnavailableError(
+                    "resume_not_ready",
+                    "등록 이력서 색인을 준비하지 못했습니다. 서버의 색인 상태를 확인해 주세요.",
+                ) from None
+
+    def read_document_status(self) -> dict:
+        with self._lock:
+            self.ensure_resume_ingested()
+            _, active_chunks = self.store.snapshot()
+            document_status = {
+                "revision": self.store.revision,
+                "sources": sorted({chunk.source for chunk in active_chunks}),
+                "resume_configured": True,
+                "resume_ready": True,
+                "section_count": self._section_count,
+                "candidate_name": self.resume_settings.candidate_name,
+                "resume_updated_at": self.resume_settings.updated_at,
+            }
+            try:
+                if is_debug_enabled():
+                    # 같은 잠금·활성 snapshot의 정제 절만 읽고 전체 본문은 반환하지 않는다.
+                    active_documents = [
+                        self.store.read_document(document_id)
+                        for document_id in sorted({chunk.document_id for chunk in active_chunks})
+                    ]
+                    document_status["debug"] = {
+                        "page_count": len(self._resume_pages),
+                        "sanitized_character_count": sum(
+                            len(page.text) for page in self._resume_pages
+                        ),
+                        "embedding_model": DOLMEN_EMBEDDING_MODEL_NAME,
+                        "retrieval_limit": RETRIEVED_GROUNDS_LIMIT,
+                        "context_policy": RESUME_CONTEXT_POLICY,
+                        "privacy_filter_version": SANITIZER_VERSION,
+                        "index_version": RESUME_INDEX_VERSION,
+                        "model_id": read_debug_model_id(),
+                        "history_turn_limit": MAX_CHAT_HISTORY_TURNS,
+                        "session_limit": MAX_CHAT_SESSIONS,
+                        "sections": [
+                            {
+                                "document_id": document.document_id,
+                                "source": document.source,
+                                "version": document.version,
+                                "character_count": len(document.content),
+                                "snippet": document.content.strip()[:220],
+                            }
+                            for document in active_documents
+                        ],
+                    }
+            except Exception:
+                # 개발 관측 실패가 등록 상태나 본래 응답을 바꾸지 않는다.
+                pass
+            return document_status
 
     def search_grounds(self, query: str, limit: int = 5) -> list[RetrievedGround]:
-        retrieval_results = self.search_backend.search(query=query, limit=limit)
-        return [
-            RetrievedGround(
-                chunk_id=result.chunk_id,
-                source=result.source,
-                version=result.version,
-                score=round(result.score, 4),
-                snippet=result.content.strip()[:220],
-                content=result.content.strip(),
+        with self._lock:
+            self.ensure_resume_ingested()
+            try:
+                if self.search_backend is None:
+                    raise ValueError
+                retrieval_results = self.search_backend.search(query=query, limit=limit)
+                return [
+                    RetrievedGround(
+                        chunk_id=ground.chunk_id,
+                        source=ground.source,
+                        version=ground.version,
+                        score=round(ground.score, 4),
+                        snippet=ground.content.strip()[:220],
+                        content=ground.content.strip(),
+                    )
+                    for ground in retrieval_results
+                ]
+            except Exception:
+                self._active_fingerprint = None
+                raise ResumeUnavailableError(
+                    "resume_not_ready",
+                    "등록 이력서 검색에 실패했습니다. 잠시 후 다시 질문해 주세요.",
+                ) from None
+
+    def retrieve_reply_context(self, query: str, limit: int = 5) -> ResumeReplyContext:
+        """검색 결과와 revision을 같은 잠금 안에서 읽어 문서 교체 중 혼합을 막는다."""
+        with self._lock:
+            return ResumeReplyContext(
+                grounds=self.search_grounds(query, limit),
+                revision=self.store.revision,
+                resume_settings=self.resume_settings,
+                resume_pages=list(self._resume_pages),
             )
-            for result in retrieval_results
-        ]
-
-    def list_document_sources(self) -> list[str]:
-        """저장소에 활성 문서가 있는 고유 source 목록(절 단위)."""
-        _, chunk_items = self.store.snapshot()
-        return sorted({chunk_item.source for chunk_item in chunk_items})
-
-    def has_document(self, source: str) -> bool:
-        return any(
-            stored_source == source or stored_source.startswith(f"{source} § ")
-            for stored_source in self.list_document_sources()
-        )
-
-    def ensure_demo_document_ingested(self) -> list[IngestedDocumentSummary] | None:
-        """데모 온보딩 위키가 저장소에 없으면 넣고, 인덱스를 최신으로 맞춘다.
-
-        문서는 이미 있어도 이전 sync가 실패했을 수 있으므로 sync()는 항상 호출한다
-        (sync는 변경이 없으면 인코딩 없이 0을 반환하는 증분 동작).
-        """
-        if self.has_document(DEMO_DOC_SOURCE):
-            self.search_backend.sync()
-            return None
-        demo_doc_text = DEMO_DOC_PATH.read_text(encoding="utf-8")
-        return self.ingest_markdown_document(
-            markdown_text=demo_doc_text, source=DEMO_DOC_SOURCE, version="1"
-        )
 
 
 _dolmen_rag_service: DolmenRagService | None = None
+_dolmen_rag_service_lock = threading.Lock()
 
 
 def dolmen_rag_service() -> DolmenRagService:
-    """앱 생애주기에 하나만 만드는 싱글턴(모델 로드가 무겁다)."""
     global _dolmen_rag_service
-    if _dolmen_rag_service is None:
-        _dolmen_rag_service = DolmenRagService()
-    return _dolmen_rag_service
+    with _dolmen_rag_service_lock:
+        if _dolmen_rag_service is None:
+            try:
+                _dolmen_rag_service = DolmenRagService()
+            except Exception:
+                raise ResumeUnavailableError(
+                    "resume_not_ready",
+                    "이력서 저장소를 열지 못했습니다. 서버 상태를 확인해 주세요.",
+                ) from None
+        return _dolmen_rag_service

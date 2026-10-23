@@ -1,0 +1,98 @@
+{
+  "blender": "5.2.2 LTS",
+  "source_sha256": "7d31bcc8f74816def1bcf52694192695a0855b3b67e3ea05d1555403e7839640",
+  "source_fur_strands": 136500,
+  "sampled_fur_strands": 6825,
+  "fur_stride": 20,
+  "fur_triangles": 68250,
+  "body_triangles_before_decimate": 93372,
+  "body_triangles": 69948,
+  "total_triangles": 138198,
+  "bounds_gltf_animation_union": {
+    "min": [
+      -1.2143819332122803,
+      -0.0027786046266555786,
+      -0.900623083114624
+    ],
+    "max": [
+      1.2255686521530151,
+      2.918344020843506,
+      0.9511350989341736
+    ],
+    "center": [
+      0.005593359470367432,
+      1.4577827453613281,
+      0.02525600790977478
+    ],
+    "size": [
+      2.439950466156006,
+      2.9211225509643555,
+      1.8517582416534424
+    ]
+  },
+  "camera_gltf": {
+    "position": [
+      0,
+      1.46,
+      6.0
+    ],
+    "target": [
+      0,
+      1.46,
+      0
+    ],
+    "fov_degrees": 32
+  },
+  "clips": {
+    "idle": {
+      "duration_seconds": 4,
+      "loop": true,
+      "source_frames_inclusive": [
+        1,
+        96
+      ]
+    },
+    "hello": {
+      "duration_seconds": 4,
+      "loop": false,
+      "source_frames_inclusive": [
+        97,
+        192
+      ]
+    },
+    "listen": {
+      "duration_seconds": 4,
+      "loop": true,
+      "source_frames_inclusive": [
+        193,
+        288
+      ]
+    },
+    "think": {
+      "duration_seconds": 4,
+      "loop": true,
+      "source_frames_inclusive": [
+        289,
+        384
+      ]
+    },
+    "happy": {
+      "duration_seconds": 4,
+      "loop": false,
+      "source_frames_inclusive": [
+        385,
+        480
+      ]
+    },
+    "speak": {
+      "duration_seconds": 4,
+      "loop": true,
+      "source_frames_inclusive": [
+        481,
+        576
+      ]
+    }
+  },
+  "origin": "native master origin; glTF Y-up; front +Z",
+  "source_saved": false
+}
