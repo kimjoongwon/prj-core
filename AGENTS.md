@@ -1,11 +1,12 @@
 # 프로젝트 공통 규칙
 
-## 배포·운영 (2026-10-05)
+## 배포·운영 (2026-10-22 소스 대조)
 
 - `stg`/`main`은 브랜치 보호(관리자 포함 직접 푸시 차단) — **무조건 PR 경유**. 흐름: feature → stg PR → 세션 리뷰 → 사용자 승인 머지 → stg 배포 → stg→main PR → 사용자 승인 → prod 자동 배포(push-router).
 - 작업은 git worktree에서. 이미지 태그 = 커밋 SHA 12자, 빌드·범프는 Jenkins 잡(`devops/Jenkinsfile.*`, 잡별 노트는 `*.ops.md`).
 - 전체 파이프라인·인프라·시크릿 지식은 **워크스페이스 루트 `~/dev/AGENTS.md`와 OpenBao `secret/docs/*`가 진입점** — 배포·인프라 작업 시 먼저 읽을 것.
-- 빌드/배포 문서: `docs/build-deploy-runbook.md`, `docs/env-reference.md`.
+- 빌드/배포 문서: `docs/build-deploy-runbook.md`, `docs/env-reference.md`. 앱 소스의 stg 빌드는 현재 수동이며 main push만 경로 라우터가 처리합니다(Storybook 제외).
+- ArgoCD는 prod/stg 모두 `prj-devops main`과 `prj-deploy main`을 읽으며 환경별 디렉터리로 구분합니다. prod 태그는 8앱, stg는 4서비스+Dolmen 2앱입니다. Dolmen의 main 빌드는 허용되지만 prod 태그 파일·Application은 없어 범프가 실패할 수 있습니다. 소스 구성과 실제 배포 완료를 구분합니다.
 
 ## 문서 범위
 

@@ -6,8 +6,10 @@
 
 ## 역할
 
+> 2026-10-22 Dockerfile·호출 소스 대조. 이미지 빌드·실행을 새로 수행한 검증 기록은 아니다. 날짜가 붙은 변경 이력은 당시 기록으로 구분한다.
+
 `idp-api` 이미지를 빌드하기 위한 멀티스테이지 Dockerfile입니다.
-`turbo prune`으로 idp-api 의존 그래프만 추출하고, pnpm store와 turbo 작업 캐시를 BuildKit cache mount로 유지해 재빌드 시간을 단축합니다.
+`turbo prune`으로 idp-api 의존 그래프만 추출하고 워크스페이스 트리로 실행합니다. 현재 pnpm·turbo 캐시는 일반 레이어의 `/cache` 경로를 사용하며 Dockerfile에 명시적 cache mount는 없습니다.
 
 ## 공개 계약
 
@@ -17,11 +19,11 @@
 | base 이미지 | `node:24.21.0-alpine3.24@sha256:be80f76cf40ec8e42b9bec49f60a55e0660f30af58d3e5a25530785b30ea67e2`로 digest 고정 (admin-web runner와 동일) |
 | 도구체인 | pnpm `10.34.5`, turbo `2.9.14` (레포 표준 도구체인) |
 | setup 단계 | `COPY . .` 후 `turbo prune --scope=idp-api --docker` |
-| builder 단계 | `out/json` 복사 → `pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline` → `out/full` 복사 → `pnpm exec turbo build --concurrency=2 --filter=idp-api...` 단일 빌드 |
+| builder 단계 | `out/json` 복사 → `pnpm install --frozen-lockfile --store-dir /cache/pnpm-store --prefer-offline` → `out/full` 복사 → `pnpm exec turbo build --concurrency=2 --cache-dir=/cache/turbo --filter=idp-api...` 단일 빌드 |
 | 러너 단계 | 루트 `node_modules`, `packages/`, `apps/`, 루트 manifest를 복사한 워크스페이스 트리에서 앱 실행 |
 | 러너 검증 | 배포 트리에서 `node --check`, 필수 native/runtime 패키지 require, `app.module` 로드, 금지 패키지 require 해석 불가 검사 |
 | 런타임 프로세스 | `CMD ["node", "apps/idp/api/dist/main.js"]` (워크스페이스 내 앱 경로) |
-| 캐시 정책 | `/pnpm/store`(pnpm store), `/app/.turbo`(turbo 작업 캐시)에 BuildKit cache mount 적용 |
+| 캐시 정책 | `/cache/pnpm-store`, `/cache/turbo` 일반 레이어 경로. Jenkins에 별도 `/cache` PVC 마운트 없음. BuildKit 데몬의 레이어 캐시와 구분 |
 
 ## 구조 개요
 
@@ -34,9 +36,9 @@
 ## 구현 체크리스트
 
 - [x] `idp-api` 대상만 `turbo prune --scope=idp-api --docker` 수행
-- [x] `out/json`을 먼저 복사하고 `pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline` 이후 `out/full`을 복사해 prune 산출물의 최신 lockfile이 오래된 `out/full/pnpm-lock.yaml`에 덮어써지지 않도록 보장
-- [x] `pnpm install` 단계 캐시 유지(`/pnpm/store`)
-- [x] `turbo build` 단계 캐시 유지(`/app/.turbo`) 및 `--concurrency=2` 병렬 빌드
+- [x] `out/json`을 먼저 복사하고 `pnpm install --frozen-lockfile --store-dir /cache/pnpm-store --prefer-offline` 이후 `out/full`을 복사해 prune 산출물의 최신 lockfile이 오래된 `out/full/pnpm-lock.yaml`에 덮어써지지 않도록 보장
+- [x] `pnpm install`의 store 경로(`/cache/pnpm-store`) 명시
+- [x] `turbo build --cache-dir=/cache/turbo --concurrency=2` 실행
 - [x] runner가 PreSync 마이그레이션 Job 계약(`/app/packages/be-prisma` 실행, 루트 `node_modules`의 .pnpm 심링크)을 보존하면서 앱과 마이그레이션 Job 모두 워크스페이스 구조에서 실행
 - [x] 러너 단계에서 배포 트리 기반 런타임 계약 검증(`node --check`, 필수 패키지 require, `app.module` 로드, 금지 패키지 해석 불가)
 - [x] 런타임 계약(`ENV NODE_ENV=production`, `ENV APP_PORT=3007`, `EXPOSE 3007`, `CMD ["node", ...]`) 유지

@@ -28,7 +28,7 @@
 **PRJ Core**는 필라테스, 헬스, 요가 등 다양한 피트니스 및 서비스 예약을 지원하는 멀티 도메인 예약 플랫폼입니다. Turborepo와 pnpm 워크스페이스를 활용한 Monorepo 아키텍처로 구성되어 있으며, 코드 재사용성과 개발 효율성을 극대화합니다.
 
 > **⚠️ 중요 안내**  
-> 이 프로젝트는 **실운영 플랫폼**입니다 (stg/prod 2단계 배포, 2026-10 기준 전 서비스 운영 중).
+> 이 프로젝트는 stg/prod 2단계 GitOps 배포를 구성합니다. 앱별 배포 대상은 아래 배포 표와 [빌드·배포 런북](./docs/build-deploy-runbook.md)을 따르며, 실제 운영 상태는 별도 확인합니다.
 >
 > - SI 프로젝트 수행을 위한 기본 기술 스택 학습
 > - 모노레포 아키텍처 및 현대적인 개발 방법론 연구
@@ -65,7 +65,7 @@
 
 ### 파일 관리
 
-- 📁 **오브젝트 스토리지**: Cloudflare R2 (S3 호환, `OBJECT_STORAGE_*` env — 아직 배포 환경 미구성)
+- 📁 **오브젝트 스토리지**: Cloudflare R2 (S3 호환, `OBJECT_STORAGE_*` env — 환경별 연결은 유효 env로 확인)
 - 📤 **업로드 UX**: react-dropzone 기반 드래그 앤 드롭 업로드
 
 ### 인증 & IDP
@@ -112,7 +112,7 @@
 | **Authorization**    | CASL            | 6.x  | 권한 관리           |
 | **Validation**       | class-validator | 0.14 | DTO 검증            |
 | **API Docs**         | Swagger         | 11.4 | OpenAPI 문서화      |
-| **File Storage**     | Cloudflare R2 (S3호환) | — | 파일 스토리지(배포 미구성) |
+| **File Storage**     | Cloudflare R2 (S3호환) | — | 파일 스토리지(환경별 설정 필요) |
 | **Email**            | Nodemailer      | 7.x  | 이메일 발송         |
 | **Logging**          | Pino (nestjs-pino) | 4.x | 고성능 로깅       |
 
@@ -437,7 +437,7 @@ pnpm codegen:api
 
 - **커밋 메시지**
 
-  커밋 메시지 형식과 허용 타입은 [프로젝트 공통 규칙](./AGENTS.md#커밋-메시지-규칙)을 따릅니다.
+  커밋 메시지 형식과 허용 타입은 [프로젝트 공통 규칙](./AGENTS.md#커밋-메시지)을 따릅니다.
 
 ## 🏗 아키텍처
 
@@ -474,14 +474,23 @@ Tenant (최상위 조직)
 
 ### Jenkins를 통한 배포 (운영)
 
-앱별 Jenkinsfile이 `devops/`에 형상 관리됩니다(각 파일 옆에 `.ops.md` 운영 문서 동반).
+앱별 Jenkinsfile·Dockerfile은 `devops/`, 잡 정의와 경로 라우터는 `prj-devops/helm/development-tools/jenkins/values.yaml`이 소유합니다. 2026-10-22 소스 기준 배포 대상은 다음과 같습니다.
+
+| 앱 | GitOps 환경 | 빌드 시작 |
+|---|---|---|
+| core-api, admin-web, idp-api, idp-web | prod + stg | main push 경로 매칭 / stg 수동 |
+| proposal-web, design-web, live-web | prod | main push 경로 매칭 |
+| tool-storybook | prod | 수동 |
+| dolmen-api, dolmen-web | stg | `BRANCH_NAME=stg` 수동. 라우터의 main 빌드는 prod 태그 파일이 없어 후속 범프 실패 가능 |
+
+[빌드·배포 런북](./docs/build-deploy-runbook.md)에 대상 브랜치·수동 실행 필드·검증 기준을 정리합니다. 앱 빌드 성공 뒤 GitOps 범프와 ArgoCD 배포가 비동기로 이어지므로 각 결과를 확인합니다.
 
 ```bash
 # Jenkins 파이프라인 (예)
 devops/Jenkinsfile.core-api        # Core API 빌드 → Harbor push → prj-deploy 태그 범프
 devops/Jenkinsfile.admin-web       # Admin 웹
 devops/Jenkinsfile.idp-api         # IDP API
-devops/Jenkinsfile.gitops-update   # GitOps 변경 승인 잡
+devops/Jenkinsfile.gitops-update   # prj-deploy 기존 환경별 태그 파일 범프 잡
 ```
 
 ### 도커를 이용한 로컬 빌드
@@ -500,8 +509,10 @@ docker build -t prj-core-admin-web:latest -f devops/Dockerfile.admin-web .
 Kubernetes 배포에서는 런타임 `.env` 파일을 사용하지 않습니다.
 
 - 차트·환경 설정: [prj-devops](https://github.com/kimjoongwon/prj-devops) (Helm + ArgoCD)
-- 이미지 태그: [prj-deploy](https://github.com/kimjoongwon/prj-deploy) (Jenkins 빌드가 커밋 SHA 태그를 범프)
-- 환경 변수: `prj-devops`에서 관리하는 OpenBao를 통해 주입
+- 이미지 태그: [prj-deploy](https://github.com/kimjoongwon/prj-deploy)의 `prod/` 8개·`stg/` 6개 파일 (Jenkins가 빌드 커밋 SHA 앞 12자로 범프)
+- ArgoCD는 두 저장소의 **main**을 읽고 환경별 values와 태그 디렉터리로 prod/stg를 구분합니다. `prj-core`의 소스 브랜치와 별개입니다.
+- 환경 변수: OpenBao → ExternalSecret → Kubernetes Secret의 `envFrom` 및 차트 `extraEnv`로 주입 ([환경 변수 참조](./docs/env-reference.md#kubernetes-배포-환경-변수))
+- Jenkins 차트는 ArgoCD 밖이므로 Job DSL 변경은 별도 Helm 적용이 필요합니다.
 
 ## 📚 추가 문서
 

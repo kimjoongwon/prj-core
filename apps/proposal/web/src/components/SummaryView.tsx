@@ -2,7 +2,7 @@
 
 import { Button, Chip, VStack, HStack, Typography, Container } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { RotateCcw, Printer, FolderGit2, Bot, Split } from "lucide-react";
+import { RotateCcw, Printer, FolderGit2, Bot, Split, Wand2 } from "lucide-react";
 import type { SelectionState } from "../data/types";
 import { frontendStep } from "../data/frontend";
 import { backendStep } from "../data/backend";
@@ -30,12 +30,10 @@ function SummaryRow({ label, value, note }: { label: string; value: string; note
 
 function ArchDiagram({
   selection,
-  feName,
   beName,
   infraName,
 }: {
   selection: SelectionState;
-  feName: string;
   beName: string;
   infraName: string;
 }) {
@@ -111,7 +109,6 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
 
   const isMonorepo = selection.frontend === "react-native" && selection.backend === "nestjs";
   const isRN = selection.frontend === "react-native";
-  const isFlutter = selection.frontend === "flutter";
 
   const feName = fe?.name ?? "—";
   const beName = be?.name ?? "—";
@@ -206,13 +203,30 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
           </VStack>
         </Card>
 
+        {/* AI 에셋 자동화 판매 강조 */}
+        <Card className="w-full border-2 border-accent bg-accent-soft p-5">
+          <HStack gap="block" alignItems="start">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent">
+              <Wand2 className="h-5 w-5 text-accent-foreground" />
+            </span>
+            <VStack gap="dense" alignItems="start">
+              <Typography.Heading level={4}>AI 에셋 자동화 프레임워크</Typography.Heading>
+              <Typography.Paragraph size="sm">
+                아이콘·배너·스플래시 등 반복 디자인 에셋은 브랜드 스타일을 학습한
+                자사 생성 파이프라인(ComfyUI)으로 자동 생산합니다. 서비스 아이콘
+                세트·앱 스플래시 이미지를 자동 생성한 적용 사례를 보유하고 있습니다.
+              </Typography.Paragraph>
+            </VStack>
+          </HStack>
+        </Card>
+
         {/* 아키텍처 다이어그램 */}
         <Card className="w-full p-6">
           <VStack gap="block">
             <Typography.Heading level={4}>아키텍처 요약</Typography.Heading>
             <div className="overflow-x-auto rounded-lg bg-surface-secondary p-4">
               <pre className="text-xs leading-relaxed text-foreground/80">
-                <ArchDiagram selection={selection} feName={feName} beName={beName} infraName={infraName} />
+                <ArchDiagram selection={selection} beName={beName} infraName={infraName} />
               </pre>
             </div>
           </VStack>

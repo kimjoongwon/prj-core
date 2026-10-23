@@ -6,6 +6,8 @@
 
 ## 역할
 
+> 2026-10-22 Dockerfile·호출 소스 대조. 이미지 빌드·실행을 새로 수행한 검증 기록은 아니다. 날짜가 붙은 변경 이력은 당시 기록으로 구분한다.
+
 `core-api` 이미지를 빌드하는 멀티스테이지 Dockerfile입니다.
 `turbo prune --scope=core-api --docker` 결과를 기반으로 관련 워크스페이스를 빌드하고,
 최종 런타임에서는 Node API 프로세스를 단일 프로세스로 실행합니다.
@@ -34,8 +36,8 @@
 
 - [x] `core-api` 대상 prune 결과만 사용
 - [x] `out/json`을 먼저 복사해 lockfile/의존성 설치의 기준점을 고정
-- [x] `pnpm install --frozen-lockfile --store-dir /pnpm/store --prefer-offline`로 설치 캐시 유지
-- [x] `/app/.turbo` 캐시 마운트로 Turbo 작업 캐시를 재사용하고 `turbo build --concurrency=2 --filter=core-api...`로 빌드
+- [x] `pnpm install --frozen-lockfile --store-dir /cache/pnpm-store --prefer-offline`로 설치
+- [x] `turbo build --concurrency=2 --cache-dir=/cache/turbo --filter=core-api...`로 빌드. Dockerfile에 명시적 cache mount는 없고 현재 Jenkins는 `/cache` PVC를 별도 마운트하지 않음
 - [x] 러너가 PreSync 마이그레이션 Job 계약(`/app/packages/be-prisma` 실행, 루트 `node_modules`의 .pnpm 심링크)을 보존
 - [x] 러너 단계에서 배포 트리 기반 런타임 계약 검증(`node --check`, 필수 패키지 require, `app.module` 로드, Devtools 가드, 금지 패키지 해석 불가)
 - [x] 런타임에서 Node 단일 프로세스 실행 구조 유지(`CMD ["node", "apps/core/api/dist/main.js"]`)

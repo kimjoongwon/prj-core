@@ -19,9 +19,9 @@ GitOps 반영 Job을 비동기로 트리거해 prj-deploy `prod/design-web.yaml`
 | 브랜치 정책 | `main` 브랜치만 허용(운영 전용, stg 없음 — proposal-web과 동일) |
 | 빌드 방식 | `buildctl` 원격 빌더(buildkitd) — Dockerfile은 `devops/Dockerfile.design-web` |
 | 실행 Stage | `Validate Branch` → `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
-| GitOps 트리거 | `APP_NAME=design-web`, `IMAGE_TAG`, `DEPLOY_ENV=prod` 등 — `Jenkinsfile.gitops-update` choices에 design-web 등록 필요 |
+| GitOps 트리거 | `APP_NAME=design-web`, `IMAGE_TAG`, `DEPLOY_ENV=prod` 등 — `Jenkinsfile.gitops-update` choices에 등록됨 |
 | 알림 | buzz #cicd 성공/실패 알림, 실패 시 @ZCode 멘션 (proposal-web과 동일 계약) |
-| 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
+| 실패 전파 정책 | 범프 호출 자체가 실패하면 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지. `wait: false`이므로 후속 범프 잡 실패·ArgoCD 실패는 전파되지 않음 |
 
 ## 구현 체크리스트
 
