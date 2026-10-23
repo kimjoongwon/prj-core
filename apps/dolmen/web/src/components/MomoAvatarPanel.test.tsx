@@ -173,7 +173,7 @@ describe("MomoAvatarPanel", () => {
 		expect(screen.queryByTestId("momo-canvas")).not.toBeInTheDocument();
 		expect(container.querySelector("img")).toBeInTheDocument();
 		expect(screen.getByRole("status")).toHaveTextContent(
-			"이력서에서 근거를 확인하고 있어요",
+			"답변을 준비하고 있어요",
 		);
 		expect(consoleError).toHaveBeenCalled();
 	});

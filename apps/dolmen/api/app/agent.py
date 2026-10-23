@@ -9,7 +9,12 @@ from hello_agents import HelloAgentsLLM, SimpleAgent
 
 from app.rag import RetrievedGround
 from app.resume import ResumePage, ResumeUnavailableError, is_private_resume_question
-from app.settings import ResumeSettings, missing_llm_env_names
+from app.settings import (
+    MAX_CHAT_HISTORY_TURNS,
+    MAX_CHAT_SESSIONS,
+    ResumeSettings,
+    missing_llm_env_names,
+)
 
 DOLMEN_SYSTEM_PROMPT = """당신은 지원자의 이력서를 소개하는 AI 도우미 '모모'입니다.
 당신은 지원자 본인이 아니며 면접관의 질문에 지원자를 항상 '{candidate_name}님'으로
@@ -46,10 +51,6 @@ class DolmenEmptyReplyError(RuntimeError):
     """모델이 표시 가능한 답변 없이 종료된 경우."""
 
 
-MAX_CHAT_SESSIONS = 50
-MAX_CHAT_HISTORY_TURNS = 2
-
-
 def compose_grounded_question(
     question: str,
     grounds: list[RetrievedGround],
@@ -75,6 +76,15 @@ def compose_grounded_question(
         },
         ensure_ascii=False,
     )
+
+
+def select_answer_path(question: str, grounds: list[RetrievedGround]) -> str:
+    """관측 정보와 실제 응답 분기가 같은 정책을 사용한다."""
+    if is_private_resume_question(question):
+        return "private_refusal"
+    if not grounds:
+        return "no_evidence"
+    return "model"
 
 
 class DolmenAgentService:
@@ -122,12 +132,13 @@ class DolmenAgentService:
             if self._resume_revision != resume_revision:
                 self._agents_by_session_id.clear()
                 self._resume_revision = resume_revision
-            if is_private_resume_question(question):
+            answer_path = select_answer_path(question, grounds)
+            if answer_path == "private_refusal":
                 local_answer = (
                     "모모는 등록 이력서의 업무 경력과 기술만 소개하며, "
                     "비공개 개인정보는 제공하지 않습니다."
                 )
-            elif not grounds:
+            elif answer_path == "no_evidence":
                 local_answer = (
                     "등록 이력서에서 해당 근거를 확인할 수 없습니다. "
                     f"{resume_settings.candidate_name}님께 직접 확인해 주세요."

@@ -5,8 +5,9 @@ import {
 	fireEvent,
 	render,
 	screen,
+	within,
 } from "@testing-library/react";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { streamDolmenChatReply } from "../data/dolmenChatClient";
 import {
@@ -17,6 +18,11 @@ import {
 import type { MomoAvatarPanelProps } from "./MomoAvatarPanel";
 
 const mocks = vi.hoisted(() => ({ streamReply: vi.fn() }));
+
+vi.mock("../data/dolmenHealthClient", () => ({
+	fetchDolmenHealthStatus: () => new Promise(() => {}),
+	fetchDolmenResumeStatus: () => new Promise(() => {}),
+}));
 
 vi.mock("../data/dolmenChatClient", async (importOriginal) => ({
 	...(await importOriginal<typeof import("../data/dolmenChatClient")>()),
@@ -62,8 +68,8 @@ vi.mock("@cocrepo/ui", () => ({
 			disabled={isDisabled}
 		/>
 	),
-	ScrollShadow: ({ children }: { children: ReactNode }) => (
-		<div>{children}</div>
+	ScrollShadow: ({ children, ...viewportProps }: ComponentProps<"div">) => (
+		<div {...viewportProps}>{children}</div>
 	),
 	Chip: ({ children }: { children: ReactNode }) => <span>{children}</span>,
 	Typography: {
@@ -73,8 +79,16 @@ vi.mock("@cocrepo/ui", () => ({
 }));
 
 vi.mock("./MomoAvatarPanel", () => ({
-	MomoAvatarPanel: ({ motion, onReady }: MomoAvatarPanelProps) => (
-		<div data-testid="momo-motion" data-motion={motion}>
+	MomoAvatarPanel: ({
+		motion,
+		onReady,
+		presentation,
+	}: MomoAvatarPanelProps) => (
+		<div
+			data-testid="momo-motion"
+			data-motion={motion}
+			data-presentation={presentation}
+		>
 			<button type="button" onClick={onReady}>
 				모델 준비
 			</button>
@@ -93,6 +107,38 @@ function createChatState() {
 
 function latestReplyInput(): ChatReplyInput {
 	return mocks.streamReply.mock.calls.at(-1)?.[0] as ChatReplyInput;
+}
+
+/** jsdom에 없는 넘침과 scrollTop 제한만 재현하며 높이는 실제 렌더된 본문에서 계산한다. */
+function giveChatViewportLayout(viewport: HTMLElement) {
+	let viewportScrollTop = 0;
+	Object.defineProperties(viewport, {
+		clientHeight: { configurable: true, get: () => 200 },
+		scrollHeight: {
+			configurable: true,
+			get: () => 500 + (viewport.textContent?.length ?? 0) * 2,
+		},
+		scrollTop: {
+			configurable: true,
+			get: () => viewportScrollTop,
+			set: (requestedScrollTop: number) => {
+				viewportScrollTop = Math.max(
+					0,
+					Math.min(
+						requestedScrollTop,
+						viewport.scrollHeight - viewport.clientHeight,
+					),
+				);
+			},
+		},
+	});
+}
+
+function sendQuestionThroughComposer(question: string) {
+	fireEvent.change(screen.getByRole("textbox", { name: "질문 입력" }), {
+		target: { value: question },
+	});
+	fireEvent.click(screen.getByRole("button", { name: "전송" }));
 }
 
 beforeEach(() => {
@@ -186,7 +232,11 @@ describe("ChatPanelState의 MOMO 연결", () => {
 		expect(chatState.momoMotion).toBe("idle");
 		expect(chatState.isAssistantResponding).toBe(false);
 		expect(chatState.streamErrorMessage).toBe("");
-		expect(chatState.agentActivities).toHaveLength(1);
+		expect(chatState.agentActivities).toHaveLength(2);
+		expect(chatState.agentActivities.at(-1)?.phase).toBe("cancelled");
+		expect(
+			chatState.agentActivities.at(-1)?.clientObservations.at(-1)?.event,
+		).toBe("cancelled");
 	});
 
 	it("새 요청이 시작되면 happy 타이머를 지우고 중복 전송을 막는다", () => {
@@ -214,6 +264,39 @@ describe("ChatPanelState의 MOMO 연결", () => {
 		expect(chatState.momoMotion).toBe("idle");
 		expect(chatState.chatMessages).toHaveLength(1);
 		expect(vi.getTimerCount()).toBe(0);
+	});
+	it("요청별 서버 기록을 분리하고 완료·새 요청 뒤 늦은 콜백을 무시한다", () => {
+		const chatState = createChatState();
+		chatState.setDraftMessage("첫 질문");
+		void chatState.submitDraftMessage();
+		const firstInput = latestReplyInput();
+		const firstEvent = {
+			event: "reply_completed" as const,
+			elapsedMs: 12,
+			requestId: "12345678-1234-1234-1234-123456789abc",
+			details: {},
+		};
+		firstInput.onDebugEvent?.(firstEvent);
+		expect(chatState.isAssistantResponding).toBe(true);
+		expect(chatState.currentAgentActivity?.phase).toBe("searching");
+		firstInput.onReplyDone();
+		firstInput.onDebugEvent?.(firstEvent);
+		expect(chatState.agentActivities[0]?.debugEvents).toHaveLength(1);
+		chatState.setDraftMessage("다음 질문");
+		void chatState.submitDraftMessage();
+		firstInput.onDebugEvent?.(firstEvent);
+		firstInput.onAssistantChunk("지난 요청의 늦은 본문");
+		latestReplyInput().onDebugEvent?.({
+			...firstEvent,
+			event: "request_received",
+			requestId: "87654321-1234-1234-1234-123456789abc",
+		});
+		expect(chatState.agentActivities[0]?.debugEvents).toHaveLength(1);
+		expect(chatState.agentActivities[1]?.debugEvents).toHaveLength(1);
+		expect(chatState.agentActivities[1]?.clientObservations).toEqual([
+			{ event: "request_sent", elapsedMs: 0 },
+		]);
+		expect(chatState.assistantReplyMessage?.text).toBe("");
 	});
 });
 
@@ -250,7 +333,9 @@ describe("ChatPanel의 입력과 수신 수명", () => {
 			"주요 프로젝트와 맡은 역할을 소개해 주세요.",
 		);
 		fireEvent.click(screen.getByRole("button", { name: "전송" }));
-		expect(screen.getByText("면접관")).toBeInTheDocument();
+		expect(
+			within(screen.getByRole("region", { name: "채팅" })).getByText("면접관"),
+		).toBeInTheDocument();
 		expect(questionInput).toBeDisabled();
 		expect(screen.getByTestId("momo-motion")).toHaveAttribute(
 			"data-motion",
@@ -265,7 +350,7 @@ describe("ChatPanel의 입력과 수신 수명", () => {
 		);
 		act(() => latestReplyInput().onReplyError("이력서를 준비하지 못했어요."));
 		expect(screen.getByRole("alert")).toHaveTextContent(
-			"이력서를 준비하지 못했어요.",
+			"답변을 마치지 못했어요. 잠시 후 다시 질문해 주세요.",
 		);
 		expect(questionInput).not.toBeDisabled();
 		expect(screen.getByTestId("momo-motion")).toHaveAttribute(
@@ -275,7 +360,183 @@ describe("ChatPanel의 입력과 수신 수명", () => {
 		const replySignal = latestReplyInput().signal;
 		unmount();
 		expect(replySignal?.aborted).toBe(true);
+		vi.runOnlyPendingTimers();
 		expect(vi.getTimerCount()).toBe(0);
+	});
+
+	it("왼쪽에는 작은 모모와 대화만, 오른쪽에는 개발 기록과 전체 검색 근거를 둔다", () => {
+		render(<ChatPanel />);
+		const chat = screen.getByRole("region", { name: "채팅" });
+		const debugPane = screen.getByRole("complementary", {
+			name: "개발자 디버그",
+		});
+		expect(within(chat).getByTestId("momo-motion")).toHaveAttribute(
+			"data-presentation",
+			"compact",
+		);
+		expect(
+			within(debugPane).queryByTestId("momo-motion"),
+		).not.toBeInTheDocument();
+		fireEvent.change(screen.getByRole("textbox", { name: "질문 입력" }), {
+			target: { value: "질문" },
+		});
+		fireEvent.click(screen.getByRole("button", { name: "전송" }));
+		act(() => {
+			latestReplyInput().onRetrievedEvidence(
+				Array.from({ length: 5 }, (_, index) => ({
+					chunkId: `test-${index}`,
+					source: `출처 ${index + 1}`,
+					version: "test-revision",
+					score: 0.7,
+					snippet: `정제 발췌 ${index + 1}`,
+				})),
+			);
+			latestReplyInput().onDebugEvent?.({
+				event: "context_ready",
+				elapsedMs: 2.3,
+				requestId: "12345678-1234-1234-1234-123456789abc",
+				details: { retrieved_count: 5 },
+			});
+			latestReplyInput().onAssistantChunk("답변입니다. [등록 이력서 · 1쪽]");
+		});
+		expect(chat).toHaveTextContent("답변입니다. [등록 이력서 · 1쪽]");
+		expect(chat).not.toHaveTextContent(
+			/API|retrieved_count|test-revision|정제 발췌|유사도|검색 근거/,
+		);
+		expect(debugPane).toHaveTextContent("retrieved_count: 5");
+		expect(
+			within(debugPane)
+				.getByText(/최신 요청 · 답변 수신 중/)
+				.closest("details"),
+		).toHaveAttribute("open");
+		expect(
+			within(debugPane)
+				.getByRole("region", { name: "요청 기록" })
+				.compareDocumentPosition(within(debugPane).getByText("등록 데이터")) &
+				Node.DOCUMENT_POSITION_FOLLOWING,
+		).toBeTruthy();
+		fireEvent.click(within(debugPane).getByText("검색 근거 (5)"));
+		expect(within(debugPane).getByText("정제 발췌 5")).toBeVisible();
+		expect(
+			within(debugPane).getByText("서버 이벤트 · 서버 요청 시작 기준"),
+		).toBeVisible();
+		expect(
+			within(debugPane).getByText("브라우저 관측 · 전송 시작 기준"),
+		).toBeVisible();
+	});
+
+	it("근거와 답변 시도만 수신하면 첫 답변을 기다리고 첫 본문부터 수신 중으로 표시한다", () => {
+		render(<ChatPanel />);
+		const debugPane = screen.getByRole("complementary", {
+			name: "개발자 디버그",
+		});
+		fireEvent.change(screen.getByRole("textbox", { name: "질문 입력" }), {
+			target: { value: "질문" },
+		});
+		fireEvent.click(screen.getByRole("button", { name: "전송" }));
+		act(() => {
+			latestReplyInput().onDebugEvent?.({
+				event: "context_ready",
+				elapsedMs: 2,
+				requestId: "12345678-1234-1234-1234-123456789abc",
+				details: { retrieved_count: 0 },
+			});
+			latestReplyInput().onRetrievedEvidence([]);
+			latestReplyInput().onDebugEvent?.({
+				event: "reply_attempt",
+				elapsedMs: 3,
+				requestId: "12345678-1234-1234-1234-123456789abc",
+				details: { attempt: 1, answer_path: "model" },
+			});
+		});
+		expect(
+			within(debugPane).getByText("최신 요청 · 첫 답변 대기"),
+		).toBeVisible();
+		expect(
+			within(debugPane).queryByText("최신 요청 · 답변 수신 중"),
+		).not.toBeInTheDocument();
+		act(() => latestReplyInput().onAssistantChunk("첫 본문"));
+		expect(
+			within(debugPane).getByText("최신 요청 · 답변 수신 중"),
+		).toBeVisible();
+		act(() => latestReplyInput().onReplyDone());
+		expect(within(debugPane).getByText("최신 요청 · 정상 종료")).toBeVisible();
+	});
+
+	it("새 질문과 연속 본문 증가를 하단에서 따라가며 대화 밖의 스크롤은 움직이지 않는다", () => {
+		render(<ChatPanel />);
+		const viewport = screen.getByRole("log", { name: "대화 내역" });
+		giveChatViewportLayout(viewport);
+		const developerPane = screen.getByRole("complementary", {
+			name: "개발자 디버그",
+		});
+		const developerViewport = within(developerPane).getByRole("region", {
+			name: "요청 기록",
+		}).parentElement;
+		if (!developerViewport)
+			throw new Error("개발 패널 스크롤 영역이 없습니다.");
+		developerViewport.scrollTop = 75;
+		document.documentElement.scrollTop = 40;
+		for (let questionIndex = 1; questionIndex <= 5; questionIndex += 1) {
+			sendQuestionThroughComposer(`새 질문 ${questionIndex}`);
+			expect(viewport.scrollTop + viewport.clientHeight).toBe(
+				viewport.scrollHeight,
+			);
+			const beforeChunkScrollTop = viewport.scrollTop;
+			act(() =>
+				latestReplyInput().onAssistantChunk(
+					`답변 ${questionIndex} ${"본문 ".repeat(100)}`,
+				),
+			);
+			expect(viewport.scrollTop).toBeGreaterThan(beforeChunkScrollTop);
+			expect(viewport.scrollTop + viewport.clientHeight).toBe(
+				viewport.scrollHeight,
+			);
+			const beforeNextChunkScrollTop = viewport.scrollTop;
+			act(() => latestReplyInput().onAssistantChunk("추가 본문 ".repeat(100)));
+			expect(viewport.scrollTop).toBeGreaterThan(beforeNextChunkScrollTop);
+			expect(viewport.scrollTop + viewport.clientHeight).toBe(
+				viewport.scrollHeight,
+			);
+			expect(
+				within(viewport).getByText(
+					new RegExp(`답변 ${questionIndex}.*추가 본문`),
+				),
+			).toBeInTheDocument();
+			act(() => latestReplyInput().onReplyDone());
+		}
+		expect(within(viewport).getByText("새 질문 5")).toBeInTheDocument();
+		expect(developerViewport.scrollTop).toBe(75);
+		expect(document.documentElement.scrollTop).toBe(40);
+		expect(screen.getByRole("textbox", { name: "질문 입력" })).toBeEnabled();
+		document.documentElement.scrollTop = 0;
+	});
+
+	it("위로 읽는 동안 본문이 늘어도 위치를 유지하고 새 전송에서 최신 따라가기를 재개한다", () => {
+		render(<ChatPanel />);
+		const viewport = screen.getByRole("log", { name: "대화 내역" });
+		giveChatViewportLayout(viewport);
+		sendQuestionThroughComposer("첫 질문");
+		act(() => latestReplyInput().onAssistantChunk("첫 본문 ".repeat(100)));
+		viewport.scrollTop = 50;
+		fireEvent.scroll(viewport);
+		act(() =>
+			latestReplyInput().onAssistantChunk("읽는 동안 추가된 본문 ".repeat(100)),
+		);
+		expect(viewport.scrollTop).toBe(50);
+		expect(
+			within(viewport).getByText(/읽는 동안 추가된 본문/),
+		).toBeInTheDocument();
+		act(() => latestReplyInput().onReplyDone());
+		expect(viewport.scrollTop).toBe(50);
+		sendQuestionThroughComposer("새 질문으로 최신 복귀");
+		expect(viewport.scrollTop + viewport.clientHeight).toBe(
+			viewport.scrollHeight,
+		);
+		act(() => latestReplyInput().onAssistantChunk("새 답변 ".repeat(100)));
+		expect(viewport.scrollTop + viewport.clientHeight).toBe(
+			viewport.scrollHeight,
+		);
 	});
 
 	it("한글 조합 중 Enter와 Shift+Enter는 전송하지 않는다", () => {

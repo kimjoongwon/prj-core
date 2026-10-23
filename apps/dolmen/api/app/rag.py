@@ -16,7 +16,17 @@ from app.resume import (
     read_resume_pdf_bytes,
     split_resume_page_sections,
 )
-from app.settings import DOLMEN_API_DIR, ResumeSettings, read_resume_settings
+from app.settings import (
+    DOLMEN_API_DIR,
+    MAX_CHAT_HISTORY_TURNS,
+    MAX_CHAT_SESSIONS,
+    RESUME_CONTEXT_POLICY,
+    RETRIEVED_GROUNDS_LIMIT,
+    ResumeSettings,
+    is_debug_enabled,
+    read_debug_model_id,
+    read_resume_settings,
+)
 
 DOLMEN_RAG_DIR = DOLMEN_API_DIR / ".rag" / "resume"
 DOLMEN_EMBEDDING_CACHE_DIR = os.getenv("DOLMEN_EMBEDDING_CACHE_DIR") or None
@@ -148,7 +158,7 @@ class DolmenRagService:
         with self._lock:
             self.ensure_resume_ingested()
             _, active_chunks = self.store.snapshot()
-            return {
+            document_status = {
                 "revision": self.store.revision,
                 "sources": sorted({chunk.source for chunk in active_chunks}),
                 "resume_configured": True,
@@ -157,6 +167,41 @@ class DolmenRagService:
                 "candidate_name": self.resume_settings.candidate_name,
                 "resume_updated_at": self.resume_settings.updated_at,
             }
+            try:
+                if is_debug_enabled():
+                    # 같은 잠금·활성 snapshot의 정제 절만 읽고 전체 본문은 반환하지 않는다.
+                    active_documents = [
+                        self.store.read_document(document_id)
+                        for document_id in sorted({chunk.document_id for chunk in active_chunks})
+                    ]
+                    document_status["debug"] = {
+                        "page_count": len(self._resume_pages),
+                        "sanitized_character_count": sum(
+                            len(page.text) for page in self._resume_pages
+                        ),
+                        "embedding_model": DOLMEN_EMBEDDING_MODEL_NAME,
+                        "retrieval_limit": RETRIEVED_GROUNDS_LIMIT,
+                        "context_policy": RESUME_CONTEXT_POLICY,
+                        "privacy_filter_version": SANITIZER_VERSION,
+                        "index_version": RESUME_INDEX_VERSION,
+                        "model_id": read_debug_model_id(),
+                        "history_turn_limit": MAX_CHAT_HISTORY_TURNS,
+                        "session_limit": MAX_CHAT_SESSIONS,
+                        "sections": [
+                            {
+                                "document_id": document.document_id,
+                                "source": document.source,
+                                "version": document.version,
+                                "character_count": len(document.content),
+                                "snippet": document.content.strip()[:220],
+                            }
+                            for document in active_documents
+                        ],
+                    }
+            except Exception:
+                # 개발 관측 실패가 등록 상태나 본래 응답을 바꾸지 않는다.
+                pass
+            return document_status
 
     def search_grounds(self, query: str, limit: int = 5) -> list[RetrievedGround]:
         with self._lock:

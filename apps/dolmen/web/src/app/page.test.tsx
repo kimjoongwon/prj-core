@@ -12,7 +12,6 @@ vi.mock("@cocrepo/ui", () => ({
 		Paragraph: ({ children }: { children: ReactNode }) => <p>{children}</p>,
 	},
 }));
-vi.mock("../components/AgentStatusBar", () => ({ AgentStatusBar: () => null }));
 vi.mock("../components/ChatPanel", () => ({ ChatPanel: () => null }));
 
 afterEach(cleanup);
@@ -22,16 +21,6 @@ it("면접 주제와 AI의 이력서 근거 범위를 방문자에게 안내한�
 	expect(
 		screen.getByRole("heading", { name: "MOMO 이력서 Q&A" }),
 	).toBeInTheDocument();
-	for (const topic of [
-		"경력",
-		"프로젝트",
-		"기술",
-		"협업",
-		"AI 활용",
-		"이력서 근거 기반 답변",
-	]) {
-		expect(screen.getByText(topic)).toBeInTheDocument();
-	}
 	expect(container.querySelector("footer")).toHaveTextContent(
 		"MOMO는 등록된 이력서를 바탕으로 답하는 AI입니다.",
 	);
@@ -39,6 +28,6 @@ it("면접 주제와 AI의 이력서 근거 범위를 방문자에게 안내한�
 		"이력서에 없는 내용은 추측하지 않습니다.",
 	);
 	expect(container).not.toHaveTextContent(
-		/온보딩|위키|hello-agents|임베딩|SSE/,
+		/온보딩|위키|hello-agents|임베딩|SSE|서비스 연결|근거 \d+개/,
 	);
 });

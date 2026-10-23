@@ -1,21 +1,23 @@
 import "@testing-library/jest-dom/vitest";
-import { act, cleanup, render, screen } from "@testing-library/react";
-import type { ReactNode } from "react";
+import {
+	act,
+	cleanup,
+	fireEvent,
+	render,
+	screen,
+} from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { DolmenResumeStatus } from "../data/dolmenHealthClient";
-import { AgentStatusBar, createAgentStatusBarState } from "./AgentStatusBar";
+import {
+	createDeveloperDebugPanelState,
+	DeveloperDebugPanel,
+} from "./DeveloperDebugPanel";
 
 const clients = vi.hoisted(() => ({ health: vi.fn(), resume: vi.fn() }));
 
 vi.mock("../data/dolmenHealthClient", () => ({
 	fetchDolmenHealthStatus: clients.health,
 	fetchDolmenResumeStatus: clients.resume,
-}));
-
-vi.mock("@cocrepo/ui", () => ({
-	Chip: ({ children, color }: { children: ReactNode; color: string }) => (
-		<span data-color={color}>{children}</span>
-	),
 }));
 
 const readyResume: DolmenResumeStatus = {
@@ -40,14 +42,14 @@ afterEach(() => {
 	vi.useRealTimers();
 });
 
-describe("AgentStatusBar의 이력서 상태", () => {
+describe("DeveloperDebugPanel의 이력서 상태", () => {
 	it("이력서 확인 전에는 준비됨을 표시하지 않고 서비스 상태를 독립적으로 갱신한다", async () => {
 		clients.resume.mockImplementation(() => new Promise(() => {}));
 		await act(async () => {
-			render(<AgentStatusBar />);
+			render(<DeveloperDebugPanel agentActivities={[]} />);
 		});
 		expect(screen.getByText("이력서 확인 중…")).toBeInTheDocument();
-		expect(screen.getByText("서비스 연결됨")).toBeInTheDocument();
+		expect(screen.getByText("API 연결됨")).toBeInTheDocument();
 		expect(screen.queryByText(/이력서 준비됨/)).not.toBeInTheDocument();
 	});
 
@@ -58,7 +60,7 @@ describe("AgentStatusBar의 이력서 상태", () => {
 	])("%s를 구분하고 준비 완료로 표시하지 않는다", async (state, label) => {
 		clients.resume.mockResolvedValue({ state });
 		await act(async () => {
-			render(<AgentStatusBar />);
+			render(<DeveloperDebugPanel agentActivities={[]} />);
 		});
 		expect(screen.getByText(label)).toBeInTheDocument();
 		expect(screen.queryByText(/이력서 준비됨/)).not.toBeInTheDocument();
@@ -68,11 +70,11 @@ describe("AgentStatusBar의 이력서 상태", () => {
 		clients.resume.mockResolvedValue(readyResume);
 		let unmount = () => {};
 		await act(async () => {
-			({ unmount } = render(<AgentStatusBar />));
+			({ unmount } = render(<DeveloperDebugPanel agentActivities={[]} />));
 		});
 		expect(
 			screen.getByText("테스트 지원자님 이력서 준비됨 · 근거 1개"),
-		).toHaveAttribute("data-color", "success");
+		).toBeInTheDocument();
 		clients.resume.mockResolvedValue({ state: "not-ready" });
 		await act(async () => {
 			await vi.advanceTimersByTimeAsync(12_000);
@@ -91,12 +93,59 @@ describe("AgentStatusBar의 이력서 상태", () => {
 					resolveResume = resolve;
 				}),
 		);
-		const statusState = createAgentStatusBarState();
+		const statusState = createDeveloperDebugPanelState();
 		statusState.activate();
 		const refresh = statusState.refreshStatuses();
 		statusState.dispose();
 		resolveResume(readyResume);
 		await refresh;
 		expect(statusState.resumeStatus).toBeNull();
+	});
+	it("등록 데이터는 기본으로 열고 상세 전체와 정제 발췌문을 키보드로 접근 가능한 summary에서 펼친다", async () => {
+		clients.resume.mockResolvedValue({
+			...readyResume,
+			sectionCount: 5,
+			debug: {
+				pageCount: 5,
+				modelId: "test-model",
+				sections: Array.from({ length: 5 }, (_, index) => ({
+					documentId: `test-${index}`,
+					source: `등록 이력서 · ${index + 1}쪽`,
+					version: "test-version",
+					characterCount: 100,
+					snippet: `정제된 테스트 발췌 ${index + 1}`,
+				})),
+			},
+		});
+		await act(async () => {
+			render(<DeveloperDebugPanel agentActivities={[]} />);
+		});
+		expect(screen.getByText("등록 데이터").closest("details")).toHaveAttribute(
+			"open",
+		);
+		const sectionsSummary = screen.getByText("전체 등록 절 목록 (5)");
+		expect(sectionsSummary.tagName).toBe("SUMMARY");
+		expect(screen.getByText("정제된 테스트 발췌 5")).not.toBeVisible();
+		fireEvent.click(sectionsSummary);
+		expect(screen.getByText("정제된 테스트 발췌 5")).toBeVisible();
+		expect(screen.getByText("ID: test-4")).toBeVisible();
+		expect(screen.getByText("test-model")).toBeVisible();
+		fireEvent.click(sectionsSummary);
+		expect(screen.getByText("정제된 테스트 발췌 5")).not.toBeVisible();
+	});
+
+	it("개발 상세가 없는 이전 API는 준비 상태를 유지하고 미수신으로 표시한다", async () => {
+		clients.resume.mockResolvedValue(readyResume);
+		await act(async () => {
+			render(<DeveloperDebugPanel agentActivities={[]} />);
+		});
+		expect(
+			screen.getByText("개발 데이터 미수신 · 수집 꺼짐 또는 API 미지원"),
+		).toBeVisible();
+		expect(screen.getByText("전체 등록 절 목록 (미확인)")).toBeVisible();
+		expect(screen.getAllByText("미확인").length).toBeGreaterThan(0);
+		expect(
+			screen.getByText("테스트 지원자님 이력서 준비됨 · 근거 1개"),
+		).toBeVisible();
 	});
 });

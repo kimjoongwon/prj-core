@@ -70,7 +70,7 @@ export type MomoAvatarPanelState = ReturnType<
 export type MomoAvatarPanelProps = Omit<
 	MomoAvatarPlaybackProps,
 	"isPlaying" | "onUnavailable"
->;
+> & { presentation?: "panel" | "compact" };
 
 const MomoAvatarCanvas = dynamic(
 	() => import("./MomoAvatarCanvas").then((module) => module.MomoAvatarCanvas),
@@ -82,6 +82,7 @@ export const MomoAvatarPanel = observer(function MomoAvatarPanel({
 	playbackId,
 	onReady,
 	onOneShotFinished,
+	presentation = "panel",
 }: MomoAvatarPanelProps) {
 	const momoAvatarPanelState = useLocalObservable(() =>
 		createMomoAvatarPanelState({ onReady }),
@@ -126,11 +127,21 @@ export const MomoAvatarPanel = observer(function MomoAvatarPanel({
 	}, [momoAvatarPanelState]);
 
 	return (
-		<figure className="m-0 flex w-full flex-col items-center gap-2">
+		<figure
+			className={
+				presentation === "compact"
+					? "m-0 flex min-w-0 items-center gap-3"
+					: "m-0 flex w-full flex-col items-center gap-2"
+			}
+		>
 			<div
 				ref={viewportRef}
 				aria-hidden="true"
-				className="relative h-[200px] w-full max-w-[280px] overflow-hidden rounded-xl bg-accent/5 lg:h-[240px]"
+				className={
+					presentation === "compact"
+						? "relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-accent/5"
+						: "relative h-[200px] w-full max-w-[280px] overflow-hidden rounded-xl bg-accent/5 lg:h-[240px]"
+				}
 			>
 				{!momoAvatarPanelState.shouldLoadCanvas ||
 				!momoAvatarPanelState.isModelReady ? (
@@ -151,7 +162,11 @@ export const MomoAvatarPanel = observer(function MomoAvatarPanel({
 					</MomoAvatarErrorBoundary>
 				) : null}
 			</div>
-			<figcaption className="text-center">
+			<figcaption
+				className={
+					presentation === "compact" ? "min-w-0 text-left" : "text-center"
+				}
+			>
 				<Typography.Paragraph className="text-sm font-semibold">
 					MOMO
 				</Typography.Paragraph>

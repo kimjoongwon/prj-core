@@ -460,4 +460,62 @@ describe("streamDolmenChatReply", () => {
 		expect(chatInput.onReplyError).not.toHaveBeenCalled();
 		expect(responseBody.locked).toBe(false);
 	});
+	it("개발 이벤트를 선택적으로 전달하고 본문/종료 계약을 유지한다", async () => {
+		const chatInput = createChatInput();
+		const onDebugEvent = vi.fn();
+		createSseResponse([
+			'data: {"type":"debug","event":"context_ready","elapsed_ms":12.3,"request_id":"12345678-1234-1234-1234-123456789abc","details":{"revision":2,"retrieved_count":5,"prompt":"비공개","error_category":"unknown"}}\n\n',
+			'data: {"type":"chunk","text":"답변 본문"}\n\ndata: {"type":"done"}\n\n',
+		]);
+		await streamDolmenChatReply({ ...chatInput, onDebugEvent });
+		expect(onDebugEvent).toHaveBeenCalledExactlyOnceWith({
+			event: "context_ready",
+			elapsedMs: 12.3,
+			requestId: "12345678-1234-1234-1234-123456789abc",
+			details: { revision: 2, retrieved_count: 5, error_category: "unknown" },
+		});
+		expect(chatInput.onAssistantChunk).toHaveBeenCalledExactlyOnceWith(
+			"답변 본문",
+		);
+		expect(chatInput.onReplyDone).toHaveBeenCalledOnce();
+	});
+
+	it("malformed 개발 이벤트와 개발 콜백 예외가 답변을 실패시키지 않는다", async () => {
+		const chatInput = createChatInput();
+		const onDebugEvent = vi.fn(() => {
+			throw new Error("기록 실패");
+		});
+		createSseResponse([
+			'data: {"type":"debug","event":"unknown","elapsed_ms":1,"request_id":"12345678-1234-1234-1234-123456789abc","details":{}}\n\n',
+			'data: {"type":"debug","event":"first_chunk","elapsed_ms":-1,"request_id":"bad","details":null}\n\n',
+			'data: {"type":"debug","event":"request_received","elapsed_ms":0,"request_id":"12345678-1234-1234-1234-123456789abc","details":{}}\n\n',
+			'data: {"type":"chunk","text":"정상 본문"}\n\ndata: {"type":"done"}\n\n',
+		]);
+		await streamDolmenChatReply({ ...chatInput, onDebugEvent });
+		expect(onDebugEvent).toHaveBeenCalledOnce();
+		expect(chatInput.onReplyDone).toHaveBeenCalledOnce();
+		expect(chatInput.onReplyError).not.toHaveBeenCalled();
+	});
+
+	it.each([
+		"done",
+		"error",
+	])("%s 이후의 늦은 개발 이벤트를 전달하지 않는다", async (terminalType) => {
+		const chatInput = createChatInput();
+		const onDebugEvent = vi.fn();
+		createSseResponse([
+			`data: {"type":"${terminalType}"}\n\ndata: {"type":"debug","event":"reply_completed","elapsed_ms":12,"request_id":"12345678-1234-1234-1234-123456789abc","details":{}}\n\n`,
+		]);
+		await streamDolmenChatReply({ ...chatInput, onDebugEvent });
+		expect(onDebugEvent).not.toHaveBeenCalled();
+	});
+
+	it("개발 콜백이 없는 기존 소비자도 개발 이벤트를 건너뛰고 정상 완료한다", async () => {
+		const chatInput = createChatInput();
+		createSseResponse([
+			'data: {"type":"debug","event":"request_received","elapsed_ms":0,"request_id":"12345678-1234-1234-1234-123456789abc","details":{}}\n\ndata: {"type":"done"}\n\n',
+		]);
+		await streamDolmenChatReply(chatInput);
+		expect(chatInput.onReplyDone).toHaveBeenCalledOnce();
+	});
 });

@@ -1,3 +1,5 @@
+import { type DolmenResumeDebug, parseDolmenResumeDebug } from "./dolmenDebug";
+
 /** dolmen-api와 등록 이력서의 상태를 조회한다. */
 
 export interface DolmenHealthStatus {
@@ -13,6 +15,7 @@ export type DolmenResumeStatus =
 			sources: string[];
 			candidateName: string;
 			resumeUpdatedAt: string;
+			debug?: DolmenResumeDebug;
 	  }
 	| { state: "unregistered" | "not-ready" | "unavailable" };
 
@@ -24,6 +27,7 @@ interface DolmenResumeStatusBody {
 	section_count?: unknown;
 	candidate_name?: unknown;
 	resume_updated_at?: unknown;
+	debug?: unknown;
 }
 
 export async function fetchDolmenHealthStatus(): Promise<DolmenHealthStatus> {
@@ -87,6 +91,7 @@ export async function fetchDolmenResumeStatus(): Promise<DolmenResumeStatus> {
 		) {
 			return { state: "not-ready" };
 		}
+		const debug = parseDolmenResumeDebug(resumeBody.debug);
 		return {
 			state: "ready",
 			sectionCount: resumeBody.section_count,
@@ -94,6 +99,7 @@ export async function fetchDolmenResumeStatus(): Promise<DolmenResumeStatus> {
 			sources: resumeBody.sources,
 			candidateName: resumeBody.candidate_name.trim(),
 			resumeUpdatedAt: resumeBody.resume_updated_at,
+			...(debug ? { debug } : {}),
 		};
 	} catch {
 		return { state: "unavailable" };

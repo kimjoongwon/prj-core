@@ -1,3 +1,9 @@
+import {
+	type DolmenClientObservation,
+	type DolmenDebugEvent,
+	parseDolmenDebugEvent,
+} from "./dolmenDebug";
+
 export type DolmenChatRole = "user" | "assistant";
 
 /** 답변 근거로 제시된 이력서 발췌문과 쪽 출처. */
@@ -16,12 +22,13 @@ export interface DolmenChatMessage {
 	evidence: DolmenChatEvidence[];
 }
 
-/** 한 번의 질문에 대한 에이전트 처리 단계 — 활동 타임라인 패널이 실시간으로 그린다. */
+/** 한 번의 질문에 대한 클라이언트 수신 상태. 서버 처리 기록은 debugEvents로 구분한다. */
 export type DolmenAgentActivityPhase =
 	| "searching"
 	| "generating"
 	| "done"
-	| "error";
+	| "error"
+	| "cancelled";
 
 export interface DolmenAgentActivity {
 	activityId: string;
@@ -36,6 +43,8 @@ export interface DolmenAgentActivity {
 	/** 진행 중 상태 안내(예: 모델 혼잡 재시도). 첫 답변 조각이 오면 비운다 */
 	statusText: string;
 	errorText: string;
+	debugEvents: DolmenDebugEvent[];
+	clientObservations: DolmenClientObservation[];
 }
 
 export function issueAgentActivityId(): string {
@@ -62,10 +71,11 @@ interface StreamDolmenChatReplyInput {
 	onReplyDone: () => void;
 	onReplyError: (errorMessage: string) => void;
 	onReplyCancelled?: () => void;
+	onDebugEvent?: (debugEvent: DolmenDebugEvent) => void;
 }
 
 interface DolmenChatStreamEvent {
-	type: "sources" | "status" | "chunk" | "done" | "error";
+	type: "sources" | "status" | "chunk" | "done" | "error" | "debug";
 	text?: string;
 	message?: string;
 	grounds?: DolmenChatStreamGround[];
@@ -107,6 +117,7 @@ export async function streamDolmenChatReply({
 	onReplyDone,
 	onReplyError,
 	onReplyCancelled,
+	onDebugEvent,
 }: StreamDolmenChatReplyInput): Promise<void> {
 	let replyOutcome: "done" | "error" | "cancelled" | undefined;
 	let sseReader: ReadableStreamDefaultReader<Uint8Array> | undefined;
@@ -156,6 +167,17 @@ export async function streamDolmenChatReply({
 			return;
 		}
 		if (!streamEvent || typeof streamEvent !== "object") {
+			return;
+		}
+		if (streamEvent.type === "debug") {
+			try {
+				const debugEvent = parseDolmenDebugEvent(
+					streamEvent as unknown as Record<string, unknown>,
+				);
+				if (debugEvent) onDebugEvent?.(debugEvent);
+			} catch {
+				// 선택적인 개발 기록의 오류는 답변 수신이나 종료에 영향을 주지 않는다.
+			}
 			return;
 		}
 		if (streamEvent.type === "sources" && streamEvent.grounds) {

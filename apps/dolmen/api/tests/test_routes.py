@@ -24,6 +24,9 @@ def parse_sse_events(response):
 
 class ResumeRouteTests(unittest.TestCase):
     def setUp(self):
+        debug_env = patch.dict("os.environ", {"DOLMEN_DEBUG_ENABLED": "false"})
+        debug_env.start()
+        self.addCleanup(debug_env.stop)
         self.client = TestClient(create_app())
         self.settings = ResumeSettings(Path("private.pdf"), "가상지원자", "2026-09-27")
         self.reply_context = ResumeReplyContext(

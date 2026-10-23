@@ -1,5 +1,6 @@
 """실제 SQLite 저장소와 합성 PDF 추출 결과로 등록본 교체를 검증한다."""
 
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -25,6 +26,9 @@ class LocalSearchBackend:
 
 class ResumeRagTests(unittest.TestCase):
     def setUp(self):
+        debug_env = patch.dict("os.environ", {"DOLMEN_DEBUG_ENABLED": "false"})
+        debug_env.start()
+        self.addCleanup(debug_env.stop)
         self.temp_dir = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp_dir.cleanup)
         self.api_dir = Path(self.temp_dir.name)
@@ -162,6 +166,66 @@ class ResumeRagTests(unittest.TestCase):
             self.service.search_grounds("Python")
         self.assertEqual(raised.exception.code, "resume_not_ready")
         self.assertNotIn("PRIVATE_SEARCH_EXCEPTION", str(raised.exception))
+
+    def test_debug_snapshot_exposes_only_current_sanitized_sections_and_safe_config(self):
+        self.set_pages(
+            "이메일 synthetic@example.test\n010-1234-5678 휴대폰\n"
+            "경력사항\n가상알파 Kotlin 2024.01 ~ 2026.09\n" + "가상 업무\n" * 80,
+        )
+        with patch.dict("os.environ", {
+            "DOLMEN_DEBUG_ENABLED": "true", "LLM_MODEL_ID": "synthetic-model/v1",
+            "LLM_API_KEY": "PRIVATE_KEY_MARKER", "LLM_BASE_URL": "https://private.invalid/v1",
+        }):
+            document_status = self.service.read_document_status()
+        debug = document_status["debug"]
+        self.assertEqual(set(debug), {
+            "page_count", "sanitized_character_count", "embedding_model", "retrieval_limit",
+            "context_policy", "privacy_filter_version", "index_version", "model_id",
+            "history_turn_limit", "session_limit", "sections",
+        })
+        self.assertEqual(debug["page_count"], 1)
+        self.assertEqual(debug["model_id"], "synthetic-model/v1")
+        self.assertEqual(debug["context_policy"], "full_sanitized_resume")
+        self.assertEqual(debug["retrieval_limit"], 5)
+        self.assertEqual(debug["history_turn_limit"], 2)
+        self.assertEqual(debug["session_limit"], 50)
+        self.assertEqual(debug["sanitized_character_count"],
+                         sum(len(page.text) for page in self.service._resume_pages))
+        self.assertEqual(len(debug["sections"]), document_status["section_count"])
+        for section in debug["sections"]:
+            self.assertEqual(set(section), {
+                "document_id", "source", "version", "character_count", "snippet"
+            })
+            stored_document = self.service.store.read_document(section["document_id"])
+            self.assertEqual(section["character_count"], len(stored_document.content))
+            self.assertEqual(section["snippet"], stored_document.content.strip()[:220])
+            self.assertLessEqual(len(section["snippet"]), 220)
+        serialized_status = json.dumps(document_status)
+        for private_marker in (
+            "synthetic@example", "010-1234", "PRIVATE_KEY_MARKER", "private.invalid",
+            self.temp_dir.name, "private.pdf",
+        ):
+            self.assertNotIn(private_marker, serialized_status)
+
+    def test_debug_snapshot_replaces_old_pages_and_never_includes_whole_section(self):
+        with patch.dict("os.environ", {"DOLMEN_DEBUG_ENABLED": "true"}):
+            self.set_pages("이전회사 Python", "제거할회사 Java")
+            old_status = self.service.read_document_status()
+            self.resume_path.write_bytes(b"new-debug-resume")
+            self.set_pages("새회사 Kotlin\n" + "가상 업무\n" * 80 + "SECTION_END_MARKER")
+            new_status = self.service.read_document_status()
+        self.assertGreater(new_status["revision"], old_status["revision"])
+        self.assertEqual(new_status["debug"]["page_count"], 1)
+        serialized_status = json.dumps(new_status, ensure_ascii=False)
+        self.assertNotIn("제거할회사", serialized_status)
+        self.assertNotIn("SECTION_END_MARKER", serialized_status)
+
+    def test_debug_metadata_failure_keeps_original_ready_status(self):
+        with patch.dict("os.environ", {"DOLMEN_DEBUG_ENABLED": "true"}):
+            with patch("app.rag.read_debug_model_id", side_effect=RuntimeError("PRIVATE_DEBUG")):
+                document_status = self.service.read_document_status()
+        self.assertTrue(document_status["resume_ready"])
+        self.assertNotIn("debug", document_status)
 
 
 if __name__ == "__main__":

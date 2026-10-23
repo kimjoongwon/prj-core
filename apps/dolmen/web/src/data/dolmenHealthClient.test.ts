@@ -76,4 +76,64 @@ describe("fetchDolmenResumeStatus", () => {
 			state: "unavailable",
 		});
 	});
+	it("선택적 개발 메타데이터와 등록 절 전체를 변환하고 알 수 없는 필드는 보관하지 않는다", async () => {
+		mockResumeResponse({
+			...createResumeStatusBody(),
+			debug: {
+				page_count: 5,
+				sanitized_character_count: 2000,
+				embedding_model: "test-embedding",
+				retrieval_limit: 5,
+				context_policy: "full_sanitized_resume",
+				privacy_filter_version: "test-filter",
+				index_version: "test-index",
+				model_id: "",
+				history_turn_limit: 2,
+				session_limit: 50,
+				secret: "비공개",
+				sections: Array.from({ length: 5 }, (_, index) => ({
+					document_id: `test-${index}`,
+					source: `등록 이력서 · ${index + 1}쪽`,
+					version: "test",
+					character_count: 100,
+					snippet: "정제된 테스트 발췌문",
+				})),
+			},
+		});
+		const resume = await fetchDolmenResumeStatus();
+		expect(resume.state).toBe("ready");
+		if (resume.state !== "ready") throw new Error("ready expected");
+		expect(resume.debug).toMatchObject({
+			pageCount: 5,
+			sanitizedCharacterCount: 2000,
+			embeddingModel: "test-embedding",
+			retrievalLimit: 5,
+			contextPolicy: "full_sanitized_resume",
+			privacyFilterVersion: "test-filter",
+			indexVersion: "test-index",
+			modelId: "",
+			historyTurnLimit: 2,
+			sessionLimit: 50,
+		});
+		expect(resume.debug?.sections).toHaveLength(5);
+		expect(resume.debug?.sections?.[4]).toMatchObject({
+			documentId: "test-4",
+			source: "등록 이력서 · 5쪽",
+			characterCount: 100,
+		});
+		expect(resume.debug).not.toHaveProperty("secret");
+	});
+
+	it("잘못된 선택적 개발 상세를 기존 준비 상태의 실패로 바꾸지 않는다", async () => {
+		mockResumeResponse({
+			...createResumeStatusBody(),
+			debug: {
+				page_count: -1,
+				sections: [null, { document_id: "incomplete" }],
+			},
+		});
+		const resume = await fetchDolmenResumeStatus();
+		expect(resume.state).toBe("ready");
+		if (resume.state === "ready") expect(resume.debug).toEqual({});
+	});
 });

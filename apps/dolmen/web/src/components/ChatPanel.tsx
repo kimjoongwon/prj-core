@@ -4,7 +4,7 @@ import { Button, ScrollShadow, TextArea, Typography } from "@cocrepo/ui";
 import { Send, TriangleAlert } from "lucide-react";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { type KeyboardEvent, useEffect, useRef } from "react";
+import { type KeyboardEvent, type UIEvent, useEffect, useRef } from "react";
 import {
 	type DolmenAgentActivity,
 	type DolmenChatEvidence,
@@ -13,8 +13,12 @@ import {
 	issueChatSessionId,
 	streamDolmenChatReply,
 } from "../data/dolmenChatClient";
-import { AgentActivityPanel } from "./AgentActivityPanel";
+import type {
+	DolmenClientObservation,
+	DolmenDebugEvent,
+} from "../data/dolmenDebug";
 import { ChatMessageItem } from "./ChatMessageItem";
+import { DeveloperDebugPanel } from "./DeveloperDebugPanel";
 import { MomoAvatarPanel } from "./MomoAvatarPanel";
 import { MOMO_ONE_SHOT_TIMEOUT_MS, type MomoMotion } from "./momoAvatar";
 
@@ -28,6 +32,7 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 			agentActivities: [] as DolmenAgentActivity[],
 			draftMessage: "",
 			isAssistantResponding: false,
+			isFollowingLatestMessage: true,
 			streamErrorMessage: "",
 			assistantReplyChatMessageId: "",
 			currentAgentActivityId: "",
@@ -95,6 +100,12 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 			blurDraftInput() {
 				this.isDraftInputFocused = false;
 			},
+			observeChatScroll(event: UIEvent<HTMLDivElement>) {
+				const viewport = event.currentTarget;
+				this.isFollowingLatestMessage =
+					viewport.scrollHeight - viewport.clientHeight - viewport.scrollTop <=
+					32;
+			},
 			submitDraftOnEnter(event: KeyboardEvent<HTMLTextAreaElement>) {
 				if (
 					event.key === "Enter" &&
@@ -151,15 +162,37 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 					replyCharacterCount: 0,
 					statusText: "",
 					errorText: "",
+					debugEvents: [],
+					clientObservations: [{ event: "request_sent", elapsedMs: 0 }],
 				});
 			},
+			recordClientObservation(event: DolmenClientObservation["event"]) {
+				const activity = this.currentAgentActivity;
+				if (activity)
+					activity.clientObservations.push({
+						event,
+						elapsedMs: Math.max(0, Date.now() - activity.startedAtMs),
+					});
+			},
+			recordServerDebugEvent(debugEvent: DolmenDebugEvent) {
+				const activity = this.currentAgentActivity;
+				if (
+					!activity ||
+					(activity.debugEvents[0] &&
+						activity.debugEvents[0].requestId !== debugEvent.requestId)
+				)
+					return;
+				activity.debugEvents.push(debugEvent);
+			},
 			noteAgentActivityStatus(statusText: string) {
+				this.recordClientObservation("status_received");
 				const currentAgentActivity = this.currentAgentActivity;
 				if (currentAgentActivity) {
 					currentAgentActivity.statusText = statusText;
 				}
 			},
 			attachReplyEvidence(retrievedEvidence: DolmenChatEvidence[]) {
+				this.recordClientObservation("sources_received");
 				const assistantReplyMessage = this.assistantReplyMessage;
 				if (assistantReplyMessage) {
 					assistantReplyMessage.evidence = retrievedEvidence;
@@ -172,6 +205,8 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				}
 			},
 			appendAssistantReplyChunk(chunkText: string) {
+				if ((this.currentAgentActivity?.replyCharacterCount ?? 0) === 0)
+					this.recordClientObservation("first_chunk_received");
 				const assistantReplyMessage = this.assistantReplyMessage;
 				if (assistantReplyMessage) {
 					assistantReplyMessage.text += chunkText;
@@ -184,6 +219,7 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				}
 			},
 			completeAssistantReply() {
+				this.recordClientObservation("done_received");
 				const hasReplyText = (this.assistantReplyMessage?.text.length ?? 0) > 0;
 				this.isAssistantResponding = false;
 				this.assistantReplyChatMessageId = "";
@@ -198,10 +234,12 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				}
 			},
 			failAssistantReply(errorMessage: string) {
+				this.recordClientObservation("error_received");
 				this.clearMomoOneShot();
 				this.isAssistantResponding = false;
 				this.assistantReplyChatMessageId = "";
-				this.streamErrorMessage = errorMessage;
+				this.streamErrorMessage =
+					"답변을 마치지 못했어요. 잠시 후 다시 질문해 주세요.";
 				const currentAgentActivity = this.currentAgentActivity;
 				if (currentAgentActivity) {
 					currentAgentActivity.phase = "error";
@@ -212,10 +250,11 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 			},
 			cancelAssistantReply() {
 				this.clearMomoOneShot();
-				// 취소는 완료나 실패로 기록하지 않고 미완료 활동만 제거한다.
-				this.agentActivities = this.agentActivities.filter(
-					(activity) => activity.activityId !== this.currentAgentActivityId,
-				);
+				this.recordClientObservation("cancelled");
+				if (this.currentAgentActivity) {
+					this.currentAgentActivity.phase = "cancelled";
+					this.currentAgentActivity.finishedAtMs = Date.now();
+				}
 				this.chatMessages = this.chatMessages.filter(
 					(message) =>
 						message.chatMessageId !== this.assistantReplyChatMessageId ||
@@ -239,6 +278,7 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				this.isDraftInputFocused = false;
 				this.streamErrorMessage = "";
 				this.isAssistantResponding = true;
+				this.isFollowingLatestMessage = true;
 				this.appendUserMessage(messageText);
 				this.beginAssistantReply();
 				this.beginAgentActivity(messageText);
@@ -246,12 +286,17 @@ export function createChatPanelState({ sessionId }: { sessionId: string }) {
 				const replyController = new AbortController();
 				requestController = replyController;
 				const canAcceptReply = () =>
-					!isDisposed && requestController === replyController;
+					!isDisposed &&
+					requestController === replyController &&
+					this.isAssistantResponding;
 				try {
 					await streamDolmenChatReply({
 						messageText,
 						sessionId,
 						signal: replyController.signal,
+						onDebugEvent: (debugEvent) => {
+							if (canAcceptReply()) this.recordServerDebugEvent(debugEvent);
+						},
 						onRetrievedEvidence: (retrievedEvidence) => {
 							if (canAcceptReply()) this.attachReplyEvidence(retrievedEvidence);
 						},
@@ -301,16 +346,57 @@ export const ChatPanel = observer(function ChatPanel() {
 	const chatPanelState = useLocalObservable(() =>
 		createChatPanelState({ sessionId: sessionIdRef.current }),
 	);
+	const chatViewportRef = useRef<HTMLDivElement>(null);
+	const chatMessageCount = chatPanelState.chatMessages.length;
+	const latestMessageTextLength =
+		chatPanelState.chatMessages.at(-1)?.text.length ?? 0;
+	const isFollowingLatestMessage = chatPanelState.isFollowingLatestMessage;
+	const isAssistantResponding = chatPanelState.isAssistantResponding;
+	const streamErrorMessage = chatPanelState.streamErrorMessage;
 
 	useEffect(() => {
 		chatPanelState.activate();
 		return chatPanelState.dispose;
 	}, [chatPanelState]);
 
+	useEffect(() => {
+		const chatViewport = chatViewportRef.current;
+		if (chatViewport && isFollowingLatestMessage && chatMessageCount > 0) {
+			// 대화 영역만 이동해 작성창과 개발 패널의 스크롤을 유지한다.
+			chatViewport.scrollTop = chatViewport.scrollHeight;
+		}
+	}, [
+		chatMessageCount,
+		latestMessageTextLength,
+		isFollowingLatestMessage,
+		isAssistantResponding,
+		streamErrorMessage,
+	]);
+
 	return (
 		<div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-			<section className="flex min-w-0 flex-1 flex-col gap-3 rounded-2xl border border-border bg-surface/40 p-4">
-				<ScrollShadow className="min-h-[50vh] flex-1">
+			<section
+				aria-label="채팅"
+				className="flex h-[calc(100dvh-220px)] min-h-[360px] min-w-0 flex-none flex-col gap-3 rounded-2xl border border-border bg-surface/40 p-4 lg:h-[calc(100dvh-250px)] lg:min-h-[540px] lg:flex-1"
+			>
+				<header className="shrink-0 border-b border-border pb-3">
+					<MomoAvatarPanel
+						presentation="compact"
+						motion={chatPanelState.momoMotion}
+						playbackId={chatPanelState.momoPlaybackId}
+						onReady={chatPanelState.greetMomoIfIdle}
+						onOneShotFinished={chatPanelState.finishMomoOneShot}
+					/>
+				</header>
+				<ScrollShadow
+					ref={chatViewportRef}
+					role="log"
+					aria-label="대화 내역"
+					aria-busy={chatPanelState.isAssistantResponding}
+					tabIndex={0}
+					onScroll={chatPanelState.observeChatScroll}
+					className="min-h-0 flex-1 overflow-y-auto"
+				>
 					{chatPanelState.chatMessages.length === 0 ? (
 						<div className="flex h-full flex-col items-center justify-center gap-3 py-16 text-center">
 							<Typography.Paragraph color="muted">
@@ -341,9 +427,6 @@ export const ChatPanel = observer(function ChatPanel() {
 									isStreaming={
 										chatMessage.chatMessageId ===
 										chatPanelState.assistantReplyChatMessageId
-									}
-									streamingStatusText={
-										chatPanelState.currentAgentActivity?.statusText ?? ""
 									}
 								/>
 							))}
@@ -391,17 +474,7 @@ export const ChatPanel = observer(function ChatPanel() {
 				</div>
 			</section>
 
-			<AgentActivityPanel
-				agentActivities={chatPanelState.agentActivities}
-				avatar={
-					<MomoAvatarPanel
-						motion={chatPanelState.momoMotion}
-						playbackId={chatPanelState.momoPlaybackId}
-						onReady={chatPanelState.greetMomoIfIdle}
-						onOneShotFinished={chatPanelState.finishMomoOneShot}
-					/>
-				}
-			/>
+			<DeveloperDebugPanel agentActivities={chatPanelState.agentActivities} />
 		</div>
 	);
 });

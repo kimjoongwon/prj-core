@@ -1,18 +1,8 @@
 "use client";
 
-import { Chip, Container, Typography } from "@cocrepo/ui";
+import { Container, Typography } from "@cocrepo/ui";
 import { Landmark } from "lucide-react";
-import { AgentStatusBar } from "../components/AgentStatusBar";
 import { ChatPanel } from "../components/ChatPanel";
-
-const INTERVIEW_TOPICS = [
-	"경력",
-	"프로젝트",
-	"기술",
-	"협업",
-	"AI 활용",
-	"이력서 근거 기반 답변",
-];
 
 export default function Page() {
 	return (
@@ -33,14 +23,6 @@ export default function Page() {
 							</Typography.Paragraph>
 						</div>
 					</div>
-					<AgentStatusBar />
-				</div>
-				<div className="flex flex-wrap gap-2">
-					{INTERVIEW_TOPICS.map((interviewTopic) => (
-						<Chip key={interviewTopic} size="sm" variant="soft" color="default">
-							{interviewTopic}
-						</Chip>
-					))}
 				</div>
 			</header>
 
