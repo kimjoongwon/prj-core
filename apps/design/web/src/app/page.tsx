@@ -1,3 +1,4 @@
+import Link from "next/link";
 import DesignLinkDirectory from "@/components/DesignLinkDirectory";
 import {
 	designCurationRounds,
@@ -51,6 +52,15 @@ export default function DesignArchivePage() {
 						</dd>
 					</div>
 				</dl>
+				<div className="mt-6">
+					<Link
+						href="/components"
+						className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3.5 py-2 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100"
+					>
+						UI 키트 · 톤앤매너 탐색기
+						<span aria-hidden>→</span>
+					</Link>
+				</div>
 			</header>
 
 			<DesignLinkDirectory

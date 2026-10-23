@@ -13,6 +13,10 @@
     "clean": "rm -rf node_modules && rm -rf .next"
   },
   "dependencies": {
+    "@cocrepo/ui": "workspace:^1.5.0",
+    "@heroui/react": "catalog:",
+    "@heroui/styles": "catalog:",
+    "@tanstack/react-table": "^8.21.3",
     "lucide-react": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
