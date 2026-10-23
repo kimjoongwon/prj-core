@@ -3,7 +3,7 @@
 import { Button, Typography, useDesignSystemTheme } from "@cocrepo/ui";
 import { RotateCcw } from "lucide-react";
 import { makeAutoObservable, runInAction } from "mobx";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import {
 	buildToneMannerCssText,
 	convertRadiusPixelsToRemToken,
@@ -99,8 +99,13 @@ export function createToneMannerPanelState() {
 
 export type ToneMannerPanelState = ReturnType<typeof createToneMannerPanelState>;
 
-export const ToneMannerPanel = observer(function ToneMannerPanel() {
-	const toneMannerState = useLocalObservable(createToneMannerPanelState);
+export interface ToneMannerPanelProps {
+	toneMannerState: ToneMannerPanelState;
+}
+
+export const ToneMannerPanel = observer(function ToneMannerPanel({
+	toneMannerState,
+}: ToneMannerPanelProps) {
 	const { resolvedTheme, setTheme } = useDesignSystemTheme();
 	const activeMode: ToneMannerMode = resolvedTheme === "dark" ? "dark" : "light";
 	const activeValues =
@@ -124,16 +129,7 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 	};
 
 	return (
-		<div className="flex flex-col gap-5 rounded-xl border border-border bg-surface p-4 text-surface-foreground">
-			{cssText ? (
-				// 오버라이드를 :root/.dark 스코프에 주입해 파생 토큰(-hover 등
-				// color-mix)까지 HeroUI 공식과 함께 재계산되게 합니다.
-				<style
-					href="tone-manner-token-overrides"
-					precedence="design-tokens"
-				>{cssText}</style>
-			) : null}
-
+		<div className="flex flex-col gap-6 rounded-xl border border-border bg-surface p-5 text-surface-foreground">
 			<div>
 				<Typography.Heading level={3} weight="semibold">
 					톤앤매너 토큰
@@ -143,47 +139,46 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 				</Typography.Paragraph>
 			</div>
 
-			<fieldset className="flex flex-col gap-2">
-				<legend className="text-xs font-semibold text-muted">
+			<fieldset className="flex flex-col gap-2.5">
+				<legend className="text-sm font-semibold text-muted">
 					라이브 토큰 미리보기
 				</legend>
-				<div className="grid grid-cols-4 gap-1.5">
+				<div className="grid grid-cols-4 gap-2">
 					{toneMannerColorTokenDefinitions.map((tokenDefinition) => (
-						<div key={tokenDefinition.key} className="flex flex-col gap-1">
+						<div key={tokenDefinition.key} className="flex flex-col gap-1.5">
 							<span
-								className="h-8 w-full rounded-md border border-border"
+								className="h-12 w-full rounded-lg border border-border"
 								style={{
 									backgroundColor: `var(${tokenDefinition.cssVariable})`,
 								}}
 							/>
-							<span className="text-center text-[10px] text-muted">
+							<span className="text-center text-xs text-muted">
 								{tokenDefinition.label}
 							</span>
 						</div>
 					))}
 				</div>
-				<div className="flex items-center gap-2 pt-1">
+				<div className="flex items-center gap-3 pt-1">
 					<span
-						className="size-8 border border-border bg-accent"
+						className="size-10 border border-border bg-accent"
 						style={{ borderRadius: "var(--radius)" }}
 					/>
 					<span
-						className="size-8 border border-border bg-surface"
+						className="size-10 border border-border bg-surface"
 						style={{ borderRadius: "var(--field-radius)" }}
 					/>
-					<span className="text-[10px] text-muted">
+					<span className="text-xs text-muted">
 						반경(--radius) · 필드(--field-radius)
 					</span>
 				</div>
 			</fieldset>
 
-			<fieldset className="flex flex-col gap-2">
-				<legend className="text-xs font-semibold text-muted">프리셋</legend>
-				<div className="flex flex-wrap gap-1.5">
+			<fieldset className="flex flex-col gap-2.5">
+				<legend className="text-sm font-semibold text-muted">프리셋</legend>
+				<div className="flex flex-wrap gap-2">
 					{toneMannerPresets.map((preset) => (
 						<Button
 							key={preset.id}
-							size="sm"
 							variant={
 								toneMannerState.presetId === preset.id ? "primary" : "outline"
 							}
@@ -199,14 +194,13 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 				</Typography.Paragraph>
 			</fieldset>
 
-			<fieldset className="flex flex-col gap-2">
-				<legend className="text-xs font-semibold text-muted">모드</legend>
-				<div className="grid grid-cols-2 gap-1.5">
+			<fieldset className="flex flex-col gap-2.5">
+				<legend className="text-sm font-semibold text-muted">모드</legend>
+				<div className="grid grid-cols-2 gap-2">
 					{(Object.keys(toneMannerModeLabels) as ToneMannerMode[]).map(
 						(mode) => (
 							<Button
 								key={mode}
-								size="sm"
 								variant={activeMode === mode ? "primary" : "outline"}
 								aria-pressed={activeMode === mode}
 								onPress={() => setTheme(mode)}
@@ -222,8 +216,8 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 				</Typography.Paragraph>
 			</fieldset>
 
-			<fieldset className="flex flex-col gap-2.5">
-				<legend className="text-xs font-semibold text-muted">색상 토큰</legend>
+			<fieldset className="flex flex-col gap-3">
+				<legend className="text-sm font-semibold text-muted">색상 토큰</legend>
 				{toneMannerColorTokenDefinitions.map((tokenDefinition) => {
 					const tokenValue = activeValues[tokenDefinition.key];
 					const isUsableColorValue = tokenValue
@@ -232,7 +226,7 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 					return (
 						<div
 							key={tokenDefinition.key}
-							className="flex items-center gap-2.5"
+							className="flex items-center gap-3"
 							title={tokenDefinition.description}
 						>
 							<input
@@ -248,11 +242,11 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 										event.target.value,
 									)
 								}
-								className="size-8 shrink-0 cursor-pointer rounded-md border border-border bg-transparent p-0.5"
+								className="size-10 shrink-0 cursor-pointer rounded-lg border border-border bg-transparent p-1"
 							/>
 							<div className="min-w-0 flex-1">
-								<p className="text-xs font-medium">{tokenDefinition.label}</p>
-								<p className="font-mono text-[10px] text-muted">
+								<p className="text-sm font-medium">{tokenDefinition.label}</p>
+								<p className="font-mono text-[11px] text-muted">
 									{tokenDefinition.cssVariable}
 								</p>
 							</div>
@@ -268,10 +262,9 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 										event.target.value,
 									)
 								}
-								className="w-[5.5rem] shrink-0 rounded-md border border-border bg-surface px-2 py-1 font-mono text-xs outline-none focus-visible:ring-2 focus-visible:ring-accent"
+								className="w-24 shrink-0 rounded-lg border border-border bg-surface px-2 py-1.5 font-mono text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent"
 							/>
 							<Button
-								size="sm"
 								variant="ghost"
 								isIconOnly
 								aria-label={`${tokenDefinition.label} 기본값으로 되돌리기`}
@@ -283,16 +276,16 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 									)
 								}
 							>
-								<RotateCcw className="size-3.5" aria-hidden />
+								<RotateCcw className="size-4" aria-hidden />
 							</Button>
 						</div>
 					);
 				})}
 			</fieldset>
 
-			<fieldset className="flex flex-col gap-2">
-				<legend className="text-xs font-semibold text-muted">모양 토큰</legend>
-				<div className="flex items-center gap-2.5">
+			<fieldset className="flex flex-col gap-2.5">
+				<legend className="text-sm font-semibold text-muted">모양 토큰</legend>
+				<div className="flex items-center gap-3">
 					<input
 						type="range"
 						min="0"
@@ -306,9 +299,9 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 								Number(event.target.value),
 							)
 						}
-						className="min-w-0 flex-1 accent-(--accent)"
+						className="h-5 min-w-0 flex-1 accent-(--accent)"
 					/>
-					<span className="w-[6.5rem] shrink-0 text-right font-mono text-xs">
+					<span className="w-28 shrink-0 text-right font-mono text-xs">
 						{activeRadiusPixels}px · 필드{" "}
 						{Math.round(activeRadiusPixels * 1.5)}px
 					</span>
@@ -318,13 +311,12 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 				</Typography.Paragraph>
 			</fieldset>
 
-			<fieldset className="flex flex-col gap-2">
-				<legend className="text-xs font-semibold text-muted">
+			<fieldset className="flex flex-col gap-2.5">
+				<legend className="text-sm font-semibold text-muted">
 					내보내기 CSS
 				</legend>
-				<div className="flex justify-end gap-1.5">
+				<div className="flex justify-end gap-2">
 					<Button
-						size="sm"
 						variant="ghost"
 						isDisabled={!toneMannerState.hasAnyOverride}
 						onPress={() => toneMannerState.resetAllTokens()}
@@ -332,7 +324,6 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 						초기화
 					</Button>
 					<Button
-						size="sm"
 						variant="outline"
 						isDisabled={!cssText}
 						onPress={() => void copyCssTextToClipboard()}
@@ -340,7 +331,7 @@ export const ToneMannerPanel = observer(function ToneMannerPanel() {
 						{toneMannerState.isCssCopied ? "복사됨" : "복사"}
 					</Button>
 				</div>
-				<pre className="max-h-52 overflow-auto rounded-lg bg-default p-3 font-mono text-[11px] leading-5 whitespace-pre-wrap">
+				<pre className="max-h-52 overflow-auto rounded-lg bg-default p-3 font-mono text-xs leading-5 whitespace-pre-wrap">
 					{cssText ||
 						"/* 오버라이드한 토큰이 없습니다. 프리셋을 선택하거나 값을 조정하세요. */"}
 				</pre>

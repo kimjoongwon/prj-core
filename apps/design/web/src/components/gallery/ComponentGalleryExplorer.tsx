@@ -5,7 +5,11 @@ import { Button } from "@cocrepo/ui";
 import { Palette, X } from "lucide-react";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { ToneMannerPanel } from "@/components/tone-manner/ToneMannerPanel";
+import { useEffect } from "react";
+import {
+	createToneMannerPanelState,
+	ToneMannerPanel,
+} from "@/components/tone-manner/ToneMannerPanel";
 import { useIsWideViewport } from "@/hooks/useIsWideViewport";
 import ButtonSection from "./sections/ButtonSection";
 import DataDisplaySection from "./sections/DataDisplaySection";
@@ -24,6 +28,8 @@ const gallerySectionLinks = [
 	{ id: "overlay", label: "오버레이" },
 	{ id: "data-grid", label: "DataGrid" },
 ];
+
+const TONE_MANNER_STYLE_ELEMENT_ID = "tone-manner-token-overrides";
 
 export function createComponentGalleryExplorerState() {
 	const state = {
@@ -50,7 +56,32 @@ export type ComponentGalleryExplorerState = ReturnType<
 
 const ComponentGalleryExplorer = observer(function ComponentGalleryExplorer() {
 	const explorerState = useLocalObservable(createComponentGalleryExplorerState);
+	// 패널이 사이드바↔서랍 사이에서 다시 마운트돼도 토큰 선택이 유지되도록
+	// 탐색기가 상태를 소유하고 패널에 내려줍니다.
+	const toneMannerState = useLocalObservable(createToneMannerPanelState);
 	const isWideViewport = useIsWideViewport();
+	const toneMannerCssText = toneMannerState.cssText;
+
+	// 오버라이드를 :root/.dark 스코프의 DOM style 요소로 주입합니다.
+	// 파생 토큰(color-mix)은 선언 요소에서 치환되므로 :root 스코프여야 정확하고,
+	// React <style href> 리소스는 내용 갱신이 보장되지 않아 직접 관리합니다.
+	useEffect(() => {
+		let styleElement = document.getElementById(
+			TONE_MANNER_STYLE_ELEMENT_ID,
+		) as HTMLStyleElement | null;
+		if (!styleElement) {
+			styleElement = document.createElement("style");
+			styleElement.id = TONE_MANNER_STYLE_ELEMENT_ID;
+			document.head.appendChild(styleElement);
+		}
+		styleElement.textContent = toneMannerCssText;
+	}, [toneMannerCssText]);
+
+	useEffect(() => {
+		return () => {
+			document.getElementById(TONE_MANNER_STYLE_ELEMENT_ID)?.remove();
+		};
+	}, []);
 
 	return (
 		<div className="min-h-dvh bg-background text-foreground">
@@ -102,9 +133,9 @@ const ComponentGalleryExplorer = observer(function ComponentGalleryExplorer() {
 					<DataGridSection />
 				</div>
 				{isWideViewport ? (
-					<aside className="sticky top-6 w-80 shrink-0">
+					<aside className="sticky top-6 w-96 shrink-0">
 						<div className="max-h-[calc(100dvh-3rem)] overflow-y-auto pr-1">
-							<ToneMannerPanel />
+							<ToneMannerPanel toneMannerState={toneMannerState} />
 						</div>
 					</aside>
 				) : null}
@@ -113,7 +144,7 @@ const ComponentGalleryExplorer = observer(function ComponentGalleryExplorer() {
 				<>
 					<Button
 						variant="primary"
-						startContent={<Palette className="size-4" aria-hidden />}
+						startContent={<Palette className="size-5" aria-hidden />}
 						onPress={explorerState.openToneMannerDrawer}
 						aria-expanded={explorerState.isToneMannerDrawerOpen}
 						className="fixed right-5 bottom-5 z-30 shadow-lg"
@@ -133,20 +164,19 @@ const ComponentGalleryExplorer = observer(function ComponentGalleryExplorer() {
 								onClick={explorerState.closeToneMannerDrawer}
 								className="absolute inset-0 bg-black/40"
 							/>
-							<div className="absolute inset-y-0 right-0 flex w-[22rem] max-w-[92vw] flex-col border-l border-border bg-surface shadow-xl">
+							<div className="absolute inset-y-0 right-0 flex w-100 max-w-[94vw] flex-col border-l border-border bg-surface shadow-xl">
 								<div className="flex justify-end border-b border-border p-3">
 									<Button
 										variant="ghost"
 										isIconOnly
-										size="sm"
 										aria-label="패널 닫기"
 										onPress={explorerState.closeToneMannerDrawer}
 									>
-										<X className="size-4" aria-hidden />
+										<X className="size-5" aria-hidden />
 									</Button>
 								</div>
-								<div className="flex-1 overflow-y-auto p-3">
-									<ToneMannerPanel />
+								<div className="flex-1 overflow-y-auto p-4">
+									<ToneMannerPanel toneMannerState={toneMannerState} />
 								</div>
 							</div>
 						</div>
