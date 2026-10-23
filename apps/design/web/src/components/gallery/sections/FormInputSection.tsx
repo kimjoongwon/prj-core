@@ -67,7 +67,7 @@ const FormInputSection = observer(function FormInputSection() {
 		>
 			<GalleryExample
 				label="TextField"
-				className="grid gap-3 sm:grid-cols-2"
+				className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3"
 			>
 				<TextField
 					label="사이트 이름"
