@@ -7,6 +7,7 @@ import { Rocket, CheckCircle2, Pencil, Server, Eye } from "lucide-react";
 import { Stepper } from "../components/Stepper";
 import { StepShell } from "../components/StepShell";
 import { ChoiceCard } from "../components/ChoiceCard";
+import { AssetAutomationCard } from "../components/AssetAutomationCard";
 import { SummaryView } from "../components/SummaryView";
 import { frontendStep } from "../data/frontend";
 import { backendStep } from "../data/backend";
@@ -150,6 +151,7 @@ export default function Page() {
           </div>
           {renderComparisonTable(stepData.options.map((o) => o.name), stepData.comparison)}
           {renderRecommendations(stepData.recommendations)}
+          {step === 3 && <AssetAutomationCard />}
           {step === 3 && (
             <Card className="w-full border-2 border-accent bg-accent-soft p-5">
               <VStack gap="section">
