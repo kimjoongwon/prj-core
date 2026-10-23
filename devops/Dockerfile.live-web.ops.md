@@ -6,6 +6,8 @@
 
 ## 역할
 
+> 2026-10-22 Dockerfile·호출 소스 대조. 이미지 빌드·실행을 새로 수행한 검증 기록은 아니다. 날짜가 붙은 변경 이력은 당시 기록으로 구분한다.
+
 `live-web`(라이브 커머스 클라이언트 시연 데모) 이미지를 빌드하는 멀티스테이지 Dockerfile입니다.
 `Dockerfile.proposal-web`과 동일한 base → setup → builder → runner 구조를 따르며,
 `turbo prune --scope=live-web` 결과만 빌드해 standalone 런타임 이미지를 만듭니다.
@@ -30,9 +32,9 @@
 
 ## 운영 노트
 
-- 이 앱은 외부 API 의존이 전혀 없는 시연 목업이라 빌드 환경변수·시크릿 주입이 필요 없다.
-- 영상은 클러스터의 SRS 미디어 서버(prj-devops `helm/applications/srs-server`) 실스트림을 재생한다. 재생 URL 기본값은 `/live-stream/live/livedemo.flv|.m3u8`이며 `LIVE_STREAM_FLV_URL`/`LIVE_STREAM_HLS_URL` 환경변수(values-prod extraEnv)로 재빌드 없이 교체할 수 있다. 스트림 미연결 시 `public/videos/live-loop.mp4`로 폴백한다.
-- `LIVE_DEMO_JWT_SECRET`은 시연용 목업 서명 키로 기본값(live-demo-mock-secret)을 그대로 사용한다 — 실서비스 전환 시 values-prod의 extraEnv로 교체한다.
+- 데이터·인증 API는 앱 내부 데모 구현을 사용한다. 브라우저의 미디어 재생은 공개 SRS 스트림에 연결하며, 런타임 미디어 URL·데모 서명 설정은 아래 env를 읽는다. 빌드 시 별도 서비스 자격증명 주입은 없다.
+- 영상은 클러스터의 SRS 미디어 서버(prj-devops `helm/applications/srs-server`) 실스트림을 재생한다. 재생 URL 기본값은 `https://onjitda.com/live-stream/live/livedemo.flv|.m3u8`이며 `LIVE_STREAM_FLV_URL`/`LIVE_STREAM_HLS_URL` 런타임 환경변수로 교체할 수 있다. 현재 values-prod extraEnv에는 이 두 키가 선언되어 있지 않다. 스트림 미연결 시 `public/videos/live-loop.mp4`로 폴백한다.
+- `LIVE_DEMO_JWT_SECRET` 미설정 시 코드가 시연용 기본값(live-demo-mock-secret)을 사용한다. 현재 values-prod에는 override가 없다 — 실서비스 전환 시 values-prod의 extraEnv로 교체한다.
 
 ## 변경 이력
 

@@ -1,12 +1,14 @@
-# PRJ Core Environment Variable Reference
+# PRJ Core 환경 변수 참조
+
+> 배포 계약 소스 대조일: 2026-10-22. 아래 배포 설정은 저장소 기준이며 실제 OpenBao 값·ExternalSecret 동기화·파드 env 반영은 별도 확인한다.
 
 `prj-core`의 로컬 환경 변수 규칙은 다음과 같습니다.
 
 - 서버 앱·패키지(core-api, idp-api, be-prisma)는 각 프로젝트 디렉터리의 `.env`를 사용합니다.
-- Next.js 웹 앱(admin·idp·proposal web)은 각 디렉터리의 `.env.local`을 사용합니다(dev 스크립트가 source).
+- Next.js 웹 앱(admin·idp·proposal·dolmen·live web)은 각 디렉터리의 `.env.local`을 사용합니다(일부 dev 스크립트는 shell source도 수행).
 - `.env.example`는 커밋되는 템플릿이며, 런타임에서 직접 읽지 않습니다.
 - 로컬 개발용 실제 키(이메일 SMTP, 객체 스토리지, 인증 서명)는 팀 OpenBao에서 `pnpm secrets:pull`로 가져옵니다. 자세한 흐름은 아래 [로컬 개발 시크릿(OpenBao)](#로컬-개발-시크릿openbao) 섹션을 참고하세요.
-- 배포 환경 변수는 `prj-devops`의 OpenBao 연동을 통해 주입됩니다.
+- 배포 환경 변수는 `prj-devops`의 OpenBao → ExternalSecret → Kubernetes Secret 연동 및 차트 `extraEnv`를 통해 주입됩니다. 실제 키 값은 `secret/docs/credentials-map`을 확인합니다.
 - 아래 표는 현재 코드가 실제로 읽는 키 기준입니다.
 - 주석 처리된 legacy 예시 키(`file.config.ts`, `mail.config.ts`, `database.config.ts`)는 제외했습니다.
 
@@ -20,6 +22,7 @@
 | `idp-web` | `apps/idp/web/.env.local` | `apps/idp/web/.env.example` | Next.js IDP Web(로그인/동의 UI) |
 | `proposal-web` | `apps/proposal/web/.env.local` | `apps/proposal/web/.env.example` | Next.js Proposal Web |
 | `design-web` | 없음(정적 콘텐츠) | 없음 | Next.js Design Web(디자인 링크 디렉터리, 포트만 `DESIGN_WEB_PORT`) |
+| `live-web` | `apps/live/web/.env.local` | `apps/live/web/.env.example` | Next.js 라이브커머스 데모(dev 3014, 컨테이너 3013) |
 | `dolmen-api` | `apps/dolmen/api/.env` | `apps/dolmen/api/.env.example` | Python FastAPI(등록 이력서 근거 면접 Q&A API) |
 | `dolmen-web` | `apps/dolmen/web/.env.local` | `apps/dolmen/web/.env.example` | Next.js Dolmen Web(모모의 이력서 면접 Q&A 화면) |
 | `tool-storybook` | `apps/tool/storybook/.env` | 없음 | Storybook dev server |
@@ -67,7 +70,7 @@
 | 범주 | 키 | 설명 |
 | --- | --- | --- |
 | App | `DOLMEN_WEB_PORT` | Next.js dev 서버 포트(기본 3013). |
-| API 연결 | `DOLMEN_API_URL` | Next 라우트 핸들러가 요청 시점에 읽어 `/dolmen/api/*`를 프록시할 dolmen-api 주소(기본 `http://localhost:3012`). |
+| API 연결 | `DOLMEN_API_URL` | `src/app/api/[...path]/route.ts`가 요청마다 읽는 dolmen-api 주소(기본 `http://localhost:3012`). `/dolmen/api/*`를 `/api/*`로 전달하며 standalone 재빌드 없이 런타임 env로 대상을 바꾼다. |
 
 ## apps/admin/web
 
@@ -75,6 +78,23 @@
 | --- | --- | --- |
 | Build / Dev | `NODE_ENV`, `ANALYZE`, `CORE_API_INTERNAL_URL`, `IDP_API_INTERNAL_URL` | `NODE_ENV`: Next.js 실행 모드. `ANALYZE`: bundle analyzer 활성화 여부. `CORE_API_INTERNAL_URL`: 개발 프록시에서 core-api로 넘길 내부 대상 URL(비밀번호 재설정과 일반 비즈니스 API). `IDP_API_INTERNAL_URL`: 개발 프록시에서 idp-api로 넘길 내부 대상 URL(`/api/v1/auth`, `/api/v1/idp`, `/api/v1/oidc-clients`, `/api/v1/oidc-sessions`). `/oidc`와 `/api/interaction`은 발급자와 UI가 같은 origin이어야 해서 idp-web이 프록시를 소유합니다. |
 | Public Runtime | `NEXT_PUBLIC_WS_URL` | `NEXT_PUBLIC_WS_URL`: 브라우저에서 사용할 WebSocket base URL. |
+
+## apps/idp/web
+
+| 범주 | 키 | 설명 |
+| --- | --- | --- |
+| App / Dev | `IDP_WEB_PORT`, `NODE_ENV`, `ANALYZE` | 개발 서버 기본 3008, 개발 프록시 여부 및 bundle analyzer 설정. |
+| SSR / Proxy | `IDP_API_INTERNAL_URL` | 로그인·동의 페이지의 서버 interaction 조회 주소. 로컬 기본 `http://localhost:3007`; prod/stg 차트는 각각 `http://idp-api-prod`, `http://idp-api-stg`를 주입한다. 개발에만 Next rewrites도 사용하며 배포 공개 API는 ingress가 처리한다. |
+| Redirect | `ADMIN_WEB_URL` | 루트 진입 시 이동할 Admin URL. 미설정 시 코드 기본값은 `https://onjitda.com`이다. stg에서 다른 목적지가 필요하면 유효 env를 확인한다. |
+
+## apps/live/web
+
+| 범주 | 키 | 설명 |
+| --- | --- | --- |
+| App | `LIVE_WEB_PORT` | 개발 기본 3014. Dockerfile 런타임 `PORT=3013`과 구분한다. |
+| Media | `LIVE_STREAM_FLV_URL`, `LIVE_STREAM_HLS_URL` | 서버 mock store의 재생 주소 override. 기본은 `https://onjitda.com/live-stream/live/livedemo.flv`, `.m3u8`이다. 현재 prod values에는 이 override가 없으므로 코드 기본값을 사용한다. |
+| Demo auth | `LIVE_DEMO_JWT_SECRET` | 데모 JWT 서명 키. 미설정 시 `live-demo-mock-secret`을 사용한다. 현재 prod values에 override는 없다. |
+| Public path | `NEXT_PUBLIC_BASE_PATH` | `next.config.ts`가 `/live`로 고정해 브라우저 API·영상 경로를 조합한다. 런타임 배포 전환용 키가 아니다. |
 
 ## apps/tool/storybook
 
@@ -90,6 +110,27 @@
 | Database / Staging | `DATABASE_URL_STG`, `DIRECT_URL_STG` | `db:pull:stg`, `db:push:stg`, `db:migrate:deploy:stg`, `db:data:migrate:stg` 같은 staging 스크립트에서 `DATABASE_URL`/`DIRECT_URL`로 매핑됩니다. |
 | Database / Production | `DATABASE_URL_PROD`, `DIRECT_URL_PROD` | production 대상 Prisma CLI / reference-data 스크립트에서 `DATABASE_URL`/`DIRECT_URL`로 매핑됩니다. |
 | OIDC Seed Override | `OIDC_ADMIN_BASE_URL`, `OIDC_ADMIN_REDIRECT_URI`, `OIDC_ADMIN_CLIENT_SECRET`, `OIDC_STORYBOOK_BASE_URL`, `OIDC_STORYBOOK_REDIRECT_URI`, `OIDC_STORYBOOK_CLIENT_SECRET`, `OIDC_ISSUER`, `OIDC_INTERACTION_BASE_URL`, `OIDC_SWAGGER_REDIRECT_URI` | reference-data bootstrap 시 기본 OIDC client redirect URI와 confidential client secret을 환경별 값으로 덮어쓸 때 사용합니다. `OIDC_ADMIN_BASE_URL`: admin redirect 기본 base URL. `OIDC_ADMIN_REDIRECT_URI`: admin redirect 직접 override. `OIDC_ADMIN_CLIENT_SECRET`: admin client secret override. `OIDC_STORYBOOK_BASE_URL`: Storybook redirect 기본 base URL. `OIDC_STORYBOOK_REDIRECT_URI`: Storybook redirect 직접 override. `OIDC_STORYBOOK_CLIENT_SECRET`: Storybook client secret override. `OIDC_ISSUER`: admin public origin 기준 issuer. `OIDC_INTERACTION_BASE_URL`: interaction 화면 base URL. `OIDC_SWAGGER_REDIRECT_URI`: Swagger redirect 직접 override. |
+
+## Kubernetes 배포 환경 변수
+
+prod/stg 모두 ArgoCD가 `prj-devops main`의 `helm/applications/<앱>/values.yaml`과 `values-<환경>.yaml`을 읽는다. 이미지 태그만 `prj-deploy main`의 `<환경>/<앱>.yaml`이 덮어쓴다. 런타임 `.env`를 컨테이너에 복사하는 방식이 아니다.
+
+| 앱·환경 | Secret envFrom | 차트에서 명시하는 주요 env |
+|---|---|---|
+| core-api prod/stg | `app-env-secrets` + `infra-env-secrets` | `REDIS_PORT`, interaction URL, CORS origin, `TRUST_PROXY_HOPS`, OTel. JWKS·cookie는 `idp-api-env-secrets`의 해당 키 참조 |
+| admin-web prod/stg | `app-env-secrets` | `CORE_API_INTERNAL_URL`, `IDP_API_INTERNAL_URL`, OTel service name |
+| idp-api prod/stg | `idp-api-env-secrets` + `infra-env-secrets` | `APP_NAME`, `APP_PORT`, `OIDC_ISSUER`, `OIDC_INTERACTION_BASE_URL`, `OIDC_ADMIN_BASE_URL`, OTel |
+| idp-web prod/stg | `idp-web-env-secrets` | `IDP_API_INTERNAL_URL`, OTel service name |
+| dolmen-api stg | `app-env-secrets`(infraSecrets 비활성) | LLM 접속 키는 유효 Secret에 별도 준비 필요. Dockerfile은 임베딩 캐시 경로를 지정 |
+| dolmen-web stg | 비활성 | `DOLMEN_API_URL=http://dolmen-api-stg.plate-stg.svc.cluster.local:3012` |
+| proposal-web, design-web, live-web prod | 비활성 | OTel 관련 env. live 미디어 URL·데모 서명 키 override는 현재 values에 없음 |
+| tool-storybook prod | 비활성(`secretName` 기본 항목은 있으나 주입하지 않음) | nginx 정적 앱이며 Storybook 빌드 플래그는 Jenkins build arg로 전달 |
+
+Secret 주입의 정확한 방식(`envFrom`·`secretKeyRef`)은 각 deployment/migration 템플릿을 따른다. `extraEnv`가 같은 키를 명시하면 envFrom보다 해당 명시값이 우선하므로 Secret 값만 보고 유효값을 단정하지 않는다. core/idp API의 PreSync 마이그레이션 Job도 앱·인프라 시크릿과 extraEnv를 함께 소비한다.
+
+OpenBao 환경 동기화 원본은 `prj-devops/helm/shared-configs/openbao-secrets-manager`다. 환경별 `core-api/{production,staging}` → `app-env-secrets`, `idp-api/{production,staging}` → `idp-api-env-secrets`, `idp-web/{production,staging}` → `idp-web-env-secrets`, `devops/{production,staging}` → `infra-env-secrets`를 선언한다. local development pull과 Kubernetes 환경 동기화는 서로 다른 경로다. 값을 변경할 때는 OpenBao `secret/docs/overview` → `endpoints` → `credentials-map` 및 해당 runbook을 확인한다.
+
+실제 배포 확인 시에는 Secret 존재·ExternalSecret 상태·파드 시작 시각·필요 env의 유효 출처를 함께 확인한다. envFrom으로 주입된 Secret 변경은 실행 중인 프로세스 env를 즉시 갱신하지 않으므로 파드 반영도 별도로 확인한다. 키나 토큰의 평문은 문서·로그에 남기지 않는다.
 
 ## 로컬 개발 시크릿(OpenBao)
 

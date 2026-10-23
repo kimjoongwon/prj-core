@@ -21,7 +21,7 @@
 | 실행 Stage | `Validate Branch` → `Checkout` → `Build and Push Image` → `Trigger GitOps Update Job` |
 | GitOps 트리거 | `APP_NAME=live-web`, `IMAGE_TAG`, `DEPLOY_ENV=prod` 파라미터로 `GITOPS_UPDATE_JOB` 비동기 호출 |
 | 알림 | buzz #cicd 성공/실패 알림, 실패 시 @ZCode 멘션 (proposal-web과 동일 계약) |
-| 실패 전파 정책 | GitOps 트리거 실패 시 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지 |
+| 실패 전파 정책 | 범프 호출 자체가 실패하면 stage만 `UNSTABLE`, 빌드 결과는 `SUCCESS` 유지. `wait: false`이므로 후속 범프 잡 실패·ArgoCD 실패는 전파되지 않음 |
 
 ## 구현 체크리스트
 
@@ -30,7 +30,7 @@
 
 ## 운영 노트
 
-- 최초 배포 순서: 젠킨스 values 반영(helm upgrade) → 잡 생성 확인 → main에서 1회 수동 실행 → prj-deploy `prod/live-web.yaml` 초기 생성(빌드 SHA-12 태그, 사유 명시 커밋).
+- 2026-10-22 소스 기준 Jenkins DSL, prj-deploy `prod/live-web.yaml`, ArgoCD `live-web-prod`가 연결되어 있습니다. 범프 잡은 기존 파일만 갱신하므로 새 앱 등록 시 태그 파일·Application의 준비가 선행되어야 합니다. 실제 Jenkins 차트 적용 상태는 별도 확인합니다.
 - 이후에는 stg→main PR 머지 시 push-router가 경로 매칭(`apps/live/web/.*` 등)으로 자동 트리거한다.
 
 ## 잔여 위험
