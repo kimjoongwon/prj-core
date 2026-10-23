@@ -1,1 +1,1 @@
-"""Dolmen API — hello-agents 기반 에이전트 메모리·RAG 학습 데모."""
+"""Dolmen API — 등록 이력서 근거로 지원자를 소개하는 모모."""

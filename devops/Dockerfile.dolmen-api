@@ -16,14 +16,13 @@ COPY apps/dolmen/api/pyproject.toml apps/dolmen/api/uv.lock ./
 RUN uv sync --frozen --no-dev
 
 COPY apps/dolmen/api/app ./app
-# demo-doc은 settings.DEMO_DOC_PATH가 ../demo-doc 로 찾는다
-COPY apps/dolmen/demo-doc /srv/demo-doc
+# 이력서 원본은 이미지에 복사하지 않는다. DOLMEN_RESUME_PATH로 비공개 파일을 마운트한다.
 
 # 임베딩 모델 프리다운로드 (빌드 시점 네트워크 필요)
 RUN uv run --no-sync python -c "from fastembed import TextEmbedding; TextEmbedding('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2', cache_dir='/opt/dolmen/embedding-cache')"
 
 # 비루트 실행 — .rag(로컬 인덱스)는 런타임에 이 디렉터리 안에 생성된다
-RUN useradd --system --uid 1001 dolmen && mkdir -p /srv/dolmen-api/.rag && chown -R dolmen:dolmen /srv/dolmen-api
+RUN useradd --system --uid 1001 dolmen && mkdir -p /srv/dolmen-api/.rag/resume /srv/dolmen-api/private && chown -R dolmen:dolmen /srv/dolmen-api
 USER dolmen
 
 EXPOSE 3012

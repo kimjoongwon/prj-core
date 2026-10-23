@@ -20,8 +20,8 @@
 | `idp-web` | `apps/idp/web/.env.local` | `apps/idp/web/.env.example` | Next.js IDP Web(로그인/동의 UI) |
 | `proposal-web` | `apps/proposal/web/.env.local` | `apps/proposal/web/.env.example` | Next.js Proposal Web |
 | `design-web` | 없음(정적 콘텐츠) | 없음 | Next.js Design Web(디자인 링크 디렉터리, 포트만 `DESIGN_WEB_PORT`) |
-| `dolmen-api` | `apps/dolmen/api/.env` | `apps/dolmen/api/.env.example` | Python FastAPI(hello-agents 기반 에이전트 데모) |
-| `dolmen-web` | `apps/dolmen/web/.env.local` | `apps/dolmen/web/.env.example` | Next.js Dolmen Web(채팅 화면) |
+| `dolmen-api` | `apps/dolmen/api/.env` | `apps/dolmen/api/.env.example` | Python FastAPI(등록 이력서 근거 면접 Q&A API) |
+| `dolmen-web` | `apps/dolmen/web/.env.local` | `apps/dolmen/web/.env.example` | Next.js Dolmen Web(모모의 이력서 면접 Q&A 화면) |
 | `tool-storybook` | `apps/tool/storybook/.env` | 없음 | Storybook dev server |
 | `be-prisma` | `packages/be-prisma/.env` | `packages/be-prisma/.env.example` | Prisma CLI / bootstrap / data-migrate |
 
@@ -46,14 +46,28 @@
 | --- | --- | --- |
 | LLM | `LLM_API_KEY`, `LLM_MODEL_ID`, `LLM_BASE_URL` | hello-agents `HelloAgentsLLM`이 읽는 OpenAI 호환 LLM 접속 설정. 실제 키는 절대 커밋하지 않는다. |
 | App | `DOLMEN_API_PORT` | `pnpm start:dolmen-api`가 uvicorn 실행에 사용하는 포트(기본 3012). |
+| 개발 관측 | `DOLMEN_DEBUG_ENABLED` | 기본 `false`. 서버에서 `true`로 켠 개발 환경에만 정제 데이터 요약과 허용된 SSE 실행 이벤트를 추가한다. 운영에서는 활성화하지 않는다. 상세는 `apps/dolmen/api/README.md`를 따른다. |
+| 컨텍스트 | `DOLMEN_CONTEXT_INPUT_TOKEN_LIMIT` | 기본 `32768`. 출력 예산을 이미 제외한 앱 입력 예산이다. UTF-8 바이트 기반 보수적 추정치로 제한하며, 제공자의 실제 토큰 수나 모델의 컨텍스트 한도를 뜻하지 않는다. |
+| 컨텍스트 | `DOLMEN_CONTEXT_OUTPUT_TOKEN_RESERVE` | 기본 `2048`. 답변 호출의 `max_tokens`로 전달하는 출력 예산이다. 입력 예산과 별도로 적용한다. |
 | RAG | `DOLMEN_EMBEDDING_CACHE_DIR` | fastembed 임베딩 모델 캐시 경로(선택). 컨테이너 이미지의 `/opt/dolmen/embedding-cache`를 가리킨다. |
+| 이력서 | `DOLMEN_RESUME_PATH` | 등록할 비공개 PDF의 서버 경로. 기본 `private/resume.pdf`, 상대 경로는 `apps/dolmen/api` 기준. PDF는 Git·컨테이너 이미지·웹 공개 경로에 포함하지 않고 운영에서는 별도 비공개 파일로 마운트한다. |
+| 지원자 | `DOLMEN_CANDIDATE_NAME` | 모모가 3인칭으로 소개할 지원자 이름. 로컬/서버 설정에서 공급하며 예시에는 실제 개인정보를 넣지 않는다. |
+| 작성 기준일 | `DOLMEN_RESUME_UPDATED_AT` | 등록 이력서 작성 기준일(`YYYY-MM-DD`, 필수). 경력 기간과 현재 가용성을 구분하는 기준이며 자동으로 오늘 날짜를 넣지 않는다. |
+
+등록 PDF는 pypdf로 쪽별 텍스트를 추출하고 연락처·인적사항·기존 연봉·병역/취업우대를 제거한 뒤
+`.rag/resume/`에만 색인한다. 기존 `.rag/` 위키 색인은 검색하지 않는다. 파일 내용이 바뀌면 이전 절을
+검색에서 철회하고 새 revision으로 동기화하며, 기존 대화 세션도 새 등록본을 기준으로 초기화한다.
+`GET /api/documents`는 준비 상태만 읽고 원본 PDF/추출 원문 다운로드나 공개 문서 등록 API는 제공하지 않는다.
+등록·추출·색인 실패는 HTTP 503 또는 채팅 `error` 이벤트로 종료하며 근거 없는 모델 호출로 대체하지 않는다.
+같은 등록본의 대화는 최근 2턴, 최대 50세션까지만 메모리에 유지하며 사용이 오래된 유휴 세션부터
+정리한다. 각 턴 뒤 과거 원문을 키로 보관하는 토큰 카운터 캐시도 비운다.
 
 ## apps/dolmen/web
 
 | 범주 | 키 | 설명 |
 | --- | --- | --- |
 | App | `DOLMEN_WEB_PORT` | Next.js dev 서버 포트(기본 3013). |
-| API 연결 | `DOLMEN_API_URL` | Next rewrites가 `/dolmen/api/*` 를 프록시할 dolmen-api 주소(기본 `http://localhost:3012`). |
+| API 연결 | `DOLMEN_API_URL` | Next 라우트 핸들러가 요청 시점에 읽어 `/dolmen/api/*`를 프록시할 dolmen-api 주소(기본 `http://localhost:3012`). |
 
 ## apps/admin/web
 

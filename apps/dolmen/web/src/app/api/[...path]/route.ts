@@ -32,6 +32,7 @@ async function forwardToDolmenApi(
 			},
 			body: hasRequestBody ? await request.text() : undefined,
 			cache: "no-store",
+			signal: request.signal,
 		});
 	} catch {
 		return Response.json(
