@@ -5,7 +5,7 @@ export class UpdateRoutineCommand implements UpdateRoutineCommandInput {
 	readonly label?: UpdateRoutineCommandInput["label"];
 
 	constructor(
-		readonly routineId: bigint,
+		readonly routineSeq: bigint,
 		input: UpdateRoutineCommandInput,
 	) {
 		Object.assign(this, input);

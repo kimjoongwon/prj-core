@@ -38,18 +38,18 @@ export class UserDetailResponseDto extends EntityResponseType(User, {
 		classification: () => UserClassificationDto,
 	},
 	extraFields: [
-		"spaceId",
+		"spaceSeq",
 		"failedLoginAttempts",
 		"lockedUntil",
 		"isPermanentlyLocked",
 		"lastLoginAt",
 		"lastLoginIp",
 		"isActive",
-		"currentTenantId",
+		"currentTenantSeq",
 	],
 }) {
 	@BigIntIdField({ description: "소속 공간 ID" })
-	spaceId: bigint;
+	spaceSeq: bigint;
 
 	@NumberField({ description: "로그인 실패 횟수" })
 	failedLoginAttempts: number;
@@ -73,7 +73,7 @@ export class UserDetailResponseDto extends EntityResponseType(User, {
 		nullable: true,
 		description: "현재 선택된 Tenant membership ID",
 	})
-	currentTenantId: bigint | null;
+	currentTenantSeq: bigint | null;
 
 	declare profiles?: ProfileDto[];
 	declare tenants?: TenantDto[];

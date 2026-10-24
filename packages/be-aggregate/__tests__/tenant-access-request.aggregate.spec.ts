@@ -23,8 +23,8 @@ describe("TenantAccessRequestAggregate", () => {
 
 	const managedSpaceId = 111n;
 	const otherSpaceId = 222n;
-	const requesterId = 333n;
-	const reviewerId = 444n;
+	const requesterSeq = 333n;
+	const reviewerSeq = 444n;
 	const requestId = 555n;
 	const memberRoleId = 666n;
 	const platformAdminRoleId = 777n;
@@ -53,12 +53,12 @@ describe("TenantAccessRequestAggregate", () => {
 
 	it("COMPANY_MANAGER는 본인 Space의 non-PLATFORM_ADMIN 신청을 승인할 수 있다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
-			buildRequest({ spaceId: managedSpaceId }),
+			buildRequest({ spaceSeq: managedSpaceId }),
 		);
 		usersRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
 			buildReviewer({
 				roleName: SYSTEM_ROLES.COMPANY_MANAGER,
-				spaceId: managedSpaceId,
+				spaceSeq: managedSpaceId,
 			}),
 		);
 		tenantsRepository.upsertByUserIdAndSpaceId.mockResolvedValue({
@@ -70,41 +70,41 @@ describe("TenantAccessRequestAggregate", () => {
 
 		await service.approve({
 			tenantAccessRequestId: requestId,
-			reviewerId,
+			reviewerSeq,
 			reviewComment: "승인합니다.",
 		});
 
 		expect(tenantsRepository.upsertByUserIdAndSpaceId).toHaveBeenCalledWith({
-			userId: requesterId,
-			spaceId: managedSpaceId,
-			roleId: memberRoleId,
+			userSeq: requesterSeq,
+			spaceSeq: managedSpaceId,
+			roleSeq: memberRoleId,
 		});
 		expect(repository.updateById).toHaveBeenCalledWith(
 			requestId,
 			expect.objectContaining({
 				status: "APPROVED",
-				reviewerId,
+				reviewerSeq,
 				reviewComment: "승인합니다.",
-				appliedTenantId: 888n,
+				appliedTenantSeq: 888n,
 			}),
 		);
 	});
 
 	it("COMPANY_MANAGER가 다른 Space 신청을 승인하면 403을 반환한다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
-			buildRequest({ spaceId: otherSpaceId }),
+			buildRequest({ spaceSeq: otherSpaceId }),
 		);
 		usersRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
 			buildReviewer({
 				roleName: SYSTEM_ROLES.COMPANY_MANAGER,
-				spaceId: managedSpaceId,
+				spaceSeq: managedSpaceId,
 			}),
 		);
 
 		await expect(
 			service.approve({
 				tenantAccessRequestId: requestId,
-				reviewerId,
+				reviewerSeq,
 			}),
 		).rejects.toThrow(ForbiddenException);
 		expect(tenantsRepository.upsertByUserIdAndSpaceId).not.toHaveBeenCalled();
@@ -113,7 +113,7 @@ describe("TenantAccessRequestAggregate", () => {
 	it("COMPANY_MANAGER가 PLATFORM_ADMIN 신청을 승인하면 403을 반환한다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
 			buildRequest({
-				requestedRoleId: platformAdminRoleId,
+				requestedRoleSeq: platformAdminRoleId,
 				requestedRole: {
 					id: platformAdminRoleId,
 					name: SYSTEM_ROLES.PLATFORM_ADMIN,
@@ -124,14 +124,14 @@ describe("TenantAccessRequestAggregate", () => {
 		usersRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
 			buildReviewer({
 				roleName: SYSTEM_ROLES.COMPANY_MANAGER,
-				spaceId: managedSpaceId,
+				spaceSeq: managedSpaceId,
 			}),
 		);
 
 		await expect(
 			service.approve({
 				tenantAccessRequestId: requestId,
-				reviewerId,
+				reviewerSeq,
 			}),
 		).rejects.toThrow(ForbiddenException);
 		expect(tenantsRepository.upsertByUserIdAndSpaceId).not.toHaveBeenCalled();
@@ -140,7 +140,7 @@ describe("TenantAccessRequestAggregate", () => {
 	it("COMPANY_MANAGER는 본인 Space의 PLATFORM_ADMIN 신청을 반려할 수 있다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
 			buildRequest({
-				requestedRoleId: platformAdminRoleId,
+				requestedRoleSeq: platformAdminRoleId,
 				requestedRole: {
 					id: platformAdminRoleId,
 					name: SYSTEM_ROLES.PLATFORM_ADMIN,
@@ -151,7 +151,7 @@ describe("TenantAccessRequestAggregate", () => {
 		usersRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
 			buildReviewer({
 				roleName: SYSTEM_ROLES.COMPANY_MANAGER,
-				spaceId: managedSpaceId,
+				spaceSeq: managedSpaceId,
 			}),
 		);
 		repository.updateById.mockResolvedValue(
@@ -160,7 +160,7 @@ describe("TenantAccessRequestAggregate", () => {
 
 		await service.reject({
 			tenantAccessRequestId: requestId,
-			reviewerId,
+			reviewerSeq,
 			reviewComment: "PLATFORM_ADMIN은 플랫폼 관리자가 처리합니다.",
 		});
 
@@ -169,7 +169,7 @@ describe("TenantAccessRequestAggregate", () => {
 			requestId,
 			expect.objectContaining({
 				status: "REJECTED",
-				reviewerId,
+				reviewerSeq,
 				reviewComment: "PLATFORM_ADMIN은 플랫폼 관리자가 처리합니다.",
 			}),
 		);
@@ -178,8 +178,8 @@ describe("TenantAccessRequestAggregate", () => {
 	it("PLATFORM_ADMIN은 모든 Space와 Role 신청을 승인할 수 있다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
 			buildRequest({
-				spaceId: otherSpaceId,
-				requestedRoleId: platformAdminRoleId,
+				spaceSeq: otherSpaceId,
+				requestedRoleSeq: platformAdminRoleId,
 				requestedRole: {
 					id: platformAdminRoleId,
 					name: SYSTEM_ROLES.PLATFORM_ADMIN,
@@ -190,7 +190,7 @@ describe("TenantAccessRequestAggregate", () => {
 		usersRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
 			buildReviewer({
 				roleName: SYSTEM_ROLES.PLATFORM_ADMIN,
-				spaceId: managedSpaceId,
+				spaceSeq: managedSpaceId,
 			}),
 		);
 		tenantsRepository.upsertByUserIdAndSpaceId.mockResolvedValue({
@@ -202,13 +202,13 @@ describe("TenantAccessRequestAggregate", () => {
 
 		await service.approve({
 			tenantAccessRequestId: requestId,
-			reviewerId,
+			reviewerSeq,
 		});
 
 		expect(tenantsRepository.upsertByUserIdAndSpaceId).toHaveBeenCalledWith({
-			userId: requesterId,
-			spaceId: otherSpaceId,
-			roleId: platformAdminRoleId,
+			userSeq: requesterSeq,
+			spaceSeq: otherSpaceId,
+			roleSeq: platformAdminRoleId,
 		});
 	});
 
@@ -217,16 +217,16 @@ describe("TenantAccessRequestAggregate", () => {
 	): TenantAccessRequest {
 		return {
 			id: requestId,
-			requesterId,
-			spaceId: managedSpaceId,
-			requestedRoleId: memberRoleId,
-			previousRoleId: null,
+			requesterSeq,
+			spaceSeq: managedSpaceId,
+			requestedRoleSeq: memberRoleId,
+			previousRoleSeq: null,
 			reason: "업무 권한이 필요합니다.",
 			status: "PENDING",
-			reviewerId: null,
+			reviewerSeq: null,
 			reviewComment: null,
 			reviewedAt: null,
-			appliedTenantId: null,
+			appliedTenantSeq: null,
 			requestedRole: {
 				id: memberRoleId,
 				name: SYSTEM_ROLES.MEMBER,
@@ -240,13 +240,13 @@ describe("TenantAccessRequestAggregate", () => {
 		Awaited<ReturnType<UsersRepository["findByIdWithTenantsAndProfiles"]>>
 	>;
 
-	function buildReviewer(params: { roleName: string; spaceId: bigint }) {
+	function buildReviewer(params: { roleName: string; spaceSeq: bigint }) {
 		return {
-			id: reviewerId,
+			id: reviewerSeq,
 			tenants: [
 				{
 					removedAt: null,
-					spaceId: params.spaceId,
+					spaceSeq: params.spaceSeq,
 					role: {
 						name: params.roleName,
 					},

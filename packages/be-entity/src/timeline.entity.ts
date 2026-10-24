@@ -16,11 +16,11 @@ import type { User } from "./user.entity";
 export class Timeline extends TimelineSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare timelineId: TimelineSchema["timelineId"];
+	declare id: TimelineSchema["id"];
 
-	@BigIntIdFieldMetadata() declare spaceId: TimelineSchema["spaceId"];
+	@BigIntIdFieldMetadata() declare spaceSeq: TimelineSchema["spaceSeq"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true })
-	declare createdById: TimelineSchema["createdById"];
+	declare createdBySeq: TimelineSchema["createdBySeq"];
 	@StringFieldMetadata() declare name: TimelineSchema["name"];
 	@StringFieldOptionalMetadata({ nullable: true })
 	declare description: TimelineSchema["description"];

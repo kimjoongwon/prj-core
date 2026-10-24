@@ -24,7 +24,7 @@ export class SignUpPayloadDto {
 		example: "1",
 		description: "스페이스 ID",
 	})
-	spaceId: bigint;
+	spaceSeq: bigint;
 
 	@EmailField({
 		example: "user@example.com",

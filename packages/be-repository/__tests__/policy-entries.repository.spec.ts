@@ -31,8 +31,8 @@ describe("PolicyEntriesRepository", () => {
 		policyEntry.findMany.mockResolvedValue([
 			{
 				id: 1n,
-				policyId: 10n,
-				abilityId: 20n,
+				policySeq: 10n,
+				abilitySeq: 20n,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				removedAt: null,
@@ -44,7 +44,7 @@ describe("PolicyEntriesRepository", () => {
 
 		expect(policyEntry.findMany).toHaveBeenCalledWith({
 			where: {
-				policyId: 10n,
+				policySeq: 10n,
 				removedAt: null,
 				ability: { removedAt: null },
 			},
@@ -73,8 +73,8 @@ describe("PolicyEntriesRepository", () => {
 		expect(policyEntry.create).toHaveBeenCalledTimes(1);
 		expect(policyEntry.create).toHaveBeenCalledWith({
 			data: {
-				policyId: 10n,
-				abilityId: 20n,
+				policySeq: 10n,
+				abilitySeq: 20n,
 			},
 		});
 		expect(policyEntry.update).not.toHaveBeenCalled();

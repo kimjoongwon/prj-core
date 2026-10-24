@@ -1,6 +1,6 @@
 export interface CreateAbilityInput {
-	actionId: bigint;
-	subjectId: bigint;
+	actionSeq: bigint;
+	subjectSeq: bigint;
 	fields?: string[];
 	conditions?: unknown;
 	inverted?: boolean;

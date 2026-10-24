@@ -7,6 +7,6 @@ export class DeleteAssetUseCase {
 	constructor(private readonly assetService: AssetAggregate) {}
 
 	async execute(command: DeleteAssetCommand): Promise<void> {
-		await this.assetService.deleteAsset(command.assetId);
+		await this.assetService.deleteAsset(command.assetSeq);
 	}
 }

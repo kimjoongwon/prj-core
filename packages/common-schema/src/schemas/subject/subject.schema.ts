@@ -7,7 +7,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Subject의 DB 필드 타입과 공통 검증입니다. */
 export class SubjectSchema extends AbstractSchema {
-	subjectId!: string;
+	id!: string;
 
 	@StringValidation()
 	name!: string;

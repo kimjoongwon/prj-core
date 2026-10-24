@@ -15,8 +15,8 @@ import {
  * DDD 원칙에 따라 actionId로 Action을 참조합니다.
  */
 export class CreateAbilityDto extends PickType(Ability, [
-	"actionId",
-	"subjectId",
+	"actionSeq",
+	"subjectSeq",
 ] as const) {
 	@ApiProperty({
 		description: "대상 필드 목록 (빈 배열이면 전체 필드)",

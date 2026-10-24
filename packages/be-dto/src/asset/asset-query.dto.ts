@@ -11,7 +11,7 @@ import { Asset } from "@cocrepo/entity";
  * 에셋 목록 조회용 Query DTO
  *
  * 필터 계약:
- * - folderId, tenantId -> 정확 매칭 (*Id)
+ * - folderSeq, tenantId -> 정확 매칭 (*Id)
  * - kind, status -> 직접 매핑 (enum)
  *
  * 커스텀 처리:
@@ -19,8 +19,8 @@ import { Asset } from "@cocrepo/entity";
  * - statusFilter -> removedAt 필터
  */
 export class AssetQueryDto extends EntityQueryType(Asset, [
-	"folderId",
-	"spaceId",
+	"folderSeq",
+	"spaceSeq",
 	"kind",
 	"status",
 ] as const) {

@@ -66,9 +66,9 @@ export class RoutinesController {
 
 	/**
 	 * 루틴 상세 조회
-	 * GET /api/v1/routines/:routineId
+	 * GET /api/v1/routines/:routineSeq
 	 */
-	@Get(":routineId")
+	@Get(":routineSeq")
 	@ApiOperation({
 		operationId: "getRoutine",
 		summary: "루틴 상세 조회",
@@ -77,7 +77,7 @@ export class RoutinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "routineId",
+		name: "routineSeq",
 		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -89,9 +89,9 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	@ResponseMessage("루틴 상세 조회 성공")
 	async getRoutine(
-		@Param("routineId", ParseBigIntIdPipe) routineId: bigint,
+		@Param("routineSeq", ParseBigIntIdPipe) routineSeq: bigint,
 	): Promise<Routine> {
-		return this.queryBus.execute(new GetRoutineByIdQuery(routineId));
+		return this.queryBus.execute(new GetRoutineByIdQuery(routineSeq));
 	}
 
 	/**
@@ -125,9 +125,9 @@ export class RoutinesController {
 
 	/**
 	 * 루틴 수정
-	 * PATCH /api/v1/routines/:routineId
+	 * PATCH /api/v1/routines/:routineSeq
 	 */
-	@Patch(":routineId")
+	@Patch(":routineSeq")
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
@@ -138,7 +138,7 @@ export class RoutinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "routineId",
+		name: "routineSeq",
 		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -155,17 +155,17 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	@ResponseMessage("루틴 수정 성공")
 	async updateRoutine(
-		@Param("routineId", ParseBigIntIdPipe) routineId: bigint,
+		@Param("routineSeq", ParseBigIntIdPipe) routineSeq: bigint,
 		@Body() dto: UpdateRoutineDto,
 	): Promise<Routine> {
-		return this.commandBus.execute(new UpdateRoutineCommand(routineId, dto));
+		return this.commandBus.execute(new UpdateRoutineCommand(routineSeq, dto));
 	}
 
 	/**
 	 * 루틴 삭제 (소프트 삭제)
-	 * DELETE /api/v1/routines/:routineId
+	 * DELETE /api/v1/routines/:routineSeq
 	 */
-	@Delete(":routineId")
+	@Delete(":routineSeq")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -177,7 +177,7 @@ export class RoutinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "routineId",
+		name: "routineSeq",
 		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -190,8 +190,8 @@ export class RoutinesController {
 	)
 	@ResponseMessage("루틴 삭제 성공")
 	async deleteRoutine(
-		@Param("routineId", ParseBigIntIdPipe) routineId: bigint,
+		@Param("routineSeq", ParseBigIntIdPipe) routineSeq: bigint,
 	): Promise<void> {
-		await this.commandBus.execute(new DeleteRoutineCommand(routineId));
+		await this.commandBus.execute(new DeleteRoutineCommand(routineSeq));
 	}
 }

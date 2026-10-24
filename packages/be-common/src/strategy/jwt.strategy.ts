@@ -102,12 +102,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		iat: number;
 		exp: number;
 	}): Promise<User> {
-		const userId = payload.sub;
+		const userSeq = payload.sub;
 
 		// 1. Redis 캐시 조회 (실패 시 null → DB fallback)
-		const cached = await this.authCacheService.get(userId);
+		const cached = await this.authCacheService.get(userSeq);
 		if (cached) {
-			this.logger.debug(`JWT 검증 - 캐시 히트: ${userId}`);
+			this.logger.debug(`JWT 검증 - 캐시 히트: ${userSeq}`);
 			// 내부 캐시는 API 필드 변환 없이 원본 값과 User 동작을 복원합니다.
 			return hydrateEntity(
 				UserEntity,
@@ -116,11 +116,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		}
 
 		// 2. 캐시 미스 → DB 조회
-		this.logger.debug(`JWT 검증 - DB 조회: ${userId}`);
-		const user = await this.usersService.findByUserIdWithTenants(userId);
+		this.logger.debug(`JWT 검증 - DB 조회: ${userSeq}`);
+		const user = await this.usersService.findByUserIdWithTenants(userSeq);
 
 		if (!user) {
-			this.logger.warn(`사용자를 찾을 수 없음: ${userId}`);
+			this.logger.warn(`사용자를 찾을 수 없음: ${userSeq}`);
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
 		}
 
@@ -128,7 +128,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		const nowSeconds = Math.floor(Date.now() / 1000);
 		const remainingSeconds = payload.exp - nowSeconds;
 		await this.authCacheService.set(
-			userId,
+			userSeq,
 			stringifyBigIntJson(user),
 			remainingSeconds,
 		);

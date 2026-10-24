@@ -1,3 +1,3 @@
 export class DeleteAssetCommand {
-	constructor(readonly assetId: bigint) {}
+	constructor(readonly assetSeq: bigint) {}
 }

@@ -18,7 +18,7 @@ import { EntityQueryType } from "../query/entity-query-type";
  * - statusFilter -> removedAt 필터
  */
 export class AlbumQueryDto extends EntityQueryType(Album, [
-	"spaceId",
+	"spaceSeq",
 ] as const) {
 	@StringFieldOptional({ description: "앨범명 검색 (부분 일치)" })
 	name?: string;

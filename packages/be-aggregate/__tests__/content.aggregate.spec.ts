@@ -9,8 +9,8 @@ import { ContentsRepository } from "@cocrepo/repository";
 import { BadRequestException } from "@nestjs/common";
 import { ContentAggregate } from "../src/content/content.aggregate";
 
-const spaceId = 101n;
-const userId = 202n;
+const spaceSeq = 101n;
+const userSeq = 202n;
 
 describe("ContentAggregate", () => {
 	let repository: jest.Mocked<ContentsRepository>;
@@ -32,15 +32,15 @@ describe("ContentAggregate", () => {
 
 		const result = await service.listCommunityPosts({
 			skip: 0,
-			spaceId,
+			spaceSeq,
 			take: 20,
-			userId,
+			userSeq,
 		});
 
 		expect(result.totalCount).toBe(0);
 		expect(repository.findCommunityPostsBySpaceId).toHaveBeenCalledWith({
 			skip: 0,
-			spaceId,
+			spaceSeq,
 			take: 20,
 		});
 	});
@@ -54,27 +54,27 @@ describe("ContentAggregate", () => {
 		repository.createCommunityPost.mockResolvedValue(createdPost as never);
 
 		const result = await service.createCommunityPost({
-			spaceId,
+			spaceSeq,
 			text: "  함께 운동해요.  ",
 			title: "  새 글  ",
-			userId,
+			userSeq,
 		});
 
 		expect(result).toBe(createdPost);
 		expect(repository.createCommunityPost).toHaveBeenCalledWith({
-			spaceId,
+			spaceSeq,
 			text: "함께 운동해요.",
 			title: "새 글",
-			userId,
+			userSeq,
 		});
 	});
 
 	it("본문이 비어 있으면 게시글을 생성하지 않는다", async () => {
 		await expect(
 			service.createCommunityPost({
-				spaceId,
+				spaceSeq,
 				text: "   ",
-				userId,
+				userSeq,
 			}),
 		).rejects.toThrow(BadRequestException);
 		expect(repository.createCommunityPost).not.toHaveBeenCalled();

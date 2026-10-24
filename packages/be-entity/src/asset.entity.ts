@@ -25,15 +25,15 @@ import { Video } from "./video.entity";
 export class Asset extends AssetSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare assetId: AssetSchema["assetId"];
+	declare id: AssetSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceId: AssetSchema["spaceId"];
+	declare spaceSeq: AssetSchema["spaceSeq"];
 	@BigIntIdFieldMetadata({ description: "소속 폴더 ID" })
-	declare folderId: AssetSchema["folderId"];
+	declare folderSeq: AssetSchema["folderSeq"];
 	@EnumFieldMetadata(() => AssetKind, {
 		description: "에셋 종류 (IMAGE, VIDEO, DOCUMENT)",
 	})
@@ -68,7 +68,7 @@ export class Asset extends AssetSchema {
 	})
 	declare metadata: AssetSchema["metadata"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdById: AssetSchema["createdById"];
+	declare createdBySeq: AssetSchema["createdBySeq"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

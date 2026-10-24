@@ -163,12 +163,12 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 		@Headers(REQUEST_HEADER_KEYS.REFRESH_TOKEN) refreshTokenHeader?: string,
 	) {
-		const sessionId = req.cookies?.sessionId;
+		const sessionSeq = req.cookies?.sessionSeq;
 		return this.commandBus.execute(
 			new RefreshTokenWithIdpCommand(
 				req.cookies?.refreshToken,
 				refreshTokenHeader,
-				sessionId,
+				sessionSeq,
 				res,
 			),
 		);
@@ -221,7 +221,7 @@ export class AuthController {
 	) {
 		if (
 			requestedSpaceId &&
-			requestedSpaceId !== formatDatabaseId(signUpDto.spaceId)
+			requestedSpaceId !== formatDatabaseId(signUpDto.spaceSeq)
 		) {
 			throw new BadRequestException("SIGN_UP_SPACE_HEADER_MISMATCH");
 		}
@@ -340,12 +340,12 @@ export class AuthController {
 	@ApiResponseEntity(LogoutResponseDto, HttpStatus.OK)
 	@ResponseMessage("로그아웃 성공")
 	async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-		const sessionId = req.cookies?.sessionId;
+		const sessionSeq = req.cookies?.sessionSeq;
 		return this.commandBus.execute(
 			new LogoutWithCookieCommand(
 				req.cookies?.accessToken,
 				req.headers.authorization,
-				sessionId,
+				sessionSeq,
 				res,
 			),
 		);
@@ -388,58 +388,58 @@ export class AuthController {
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
-	@Post("users/:userId/unlock")
+	@Post("users/:userSeq/unlock")
 	@ApiOperation({
 		operationId: "unlockAccount",
 		summary: "계정 잠금 해제",
 		description: "잠긴 계정을 해제합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
-	@ApiParam({ name: "userId", type: String })
+	@ApiParam({ name: "userSeq", type: String })
 	@ApiAuth()
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("계정 잠금이 해제되었습니다.")
-	async unlockAccount(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
-		return this.commandBus.execute(new UnlockAccountCommand(userId));
+	async unlockAccount(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
+		return this.commandBus.execute(new UnlockAccountCommand(userSeq));
 	}
 
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
-	@Post("users/:userId/force-reset-password")
+	@Post("users/:userSeq/force-reset-password")
 	@ApiOperation({
 		operationId: "forceResetPassword",
 		summary: "비밀번호 강제 재설정",
 		description:
 			"임시 비밀번호를 생성하여 이메일로 발송합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
-	@ApiParam({ name: "userId", type: String })
+	@ApiParam({ name: "userSeq", type: String })
 	@ApiAuth()
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("임시 비밀번호가 이메일로 발송되었습니다.")
-	async forceResetPassword(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
-		return this.commandBus.execute(new ForceResetPasswordCommand(userId));
+	async forceResetPassword(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
+		return this.commandBus.execute(new ForceResetPasswordCommand(userSeq));
 	}
 
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
-	@Post("users/:userId/invalidate-sessions")
+	@Post("users/:userSeq/invalidate-sessions")
 	@ApiOperation({
 		operationId: "invalidateUserSessions",
 		summary: "사용자 전체 세션 무효화",
 		description:
 			"특정 사용자의 모든 세션을 강제 종료합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
-	@ApiParam({ name: "userId", type: String })
+	@ApiParam({ name: "userSeq", type: String })
 	@ApiAuth()
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("사용자의 모든 세션이 무효화되었습니다.")
 	async invalidateUserSessions(
-		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+		@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint,
 	) {
-		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
+		return this.commandBus.execute(new InvalidateUserSessionsCommand(userSeq));
 	}
 }

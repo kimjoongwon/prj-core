@@ -41,7 +41,7 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 	it("캐시 적중 시 내부 필드·날짜 문자열·bigint와 User 도메인 동작을 보존한다", async () => {
 		const cachedUserSnapshot = {
 			id: 9_007_199_254_740_993n,
-			userId: authenticatedUserId,
+			userSeq: authenticatedUserId,
 			name: "관리자",
 			email: "Mixed.Case@Example.COM",
 			password: "$2b$10$stored.password.hash",
@@ -52,8 +52,8 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 			passwordChangedAt: "2023-11-14T20:13:20.000Z",
 			lastLoginAt: "2023-11-14T21:13:20.000Z",
 			isPermanentlyLocked: false,
-			currentTenantId: 9_007_199_254_740_994n,
-			tenants: [{ id: 9_007_199_254_740_994n, spaceId: 301n }],
+			currentTenantSeq: 9_007_199_254_740_994n,
+			tenants: [{ id: 9_007_199_254_740_994n, spaceSeq: 301n }],
 		};
 		authCacheService.get.mockResolvedValue(
 			stringifyBigIntJson(cachedUserSnapshot),
@@ -76,13 +76,13 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 		jest.spyOn(Date, "now").mockReturnValue(jwtPayload.iat * 1000);
 		const databaseUser = hydrateEntity(User, {
 			id: 101n,
-			userId: authenticatedUserId,
+			userSeq: authenticatedUserId,
 			email: "Existing.Case@Example.COM",
 			password: "$2b$10$database.password.hash",
 			createdAt: new Date("2023-11-14T22:13:20.000Z"),
 			passwordChangedAt: new Date("2023-11-14T22:00:00.000Z"),
 			removedAt: null,
-			tenants: [{ id: 201n, spaceId: 301n }],
+			tenants: [{ id: 201n, spaceSeq: 301n }],
 		});
 		authCacheService.get.mockResolvedValue(null);
 		usersService.findByUserIdWithTenants.mockResolvedValue(databaseUser);

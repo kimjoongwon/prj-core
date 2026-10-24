@@ -8,9 +8,9 @@ export function getOrderedTenantSpaceIds(user: UserWithTenantsLike): bigint[] {
 		if (tenant.removedAt != null) {
 			continue;
 		}
-		if (!seen.has(tenant.spaceId)) {
-			seen.add(tenant.spaceId);
-			orderedSpaceIds.push(tenant.spaceId);
+		if (!seen.has(tenant.spaceSeq)) {
+			seen.add(tenant.spaceSeq);
+			orderedSpaceIds.push(tenant.spaceSeq);
 		}
 	}
 

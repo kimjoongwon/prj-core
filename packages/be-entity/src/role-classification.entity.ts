@@ -9,12 +9,12 @@ import { Role } from "./role.entity";
 export class RoleClassification extends RoleClassificationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare roleClassificationId: RoleClassificationSchema["roleClassificationId"];
+	declare id: RoleClassificationSchema["id"];
 
 	@BigIntIdFieldMetadata()
-	declare categoryId: RoleClassificationSchema["categoryId"];
+	declare categorySeq: RoleClassificationSchema["categorySeq"];
 	@BigIntIdFieldMetadata()
-	declare roleId: RoleClassificationSchema["roleId"];
+	declare roleSeq: RoleClassificationSchema["roleSeq"];
 
 	@ClassField(() => Category, { required: false })
 	category?: Category;

@@ -3,7 +3,8 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 @AbstractEntityFields()
 export abstract class AbstractAggregateEntity implements BaseEntityFields {
-	id!: bigint;
+	id!: string;
+	seq!: bigint;
 	createdAt!: Date;
 	updatedAt!: Date | null;
 	removedAt!: Date | null;

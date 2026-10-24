@@ -27,10 +27,10 @@ export type AggregateDerivative = {
 }
 
 export type DerivativeAvgAggregateOutputType = {
-  id: number | null
-  spaceId: number | null
-  createdById: number | null
-  assetId: number | null
+  seq: number | null
+  spaceSeq: number | null
+  createdBySeq: number | null
+  assetSeq: number | null
   sizeBytes: number | null
   width: number | null
   height: number | null
@@ -38,10 +38,10 @@ export type DerivativeAvgAggregateOutputType = {
 }
 
 export type DerivativeSumAggregateOutputType = {
-  id: bigint | null
-  spaceId: bigint | null
-  createdById: bigint | null
-  assetId: bigint | null
+  seq: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
+  assetSeq: bigint | null
   sizeBytes: bigint | null
   width: number | null
   height: number | null
@@ -49,14 +49,14 @@ export type DerivativeSumAggregateOutputType = {
 }
 
 export type DerivativeMinAggregateOutputType = {
-  derivativeId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  createdById: bigint | null
-  assetId: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
+  assetSeq: bigint | null
   kind: $Enums.DerivativeKind | null
   profile: string | null
   storageKey: string | null
@@ -68,14 +68,14 @@ export type DerivativeMinAggregateOutputType = {
 }
 
 export type DerivativeMaxAggregateOutputType = {
-  derivativeId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  createdById: bigint | null
-  assetId: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
+  assetSeq: bigint | null
   kind: $Enums.DerivativeKind | null
   profile: string | null
   storageKey: string | null
@@ -87,14 +87,14 @@ export type DerivativeMaxAggregateOutputType = {
 }
 
 export type DerivativeCountAggregateOutputType = {
-  derivativeId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceId: number
-  createdById: number
-  assetId: number
+  spaceSeq: number
+  createdBySeq: number
+  assetSeq: number
   kind: number
   profile: number
   storageKey: number
@@ -108,10 +108,10 @@ export type DerivativeCountAggregateOutputType = {
 
 
 export type DerivativeAvgAggregateInputType = {
-  id?: true
-  spaceId?: true
-  createdById?: true
-  assetId?: true
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
+  assetSeq?: true
   sizeBytes?: true
   width?: true
   height?: true
@@ -119,10 +119,10 @@ export type DerivativeAvgAggregateInputType = {
 }
 
 export type DerivativeSumAggregateInputType = {
-  id?: true
-  spaceId?: true
-  createdById?: true
-  assetId?: true
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
+  assetSeq?: true
   sizeBytes?: true
   width?: true
   height?: true
@@ -130,14 +130,14 @@ export type DerivativeSumAggregateInputType = {
 }
 
 export type DerivativeMinAggregateInputType = {
-  derivativeId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
-  assetId?: true
+  spaceSeq?: true
+  createdBySeq?: true
+  assetSeq?: true
   kind?: true
   profile?: true
   storageKey?: true
@@ -149,14 +149,14 @@ export type DerivativeMinAggregateInputType = {
 }
 
 export type DerivativeMaxAggregateInputType = {
-  derivativeId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
-  assetId?: true
+  spaceSeq?: true
+  createdBySeq?: true
+  assetSeq?: true
   kind?: true
   profile?: true
   storageKey?: true
@@ -168,14 +168,14 @@ export type DerivativeMaxAggregateInputType = {
 }
 
 export type DerivativeCountAggregateInputType = {
-  derivativeId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
-  assetId?: true
+  spaceSeq?: true
+  createdBySeq?: true
+  assetSeq?: true
   kind?: true
   profile?: true
   storageKey?: true
@@ -274,14 +274,14 @@ export type DerivativeGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type DerivativeGroupByOutputType = {
-  derivativeId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint
-  createdById: bigint | null
-  assetId: bigint
+  spaceSeq: bigint
+  createdBySeq: bigint | null
+  assetSeq: bigint
   kind: $Enums.DerivativeKind
   profile: string
   storageKey: string
@@ -316,14 +316,14 @@ export type DerivativeWhereInput = {
   AND?: Prisma.DerivativeWhereInput | Prisma.DerivativeWhereInput[]
   OR?: Prisma.DerivativeWhereInput[]
   NOT?: Prisma.DerivativeWhereInput | Prisma.DerivativeWhereInput[]
-  derivativeId?: Prisma.StringFilter<"Derivative"> | string
-  id?: Prisma.BigIntFilter<"Derivative"> | bigint | number
+  id?: Prisma.StringFilter<"Derivative"> | string
+  seq?: Prisma.BigIntFilter<"Derivative"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Derivative"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Derivative"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Derivative"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Derivative"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Derivative"> | bigint | number | null
-  assetId?: Prisma.BigIntFilter<"Derivative"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"Derivative"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Derivative"> | bigint | number | null
+  assetSeq?: Prisma.BigIntFilter<"Derivative"> | bigint | number
   kind?: Prisma.EnumDerivativeKindFilter<"Derivative"> | $Enums.DerivativeKind
   profile?: Prisma.StringFilter<"Derivative"> | string
   storageKey?: Prisma.StringFilter<"Derivative"> | string
@@ -338,14 +338,14 @@ export type DerivativeWhereInput = {
 }
 
 export type DerivativeOrderByWithRelationInput = {
-  derivativeId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   profile?: Prisma.SortOrder
   storageKey?: Prisma.SortOrder
@@ -360,19 +360,19 @@ export type DerivativeOrderByWithRelationInput = {
 }
 
 export type DerivativeWhereUniqueInput = Prisma.AtLeast<{
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   storageKey?: string
-  assetId_kind_profile?: Prisma.DerivativeAssetIdKindProfileCompoundUniqueInput
+  assetSeq_kind_profile?: Prisma.DerivativeAssetSeqKindProfileCompoundUniqueInput
   AND?: Prisma.DerivativeWhereInput | Prisma.DerivativeWhereInput[]
   OR?: Prisma.DerivativeWhereInput[]
   NOT?: Prisma.DerivativeWhereInput | Prisma.DerivativeWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Derivative"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Derivative"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Derivative"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Derivative"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Derivative"> | bigint | number | null
-  assetId?: Prisma.BigIntFilter<"Derivative"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"Derivative"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Derivative"> | bigint | number | null
+  assetSeq?: Prisma.BigIntFilter<"Derivative"> | bigint | number
   kind?: Prisma.EnumDerivativeKindFilter<"Derivative"> | $Enums.DerivativeKind
   profile?: Prisma.StringFilter<"Derivative"> | string
   mimeType?: Prisma.StringFilter<"Derivative"> | string
@@ -383,17 +383,17 @@ export type DerivativeWhereUniqueInput = Prisma.AtLeast<{
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
-}, "id" | "derivativeId" | "storageKey" | "assetId_kind_profile">
+}, "seq" | "id" | "storageKey" | "assetSeq_kind_profile">
 
 export type DerivativeOrderByWithAggregationInput = {
-  derivativeId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   profile?: Prisma.SortOrder
   storageKey?: Prisma.SortOrder
@@ -413,14 +413,14 @@ export type DerivativeScalarWhereWithAggregatesInput = {
   AND?: Prisma.DerivativeScalarWhereWithAggregatesInput | Prisma.DerivativeScalarWhereWithAggregatesInput[]
   OR?: Prisma.DerivativeScalarWhereWithAggregatesInput[]
   NOT?: Prisma.DerivativeScalarWhereWithAggregatesInput | Prisma.DerivativeScalarWhereWithAggregatesInput[]
-  derivativeId?: Prisma.StringWithAggregatesFilter<"Derivative"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"Derivative"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"Derivative"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"Derivative"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Derivative"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Derivative"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Derivative"> | Date | string | null
-  spaceId?: Prisma.BigIntWithAggregatesFilter<"Derivative"> | bigint | number
-  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"Derivative"> | bigint | number | null
-  assetId?: Prisma.BigIntWithAggregatesFilter<"Derivative"> | bigint | number
+  spaceSeq?: Prisma.BigIntWithAggregatesFilter<"Derivative"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableWithAggregatesFilter<"Derivative"> | bigint | number | null
+  assetSeq?: Prisma.BigIntWithAggregatesFilter<"Derivative"> | bigint | number
   kind?: Prisma.EnumDerivativeKindWithAggregatesFilter<"Derivative"> | $Enums.DerivativeKind
   profile?: Prisma.StringWithAggregatesFilter<"Derivative"> | string
   storageKey?: Prisma.StringWithAggregatesFilter<"Derivative"> | string
@@ -432,8 +432,8 @@ export type DerivativeScalarWhereWithAggregatesInput = {
 }
 
 export type DerivativeCreateInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -451,14 +451,14 @@ export type DerivativeCreateInput = {
 }
 
 export type DerivativeUncheckedCreateInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
-  assetId: bigint | number
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
+  assetSeq: bigint | number
   kind: $Enums.DerivativeKind
   profile?: string
   storageKey: string
@@ -470,8 +470,8 @@ export type DerivativeUncheckedCreateInput = {
 }
 
 export type DerivativeUpdateInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -489,14 +489,14 @@ export type DerivativeUpdateInput = {
 }
 
 export type DerivativeUncheckedUpdateInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  assetId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assetSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumDerivativeKindFieldUpdateOperationsInput | $Enums.DerivativeKind
   profile?: Prisma.StringFieldUpdateOperationsInput | string
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -508,14 +508,14 @@ export type DerivativeUncheckedUpdateInput = {
 }
 
 export type DerivativeCreateManyInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
-  assetId: bigint | number
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
+  assetSeq: bigint | number
   kind: $Enums.DerivativeKind
   profile?: string
   storageKey: string
@@ -527,8 +527,8 @@ export type DerivativeCreateManyInput = {
 }
 
 export type DerivativeUpdateManyMutationInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543,14 +543,14 @@ export type DerivativeUpdateManyMutationInput = {
 }
 
 export type DerivativeUncheckedUpdateManyInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  assetId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assetSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumDerivativeKindFieldUpdateOperationsInput | $Enums.DerivativeKind
   profile?: Prisma.StringFieldUpdateOperationsInput | string
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -571,21 +571,21 @@ export type DerivativeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type DerivativeAssetIdKindProfileCompoundUniqueInput = {
-  assetId: bigint | number
+export type DerivativeAssetSeqKindProfileCompoundUniqueInput = {
+  assetSeq: bigint | number
   kind: $Enums.DerivativeKind
   profile: string
 }
 
 export type DerivativeCountOrderByAggregateInput = {
-  derivativeId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   profile?: Prisma.SortOrder
   storageKey?: Prisma.SortOrder
@@ -597,10 +597,10 @@ export type DerivativeCountOrderByAggregateInput = {
 }
 
 export type DerivativeAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
@@ -608,14 +608,14 @@ export type DerivativeAvgOrderByAggregateInput = {
 }
 
 export type DerivativeMaxOrderByAggregateInput = {
-  derivativeId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   profile?: Prisma.SortOrder
   storageKey?: Prisma.SortOrder
@@ -627,14 +627,14 @@ export type DerivativeMaxOrderByAggregateInput = {
 }
 
 export type DerivativeMinOrderByAggregateInput = {
-  derivativeId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   profile?: Prisma.SortOrder
   storageKey?: Prisma.SortOrder
@@ -646,10 +646,10 @@ export type DerivativeMinOrderByAggregateInput = {
 }
 
 export type DerivativeSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
@@ -787,8 +787,8 @@ export type DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type DerivativeCreateWithoutAssetInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -805,13 +805,13 @@ export type DerivativeCreateWithoutAssetInput = {
 }
 
 export type DerivativeUncheckedCreateWithoutAssetInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   kind: $Enums.DerivativeKind
   profile?: string
   storageKey: string
@@ -852,14 +852,14 @@ export type DerivativeScalarWhereInput = {
   AND?: Prisma.DerivativeScalarWhereInput | Prisma.DerivativeScalarWhereInput[]
   OR?: Prisma.DerivativeScalarWhereInput[]
   NOT?: Prisma.DerivativeScalarWhereInput | Prisma.DerivativeScalarWhereInput[]
-  derivativeId?: Prisma.StringFilter<"Derivative"> | string
-  id?: Prisma.BigIntFilter<"Derivative"> | bigint | number
+  id?: Prisma.StringFilter<"Derivative"> | string
+  seq?: Prisma.BigIntFilter<"Derivative"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Derivative"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Derivative"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Derivative"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Derivative"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Derivative"> | bigint | number | null
-  assetId?: Prisma.BigIntFilter<"Derivative"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"Derivative"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Derivative"> | bigint | number | null
+  assetSeq?: Prisma.BigIntFilter<"Derivative"> | bigint | number
   kind?: Prisma.EnumDerivativeKindFilter<"Derivative"> | $Enums.DerivativeKind
   profile?: Prisma.StringFilter<"Derivative"> | string
   storageKey?: Prisma.StringFilter<"Derivative"> | string
@@ -871,8 +871,8 @@ export type DerivativeScalarWhereInput = {
 }
 
 export type DerivativeCreateWithoutSpaceInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -889,13 +889,13 @@ export type DerivativeCreateWithoutSpaceInput = {
 }
 
 export type DerivativeUncheckedCreateWithoutSpaceInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: bigint | number | null
-  assetId: bigint | number
+  createdBySeq?: bigint | number | null
+  assetSeq: bigint | number
   kind: $Enums.DerivativeKind
   profile?: string
   storageKey: string
@@ -933,8 +933,8 @@ export type DerivativeUpdateManyWithWhereWithoutSpaceInput = {
 }
 
 export type DerivativeCreateWithoutCreatedByInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -951,13 +951,13 @@ export type DerivativeCreateWithoutCreatedByInput = {
 }
 
 export type DerivativeUncheckedCreateWithoutCreatedByInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  assetId: bigint | number
+  spaceSeq: bigint | number
+  assetSeq: bigint | number
   kind: $Enums.DerivativeKind
   profile?: string
   storageKey: string
@@ -995,13 +995,13 @@ export type DerivativeUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type DerivativeCreateManyAssetInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   kind: $Enums.DerivativeKind
   profile?: string
   storageKey: string
@@ -1013,8 +1013,8 @@ export type DerivativeCreateManyAssetInput = {
 }
 
 export type DerivativeUpdateWithoutAssetInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1031,13 +1031,13 @@ export type DerivativeUpdateWithoutAssetInput = {
 }
 
 export type DerivativeUncheckedUpdateWithoutAssetInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   kind?: Prisma.EnumDerivativeKindFieldUpdateOperationsInput | $Enums.DerivativeKind
   profile?: Prisma.StringFieldUpdateOperationsInput | string
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1049,13 +1049,13 @@ export type DerivativeUncheckedUpdateWithoutAssetInput = {
 }
 
 export type DerivativeUncheckedUpdateManyWithoutAssetInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   kind?: Prisma.EnumDerivativeKindFieldUpdateOperationsInput | $Enums.DerivativeKind
   profile?: Prisma.StringFieldUpdateOperationsInput | string
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1067,13 +1067,13 @@ export type DerivativeUncheckedUpdateManyWithoutAssetInput = {
 }
 
 export type DerivativeCreateManySpaceInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: bigint | number | null
-  assetId: bigint | number
+  createdBySeq?: bigint | number | null
+  assetSeq: bigint | number
   kind: $Enums.DerivativeKind
   profile?: string
   storageKey: string
@@ -1085,8 +1085,8 @@ export type DerivativeCreateManySpaceInput = {
 }
 
 export type DerivativeUpdateWithoutSpaceInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1103,13 +1103,13 @@ export type DerivativeUpdateWithoutSpaceInput = {
 }
 
 export type DerivativeUncheckedUpdateWithoutSpaceInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  assetId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assetSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumDerivativeKindFieldUpdateOperationsInput | $Enums.DerivativeKind
   profile?: Prisma.StringFieldUpdateOperationsInput | string
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1121,13 +1121,13 @@ export type DerivativeUncheckedUpdateWithoutSpaceInput = {
 }
 
 export type DerivativeUncheckedUpdateManyWithoutSpaceInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  assetId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assetSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumDerivativeKindFieldUpdateOperationsInput | $Enums.DerivativeKind
   profile?: Prisma.StringFieldUpdateOperationsInput | string
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1139,13 +1139,13 @@ export type DerivativeUncheckedUpdateManyWithoutSpaceInput = {
 }
 
 export type DerivativeCreateManyCreatedByInput = {
-  derivativeId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  assetId: bigint | number
+  spaceSeq: bigint | number
+  assetSeq: bigint | number
   kind: $Enums.DerivativeKind
   profile?: string
   storageKey: string
@@ -1157,8 +1157,8 @@ export type DerivativeCreateManyCreatedByInput = {
 }
 
 export type DerivativeUpdateWithoutCreatedByInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1175,13 +1175,13 @@ export type DerivativeUpdateWithoutCreatedByInput = {
 }
 
 export type DerivativeUncheckedUpdateWithoutCreatedByInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  assetId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  assetSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumDerivativeKindFieldUpdateOperationsInput | $Enums.DerivativeKind
   profile?: Prisma.StringFieldUpdateOperationsInput | string
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1193,13 +1193,13 @@ export type DerivativeUncheckedUpdateWithoutCreatedByInput = {
 }
 
 export type DerivativeUncheckedUpdateManyWithoutCreatedByInput = {
-  derivativeId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  assetId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  assetSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumDerivativeKindFieldUpdateOperationsInput | $Enums.DerivativeKind
   profile?: Prisma.StringFieldUpdateOperationsInput | string
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1213,14 +1213,14 @@ export type DerivativeUncheckedUpdateManyWithoutCreatedByInput = {
 
 
 export type DerivativeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  derivativeId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
-  assetId?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
+  assetSeq?: boolean
   kind?: boolean
   profile?: boolean
   storageKey?: boolean
@@ -1235,14 +1235,14 @@ export type DerivativeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 }, ExtArgs["result"]["derivative"]>
 
 export type DerivativeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  derivativeId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
-  assetId?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
+  assetSeq?: boolean
   kind?: boolean
   profile?: boolean
   storageKey?: boolean
@@ -1257,14 +1257,14 @@ export type DerivativeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 }, ExtArgs["result"]["derivative"]>
 
 export type DerivativeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  derivativeId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
-  assetId?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
+  assetSeq?: boolean
   kind?: boolean
   profile?: boolean
   storageKey?: boolean
@@ -1279,14 +1279,14 @@ export type DerivativeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 }, ExtArgs["result"]["derivative"]>
 
 export type DerivativeSelectScalar = {
-  derivativeId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
-  assetId?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
+  assetSeq?: boolean
   kind?: boolean
   profile?: boolean
   storageKey?: boolean
@@ -1297,7 +1297,7 @@ export type DerivativeSelectScalar = {
   durationMs?: boolean
 }
 
-export type DerivativeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"derivativeId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById" | "assetId" | "kind" | "profile" | "storageKey" | "mimeType" | "sizeBytes" | "width" | "height" | "durationMs", ExtArgs["result"]["derivative"]>
+export type DerivativeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq" | "assetSeq" | "kind" | "profile" | "storageKey" | "mimeType" | "sizeBytes" | "width" | "height" | "durationMs", ExtArgs["result"]["derivative"]>
 export type DerivativeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Derivative$createdByArgs<ExtArgs>
@@ -1322,20 +1322,20 @@ export type $DerivativePayload<ExtArgs extends runtime.Types.Extensions.Internal
     asset: Prisma.$AssetPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    derivativeId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
     /**
      * @displayName 소속 Space
      */
-    spaceId: bigint
-    createdById: bigint | null
+    spaceSeq: bigint
+    createdBySeq: bigint | null
     /**
      * @displayName 원본 Asset 내부 순번
      */
-    assetId: bigint
+    assetSeq: bigint
     /**
      * @displayName 파생 리소스 종류
      */
@@ -1451,8 +1451,8 @@ export interface DerivativeDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Get first 10 Derivatives
    * const derivatives = await prisma.derivative.findMany({ take: 10 })
    *
-   * // Only select the `derivativeId`
-   * const derivativeWithDerivativeIdOnly = await prisma.derivative.findMany({ select: { derivativeId: true } })
+   * // Only select the `id`
+   * const derivativeWithIdOnly = await prisma.derivative.findMany({ select: { id: true } })
    *
    */
   findMany<T extends DerivativeFindManyArgs>(args?: Prisma.SelectSubset<T, DerivativeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DerivativePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1496,9 +1496,9 @@ export interface DerivativeDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    *
-   * // Create many Derivatives and only return the `derivativeId`
-   * const derivativeWithDerivativeIdOnly = await prisma.derivative.createManyAndReturn({
-   *   select: { derivativeId: true },
+   * // Create many Derivatives and only return the `id`
+   * const derivativeWithIdOnly = await prisma.derivative.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1587,9 +1587,9 @@ export interface DerivativeDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    *
-   * // Update zero or more Derivatives and only return the `derivativeId`
-   * const derivativeWithDerivativeIdOnly = await prisma.derivative.updateManyAndReturn({
-   *   select: { derivativeId: true },
+   * // Update zero or more Derivatives and only return the `id`
+   * const derivativeWithIdOnly = await prisma.derivative.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1794,14 +1794,14 @@ export interface Prisma__DerivativeClient<T, Null = never, ExtArgs extends runti
  * Fields of the Derivative model
  */
 export interface DerivativeFieldRefs {
-  readonly derivativeId: Prisma.FieldRef<"Derivative", 'String'>
-  readonly id: Prisma.FieldRef<"Derivative", 'BigInt'>
+  readonly id: Prisma.FieldRef<"Derivative", 'String'>
+  readonly seq: Prisma.FieldRef<"Derivative", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Derivative", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Derivative", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Derivative", 'DateTime'>
-  readonly spaceId: Prisma.FieldRef<"Derivative", 'BigInt'>
-  readonly createdById: Prisma.FieldRef<"Derivative", 'BigInt'>
-  readonly assetId: Prisma.FieldRef<"Derivative", 'BigInt'>
+  readonly spaceSeq: Prisma.FieldRef<"Derivative", 'BigInt'>
+  readonly createdBySeq: Prisma.FieldRef<"Derivative", 'BigInt'>
+  readonly assetSeq: Prisma.FieldRef<"Derivative", 'BigInt'>
   readonly kind: Prisma.FieldRef<"Derivative", 'DerivativeKind'>
   readonly profile: Prisma.FieldRef<"Derivative", 'String'>
   readonly storageKey: Prisma.FieldRef<"Derivative", 'String'>

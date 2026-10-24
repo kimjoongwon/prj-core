@@ -54,7 +54,7 @@ export class TenantAccessRequestsRepository {
 		this.logger.debug(`테넌트 접근 신청 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: tenantAccessRequestInclude,
 		});
 
@@ -65,7 +65,7 @@ export class TenantAccessRequestsRepository {
 		this.logger.debug(`테넌트 접근 신청 상세 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: tenantAccessRequestInclude,
 		});
 
@@ -102,11 +102,11 @@ export class TenantAccessRequestsRepository {
 	async create(
 		data: AutoIdentityCreateInput<
 			Prisma.TenantAccessRequestUncheckedCreateInput,
-			"tenantAccessRequestId"
+			"id"
 		>,
 	): Promise<TenantAccessRequest> {
 		this.logger.debug(
-			`테넌트 접근 신청 생성: requester=${data.requesterId.toString()}, space=${data.spaceId.toString()}`,
+			`테넌트 접근 신청 생성: requester=${data.requesterSeq.toString()}, space=${data.spaceSeq.toString()}`,
 		);
 		const result = await this.txHost.tx.tenantAccessRequest.create({
 			data,
@@ -120,12 +120,12 @@ export class TenantAccessRequestsRepository {
 		id: bigint,
 		data: AutoIdentityUpdateInput<
 			Prisma.TenantAccessRequestUncheckedUpdateInput,
-			"tenantAccessRequestId"
+			"id"
 		>,
 	): Promise<TenantAccessRequest> {
 		this.logger.debug(`테넌트 접근 신청 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.tenantAccessRequest.update({
-			where: { id },
+			where: { seq: id },
 			data,
 			include: tenantAccessRequestInclude,
 		});

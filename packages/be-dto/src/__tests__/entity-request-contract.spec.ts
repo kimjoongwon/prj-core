@@ -59,7 +59,7 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 		await expect(
 			validateRequest(requestType, {
 				...roleBody,
-				roleId: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+				roleSeq: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
 			}),
 		).rejects.toThrow();
 	});
@@ -80,22 +80,22 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 		await expect(
 			validateRequest(CreateFolderDto, {
 				name: "images",
-				parentFolderId: "42",
+				parentFolderSeq: "42",
 			}),
-		).resolves.toMatchObject({ parentFolderId: 42n });
+		).resolves.toMatchObject({ parentFolderSeq: 42n });
 		await expect(
 			validateRequest(CreateFolderDto, { name: "invalid/name" }),
 		).rejects.toThrow();
 		await expect(
 			validateRequest(CreateFolderDto, {
 				name: "images",
-				parentFolderId: "invalid",
+				parentFolderSeq: "invalid",
 			}),
 		).rejects.toThrow();
 		await expect(
 			validateRequest(CreateFolderDto, {
 				name: "images",
-				parentFolderId: null,
+				parentFolderSeq: null,
 			}),
 		).resolves.toBeInstanceOf(CreateFolderDto);
 		await expect(
@@ -132,17 +132,17 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 	it("Ability의 엄격한 boolean과 JSON 입력은 DTO 전용 계약을 유지한다", async () => {
 		await expect(
 			validateRequest(CreateAbilityDto, {
-				actionId: "1",
-				subjectId: "2",
+				actionSeq: "1",
+				subjectSeq: "2",
 				name: "read",
 				inverted: false,
 				conditions: { ownerId: "1" },
 			}),
-		).resolves.toMatchObject({ actionId: 1n, subjectId: 2n });
+		).resolves.toMatchObject({ actionSeq: 1n, subjectSeq: 2n });
 		await expect(
 			validateRequest(CreateAbilityDto, {
-				actionId: "1",
-				subjectId: "2",
+				actionSeq: "1",
+				subjectSeq: "2",
 				name: "read",
 				inverted: "false",
 			}),
@@ -151,8 +151,8 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 
 	it("파일 크기는 DB bigint와 구분하여 기존 숫자 입력으로 변환한다", async () => {
 		const assetBody = {
-			spaceId: "1",
-			folderId: "2",
+			spaceSeq: "1",
+			folderSeq: "2",
 			kind: "IMAGE",
 			status: "READY",
 			originalName: "image.png",

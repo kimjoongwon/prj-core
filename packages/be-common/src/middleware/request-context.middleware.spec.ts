@@ -23,8 +23,8 @@ describe("RequestContextMiddleware", () => {
 		tenants: [
 			{
 				id: 201n,
-				spaceId: 301n,
-				roleId: 401n,
+				spaceSeq: 301n,
+				roleSeq: 401n,
 				role: {
 					name: "MEMBER",
 					classification: {
@@ -145,14 +145,14 @@ describe("RequestContextMiddleware", () => {
 					tenants: [
 						{
 							id: 202n,
-							spaceId: 301n,
-							roleId: 402n,
+							spaceSeq: 301n,
+							roleSeq: 402n,
 							role: { name: "MEMBER" },
 						},
 						{
 							id: 203n,
-							spaceId: 301n,
-							roleId: 403n,
+							spaceSeq: 301n,
+							roleSeq: 403n,
 							role: { name: "PLATFORM_ADMIN" },
 						},
 					],
@@ -180,8 +180,8 @@ describe("RequestContextMiddleware", () => {
 					tenants: [
 						{
 							id: 204n,
-							spaceId: 301n,
-							roleId: 404n,
+							spaceSeq: 301n,
+							roleSeq: 404n,
 							role: { name: "PLATFORM_ADMIN" },
 							removedAt: new Date(),
 						},

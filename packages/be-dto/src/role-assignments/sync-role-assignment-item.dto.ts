@@ -7,7 +7,7 @@ export class SyncRoleAssignmentItemDto {
 		description: "Policy ID (Role에 할당할 정책)",
 		example: "1",
 	})
-	policyId!: bigint;
+	policySeq!: bigint;
 
 	@ApiProperty({
 		description: "활성화 여부",

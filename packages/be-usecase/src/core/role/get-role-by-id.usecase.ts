@@ -7,6 +7,6 @@ export class GetRoleByIdUseCase {
 	constructor(private readonly rolesService: RoleAggregate) {}
 
 	execute(query: GetRoleByIdQuery): Promise<unknown> {
-		return this.rolesService.getById(query.roleId);
+		return this.rolesService.getById(query.roleSeq);
 	}
 }

@@ -16,18 +16,18 @@ import { User } from "./user.entity";
 export class Folder extends FolderSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare folderId: FolderSchema["folderId"];
+	declare id: FolderSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceId: FolderSchema["spaceId"];
+	declare spaceSeq: FolderSchema["spaceSeq"];
 	@BigIntIdFieldOptionalMetadata({
 		nullable: true,
 		description: "부모 폴더 ID (루트면 null)",
 	})
-	declare parentFolderId: FolderSchema["parentFolderId"];
+	declare parentFolderSeq: FolderSchema["parentFolderSeq"];
 	@StringFieldMetadata({ description: "폴더명" })
 	declare name: FolderSchema["name"];
 	@StringFieldMetadata({ description: "전체 경로 (예: /images/2024)" })
@@ -35,7 +35,7 @@ export class Folder extends FolderSchema {
 	@NumberFieldMetadata({ description: "정렬 순서", int: true })
 	declare sortOrder: FolderSchema["sortOrder"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdById: FolderSchema["createdById"];
+	declare createdBySeq: FolderSchema["createdBySeq"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)
@@ -62,7 +62,7 @@ export class Folder extends FolderSchema {
 	 * 루트 폴더인지 확인합니다
 	 */
 	isRoot(): boolean {
-		return this.parentFolderId === null;
+		return this.parentFolderSeq === null;
 	}
 
 	/**
@@ -77,8 +77,8 @@ export class Folder extends FolderSchema {
 	 * 특정 폴더의 하위 폴더인지 확인합니다
 	 */
 	isDescendantOf(folderId: bigint): boolean {
-		if (!this.parentFolderId) return false;
-		if (this.parentFolderId === folderId) return true;
+		if (!this.parentFolderSeq) return false;
+		if (this.parentFolderSeq === folderId) return true;
 		// parent가 로드되어 있으면 재귀적으로 확인
 		if (this.parent) {
 			return this.parent.isDescendantOf(folderId);

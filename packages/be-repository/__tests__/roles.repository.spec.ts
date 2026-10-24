@@ -59,15 +59,15 @@ describe("RolesRepository", () => {
 	describe("findById", () => {
 		it("ID로 역할을 조회해야 한다", async () => {
 			// Given
-			const roleId = 1n;
+			const roleSeq = 1n;
 			mockTxHost.tx.role.findUnique.mockResolvedValue(mockRoleData);
 
 			// When
-			const result = await repository.findById(roleId);
+			const result = await repository.findById(roleSeq);
 
 			// Then
 			expect(mockTxHost.tx.role.findUnique).toHaveBeenCalledWith({
-				where: { id: roleId },
+				where: { id: roleSeq },
 			});
 			expect(result).toBeInstanceOf(Role);
 			expect(result?.id).toBe(mockRoleData.id);
@@ -76,15 +76,15 @@ describe("RolesRepository", () => {
 
 		it("역할이 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const roleId = 999n;
+			const roleSeq = 999n;
 			mockTxHost.tx.role.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findById(roleId);
+			const result = await repository.findById(roleSeq);
 
 			// Then
 			expect(mockTxHost.tx.role.findUnique).toHaveBeenCalledWith({
-				where: { id: roleId },
+				where: { id: roleSeq },
 			});
 			expect(result).toBeNull();
 		});
@@ -181,7 +181,7 @@ describe("RolesRepository", () => {
 	describe("updateById", () => {
 		it("역할을 수정해야 한다", async () => {
 			// Given
-			const roleId = 1n;
+			const roleSeq = 1n;
 			const updateData = { name: SYSTEM_ROLES.COMPANY_MANAGER };
 			mockTxHost.tx.role.update.mockResolvedValue({
 				...mockRoleData,
@@ -189,11 +189,11 @@ describe("RolesRepository", () => {
 			});
 
 			// When
-			const result = await repository.updateById(roleId, updateData);
+			const result = await repository.updateById(roleSeq, updateData);
 
 			// Then
 			expect(mockTxHost.tx.role.update).toHaveBeenCalledWith({
-				where: { id: roleId },
+				where: { id: roleSeq },
 				data: updateData,
 			});
 			expect(result).toBeInstanceOf(Role);

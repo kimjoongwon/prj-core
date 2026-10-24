@@ -7,8 +7,8 @@ export class ListInquiriesQuery implements ListInquiriesQueryInput {
 	readonly channel?: ListInquiriesQueryInput["channel"];
 	readonly priority?: ListInquiriesQueryInput["priority"];
 	readonly inquiryStatus?: ListInquiriesQueryInput["inquiryStatus"];
-	readonly customerId?: ListInquiriesQueryInput["customerId"];
-	readonly assigneeId?: ListInquiriesQueryInput["assigneeId"];
+	readonly customerSeq?: ListInquiriesQueryInput["customerSeq"];
+	readonly assigneeSeq?: ListInquiriesQueryInput["assigneeSeq"];
 	readonly spaceIds?: ListInquiriesQueryInput["spaceIds"];
 	readonly startDate?: ListInquiriesQueryInput["startDate"];
 	readonly endDate?: ListInquiriesQueryInput["endDate"];

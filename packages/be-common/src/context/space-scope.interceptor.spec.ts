@@ -59,7 +59,7 @@ describe("SpaceScopeInterceptor", () => {
 	it("데코레이터가 없으면 현재 Space와 하위 Space scope를 사용해야 한다", async () => {
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
-				return { id: 201n, spaceId: 301n };
+				return { id: 201n, spaceSeq: 301n };
 			}
 			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
 			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
@@ -85,7 +85,7 @@ describe("SpaceScopeInterceptor", () => {
 		});
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
-				return { id: 201n, spaceId: 301n };
+				return { id: 201n, spaceSeq: 301n };
 			}
 			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
 			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
@@ -111,7 +111,7 @@ describe("SpaceScopeInterceptor", () => {
 		});
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
-				return { id: 201n, spaceId: 301n };
+				return { id: 201n, spaceSeq: 301n };
 			}
 			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
 			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
@@ -135,7 +135,7 @@ describe("SpaceScopeInterceptor", () => {
 			if (key === CONTEXT_KEYS.TENANT) {
 				return {
 					id: 201n,
-					spaceId: 301n,
+					spaceSeq: 301n,
 					role: { name: "PLATFORM_ADMIN" },
 				};
 			}
@@ -160,7 +160,7 @@ describe("SpaceScopeInterceptor", () => {
 			if (key === CONTEXT_KEYS.TENANT) {
 				return {
 					id: 201n,
-					spaceId: undefined,
+					spaceSeq: undefined,
 					space: { id: 303n },
 				};
 			}

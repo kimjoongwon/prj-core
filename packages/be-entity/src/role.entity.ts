@@ -16,7 +16,7 @@ export class Role extends RoleSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
-	declare roleId: RoleSchema["roleId"];
+	declare id: RoleSchema["id"];
 
 	@StringFieldMetadata({
 		description: "역할 식별자",

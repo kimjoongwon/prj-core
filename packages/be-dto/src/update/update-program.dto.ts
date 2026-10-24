@@ -3,8 +3,8 @@ import { PartialType, PickType } from "@nestjs/swagger";
 
 export class UpdateProgramDto extends PartialType(
 	PickType(Program, [
-		"routineId",
-		"instructorId",
+		"routineSeq",
+		"instructorSeq",
 		"capacity",
 		"name",
 		"level",

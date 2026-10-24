@@ -1,7 +1,7 @@
 import type { LanguageCode } from "@cocrepo/prisma";
 
 export interface GetTimelinesQueryInput {
-	timelineId?: bigint | null;
+	timelineSeq?: bigint | null;
 	search?: string | null;
 	contentLanguageCode?: LanguageCode;
 	sort?: string[];

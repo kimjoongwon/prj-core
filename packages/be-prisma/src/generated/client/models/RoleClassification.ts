@@ -27,42 +27,42 @@ export type AggregateRoleClassification = {
 }
 
 export type RoleClassificationAvgAggregateOutputType = {
-  id: number | null
-  categoryId: number | null
-  roleId: number | null
+  seq: number | null
+  categorySeq: number | null
+  roleSeq: number | null
 }
 
 export type RoleClassificationSumAggregateOutputType = {
-  id: bigint | null
-  categoryId: bigint | null
-  roleId: bigint | null
+  seq: bigint | null
+  categorySeq: bigint | null
+  roleSeq: bigint | null
 }
 
 export type RoleClassificationMinAggregateOutputType = {
-  roleClassificationId: string | null
-  id: bigint | null
-  categoryId: bigint | null
-  roleId: bigint | null
+  id: string | null
+  seq: bigint | null
+  categorySeq: bigint | null
+  roleSeq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
 }
 
 export type RoleClassificationMaxAggregateOutputType = {
-  roleClassificationId: string | null
-  id: bigint | null
-  categoryId: bigint | null
-  roleId: bigint | null
+  id: string | null
+  seq: bigint | null
+  categorySeq: bigint | null
+  roleSeq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
 }
 
 export type RoleClassificationCountAggregateOutputType = {
-  roleClassificationId: number
   id: number
-  categoryId: number
-  roleId: number
+  seq: number
+  categorySeq: number
+  roleSeq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -71,42 +71,42 @@ export type RoleClassificationCountAggregateOutputType = {
 
 
 export type RoleClassificationAvgAggregateInputType = {
-  id?: true
-  categoryId?: true
-  roleId?: true
+  seq?: true
+  categorySeq?: true
+  roleSeq?: true
 }
 
 export type RoleClassificationSumAggregateInputType = {
-  id?: true
-  categoryId?: true
-  roleId?: true
+  seq?: true
+  categorySeq?: true
+  roleSeq?: true
 }
 
 export type RoleClassificationMinAggregateInputType = {
-  roleClassificationId?: true
   id?: true
-  categoryId?: true
-  roleId?: true
+  seq?: true
+  categorySeq?: true
+  roleSeq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
 }
 
 export type RoleClassificationMaxAggregateInputType = {
-  roleClassificationId?: true
   id?: true
-  categoryId?: true
-  roleId?: true
+  seq?: true
+  categorySeq?: true
+  roleSeq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
 }
 
 export type RoleClassificationCountAggregateInputType = {
-  roleClassificationId?: true
   id?: true
-  categoryId?: true
-  roleId?: true
+  seq?: true
+  categorySeq?: true
+  roleSeq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -200,10 +200,10 @@ export type RoleClassificationGroupByArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 export type RoleClassificationGroupByOutputType = {
-  roleClassificationId: string
-  id: bigint
-  categoryId: bigint
-  roleId: bigint
+  id: string
+  seq: bigint
+  categorySeq: bigint
+  roleSeq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -233,10 +233,10 @@ export type RoleClassificationWhereInput = {
   AND?: Prisma.RoleClassificationWhereInput | Prisma.RoleClassificationWhereInput[]
   OR?: Prisma.RoleClassificationWhereInput[]
   NOT?: Prisma.RoleClassificationWhereInput | Prisma.RoleClassificationWhereInput[]
-  roleClassificationId?: Prisma.StringFilter<"RoleClassification"> | string
-  id?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
-  categoryId?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
-  roleId?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
+  id?: Prisma.StringFilter<"RoleClassification"> | string
+  seq?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
+  categorySeq?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
+  roleSeq?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"RoleClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"RoleClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"RoleClassification"> | Date | string | null
@@ -245,10 +245,10 @@ export type RoleClassificationWhereInput = {
 }
 
 export type RoleClassificationOrderByWithRelationInput = {
-  roleClassificationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -257,26 +257,26 @@ export type RoleClassificationOrderByWithRelationInput = {
 }
 
 export type RoleClassificationWhereUniqueInput = Prisma.AtLeast<{
-  roleClassificationId?: string
-  id?: bigint | number
-  roleId?: bigint | number
-  categoryId_roleId?: Prisma.RoleClassificationCategoryIdRoleIdCompoundUniqueInput
+  id?: string
+  seq?: bigint | number
+  roleSeq?: bigint | number
+  categorySeq_roleSeq?: Prisma.RoleClassificationCategorySeqRoleSeqCompoundUniqueInput
   AND?: Prisma.RoleClassificationWhereInput | Prisma.RoleClassificationWhereInput[]
   OR?: Prisma.RoleClassificationWhereInput[]
   NOT?: Prisma.RoleClassificationWhereInput | Prisma.RoleClassificationWhereInput[]
-  categoryId?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
+  categorySeq?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"RoleClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"RoleClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"RoleClassification"> | Date | string | null
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
-}, "id" | "roleClassificationId" | "roleId" | "categoryId_roleId">
+}, "seq" | "id" | "roleSeq" | "categorySeq_roleSeq">
 
 export type RoleClassificationOrderByWithAggregationInput = {
-  roleClassificationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -291,18 +291,18 @@ export type RoleClassificationScalarWhereWithAggregatesInput = {
   AND?: Prisma.RoleClassificationScalarWhereWithAggregatesInput | Prisma.RoleClassificationScalarWhereWithAggregatesInput[]
   OR?: Prisma.RoleClassificationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RoleClassificationScalarWhereWithAggregatesInput | Prisma.RoleClassificationScalarWhereWithAggregatesInput[]
-  roleClassificationId?: Prisma.StringWithAggregatesFilter<"RoleClassification"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"RoleClassification"> | bigint | number
-  categoryId?: Prisma.BigIntWithAggregatesFilter<"RoleClassification"> | bigint | number
-  roleId?: Prisma.BigIntWithAggregatesFilter<"RoleClassification"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"RoleClassification"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"RoleClassification"> | bigint | number
+  categorySeq?: Prisma.BigIntWithAggregatesFilter<"RoleClassification"> | bigint | number
+  roleSeq?: Prisma.BigIntWithAggregatesFilter<"RoleClassification"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RoleClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RoleClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RoleClassification"> | Date | string | null
 }
 
 export type RoleClassificationCreateInput = {
-  roleClassificationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -311,18 +311,18 @@ export type RoleClassificationCreateInput = {
 }
 
 export type RoleClassificationUncheckedCreateInput = {
-  roleClassificationId?: string
-  id?: bigint | number
-  categoryId: bigint | number
-  roleId: bigint | number
+  id?: string
+  seq?: bigint | number
+  categorySeq: bigint | number
+  roleSeq: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
 }
 
 export type RoleClassificationUpdateInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -331,38 +331,38 @@ export type RoleClassificationUpdateInput = {
 }
 
 export type RoleClassificationUncheckedUpdateInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  categoryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  categorySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  roleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RoleClassificationCreateManyInput = {
-  roleClassificationId?: string
-  id?: bigint | number
-  categoryId: bigint | number
-  roleId: bigint | number
+  id?: string
+  seq?: bigint | number
+  categorySeq: bigint | number
+  roleSeq: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
 }
 
 export type RoleClassificationUpdateManyMutationInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RoleClassificationUncheckedUpdateManyInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  categoryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  categorySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  roleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -378,51 +378,51 @@ export type RoleClassificationOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type RoleClassificationCategoryIdRoleIdCompoundUniqueInput = {
-  categoryId: bigint | number
-  roleId: bigint | number
+export type RoleClassificationCategorySeqRoleSeqCompoundUniqueInput = {
+  categorySeq: bigint | number
+  roleSeq: bigint | number
 }
 
 export type RoleClassificationCountOrderByAggregateInput = {
-  roleClassificationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
 }
 
 export type RoleClassificationAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
 }
 
 export type RoleClassificationMaxOrderByAggregateInput = {
-  roleClassificationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
 }
 
 export type RoleClassificationMinOrderByAggregateInput = {
-  roleClassificationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
 }
 
 export type RoleClassificationSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
 }
 
 export type RoleClassificationNullableScalarRelationFilter = {
@@ -505,8 +505,8 @@ export type RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput = {
 }
 
 export type RoleClassificationCreateWithoutCategoryInput = {
-  roleClassificationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -514,9 +514,9 @@ export type RoleClassificationCreateWithoutCategoryInput = {
 }
 
 export type RoleClassificationUncheckedCreateWithoutCategoryInput = {
-  roleClassificationId?: string
-  id?: bigint | number
-  roleId: bigint | number
+  id?: string
+  seq?: bigint | number
+  roleSeq: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -552,18 +552,18 @@ export type RoleClassificationScalarWhereInput = {
   AND?: Prisma.RoleClassificationScalarWhereInput | Prisma.RoleClassificationScalarWhereInput[]
   OR?: Prisma.RoleClassificationScalarWhereInput[]
   NOT?: Prisma.RoleClassificationScalarWhereInput | Prisma.RoleClassificationScalarWhereInput[]
-  roleClassificationId?: Prisma.StringFilter<"RoleClassification"> | string
-  id?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
-  categoryId?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
-  roleId?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
+  id?: Prisma.StringFilter<"RoleClassification"> | string
+  seq?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
+  categorySeq?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
+  roleSeq?: Prisma.BigIntFilter<"RoleClassification"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"RoleClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"RoleClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"RoleClassification"> | Date | string | null
 }
 
 export type RoleClassificationCreateWithoutRoleInput = {
-  roleClassificationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -571,9 +571,9 @@ export type RoleClassificationCreateWithoutRoleInput = {
 }
 
 export type RoleClassificationUncheckedCreateWithoutRoleInput = {
-  roleClassificationId?: string
-  id?: bigint | number
-  categoryId: bigint | number
+  id?: string
+  seq?: bigint | number
+  categorySeq: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -596,8 +596,8 @@ export type RoleClassificationUpdateToOneWithWhereWithoutRoleInput = {
 }
 
 export type RoleClassificationUpdateWithoutRoleInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -605,26 +605,26 @@ export type RoleClassificationUpdateWithoutRoleInput = {
 }
 
 export type RoleClassificationUncheckedUpdateWithoutRoleInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  categoryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  categorySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RoleClassificationCreateManyCategoryInput = {
-  roleClassificationId?: string
-  id?: bigint | number
-  roleId: bigint | number
+  id?: string
+  seq?: bigint | number
+  roleSeq: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
 }
 
 export type RoleClassificationUpdateWithoutCategoryInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -632,18 +632,18 @@ export type RoleClassificationUpdateWithoutCategoryInput = {
 }
 
 export type RoleClassificationUncheckedUpdateWithoutCategoryInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  roleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type RoleClassificationUncheckedUpdateManyWithoutCategoryInput = {
-  roleClassificationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  roleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  roleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -652,10 +652,10 @@ export type RoleClassificationUncheckedUpdateManyWithoutCategoryInput = {
 
 
 export type RoleClassificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  roleClassificationId?: boolean
   id?: boolean
-  categoryId?: boolean
-  roleId?: boolean
+  seq?: boolean
+  categorySeq?: boolean
+  roleSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -664,10 +664,10 @@ export type RoleClassificationSelect<ExtArgs extends runtime.Types.Extensions.In
 }, ExtArgs["result"]["roleClassification"]>
 
 export type RoleClassificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  roleClassificationId?: boolean
   id?: boolean
-  categoryId?: boolean
-  roleId?: boolean
+  seq?: boolean
+  categorySeq?: boolean
+  roleSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -676,10 +676,10 @@ export type RoleClassificationSelectCreateManyAndReturn<ExtArgs extends runtime.
 }, ExtArgs["result"]["roleClassification"]>
 
 export type RoleClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  roleClassificationId?: boolean
   id?: boolean
-  categoryId?: boolean
-  roleId?: boolean
+  seq?: boolean
+  categorySeq?: boolean
+  roleSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -688,16 +688,16 @@ export type RoleClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.
 }, ExtArgs["result"]["roleClassification"]>
 
 export type RoleClassificationSelectScalar = {
-  roleClassificationId?: boolean
   id?: boolean
-  categoryId?: boolean
-  roleId?: boolean
+  seq?: boolean
+  categorySeq?: boolean
+  roleSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
 }
 
-export type RoleClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"roleClassificationId" | "id" | "categoryId" | "roleId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["roleClassification"]>
+export type RoleClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "categorySeq" | "roleSeq" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["roleClassification"]>
 export type RoleClassificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
@@ -718,10 +718,10 @@ export type $RoleClassificationPayload<ExtArgs extends runtime.Types.Extensions.
     role: Prisma.$RolePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    roleClassificationId: string
-    id: bigint
-    categoryId: bigint
-    roleId: bigint
+    id: string
+    seq: bigint
+    categorySeq: bigint
+    roleSeq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -808,8 +808,8 @@ export interface RoleClassificationDelegate<ExtArgs extends runtime.Types.Extens
    * // Get first 10 RoleClassifications
    * const roleClassifications = await prisma.roleClassification.findMany({ take: 10 })
    *
-   * // Only select the `roleClassificationId`
-   * const roleClassificationWithRoleClassificationIdOnly = await prisma.roleClassification.findMany({ select: { roleClassificationId: true } })
+   * // Only select the `id`
+   * const roleClassificationWithIdOnly = await prisma.roleClassification.findMany({ select: { id: true } })
    *
    */
   findMany<T extends RoleClassificationFindManyArgs>(args?: Prisma.SelectSubset<T, RoleClassificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -853,9 +853,9 @@ export interface RoleClassificationDelegate<ExtArgs extends runtime.Types.Extens
    *   ]
    * })
    *
-   * // Create many RoleClassifications and only return the `roleClassificationId`
-   * const roleClassificationWithRoleClassificationIdOnly = await prisma.roleClassification.createManyAndReturn({
-   *   select: { roleClassificationId: true },
+   * // Create many RoleClassifications and only return the `id`
+   * const roleClassificationWithIdOnly = await prisma.roleClassification.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -944,9 +944,9 @@ export interface RoleClassificationDelegate<ExtArgs extends runtime.Types.Extens
    *   ]
    * })
    *
-   * // Update zero or more RoleClassifications and only return the `roleClassificationId`
-   * const roleClassificationWithRoleClassificationIdOnly = await prisma.roleClassification.updateManyAndReturn({
-   *   select: { roleClassificationId: true },
+   * // Update zero or more RoleClassifications and only return the `id`
+   * const roleClassificationWithIdOnly = await prisma.roleClassification.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1150,10 +1150,10 @@ export interface Prisma__RoleClassificationClient<T, Null = never, ExtArgs exten
  * Fields of the RoleClassification model
  */
 export interface RoleClassificationFieldRefs {
-  readonly roleClassificationId: Prisma.FieldRef<"RoleClassification", 'String'>
-  readonly id: Prisma.FieldRef<"RoleClassification", 'BigInt'>
-  readonly categoryId: Prisma.FieldRef<"RoleClassification", 'BigInt'>
-  readonly roleId: Prisma.FieldRef<"RoleClassification", 'BigInt'>
+  readonly id: Prisma.FieldRef<"RoleClassification", 'String'>
+  readonly seq: Prisma.FieldRef<"RoleClassification", 'BigInt'>
+  readonly categorySeq: Prisma.FieldRef<"RoleClassification", 'BigInt'>
+  readonly roleSeq: Prisma.FieldRef<"RoleClassification", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"RoleClassification", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"RoleClassification", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"RoleClassification", 'DateTime'>

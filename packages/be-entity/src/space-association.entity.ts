@@ -8,12 +8,12 @@ import { Group } from "./group.entity";
 export class SpaceAssociation extends SpaceAssociationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare spaceAssociationId: SpaceAssociationSchema["spaceAssociationId"];
+	declare id: SpaceAssociationSchema["id"];
 
 	@BigIntIdFieldMetadata()
-	declare spaceId: SpaceAssociationSchema["spaceId"];
+	declare spaceSeq: SpaceAssociationSchema["spaceSeq"];
 	@BigIntIdFieldMetadata()
-	declare groupId: SpaceAssociationSchema["groupId"];
+	declare groupSeq: SpaceAssociationSchema["groupSeq"];
 
 	@ClassField(() => Group, { required: false, swagger: false })
 	group?: Group;

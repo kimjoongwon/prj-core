@@ -9,7 +9,7 @@ export class GetAbilityByIdUseCase {
 	constructor(private readonly abilitiesService: AbilityAggregate) {}
 
 	async execute(query: GetAbilityByIdQuery): Promise<unknown> {
-		const ability = await this.abilitiesService.getAbilityById(query.abilityId);
+		const ability = await this.abilitiesService.getAbilityById(query.abilitySeq);
 		if (!ability) {
 			throw new NotFoundException(ABILITY_ERRORS.NOT_FOUND);
 		}

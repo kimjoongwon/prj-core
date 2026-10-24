@@ -27,29 +27,29 @@ export type AggregateAIAgentLog = {
 }
 
 export type AIAgentLogAvgAggregateOutputType = {
-  id: number | null
-  inquiryId: number | null
-  messageId: number | null
+  seq: number | null
+  inquirySeq: number | null
+  messageSeq: number | null
   confidence: number | null
   responseTimeMs: number | null
   tokenCount: number | null
 }
 
 export type AIAgentLogSumAggregateOutputType = {
-  id: bigint | null
-  inquiryId: bigint | null
-  messageId: bigint | null
+  seq: bigint | null
+  inquirySeq: bigint | null
+  messageSeq: bigint | null
   confidence: number | null
   responseTimeMs: number | null
   tokenCount: number | null
 }
 
 export type AIAgentLogMinAggregateOutputType = {
-  aiAgentLogId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
-  inquiryId: bigint | null
-  messageId: bigint | null
+  inquirySeq: bigint | null
+  messageSeq: bigint | null
   action: $Enums.AIAgentAction | null
   confidence: number | null
   wasAccepted: boolean | null
@@ -61,11 +61,11 @@ export type AIAgentLogMinAggregateOutputType = {
 }
 
 export type AIAgentLogMaxAggregateOutputType = {
-  aiAgentLogId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
-  inquiryId: bigint | null
-  messageId: bigint | null
+  inquirySeq: bigint | null
+  messageSeq: bigint | null
   action: $Enums.AIAgentAction | null
   confidence: number | null
   wasAccepted: boolean | null
@@ -77,11 +77,11 @@ export type AIAgentLogMaxAggregateOutputType = {
 }
 
 export type AIAgentLogCountAggregateOutputType = {
-  aiAgentLogId: number
   id: number
+  seq: number
   createdAt: number
-  inquiryId: number
-  messageId: number
+  inquirySeq: number
+  messageSeq: number
   action: number
   input: number
   output: number
@@ -97,29 +97,29 @@ export type AIAgentLogCountAggregateOutputType = {
 
 
 export type AIAgentLogAvgAggregateInputType = {
-  id?: true
-  inquiryId?: true
-  messageId?: true
+  seq?: true
+  inquirySeq?: true
+  messageSeq?: true
   confidence?: true
   responseTimeMs?: true
   tokenCount?: true
 }
 
 export type AIAgentLogSumAggregateInputType = {
-  id?: true
-  inquiryId?: true
-  messageId?: true
+  seq?: true
+  inquirySeq?: true
+  messageSeq?: true
   confidence?: true
   responseTimeMs?: true
   tokenCount?: true
 }
 
 export type AIAgentLogMinAggregateInputType = {
-  aiAgentLogId?: true
   id?: true
+  seq?: true
   createdAt?: true
-  inquiryId?: true
-  messageId?: true
+  inquirySeq?: true
+  messageSeq?: true
   action?: true
   confidence?: true
   wasAccepted?: true
@@ -131,11 +131,11 @@ export type AIAgentLogMinAggregateInputType = {
 }
 
 export type AIAgentLogMaxAggregateInputType = {
-  aiAgentLogId?: true
   id?: true
+  seq?: true
   createdAt?: true
-  inquiryId?: true
-  messageId?: true
+  inquirySeq?: true
+  messageSeq?: true
   action?: true
   confidence?: true
   wasAccepted?: true
@@ -147,11 +147,11 @@ export type AIAgentLogMaxAggregateInputType = {
 }
 
 export type AIAgentLogCountAggregateInputType = {
-  aiAgentLogId?: true
   id?: true
+  seq?: true
   createdAt?: true
-  inquiryId?: true
-  messageId?: true
+  inquirySeq?: true
+  messageSeq?: true
   action?: true
   input?: true
   output?: true
@@ -252,11 +252,11 @@ export type AIAgentLogGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type AIAgentLogGroupByOutputType = {
-  aiAgentLogId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
-  inquiryId: bigint
-  messageId: bigint | null
+  inquirySeq: bigint
+  messageSeq: bigint | null
   action: $Enums.AIAgentAction
   input: runtime.JsonValue | null
   output: runtime.JsonValue | null
@@ -293,11 +293,11 @@ export type AIAgentLogWhereInput = {
   AND?: Prisma.AIAgentLogWhereInput | Prisma.AIAgentLogWhereInput[]
   OR?: Prisma.AIAgentLogWhereInput[]
   NOT?: Prisma.AIAgentLogWhereInput | Prisma.AIAgentLogWhereInput[]
-  aiAgentLogId?: Prisma.StringFilter<"AIAgentLog"> | string
-  id?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
+  id?: Prisma.StringFilter<"AIAgentLog"> | string
+  seq?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"AIAgentLog"> | Date | string
-  inquiryId?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
-  messageId?: Prisma.BigIntNullableFilter<"AIAgentLog"> | bigint | number | null
+  inquirySeq?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
+  messageSeq?: Prisma.BigIntNullableFilter<"AIAgentLog"> | bigint | number | null
   action?: Prisma.EnumAIAgentActionFilter<"AIAgentLog"> | $Enums.AIAgentAction
   input?: Prisma.JsonNullableFilter<"AIAgentLog">
   output?: Prisma.JsonNullableFilter<"AIAgentLog">
@@ -313,11 +313,11 @@ export type AIAgentLogWhereInput = {
 }
 
 export type AIAgentLogOrderByWithRelationInput = {
-  aiAgentLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrderInput | Prisma.SortOrder
   action?: Prisma.SortOrder
   input?: Prisma.SortOrderInput | Prisma.SortOrder
   output?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -333,14 +333,14 @@ export type AIAgentLogOrderByWithRelationInput = {
 }
 
 export type AIAgentLogWhereUniqueInput = Prisma.AtLeast<{
-  aiAgentLogId?: string
-  id?: bigint | number
-  messageId?: bigint | number
+  id?: string
+  seq?: bigint | number
+  messageSeq?: bigint | number
   AND?: Prisma.AIAgentLogWhereInput | Prisma.AIAgentLogWhereInput[]
   OR?: Prisma.AIAgentLogWhereInput[]
   NOT?: Prisma.AIAgentLogWhereInput | Prisma.AIAgentLogWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"AIAgentLog"> | Date | string
-  inquiryId?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
+  inquirySeq?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
   action?: Prisma.EnumAIAgentActionFilter<"AIAgentLog"> | $Enums.AIAgentAction
   input?: Prisma.JsonNullableFilter<"AIAgentLog">
   output?: Prisma.JsonNullableFilter<"AIAgentLog">
@@ -353,14 +353,14 @@ export type AIAgentLogWhereUniqueInput = Prisma.AtLeast<{
   errorMessage?: Prisma.StringNullableFilter<"AIAgentLog"> | string | null
   inquiry?: Prisma.XOR<Prisma.InquiryScalarRelationFilter, Prisma.InquiryWhereInput>
   message?: Prisma.XOR<Prisma.InquiryMessageNullableScalarRelationFilter, Prisma.InquiryMessageWhereInput> | null
-}, "id" | "aiAgentLogId" | "messageId">
+}, "seq" | "id" | "messageSeq">
 
 export type AIAgentLogOrderByWithAggregationInput = {
-  aiAgentLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrderInput | Prisma.SortOrder
   action?: Prisma.SortOrder
   input?: Prisma.SortOrderInput | Prisma.SortOrder
   output?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -382,11 +382,11 @@ export type AIAgentLogScalarWhereWithAggregatesInput = {
   AND?: Prisma.AIAgentLogScalarWhereWithAggregatesInput | Prisma.AIAgentLogScalarWhereWithAggregatesInput[]
   OR?: Prisma.AIAgentLogScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AIAgentLogScalarWhereWithAggregatesInput | Prisma.AIAgentLogScalarWhereWithAggregatesInput[]
-  aiAgentLogId?: Prisma.StringWithAggregatesFilter<"AIAgentLog"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"AIAgentLog"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"AIAgentLog"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"AIAgentLog"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AIAgentLog"> | Date | string
-  inquiryId?: Prisma.BigIntWithAggregatesFilter<"AIAgentLog"> | bigint | number
-  messageId?: Prisma.BigIntNullableWithAggregatesFilter<"AIAgentLog"> | bigint | number | null
+  inquirySeq?: Prisma.BigIntWithAggregatesFilter<"AIAgentLog"> | bigint | number
+  messageSeq?: Prisma.BigIntNullableWithAggregatesFilter<"AIAgentLog"> | bigint | number | null
   action?: Prisma.EnumAIAgentActionWithAggregatesFilter<"AIAgentLog"> | $Enums.AIAgentAction
   input?: Prisma.JsonNullableWithAggregatesFilter<"AIAgentLog">
   output?: Prisma.JsonNullableWithAggregatesFilter<"AIAgentLog">
@@ -400,8 +400,8 @@ export type AIAgentLogScalarWhereWithAggregatesInput = {
 }
 
 export type AIAgentLogCreateInput = {
-  aiAgentLogId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   action: $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -418,11 +418,11 @@ export type AIAgentLogCreateInput = {
 }
 
 export type AIAgentLogUncheckedCreateInput = {
-  aiAgentLogId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
-  inquiryId: bigint | number
-  messageId?: bigint | number | null
+  inquirySeq: bigint | number
+  messageSeq?: bigint | number | null
   action: $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -436,8 +436,8 @@ export type AIAgentLogUncheckedCreateInput = {
 }
 
 export type AIAgentLogUpdateInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -454,11 +454,11 @@ export type AIAgentLogUpdateInput = {
 }
 
 export type AIAgentLogUncheckedUpdateInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  messageId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  messageSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -472,11 +472,11 @@ export type AIAgentLogUncheckedUpdateInput = {
 }
 
 export type AIAgentLogCreateManyInput = {
-  aiAgentLogId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
-  inquiryId: bigint | number
-  messageId?: bigint | number | null
+  inquirySeq: bigint | number
+  messageSeq?: bigint | number | null
   action: $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -490,8 +490,8 @@ export type AIAgentLogCreateManyInput = {
 }
 
 export type AIAgentLogUpdateManyMutationInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -506,11 +506,11 @@ export type AIAgentLogUpdateManyMutationInput = {
 }
 
 export type AIAgentLogUncheckedUpdateManyInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  messageId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  messageSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -524,11 +524,11 @@ export type AIAgentLogUncheckedUpdateManyInput = {
 }
 
 export type AIAgentLogCountOrderByAggregateInput = {
-  aiAgentLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   action?: Prisma.SortOrder
   input?: Prisma.SortOrder
   output?: Prisma.SortOrder
@@ -542,20 +542,20 @@ export type AIAgentLogCountOrderByAggregateInput = {
 }
 
 export type AIAgentLogAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
   responseTimeMs?: Prisma.SortOrder
   tokenCount?: Prisma.SortOrder
 }
 
 export type AIAgentLogMaxOrderByAggregateInput = {
-  aiAgentLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   action?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
   wasAccepted?: Prisma.SortOrder
@@ -567,11 +567,11 @@ export type AIAgentLogMaxOrderByAggregateInput = {
 }
 
 export type AIAgentLogMinOrderByAggregateInput = {
-  aiAgentLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   action?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
   wasAccepted?: Prisma.SortOrder
@@ -583,9 +583,9 @@ export type AIAgentLogMinOrderByAggregateInput = {
 }
 
 export type AIAgentLogSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
   responseTimeMs?: Prisma.SortOrder
   tokenCount?: Prisma.SortOrder
@@ -713,8 +713,8 @@ export type AIAgentLogUncheckedUpdateManyWithoutInquiryNestedInput = {
 }
 
 export type AIAgentLogCreateWithoutMessageInput = {
-  aiAgentLogId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   action: $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -730,10 +730,10 @@ export type AIAgentLogCreateWithoutMessageInput = {
 }
 
 export type AIAgentLogUncheckedCreateWithoutMessageInput = {
-  aiAgentLogId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
-  inquiryId: bigint | number
+  inquirySeq: bigint | number
   action: $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -763,8 +763,8 @@ export type AIAgentLogUpdateToOneWithWhereWithoutMessageInput = {
 }
 
 export type AIAgentLogUpdateWithoutMessageInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -780,10 +780,10 @@ export type AIAgentLogUpdateWithoutMessageInput = {
 }
 
 export type AIAgentLogUncheckedUpdateWithoutMessageInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -797,8 +797,8 @@ export type AIAgentLogUncheckedUpdateWithoutMessageInput = {
 }
 
 export type AIAgentLogCreateWithoutInquiryInput = {
-  aiAgentLogId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   action: $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -814,10 +814,10 @@ export type AIAgentLogCreateWithoutInquiryInput = {
 }
 
 export type AIAgentLogUncheckedCreateWithoutInquiryInput = {
-  aiAgentLogId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
-  messageId?: bigint | number | null
+  messageSeq?: bigint | number | null
   action: $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -860,11 +860,11 @@ export type AIAgentLogScalarWhereInput = {
   AND?: Prisma.AIAgentLogScalarWhereInput | Prisma.AIAgentLogScalarWhereInput[]
   OR?: Prisma.AIAgentLogScalarWhereInput[]
   NOT?: Prisma.AIAgentLogScalarWhereInput | Prisma.AIAgentLogScalarWhereInput[]
-  aiAgentLogId?: Prisma.StringFilter<"AIAgentLog"> | string
-  id?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
+  id?: Prisma.StringFilter<"AIAgentLog"> | string
+  seq?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"AIAgentLog"> | Date | string
-  inquiryId?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
-  messageId?: Prisma.BigIntNullableFilter<"AIAgentLog"> | bigint | number | null
+  inquirySeq?: Prisma.BigIntFilter<"AIAgentLog"> | bigint | number
+  messageSeq?: Prisma.BigIntNullableFilter<"AIAgentLog"> | bigint | number | null
   action?: Prisma.EnumAIAgentActionFilter<"AIAgentLog"> | $Enums.AIAgentAction
   input?: Prisma.JsonNullableFilter<"AIAgentLog">
   output?: Prisma.JsonNullableFilter<"AIAgentLog">
@@ -878,10 +878,10 @@ export type AIAgentLogScalarWhereInput = {
 }
 
 export type AIAgentLogCreateManyInquiryInput = {
-  aiAgentLogId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
-  messageId?: bigint | number | null
+  messageSeq?: bigint | number | null
   action: $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -895,8 +895,8 @@ export type AIAgentLogCreateManyInquiryInput = {
 }
 
 export type AIAgentLogUpdateWithoutInquiryInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -912,10 +912,10 @@ export type AIAgentLogUpdateWithoutInquiryInput = {
 }
 
 export type AIAgentLogUncheckedUpdateWithoutInquiryInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messageId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  messageSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -929,10 +929,10 @@ export type AIAgentLogUncheckedUpdateWithoutInquiryInput = {
 }
 
 export type AIAgentLogUncheckedUpdateManyWithoutInquiryInput = {
-  aiAgentLogId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messageId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  messageSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   action?: Prisma.EnumAIAgentActionFieldUpdateOperationsInput | $Enums.AIAgentAction
   input?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   output?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -948,11 +948,11 @@ export type AIAgentLogUncheckedUpdateManyWithoutInquiryInput = {
 
 
 export type AIAgentLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  aiAgentLogId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
-  inquiryId?: boolean
-  messageId?: boolean
+  inquirySeq?: boolean
+  messageSeq?: boolean
   action?: boolean
   input?: boolean
   output?: boolean
@@ -968,11 +968,11 @@ export type AIAgentLogSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 }, ExtArgs["result"]["aIAgentLog"]>
 
 export type AIAgentLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  aiAgentLogId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
-  inquiryId?: boolean
-  messageId?: boolean
+  inquirySeq?: boolean
+  messageSeq?: boolean
   action?: boolean
   input?: boolean
   output?: boolean
@@ -988,11 +988,11 @@ export type AIAgentLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 }, ExtArgs["result"]["aIAgentLog"]>
 
 export type AIAgentLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  aiAgentLogId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
-  inquiryId?: boolean
-  messageId?: boolean
+  inquirySeq?: boolean
+  messageSeq?: boolean
   action?: boolean
   input?: boolean
   output?: boolean
@@ -1008,11 +1008,11 @@ export type AIAgentLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 }, ExtArgs["result"]["aIAgentLog"]>
 
 export type AIAgentLogSelectScalar = {
-  aiAgentLogId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
-  inquiryId?: boolean
-  messageId?: boolean
+  inquirySeq?: boolean
+  messageSeq?: boolean
   action?: boolean
   input?: boolean
   output?: boolean
@@ -1025,7 +1025,7 @@ export type AIAgentLogSelectScalar = {
   errorMessage?: boolean
 }
 
-export type AIAgentLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"aiAgentLogId" | "id" | "createdAt" | "inquiryId" | "messageId" | "action" | "input" | "output" | "confidence" | "wasAccepted" | "wasModified" | "responseTimeMs" | "model" | "tokenCount" | "errorMessage", ExtArgs["result"]["aIAgentLog"]>
+export type AIAgentLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "inquirySeq" | "messageSeq" | "action" | "input" | "output" | "confidence" | "wasAccepted" | "wasModified" | "responseTimeMs" | "model" | "tokenCount" | "errorMessage", ExtArgs["result"]["aIAgentLog"]>
 export type AIAgentLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>
   message?: boolean | Prisma.AIAgentLog$messageArgs<ExtArgs>
@@ -1046,8 +1046,8 @@ export type $AIAgentLogPayload<ExtArgs extends runtime.Types.Extensions.Internal
     message: Prisma.$InquiryMessagePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    aiAgentLogId: string
-    id: bigint
+    id: string
+    seq: bigint
     /**
      * @displayName 생성 일시
      */
@@ -1055,11 +1055,11 @@ export type $AIAgentLogPayload<ExtArgs extends runtime.Types.Extensions.Internal
     /**
      * @displayName 소속 문의 내부 순번
      */
-    inquiryId: bigint
+    inquirySeq: bigint
     /**
      * @displayName 관련 메시지 내부 순번
      */
-    messageId: bigint | null
+    messageSeq: bigint | null
     /**
      * @displayName AI 작업 유형
      */
@@ -1183,8 +1183,8 @@ export interface AIAgentLogDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Get first 10 AIAgentLogs
    * const aIAgentLogs = await prisma.aIAgentLog.findMany({ take: 10 })
    *
-   * // Only select the `aiAgentLogId`
-   * const aIAgentLogWithAiAgentLogIdOnly = await prisma.aIAgentLog.findMany({ select: { aiAgentLogId: true } })
+   * // Only select the `id`
+   * const aIAgentLogWithIdOnly = await prisma.aIAgentLog.findMany({ select: { id: true } })
    *
    */
   findMany<T extends AIAgentLogFindManyArgs>(args?: Prisma.SelectSubset<T, AIAgentLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AIAgentLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1228,9 +1228,9 @@ export interface AIAgentLogDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    *
-   * // Create many AIAgentLogs and only return the `aiAgentLogId`
-   * const aIAgentLogWithAiAgentLogIdOnly = await prisma.aIAgentLog.createManyAndReturn({
-   *   select: { aiAgentLogId: true },
+   * // Create many AIAgentLogs and only return the `id`
+   * const aIAgentLogWithIdOnly = await prisma.aIAgentLog.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1319,9 +1319,9 @@ export interface AIAgentLogDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    *
-   * // Update zero or more AIAgentLogs and only return the `aiAgentLogId`
-   * const aIAgentLogWithAiAgentLogIdOnly = await prisma.aIAgentLog.updateManyAndReturn({
-   *   select: { aiAgentLogId: true },
+   * // Update zero or more AIAgentLogs and only return the `id`
+   * const aIAgentLogWithIdOnly = await prisma.aIAgentLog.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1525,11 +1525,11 @@ export interface Prisma__AIAgentLogClient<T, Null = never, ExtArgs extends runti
  * Fields of the AIAgentLog model
  */
 export interface AIAgentLogFieldRefs {
-  readonly aiAgentLogId: Prisma.FieldRef<"AIAgentLog", 'String'>
-  readonly id: Prisma.FieldRef<"AIAgentLog", 'BigInt'>
+  readonly id: Prisma.FieldRef<"AIAgentLog", 'String'>
+  readonly seq: Prisma.FieldRef<"AIAgentLog", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"AIAgentLog", 'DateTime'>
-  readonly inquiryId: Prisma.FieldRef<"AIAgentLog", 'BigInt'>
-  readonly messageId: Prisma.FieldRef<"AIAgentLog", 'BigInt'>
+  readonly inquirySeq: Prisma.FieldRef<"AIAgentLog", 'BigInt'>
+  readonly messageSeq: Prisma.FieldRef<"AIAgentLog", 'BigInt'>
   readonly action: Prisma.FieldRef<"AIAgentLog", 'AIAgentAction'>
   readonly input: Prisma.FieldRef<"AIAgentLog", 'Json'>
   readonly output: Prisma.FieldRef<"AIAgentLog", 'Json'>

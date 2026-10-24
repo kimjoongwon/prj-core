@@ -13,14 +13,14 @@ export class UpdateTimelineUseCase {
 	) {}
 
 	execute(command: UpdateTimelineCommand): Promise<unknown> {
-		const spaceId = this.spaceContext.tenant?.spaceId;
-		if (!spaceId) {
+		const spaceSeq = this.spaceContext.tenant?.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}
 		return this.timelinesService.updateTimelineForSpace(
-			command.timelineId,
+			command.timelineSeq,
 			command,
-			spaceId,
+			spaceSeq,
 		);
 	}
 }

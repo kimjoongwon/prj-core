@@ -35,15 +35,15 @@ export class PolicyAggregate {
 	) {}
 
 	async listPolicies(): Promise<Policy[]> {
-		const spaceId = this.requireSpaceId();
-		return this.policiesRepository.findManyBySpaceId(spaceId);
+		const spaceSeq = this.requireSpaceId();
+		return this.policiesRepository.findManyBySpaceId(spaceSeq);
 	}
 
-	async getPolicyById(policyId: bigint): Promise<Policy> {
-		const spaceId = this.requireSpaceId();
+	async getPolicyById(policySeq: bigint): Promise<Policy> {
+		const spaceSeq = this.requireSpaceId();
 		const policy = await this.policiesRepository.findByIdInSpace(
-			policyId,
-			spaceId,
+			policySeq,
+			spaceSeq,
 		);
 
 		if (!policy) {
@@ -54,12 +54,12 @@ export class PolicyAggregate {
 	}
 
 	async createPolicy(dto: CreatePolicyCommandInput): Promise<Policy> {
-		const spaceId = this.requireSpaceId();
-		const createdById = this.requireUserId();
-		this.logger.debug(`Policy 생성: name=${dto.name}, spaceId=${spaceId}`);
+		const spaceSeq = this.requireSpaceId();
+		const createdBySeq = this.requireUserId();
+		this.logger.debug(`Policy 생성: name=${dto.name}, spaceSeq=${spaceSeq}`);
 
 		const existing = await this.policiesRepository.findByNameInSpace(
-			spaceId,
+			spaceSeq,
 			dto.name,
 		);
 		if (existing) {
@@ -67,8 +67,8 @@ export class PolicyAggregate {
 		}
 
 		return this.policiesRepository.create({
-			spaceId,
-			createdById,
+			spaceSeq,
+			createdBySeq,
 			name: dto.name,
 			displayName: dto.displayName ?? null,
 			description: dto.description ?? null,
@@ -76,14 +76,14 @@ export class PolicyAggregate {
 	}
 
 	async updatePolicy(
-		policyId: bigint,
+		policySeq: bigint,
 		dto: UpdatePolicyCommandInput,
 	): Promise<Policy> {
-		const policy = await this.getPolicyById(policyId);
+		const policy = await this.getPolicyById(policySeq);
 
 		if (dto.name && dto.name !== policy.name) {
 			const existing = await this.policiesRepository.findByNameInSpace(
-				policy.spaceId,
+				policy.spaceSeq,
 				dto.name,
 			);
 			if (existing) {
@@ -93,7 +93,7 @@ export class PolicyAggregate {
 			}
 		}
 
-		return this.policiesRepository.updateById(policyId, {
+		return this.policiesRepository.updateById(policySeq, {
 			...(dto.name !== undefined && { name: dto.name }),
 			...(dto.displayName !== undefined && {
 				displayName: dto.displayName,
@@ -105,22 +105,22 @@ export class PolicyAggregate {
 	}
 
 	@Transactional()
-	async deletePolicy(policyId: bigint): Promise<Policy> {
-		await this.getPolicyById(policyId);
+	async deletePolicy(policySeq: bigint): Promise<Policy> {
+		await this.getPolicyById(policySeq);
 
-		await this.roleAssignmentsRepository.removeByPolicyId(policyId);
+		await this.roleAssignmentsRepository.removeByPolicyId(policySeq);
 
-		return this.policiesRepository.removeById(policyId);
+		return this.policiesRepository.removeById(policySeq);
 	}
 
 	@Transactional()
 	async syncPolicyEntries(
-		policyId: bigint,
+		policySeq: bigint,
 		abilityIds: bigint[],
 	): Promise<PolicyEntry[]> {
-		await this.getPolicyById(policyId);
+		await this.getPolicyById(policySeq);
 		await this.assertAbilitiesExist(abilityIds);
-		return this.policyEntriesRepository.syncByPolicyId(policyId, abilityIds);
+		return this.policyEntriesRepository.syncByPolicyId(policySeq, abilityIds);
 	}
 
 	private async assertAbilitiesExist(abilityIds: bigint[]): Promise<void> {
@@ -140,18 +140,18 @@ export class PolicyAggregate {
 	}
 
 	private requireSpaceId(): bigint {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
+		const spaceSeq = this.spaceContext.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
-		return spaceId;
+		return spaceSeq;
 	}
 
 	private requireUserId(): bigint {
-		const userId = this.authContext.user?.id;
-		if (!userId) {
+		const userSeq = this.authContext.user?.id;
+		if (!userSeq) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
-		return userId;
+		return userSeq;
 	}
 }

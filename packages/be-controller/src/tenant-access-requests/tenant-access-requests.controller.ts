@@ -61,15 +61,15 @@ export class TenantAccessRequestsController {
 	@ResponseMessage("테넌트 접근 신청 승인 목록 조회 성공")
 	getRequests(@Query() query: QueryTenantAccessRequestDto) {
 		this.authContext.assertAuthenticated();
-		const userId = this.authContext.user?.id;
-		if (!userId) {
+		const userSeq = this.authContext.user?.id;
+		if (!userSeq) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return this.queryBus.execute(
 			new ListTenantAccessRequestsForReviewQuery({
 				...query,
-				reviewerId: userId,
+				reviewerSeq: userSeq,
 			}),
 		);
 	}
@@ -100,13 +100,13 @@ export class TenantAccessRequestsController {
 		tenantAccessRequestId: bigint,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();
-		const userId = this.authContext.user?.id;
-		if (!userId) {
+		const userSeq = this.authContext.user?.id;
+		if (!userSeq) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return this.queryBus.execute(
-			new GetTenantAccessRequestForReviewQuery(tenantAccessRequestId, userId),
+			new GetTenantAccessRequestForReviewQuery(tenantAccessRequestId, userSeq),
 		);
 	}
 
@@ -147,13 +147,13 @@ export class TenantAccessRequestsController {
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();
-		const userId = this.authContext.user?.id;
-		if (!userId) {
+		const userSeq = this.authContext.user?.id;
+		if (!userSeq) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return this.commandBus.execute(
-			new ApproveTenantAccessRequestCommand(tenantAccessRequestId, userId, dto),
+			new ApproveTenantAccessRequestCommand(tenantAccessRequestId, userSeq, dto),
 		);
 	}
 
@@ -189,13 +189,13 @@ export class TenantAccessRequestsController {
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();
-		const userId = this.authContext.user?.id;
-		if (!userId) {
+		const userSeq = this.authContext.user?.id;
+		if (!userSeq) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return this.commandBus.execute(
-			new RejectTenantAccessRequestCommand(tenantAccessRequestId, userId, dto),
+			new RejectTenantAccessRequestCommand(tenantAccessRequestId, userSeq, dto),
 		);
 	}
 }

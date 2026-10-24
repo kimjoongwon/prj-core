@@ -10,14 +10,14 @@ import { AbstractSchema } from "../abstract.schema";
 /** OidcModel의 DB 필드 타입과 공통 검증입니다. */
 export class OidcModelSchema
 	extends PickSchemaType(AbstractSchema, [
-		"id",
+		"seq",
 		"createdAt",
 		"updatedAt",
 	] as const)
 {
-	oidcModelId!: string;
+	id!: string;
 
-	declare id: bigint;
+	declare seq: bigint;
 
 	declare createdAt: Date;
 

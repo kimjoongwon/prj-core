@@ -36,7 +36,7 @@ describe("RoleCategoryGuard", () => {
 		tenants: [
 			{
 				id: 201n,
-				spaceId: 301n,
+				spaceSeq: 301n,
 				role: {
 					name: "MEMBER",
 					classification: {
@@ -55,7 +55,7 @@ describe("RoleCategoryGuard", () => {
 
 	const createMockTenant = (overrides: Record<string, unknown> = {}) => ({
 		id: 201n,
-		spaceId: 301n,
+		spaceSeq: 301n,
 		role: {
 			name: "MEMBER",
 			classification: {
@@ -193,7 +193,7 @@ describe("RoleCategoryGuard", () => {
 				// Given
 				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const user = createMockUser({
-					tenants: [{ id: 201n, spaceId: 301n, role: null }],
+					tenants: [{ id: 201n, spaceSeq: 301n, role: null }],
 				});
 				const tenant = createMockTenant({ role: null });
 				mockClsService.get.mockImplementation((key: string) => {
@@ -219,7 +219,7 @@ describe("RoleCategoryGuard", () => {
 					tenants: [
 						{
 							id: 201n,
-							spaceId: 301n,
+							spaceSeq: 301n,
 							role: {
 								name: "MEMBER",
 								classification: {
@@ -234,7 +234,7 @@ describe("RoleCategoryGuard", () => {
 						},
 						{
 							id: 202n,
-							spaceId: 302n,
+							spaceSeq: 302n,
 							role: {
 								name: "COMPANY_MANAGER",
 								classification: {
@@ -251,7 +251,7 @@ describe("RoleCategoryGuard", () => {
 				});
 				const tenant = createMockTenant({
 					id: 202n,
-					spaceId: 302n,
+					spaceSeq: 302n,
 					role: {
 						name: "COMPANY_MANAGER",
 						classification: {

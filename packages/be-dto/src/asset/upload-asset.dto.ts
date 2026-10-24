@@ -5,5 +5,5 @@ import { BigIntIdField } from "@cocrepo/decorator/field";
  */
 export class UploadAssetDto {
 	@BigIntIdField({ description: "업로드 대상 폴더 ID" })
-	folderId!: bigint;
+	folderSeq!: bigint;
 }

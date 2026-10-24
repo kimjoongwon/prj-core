@@ -16,7 +16,7 @@ export class EmailVerificationDto extends EntityResponseType(
 			"lastSentAt",
 			"sendCount",
 			"lastSendStatus",
-			"verifiedUserId",
+			"verifiedUserSeq",
 		] as const,
 
 		extraFields: ["canResend", "resendAvailableAt", "updatedAt"],

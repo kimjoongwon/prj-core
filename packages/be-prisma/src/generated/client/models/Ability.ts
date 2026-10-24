@@ -27,20 +27,20 @@ export type AggregateAbility = {
 }
 
 export type AbilityAvgAggregateOutputType = {
-  id: number | null
-  subjectId: number | null
-  actionId: number | null
+  seq: number | null
+  subjectSeq: number | null
+  actionSeq: number | null
 }
 
 export type AbilitySumAggregateOutputType = {
-  id: bigint | null
-  subjectId: bigint | null
-  actionId: bigint | null
+  seq: bigint | null
+  subjectSeq: bigint | null
+  actionSeq: bigint | null
 }
 
 export type AbilityMinAggregateOutputType = {
-  abilityId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -48,13 +48,13 @@ export type AbilityMinAggregateOutputType = {
   description: string | null
   inverted: boolean | null
   reason: string | null
-  subjectId: bigint | null
-  actionId: bigint | null
+  subjectSeq: bigint | null
+  actionSeq: bigint | null
 }
 
 export type AbilityMaxAggregateOutputType = {
-  abilityId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -62,13 +62,13 @@ export type AbilityMaxAggregateOutputType = {
   description: string | null
   inverted: boolean | null
   reason: string | null
-  subjectId: bigint | null
-  actionId: bigint | null
+  subjectSeq: bigint | null
+  actionSeq: bigint | null
 }
 
 export type AbilityCountAggregateOutputType = {
-  abilityId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -78,27 +78,27 @@ export type AbilityCountAggregateOutputType = {
   conditions: number
   inverted: number
   reason: number
-  subjectId: number
-  actionId: number
+  subjectSeq: number
+  actionSeq: number
   _all: number
 }
 
 
 export type AbilityAvgAggregateInputType = {
-  id?: true
-  subjectId?: true
-  actionId?: true
+  seq?: true
+  subjectSeq?: true
+  actionSeq?: true
 }
 
 export type AbilitySumAggregateInputType = {
-  id?: true
-  subjectId?: true
-  actionId?: true
+  seq?: true
+  subjectSeq?: true
+  actionSeq?: true
 }
 
 export type AbilityMinAggregateInputType = {
-  abilityId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -106,13 +106,13 @@ export type AbilityMinAggregateInputType = {
   description?: true
   inverted?: true
   reason?: true
-  subjectId?: true
-  actionId?: true
+  subjectSeq?: true
+  actionSeq?: true
 }
 
 export type AbilityMaxAggregateInputType = {
-  abilityId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -120,13 +120,13 @@ export type AbilityMaxAggregateInputType = {
   description?: true
   inverted?: true
   reason?: true
-  subjectId?: true
-  actionId?: true
+  subjectSeq?: true
+  actionSeq?: true
 }
 
 export type AbilityCountAggregateInputType = {
-  abilityId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -136,8 +136,8 @@ export type AbilityCountAggregateInputType = {
   conditions?: true
   inverted?: true
   reason?: true
-  subjectId?: true
-  actionId?: true
+  subjectSeq?: true
+  actionSeq?: true
   _all?: true
 }
 
@@ -228,8 +228,8 @@ export type AbilityGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type AbilityGroupByOutputType = {
-  abilityId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -239,8 +239,8 @@ export type AbilityGroupByOutputType = {
   conditions: runtime.JsonValue | null
   inverted: boolean
   reason: string | null
-  subjectId: bigint
-  actionId: bigint
+  subjectSeq: bigint
+  actionSeq: bigint
   _count: AbilityCountAggregateOutputType | null
   _avg: AbilityAvgAggregateOutputType | null
   _sum: AbilitySumAggregateOutputType | null
@@ -267,8 +267,8 @@ export type AbilityWhereInput = {
   AND?: Prisma.AbilityWhereInput | Prisma.AbilityWhereInput[]
   OR?: Prisma.AbilityWhereInput[]
   NOT?: Prisma.AbilityWhereInput | Prisma.AbilityWhereInput[]
-  abilityId?: Prisma.StringFilter<"Ability"> | string
-  id?: Prisma.BigIntFilter<"Ability"> | bigint | number
+  id?: Prisma.StringFilter<"Ability"> | string
+  seq?: Prisma.BigIntFilter<"Ability"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Ability"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
@@ -278,16 +278,16 @@ export type AbilityWhereInput = {
   conditions?: Prisma.JsonNullableFilter<"Ability">
   inverted?: Prisma.BoolFilter<"Ability"> | boolean
   reason?: Prisma.StringNullableFilter<"Ability"> | string | null
-  subjectId?: Prisma.BigIntFilter<"Ability"> | bigint | number
-  actionId?: Prisma.BigIntFilter<"Ability"> | bigint | number
+  subjectSeq?: Prisma.BigIntFilter<"Ability"> | bigint | number
+  actionSeq?: Prisma.BigIntFilter<"Ability"> | bigint | number
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
   policyEntries?: Prisma.PolicyEntryListRelationFilter
 }
 
 export type AbilityOrderByWithRelationInput = {
-  abilityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -297,16 +297,16 @@ export type AbilityOrderByWithRelationInput = {
   conditions?: Prisma.SortOrderInput | Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
-  subjectId?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
+  subjectSeq?: Prisma.SortOrder
+  actionSeq?: Prisma.SortOrder
   subject?: Prisma.SubjectOrderByWithRelationInput
   action?: Prisma.ActionOrderByWithRelationInput
   policyEntries?: Prisma.PolicyEntryOrderByRelationAggregateInput
 }
 
 export type AbilityWhereUniqueInput = Prisma.AtLeast<{
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   name?: string
   AND?: Prisma.AbilityWhereInput | Prisma.AbilityWhereInput[]
   OR?: Prisma.AbilityWhereInput[]
@@ -319,16 +319,16 @@ export type AbilityWhereUniqueInput = Prisma.AtLeast<{
   conditions?: Prisma.JsonNullableFilter<"Ability">
   inverted?: Prisma.BoolFilter<"Ability"> | boolean
   reason?: Prisma.StringNullableFilter<"Ability"> | string | null
-  subjectId?: Prisma.BigIntFilter<"Ability"> | bigint | number
-  actionId?: Prisma.BigIntFilter<"Ability"> | bigint | number
+  subjectSeq?: Prisma.BigIntFilter<"Ability"> | bigint | number
+  actionSeq?: Prisma.BigIntFilter<"Ability"> | bigint | number
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
   policyEntries?: Prisma.PolicyEntryListRelationFilter
-}, "id" | "abilityId" | "name">
+}, "seq" | "id" | "name">
 
 export type AbilityOrderByWithAggregationInput = {
-  abilityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -338,8 +338,8 @@ export type AbilityOrderByWithAggregationInput = {
   conditions?: Prisma.SortOrderInput | Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
-  subjectId?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
+  subjectSeq?: Prisma.SortOrder
+  actionSeq?: Prisma.SortOrder
   _count?: Prisma.AbilityCountOrderByAggregateInput
   _avg?: Prisma.AbilityAvgOrderByAggregateInput
   _max?: Prisma.AbilityMaxOrderByAggregateInput
@@ -351,8 +351,8 @@ export type AbilityScalarWhereWithAggregatesInput = {
   AND?: Prisma.AbilityScalarWhereWithAggregatesInput | Prisma.AbilityScalarWhereWithAggregatesInput[]
   OR?: Prisma.AbilityScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AbilityScalarWhereWithAggregatesInput | Prisma.AbilityScalarWhereWithAggregatesInput[]
-  abilityId?: Prisma.StringWithAggregatesFilter<"Ability"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"Ability"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"Ability"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"Ability"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ability"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ability"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ability"> | Date | string | null
@@ -362,13 +362,13 @@ export type AbilityScalarWhereWithAggregatesInput = {
   conditions?: Prisma.JsonNullableWithAggregatesFilter<"Ability">
   inverted?: Prisma.BoolWithAggregatesFilter<"Ability"> | boolean
   reason?: Prisma.StringNullableWithAggregatesFilter<"Ability"> | string | null
-  subjectId?: Prisma.BigIntWithAggregatesFilter<"Ability"> | bigint | number
-  actionId?: Prisma.BigIntWithAggregatesFilter<"Ability"> | bigint | number
+  subjectSeq?: Prisma.BigIntWithAggregatesFilter<"Ability"> | bigint | number
+  actionSeq?: Prisma.BigIntWithAggregatesFilter<"Ability"> | bigint | number
 }
 
 export type AbilityCreateInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -384,8 +384,8 @@ export type AbilityCreateInput = {
 }
 
 export type AbilityUncheckedCreateInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -395,14 +395,14 @@ export type AbilityUncheckedCreateInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
-  subjectId: bigint | number
-  actionId: bigint | number
+  subjectSeq: bigint | number
+  actionSeq: bigint | number
   policyEntries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUpdateInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -418,8 +418,8 @@ export type AbilityUpdateInput = {
 }
 
 export type AbilityUncheckedUpdateInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -429,14 +429,14 @@ export type AbilityUncheckedUpdateInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  subjectId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  actionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  subjectSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  actionSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   policyEntries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityCreateManyInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -446,13 +446,13 @@ export type AbilityCreateManyInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
-  subjectId: bigint | number
-  actionId: bigint | number
+  subjectSeq: bigint | number
+  actionSeq: bigint | number
 }
 
 export type AbilityUpdateManyMutationInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -465,8 +465,8 @@ export type AbilityUpdateManyMutationInput = {
 }
 
 export type AbilityUncheckedUpdateManyInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -476,8 +476,8 @@ export type AbilityUncheckedUpdateManyInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  subjectId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  actionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  subjectSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  actionSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type StringNullableListFilter<$PrismaModel = never> = {
@@ -489,8 +489,8 @@ export type StringNullableListFilter<$PrismaModel = never> = {
 }
 
 export type AbilityCountOrderByAggregateInput = {
-  abilityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -500,19 +500,19 @@ export type AbilityCountOrderByAggregateInput = {
   conditions?: Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrder
-  subjectId?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
+  subjectSeq?: Prisma.SortOrder
+  actionSeq?: Prisma.SortOrder
 }
 
 export type AbilityAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  subjectId?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  subjectSeq?: Prisma.SortOrder
+  actionSeq?: Prisma.SortOrder
 }
 
 export type AbilityMaxOrderByAggregateInput = {
-  abilityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -520,13 +520,13 @@ export type AbilityMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrder
-  subjectId?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
+  subjectSeq?: Prisma.SortOrder
+  actionSeq?: Prisma.SortOrder
 }
 
 export type AbilityMinOrderByAggregateInput = {
-  abilityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -534,14 +534,14 @@ export type AbilityMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   inverted?: Prisma.SortOrder
   reason?: Prisma.SortOrder
-  subjectId?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
+  subjectSeq?: Prisma.SortOrder
+  actionSeq?: Prisma.SortOrder
 }
 
 export type AbilitySumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  subjectId?: Prisma.SortOrder
-  actionId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  subjectSeq?: Prisma.SortOrder
+  actionSeq?: Prisma.SortOrder
 }
 
 export type AbilityListRelationFilter = {
@@ -695,8 +695,8 @@ export type AbilityUncheckedUpdateManyWithoutSubjectNestedInput = {
 }
 
 export type AbilityCreateWithoutActionInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -711,8 +711,8 @@ export type AbilityCreateWithoutActionInput = {
 }
 
 export type AbilityUncheckedCreateWithoutActionInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -722,7 +722,7 @@ export type AbilityUncheckedCreateWithoutActionInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
-  subjectId: bigint | number
+  subjectSeq: bigint | number
   policyEntries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutAbilityInput
 }
 
@@ -756,8 +756,8 @@ export type AbilityScalarWhereInput = {
   AND?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
   OR?: Prisma.AbilityScalarWhereInput[]
   NOT?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
-  abilityId?: Prisma.StringFilter<"Ability"> | string
-  id?: Prisma.BigIntFilter<"Ability"> | bigint | number
+  id?: Prisma.StringFilter<"Ability"> | string
+  seq?: Prisma.BigIntFilter<"Ability"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Ability"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Ability"> | Date | string | null
@@ -767,13 +767,13 @@ export type AbilityScalarWhereInput = {
   conditions?: Prisma.JsonNullableFilter<"Ability">
   inverted?: Prisma.BoolFilter<"Ability"> | boolean
   reason?: Prisma.StringNullableFilter<"Ability"> | string | null
-  subjectId?: Prisma.BigIntFilter<"Ability"> | bigint | number
-  actionId?: Prisma.BigIntFilter<"Ability"> | bigint | number
+  subjectSeq?: Prisma.BigIntFilter<"Ability"> | bigint | number
+  actionSeq?: Prisma.BigIntFilter<"Ability"> | bigint | number
 }
 
 export type AbilityCreateWithoutPolicyEntriesInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -788,8 +788,8 @@ export type AbilityCreateWithoutPolicyEntriesInput = {
 }
 
 export type AbilityUncheckedCreateWithoutPolicyEntriesInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -799,8 +799,8 @@ export type AbilityUncheckedCreateWithoutPolicyEntriesInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
-  subjectId: bigint | number
-  actionId: bigint | number
+  subjectSeq: bigint | number
+  actionSeq: bigint | number
 }
 
 export type AbilityCreateOrConnectWithoutPolicyEntriesInput = {
@@ -820,8 +820,8 @@ export type AbilityUpdateToOneWithWhereWithoutPolicyEntriesInput = {
 }
 
 export type AbilityUpdateWithoutPolicyEntriesInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -836,8 +836,8 @@ export type AbilityUpdateWithoutPolicyEntriesInput = {
 }
 
 export type AbilityUncheckedUpdateWithoutPolicyEntriesInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -847,13 +847,13 @@ export type AbilityUncheckedUpdateWithoutPolicyEntriesInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  subjectId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  actionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  subjectSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  actionSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type AbilityCreateWithoutSubjectInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -868,8 +868,8 @@ export type AbilityCreateWithoutSubjectInput = {
 }
 
 export type AbilityUncheckedCreateWithoutSubjectInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -879,7 +879,7 @@ export type AbilityUncheckedCreateWithoutSubjectInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
-  actionId: bigint | number
+  actionSeq: bigint | number
   policyEntries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutAbilityInput
 }
 
@@ -910,8 +910,8 @@ export type AbilityUpdateManyWithWhereWithoutSubjectInput = {
 }
 
 export type AbilityCreateManyActionInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -921,12 +921,12 @@ export type AbilityCreateManyActionInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
-  subjectId: bigint | number
+  subjectSeq: bigint | number
 }
 
 export type AbilityUpdateWithoutActionInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -941,8 +941,8 @@ export type AbilityUpdateWithoutActionInput = {
 }
 
 export type AbilityUncheckedUpdateWithoutActionInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -952,13 +952,13 @@ export type AbilityUncheckedUpdateWithoutActionInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  subjectId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  subjectSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   policyEntries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateManyWithoutActionInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -968,12 +968,12 @@ export type AbilityUncheckedUpdateManyWithoutActionInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  subjectId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  subjectSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type AbilityCreateManySubjectInput = {
-  abilityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -983,12 +983,12 @@ export type AbilityCreateManySubjectInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: boolean
   reason?: string | null
-  actionId: bigint | number
+  actionSeq: bigint | number
 }
 
 export type AbilityUpdateWithoutSubjectInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1003,8 +1003,8 @@ export type AbilityUpdateWithoutSubjectInput = {
 }
 
 export type AbilityUncheckedUpdateWithoutSubjectInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1014,13 +1014,13 @@ export type AbilityUncheckedUpdateWithoutSubjectInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  actionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  actionSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   policyEntries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1030,7 +1030,7 @@ export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
   conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  actionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  actionSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 
@@ -1065,8 +1065,8 @@ export type AbilityCountOutputTypeCountPolicyEntriesArgs<ExtArgs extends runtime
 
 
 export type AbilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  abilityId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1076,8 +1076,8 @@ export type AbilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   conditions?: boolean
   inverted?: boolean
   reason?: boolean
-  subjectId?: boolean
-  actionId?: boolean
+  subjectSeq?: boolean
+  actionSeq?: boolean
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
   policyEntries?: boolean | Prisma.Ability$policyEntriesArgs<ExtArgs>
@@ -1085,8 +1085,8 @@ export type AbilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 }, ExtArgs["result"]["ability"]>
 
 export type AbilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  abilityId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1096,15 +1096,15 @@ export type AbilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   conditions?: boolean
   inverted?: boolean
   reason?: boolean
-  subjectId?: boolean
-  actionId?: boolean
+  subjectSeq?: boolean
+  actionSeq?: boolean
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
 
 export type AbilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  abilityId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1114,15 +1114,15 @@ export type AbilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   conditions?: boolean
   inverted?: boolean
   reason?: boolean
-  subjectId?: boolean
-  actionId?: boolean
+  subjectSeq?: boolean
+  actionSeq?: boolean
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
 
 export type AbilitySelectScalar = {
-  abilityId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1132,11 +1132,11 @@ export type AbilitySelectScalar = {
   conditions?: boolean
   inverted?: boolean
   reason?: boolean
-  subjectId?: boolean
-  actionId?: boolean
+  subjectSeq?: boolean
+  actionSeq?: boolean
 }
 
-export type AbilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"abilityId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "description" | "fields" | "conditions" | "inverted" | "reason" | "subjectId" | "actionId", ExtArgs["result"]["ability"]>
+export type AbilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "description" | "fields" | "conditions" | "inverted" | "reason" | "subjectSeq" | "actionSeq", ExtArgs["result"]["ability"]>
 export type AbilityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
@@ -1160,8 +1160,8 @@ export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     policyEntries: Prisma.$PolicyEntryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    abilityId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1189,8 +1189,8 @@ export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
      * @displayName 거부 사유
      */
     reason: string | null
-    subjectId: bigint
-    actionId: bigint
+    subjectSeq: bigint
+    actionSeq: bigint
   }, ExtArgs["result"]["ability"]>
   composites: {}
 }
@@ -1274,8 +1274,8 @@ export interface AbilityDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * // Get first 10 Abilities
    * const abilities = await prisma.ability.findMany({ take: 10 })
    *
-   * // Only select the `abilityId`
-   * const abilityWithAbilityIdOnly = await prisma.ability.findMany({ select: { abilityId: true } })
+   * // Only select the `id`
+   * const abilityWithIdOnly = await prisma.ability.findMany({ select: { id: true } })
    *
    */
   findMany<T extends AbilityFindManyArgs>(args?: Prisma.SelectSubset<T, AbilityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1319,9 +1319,9 @@ export interface AbilityDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    *
-   * // Create many Abilities and only return the `abilityId`
-   * const abilityWithAbilityIdOnly = await prisma.ability.createManyAndReturn({
-   *   select: { abilityId: true },
+   * // Create many Abilities and only return the `id`
+   * const abilityWithIdOnly = await prisma.ability.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1410,9 +1410,9 @@ export interface AbilityDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    *
-   * // Update zero or more Abilities and only return the `abilityId`
-   * const abilityWithAbilityIdOnly = await prisma.ability.updateManyAndReturn({
-   *   select: { abilityId: true },
+   * // Update zero or more Abilities and only return the `id`
+   * const abilityWithIdOnly = await prisma.ability.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1617,8 +1617,8 @@ export interface Prisma__AbilityClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Ability model
  */
 export interface AbilityFieldRefs {
-  readonly abilityId: Prisma.FieldRef<"Ability", 'String'>
-  readonly id: Prisma.FieldRef<"Ability", 'BigInt'>
+  readonly id: Prisma.FieldRef<"Ability", 'String'>
+  readonly seq: Prisma.FieldRef<"Ability", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Ability", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ability", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Ability", 'DateTime'>
@@ -1628,8 +1628,8 @@ export interface AbilityFieldRefs {
   readonly conditions: Prisma.FieldRef<"Ability", 'Json'>
   readonly inverted: Prisma.FieldRef<"Ability", 'Boolean'>
   readonly reason: Prisma.FieldRef<"Ability", 'String'>
-  readonly subjectId: Prisma.FieldRef<"Ability", 'BigInt'>
-  readonly actionId: Prisma.FieldRef<"Ability", 'BigInt'>
+  readonly subjectSeq: Prisma.FieldRef<"Ability", 'BigInt'>
+  readonly actionSeq: Prisma.FieldRef<"Ability", 'BigInt'>
 }
 
 

@@ -6,7 +6,7 @@ export class ApproveTenantAccessRequestCommand
 
 	constructor(
 		readonly tenantAccessRequestId: bigint,
-		readonly reviewerId: bigint,
+		readonly reviewerSeq: bigint,
 		input: ApproveTenantAccessRequestCommandInput,
 	) {
 		Object.assign(this, input);

@@ -22,20 +22,20 @@ import { User } from "./user.entity";
 export class Reservation extends ReservationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare reservationId: ReservationSchema["reservationId"];
+	declare id: ReservationSchema["id"];
 
 	@BigIntIdFieldMetadata({ description: "Space ID" })
-	declare spaceId: ReservationSchema["spaceId"];
+	declare spaceSeq: ReservationSchema["spaceSeq"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdById: ReservationSchema["createdById"];
+	declare createdBySeq: ReservationSchema["createdBySeq"];
 	@BigIntIdFieldMetadata({ description: "예약 사용자 ID" })
-	declare userId: ReservationSchema["userId"];
+	declare userSeq: ReservationSchema["userSeq"];
 	@BigIntIdFieldMetadata({ description: "타임라인 ID" })
-	declare timelineId: ReservationSchema["timelineId"];
+	declare timelineSeq: ReservationSchema["timelineSeq"];
 	@BigIntIdFieldMetadata({ description: "세션 ID" })
-	declare sessionId: ReservationSchema["sessionId"];
+	declare sessionSeq: ReservationSchema["sessionSeq"];
 	@BigIntIdFieldMetadata({ description: "프로그램 ID" })
-	declare programId: ReservationSchema["programId"];
+	declare programSeq: ReservationSchema["programSeq"];
 	@DateFieldMetadata({ description: "예약 발생 회차 시작 시각" })
 	declare occurrenceStartAt: ReservationSchema["occurrenceStartAt"];
 	@EnumFieldMetadata(() => ReservationStatus, { description: "예약 상태" })

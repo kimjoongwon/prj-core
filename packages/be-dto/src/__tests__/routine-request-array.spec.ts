@@ -38,8 +38,8 @@ describe.each([
 	it("배열의 각 항목을 인스턴스로 변환하고 ID와 숫자를 검증한다", async () => {
 		const routineRequest = await validateRoutineRequest({
 			activities: [
-				{ taskId: "1", order: "1" },
-				{ taskId: "2", repetitions: "3" },
+				{ taskSeq: "1", order: "1" },
+				{ taskSeq: "2", repetitions: "3" },
 			],
 		});
 
@@ -48,8 +48,8 @@ describe.each([
 			CreateRoutineActivityItemDto,
 		);
 		expect(routineRequest.activities).toEqual([
-			expect.objectContaining({ taskId: 1n, order: 1 }),
-			expect.objectContaining({ taskId: 2n, repetitions: 3 }),
+			expect.objectContaining({ taskSeq: 1n, order: 1 }),
+			expect.objectContaining({ taskSeq: 2n, repetitions: 3 }),
 		]);
 	});
 
@@ -62,9 +62,9 @@ describe.each([
 			(await validateRoutineRequest({ activities: null })).activities,
 		).toEqual([]);
 		expect(
-			(await validateRoutineRequest({ activities: { taskId: "3" } }))
+			(await validateRoutineRequest({ activities: { taskSeq: "3" } }))
 				.activities,
-		).toEqual([expect.objectContaining({ taskId: 3n })]);
+		).toEqual([expect.objectContaining({ taskSeq: 3n })]);
 	});
 
 	it("필수 항목 ID 누락과 잘못된 ID를 거부한다", async () => {
@@ -72,7 +72,7 @@ describe.each([
 			validateRoutineRequest({ activities: [{}] }),
 		).rejects.toThrow();
 		await expect(
-			validateRoutineRequest({ activities: [{ taskId: "invalid" }] }),
+			validateRoutineRequest({ activities: [{ taskSeq: "invalid" }] }),
 		).rejects.toThrow();
 	});
 });

@@ -14,11 +14,12 @@ import type { User } from "./user.entity";
 @AbstractEntityFields()
 export class Task extends TaskSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) declare taskId: TaskSchema["taskId"];
+	@Exclude({ toPlainOnly: true })
+	declare id: TaskSchema["id"];
 
-	@BigIntIdFieldMetadata() declare spaceId: TaskSchema["spaceId"];
+	@BigIntIdFieldMetadata() declare spaceSeq: TaskSchema["spaceSeq"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true })
-	declare createdById: TaskSchema["createdById"];
+	declare createdBySeq: TaskSchema["createdBySeq"];
 
 	space?: Space;
 	createdBy?: User;

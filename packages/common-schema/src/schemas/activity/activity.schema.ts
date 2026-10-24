@@ -7,13 +7,13 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Activity의 DB 필드 타입과 공통 검증입니다. */
 export class ActivitySchema extends AbstractSchema {
-	activityId!: string;
+	id!: string;
 
 	@BigIntIdValidation()
-	routineId!: bigint;
+	routineSeq!: bigint;
 
 	@BigIntIdValidation()
-	taskId!: bigint;
+	taskSeq!: bigint;
 
 	@NumberValidation()
 	order!: number;

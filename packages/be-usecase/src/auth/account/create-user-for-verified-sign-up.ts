@@ -12,7 +12,7 @@ export async function createUserForVerifiedSignUp(params: {
 	nickname?: string;
 	phone: string;
 	address: string;
-	spaceId: bigint;
+	spaceSeq: bigint;
 	email: string;
 	passwordHash: string;
 }): Promise<{ id: bigint }> {
@@ -25,7 +25,7 @@ export async function createUserForVerifiedSignUp(params: {
 
 	const signUpSpace = await getSignUpSpaceOrThrow(
 		params.spacesService,
-		params.spaceId,
+		params.spaceSeq,
 	);
 
 	const user = await params.usersService.createUserForSignUp({
@@ -34,8 +34,8 @@ export async function createUserForVerifiedSignUp(params: {
 		phone: params.phone,
 		address: params.address,
 		password: params.passwordHash,
-		spaceId: signUpSpace.id,
-		roleId: userRole.id,
+		spaceSeq: signUpSpace.id,
+		roleSeq: userRole.id,
 		nickname: params.nickname,
 	});
 

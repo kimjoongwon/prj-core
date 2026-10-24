@@ -8,12 +8,12 @@ import { Group } from "./group.entity";
 export class RoleAssociation extends RoleAssociationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare roleAssociationId: RoleAssociationSchema["roleAssociationId"];
+	declare id: RoleAssociationSchema["id"];
 
 	@BigIntIdFieldMetadata()
-	declare roleId: RoleAssociationSchema["roleId"];
+	declare roleSeq: RoleAssociationSchema["roleSeq"];
 	@BigIntIdFieldMetadata()
-	declare groupId: RoleAssociationSchema["groupId"];
+	declare groupSeq: RoleAssociationSchema["groupSeq"];
 
 	@ClassField(() => Group, { required: false, swagger: false })
 	group?: Group;

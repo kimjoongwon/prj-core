@@ -49,10 +49,10 @@ type AbilityWithPriority = Pick<
  */
 const ALLOWED_TEMPLATE_VARIABLES = [
 	"user.id",
-	"user.spaceId",
+	"user.spaceSeq",
 	"user.email",
 	"user.name",
-	"user.currentTenantId",
+	"user.currentTenantSeq",
 	"user.currentSpaceId",
 	"user.currentRoleId",
 	"user.roleCategory",
@@ -88,7 +88,7 @@ export class CaslAbilityFactory {
 	 * @returns 사용자의 권한이 적용된 AppAbility 객체
 	 *
 	 * @description
-	 * 1. x-tenant-id 헤더에서 현재 tenant를 가져와 spaceId 파생
+	 * 1. x-tenant-id 헤더에서 현재 tenant를 가져와 spaceSeq 파생
 	 * 2. RoleAssignment로 Role 기반 정책 조회 (RoleAssignment → Policy → Ability)
 	 * 3. 권한 병합 (priority 기반)
 	 * 4. AbilityBuilder로 권한 생성
@@ -100,35 +100,35 @@ export class CaslAbilityFactory {
 			Ability as AppAbilityClass,
 		);
 
-		// x-tenant-id 헤더에서 현재 tenant를 가져와서 spaceId 파생
+		// x-tenant-id 헤더에서 현재 tenant를 가져와서 spaceSeq 파생
 		const tenantId = this.cls.get<DatabaseId>(CONTEXT_KEYS.TENANT_ID);
 		const currentTenant =
 			this.cls.get<ContextTenantSnapshot | undefined>(CONTEXT_KEYS.TENANT) ??
 			resolveCurrentTenantById(user.tenants, tenantId);
-		const spaceId = currentTenant
+		const spaceSeq = currentTenant
 			? resolveTenantSpaceId(currentTenant)
 			: this.cls.get<DatabaseId | undefined>(CONTEXT_KEYS.SPACE_ID);
 
-		if (!tenantId || !spaceId || !currentTenant?.role) {
+		if (!tenantId || !spaceSeq || !currentTenant?.role) {
 			this.logger.warn(
-				`사용자에게 현재 Tenant 또는 Role이 없습니다: userId=${user.id}, tenantId=${tenantId}, spaceId=${spaceId}`,
+				`사용자에게 현재 Tenant 또는 Role이 없습니다: userSeq=${user.id}, tenantId=${tenantId}, spaceSeq=${spaceSeq}`,
 			);
 			return abilityBuilder.build();
 		}
 
-		const roleId = currentTenant.roleId;
+		const roleSeq = currentTenant.roleSeq;
 		this.logger.debug(
-			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}, spaceId=${spaceId}`,
+			`사용자 권한 생성 시작: userSeq=${user.id}, roleSeq=${roleSeq}, spaceSeq=${spaceSeq}`,
 		);
 
 		const roleAssignments =
 			await this.roleAssignmentsRepository.findActiveByRoleIdsInSpace(
-				[roleId],
-				spaceId,
+				[roleSeq],
+				spaceSeq,
 			);
 		const roleAbilities = this.expandRoleAssignmentAbilities(roleAssignments);
 		this.logger.debug(
-			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleId=${roleId}`,
+			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleSeq=${roleSeq}`,
 		);
 
 		const mergedAbilities = this.mergeAbilities(roleAbilities);
@@ -268,12 +268,12 @@ export class CaslAbilityFactory {
 		return {
 			user: {
 				id: user.id,
-				spaceId: user.spaceId,
+				spaceSeq: user.spaceSeq,
 				email: user.email,
 				name: user.name,
-				currentTenantId: currentTenant.id,
-				currentSpaceId: currentTenant.spaceId,
-				currentRoleId: currentTenant.roleId,
+				currentTenantSeq: currentTenant.id,
+				currentSpaceId: currentTenant.spaceSeq,
+				currentRoleId: currentTenant.roleSeq,
 				roleCategory,
 				roleGroupNames,
 				userCategory,
@@ -305,12 +305,12 @@ export class CaslAbilityFactory {
 		) => void,
 	): void {
 		if (!ability.subject) {
-			this.logger.warn(`Ability에 Subject가 없습니다: abilityId=${ability.id}`);
+			this.logger.warn(`Ability에 Subject가 없습니다: abilitySeq=${ability.id}`);
 			return;
 		}
 
 		if (!ability.action) {
-			this.logger.warn(`Ability에 Action이 없습니다: abilityId=${ability.id}`);
+			this.logger.warn(`Ability에 Action이 없습니다: abilitySeq=${ability.id}`);
 			return;
 		}
 

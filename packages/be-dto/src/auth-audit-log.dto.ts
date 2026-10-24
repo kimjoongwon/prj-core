@@ -6,7 +6,7 @@ export class AuthAuditLogDto extends EntityResponseType(AuthAuditLog, {
 		"id",
 		"createdAt",
 		"email",
-		"userId",
+		"userSeq",
 		"result",
 		"failureReason",
 		"ipAddress",

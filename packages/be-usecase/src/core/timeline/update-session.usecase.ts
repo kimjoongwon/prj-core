@@ -8,8 +8,8 @@ export class UpdateSessionUseCase {
 
 	execute(command: UpdateSessionCommand): Promise<unknown> {
 		return this.timelinesService.updateSessionInTimeline(
-			command.timelineId,
-			command.sessionId,
+			command.timelineSeq,
+			command.sessionSeq,
 			command,
 		);
 	}

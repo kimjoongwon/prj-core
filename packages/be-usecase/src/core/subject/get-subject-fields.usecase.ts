@@ -7,7 +7,7 @@ export class GetSubjectFieldsUseCase {
 	constructor(private readonly subjectsService: SubjectAggregate) {}
 
 	async execute(query: GetSubjectFieldsQuery): Promise<unknown> {
-		const subject = await this.subjectsService.getSubjectById(query.subjectId);
+		const subject = await this.subjectsService.getSubjectById(query.subjectSeq);
 		if (!subject) {
 			return [];
 		}

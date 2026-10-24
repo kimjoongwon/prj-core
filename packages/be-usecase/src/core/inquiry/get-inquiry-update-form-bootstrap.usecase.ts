@@ -12,7 +12,7 @@ export class GetInquiryUpdateFormBootstrapUseCase {
 
 	execute(query: GetInquiryUpdateFormBootstrapQuery): Promise<unknown> {
 		return this.inquiryService.getUpdateFormBootstrap(
-			query.inquiryId,
+			query.inquirySeq,
 			this.spaceContext.spaceIds,
 		);
 	}

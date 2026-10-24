@@ -13,18 +13,18 @@ import { InquiryMessage } from "./inquiry-message.entity";
 @AbstractEntityFields()
 export class AIAgentLog extends AIAgentLogSchema {
 	/** 공개 식별자 ULID */
-	declare aiAgentLogId: AIAgentLogSchema["aiAgentLogId"];
+	declare id: AIAgentLogSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	declare inquiryId: AIAgentLogSchema["inquiryId"];
+	declare inquirySeq: AIAgentLogSchema["inquirySeq"];
 	declare action: AIAgentLogSchema["action"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	declare messageId: AIAgentLogSchema["messageId"];
+	declare messageSeq: AIAgentLogSchema["messageSeq"];
 	declare input: AIAgentLogSchema["input"];
 	declare output: AIAgentLogSchema["output"];
 	declare confidence: AIAgentLogSchema["confidence"];

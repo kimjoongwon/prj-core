@@ -67,7 +67,7 @@ export class TemplatesController {
 		return this.queryBus.execute(new GetTemplatesQuery(query));
 	}
 
-	@Get(":templateId")
+	@Get(":templateSeq")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -79,7 +79,7 @@ export class TemplatesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "templateId",
+		name: "templateSeq",
 		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -87,9 +87,9 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("템플릿 조회 성공")
 	async getTemplate(
-		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
+		@Param("templateSeq", ParseBigIntIdPipe) templateSeq: bigint,
 	) {
-		return this.queryBus.execute(new GetTemplateByIdQuery(templateId));
+		return this.queryBus.execute(new GetTemplateByIdQuery(templateSeq));
 	}
 
 	@Post()
@@ -113,7 +113,7 @@ export class TemplatesController {
 		return this.commandBus.execute(new CreateTemplateCommand(dto));
 	}
 
-	@Patch(":templateId")
+	@Patch(":templateSeq")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -125,7 +125,7 @@ export class TemplatesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "templateId",
+		name: "templateSeq",
 		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -137,13 +137,13 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("템플릿 수정 성공")
 	async updateTemplate(
-		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
+		@Param("templateSeq", ParseBigIntIdPipe) templateSeq: bigint,
 		@Body() dto: UpdateTemplateDto,
 	) {
-		return this.commandBus.execute(new UpdateTemplateCommand(templateId, dto));
+		return this.commandBus.execute(new UpdateTemplateCommand(templateSeq, dto));
 	}
 
-	@Delete(":templateId")
+	@Delete(":templateSeq")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -154,19 +154,19 @@ export class TemplatesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "templateId",
+		name: "templateSeq",
 		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ResponseMessage("템플릿 삭제 성공")
 	async deleteTemplate(
-		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
+		@Param("templateSeq", ParseBigIntIdPipe) templateSeq: bigint,
 	): Promise<void> {
-		await this.commandBus.execute(new DeleteTemplateCommand(templateId));
+		await this.commandBus.execute(new DeleteTemplateCommand(templateSeq));
 	}
 
-	@Patch(":templateId/toggle-status")
+	@Patch(":templateSeq/toggle-status")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -178,7 +178,7 @@ export class TemplatesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "templateId",
+		name: "templateSeq",
 		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -186,12 +186,12 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("템플릿 상태 변경 성공")
 	async toggleTemplateStatus(
-		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
+		@Param("templateSeq", ParseBigIntIdPipe) templateSeq: bigint,
 	) {
-		return this.commandBus.execute(new ToggleTemplateStatusCommand(templateId));
+		return this.commandBus.execute(new ToggleTemplateStatusCommand(templateSeq));
 	}
 
-	@Post(":templateId/preview")
+	@Post(":templateSeq/preview")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -203,7 +203,7 @@ export class TemplatesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "templateId",
+		name: "templateSeq",
 		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -214,13 +214,13 @@ export class TemplatesController {
 	@ApiErrors(401, 403, 404, 500)
 	@ResponseMessage("템플릿 미리보기 성공")
 	async previewTemplate(
-		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
+		@Param("templateSeq", ParseBigIntIdPipe) templateSeq: bigint,
 		@Body() dto: PreviewTemplateDto,
 	) {
-		return this.queryBus.execute(new PreviewTemplateQuery(templateId, dto));
+		return this.queryBus.execute(new PreviewTemplateQuery(templateSeq, dto));
 	}
 
-	@Post(":templateId/send-test")
+	@Post(":templateSeq/send-test")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -232,7 +232,7 @@ export class TemplatesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "templateId",
+		name: "templateSeq",
 		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -243,11 +243,11 @@ export class TemplatesController {
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ResponseMessage("테스트 발송 성공")
 	async sendTestTemplate(
-		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
+		@Param("templateSeq", ParseBigIntIdPipe) templateSeq: bigint,
 		@Body() dto: SendTestTemplateDto,
 	) {
 		return this.commandBus.execute(
-			new SendTestTemplateCommand(templateId, dto),
+			new SendTestTemplateCommand(templateSeq, dto),
 		);
 	}
 }

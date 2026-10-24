@@ -39,8 +39,8 @@ export class AssetAggregate {
 	) {}
 
 	async getAssets(query: GetAssetsQueryInput) {
-		const spaceId = this.getCurrentSpaceId();
-		this.logger.debug(`에셋 목록 조회: space=${spaceId}`);
+		const spaceSeq = this.getCurrentSpaceId();
+		this.logger.debug(`에셋 목록 조회: space=${spaceSeq}`);
 		const spaceIds = this.spaceContext.spaceIds;
 		const where = this.applySpaceScope(
 			buildAssetQueryWhere(
@@ -65,13 +65,13 @@ export class AssetAggregate {
 		};
 	}
 
-	async getAssetById(assetId: bigint) {
-		const asset = await this.getCurrentSpaceAsset(assetId);
+	async getAssetById(assetSeq: bigint) {
+		const asset = await this.getCurrentSpaceAsset(assetSeq);
 		return this.serializeAsset(asset);
 	}
 
-	async getAssetContent(assetId: bigint) {
-		const asset = await this.getCurrentSpaceAsset(assetId);
+	async getAssetContent(assetSeq: bigint) {
+		const asset = await this.getCurrentSpaceAsset(assetSeq);
 		const object = await this.objectStorageService.getObject(asset.storageKey);
 
 		return {
@@ -84,9 +84,9 @@ export class AssetAggregate {
 		};
 	}
 
-	async moveAsset(assetId: bigint, dto: MoveAssetCommandInput) {
+	async moveAsset(assetSeq: bigint, dto: MoveAssetCommandInput) {
 		const currentSpaceId = this.getCurrentSpaceId();
-		const asset = await this.getCurrentSpaceAsset(assetId);
+		const asset = await this.getCurrentSpaceAsset(assetSeq);
 		const targetFolder = await this.foldersRepository.findById(
 			dto.targetFolderId,
 		);
@@ -94,60 +94,60 @@ export class AssetAggregate {
 		if (
 			!targetFolder ||
 			targetFolder.removedAt ||
-			targetFolder.spaceId !== currentSpaceId
+			targetFolder.spaceSeq !== currentSpaceId
 		) {
 			throw new NotFoundException("이동할 폴더를 찾을 수 없습니다");
 		}
 
-		if (asset.folderId === dto.targetFolderId) {
+		if (asset.folderSeq === dto.targetFolderId) {
 			throw new BadRequestException("이미 선택한 폴더에 속한 에셋입니다");
 		}
 
-		const movedAsset = await this.assetsRepository.updateById(assetId, {
-			folderId: dto.targetFolderId,
+		const movedAsset = await this.assetsRepository.updateById(assetSeq, {
+			folderSeq: dto.targetFolderId,
 		});
 
 		return this.serializeAsset(movedAsset);
 	}
 
-	async deleteAsset(assetId: bigint): Promise<void> {
-		const asset = await this.getCurrentSpaceAsset(assetId);
+	async deleteAsset(assetSeq: bigint): Promise<void> {
+		const asset = await this.getCurrentSpaceAsset(assetSeq);
 
 		if (
 			this.spaceContext.spaceIds !== undefined &&
-			asset.spaceId !== this.getCurrentSpaceId()
+			asset.spaceSeq !== this.getCurrentSpaceId()
 		) {
 			throw new ForbiddenException("현재 Space의 에셋만 삭제할 수 있습니다");
 		}
 
 		await this.objectStorageService.deleteObject(asset.storageKey);
-		await this.assetsRepository.deleteById(assetId);
+		await this.assetsRepository.deleteById(assetSeq);
 	}
 
 	async uploadAsset(
 		dto: UploadAssetCommandInput,
 		file: UploadedAssetFile | undefined,
-		createdById: bigint,
+		createdBySeq: bigint,
 	) {
 		if (!file) {
 			throw new BadRequestException("업로드할 파일이 필요합니다");
 		}
 
 		const normalizedOriginalName = normalizeUploadedFileName(file.originalname);
-		const spaceId = this.getCurrentSpaceId();
-		const targetFolder = await this.foldersRepository.findById(dto.folderId);
+		const spaceSeq = this.getCurrentSpaceId();
+		const targetFolder = await this.foldersRepository.findById(dto.folderSeq);
 
 		if (
 			!targetFolder ||
 			targetFolder.removedAt ||
-			targetFolder.spaceId !== spaceId
+			targetFolder.spaceSeq !== spaceSeq
 		) {
 			throw new NotFoundException("업로드할 폴더를 찾을 수 없습니다");
 		}
 
 		const extension = this.extractExtension(normalizedOriginalName);
 		const kind = this.resolveAssetKind(file.mimetype);
-		const storageKey = this.buildStorageKey(spaceId, kind, extension);
+		const storageKey = this.buildStorageKey(spaceSeq, kind, extension);
 		let uploadedAssetContent: Buffer | ReturnType<typeof createReadStream>;
 		let uploadedAssetChecksum: string;
 		if (file.path) {
@@ -179,8 +179,8 @@ export class AssetAggregate {
 		});
 
 		const asset = await this.assetsRepository.create({
-			spaceId,
-			folderId: dto.folderId,
+			spaceSeq,
+			folderSeq: dto.folderSeq,
 			kind,
 			status: AssetStatus.READY,
 			originalName: normalizedOriginalName,
@@ -190,22 +190,22 @@ export class AssetAggregate {
 			extension,
 			checksum: checksum.value,
 			metadata: null,
-			createdById,
+			createdBySeq,
 		});
 
 		return this.serializeAsset(asset);
 	}
 
 	private getCurrentSpaceId(): bigint {
-		const spaceId = this.spaceContext.spaceId;
+		const spaceSeq = this.spaceContext.spaceSeq;
 
-		if (!spaceId) {
+		if (!spaceSeq) {
 			throw new BadRequestException(
 				"x-tenant-id 헤더가 필요합니다. Space를 선택해주세요.",
 			);
 		}
 
-		return spaceId;
+		return spaceSeq;
 	}
 
 	private async calculateStoredAssetFileChecksum(
@@ -225,11 +225,11 @@ export class AssetAggregate {
 		});
 	}
 
-	private async getCurrentSpaceAsset(assetId: bigint): Promise<Asset> {
-		const asset = await this.assetsRepository.findByIdWithRelations(assetId);
+	private async getCurrentSpaceAsset(assetSeq: bigint): Promise<Asset> {
+		const asset = await this.assetsRepository.findByIdWithRelations(assetSeq);
 		this.getCurrentSpaceId();
 
-		if (!asset || asset.removedAt || !this.canReadSpace(asset.spaceId)) {
+		if (!asset || asset.removedAt || !this.canReadSpace(asset.spaceSeq)) {
 			throw new NotFoundException("에셋을 찾을 수 없습니다");
 		}
 
@@ -250,9 +250,9 @@ export class AssetAggregate {
 		};
 	}
 
-	private canReadSpace(spaceId: bigint): boolean {
+	private canReadSpace(spaceSeq: bigint): boolean {
 		const spaceIds = this.spaceContext.spaceIds;
-		return spaceIds === undefined || spaceIds.includes(spaceId);
+		return spaceIds === undefined || spaceIds.includes(spaceSeq);
 	}
 
 	private serializeAsset(asset: Asset) {
@@ -281,13 +281,13 @@ export class AssetAggregate {
 	}
 
 	private buildStorageKey(
-		spaceId: bigint,
+		spaceSeq: bigint,
 		kind: AssetKind,
 		extension: string | null,
 	): StorageKey {
 		const normalizedExtension = extension ? `.${extension}` : "";
 		return StorageKey.fromPath(
-			`spaces/${spaceId}/assets/${kind.toLowerCase()}/${randomUUID()}${normalizedExtension}`,
+			`spaces/${spaceSeq}/assets/${kind.toLowerCase()}/${randomUUID()}${normalizedExtension}`,
 		);
 	}
 }

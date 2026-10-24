@@ -19,7 +19,7 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class SecurityPolicy extends SecurityPolicySchema {
 	@BigIntIdFieldMetadata({ description: "ID" })
-	declare id: bigint;
+	declare seq: bigint;
 	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 	@DateFieldOptionalMetadata({ nullable: true, description: "수정일" })
@@ -27,7 +27,7 @@ export class SecurityPolicy extends SecurityPolicySchema {
 
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare securityPolicyId: SecurityPolicySchema["securityPolicyId"];
+	declare id: SecurityPolicySchema["id"];
 
 	// ============================================================================
 	// 기본 필드

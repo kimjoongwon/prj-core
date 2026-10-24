@@ -50,7 +50,7 @@ export class TimelinesRepository {
 			...(params.spaceIds || params.contentLanguageCode
 				? {
 						space: {
-							...(params.spaceIds ? { id: { in: params.spaceIds } } : {}),
+							...(params.spaceIds ? { seq: { in: params.spaceIds } } : {}),
 							...(params.contentLanguageCode
 								? { contentLanguageCode: params.contentLanguageCode }
 								: {}),
@@ -86,14 +86,14 @@ export class TimelinesRepository {
 	/**
 	 * ID와 spaceId로 타임라인 단건 조회 (createdBy, space, 세션 수 포함)
 	 */
-	async findTimelineById(timelineId: bigint, spaceIds?: bigint[]) {
-		this.logger.debug(`타임라인 상세 조회: ${timelineId.toString()}`);
+	async findTimelineById(timelineSeq: bigint, spaceIds?: bigint[]) {
+		this.logger.debug(`타임라인 상세 조회: ${timelineSeq.toString()}`);
 
 		const timeline = await this.txHost.tx.timeline.findFirst({
 			where: {
-				id: timelineId,
+				seq: timelineSeq,
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
 			},
 			include: {
 				createdBy: { select: { id: true, name: true } },
@@ -113,8 +113,8 @@ export class TimelinesRepository {
 	async createTimeline(data: {
 		name: string;
 		description?: string | null;
-		spaceId: bigint;
-		createdById: bigint;
+		spaceSeq: bigint;
+		createdBySeq: bigint;
 	}) {
 		this.logger.debug("타임라인 생성");
 
@@ -122,8 +122,8 @@ export class TimelinesRepository {
 			data: {
 				name: data.name,
 				description: data.description,
-				spaceId: data.spaceId,
-				createdById: data.createdById,
+				spaceSeq: data.spaceSeq,
+				createdBySeq: data.createdBySeq,
 			},
 			include: {
 				space: { select: { id: true } },
@@ -138,13 +138,13 @@ export class TimelinesRepository {
 	 * 타임라인 수정
 	 */
 	async updateTimeline(
-		timelineId: bigint,
+		timelineSeq: bigint,
 		data: { name?: string; description?: string | null },
 	) {
-		this.logger.debug(`타임라인 수정: ${timelineId}`);
+		this.logger.debug(`타임라인 수정: ${timelineSeq}`);
 
 		const timeline = await this.txHost.tx.timeline.update({
-			where: { id: timelineId },
+			where: { seq: timelineSeq },
 			data,
 		});
 
@@ -154,11 +154,11 @@ export class TimelinesRepository {
 	/**
 	 * 타임라인 소프트 삭제
 	 */
-	async softDeleteTimeline(timelineId: bigint): Promise<void> {
-		this.logger.debug(`타임라인 소프트 삭제: ${timelineId}`);
+	async softDeleteTimeline(timelineSeq: bigint): Promise<void> {
+		this.logger.debug(`타임라인 소프트 삭제: ${timelineSeq}`);
 
 		await this.txHost.tx.timeline.update({
-			where: { id: timelineId },
+			where: { seq: timelineSeq },
 			data: { removedAt: new Date() },
 		});
 	}
@@ -168,15 +168,15 @@ export class TimelinesRepository {
 	 */
 	async countTimelinesWithName(
 		name: string,
-		spaceId: bigint,
+		spaceSeq: bigint,
 		excludeId?: bigint,
 	): Promise<number> {
 		return this.txHost.tx.timeline.count({
 			where: {
 				name,
-				spaceId,
+				spaceSeq,
 				removedAt: null,
-				...(excludeId ? { id: { not: excludeId } } : {}),
+				...(excludeId ? { seq: { not: excludeId } } : {}),
 			},
 		});
 	}
@@ -189,13 +189,13 @@ export class TimelinesRepository {
 	 * 타임라인 기반 세션 목록 조회 (프로그램 수 포함)
 	 */
 	async findManySessions(
-		timelineId: bigint,
+		timelineSeq: bigint,
 		params: { skip: number; take: number; search?: string | null },
 	) {
-		this.logger.debug(`세션 목록 조회: timelineId=${timelineId.toString()}`);
+		this.logger.debug(`세션 목록 조회: timelineSeq=${timelineSeq.toString()}`);
 
 		const where: Prisma.SessionWhereInput = {
-			timelineId,
+			timelineSeq,
 			removedAt: null,
 			...(params.search
 				? { name: { contains: params.search, mode: "insensitive" } }
@@ -222,15 +222,15 @@ export class TimelinesRepository {
 	}
 
 	/**
-	 * timelineId + sessionId로 세션 단건 조회 (timeline 관계 포함)
+	 * timelineSeq + sessionId로 세션 단건 조회 (timeline 관계 포함)
 	 */
-	async findSessionById(timelineId: bigint, sessionId: bigint) {
-		this.logger.debug(`세션 상세 조회: ${sessionId.toString()}`);
+	async findSessionById(timelineSeq: bigint, sessionSeq: bigint) {
+		this.logger.debug(`세션 상세 조회: ${sessionSeq.toString()}`);
 
 		const session = await this.txHost.tx.session.findFirst({
 			where: {
-				id: sessionId,
-				timelineId,
+				seq: sessionSeq,
+				timelineSeq,
 				removedAt: null,
 			},
 			include: {
@@ -250,7 +250,7 @@ export class TimelinesRepository {
 	async createSession(
 		data: AutoIdentityCreateInput<
 			Prisma.SessionUncheckedCreateInput,
-			"sessionId"
+			"id"
 		>,
 	) {
 		this.logger.debug("세션 생성");
@@ -266,15 +266,15 @@ export class TimelinesRepository {
 	 * 세션 수정
 	 */
 	async updateSession(
-		sessionId: bigint,
+		sessionSeq: bigint,
 		data: AutoIdentityUpdateInput<
 			Prisma.SessionUncheckedUpdateInput,
-			"sessionId"
+			"id"
 		>,
 	) {
-		this.logger.debug(`세션 수정: ${sessionId.toString()}`);
+		this.logger.debug(`세션 수정: ${sessionSeq.toString()}`);
 		const session = await this.txHost.tx.session.update({
-			where: { id: sessionId },
+			where: { seq: sessionSeq },
 			data,
 			include: { timeline: { select: { id: true } } },
 		});
@@ -285,11 +285,11 @@ export class TimelinesRepository {
 	/**
 	 * 세션 소프트 삭제
 	 */
-	async softDeleteSession(sessionId: bigint): Promise<void> {
-		this.logger.debug(`세션 소프트 삭제: ${sessionId.toString()}`);
+	async softDeleteSession(sessionSeq: bigint): Promise<void> {
+		this.logger.debug(`세션 소프트 삭제: ${sessionSeq.toString()}`);
 
 		await this.txHost.tx.session.update({
-			where: { id: sessionId },
+			where: { seq: sessionSeq },
 			data: { removedAt: new Date() },
 		});
 	}
@@ -302,13 +302,13 @@ export class TimelinesRepository {
 	 * 세션 기반 프로그램 목록 조회
 	 */
 	async findManyPrograms(
-		sessionId: bigint,
+		sessionSeq: bigint,
 		params: { skip: number; take: number },
 	) {
-		this.logger.debug(`프로그램 목록 조회: sessionId=${sessionId.toString()}`);
+		this.logger.debug(`프로그램 목록 조회: sessionSeq=${sessionSeq.toString()}`);
 
 		const where: Prisma.ProgramWhereInput = {
-			sessionId,
+			sessionSeq,
 			removedAt: null,
 		};
 
@@ -350,16 +350,16 @@ export class TimelinesRepository {
 	}
 
 	/**
-	 * sessionId + programId로 프로그램 단건 조회 (routine, session 포함)
+	 * sessionSeq + programId로 프로그램 단건 조회 (routine, session 포함)
 	 */
-	async findProgramById(sessionId: bigint, programId: bigint) {
-		this.logger.debug(`프로그램 상세 조회: ${programId.toString()}`);
+	async findProgramById(sessionSeq: bigint, programSeq: bigint) {
+		this.logger.debug(`프로그램 상세 조회: ${programSeq.toString()}`);
 
 		return this.txHost.tx.program
 			.findFirst({
 				where: {
-					id: programId,
-					sessionId,
+					seq: programSeq,
+					sessionSeq,
 					removedAt: null,
 				},
 				include: {
@@ -400,9 +400,9 @@ export class TimelinesRepository {
 	 */
 	async createProgram(data: {
 		name: string;
-		routineId: bigint;
-		sessionId: bigint;
-		instructorId: bigint;
+		routineSeq: bigint;
+		sessionSeq: bigint;
+		instructorSeq: bigint;
 		capacity: number;
 		level?: string | null;
 		routineNameSnapshot?: string | null;
@@ -413,9 +413,9 @@ export class TimelinesRepository {
 		const program = await this.txHost.tx.program.create({
 			data: {
 				name: data.name,
-				routineId: data.routineId,
-				sessionId: data.sessionId,
-				instructorId: data.instructorId,
+				routineSeq: data.routineSeq,
+				sessionSeq: data.sessionSeq,
+				instructorSeq: data.instructorSeq,
 				capacity: data.capacity,
 				level: data.level,
 				routineNameSnapshot: data.routineNameSnapshot,
@@ -434,20 +434,20 @@ export class TimelinesRepository {
 	 * 프로그램 수정
 	 */
 	async updateProgram(
-		programId: bigint,
+		programSeq: bigint,
 		data: {
 			name?: string;
-			routineId?: bigint;
-			instructorId?: bigint;
+			routineSeq?: bigint;
+			instructorSeq?: bigint;
 			capacity?: number;
 			level?: string | null;
 			routineNameSnapshot?: string | null;
 			routineLabelSnapshot?: string | null;
 		},
 	) {
-		this.logger.debug(`프로그램 수정: ${programId}`);
+		this.logger.debug(`프로그램 수정: ${programSeq}`);
 		const program = await this.txHost.tx.program.update({
-			where: { id: programId },
+			where: { seq: programSeq },
 			data,
 			include: {
 				routine: { select: { id: true } },
@@ -461,18 +461,18 @@ export class TimelinesRepository {
 	/**
 	 * 프로그램 소프트 삭제
 	 */
-	async softDeleteProgram(programId: bigint): Promise<void> {
-		this.logger.debug(`프로그램 소프트 삭제: ${programId}`);
+	async softDeleteProgram(programSeq: bigint): Promise<void> {
+		this.logger.debug(`프로그램 소프트 삭제: ${programSeq}`);
 
 		const removedAt = new Date();
 
 		await this.txHost.tx.program.update({
-			where: { id: programId },
+			where: { seq: programSeq },
 			data: { removedAt },
 		});
 		await this.txHost.tx.programActivity.updateMany({
 			where: {
-				programId,
+				programSeq,
 				removedAt: null,
 			},
 			data: { removedAt },
@@ -480,9 +480,9 @@ export class TimelinesRepository {
 	}
 
 	async createProgramActivities(
-		programId: bigint,
+		programSeq: bigint,
 		activities: {
-			taskId: bigint;
+			taskSeq: bigint;
 			order: number;
 			repetitions: number;
 			restTime: number;
@@ -501,8 +501,8 @@ export class TimelinesRepository {
 
 		await this.txHost.tx.programActivity.createMany({
 			data: activities.map((activity) => ({
-				programId,
-				taskId: activity.taskId,
+				programSeq,
+				taskSeq: activity.taskSeq,
 				order: activity.order,
 				repetitions: activity.repetitions,
 				restTime: activity.restTime,
@@ -518,9 +518,9 @@ export class TimelinesRepository {
 	}
 
 	async replaceProgramActivities(
-		programId: bigint,
+		programSeq: bigint,
 		activities: {
-			taskId: bigint;
+			taskSeq: bigint;
 			order: number;
 			repetitions: number;
 			restTime: number;
@@ -534,25 +534,25 @@ export class TimelinesRepository {
 		}[],
 	): Promise<void> {
 		await this.txHost.tx.programActivity.deleteMany({
-			where: { programId },
+			where: { programSeq },
 		});
-		await this.createProgramActivities(programId, activities);
+		await this.createProgramActivities(programSeq, activities);
 	}
 
 	/**
 	 * 세션 내 동일 루틴 프로그램 수 조회 (루틴 중복 확인용)
 	 */
 	async countProgramsWithRoutine(
-		sessionId: bigint,
-		routineId: bigint,
+		sessionSeq: bigint,
+		routineSeq: bigint,
 		excludeId?: bigint,
 	): Promise<number> {
 		return this.txHost.tx.program.count({
 			where: {
-				sessionId,
-				routineId,
+				sessionSeq,
+				routineSeq,
 				removedAt: null,
-				...(excludeId ? { id: { not: excludeId } } : {}),
+				...(excludeId ? { seq: { not: excludeId } } : {}),
 			},
 		});
 	}

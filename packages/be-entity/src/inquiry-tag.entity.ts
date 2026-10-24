@@ -10,12 +10,12 @@ import type { Inquiry } from "./inquiry.entity";
 @AbstractEntityFields()
 export class InquiryTag extends InquiryTagSchema {
 	/** 공개 식별자 ULID */
-	declare inquiryTagId: InquiryTagSchema["inquiryTagId"];
+	declare id: InquiryTagSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	declare inquiryId: InquiryTagSchema["inquiryId"];
+	declare inquirySeq: InquiryTagSchema["inquirySeq"];
 	declare name: InquiryTagSchema["name"];
 
 	// ============================================================================

@@ -25,13 +25,13 @@ export class BookingFeedItemDto {
 	endsAt!: Date;
 
 	@BigIntIdField({ description: "타임라인 ID" })
-	timelineId!: bigint;
+	timelineSeq!: bigint;
 
 	@BigIntIdField({ description: "세션 ID" })
-	sessionId!: bigint;
+	sessionSeq!: bigint;
 
 	@BigIntIdField({ description: "프로그램 ID" })
-	programId!: bigint;
+	programSeq!: bigint;
 
 	@StringField({ description: "타임라인 이름" })
 	timelineName!: string;

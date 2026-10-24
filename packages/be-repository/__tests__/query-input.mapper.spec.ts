@@ -19,15 +19,15 @@ describe("QueryInput mapper", () => {
 	it("검색 문자열과 ID 필터를 Prisma where로 변환한다", () => {
 		expect(
 			buildAssetQueryWhere({
-				folderId: 1n,
-				spaceId: 2n,
+				folderSeq: 1n,
+				spaceSeq: 2n,
 				kind: AssetKind.IMAGE,
 				status: AssetStatus.READY,
 				search: "photo",
 			}),
 		).toEqual({
-			folderId: 1n,
-			spaceId: 2n,
+			folderSeq: 1n,
+			spaceSeq: 2n,
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: { contains: "photo", mode: "insensitive" },
@@ -63,16 +63,16 @@ describe("QueryInput mapper", () => {
 	it("*Id와 *Ids 필터를 관계 조건으로 변환한다", () => {
 		expect(
 			buildUserQueryWhere({
-				categoryId: 101n,
+				categorySeq: 101n,
 				groupIds: [201n, 202n],
 				roles: ["admin", "operator"],
 			}),
 		).toEqual({
 			removedAt: null,
-			classification: { categoryId: 101n },
+			classification: { categorySeq: 101n },
 			associations: {
 				some: {
-					groupId: { in: [201n, 202n] },
+					groupSeq: { in: [201n, 202n] },
 					removedAt: null,
 				},
 			},
@@ -113,9 +113,9 @@ describe("QueryInput mapper", () => {
 
 		expect(
 			buildTenantAccessRequestQueryWhere({
-				reviewerId: 1n,
+				reviewerSeq: 1n,
 				search: "club",
-				spaceId: 2n,
+				spaceSeq: 2n,
 			}),
 		).toEqual({
 			space: { id: 2n },
@@ -151,7 +151,7 @@ describe("QueryInput mapper", () => {
 	it("문의 sort 변환은 허용 필드만 사용한다", () => {
 		expect(
 			buildInquiryQueryOrderBy({
-				sort: ["-lastMessageAt", "priority", "customerId"],
+				sort: ["-lastMessageAt", "priority", "customerSeq"],
 			}),
 		).toEqual([{ lastMessageAt: "desc" }, { priority: "asc" }]);
 	});

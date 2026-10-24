@@ -18,7 +18,7 @@ export class OidcClientsRepository {
 	async findById(id: bigint): Promise<OidcClient | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.findUnique({
-			where: { id },
+			where: { seq: id },
 		});
 		return result ? toDomainEntity(OidcClient, result) : null;
 	}
@@ -34,7 +34,7 @@ export class OidcClientsRepository {
 	/** OIDC integration 경계에서 모델별 ULID로 조회합니다. */
 	async findByOidcClientId(oidcClientId: string): Promise<OidcClient | null> {
 		const result = await this.txHost.tx.oidcClient.findUnique({
-			where: { oidcClientId },
+			where: { id: oidcClientId },
 		});
 		return result ? toDomainEntity(OidcClient, result) : null;
 	}
@@ -97,7 +97,7 @@ export class OidcClientsRepository {
 	): Promise<OidcClient> {
 		this.logger.debug(`업데이트 중: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.update({
-			where: { id },
+			where: { seq: id },
 			data,
 		});
 		return toDomainEntity(OidcClient, result);
@@ -106,7 +106,7 @@ export class OidcClientsRepository {
 	async removeById(id: bigint): Promise<OidcClient> {
 		this.logger.debug(`소프트 삭제: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.update({
-			where: { id },
+			where: { seq: id },
 			data: { removedAt: new Date(), isActive: false },
 		});
 		return toDomainEntity(OidcClient, result);

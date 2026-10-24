@@ -10,11 +10,11 @@ export class DeleteAbilityUseCase {
 
 	async execute(command: DeleteAbilityCommand): Promise<unknown> {
 		const existing = await this.abilitiesService.getAbilityById(
-			command.abilityId,
+			command.abilitySeq,
 		);
 		if (!existing) {
 			throw new NotFoundException(ABILITY_ERRORS.NOT_FOUND);
 		}
-		return this.abilitiesService.deleteAbility(command.abilityId);
+		return this.abilitiesService.deleteAbility(command.abilitySeq);
 	}
 }

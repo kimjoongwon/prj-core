@@ -12,14 +12,14 @@ import { AbstractSchema } from "../abstract.schema";
 /** InquiryThread의 DB 필드 타입과 공통 검증입니다. */
 export class InquiryThreadSchema
 	extends PickSchemaType(AbstractSchema, [
-		"id",
+		"seq",
 		"createdAt",
 		"updatedAt",
 	] as const)
 {
-	inquiryThreadId!: string;
+	id!: string;
 
-	declare id: bigint;
+	declare seq: bigint;
 
 	declare createdAt: Date;
 
@@ -28,7 +28,7 @@ export class InquiryThreadSchema
 	closedAt!: Date | null;
 
 	@BigIntIdValidation({ description: "소속 문의 ID" })
-	inquiryId!: bigint;
+	inquirySeq!: bigint;
 
 	@StringValidation({ nullable: true, description: "스레드 제목" })
 	title!: string | null;
@@ -37,7 +37,7 @@ export class InquiryThreadSchema
 	status!: ThreadStatus;
 
 	@BigIntIdValidation({ description: "생성자 ID" })
-	createdById!: bigint;
+	createdBySeq!: bigint;
 
 	@DateValidation({ nullable: true, description: "마지막 메시지 일시" })
 	lastMessageAt!: Date | null;

@@ -27,7 +27,7 @@ export class TaskAggregate {
 	) {}
 
 	async findTasks(params: {
-		spaceId: bigint;
+		spaceSeq: bigint;
 		spaceScope: SpaceScope;
 		skip: number;
 		take: number;
@@ -36,7 +36,7 @@ export class TaskAggregate {
 	}): Promise<{ tasks: Task[]; total: number }> {
 		const spaceIds = this.resolveReadableSpaceIds(
 			params.spaceScope,
-			params.spaceId,
+			params.spaceSeq,
 		);
 
 		const [tasks, total] = await this.tasksRepository.findManyTasks({
@@ -51,13 +51,13 @@ export class TaskAggregate {
 	}
 
 	async findTaskById(
-		taskId: bigint,
-		spaceId: bigint,
+		taskSeq: bigint,
+		spaceSeq: bigint,
 		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Task> {
-		const spaceIds = this.resolveReadableSpaceIds(spaceScope, spaceId);
+		const spaceIds = this.resolveReadableSpaceIds(spaceScope, spaceSeq);
 
-		const task = await this.tasksRepository.findTaskById(taskId, spaceIds);
+		const task = await this.tasksRepository.findTaskById(taskSeq, spaceIds);
 		if (!task) {
 			throw new NotFoundException(EXERCISE_ERRORS.EXERCISE_NOT_FOUND);
 		}
@@ -66,11 +66,11 @@ export class TaskAggregate {
 	}
 
 	async getExerciseByTaskId(
-		taskId: bigint,
-		spaceId: bigint,
+		taskSeq: bigint,
+		spaceSeq: bigint,
 		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Exercise> {
-		const task = await this.findTaskById(taskId, spaceId, spaceScope);
+		const task = await this.findTaskById(taskSeq, spaceSeq, spaceScope);
 		if (!task.exercise) {
 			throw new NotFoundException(EXERCISE_ERRORS.EXERCISE_NOT_FOUND);
 		}
@@ -79,21 +79,21 @@ export class TaskAggregate {
 		return task.exercise;
 	}
 
-	async findTaskRoutines(taskId: bigint, spaceId: bigint): Promise<Routine[]> {
-		await this.findTaskById(taskId, spaceId, SpaceScope.INCLUDE_ANCESTORS);
-		return this.tasksRepository.findTaskRoutines(taskId);
+	async findTaskRoutines(taskSeq: bigint, spaceSeq: bigint): Promise<Routine[]> {
+		await this.findTaskById(taskSeq, spaceSeq, SpaceScope.INCLUDE_ANCESTORS);
+		return this.tasksRepository.findTaskRoutines(taskSeq);
 	}
 
 	@Transactional()
 	async createTaskWithExercise(
 		dto: CreateTaskCommandInput,
-		spaceId: bigint,
-		createdById: bigint,
+		spaceSeq: bigint,
+		createdBySeq: bigint,
 	): Promise<Task> {
 		this.logger.debug(`Task 생성: exercise=${dto.name}`);
 		const task = await this.tasksRepository.create({
-			spaceId,
-			createdById,
+			spaceSeq,
+			createdBySeq,
 		});
 
 		return this.tasksRepository.createExerciseByTaskId(task.id, {
@@ -107,21 +107,21 @@ export class TaskAggregate {
 	}
 
 	async updateTaskExercise(
-		taskId: bigint,
+		taskSeq: bigint,
 		dto: UpdateTaskExerciseCommandInput,
-		spaceId: bigint,
+		spaceSeq: bigint,
 	): Promise<Task> {
 		const task = await this.findTaskById(
-			taskId,
-			spaceId,
+			taskSeq,
+			spaceSeq,
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
-		if (task.spaceId !== spaceId) {
+		if (task.spaceSeq !== spaceSeq) {
 			throw new ForbiddenException(EXERCISE_ERRORS.EXERCISE_NOT_OWNED);
 		}
 
-		return this.tasksRepository.updateExerciseByTaskId(taskId, {
+		return this.tasksRepository.updateExerciseByTaskId(taskSeq, {
 			...(dto.name !== undefined && { name: dto.name }),
 			...(dto.duration !== undefined && { duration: dto.duration }),
 			...(dto.count !== undefined && { count: dto.count }),
@@ -132,30 +132,30 @@ export class TaskAggregate {
 	}
 
 	@Transactional()
-	async deleteTask(taskId: bigint, spaceId: bigint): Promise<void> {
+	async deleteTask(taskSeq: bigint, spaceSeq: bigint): Promise<void> {
 		const task = await this.findTaskById(
-			taskId,
-			spaceId,
+			taskSeq,
+			spaceSeq,
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
-		if (task.spaceId !== spaceId) {
+		if (task.spaceSeq !== spaceSeq) {
 			throw new ForbiddenException(EXERCISE_ERRORS.EXERCISE_NOT_OWNED);
 		}
 
 		const activityCount =
-			await this.tasksRepository.countActivitiesUsingTask(taskId);
+			await this.tasksRepository.countActivitiesUsingTask(taskSeq);
 		if (activityCount > 0) {
 			throw new ConflictException(EXERCISE_ERRORS.EXERCISE_IN_USE);
 		}
 
-		await this.tasksRepository.softDeleteExerciseByTaskId(taskId);
-		await this.tasksRepository.softDeleteTaskById(taskId);
+		await this.tasksRepository.softDeleteExerciseByTaskId(taskSeq);
+		await this.tasksRepository.softDeleteTaskById(taskSeq);
 	}
 
 	private resolveReadableSpaceIds(
 		spaceScope: SpaceScope,
-		spaceId: bigint,
+		spaceSeq: bigint,
 	): bigint[] | undefined {
 		if (this.spaceContext.spaceIds === undefined) {
 			return undefined;
@@ -163,6 +163,6 @@ export class TaskAggregate {
 
 		return spaceScope === SpaceScope.INCLUDE_ANCESTORS
 			? this.spaceContext.spaceIds
-			: [spaceId];
+			: [spaceSeq];
 	}
 }

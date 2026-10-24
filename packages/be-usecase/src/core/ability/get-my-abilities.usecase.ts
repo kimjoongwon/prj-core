@@ -30,16 +30,16 @@ export class GetMyAbilitiesUseCase {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const roleIds = tenant.roleId ? [tenant.roleId] : [];
-		const spaceId = tenant.spaceId;
-		if (!spaceId) {
+		const roleIds = tenant.roleSeq ? [tenant.roleSeq] : [];
+		const spaceSeq = tenant.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
 		this.logger.debug(
-			`현재 사용자 권한 조회: userId=${user.id.toString()}, tenantId=${tenant.id.toString()}, roleIds=${roleIds.length}`,
+			`현재 사용자 권한 조회: userSeq=${user.id.toString()}, tenantId=${tenant.id.toString()}, roleIds=${roleIds.length}`,
 		);
 
-		return this.abilitiesService.getMergedAbilities(roleIds, spaceId);
+		return this.abilitiesService.getMergedAbilities(roleIds, spaceSeq);
 	}
 }

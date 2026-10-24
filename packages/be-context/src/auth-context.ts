@@ -53,7 +53,7 @@ export class AuthContext {
 	}
 
 	/** 현재 Tenant에서 파생된 Space ID */
-	get spaceId(): DatabaseId | undefined {
+	get spaceSeq(): DatabaseId | undefined {
 		return this.cls.get<DatabaseId>(CONTEXT_KEYS.SPACE_ID);
 	}
 
@@ -84,8 +84,8 @@ export class AuthContext {
 	}
 
 	/** 특정 Space 접근 권한 */
-	canAccessSpace(spaceId: DatabaseId): boolean {
-		return this.user?.canAccessSpace(spaceId) ?? false;
+	canAccessSpace(spaceSeq: DatabaseId): boolean {
+		return this.user?.canAccessSpace(spaceSeq) ?? false;
 	}
 
 	// ═══════════════════════════════════════════════════════════

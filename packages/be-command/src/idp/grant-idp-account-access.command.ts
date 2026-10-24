@@ -2,11 +2,11 @@ import type { GrantIdpAccountAccessCommandInput } from "@cocrepo/input";
 export class GrantIdpAccountAccessCommand
 	implements GrantIdpAccountAccessCommandInput
 {
-	readonly spaceId!: GrantIdpAccountAccessCommandInput["spaceId"];
-	readonly roleId!: GrantIdpAccountAccessCommandInput["roleId"];
+	readonly spaceSeq!: GrantIdpAccountAccessCommandInput["spaceSeq"];
+	readonly roleSeq!: GrantIdpAccountAccessCommandInput["roleSeq"];
 
 	constructor(
-		readonly userId: bigint,
+		readonly userSeq: bigint,
 		input: GrantIdpAccountAccessCommandInput,
 	) {
 		Object.assign(this, input);

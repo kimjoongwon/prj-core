@@ -8,7 +8,7 @@ describe("DmmfParser field contract manifest", () => {
 
 		expect(userFields).toContainEqual({
 			modelName: "User",
-			fieldName: "userId",
+			fieldName: "id",
 			type: "String",
 			isRequired: true,
 			isList: false,
@@ -35,7 +35,7 @@ describe("DmmfParser field contract manifest", () => {
 		const userStatusFields = parser.parseFieldContractManifestByModel("UserStatus");
 		expect(userStatusFields).toContainEqual({
 			modelName: "UserStatus",
-			fieldName: "userId",
+			fieldName: "userSeq",
 			type: "BigInt",
 			isRequired: true,
 			isList: false,

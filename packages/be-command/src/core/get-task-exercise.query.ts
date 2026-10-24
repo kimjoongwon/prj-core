@@ -2,8 +2,8 @@ import type { SpaceScope } from "@cocrepo/type";
 
 export class GetTaskExerciseQuery {
 	constructor(
-		readonly taskId: bigint,
-		readonly spaceId: bigint,
+		readonly taskSeq: bigint,
+		readonly spaceSeq: bigint,
 		readonly spaceScope?: SpaceScope,
 	) {}
 }

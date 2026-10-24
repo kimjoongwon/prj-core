@@ -30,7 +30,7 @@ export class TenantAccessRequestAggregate {
 	async listForReview(
 		params: ListTenantAccessRequestsForReviewQueryInput,
 	): Promise<{ items: TenantAccessRequest[]; totalCount: number }> {
-		const scope = await this.getReviewerScope(params.reviewerId);
+		const scope = await this.getReviewerScope(params.reviewerSeq);
 		const scopedWhere = this.applyReviewerScope(
 			buildTenantAccessRequestQueryWhere(params),
 			scope,
@@ -49,12 +49,12 @@ export class TenantAccessRequestAggregate {
 
 	async findForReview(params: {
 		tenantAccessRequestId: bigint;
-		reviewerId: bigint;
+		reviewerSeq: bigint;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
 		await this.assertCanReview({
 			request,
-			reviewerId: params.reviewerId,
+			reviewerSeq: params.reviewerSeq,
 			action: "read",
 		});
 		return request;
@@ -63,49 +63,49 @@ export class TenantAccessRequestAggregate {
 	@Transactional()
 	async approve(params: {
 		tenantAccessRequestId: bigint;
-		reviewerId: bigint;
+		reviewerSeq: bigint;
 		reviewComment?: string | null;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
 		this.assertPending(request.status);
 		await this.assertCanReview({
 			request,
-			reviewerId: params.reviewerId,
+			reviewerSeq: params.reviewerSeq,
 			action: "approve",
 		});
 
 		const tenant = await this.tenantsRepository.upsertByUserIdAndSpaceId({
-			userId: request.requesterId,
-			spaceId: request.spaceId,
-			roleId: request.requestedRoleId,
+			userSeq: request.requesterSeq,
+			spaceSeq: request.spaceSeq,
+			roleSeq: request.requestedRoleSeq,
 		});
 
 		return this.repository.updateById(params.tenantAccessRequestId, {
 			status: "APPROVED",
-			reviewerId: params.reviewerId,
+			reviewerSeq: params.reviewerSeq,
 			reviewComment: params.reviewComment ?? null,
 			reviewedAt: new Date(),
-			appliedTenantId: tenant.id,
+			appliedTenantSeq: tenant.id,
 		});
 	}
 
 	@Transactional()
 	async reject(params: {
 		tenantAccessRequestId: bigint;
-		reviewerId: bigint;
+		reviewerSeq: bigint;
 		reviewComment?: string | null;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
 		this.assertPending(request.status);
 		await this.assertCanReview({
 			request,
-			reviewerId: params.reviewerId,
+			reviewerSeq: params.reviewerSeq,
 			action: "reject",
 		});
 
 		return this.repository.updateById(params.tenantAccessRequestId, {
 			status: "REJECTED",
-			reviewerId: params.reviewerId,
+			reviewerSeq: params.reviewerSeq,
 			reviewComment: params.reviewComment ?? null,
 			reviewedAt: new Date(),
 		});
@@ -147,15 +147,15 @@ export class TenantAccessRequestAggregate {
 
 	private async assertCanReview(params: {
 		request: TenantAccessRequest;
-		reviewerId: bigint;
+		reviewerSeq: bigint;
 		action: "read" | "approve" | "reject";
 	}): Promise<void> {
-		const scope = await this.getReviewerScope(params.reviewerId);
+		const scope = await this.getReviewerScope(params.reviewerSeq);
 		if (scope.hasFullAccess) {
 			return;
 		}
 
-		if (!scope.managedSpaceIds.includes(params.request.spaceId)) {
+		if (!scope.managedSpaceIds.includes(params.request.spaceSeq)) {
 			throw new ForbiddenException("해당 Space 신청을 처리할 권한이 없습니다");
 		}
 
@@ -169,9 +169,9 @@ export class TenantAccessRequestAggregate {
 		}
 	}
 
-	private async getReviewerScope(reviewerId: bigint): Promise<ReviewerScope> {
+	private async getReviewerScope(reviewerSeq: bigint): Promise<ReviewerScope> {
 		const reviewer =
-			await this.usersRepository.findByIdWithTenantsAndProfiles(reviewerId);
+			await this.usersRepository.findByIdWithTenantsAndProfiles(reviewerSeq);
 		if (!reviewer) {
 			throw new NotFoundException("검토자를 찾을 수 없습니다");
 		}
@@ -186,10 +186,10 @@ export class TenantAccessRequestAggregate {
 			),
 			managedSpaceIds: activeTenants
 				.filter((tenant) => tenant.role?.name === SYSTEM_ROLES.COMPANY_MANAGER)
-				.map((tenant) => tenant.spaceId)
+				.map((tenant) => tenant.spaceSeq)
 				.filter(
-					(spaceId): spaceId is bigint =>
-						spaceId !== undefined && spaceId !== null,
+					(spaceSeq): spaceSeq is bigint =>
+						spaceSeq !== undefined && spaceSeq !== null,
 				),
 		};
 	}

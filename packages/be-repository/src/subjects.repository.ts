@@ -38,7 +38,7 @@ export class SubjectsRepository {
 		this.logger.debug(`ID로 Subject 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.subject.findUnique({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return result ? toDomainEntity(Subject, result) : null;
@@ -111,7 +111,7 @@ export class SubjectsRepository {
 		this.logger.debug(`Subject 수정: ${id.toString()}`);
 
 		const result = await this.txHost.tx.subject.update({
-			where: { id },
+			where: { seq: id },
 			data,
 		});
 
@@ -125,7 +125,7 @@ export class SubjectsRepository {
 		this.logger.debug(`Subject 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.subject.update({
-			where: { id },
+			where: { seq: id },
 			data: { removedAt: new Date() },
 		});
 
@@ -140,7 +140,7 @@ export class SubjectsRepository {
 
 		const results = await this.txHost.tx.subject.findMany({
 			where: {
-				id: { in: ids },
+				seq: { in: ids },
 				removedAt: null,
 			},
 			orderBy: [{ group: "asc" }, { order: "asc" }],

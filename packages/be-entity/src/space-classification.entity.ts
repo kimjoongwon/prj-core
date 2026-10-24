@@ -9,12 +9,12 @@ import { Space } from "./space.entity";
 export class SpaceClassification extends SpaceClassificationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare spaceClassificationId: SpaceClassificationSchema["spaceClassificationId"];
+	declare id: SpaceClassificationSchema["id"];
 
 	@BigIntIdFieldMetadata()
-	declare categoryId: SpaceClassificationSchema["categoryId"];
+	declare categorySeq: SpaceClassificationSchema["categorySeq"];
 	@BigIntIdFieldMetadata()
-	declare spaceId: SpaceClassificationSchema["spaceId"];
+	declare spaceSeq: SpaceClassificationSchema["spaceSeq"];
 
 	@ClassField(() => Category, { required: false })
 	category?: Category;

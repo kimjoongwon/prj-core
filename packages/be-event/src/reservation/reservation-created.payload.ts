@@ -34,29 +34,29 @@ export interface ReservationCreatedEventPayload {
 	reservationId: ReservationId;
 	/**
 	 * 사용자 공개 식별자 ULID.
-	 * DB users.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 userId(ULID)만 사용합니다.
+	 * DB users.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 userSeq(ULID)만 사용합니다.
 	 */
-	userId: UserId;
+	userSeq: UserId;
 	/**
 	 * Space 공개 식별자 ULID.
-	 * DB spaces.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 spaceId(ULID)만 사용합니다.
+	 * DB spaces.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 spaceSeq(ULID)만 사용합니다.
 	 */
-	spaceId: SpaceId;
+	spaceSeq: SpaceId;
 	/**
 	 * Timeline 공개 식별자 ULID.
-	 * DB timelines.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 timelineId(ULID)만 사용합니다.
+	 * DB timelines.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 timelineSeq(ULID)만 사용합니다.
 	 */
-	timelineId: TimelineId;
+	timelineSeq: TimelineId;
 	/**
 	 * Session 공개 식별자 ULID.
-	 * DB sessions.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 sessionId(ULID)만 사용합니다.
+	 * DB sessions.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 sessionSeq(ULID)만 사용합니다.
 	 */
-	sessionId: SessionId;
+	sessionSeq: SessionId;
 	/**
 	 * Program 공개 식별자 ULID.
-	 * DB programs.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 programId(ULID)만 사용합니다.
+	 * DB programs.id(BigInt)는 내부 계약이며, 외부 이벤트 계약에서는 programSeq(ULID)만 사용합니다.
 	 */
-	programId: ProgramId;
+	programSeq: ProgramId;
 	/** 이벤트 발생 시각 */
 	occurredAt: Date;
 }

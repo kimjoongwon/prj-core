@@ -31,8 +31,8 @@ describe("RoleAssignmentsRepository", () => {
 		roleAssignment.findMany.mockResolvedValue([
 			{
 				id: 1n,
-				roleId: 10n,
-				policyId: 20n,
+				roleSeq: 10n,
+				policySeq: 20n,
 				isActive: false,
 				priority: 10,
 				createdAt: new Date(),
@@ -47,7 +47,7 @@ describe("RoleAssignmentsRepository", () => {
 		expect(roleAssignment.findMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				where: {
-					roleId: { in: [10n] },
+					roleSeq: { in: [10n] },
 					removedAt: null,
 					policy: { space: { id: 30n }, removedAt: null },
 				},
@@ -70,7 +70,7 @@ describe("RoleAssignmentsRepository", () => {
 		expect(roleAssignment.findMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				where: expect.objectContaining({
-					roleId: { in: [10n, 11n] },
+					roleSeq: { in: [10n, 11n] },
 					isActive: true,
 					policy: { space: { id: 30n }, removedAt: null },
 				}),
@@ -87,8 +87,8 @@ describe("RoleAssignmentsRepository", () => {
 		await repository.syncByRoleId(
 			10n,
 			[
-				{ policyId: 20n, isActive: true, priority: 1 },
-				{ policyId: 20n, isActive: false, priority: 20 },
+				{ policySeq: 20n, isActive: true, priority: 1 },
+				{ policySeq: 20n, isActive: false, priority: 20 },
 			],
 			30n,
 		);
@@ -96,8 +96,8 @@ describe("RoleAssignmentsRepository", () => {
 		expect(roleAssignment.create).toHaveBeenCalledTimes(1);
 		expect(roleAssignment.create).toHaveBeenCalledWith({
 			data: {
-				roleId: 10n,
-				policyId: 20n,
+				roleSeq: 10n,
+				policySeq: 20n,
 				isActive: false,
 				priority: 20,
 				removedAt: null,

@@ -5,8 +5,8 @@ export class GetReservationBookingFeedQuery
 {
 	readonly dateFrom?: GetReservationBookingFeedQueryInput["dateFrom"];
 	readonly dateTo?: GetReservationBookingFeedQueryInput["dateTo"];
-	readonly timelineId?: GetReservationBookingFeedQueryInput["timelineId"];
-	readonly programId?: GetReservationBookingFeedQueryInput["programId"];
+	readonly timelineSeq?: GetReservationBookingFeedQueryInput["timelineSeq"];
+	readonly programSeq?: GetReservationBookingFeedQueryInput["programSeq"];
 	readonly search?: GetReservationBookingFeedQueryInput["search"];
 	readonly skip?: GetReservationBookingFeedQueryInput["skip"];
 	readonly take?: GetReservationBookingFeedQueryInput["take"];

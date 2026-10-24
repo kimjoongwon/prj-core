@@ -63,7 +63,7 @@ export class SpacesController {
 		);
 	}
 
-	@Get(":spaceId/fitness-center")
+	@Get(":spaceSeq/fitness-center")
 	@ApiOperation({
 		operationId: "getSpaceFitnessCenter",
 		summary: "공간의 시설 detail 조회",
@@ -71,7 +71,7 @@ export class SpacesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "spaceId",
+		name: "spaceSeq",
 		description: "Space ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -80,13 +80,13 @@ export class SpacesController {
 	@ResponseMessage("공간 시설 조회 성공")
 	@HttpCode(HttpStatus.OK)
 	async getSpaceFitnessCenter(
-		@Param("spaceId", ParseBigIntIdPipe) spaceId: bigint,
+		@Param("spaceSeq", ParseBigIntIdPipe) spaceSeq: bigint,
 	): Promise<FitnessCenter> {
-		if (!this.spaceContext.canAccessSpace(spaceId)) {
+		if (!this.spaceContext.canAccessSpace(spaceSeq)) {
 			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
 		}
 
-		return this.queryBus.execute(new GetSpaceFitnessCenterQuery(spaceId));
+		return this.queryBus.execute(new GetSpaceFitnessCenterQuery(spaceSeq));
 	}
 
 	@Post()
@@ -110,7 +110,7 @@ export class SpacesController {
 		return this.commandBus.execute(new CreateSpaceCommand(dto));
 	}
 
-	@Patch(":spaceId/fitness-center")
+	@Patch(":spaceSeq/fitness-center")
 	@ApiOperation({
 		operationId: "updateSpaceFitnessCenter",
 		summary: "공간의 시설 detail 수정",
@@ -119,7 +119,7 @@ export class SpacesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "spaceId",
+		name: "spaceSeq",
 		description: "Space ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -132,15 +132,15 @@ export class SpacesController {
 	@ResponseMessage("공간 시설 수정 성공")
 	@HttpCode(HttpStatus.OK)
 	async updateSpaceFitnessCenter(
-		@Param("spaceId", ParseBigIntIdPipe) spaceId: bigint,
+		@Param("spaceSeq", ParseBigIntIdPipe) spaceSeq: bigint,
 		@Body() dto: UpdateFitnessCenterDto,
 	): Promise<Space> {
-		if (!this.spaceContext.canAccessSpace(spaceId)) {
+		if (!this.spaceContext.canAccessSpace(spaceSeq)) {
 			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
 		}
 
 		return this.commandBus.execute(
-			new UpdateSpaceFitnessCenterCommand(spaceId, dto),
+			new UpdateSpaceFitnessCenterCommand(spaceSeq, dto),
 		);
 	}
 }

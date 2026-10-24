@@ -27,31 +27,31 @@ export type AggregateActivity = {
 }
 
 export type ActivityAvgAggregateOutputType = {
-  id: number | null
-  routineId: number | null
-  taskId: number | null
+  seq: number | null
+  routineSeq: number | null
+  taskSeq: number | null
   order: number | null
   repetitions: number | null
   restTime: number | null
 }
 
 export type ActivitySumAggregateOutputType = {
-  id: bigint | null
-  routineId: bigint | null
-  taskId: bigint | null
+  seq: bigint | null
+  routineSeq: bigint | null
+  taskSeq: bigint | null
   order: number | null
   repetitions: number | null
   restTime: number | null
 }
 
 export type ActivityMinAggregateOutputType = {
-  activityId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  routineId: bigint | null
-  taskId: bigint | null
+  routineSeq: bigint | null
+  taskSeq: bigint | null
   order: number | null
   repetitions: number | null
   restTime: number | null
@@ -59,13 +59,13 @@ export type ActivityMinAggregateOutputType = {
 }
 
 export type ActivityMaxAggregateOutputType = {
-  activityId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  routineId: bigint | null
-  taskId: bigint | null
+  routineSeq: bigint | null
+  taskSeq: bigint | null
   order: number | null
   repetitions: number | null
   restTime: number | null
@@ -73,13 +73,13 @@ export type ActivityMaxAggregateOutputType = {
 }
 
 export type ActivityCountAggregateOutputType = {
-  activityId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  routineId: number
-  taskId: number
+  routineSeq: number
+  taskSeq: number
   order: number
   repetitions: number
   restTime: number
@@ -89,31 +89,31 @@ export type ActivityCountAggregateOutputType = {
 
 
 export type ActivityAvgAggregateInputType = {
-  id?: true
-  routineId?: true
-  taskId?: true
+  seq?: true
+  routineSeq?: true
+  taskSeq?: true
   order?: true
   repetitions?: true
   restTime?: true
 }
 
 export type ActivitySumAggregateInputType = {
-  id?: true
-  routineId?: true
-  taskId?: true
+  seq?: true
+  routineSeq?: true
+  taskSeq?: true
   order?: true
   repetitions?: true
   restTime?: true
 }
 
 export type ActivityMinAggregateInputType = {
-  activityId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  routineId?: true
-  taskId?: true
+  routineSeq?: true
+  taskSeq?: true
   order?: true
   repetitions?: true
   restTime?: true
@@ -121,13 +121,13 @@ export type ActivityMinAggregateInputType = {
 }
 
 export type ActivityMaxAggregateInputType = {
-  activityId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  routineId?: true
-  taskId?: true
+  routineSeq?: true
+  taskSeq?: true
   order?: true
   repetitions?: true
   restTime?: true
@@ -135,13 +135,13 @@ export type ActivityMaxAggregateInputType = {
 }
 
 export type ActivityCountAggregateInputType = {
-  activityId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  routineId?: true
-  taskId?: true
+  routineSeq?: true
+  taskSeq?: true
   order?: true
   repetitions?: true
   restTime?: true
@@ -236,13 +236,13 @@ export type ActivityGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 export type ActivityGroupByOutputType = {
-  activityId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  routineId: bigint
-  taskId: bigint
+  routineSeq: bigint
+  taskSeq: bigint
   order: number
   repetitions: number
   restTime: number
@@ -273,13 +273,13 @@ export type ActivityWhereInput = {
   AND?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
   OR?: Prisma.ActivityWhereInput[]
   NOT?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
-  activityId?: Prisma.StringFilter<"Activity"> | string
-  id?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  id?: Prisma.StringFilter<"Activity"> | string
+  seq?: Prisma.BigIntFilter<"Activity"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
-  routineId?: Prisma.BigIntFilter<"Activity"> | bigint | number
-  taskId?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  routineSeq?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  taskSeq?: Prisma.BigIntFilter<"Activity"> | bigint | number
   order?: Prisma.IntFilter<"Activity"> | number
   repetitions?: Prisma.IntFilter<"Activity"> | number
   restTime?: Prisma.IntFilter<"Activity"> | number
@@ -289,13 +289,13 @@ export type ActivityWhereInput = {
 }
 
 export type ActivityOrderByWithRelationInput = {
-  activityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  routineId?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  routineSeq?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   order?: Prisma.SortOrder
   repetitions?: Prisma.SortOrder
   restTime?: Prisma.SortOrder
@@ -305,33 +305,33 @@ export type ActivityOrderByWithRelationInput = {
 }
 
 export type ActivityWhereUniqueInput = Prisma.AtLeast<{
-  activityId?: string
-  id?: bigint | number
-  routineId_taskId?: Prisma.ActivityRoutineIdTaskIdCompoundUniqueInput
+  id?: string
+  seq?: bigint | number
+  routineSeq_taskSeq?: Prisma.ActivityRoutineSeqTaskSeqCompoundUniqueInput
   AND?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
   OR?: Prisma.ActivityWhereInput[]
   NOT?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
-  routineId?: Prisma.BigIntFilter<"Activity"> | bigint | number
-  taskId?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  routineSeq?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  taskSeq?: Prisma.BigIntFilter<"Activity"> | bigint | number
   order?: Prisma.IntFilter<"Activity"> | number
   repetitions?: Prisma.IntFilter<"Activity"> | number
   restTime?: Prisma.IntFilter<"Activity"> | number
   notes?: Prisma.StringNullableFilter<"Activity"> | string | null
   routine?: Prisma.XOR<Prisma.RoutineScalarRelationFilter, Prisma.RoutineWhereInput>
   task?: Prisma.XOR<Prisma.TaskScalarRelationFilter, Prisma.TaskWhereInput>
-}, "id" | "activityId" | "routineId_taskId">
+}, "seq" | "id" | "routineSeq_taskSeq">
 
 export type ActivityOrderByWithAggregationInput = {
-  activityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  routineId?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  routineSeq?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   order?: Prisma.SortOrder
   repetitions?: Prisma.SortOrder
   restTime?: Prisma.SortOrder
@@ -347,13 +347,13 @@ export type ActivityScalarWhereWithAggregatesInput = {
   AND?: Prisma.ActivityScalarWhereWithAggregatesInput | Prisma.ActivityScalarWhereWithAggregatesInput[]
   OR?: Prisma.ActivityScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ActivityScalarWhereWithAggregatesInput | Prisma.ActivityScalarWhereWithAggregatesInput[]
-  activityId?: Prisma.StringWithAggregatesFilter<"Activity"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"Activity"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"Activity"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"Activity"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Activity"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Activity"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Activity"> | Date | string | null
-  routineId?: Prisma.BigIntWithAggregatesFilter<"Activity"> | bigint | number
-  taskId?: Prisma.BigIntWithAggregatesFilter<"Activity"> | bigint | number
+  routineSeq?: Prisma.BigIntWithAggregatesFilter<"Activity"> | bigint | number
+  taskSeq?: Prisma.BigIntWithAggregatesFilter<"Activity"> | bigint | number
   order?: Prisma.IntWithAggregatesFilter<"Activity"> | number
   repetitions?: Prisma.IntWithAggregatesFilter<"Activity"> | number
   restTime?: Prisma.IntWithAggregatesFilter<"Activity"> | number
@@ -361,8 +361,8 @@ export type ActivityScalarWhereWithAggregatesInput = {
 }
 
 export type ActivityCreateInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -375,13 +375,13 @@ export type ActivityCreateInput = {
 }
 
 export type ActivityUncheckedCreateInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineId: bigint | number
-  taskId: bigint | number
+  routineSeq: bigint | number
+  taskSeq: bigint | number
   order: number
   repetitions?: number
   restTime?: number
@@ -389,8 +389,8 @@ export type ActivityUncheckedCreateInput = {
 }
 
 export type ActivityUpdateInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -403,13 +403,13 @@ export type ActivityUpdateInput = {
 }
 
 export type ActivityUncheckedUpdateInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  taskId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  routineSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  taskSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   repetitions?: Prisma.IntFieldUpdateOperationsInput | number
   restTime?: Prisma.IntFieldUpdateOperationsInput | number
@@ -417,13 +417,13 @@ export type ActivityUncheckedUpdateInput = {
 }
 
 export type ActivityCreateManyInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineId: bigint | number
-  taskId: bigint | number
+  routineSeq: bigint | number
+  taskSeq: bigint | number
   order: number
   repetitions?: number
   restTime?: number
@@ -431,8 +431,8 @@ export type ActivityCreateManyInput = {
 }
 
 export type ActivityUpdateManyMutationInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -443,32 +443,32 @@ export type ActivityUpdateManyMutationInput = {
 }
 
 export type ActivityUncheckedUpdateManyInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  taskId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  routineSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  taskSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   repetitions?: Prisma.IntFieldUpdateOperationsInput | number
   restTime?: Prisma.IntFieldUpdateOperationsInput | number
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type ActivityRoutineIdTaskIdCompoundUniqueInput = {
-  routineId: bigint | number
-  taskId: bigint | number
+export type ActivityRoutineSeqTaskSeqCompoundUniqueInput = {
+  routineSeq: bigint | number
+  taskSeq: bigint | number
 }
 
 export type ActivityCountOrderByAggregateInput = {
-  activityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  routineId?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  routineSeq?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   order?: Prisma.SortOrder
   repetitions?: Prisma.SortOrder
   restTime?: Prisma.SortOrder
@@ -476,22 +476,22 @@ export type ActivityCountOrderByAggregateInput = {
 }
 
 export type ActivityAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  routineId?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  routineSeq?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   order?: Prisma.SortOrder
   repetitions?: Prisma.SortOrder
   restTime?: Prisma.SortOrder
 }
 
 export type ActivityMaxOrderByAggregateInput = {
-  activityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  routineId?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  routineSeq?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   order?: Prisma.SortOrder
   repetitions?: Prisma.SortOrder
   restTime?: Prisma.SortOrder
@@ -499,13 +499,13 @@ export type ActivityMaxOrderByAggregateInput = {
 }
 
 export type ActivityMinOrderByAggregateInput = {
-  activityId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  routineId?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  routineSeq?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   order?: Prisma.SortOrder
   repetitions?: Prisma.SortOrder
   restTime?: Prisma.SortOrder
@@ -513,9 +513,9 @@ export type ActivityMinOrderByAggregateInput = {
 }
 
 export type ActivitySumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  routineId?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  routineSeq?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   order?: Prisma.SortOrder
   repetitions?: Prisma.SortOrder
   restTime?: Prisma.SortOrder
@@ -616,8 +616,8 @@ export type ActivityUncheckedUpdateManyWithoutTaskNestedInput = {
 }
 
 export type ActivityCreateWithoutRoutineInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -629,12 +629,12 @@ export type ActivityCreateWithoutRoutineInput = {
 }
 
 export type ActivityUncheckedCreateWithoutRoutineInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  taskId: bigint | number
+  taskSeq: bigint | number
   order: number
   repetitions?: number
   restTime?: number
@@ -671,13 +671,13 @@ export type ActivityScalarWhereInput = {
   AND?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
   OR?: Prisma.ActivityScalarWhereInput[]
   NOT?: Prisma.ActivityScalarWhereInput | Prisma.ActivityScalarWhereInput[]
-  activityId?: Prisma.StringFilter<"Activity"> | string
-  id?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  id?: Prisma.StringFilter<"Activity"> | string
+  seq?: Prisma.BigIntFilter<"Activity"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Activity"> | Date | string | null
-  routineId?: Prisma.BigIntFilter<"Activity"> | bigint | number
-  taskId?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  routineSeq?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  taskSeq?: Prisma.BigIntFilter<"Activity"> | bigint | number
   order?: Prisma.IntFilter<"Activity"> | number
   repetitions?: Prisma.IntFilter<"Activity"> | number
   restTime?: Prisma.IntFilter<"Activity"> | number
@@ -685,8 +685,8 @@ export type ActivityScalarWhereInput = {
 }
 
 export type ActivityCreateWithoutTaskInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -698,12 +698,12 @@ export type ActivityCreateWithoutTaskInput = {
 }
 
 export type ActivityUncheckedCreateWithoutTaskInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineId: bigint | number
+  routineSeq: bigint | number
   order: number
   repetitions?: number
   restTime?: number
@@ -737,12 +737,12 @@ export type ActivityUpdateManyWithWhereWithoutTaskInput = {
 }
 
 export type ActivityCreateManyRoutineInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  taskId: bigint | number
+  taskSeq: bigint | number
   order: number
   repetitions?: number
   restTime?: number
@@ -750,8 +750,8 @@ export type ActivityCreateManyRoutineInput = {
 }
 
 export type ActivityUpdateWithoutRoutineInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -763,12 +763,12 @@ export type ActivityUpdateWithoutRoutineInput = {
 }
 
 export type ActivityUncheckedUpdateWithoutRoutineInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  taskId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  taskSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   repetitions?: Prisma.IntFieldUpdateOperationsInput | number
   restTime?: Prisma.IntFieldUpdateOperationsInput | number
@@ -776,12 +776,12 @@ export type ActivityUncheckedUpdateWithoutRoutineInput = {
 }
 
 export type ActivityUncheckedUpdateManyWithoutRoutineInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  taskId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  taskSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   repetitions?: Prisma.IntFieldUpdateOperationsInput | number
   restTime?: Prisma.IntFieldUpdateOperationsInput | number
@@ -789,12 +789,12 @@ export type ActivityUncheckedUpdateManyWithoutRoutineInput = {
 }
 
 export type ActivityCreateManyTaskInput = {
-  activityId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineId: bigint | number
+  routineSeq: bigint | number
   order: number
   repetitions?: number
   restTime?: number
@@ -802,8 +802,8 @@ export type ActivityCreateManyTaskInput = {
 }
 
 export type ActivityUpdateWithoutTaskInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -815,12 +815,12 @@ export type ActivityUpdateWithoutTaskInput = {
 }
 
 export type ActivityUncheckedUpdateWithoutTaskInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  routineSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   repetitions?: Prisma.IntFieldUpdateOperationsInput | number
   restTime?: Prisma.IntFieldUpdateOperationsInput | number
@@ -828,12 +828,12 @@ export type ActivityUncheckedUpdateWithoutTaskInput = {
 }
 
 export type ActivityUncheckedUpdateManyWithoutTaskInput = {
-  activityId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  routineSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   order?: Prisma.IntFieldUpdateOperationsInput | number
   repetitions?: Prisma.IntFieldUpdateOperationsInput | number
   restTime?: Prisma.IntFieldUpdateOperationsInput | number
@@ -843,13 +843,13 @@ export type ActivityUncheckedUpdateManyWithoutTaskInput = {
 
 
 export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  activityId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  routineId?: boolean
-  taskId?: boolean
+  routineSeq?: boolean
+  taskSeq?: boolean
   order?: boolean
   repetitions?: boolean
   restTime?: boolean
@@ -859,13 +859,13 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  activityId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  routineId?: boolean
-  taskId?: boolean
+  routineSeq?: boolean
+  taskSeq?: boolean
   order?: boolean
   repetitions?: boolean
   restTime?: boolean
@@ -875,13 +875,13 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  activityId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  routineId?: boolean
-  taskId?: boolean
+  routineSeq?: boolean
+  taskSeq?: boolean
   order?: boolean
   repetitions?: boolean
   restTime?: boolean
@@ -891,20 +891,20 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectScalar = {
-  activityId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  routineId?: boolean
-  taskId?: boolean
+  routineSeq?: boolean
+  taskSeq?: boolean
   order?: boolean
   repetitions?: boolean
   restTime?: boolean
   notes?: boolean
 }
 
-export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"activityId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "routineId" | "taskId" | "order" | "repetitions" | "restTime" | "notes", ExtArgs["result"]["activity"]>
+export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "routineSeq" | "taskSeq" | "order" | "repetitions" | "restTime" | "notes", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   task?: boolean | Prisma.TaskDefaultArgs<ExtArgs>
@@ -925,13 +925,13 @@ export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     task: Prisma.$TaskPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    activityId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    routineId: bigint
-    taskId: bigint
+    routineSeq: bigint
+    taskSeq: bigint
     order: number
     repetitions: number
     restTime: number
@@ -1019,8 +1019,8 @@ export interface ActivityDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * // Get first 10 Activities
    * const activities = await prisma.activity.findMany({ take: 10 })
    *
-   * // Only select the `activityId`
-   * const activityWithActivityIdOnly = await prisma.activity.findMany({ select: { activityId: true } })
+   * // Only select the `id`
+   * const activityWithIdOnly = await prisma.activity.findMany({ select: { id: true } })
    *
    */
   findMany<T extends ActivityFindManyArgs>(args?: Prisma.SelectSubset<T, ActivityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1064,9 +1064,9 @@ export interface ActivityDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   ]
    * })
    *
-   * // Create many Activities and only return the `activityId`
-   * const activityWithActivityIdOnly = await prisma.activity.createManyAndReturn({
-   *   select: { activityId: true },
+   * // Create many Activities and only return the `id`
+   * const activityWithIdOnly = await prisma.activity.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1155,9 +1155,9 @@ export interface ActivityDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   ]
    * })
    *
-   * // Update zero or more Activities and only return the `activityId`
-   * const activityWithActivityIdOnly = await prisma.activity.updateManyAndReturn({
-   *   select: { activityId: true },
+   * // Update zero or more Activities and only return the `id`
+   * const activityWithIdOnly = await prisma.activity.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1361,13 +1361,13 @@ export interface Prisma__ActivityClient<T, Null = never, ExtArgs extends runtime
  * Fields of the Activity model
  */
 export interface ActivityFieldRefs {
-  readonly activityId: Prisma.FieldRef<"Activity", 'String'>
-  readonly id: Prisma.FieldRef<"Activity", 'BigInt'>
+  readonly id: Prisma.FieldRef<"Activity", 'String'>
+  readonly seq: Prisma.FieldRef<"Activity", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Activity", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Activity", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Activity", 'DateTime'>
-  readonly routineId: Prisma.FieldRef<"Activity", 'BigInt'>
-  readonly taskId: Prisma.FieldRef<"Activity", 'BigInt'>
+  readonly routineSeq: Prisma.FieldRef<"Activity", 'BigInt'>
+  readonly taskSeq: Prisma.FieldRef<"Activity", 'BigInt'>
   readonly order: Prisma.FieldRef<"Activity", 'Int'>
   readonly repetitions: Prisma.FieldRef<"Activity", 'Int'>
   readonly restTime: Prisma.FieldRef<"Activity", 'Int'>

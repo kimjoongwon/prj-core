@@ -8,8 +8,8 @@ export class DeleteProgramUseCase {
 
 	execute(command: DeleteProgramCommand): Promise<void> {
 		return this.timelinesService.deleteProgramFromSession(
-			command.sessionId,
-			command.programId,
+			command.sessionSeq,
+			command.programSeq,
 		);
 	}
 }

@@ -88,15 +88,15 @@ export class FoldersController {
 	@ApiResponseEntity(FolderDto, HttpStatus.CREATED)
 	@ResponseMessage("폴더 생성 성공")
 	async createFolder(@Body() dto: CreateFolderDto): Promise<Folder> {
-		const userId = this.authContext.user?.id;
-		if (!userId) {
+		const userSeq = this.authContext.user?.id;
+		if (!userSeq) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.commandBus.execute(new CreateFolderCommand(dto, userId));
+		return this.commandBus.execute(new CreateFolderCommand(dto, userSeq));
 	}
 
-	@Patch(":folderId")
+	@Patch(":folderSeq")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -114,13 +114,13 @@ export class FoldersController {
 	@ApiResponseEntity(FolderDto, HttpStatus.OK)
 	@ResponseMessage("폴더 수정 성공")
 	async updateFolder(
-		@Param("folderId", ParseBigIntIdPipe) folderId: bigint,
+		@Param("folderSeq", ParseBigIntIdPipe) folderSeq: bigint,
 		@Body() dto: UpdateFolderDto,
 	): Promise<Folder> {
-		return this.commandBus.execute(new UpdateFolderCommand(folderId, dto));
+		return this.commandBus.execute(new UpdateFolderCommand(folderSeq, dto));
 	}
 
-	@Delete(":folderId")
+	@Delete(":folderSeq")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -134,8 +134,8 @@ export class FoldersController {
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ResponseMessage("폴더 삭제 성공")
 	async deleteFolder(
-		@Param("folderId", ParseBigIntIdPipe) folderId: bigint,
+		@Param("folderSeq", ParseBigIntIdPipe) folderSeq: bigint,
 	): Promise<void> {
-		await this.commandBus.execute(new DeleteFolderCommand(folderId));
+		await this.commandBus.execute(new DeleteFolderCommand(folderSeq));
 	}
 }

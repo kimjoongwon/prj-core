@@ -9,15 +9,15 @@ import type { Role } from "./role.entity";
 @AbstractEntityFields()
 export class RoleAssignment extends RoleAssignmentSchema {
 	@Exclude({ toPlainOnly: true })
-	declare roleAssignmentId: RoleAssignmentSchema["roleAssignmentId"];
+	declare id: RoleAssignmentSchema["id"];
 	@BigIntIdFieldMetadata({ description: "Role assignment ID" })
-	declare id: bigint;
+	declare seq: bigint;
 
 	@BigIntIdFieldMetadata({ description: "Role ID" })
-	declare roleId: RoleAssignmentSchema["roleId"];
+	declare roleSeq: RoleAssignmentSchema["roleSeq"];
 
 	@BigIntIdFieldMetadata({ description: "Policy ID" })
-	declare policyId: RoleAssignmentSchema["policyId"];
+	declare policySeq: RoleAssignmentSchema["policySeq"];
 
 	@ApiProperty({
 		type: Boolean,

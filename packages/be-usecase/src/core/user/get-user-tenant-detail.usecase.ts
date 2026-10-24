@@ -8,9 +8,9 @@ export class GetUserTenantDetailUseCase {
 
 	execute(query: GetUserTenantDetailQuery): Promise<unknown> {
 		return this.usersService.getTenantDetailForUser(
-			query.userId,
+			query.userSeq,
 			query.tenantId,
-			query.spaceId,
+			query.spaceSeq,
 		);
 	}
 }

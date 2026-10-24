@@ -7,6 +7,6 @@ export class UpdateRoleUseCase {
 	constructor(private readonly rolesService: RoleAggregate) {}
 
 	execute(command: UpdateRoleCommand): Promise<unknown> {
-		return this.rolesService.update(command.roleId, command);
+		return this.rolesService.update(command.roleSeq, command);
 	}
 }

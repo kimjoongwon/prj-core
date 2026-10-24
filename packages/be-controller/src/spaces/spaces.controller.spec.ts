@@ -81,7 +81,7 @@ describe("SpacesController", () => {
 		);
 		const message = queryBus.execute.mock
 			.calls[0]?.[0] as GetSpaceFitnessCenterQuery;
-		expect(message.spaceId).toBe(1n);
+		expect(message.spaceSeq).toBe(1n);
 		expect(result).toEqual({ id: "fitness-center-id" });
 	});
 
@@ -149,7 +149,7 @@ describe("SpacesController", () => {
 		);
 		const message = commandBus.execute.mock
 			.calls[0]?.[0] as UpdateSpaceFitnessCenterCommand;
-		expect(message.spaceId).toBe(1n);
+		expect(message.spaceSeq).toBe(1n);
 		expect(message.name).toBe(dto.name);
 		expect(message.contentLanguageCode).toBe(dto.contentLanguageCode);
 		expect(message.imageFileId).toBe(dto.imageFileId);
@@ -181,7 +181,7 @@ describe("SpacesController", () => {
 		const method = Reflect.getMetadata(METHOD_METADATA, descriptor?.value);
 
 		// Then
-		expect(path).toBe(":spaceId/fitness-center");
+		expect(path).toBe(":spaceSeq/fitness-center");
 		expect(method).toBe(RequestMethod.GET);
 	});
 
@@ -197,7 +197,7 @@ describe("SpacesController", () => {
 		const method = Reflect.getMetadata(METHOD_METADATA, descriptor?.value);
 
 		// Then
-		expect(path).toBe(":spaceId/fitness-center");
+		expect(path).toBe(":spaceSeq/fitness-center");
 		expect(method).toBe(RequestMethod.PATCH);
 	});
 

@@ -6,5 +6,5 @@ export class SyncPolicyEntryItemDto {
 		description: "Policy에 포함할 Ability ID",
 		example: "1",
 	})
-	abilityId!: bigint;
+	abilitySeq!: bigint;
 }

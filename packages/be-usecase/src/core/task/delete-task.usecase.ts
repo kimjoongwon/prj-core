@@ -7,6 +7,6 @@ export class DeleteTaskUseCase {
 	constructor(private readonly taskService: TaskAggregate) {}
 
 	async execute(command: DeleteTaskCommand): Promise<void> {
-		await this.taskService.deleteTask(command.taskId, command.spaceId);
+		await this.taskService.deleteTask(command.taskSeq, command.spaceSeq);
 	}
 }

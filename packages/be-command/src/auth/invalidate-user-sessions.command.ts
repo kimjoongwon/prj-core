@@ -1,3 +1,3 @@
 export class InvalidateUserSessionsCommand {
-	constructor(readonly userId: bigint) {}
+	constructor(readonly userSeq: bigint) {}
 }

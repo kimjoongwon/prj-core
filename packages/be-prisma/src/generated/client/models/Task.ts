@@ -27,89 +27,89 @@ export type AggregateTask = {
 }
 
 export type TaskAvgAggregateOutputType = {
-  id: number | null
-  spaceId: number | null
-  createdById: number | null
+  seq: number | null
+  spaceSeq: number | null
+  createdBySeq: number | null
 }
 
 export type TaskSumAggregateOutputType = {
-  id: bigint | null
-  spaceId: bigint | null
-  createdById: bigint | null
+  seq: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
 }
 
 export type TaskMinAggregateOutputType = {
-  taskId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  createdById: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
 }
 
 export type TaskMaxAggregateOutputType = {
-  taskId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  createdById: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
 }
 
 export type TaskCountAggregateOutputType = {
-  taskId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceId: number
-  createdById: number
+  spaceSeq: number
+  createdBySeq: number
   _all: number
 }
 
 
 export type TaskAvgAggregateInputType = {
-  id?: true
-  spaceId?: true
-  createdById?: true
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
 }
 
 export type TaskSumAggregateInputType = {
-  id?: true
-  spaceId?: true
-  createdById?: true
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
 }
 
 export type TaskMinAggregateInputType = {
-  taskId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
 }
 
 export type TaskMaxAggregateInputType = {
-  taskId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
 }
 
 export type TaskCountAggregateInputType = {
-  taskId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
   _all?: true
 }
 
@@ -200,13 +200,13 @@ export type TaskGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 export type TaskGroupByOutputType = {
-  taskId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint
-  createdById: bigint | null
+  spaceSeq: bigint
+  createdBySeq: bigint | null
   _count: TaskCountAggregateOutputType | null
   _avg: TaskAvgAggregateOutputType | null
   _sum: TaskSumAggregateOutputType | null
@@ -233,13 +233,13 @@ export type TaskWhereInput = {
   AND?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
   OR?: Prisma.TaskWhereInput[]
   NOT?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
-  taskId?: Prisma.StringFilter<"Task"> | string
-  id?: Prisma.BigIntFilter<"Task"> | bigint | number
+  id?: Prisma.StringFilter<"Task"> | string
+  seq?: Prisma.BigIntFilter<"Task"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Task"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Task"> | bigint | number | null
+  spaceSeq?: Prisma.BigIntFilter<"Task"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Task"> | bigint | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
@@ -247,13 +247,13 @@ export type TaskWhereInput = {
 }
 
 export type TaskOrderByWithRelationInput = {
-  taskId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
@@ -261,30 +261,30 @@ export type TaskOrderByWithRelationInput = {
 }
 
 export type TaskWhereUniqueInput = Prisma.AtLeast<{
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   AND?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
   OR?: Prisma.TaskWhereInput[]
   NOT?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Task"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Task"> | bigint | number | null
+  spaceSeq?: Prisma.BigIntFilter<"Task"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Task"> | bigint | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   exercise?: Prisma.XOR<Prisma.ExerciseNullableScalarRelationFilter, Prisma.ExerciseWhereInput> | null
-}, "id" | "taskId">
+}, "seq" | "id">
 
 export type TaskOrderByWithAggregationInput = {
-  taskId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TaskCountOrderByAggregateInput
   _avg?: Prisma.TaskAvgOrderByAggregateInput
   _max?: Prisma.TaskMaxOrderByAggregateInput
@@ -296,18 +296,18 @@ export type TaskScalarWhereWithAggregatesInput = {
   AND?: Prisma.TaskScalarWhereWithAggregatesInput | Prisma.TaskScalarWhereWithAggregatesInput[]
   OR?: Prisma.TaskScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TaskScalarWhereWithAggregatesInput | Prisma.TaskScalarWhereWithAggregatesInput[]
-  taskId?: Prisma.StringWithAggregatesFilter<"Task"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"Task"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"Task"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"Task"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
-  spaceId?: Prisma.BigIntWithAggregatesFilter<"Task"> | bigint | number
-  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"Task"> | bigint | number | null
+  spaceSeq?: Prisma.BigIntWithAggregatesFilter<"Task"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableWithAggregatesFilter<"Task"> | bigint | number | null
 }
 
 export type TaskCreateInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -318,20 +318,20 @@ export type TaskCreateInput = {
 }
 
 export type TaskUncheckedCreateInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
 
 export type TaskUpdateInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -342,43 +342,43 @@ export type TaskUpdateInput = {
 }
 
 export type TaskUncheckedUpdateInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
 export type TaskCreateManyInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
 }
 
 export type TaskUpdateManyMutationInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TaskUncheckedUpdateManyInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TaskScalarRelationFilter = {
@@ -397,45 +397,45 @@ export type TaskOrderByRelationAggregateInput = {
 }
 
 export type TaskCountOrderByAggregateInput = {
-  taskId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TaskAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TaskMaxOrderByAggregateInput = {
-  taskId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TaskMinOrderByAggregateInput = {
-  taskId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TaskSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TaskCreateNestedOneWithoutActivitiesInput = {
@@ -551,8 +551,8 @@ export type TaskUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type TaskCreateWithoutActivitiesInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -562,13 +562,13 @@ export type TaskCreateWithoutActivitiesInput = {
 }
 
 export type TaskUncheckedCreateWithoutActivitiesInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
 
@@ -589,8 +589,8 @@ export type TaskUpdateToOneWithWhereWithoutActivitiesInput = {
 }
 
 export type TaskUpdateWithoutActivitiesInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600,19 +600,19 @@ export type TaskUpdateWithoutActivitiesInput = {
 }
 
 export type TaskUncheckedUpdateWithoutActivitiesInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
 export type TaskCreateWithoutExerciseInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -622,13 +622,13 @@ export type TaskCreateWithoutExerciseInput = {
 }
 
 export type TaskUncheckedCreateWithoutExerciseInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
 }
 
@@ -649,8 +649,8 @@ export type TaskUpdateToOneWithWhereWithoutExerciseInput = {
 }
 
 export type TaskUpdateWithoutExerciseInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -660,19 +660,19 @@ export type TaskUpdateWithoutExerciseInput = {
 }
 
 export type TaskUncheckedUpdateWithoutExerciseInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
 }
 
 export type TaskCreateWithoutSpaceInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -682,12 +682,12 @@ export type TaskCreateWithoutSpaceInput = {
 }
 
 export type TaskUncheckedCreateWithoutSpaceInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
@@ -722,18 +722,18 @@ export type TaskScalarWhereInput = {
   AND?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
   OR?: Prisma.TaskScalarWhereInput[]
   NOT?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
-  taskId?: Prisma.StringFilter<"Task"> | string
-  id?: Prisma.BigIntFilter<"Task"> | bigint | number
+  id?: Prisma.StringFilter<"Task"> | string
+  seq?: Prisma.BigIntFilter<"Task"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Task"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Task"> | bigint | number | null
+  spaceSeq?: Prisma.BigIntFilter<"Task"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Task"> | bigint | number | null
 }
 
 export type TaskCreateWithoutCreatedByInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -743,12 +743,12 @@ export type TaskCreateWithoutCreatedByInput = {
 }
 
 export type TaskUncheckedCreateWithoutCreatedByInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
+  spaceSeq: bigint | number
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
@@ -780,17 +780,17 @@ export type TaskUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type TaskCreateManySpaceInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
 }
 
 export type TaskUpdateWithoutSpaceInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -800,37 +800,37 @@ export type TaskUpdateWithoutSpaceInput = {
 }
 
 export type TaskUncheckedUpdateWithoutSpaceInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
 export type TaskUncheckedUpdateManyWithoutSpaceInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TaskCreateManyCreatedByInput = {
-  taskId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
+  spaceSeq: bigint | number
 }
 
 export type TaskUpdateWithoutCreatedByInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -840,23 +840,23 @@ export type TaskUpdateWithoutCreatedByInput = {
 }
 
 export type TaskUncheckedUpdateWithoutCreatedByInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
 export type TaskUncheckedUpdateManyWithoutCreatedByInput = {
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 
@@ -891,13 +891,13 @@ export type TaskCountOutputTypeCountActivitiesArgs<ExtArgs extends runtime.Types
 
 
 export type TaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  taskId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>
   activities?: boolean | Prisma.Task$activitiesArgs<ExtArgs>
@@ -906,40 +906,40 @@ export type TaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 }, ExtArgs["result"]["task"]>
 
 export type TaskSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  taskId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["task"]>
 
 export type TaskSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  taskId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["task"]>
 
 export type TaskSelectScalar = {
-  taskId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
 }
 
-export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"taskId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById", ExtArgs["result"]["task"]>
+export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq", ExtArgs["result"]["task"]>
 export type TaskInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>
@@ -965,13 +965,13 @@ export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     exercise: Prisma.$ExercisePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    taskId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    spaceId: bigint
-    createdById: bigint | null
+    spaceSeq: bigint
+    createdBySeq: bigint | null
   }, ExtArgs["result"]["task"]>
   composites: {}
 }
@@ -1055,8 +1055,8 @@ export interface TaskDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    * // Get first 10 Tasks
    * const tasks = await prisma.task.findMany({ take: 10 })
    *
-   * // Only select the `taskId`
-   * const taskWithTaskIdOnly = await prisma.task.findMany({ select: { taskId: true } })
+   * // Only select the `id`
+   * const taskWithIdOnly = await prisma.task.findMany({ select: { id: true } })
    *
    */
   findMany<T extends TaskFindManyArgs>(args?: Prisma.SelectSubset<T, TaskFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1100,9 +1100,9 @@ export interface TaskDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    *   ]
    * })
    *
-   * // Create many Tasks and only return the `taskId`
-   * const taskWithTaskIdOnly = await prisma.task.createManyAndReturn({
-   *   select: { taskId: true },
+   * // Create many Tasks and only return the `id`
+   * const taskWithIdOnly = await prisma.task.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1191,9 +1191,9 @@ export interface TaskDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    *   ]
    * })
    *
-   * // Update zero or more Tasks and only return the `taskId`
-   * const taskWithTaskIdOnly = await prisma.task.updateManyAndReturn({
-   *   select: { taskId: true },
+   * // Update zero or more Tasks and only return the `id`
+   * const taskWithIdOnly = await prisma.task.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1399,13 +1399,13 @@ export interface Prisma__TaskClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the Task model
  */
 export interface TaskFieldRefs {
-  readonly taskId: Prisma.FieldRef<"Task", 'String'>
-  readonly id: Prisma.FieldRef<"Task", 'BigInt'>
+  readonly id: Prisma.FieldRef<"Task", 'String'>
+  readonly seq: Prisma.FieldRef<"Task", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Task", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Task", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Task", 'DateTime'>
-  readonly spaceId: Prisma.FieldRef<"Task", 'BigInt'>
-  readonly createdById: Prisma.FieldRef<"Task", 'BigInt'>
+  readonly spaceSeq: Prisma.FieldRef<"Task", 'BigInt'>
+  readonly createdBySeq: Prisma.FieldRef<"Task", 'BigInt'>
 }
 
 

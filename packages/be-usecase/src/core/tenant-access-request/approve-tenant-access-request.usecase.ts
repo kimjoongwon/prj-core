@@ -11,7 +11,7 @@ export class ApproveTenantAccessRequestUseCase {
 	execute(command: ApproveTenantAccessRequestCommand): Promise<unknown> {
 		return this.tenantAccessRequestService.approve({
 			tenantAccessRequestId: command.tenantAccessRequestId,
-			reviewerId: command.reviewerId,
+			reviewerSeq: command.reviewerSeq,
 			reviewComment: command.reviewComment,
 		});
 	}

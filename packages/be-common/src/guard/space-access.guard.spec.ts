@@ -16,7 +16,7 @@ describe("SpaceAccessGuard", () => {
 	let mockClsService: { get: jest.Mock; set: jest.Mock };
 	type MockTenant = {
 		id: bigint;
-		spaceId?: bigint;
+		spaceSeq?: bigint;
 		role: { name: string };
 		space?: {
 			id?: bigint;
@@ -54,7 +54,7 @@ describe("SpaceAccessGuard", () => {
 		tenants: [
 			{
 				id: 201n,
-				spaceId: 301n,
+				spaceSeq: 301n,
 				role: { name: "MEMBER" },
 			},
 		],
@@ -193,7 +193,7 @@ describe("SpaceAccessGuard", () => {
 					tenants: [
 						{
 							id: 201n,
-							spaceId: undefined,
+							spaceSeq: undefined,
 							space: { id: 301n },
 							role: { name: "MEMBER" },
 						},

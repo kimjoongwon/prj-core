@@ -5,7 +5,7 @@ import type { Asset } from "./asset.entity";
 @AbstractEntityFields()
 export class Image extends ImageSchema {
 	/** 공개 식별자 ULID */
-	declare imageId: ImageSchema["imageId"];
+	declare id: ImageSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
@@ -13,7 +13,7 @@ export class Image extends ImageSchema {
 	declare width: ImageSchema["width"];
 	declare height: ImageSchema["height"];
 	declare hasAlpha: ImageSchema["hasAlpha"];
-	declare assetId: ImageSchema["assetId"];
+	declare assetSeq: ImageSchema["assetSeq"];
 
 	// ============================================================================
 	// Nullable 필드

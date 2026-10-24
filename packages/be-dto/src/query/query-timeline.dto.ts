@@ -10,7 +10,7 @@ import { QueryDto } from "./query.dto";
 export class QueryTimelineDto extends QueryDto {
 	@BigIntIdFieldOptional({ nullable: true, default: null })
 	@Transform(({ value }) => (value === "null" ? null : value))
-	timelineId?: bigint | null;
+	timelineSeq?: bigint | null;
 
 	@StringFieldOptional({ nullable: true, default: null })
 	@Transform(({ value }) => (value === "null" ? null : value))

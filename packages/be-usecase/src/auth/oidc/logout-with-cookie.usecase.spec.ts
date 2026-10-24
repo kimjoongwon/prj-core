@@ -73,8 +73,8 @@ function createMocks() {
 	};
 	const tokenStorageService = {
 		getSessionBySessionId: jest.fn().mockResolvedValue({
-			userId: "01J00000000000000000001001",
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			userSeq: "01J00000000000000000001001",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
 				idToken: storedIdToken,
@@ -120,13 +120,13 @@ function createMocks() {
 
 function createLogoutCommand(
 	overrides: Partial<
-		Pick<LogoutWithCookieCommand, "accessTokenCookie" | "sessionId">
+		Pick<LogoutWithCookieCommand, "accessTokenCookie" | "sessionSeq">
 	> & { res: Response },
 ) {
 	return new LogoutWithCookieCommand(
 		overrides.accessTokenCookie,
 		undefined,
-		overrides.sessionId,
+		overrides.sessionSeq,
 		overrides.res,
 	);
 }
@@ -136,7 +136,7 @@ describe("LogoutWithCookieUseCase", () => {
 		const mocks = createMocks();
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			res: mocks.res,
 		});
 
@@ -160,8 +160,8 @@ describe("LogoutWithCookieUseCase", () => {
 	it("만료된 ID Token은 id_token_hint에서 제외해 확인 화면 경유 URL을 반환한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
-			userId: "01J00000000000000000001001",
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			userSeq: "01J00000000000000000001001",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
 				idToken: createStoredIdToken({
@@ -171,7 +171,7 @@ describe("LogoutWithCookieUseCase", () => {
 		});
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			res: mocks.res,
 		});
 
@@ -187,8 +187,8 @@ describe("LogoutWithCookieUseCase", () => {
 	it("발급자가 현재 OP와 다른 ID Token(발급자 단일화 이전 세션)은 id_token_hint에서 제외한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
-			userId: "01J00000000000000000001001",
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			userSeq: "01J00000000000000000001001",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
 				idToken: createStoredIdToken({ iss: "http://localhost:3000" }),
@@ -196,7 +196,7 @@ describe("LogoutWithCookieUseCase", () => {
 		});
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			res: mocks.res,
 		});
 
@@ -212,8 +212,8 @@ describe("LogoutWithCookieUseCase", () => {
 	it("audience가 클라이언트와 다른 ID Token은 id_token_hint에서 제외한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
-			userId: "01J00000000000000000001001",
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			userSeq: "01J00000000000000000001001",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
 				idToken: createStoredIdToken({ aud: "other-client" }),
@@ -221,7 +221,7 @@ describe("LogoutWithCookieUseCase", () => {
 		});
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			res: mocks.res,
 		});
 
@@ -238,7 +238,7 @@ describe("LogoutWithCookieUseCase", () => {
 		const mocks = createMocks();
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			res: mocks.res,
 		});
 
@@ -250,7 +250,7 @@ describe("LogoutWithCookieUseCase", () => {
 		expect(clearedCookieNames).toEqual(
 			expect.not.arrayContaining(["_session", "_interaction"]),
 		);
-		expect(clearedCookieNames).toContain("sessionId");
+		expect(clearedCookieNames).toContain("sessionSeq");
 		expect(mocks.tokenService.clearTokenCookies).toHaveBeenCalledWith(
 			mocks.res,
 		);
@@ -260,7 +260,7 @@ describe("LogoutWithCookieUseCase", () => {
 		const mocks = createMocks();
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			res: mocks.res,
 		});
 
@@ -283,13 +283,13 @@ describe("LogoutWithCookieUseCase", () => {
 	it("세션 레코드에 ID Token이 없으면 client_id만 담은 확인 화면 end_session URL을 반환한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
-			userId: "01J00000000000000000001001",
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			userSeq: "01J00000000000000000001001",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			session: { refreshToken: "stored-refresh-token" },
 		});
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			res: mocks.res,
 		});
 
@@ -311,7 +311,7 @@ describe("LogoutWithCookieUseCase", () => {
 		);
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
+			sessionSeq: "admin-web.0123456789abcdef0123456789abcdef",
 			res: mocks.res,
 		});
 
@@ -325,7 +325,7 @@ describe("LogoutWithCookieUseCase", () => {
 		const clearedCookieNames = (
 			mocks.res.clearCookie as jest.Mock
 		).mock.calls.map(([cookieName]) => cookieName);
-		expect(clearedCookieNames).toContain("sessionId");
+		expect(clearedCookieNames).toContain("sessionSeq");
 		// OP 폐기 외 토큰 정리(블랙리스트/세션 삭제)는 클라이언트와 무관하게 계속한다.
 		expect(mocks.tokenStorageService.addToBlacklist).toHaveBeenCalled();
 		expect(mocks.tokenStorageService.deleteSession).toHaveBeenCalled();
@@ -335,7 +335,7 @@ describe("LogoutWithCookieUseCase", () => {
 		const mocks = createMocks();
 		const command = createLogoutCommand({
 			accessTokenCookie: mocks.accessToken,
-			sessionId: undefined,
+			sessionSeq: undefined,
 			res: mocks.res,
 		});
 

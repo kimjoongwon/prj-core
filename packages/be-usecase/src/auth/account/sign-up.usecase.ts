@@ -22,7 +22,7 @@ export class SignUpUseCase {
 		if (existingUser) {
 			throw new BadRequestException("EMAIL_ALREADY_EXISTS");
 		}
-		await getSignUpSpaceOrThrow(this.spacesService, input.spaceId);
+		await getSignUpSpaceOrThrow(this.spacesService, input.spaceSeq);
 
 		const plainPassword = PlainPassword.create(input.password);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
@@ -32,7 +32,7 @@ export class SignUpUseCase {
 			email: email.value,
 			phone: phone.normalized,
 			address: input.address,
-			spaceId: input.spaceId,
+			spaceSeq: input.spaceSeq,
 			passwordHash: hashedPassword.value,
 			nickname: input.nickname || input.name,
 		});

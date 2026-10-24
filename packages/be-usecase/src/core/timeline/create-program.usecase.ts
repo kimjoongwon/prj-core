@@ -7,10 +7,10 @@ export class CreateProgramUseCase {
 	constructor(private readonly timelinesService: TimelineAggregate) {}
 
 	execute(command: CreateProgramCommand): Promise<unknown> {
-		return this.timelinesService.createProgramInSession(command.sessionId, {
+		return this.timelinesService.createProgramInSession(command.sessionSeq, {
 			name: command.name,
-			routineId: command.routineId,
-			instructorId: command.instructorId,
+			routineSeq: command.routineSeq,
+			instructorSeq: command.instructorSeq,
 			capacity: command.capacity,
 			level: command.level ?? null,
 		});

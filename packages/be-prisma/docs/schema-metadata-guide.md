@@ -576,7 +576,7 @@ relation 개수, 파일 이름, API CRUD 유무만으로 타입을 결정하지 
 // @description: 사용자 계정의 현재 상태와 생명주기를 관리
 /// @displayName 사용자
 model User {
-  userId String @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id  String @unique @default(ulid()) @map("user_id") @db.Char(26)
   id     BigInt @id @default(autoincrement())
 }
 ```
@@ -683,7 +683,7 @@ Aggregate는 여러 도메인 객체를 하나의 일관성 단위로 다루는 
 // @description: Policy와 Ability를 연결하여 정책의 권한 구성을 관리
 /// @displayName 정책 권한
 model PolicyEntry {
-  policyEntryId String @unique @default(ulid()) @map("policy_entry_id") @db.Char(26)
+  id  String @unique @default(ulid()) @map("policy_entry_id") @db.Char(26)
   id            BigInt @id @default(autoincrement())
   policyId      BigInt @map("policy_id")
   abilityId     BigInt @map("ability_id")
@@ -712,7 +712,7 @@ model PolicyEntry {
 // @description: Inquiry에 종속되어 감정 분석 결과를 보관
 /// @displayName 감정 분석
 model SentimentAnalysis {
-  sentimentAnalysisId String  @unique @default(ulid()) @map("sentiment_analysis_id") @db.Char(26)
+  id  String  @unique @default(ulid()) @map("sentiment_analysis_id") @db.Char(26)
   id                  BigInt  @id @default(autoincrement())
   inquiryId           BigInt  @unique @map("inquiry_id")
   inquiry             Inquiry @relation(fields: [inquiryId], references: [id])
@@ -740,7 +740,7 @@ enum AssetKind {
 // @description: 보관되는 파일 자산의 공통 identity와 종류를 관리
 /// @displayName 자산
 model Asset {
-  assetId String    @unique @default(ulid()) @map("asset_id") @db.Char(26)
+  id  String    @unique @default(ulid()) @map("asset_id") @db.Char(26)
   id      BigInt    @id @default(autoincrement())
   kind    AssetKind
 

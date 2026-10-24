@@ -8,8 +8,8 @@ export class SyncPolicyEntriesUseCase {
 
 	execute(command: SyncPolicyEntriesCommand): Promise<unknown> {
 		return this.policyService.syncPolicyEntries(
-			command.policyId,
-			command.entries.map((entry) => entry.abilityId),
+			command.policySeq,
+			command.entries.map((entry) => entry.abilitySeq),
 		);
 	}
 }

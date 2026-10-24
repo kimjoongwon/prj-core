@@ -7,6 +7,6 @@ export class GetUserDetailForSpaceUseCase {
 	constructor(private readonly usersService: UserService) {}
 
 	execute(query: GetUserDetailForSpaceQuery): Promise<unknown> {
-		return this.usersService.getUserDetailForSpace(query.userId, query.spaceId);
+		return this.usersService.getUserDetailForSpace(query.userSeq, query.spaceSeq);
 	}
 }

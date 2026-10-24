@@ -56,18 +56,18 @@ describe("PasswordResetService", () => {
 			service as never as {
 				saveResetToken: (
 					hashedToken: string,
-					data: { userId: bigint; email: string },
+					data: { userSeq: bigint; email: string },
 				) => Promise<void>;
 			}
 		).saveResetToken("hashed-token", {
-			userId: 101n,
+			userSeq: 101n,
 			email: "tester@example.com",
 		});
 
 		expect(redisService.set).toHaveBeenCalledWith(
 			"password-reset:hashed-token",
 			JSON.stringify({
-				userId: "101",
+				userSeq: "101",
 				email: "tester@example.com",
 			}),
 			TOKEN_TTL_SECONDS,
@@ -77,7 +77,7 @@ describe("PasswordResetService", () => {
 	it("저장된 reset token payload를 읽을 때 문자열 userId를 bigint로 복원해야 한다", async () => {
 		redisService.get.mockResolvedValue(
 			JSON.stringify({
-				userId: "101",
+				userSeq: "101",
 				email: "tester@example.com",
 			}),
 		);
@@ -86,12 +86,12 @@ describe("PasswordResetService", () => {
 			service as never as {
 				getResetToken: (
 					hashedToken: string,
-				) => Promise<{ userId: bigint; email: string } | null>;
+				) => Promise<{ userSeq: bigint; email: string } | null>;
 			}
 		).getResetToken("hashed-token");
 
 		expect(result).toEqual({
-			userId: 101n,
+			userSeq: 101n,
 			email: "tester@example.com",
 		});
 	});

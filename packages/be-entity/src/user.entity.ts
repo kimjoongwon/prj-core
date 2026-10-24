@@ -50,7 +50,7 @@ export class User extends UserSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
-	declare userId: UserSchema["userId"];
+	declare id: UserSchema["id"];
 
 	// ============================================================================
 	// 필수 필드

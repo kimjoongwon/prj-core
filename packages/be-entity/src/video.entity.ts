@@ -5,7 +5,7 @@ import type { Asset } from "./asset.entity";
 @AbstractEntityFields()
 export class Video extends VideoSchema {
 	/** 공개 식별자 ULID */
-	declare videoId: VideoSchema["videoId"];
+	declare id: VideoSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
@@ -14,7 +14,7 @@ export class Video extends VideoSchema {
 	declare height: VideoSchema["height"];
 	declare durationMs: VideoSchema["durationMs"];
 	declare hasAudio: VideoSchema["hasAudio"];
-	declare assetId: VideoSchema["assetId"];
+	declare assetSeq: VideoSchema["assetSeq"];
 
 	// ============================================================================
 	// Nullable 필드

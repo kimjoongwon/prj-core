@@ -7,6 +7,6 @@ export class AssignInquiryUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(command: AssignInquiryCommand): Promise<unknown> {
-		return this.inquiryService.assignTo(command.inquiryId, command.assigneeId);
+		return this.inquiryService.assignTo(command.inquirySeq, command.assigneeSeq);
 	}
 }

@@ -7,6 +7,6 @@ export class GetAssetByIdUseCase {
 	constructor(private readonly assetService: AssetAggregate) {}
 
 	execute(query: GetAssetByIdQuery): Promise<unknown> {
-		return this.assetService.getAssetById(query.assetId);
+		return this.assetService.getAssetById(query.assetSeq);
 	}
 }

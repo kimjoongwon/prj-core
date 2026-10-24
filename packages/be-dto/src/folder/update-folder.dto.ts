@@ -7,7 +7,7 @@ import { IsOptional } from "class-validator";
  * 폴더 생성 DTO
  */
 export class UpdateFolderDto extends PartialType(
-	PickType(Folder, ["parentFolderId"] as const),
+	PickType(Folder, ["parentFolderSeq"] as const),
 ) {
 	@IsOptional()
 	@StringField({

@@ -1,3 +1,3 @@
 export class GetInquiryParticipantsQuery {
-	constructor(readonly inquiryId: bigint) {}
+	constructor(readonly inquirySeq: bigint) {}
 }

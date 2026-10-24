@@ -27,112 +27,112 @@ export type AggregateFitnessCenter = {
 }
 
 export type FitnessCenterAvgAggregateOutputType = {
-  id: number | null
-  companyId: number | null
-  spaceId: number | null
+  seq: number | null
+  companySeq: number | null
+  spaceSeq: number | null
 }
 
 export type FitnessCenterSumAggregateOutputType = {
-  id: bigint | null
-  companyId: bigint | null
-  spaceId: bigint | null
+  seq: bigint | null
+  companySeq: bigint | null
+  spaceSeq: bigint | null
 }
 
 export type FitnessCenterMinAggregateOutputType = {
-  fitnessCenterId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
   address: string | null
   phone: string | null
   email: string | null
-  companyId: bigint | null
-  spaceId: bigint | null
+  companySeq: bigint | null
+  spaceSeq: bigint | null
   imageFileId: string | null
 }
 
 export type FitnessCenterMaxAggregateOutputType = {
-  fitnessCenterId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
   address: string | null
   phone: string | null
   email: string | null
-  companyId: bigint | null
-  spaceId: bigint | null
+  companySeq: bigint | null
+  spaceSeq: bigint | null
   imageFileId: string | null
 }
 
 export type FitnessCenterCountAggregateOutputType = {
-  fitnessCenterId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
   address: number
   phone: number
   email: number
-  companyId: number
-  spaceId: number
+  companySeq: number
+  spaceSeq: number
   imageFileId: number
   _all: number
 }
 
 
 export type FitnessCenterAvgAggregateInputType = {
-  id?: true
-  companyId?: true
-  spaceId?: true
+  seq?: true
+  companySeq?: true
+  spaceSeq?: true
 }
 
 export type FitnessCenterSumAggregateInputType = {
-  id?: true
-  companyId?: true
-  spaceId?: true
+  seq?: true
+  companySeq?: true
+  spaceSeq?: true
 }
 
 export type FitnessCenterMinAggregateInputType = {
-  fitnessCenterId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
   address?: true
   phone?: true
   email?: true
-  companyId?: true
-  spaceId?: true
+  companySeq?: true
+  spaceSeq?: true
   imageFileId?: true
 }
 
 export type FitnessCenterMaxAggregateInputType = {
-  fitnessCenterId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
   address?: true
   phone?: true
   email?: true
-  companyId?: true
-  spaceId?: true
+  companySeq?: true
+  spaceSeq?: true
   imageFileId?: true
 }
 
 export type FitnessCenterCountAggregateInputType = {
-  fitnessCenterId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
   address?: true
   phone?: true
   email?: true
-  companyId?: true
-  spaceId?: true
+  companySeq?: true
+  spaceSeq?: true
   imageFileId?: true
   _all?: true
 }
@@ -224,16 +224,16 @@ export type FitnessCenterGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 export type FitnessCenterGroupByOutputType = {
-  fitnessCenterId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
   address: string
   phone: string
   email: string
-  companyId: bigint
-  spaceId: bigint
+  companySeq: bigint
+  spaceSeq: bigint
   imageFileId: string | null
   _count: FitnessCenterCountAggregateOutputType | null
   _avg: FitnessCenterAvgAggregateOutputType | null
@@ -261,41 +261,41 @@ export type FitnessCenterWhereInput = {
   AND?: Prisma.FitnessCenterWhereInput | Prisma.FitnessCenterWhereInput[]
   OR?: Prisma.FitnessCenterWhereInput[]
   NOT?: Prisma.FitnessCenterWhereInput | Prisma.FitnessCenterWhereInput[]
-  fitnessCenterId?: Prisma.StringFilter<"FitnessCenter"> | string
-  id?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
+  id?: Prisma.StringFilter<"FitnessCenter"> | string
+  seq?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"FitnessCenter"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
   address?: Prisma.StringFilter<"FitnessCenter"> | string
   phone?: Prisma.StringFilter<"FitnessCenter"> | string
   email?: Prisma.StringFilter<"FitnessCenter"> | string
-  companyId?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
-  spaceId?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
+  companySeq?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
   imageFileId?: Prisma.StringNullableFilter<"FitnessCenter"> | string | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
 }
 
 export type FitnessCenterOrderByWithRelationInput = {
-  fitnessCenterId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  companySeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrderInput | Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   space?: Prisma.SpaceOrderByWithRelationInput
 }
 
 export type FitnessCenterWhereUniqueInput = Prisma.AtLeast<{
-  fitnessCenterId?: string
-  id?: bigint | number
-  spaceId?: bigint | number
+  id?: string
+  seq?: bigint | number
+  spaceSeq?: bigint | number
   AND?: Prisma.FitnessCenterWhereInput | Prisma.FitnessCenterWhereInput[]
   OR?: Prisma.FitnessCenterWhereInput[]
   NOT?: Prisma.FitnessCenterWhereInput | Prisma.FitnessCenterWhereInput[]
@@ -305,23 +305,23 @@ export type FitnessCenterWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringFilter<"FitnessCenter"> | string
   phone?: Prisma.StringFilter<"FitnessCenter"> | string
   email?: Prisma.StringFilter<"FitnessCenter"> | string
-  companyId?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
+  companySeq?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
   imageFileId?: Prisma.StringNullableFilter<"FitnessCenter"> | string | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-}, "id" | "fitnessCenterId" | "spaceId">
+}, "seq" | "id" | "spaceSeq">
 
 export type FitnessCenterOrderByWithAggregationInput = {
-  fitnessCenterId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  companySeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.FitnessCenterCountOrderByAggregateInput
   _avg?: Prisma.FitnessCenterAvgOrderByAggregateInput
@@ -334,22 +334,22 @@ export type FitnessCenterScalarWhereWithAggregatesInput = {
   AND?: Prisma.FitnessCenterScalarWhereWithAggregatesInput | Prisma.FitnessCenterScalarWhereWithAggregatesInput[]
   OR?: Prisma.FitnessCenterScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FitnessCenterScalarWhereWithAggregatesInput | Prisma.FitnessCenterScalarWhereWithAggregatesInput[]
-  fitnessCenterId?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"FitnessCenter"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"FitnessCenter"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FitnessCenter"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FitnessCenter"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FitnessCenter"> | Date | string | null
   address?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
   phone?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
   email?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
-  companyId?: Prisma.BigIntWithAggregatesFilter<"FitnessCenter"> | bigint | number
-  spaceId?: Prisma.BigIntWithAggregatesFilter<"FitnessCenter"> | bigint | number
+  companySeq?: Prisma.BigIntWithAggregatesFilter<"FitnessCenter"> | bigint | number
+  spaceSeq?: Prisma.BigIntWithAggregatesFilter<"FitnessCenter"> | bigint | number
   imageFileId?: Prisma.StringNullableWithAggregatesFilter<"FitnessCenter"> | string | null
 }
 
 export type FitnessCenterCreateInput = {
-  fitnessCenterId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -362,22 +362,22 @@ export type FitnessCenterCreateInput = {
 }
 
 export type FitnessCenterUncheckedCreateInput = {
-  fitnessCenterId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   address: string
   phone: string
   email: string
-  companyId: bigint | number
-  spaceId: bigint | number
+  companySeq: bigint | number
+  spaceSeq: bigint | number
   imageFileId?: string | null
 }
 
 export type FitnessCenterUpdateInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -390,36 +390,36 @@ export type FitnessCenterUpdateInput = {
 }
 
 export type FitnessCenterUncheckedUpdateInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  companySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type FitnessCenterCreateManyInput = {
-  fitnessCenterId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   address: string
   phone: string
   email: string
-  companyId: bigint | number
-  spaceId: bigint | number
+  companySeq: bigint | number
+  spaceSeq: bigint | number
   imageFileId?: string | null
 }
 
 export type FitnessCenterUpdateManyMutationInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -430,16 +430,16 @@ export type FitnessCenterUpdateManyMutationInput = {
 }
 
 export type FitnessCenterUncheckedUpdateManyInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  companySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -454,57 +454,57 @@ export type FitnessCenterOrderByRelationAggregateInput = {
 }
 
 export type FitnessCenterCountOrderByAggregateInput = {
-  fitnessCenterId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  companySeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrder
 }
 
 export type FitnessCenterAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  companySeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
 }
 
 export type FitnessCenterMaxOrderByAggregateInput = {
-  fitnessCenterId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  companySeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrder
 }
 
 export type FitnessCenterMinOrderByAggregateInput = {
-  fitnessCenterId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  companySeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrder
 }
 
 export type FitnessCenterSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  companyId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  companySeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
 }
 
 export type FitnessCenterNullableScalarRelationFilter = {
@@ -587,8 +587,8 @@ export type FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput = {
 }
 
 export type FitnessCenterCreateWithoutCompanyInput = {
-  fitnessCenterId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -600,15 +600,15 @@ export type FitnessCenterCreateWithoutCompanyInput = {
 }
 
 export type FitnessCenterUncheckedCreateWithoutCompanyInput = {
-  fitnessCenterId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   address: string
   phone: string
   email: string
-  spaceId: bigint | number
+  spaceSeq: bigint | number
   imageFileId?: string | null
 }
 
@@ -642,22 +642,22 @@ export type FitnessCenterScalarWhereInput = {
   AND?: Prisma.FitnessCenterScalarWhereInput | Prisma.FitnessCenterScalarWhereInput[]
   OR?: Prisma.FitnessCenterScalarWhereInput[]
   NOT?: Prisma.FitnessCenterScalarWhereInput | Prisma.FitnessCenterScalarWhereInput[]
-  fitnessCenterId?: Prisma.StringFilter<"FitnessCenter"> | string
-  id?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
+  id?: Prisma.StringFilter<"FitnessCenter"> | string
+  seq?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"FitnessCenter"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
   address?: Prisma.StringFilter<"FitnessCenter"> | string
   phone?: Prisma.StringFilter<"FitnessCenter"> | string
   email?: Prisma.StringFilter<"FitnessCenter"> | string
-  companyId?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
-  spaceId?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
+  companySeq?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"FitnessCenter"> | bigint | number
   imageFileId?: Prisma.StringNullableFilter<"FitnessCenter"> | string | null
 }
 
 export type FitnessCenterCreateWithoutSpaceInput = {
-  fitnessCenterId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -669,15 +669,15 @@ export type FitnessCenterCreateWithoutSpaceInput = {
 }
 
 export type FitnessCenterUncheckedCreateWithoutSpaceInput = {
-  fitnessCenterId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   address: string
   phone: string
   email: string
-  companyId: bigint | number
+  companySeq: bigint | number
   imageFileId?: string | null
 }
 
@@ -698,8 +698,8 @@ export type FitnessCenterUpdateToOneWithWhereWithoutSpaceInput = {
 }
 
 export type FitnessCenterUpdateWithoutSpaceInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -711,34 +711,34 @@ export type FitnessCenterUpdateWithoutSpaceInput = {
 }
 
 export type FitnessCenterUncheckedUpdateWithoutSpaceInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  companySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type FitnessCenterCreateManyCompanyInput = {
-  fitnessCenterId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   address: string
   phone: string
   email: string
-  spaceId: bigint | number
+  spaceSeq: bigint | number
   imageFileId?: string | null
 }
 
 export type FitnessCenterUpdateWithoutCompanyInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -750,96 +750,96 @@ export type FitnessCenterUpdateWithoutCompanyInput = {
 }
 
 export type FitnessCenterUncheckedUpdateWithoutCompanyInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type FitnessCenterUncheckedUpdateManyWithoutCompanyInput = {
-  fitnessCenterId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
 
 export type FitnessCenterSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  fitnessCenterId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   address?: boolean
   phone?: boolean
   email?: boolean
-  companyId?: boolean
-  spaceId?: boolean
+  companySeq?: boolean
+  spaceSeq?: boolean
   imageFileId?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fitnessCenter"]>
 
 export type FitnessCenterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  fitnessCenterId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   address?: boolean
   phone?: boolean
   email?: boolean
-  companyId?: boolean
-  spaceId?: boolean
+  companySeq?: boolean
+  spaceSeq?: boolean
   imageFileId?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fitnessCenter"]>
 
 export type FitnessCenterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  fitnessCenterId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   address?: boolean
   phone?: boolean
   email?: boolean
-  companyId?: boolean
-  spaceId?: boolean
+  companySeq?: boolean
+  spaceSeq?: boolean
   imageFileId?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fitnessCenter"]>
 
 export type FitnessCenterSelectScalar = {
-  fitnessCenterId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   address?: boolean
   phone?: boolean
   email?: boolean
-  companyId?: boolean
-  spaceId?: boolean
+  companySeq?: boolean
+  spaceSeq?: boolean
   imageFileId?: boolean
 }
 
-export type FitnessCenterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"fitnessCenterId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "address" | "phone" | "email" | "companyId" | "spaceId" | "imageFileId", ExtArgs["result"]["fitnessCenter"]>
+export type FitnessCenterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "address" | "phone" | "email" | "companySeq" | "spaceSeq" | "imageFileId", ExtArgs["result"]["fitnessCenter"]>
 export type FitnessCenterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -860,8 +860,8 @@ export type $FitnessCenterPayload<ExtArgs extends runtime.Types.Extensions.Inter
     space: Prisma.$SpacePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    fitnessCenterId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -877,8 +877,8 @@ export type $FitnessCenterPayload<ExtArgs extends runtime.Types.Extensions.Inter
      * @displayName 이메일
      */
     email: string
-    companyId: bigint
-    spaceId: bigint
+    companySeq: bigint
+    spaceSeq: bigint
     imageFileId: string | null
   }, ExtArgs["result"]["fitnessCenter"]>
   composites: {}
@@ -963,8 +963,8 @@ export interface FitnessCenterDelegate<ExtArgs extends runtime.Types.Extensions.
    * // Get first 10 FitnessCenters
    * const fitnessCenters = await prisma.fitnessCenter.findMany({ take: 10 })
    *
-   * // Only select the `fitnessCenterId`
-   * const fitnessCenterWithFitnessCenterIdOnly = await prisma.fitnessCenter.findMany({ select: { fitnessCenterId: true } })
+   * // Only select the `id`
+   * const fitnessCenterWithIdOnly = await prisma.fitnessCenter.findMany({ select: { id: true } })
    *
    */
   findMany<T extends FitnessCenterFindManyArgs>(args?: Prisma.SelectSubset<T, FitnessCenterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FitnessCenterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1008,9 +1008,9 @@ export interface FitnessCenterDelegate<ExtArgs extends runtime.Types.Extensions.
    *   ]
    * })
    *
-   * // Create many FitnessCenters and only return the `fitnessCenterId`
-   * const fitnessCenterWithFitnessCenterIdOnly = await prisma.fitnessCenter.createManyAndReturn({
-   *   select: { fitnessCenterId: true },
+   * // Create many FitnessCenters and only return the `id`
+   * const fitnessCenterWithIdOnly = await prisma.fitnessCenter.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1099,9 +1099,9 @@ export interface FitnessCenterDelegate<ExtArgs extends runtime.Types.Extensions.
    *   ]
    * })
    *
-   * // Update zero or more FitnessCenters and only return the `fitnessCenterId`
-   * const fitnessCenterWithFitnessCenterIdOnly = await prisma.fitnessCenter.updateManyAndReturn({
-   *   select: { fitnessCenterId: true },
+   * // Update zero or more FitnessCenters and only return the `id`
+   * const fitnessCenterWithIdOnly = await prisma.fitnessCenter.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1305,16 +1305,16 @@ export interface Prisma__FitnessCenterClient<T, Null = never, ExtArgs extends ru
  * Fields of the FitnessCenter model
  */
 export interface FitnessCenterFieldRefs {
-  readonly fitnessCenterId: Prisma.FieldRef<"FitnessCenter", 'String'>
-  readonly id: Prisma.FieldRef<"FitnessCenter", 'BigInt'>
+  readonly id: Prisma.FieldRef<"FitnessCenter", 'String'>
+  readonly seq: Prisma.FieldRef<"FitnessCenter", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"FitnessCenter", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FitnessCenter", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"FitnessCenter", 'DateTime'>
   readonly address: Prisma.FieldRef<"FitnessCenter", 'String'>
   readonly phone: Prisma.FieldRef<"FitnessCenter", 'String'>
   readonly email: Prisma.FieldRef<"FitnessCenter", 'String'>
-  readonly companyId: Prisma.FieldRef<"FitnessCenter", 'BigInt'>
-  readonly spaceId: Prisma.FieldRef<"FitnessCenter", 'BigInt'>
+  readonly companySeq: Prisma.FieldRef<"FitnessCenter", 'BigInt'>
+  readonly spaceSeq: Prisma.FieldRef<"FitnessCenter", 'BigInt'>
   readonly imageFileId: Prisma.FieldRef<"FitnessCenter", 'String'>
 }
 

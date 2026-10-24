@@ -45,7 +45,7 @@ export class UsersRepository {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return result ? toDomainEntity(User, result) : null;
@@ -57,11 +57,11 @@ export class UsersRepository {
 	 */
 	async findByIdWithTenantsAndProfiles(
 		id: bigint,
-	): Promise<(User & { currentTenantId: bigint | null }) | null> {
+	): Promise<(User & { currentTenantSeq: bigint | null }) | null> {
 		this.logger.debug(`ID로 사용자 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: {
 				tenants: {
 					orderBy: {
@@ -121,7 +121,7 @@ export class UsersRepository {
 					include: { group: true },
 				},
 				status: {
-					select: { currentTenantId: true },
+					select: { currentTenantSeq: true },
 				},
 			},
 		} as never);
@@ -132,36 +132,36 @@ export class UsersRepository {
 
 		// as never 쿼리는 select 결과를 스칼라로만 추론하므로 status는 수동으로 꺼낸다.
 		const { status, ...user } = result as unknown as {
-			status: { currentTenantId: bigint | null } | null;
+			status: { currentTenantSeq: bigint | null } | null;
 		} & Record<string, unknown>;
 		return toDomainEntity(User, {
 			...user,
-			currentTenantId: status?.currentTenantId ?? null,
-		}) as User & { currentTenantId: bigint | null };
+			currentTenantSeq: status?.currentTenantSeq ?? null,
+		}) as User & { currentTenantSeq: bigint | null };
 	}
 
 	/**
 	 * 인증·OIDC 연동 경계에서 모델 ULID로 사용자와 권한 그래프를 조회합니다.
 	 */
 	async findByUserIdWithTenantsAndProfiles(
-		userId: string,
-	): Promise<(User & { currentTenantId: bigint | null }) | null> {
-		this.logger.debug(`사용자 ULID로 조회: ${userId}`);
+		userSeq: string,
+	): Promise<(User & { currentTenantSeq: bigint | null }) | null> {
+		this.logger.debug(`사용자 ULID로 조회: ${userSeq}`);
 
 		const user = await this.txHost.tx.user.findUnique({
-			where: { userId },
-			select: { id: true },
+			where: { id: userSeq },
+			select: { seq: true },
 		});
 
-		return user ? this.findByIdWithTenantsAndProfiles(user.id) : null;
+		return user ? this.findByIdWithTenantsAndProfiles(user.seq) : null;
 	}
 
 	/**
 	 * 이메일로 조회 (id, email, password만 select)
 	 */
 	async findByEmailSelectCredentials(email: string): Promise<{
-		id: bigint;
-		userId: string;
+		id: string;
+		seq: bigint;
 		email: string;
 		password: string;
 	} | null> {
@@ -169,7 +169,7 @@ export class UsersRepository {
 
 		return this.txHost.tx.user.findUnique({
 			where: { email },
-			select: { id: true, userId: true, email: true, password: true },
+			select: { id: true, seq: true, email: true, password: true },
 		});
 	}
 
@@ -300,15 +300,15 @@ export class UsersRepository {
 	 * IDP 계정 상세 projection 조회.
 	 */
 	async findIdpAccountById(params: {
-		userId: bigint;
+		userSeq: bigint;
 		spaceIds?: bigint[];
 	}): Promise<IdpAccountRecord | null> {
-		this.logger.debug(`IDP 계정 조회: ${params.userId}`);
+		this.logger.debug(`IDP 계정 조회: ${params.userSeq}`);
 
 		return this.txHost.tx.user
 			.findFirst({
 				where: this.applySpaceScopeToUserWhere(
-					{ id: params.userId, removedAt: null },
+					{ seq: params.userSeq, removedAt: null },
 					params.spaceIds,
 				),
 				select: IDP_ACCOUNT_SELECT,
@@ -320,7 +320,7 @@ export class UsersRepository {
 	 * IDP 계정 projection 수정. data는 UserStatus 상태 필드만 다룹니다.
 	 */
 	async updateIdpAccountById(params: {
-		userId: bigint;
+		userSeq: bigint;
 		data: {
 			isActive?: boolean;
 			failedLoginAttempts?: number;
@@ -329,10 +329,10 @@ export class UsersRepository {
 		};
 		spaceIds?: bigint[];
 	}): Promise<IdpAccountRecord | null> {
-		this.logger.debug(`IDP 계정 수정: ${params.userId}`);
+		this.logger.debug(`IDP 계정 수정: ${params.userSeq}`);
 
 		const account = await this.findIdpAccountById({
-			userId: params.userId,
+			userSeq: params.userSeq,
 			spaceIds: params.spaceIds,
 		});
 		if (!account) {
@@ -340,7 +340,7 @@ export class UsersRepository {
 		}
 
 		const updated = await this.txHost.tx.user.update({
-			where: { id: params.userId },
+			where: { seq: params.userSeq },
 			data: {
 				status: { upsert: { create: params.data, update: params.data } },
 			},
@@ -381,7 +381,7 @@ export class UsersRepository {
 						where: {
 							removedAt: null,
 							...(params.spaceIds
-								? { space: { id: { in: params.spaceIds } } }
+								? { space: { seq: { in: params.spaceIds } } }
 								: {}),
 							...(params.includedRoleNames?.length
 								? {
@@ -447,7 +447,7 @@ export class UsersRepository {
 				...(tenantsFilter ?? {}),
 				some: {
 					...existingSome,
-					space: { id: { in: spaceIds } },
+					space: { seq: { in: spaceIds } },
 					removedAt: null,
 				},
 			},
@@ -475,7 +475,7 @@ export class UsersRepository {
 				? {
 						tenants: {
 							some: {
-								space: { id: { in: queryParams.spaceIds } },
+								space: { seq: { in: queryParams.spaceIds } },
 								removedAt: null,
 							},
 						},
@@ -519,26 +519,26 @@ export class UsersRepository {
 	 * ID와 접근 가능한 Space ID 범위로 사용자 조회
 	 * (Tenants, Profiles, Classification, Associations 포함)
 	 *
-	 * @param userId 조회할 사용자 ULID
+	 * @param userSeq 조회할 사용자 ULID
 	 * @param spaceIds 접근 가능한 Space ULID 목록. undefined면 Space 제한 없음
 	 * @returns 범위 안의 사용자 또는 null
 	 */
 	async findByIdAndSpaceIdsWithRelations(
-		userId: string,
+		userSeq: string,
 		spaceIds?: bigint[],
 	): Promise<User | null> {
 		this.logger.debug(
-			`ID와 Space 범위로 조회: userId=${userId.slice(-8)}, scope=${spaceIds?.join(",") ?? "all"}`,
+			`ID와 Space 범위로 조회: userSeq=${userSeq.slice(-8)}, scope=${spaceIds?.join(",") ?? "all"}`,
 		);
 
 		const result = await this.txHost.tx.user.findFirst({
 			where: {
-				userId,
+				userSeq,
 				...(spaceIds
 					? {
 							tenants: {
 								some: {
-									space: { id: { in: spaceIds } },
+									space: { seq: { in: spaceIds } },
 									removedAt: null,
 								},
 							},
@@ -588,15 +588,15 @@ export class UsersRepository {
 	 * 사용자와 현재 Space에 속한 활성 Tenant 상세를 권한 그래프와 함께 조회합니다.
 	 */
 	async findTenantDetailForUserInSpace(
-		userId: string,
+		userSeq: string,
 		tenantId: string,
-		spaceId: string,
+		spaceSeq: string,
 	): Promise<Tenant | null> {
 		const result = await this.txHost.tx.tenant.findFirst({
 			where: {
-				tenantId,
-				user: { userId },
-				space: { spaceId },
+				id: tenantId,
+				user: { id: userSeq },
+				space: { id: spaceSeq },
 				removedAt: null,
 			},
 			include: {
@@ -613,7 +613,7 @@ export class UsersRepository {
 						assignments: {
 							where: {
 								removedAt: null,
-								policy: { space: { spaceId }, removedAt: null },
+								policy: { space: { id: spaceSeq }, removedAt: null },
 							},
 							orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 							include: {
@@ -681,16 +681,16 @@ export class UsersRepository {
 
 	/** 사용자의 현재 Tenant 선택값을 UserStatus에 저장합니다. */
 	async updateCurrentTenantId(
-		userId: bigint,
-		currentTenantId: bigint | null,
+		userSeq: bigint,
+		currentTenantSeq: bigint | null,
 	): Promise<void> {
-		this.logger.debug(`현재 Tenant 저장: userId=${userId.toString()}`);
+		this.logger.debug(`현재 Tenant 저장: userSeq=${userSeq.toString()}`);
 
 		await this.txHost.tx.user.update({
-			where: { id: userId },
+			where: { seq: userSeq },
 			data: {
 				status: {
-					upsert: { create: { currentTenantId }, update: { currentTenantId } },
+					upsert: { create: { currentTenantSeq }, update: { currentTenantSeq } },
 				},
 			},
 		});
@@ -703,7 +703,7 @@ export class UsersRepository {
 		this.logger.debug(`비밀번호 업데이트: ${id.toString()}`);
 
 		await this.txHost.tx.user.update({
-			where: { userId: id },
+			where: { id: id },
 			data: {
 				password: hashedPassword,
 				passwordChangedAt: new Date(),
@@ -732,7 +732,7 @@ export class UsersRepository {
 		this.logger.debug(`계정 잠금 해제: ${id.toString()}`);
 
 		await this.txHost.tx.user.update({
-			where: { userId: id },
+			where: { id: id },
 			data: {
 				status: {
 					upsert: {
@@ -766,7 +766,7 @@ export class UsersRepository {
 		this.logger.debug(`보안 정보 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
-			where: { userId: id, removedAt: null },
+			where: { id: id, removedAt: null },
 			select: {
 				email: true,
 				passwordChangedAt: true,

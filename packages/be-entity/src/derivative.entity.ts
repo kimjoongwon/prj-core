@@ -19,17 +19,17 @@ import { User } from "./user.entity";
 export class Derivative extends DerivativeSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare derivativeId: DerivativeSchema["derivativeId"];
+	declare id: DerivativeSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceId: DerivativeSchema["spaceId"];
+	declare spaceSeq: DerivativeSchema["spaceSeq"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdById: DerivativeSchema["createdById"];
+	declare createdBySeq: DerivativeSchema["createdBySeq"];
 	@BigIntIdFieldMetadata({ description: "원본 에셋 ID" })
-	declare assetId: DerivativeSchema["assetId"];
+	declare assetSeq: DerivativeSchema["assetSeq"];
 	@EnumFieldMetadata(() => DerivativeKind, {
 		description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",
 	})

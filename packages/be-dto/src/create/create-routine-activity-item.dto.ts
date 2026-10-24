@@ -3,7 +3,7 @@ import { Activity } from "@cocrepo/entity";
 import { IntersectionType, PartialType, PickType } from "@nestjs/swagger";
 
 export class CreateRoutineActivityItemDto extends IntersectionType(
-	PickType(Activity, ["taskId"] as const),
+	PickType(Activity, ["taskSeq"] as const),
 	PartialType(
 		PickType(Activity, ["order", "repetitions", "restTime"] as const),
 		{ skipNullProperties: false },

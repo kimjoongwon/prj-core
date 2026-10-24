@@ -14,7 +14,7 @@ export class SessionDto extends EntityResponseType(Session, {
 		"startDateTime",
 		"endDateTime",
 		"recurringDayOfWeek",
-		"timelineId",
+		"timelineSeq",
 		"name",
 		"description",
 		"programs",

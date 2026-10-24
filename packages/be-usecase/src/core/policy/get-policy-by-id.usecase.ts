@@ -7,6 +7,6 @@ export class GetPolicyByIdUseCase {
 	constructor(private readonly policyService: PolicyAggregate) {}
 
 	execute(query: GetPolicyByIdQuery): Promise<unknown> {
-		return this.policyService.getPolicyById(query.policyId);
+		return this.policyService.getPolicyById(query.policySeq);
 	}
 }

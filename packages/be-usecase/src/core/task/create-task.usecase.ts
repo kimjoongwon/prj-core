@@ -9,8 +9,8 @@ export class CreateTaskUseCase {
 	execute(command: CreateTaskCommand): Promise<unknown> {
 		return this.taskService.createTaskWithExercise(
 			command,
-			command.spaceId,
-			command.createdById,
+			command.spaceSeq,
+			command.createdBySeq,
 		);
 	}
 }

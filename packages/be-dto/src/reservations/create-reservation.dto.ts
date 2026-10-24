@@ -3,9 +3,9 @@ import { Reservation } from "@cocrepo/entity";
 import { PickType } from "@nestjs/swagger";
 
 export class CreateReservationDto extends PickType(Reservation, [
-	"timelineId",
-	"sessionId",
-	"programId",
+	"timelineSeq",
+	"sessionSeq",
+	"programSeq",
 	"occurrenceStartAt",
 ] as const) {
 	@StringField({

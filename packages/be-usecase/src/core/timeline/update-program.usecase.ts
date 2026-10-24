@@ -8,12 +8,12 @@ export class UpdateProgramUseCase {
 
 	execute(command: UpdateProgramCommand): Promise<unknown> {
 		return this.timelinesService.updateProgramInSession(
-			command.sessionId,
-			command.programId,
+			command.sessionSeq,
+			command.programSeq,
 			{
 				name: command.name,
-				routineId: command.routineId,
-				instructorId: command.instructorId,
+				routineSeq: command.routineSeq,
+				instructorSeq: command.instructorSeq,
 				capacity: command.capacity,
 				level: command.level,
 			},

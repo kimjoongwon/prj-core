@@ -35,9 +35,9 @@ export interface ContextSpaceSnapshot {
 
 export interface ContextTenantSnapshot {
 	id: DatabaseId;
-	roleId: DatabaseId;
-	userId?: DatabaseId;
-	spaceId: DatabaseId;
+	roleSeq: DatabaseId;
+	userSeq?: DatabaseId;
+	spaceSeq: DatabaseId;
 	removedAt?: Date | null;
 	role?: ContextRoleSnapshot | null;
 	space?: ContextSpaceSnapshot | null;
@@ -45,8 +45,8 @@ export interface ContextTenantSnapshot {
 
 export interface ContextUserSnapshot {
 	id: DatabaseId;
-	currentTenantId?: DatabaseId | null;
-	spaceId?: DatabaseId;
+	currentTenantSeq?: DatabaseId | null;
+	spaceSeq?: DatabaseId;
 	email?: string;
 	name?: string;
 	phone?: string;

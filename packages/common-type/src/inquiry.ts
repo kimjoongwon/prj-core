@@ -21,10 +21,10 @@ export type InquiryPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
 
 export interface InquiryMessage {
 	id: DecimalId;
-	threadId: DecimalId;
-	inquiryId: DecimalId;
+	threadSeq: DecimalId;
+	inquirySeq: DecimalId;
 	senderType: "USER" | "AI" | "SYSTEM";
-	senderId: DecimalId | null;
+	senderSeq: DecimalId | null;
 	content: string;
 	contentType: string;
 	isEdited: boolean;
@@ -37,9 +37,9 @@ export interface InquiryMessage {
 
 export interface InquiryParticipant {
 	id: DecimalId;
-	inquiryId: DecimalId;
-	threadId: DecimalId | null;
-	userId: DecimalId;
+	inquirySeq: DecimalId;
+	threadSeq: DecimalId | null;
+	userSeq: DecimalId;
 	role: "CUSTOMER" | "AGENT" | "SUPERVISOR";
 	isOnline: boolean;
 	isTyping: boolean;

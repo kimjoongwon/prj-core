@@ -7,12 +7,12 @@ describe("AuthContext", () => {
 	it("Given bigint CLS 식별자 When 조회하면 Then bigint 계약을 유지한다", () => {
 		const user: ContextUserSnapshot = {
 			id: 101n,
-			spaceId: 301n,
+			spaceSeq: 301n,
 			tenants: [
 				{
 					id: 201n,
-					spaceId: 301n,
-					roleId: 401n,
+					spaceSeq: 301n,
+					roleSeq: 401n,
 				},
 			],
 		};
@@ -27,7 +27,7 @@ describe("AuthContext", () => {
 		const context = new AuthContext(cls as unknown as ClsService);
 
 		expect(context.tenantId).toBe(201n);
-		expect(context.spaceId).toBe(301n);
+		expect(context.spaceSeq).toBe(301n);
 		expect(context.accessibleSpaceIds).toEqual([301n]);
 		expect(context.canAccessSpace(301n)).toBe(true);
 		expect(context.canAccessSpace(999n)).toBe(false);

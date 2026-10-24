@@ -9,12 +9,12 @@ import { User } from "./user.entity";
 export class UserAssociation extends UserAssociationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare userAssociationId: UserAssociationSchema["userAssociationId"];
+	declare id: UserAssociationSchema["id"];
 
 	@BigIntIdFieldMetadata()
-	declare userId: UserAssociationSchema["userId"];
+	declare userSeq: UserAssociationSchema["userSeq"];
 	@BigIntIdFieldMetadata()
-	declare groupId: UserAssociationSchema["groupId"];
+	declare groupSeq: UserAssociationSchema["groupSeq"];
 
 	@ClassField(() => Group, { required: false, swagger: false })
 	group?: Group;

@@ -32,10 +32,10 @@ export class GetTimelinesUseCase {
 	}
 
 	private requireTimelineSpaceId(): bigint {
-		const spaceId = this.spaceContext.tenant?.spaceId;
-		if (!spaceId) {
+		const spaceSeq = this.spaceContext.tenant?.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}
-		return spaceId;
+		return spaceSeq;
 	}
 }

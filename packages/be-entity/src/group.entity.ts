@@ -19,7 +19,7 @@ export class Group extends GroupSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
-	declare groupId: GroupSchema["groupId"];
+	declare id: GroupSchema["id"];
 
 	@StringFieldMetadata()
 	declare name: GroupSchema["name"];
@@ -28,9 +28,9 @@ export class Group extends GroupSchema {
 	@EnumFieldMetadata(() => GroupTypes, { required: true })
 	declare type: GroupSchema["type"];
 	@BigIntIdFieldMetadata()
-	declare spaceId: GroupSchema["spaceId"];
+	declare spaceSeq: GroupSchema["spaceSeq"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true })
-	declare createdById: GroupSchema["createdById"];
+	declare createdBySeq: GroupSchema["createdBySeq"];
 	@ClassField(() => Space, { required: false })
 	space?: Space;
 	@ClassField(() => User, { required: false })

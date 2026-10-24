@@ -3,9 +3,9 @@ import type { ListTenantAccessRequestsForReviewQueryInput } from "@cocrepo/input
 export class ListTenantAccessRequestsForReviewQuery
 	implements ListTenantAccessRequestsForReviewQueryInput
 {
-	readonly reviewerId!: ListTenantAccessRequestsForReviewQueryInput["reviewerId"];
-	readonly spaceId?: ListTenantAccessRequestsForReviewQueryInput["spaceId"];
-	readonly requesterId?: ListTenantAccessRequestsForReviewQueryInput["requesterId"];
+	readonly reviewerSeq!: ListTenantAccessRequestsForReviewQueryInput["reviewerSeq"];
+	readonly spaceSeq?: ListTenantAccessRequestsForReviewQueryInput["spaceSeq"];
+	readonly requesterSeq?: ListTenantAccessRequestsForReviewQueryInput["requesterSeq"];
 	readonly status?: ListTenantAccessRequestsForReviewQueryInput["status"];
 	readonly search?: ListTenantAccessRequestsForReviewQueryInput["search"];
 	readonly createdFrom?: ListTenantAccessRequestsForReviewQueryInput["createdFrom"];

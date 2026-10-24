@@ -42,16 +42,16 @@ export class AuthAuditLogAggregate {
 	/**
 	 * 사용자별 최근 감사 로그 조회
 	 *
-	 * @param userId - 사용자 ID
+	 * @param userSeq - 사용자 ID
 	 * @param limit - 조회 개수 (기본값: 10)
 	 * @returns 최근 감사 로그 배열
 	 */
-	async getRecentLogsByUserId(userId: bigint, limit = 10) {
+	async getRecentLogsByUserId(userSeq: bigint, limit = 10) {
 		this.logger.debug(
-			`사용자별 최근 감사 로그 조회: userId=${userId}, limit=${limit}`,
+			`사용자별 최근 감사 로그 조회: userSeq=${userSeq}, limit=${limit}`,
 		);
 
-		return this.repository.findByUserId(userId, limit);
+		return this.repository.findByUserId(userSeq, limit);
 	}
 
 	/**

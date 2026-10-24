@@ -1,6 +1,6 @@
 export class GetTenantAccessRequestForReviewQuery {
 	constructor(
 		readonly tenantAccessRequestId: bigint,
-		readonly reviewerId: bigint,
+		readonly reviewerSeq: bigint,
 	) {}
 }

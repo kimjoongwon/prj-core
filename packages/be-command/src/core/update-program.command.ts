@@ -1,14 +1,14 @@
 import type { UpdateProgramCommandInput } from "@cocrepo/input";
 export class UpdateProgramCommand implements UpdateProgramCommandInput {
 	readonly name?: UpdateProgramCommandInput["name"];
-	readonly routineId?: UpdateProgramCommandInput["routineId"];
-	readonly instructorId?: UpdateProgramCommandInput["instructorId"];
+	readonly routineSeq?: UpdateProgramCommandInput["routineSeq"];
+	readonly instructorSeq?: UpdateProgramCommandInput["instructorSeq"];
 	readonly capacity?: UpdateProgramCommandInput["capacity"];
 	readonly level?: UpdateProgramCommandInput["level"];
 
 	constructor(
-		readonly sessionId: bigint,
-		readonly programId: bigint,
+		readonly sessionSeq: bigint,
+		readonly programSeq: bigint,
 		input: UpdateProgramCommandInput,
 	) {
 		Object.assign(this, input);

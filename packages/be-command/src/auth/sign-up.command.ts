@@ -1,7 +1,7 @@
 import type { SignUpCommandInput } from "@cocrepo/input";
 export class SignUpCommand implements SignUpCommandInput {
 	readonly nickname!: SignUpCommandInput["nickname"];
-	readonly spaceId!: SignUpCommandInput["spaceId"];
+	readonly spaceSeq!: SignUpCommandInput["spaceSeq"];
 	readonly email!: SignUpCommandInput["email"];
 	readonly name!: SignUpCommandInput["name"];
 	readonly phone!: SignUpCommandInput["phone"];

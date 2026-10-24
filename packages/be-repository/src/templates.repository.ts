@@ -22,7 +22,7 @@ export class TemplatesRepository {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: {
 				variables: { include: { template: { select: { id: true } } } },
 			},
@@ -140,7 +140,7 @@ export class TemplatesRepository {
 		this.logger.debug(`업데이트 중: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.update({
-			where: { id },
+			where: { seq: id },
 			data,
 		});
 
@@ -164,12 +164,12 @@ export class TemplatesRepository {
 
 		// 기존 변수 전체 삭제
 		await this.txHost.tx.templateVariable.deleteMany({
-			where: { templateId: id },
+			where: { templateSeq: id },
 		});
 
 		// 템플릿 업데이트 + 새 변수 생성
 		const result = await this.txHost.tx.template.update({
-			where: { id },
+			where: { seq: id },
 			data: {
 				...templateData,
 				variables: {
@@ -191,7 +191,7 @@ export class TemplatesRepository {
 		this.logger.debug(`소프트 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.update({
-			where: { id },
+			where: { seq: id },
 			data: { removedAt: new Date(), isActive: false },
 		});
 

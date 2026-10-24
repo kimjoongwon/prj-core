@@ -12,13 +12,13 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Asset의 DB 필드 타입과 공통 검증입니다. */
 export class AssetSchema extends AbstractSchema {
-	assetId!: string;
+	id!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceId!: bigint;
+	spaceSeq!: bigint;
 
 	@BigIntIdValidation({ description: "소속 폴더 ID" })
-	folderId!: bigint;
+	folderSeq!: bigint;
 
 	@EnumValidation(() => AssetKind, {
 		description: "에셋 종류 (IMAGE, VIDEO, DOCUMENT)",
@@ -59,5 +59,5 @@ export class AssetSchema extends AbstractSchema {
 	metadata!: JsonValue;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: bigint | null;
+	createdBySeq!: bigint | null;
 }

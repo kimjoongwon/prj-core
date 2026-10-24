@@ -24,7 +24,7 @@ describe("AuthController", () => {
 	const request = {
 		cookies: {
 			refreshToken: "test-refresh-token",
-			sessionId: "admin-web.test-session-id",
+			sessionSeq: "admin-web.test-session-id",
 		},
 		headers: {
 			[REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-test-id",
@@ -111,7 +111,7 @@ describe("AuthController", () => {
 		const refreshCommand = command as RefreshTokenWithIdpCommand;
 		expect(refreshCommand.refreshTokenCookie).toBe("test-refresh-token");
 		expect(refreshCommand.refreshTokenHeader).toBeUndefined();
-		expect(refreshCommand.sessionId).toBe("admin-web.test-session-id");
+		expect(refreshCommand.sessionSeq).toBe("admin-web.test-session-id");
 		expect(result).toEqual({ accessToken: "next-access-token" });
 	});
 

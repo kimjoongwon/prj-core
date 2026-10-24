@@ -30,9 +30,9 @@ describe("PoliciesRepository", () => {
 		policy.findMany.mockResolvedValue([
 			{
 				id: 1n,
-				spaceId: 10n,
+				spaceSeq: 10n,
 				name: "Alpha",
-				createdById: 20n,
+				createdBySeq: 20n,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				removedAt: null,
@@ -46,7 +46,7 @@ describe("PoliciesRepository", () => {
 
 		expect(policy.findMany).toHaveBeenCalledWith({
 			where: {
-				spaceId: 10n,
+				spaceSeq: 10n,
 				removedAt: null,
 			},
 			include: {

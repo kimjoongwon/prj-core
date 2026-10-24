@@ -1,5 +1,5 @@
 export interface ProgramActivitySnapshotInput {
-	taskId: bigint;
+	taskSeq: bigint;
 	order: number;
 	repetitions: number;
 	restTime: number;

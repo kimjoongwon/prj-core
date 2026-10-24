@@ -21,13 +21,13 @@ import type { InquiryMessage } from "./inquiry-message.entity";
 export class InquiryAttachment extends InquiryAttachmentSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare inquiryAttachmentId: InquiryAttachmentSchema["inquiryAttachmentId"];
+	declare id: InquiryAttachmentSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 메시지 ID" })
-	declare messageId: InquiryAttachmentSchema["messageId"];
+	declare messageSeq: InquiryAttachmentSchema["messageSeq"];
 	@StringFieldMetadata({ description: "원본 파일명" })
 	declare fileName: InquiryAttachmentSchema["fileName"];
 	@NumberFieldMetadata({ description: "파일 크기" })

@@ -22,13 +22,13 @@ export async function getAccessibleSpacesForUser(
 	const spaces = await spacesService.findByIdsWithFitnessCenter(tenantSpaceIds);
 	const spaceById = new Map(spaces.map((space) => [space.id, space]));
 	const tenantBySpaceId = new Map(
-		activeTenants.map((tenant) => [tenant.spaceId, tenant]),
+		activeTenants.map((tenant) => [tenant.spaceSeq, tenant]),
 	);
 
 	const results: AuthSpaceResult[] = [];
-	for (const spaceId of tenantSpaceIds) {
-		const space = spaceById.get(spaceId);
-		const tenant = tenantBySpaceId.get(spaceId);
+	for (const spaceSeq of tenantSpaceIds) {
+		const space = spaceById.get(spaceSeq);
+		const tenant = tenantBySpaceId.get(spaceSeq);
 		if (space && tenant) {
 			results.push({
 				...space,

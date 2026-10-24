@@ -82,16 +82,16 @@ export class RequestContextMiddleware implements NestMiddleware {
 
 		// Tenant 설정 및 Space ID 파생
 		const tenant = resolveCurrentTenantById(user?.tenants, tenantId);
-		const spaceId = tenant ? resolveTenantSpaceId(tenant) : undefined;
+		const spaceSeq = tenant ? resolveTenantSpaceId(tenant) : undefined;
 		this.cls.set(CONTEXT_KEYS.TENANT, tenant);
-		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceId);
+		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceSeq);
 
 		if (user && tenant) {
 			this.logger.dev("Request 컨텍스트 설정 완료", {
-				userId: user.id.toString().slice(-8),
+				userSeq: user.id.toString().slice(-8),
 				requestedTenantId: tenantId?.toString().slice(-8),
 				tenantId: tenant.id.toString().slice(-8),
-				spaceId: spaceId?.toString().slice(-8),
+				spaceSeq: spaceSeq?.toString().slice(-8),
 				language,
 			});
 		}

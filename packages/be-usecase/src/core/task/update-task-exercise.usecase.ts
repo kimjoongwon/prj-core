@@ -8,9 +8,9 @@ export class UpdateTaskExerciseUseCase {
 
 	execute(command: UpdateTaskExerciseCommand): Promise<unknown> {
 		return this.taskService.updateTaskExercise(
-			command.taskId,
+			command.taskSeq,
 			command,
-			command.spaceId,
+			command.spaceSeq,
 		);
 	}
 }

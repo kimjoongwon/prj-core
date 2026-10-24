@@ -7,6 +7,6 @@ export class DeleteActionUseCase {
 	constructor(private readonly actionsService: ActionAggregate) {}
 
 	execute(command: DeleteActionCommand): Promise<unknown> {
-		return this.actionsService.deleteAction(command.actionId);
+		return this.actionsService.deleteAction(command.actionSeq);
 	}
 }

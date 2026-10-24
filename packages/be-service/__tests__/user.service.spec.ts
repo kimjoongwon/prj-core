@@ -27,17 +27,17 @@ describe("UserService", () => {
 
 	const mockUser = {
 		id: 101n,
-		userId: "user-public-id",
+		userSeq: "user-public-id",
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",
 		password: "$2b$10$hashedPassword",
-		spaceId: 301n,
+		spaceSeq: 301n,
 		tenants: [
 			{
 				id: 201n,
-				spaceId: 301n,
-				roleId: 401n,
+				spaceSeq: 301n,
+				roleSeq: 401n,
 				space: { id: 301n, name: "Test Space" },
 				role: {
 					id: 401n,
@@ -55,7 +55,7 @@ describe("UserService", () => {
 		mockRepository = mockDeep<UsersRepository>();
 		mockTenantsRepository = mockDeep<TenantsRepository>();
 		mockSpaceContext = {
-			spaceId: 301n,
+			spaceSeq: 301n,
 			spaceIds: [301n],
 			requireSpaceId: jest.fn(),
 			hasSpace: jest.fn(),
@@ -120,33 +120,33 @@ describe("UserService", () => {
 	describe("findByUserIdWithTenants", () => {
 		it("공개 사용자 식별자로 사용자를 조회해야 한다", async () => {
 			// Given
-			const userId = "user-public-id";
+			const userSeq = "user-public-id";
 			mockRepository.findByUserIdWithTenantsAndProfiles.mockResolvedValue(
 				mockUser as unknown as UserWithRelations,
 			);
 
 			// When
-			const result = await service.findByUserIdWithTenants(userId);
+			const result = await service.findByUserIdWithTenants(userSeq);
 
 			// Then
 			expect(
 				mockRepository.findByUserIdWithTenantsAndProfiles,
-			).toHaveBeenCalledWith(userId);
+			).toHaveBeenCalledWith(userSeq);
 			expect(result).toEqual(mockUser);
 		});
 
 		it("사용자가 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const userId = "non-existent-user";
+			const userSeq = "non-existent-user";
 			mockRepository.findByUserIdWithTenantsAndProfiles.mockResolvedValue(null);
 
 			// When
-			const result = await service.findByUserIdWithTenants(userId);
+			const result = await service.findByUserIdWithTenants(userSeq);
 
 			// Then
 			expect(
 				mockRepository.findByUserIdWithTenantsAndProfiles,
-			).toHaveBeenCalledWith(userId);
+			).toHaveBeenCalledWith(userSeq);
 			expect(result).toBeNull();
 		});
 	});
@@ -159,13 +159,13 @@ describe("UserService", () => {
 			const tenant = {
 				id: 201n,
 				tenantId: "tenant-public-id",
-				userId: 101n,
-				spaceId: 301n,
-				roleId: 401n,
+				userSeq: 101n,
+				spaceSeq: 301n,
+				roleSeq: 401n,
 				main: true,
 				space: {
 					id: 301n,
-					spaceId: "space-public-id",
+					spaceSeq: "space-public-id",
 				},
 			};
 			mockTenantsRepository.findById.mockResolvedValue(
@@ -206,7 +206,7 @@ describe("UserService", () => {
 			const email = "test@example.com";
 			const authUser = {
 				id: 101n,
-				userId: "user-public-id",
+				userSeq: "user-public-id",
 				email: "test@example.com",
 				password: "$2b$10$hashedPassword",
 			};
@@ -239,7 +239,7 @@ describe("UserService", () => {
 	});
 
 	describe("getUsersBySpace", () => {
-		it("비 PLATFORM_ADMIN이면 현재 tenant의 spaceId 1개만 기준으로 사용자 목록과 통계를 조회해야 한다", async () => {
+		it("비 PLATFORM_ADMIN이면 현재 tenant의 spaceSeq 1개만 기준으로 사용자 목록과 통계를 조회해야 한다", async () => {
 			const input = {
 				where: { removedAt: null },
 				orderBy: [{ createdAt: "desc" as const }],
@@ -258,11 +258,11 @@ describe("UserService", () => {
 			};
 
 			mockSpaceContext = {
-				spaceId: 301n,
+				spaceSeq: 301n,
 				spaceIds: [301n],
 				tenant: {
 					id: 201n,
-					spaceId: 301n,
+					spaceSeq: 301n,
 					role: {
 						id: 401n,
 						name: "COMPANY_MANAGER",
@@ -329,11 +329,11 @@ describe("UserService", () => {
 			};
 
 			mockSpaceContext = {
-				spaceId: 901n,
+				spaceSeq: 901n,
 				spaceIds: undefined,
 				tenant: {
 					id: "tenant-full-access-id",
-					spaceId: 901n,
+					spaceSeq: 901n,
 					role: {
 						id: "role-full-access-id",
 						name: "PLATFORM_ADMIN",
@@ -392,11 +392,11 @@ describe("UserService", () => {
 			};
 
 			mockSpaceContext = {
-				spaceId: 902n,
+				spaceSeq: 902n,
 				spaceIds: undefined,
 				tenant: {
 					id: "tenant-branch-full-access-id",
-					spaceId: 902n,
+					spaceSeq: 902n,
 					role: {
 						id: "role-full-access-id",
 						name: "PLATFORM_ADMIN",
@@ -456,7 +456,7 @@ describe("UserService", () => {
 
 		it("PLATFORM_ADMIN은 Space 제한 없이 사용자 상세를 조회해야 한다", async () => {
 			mockSpaceContext = {
-				spaceId: 901n,
+				spaceSeq: 901n,
 				spaceIds: undefined,
 			} as unknown as SpaceContext;
 			Object.defineProperty(service, "spaceCtx", {

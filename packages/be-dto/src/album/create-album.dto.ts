@@ -5,10 +5,10 @@ import { PickType } from "@nestjs/swagger";
  * 앨범 생성 DTO
  */
 export class CreateAlbumDto extends PickType(Album, [
-	"spaceId",
+	"spaceSeq",
 	"name",
 	"description",
 	"sortOrder",
-	"coverAssetId",
-	"createdById",
+	"coverAssetSeq",
+	"createdBySeq",
 ] as const) {}

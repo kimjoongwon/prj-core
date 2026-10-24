@@ -18,15 +18,15 @@ export class CreateReservationUseCase {
 		const input = command;
 
 		const createResult = await this.reservationService.createWithResult({
-			spaceId: context.spaceId,
-			userId: context.userId,
+			spaceSeq: context.spaceSeq,
+			userSeq: context.userSeq,
 			input: {
 				idempotencyKey: input.idempotencyKey,
 				memo: input.memo ?? null,
 				occurrenceStartAt: input.occurrenceStartAt,
-				programId: input.programId,
-				sessionId: input.sessionId,
-				timelineId: input.timelineId,
+				programSeq: input.programSeq,
+				sessionSeq: input.sessionSeq,
+				timelineSeq: input.timelineSeq,
 			},
 		});
 

@@ -74,7 +74,7 @@ export class IdpAccountsController {
 		return this.queryBus.execute(new GetIdpAccountsQuery(query));
 	}
 
-	@Get(":userId")
+	@Get(":userSeq")
 	@ApiOperation({
 		operationId: "getIdpAccount",
 		summary: "IDP 계정 상세 조회",
@@ -82,18 +82,18 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userId",
+		name: "userSeq",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
 	@ResponseMessage("계정 상세 조회 성공")
-	async getAccount(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
-		return this.queryBus.execute(new GetIdpAccountQuery(userId));
+	async getAccount(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
+		return this.queryBus.execute(new GetIdpAccountQuery(userSeq));
 	}
 
-	@Get(":userId/access-grant-form")
+	@Get(":userSeq/access-grant-form")
 	@ApiOperation({
 		operationId: "getIdpAccountAccessGrantForm",
 		summary: "IDP 계정 접근 권한 부여 폼 조회",
@@ -102,18 +102,18 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userId",
+		name: "userSeq",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountAccessGrantFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("계정 접근 권한 부여 폼 조회 성공")
-	async getAccessGrantForm(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
-		return this.queryBus.execute(new GetIdpAccountAccessGrantFormQuery(userId));
+	async getAccessGrantForm(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
+		return this.queryBus.execute(new GetIdpAccountAccessGrantFormQuery(userSeq));
 	}
 
-	@Post(":userId/access-grants")
+	@Post(":userSeq/access-grants")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "grantIdpAccountAccess",
@@ -123,7 +123,7 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userId",
+		name: "userSeq",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -135,15 +135,15 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
 	@ResponseMessage("계정 접근 권한 부여 성공")
 	async grantAccess(
-		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+		@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint,
 		@Body() dto: GrantIdpAccountAccessDto,
 	) {
 		return this.commandBus.execute(
-			new GrantIdpAccountAccessCommand(userId, dto),
+			new GrantIdpAccountAccessCommand(userSeq, dto),
 		);
 	}
 
-	@Patch(":userId/toggle-active")
+	@Patch(":userSeq/toggle-active")
 	@ApiOperation({
 		operationId: "toggleIdpAccountActive",
 		summary: "계정 활성/비활성 토글",
@@ -151,18 +151,18 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userId",
+		name: "userSeq",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상태 변경 성공")
-	async toggleActive(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
-		return this.commandBus.execute(new ToggleIdpAccountActiveCommand(userId));
+	async toggleActive(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
+		return this.commandBus.execute(new ToggleIdpAccountActiveCommand(userSeq));
 	}
 
-	@Post(":userId/reset-failed-attempts")
+	@Post(":userSeq/reset-failed-attempts")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		operationId: "resetIdpAccountFailedAttempts",
@@ -171,17 +171,17 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userId",
+		name: "userSeq",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ResponseMessage("실패 횟수 초기화 성공")
 	async resetFailedAttempts(
-		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+		@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint,
 	): Promise<void> {
 		await this.commandBus.execute(
-			new ResetIdpAccountFailedAttemptsCommand(userId),
+			new ResetIdpAccountFailedAttemptsCommand(userSeq),
 		);
 	}
 }

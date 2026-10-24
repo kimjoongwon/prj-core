@@ -58,7 +58,7 @@ export async function handleOidcCallback(params: {
 	const user = await (
 		params.usersService as UserService & {
 			findByUserIdWithTenants: (
-				userId: string,
+				userSeq: string,
 			) => ReturnType<UserService["getByIdWithTenants"]>;
 		}
 	).findByUserIdWithTenants(payload.sub);
@@ -77,14 +77,14 @@ export async function handleOidcCallback(params: {
 		);
 	}
 
-	const sessionId = SessionId.create(
+	const sessionSeq = SessionId.create(
 		client.clientId,
 		params.tokenStorageService.generateSessionId(),
 	).value;
 	if (tokenResponse.refresh_token) {
 		await params.tokenStorageService.saveSession(
 			payload.sub,
-			sessionId,
+			sessionSeq,
 			tokenResponse.refresh_token,
 			{
 				userAgent: resolveHttpUserAgent(params.req),
@@ -106,7 +106,7 @@ export async function handleOidcCallback(params: {
 			tokenResponse.refresh_token,
 		);
 	}
-	setSessionIdCookie(params.res, sessionId);
+	setSessionIdCookie(params.res, sessionSeq);
 	setLoggedInMarkerCookie(params.res);
 
 	return {

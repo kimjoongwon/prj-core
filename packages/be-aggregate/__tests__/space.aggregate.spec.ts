@@ -34,8 +34,8 @@ describe("SpaceAggregate", () => {
 		address: "서울시 강남구",
 		phone: "02-1234-5678",
 		email: "fitness@example.com",
-		companyId: 301n,
-		spaceId: 101n,
+		companySeq: 301n,
+		spaceSeq: 101n,
 		imageFileId: "image-test-id",
 	};
 
@@ -63,24 +63,24 @@ describe("SpaceAggregate", () => {
 	describe("getById", () => {
 		it("ID로 Space를 조회해야 한다", async () => {
 			// Given
-			const spaceId = 101n;
+			const spaceSeq = 101n;
 			mockRepository.findById.mockResolvedValue(mockSpace as unknown as Space);
 
 			// When
-			const result = await service.getById(spaceId);
+			const result = await service.getById(spaceSeq);
 
 			// Then
-			expect(mockRepository.findById).toHaveBeenCalledWith(spaceId);
+			expect(mockRepository.findById).toHaveBeenCalledWith(spaceSeq);
 			expect(result).toEqual(mockSpace);
 		});
 
 		it("Space가 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const spaceId = 999n;
+			const spaceSeq = 999n;
 			mockRepository.findById.mockResolvedValue(null);
 
 			// When
-			const result = await service.getById(spaceId);
+			const result = await service.getById(spaceSeq);
 
 			// Then
 			expect(result).toBeNull();

@@ -6,7 +6,7 @@ import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-pr
 import { toDomainEntity } from "./to-domain-entity";
 
 export interface RoleAssignmentInput {
-	policyId: bigint;
+	policySeq: bigint;
 	isActive?: boolean;
 	priority?: number;
 }
@@ -22,11 +22,11 @@ export class RoleAssignmentsRepository {
 	) {}
 
 	async findByRoleIdInSpace(
-		roleId: bigint,
-		spaceId: bigint,
+		roleSeq: bigint,
+		spaceSeq: bigint,
 	): Promise<RoleAssignment[]> {
 		const results = await this.txHost.tx.roleAssignment.findMany({
-			where: this.buildRoleAssignmentWhere([roleId], spaceId),
+			where: this.buildRoleAssignmentWhere([roleSeq], spaceSeq),
 			include: this.includePolicyEntries(),
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
@@ -36,13 +36,13 @@ export class RoleAssignmentsRepository {
 
 	async findActiveByRoleIdsInSpace(
 		roleIds: bigint[],
-		spaceId: bigint,
+		spaceSeq: bigint,
 	): Promise<RoleAssignment[]> {
 		if (roleIds.length === 0) return [];
 
 		const results = await this.txHost.tx.roleAssignment.findMany({
 			where: {
-				...this.buildRoleAssignmentWhere(roleIds, spaceId),
+				...this.buildRoleAssignmentWhere(roleIds, spaceSeq),
 				isActive: true,
 			},
 			include: this.includePolicyEntries(),
@@ -53,25 +53,25 @@ export class RoleAssignmentsRepository {
 	}
 
 	async syncByRoleId(
-		roleId: bigint,
+		roleSeq: bigint,
 		items: RoleAssignmentInput[],
-		spaceId: bigint,
+		spaceSeq: bigint,
 	): Promise<RoleAssignment[]> {
 		this.logger.debug(
-			`RoleAssignment 동기화: roleId=${roleId.toString()}, count=${items.length}`,
+			`RoleAssignment 동기화: roleSeq=${roleSeq.toString()}, count=${items.length}`,
 		);
 
 		const uniqueItems = this.dedupeByPolicyId(items);
-		const policyIds = uniqueItems.map((item) => item.policyId);
+		const policyIds = uniqueItems.map((item) => item.policySeq);
 
-		await this.softRemoveMissing(roleId, policyIds, spaceId);
+		await this.softRemoveMissing(roleSeq, policyIds, spaceSeq);
 
 		await Promise.all(
 			uniqueItems.map(async (item) => {
 				const existing = await this.txHost.tx.roleAssignment.findFirst({
 					where: {
-						roleId,
-						policyId: item.policyId,
+						roleSeq,
+						policySeq: item.policySeq,
 					},
 					select: { id: true },
 				});
@@ -92,8 +92,8 @@ export class RoleAssignmentsRepository {
 				await this.txHost.tx.roleAssignment.create({
 					data: {
 						...assignmentData,
-						roleId,
-						policyId: item.policyId,
+						roleSeq,
+						policySeq: item.policySeq,
 					},
 				});
 			}),
@@ -101,10 +101,10 @@ export class RoleAssignmentsRepository {
 
 		const synced = await this.txHost.tx.roleAssignment.findMany({
 			where: {
-				roleId,
+				roleSeq,
 				policy: {
-					id: { in: policyIds },
-					space: { id: spaceId },
+					seq: { in: policyIds },
+					space: { seq: spaceSeq },
 					removedAt: null,
 				},
 				removedAt: null,
@@ -116,10 +116,10 @@ export class RoleAssignmentsRepository {
 		return synced.map((result) => toDomainEntity(RoleAssignment, result));
 	}
 
-	async removeByPolicyId(policyId: bigint): Promise<number> {
+	async removeByPolicyId(policySeq: bigint): Promise<number> {
 		const result = await this.txHost.tx.roleAssignment.updateMany({
 			where: {
-				policyId,
+				policySeq,
 				removedAt: null,
 			},
 			data: {
@@ -130,33 +130,33 @@ export class RoleAssignmentsRepository {
 		return result.count;
 	}
 
-	private buildRoleAssignmentWhere(roleIds: bigint[], spaceId: bigint) {
+	private buildRoleAssignmentWhere(roleIds: bigint[], spaceSeq: bigint) {
 		return {
-			roleId: { in: roleIds },
+			roleSeq: { in: roleIds },
 			removedAt: null,
 			policy: {
-				space: { id: spaceId },
+				space: { seq: spaceSeq },
 				removedAt: null,
 			},
 		} satisfies Prisma.RoleAssignmentWhereInput;
 	}
 
 	private async softRemoveMissing(
-		roleId: bigint,
+		roleSeq: bigint,
 		policyIds: bigint[],
-		spaceId: bigint,
+		spaceSeq: bigint,
 	): Promise<void> {
 		await this.txHost.tx.roleAssignment.updateMany({
 			where: {
-				roleId,
+				roleSeq,
 				removedAt: null,
 				policy: {
-					space: { id: spaceId },
+					space: { seq: spaceSeq },
 					removedAt: null,
 				},
 				...(policyIds.length > 0
 					? {
-							policy: { id: { notIn: policyIds }, space: { id: spaceId } },
+							policy: { seq: { notIn: policyIds }, space: { seq: spaceSeq } },
 						}
 					: {}),
 			},
@@ -170,7 +170,7 @@ export class RoleAssignmentsRepository {
 		items: RoleAssignmentInput[],
 	): RoleAssignmentInput[] {
 		return Array.from(
-			new Map(items.map((item) => [item.policyId, item])).values(),
+			new Map(items.map((item) => [item.policySeq, item])).values(),
 		);
 	}
 

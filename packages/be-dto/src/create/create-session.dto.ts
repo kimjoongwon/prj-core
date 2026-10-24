@@ -7,7 +7,7 @@ export class CreateSessionDto extends PickType(Session, [
 	"startDateTime",
 	"endDateTime",
 	"recurringDayOfWeek",
-	"timelineId",
+	"timelineSeq",
 	"name",
 	"description",
 ] as const) {}

@@ -8,7 +8,7 @@ import { AbstractSchema } from "../abstract.schema";
 /** Role의 DB 필드 타입과 공통 검증입니다. */
 export class RoleSchema extends AbstractSchema {
 	@ULIDValidation()
-	roleId!: string;
+	id!: string;
 
 	@StringValidation({
 		description: "역할 식별자",

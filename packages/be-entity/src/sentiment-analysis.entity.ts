@@ -23,13 +23,13 @@ import type { InquiryMessage } from "./inquiry-message.entity";
 export class SentimentAnalysis extends SentimentAnalysisSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare sentimentAnalysisId: SentimentAnalysisSchema["sentimentAnalysisId"];
+	declare id: SentimentAnalysisSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
-	declare inquiryId: SentimentAnalysisSchema["inquiryId"];
+	declare inquirySeq: SentimentAnalysisSchema["inquirySeq"];
 	@EnumFieldMetadata(() => SentimentType, { description: "감정 유형" })
 	declare sentiment: SentimentAnalysisSchema["sentiment"];
 	@NumberFieldMetadata({ description: "감정 점수 (-1.0 ~ 1.0)" })
@@ -43,7 +43,7 @@ export class SentimentAnalysis extends SentimentAnalysisSchema {
 	// Nullable 필드
 	// ============================================================================
 	@BigIntIdFieldOptionalMetadata({ description: "분석 대상 메시지 ID" })
-	declare messageId: SentimentAnalysisSchema["messageId"];
+	declare messageSeq: SentimentAnalysisSchema["messageSeq"];
 	declare emotions: SentimentAnalysisSchema["emotions"];
 	declare keywords: SentimentAnalysisSchema["keywords"];
 	@NumberFieldMetadata({

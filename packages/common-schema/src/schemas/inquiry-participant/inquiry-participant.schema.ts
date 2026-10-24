@@ -12,11 +12,11 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** InquiryParticipant의 DB 필드 타입과 공통 검증입니다. */
 export class InquiryParticipantSchema
-	extends PickSchemaType(AbstractSchema, ["id"] as const)
+	extends PickSchemaType(AbstractSchema, ["seq"] as const)
 {
-	inquiryParticipantId!: string;
+	id!: string;
 
-	declare id: bigint;
+	declare seq: bigint;
 
 	@DateValidation({ description: "참여 일시" })
 	joinedAt!: Date;
@@ -25,13 +25,13 @@ export class InquiryParticipantSchema
 	leftAt!: Date | null;
 
 	@BigIntIdValidation({ description: "소속 문의 ID" })
-	inquiryId!: bigint;
+	inquirySeq!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "소속 스레드 ID" })
-	threadId!: bigint | null;
+	threadSeq!: bigint | null;
 
 	@BigIntIdValidation({ description: "참여자 ID" })
-	userId!: bigint;
+	userSeq!: bigint;
 
 	@EnumValidation(() => InquiryParticipantRole, { description: "참여자 역할" })
 	role!: InquiryParticipantRole;

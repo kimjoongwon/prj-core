@@ -25,7 +25,7 @@ export class AssetsRepository {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: { space: true, folder: true, createdBy: true },
 		});
 
@@ -36,7 +36,7 @@ export class AssetsRepository {
 		this.logger.debug(`관계 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: {
 				image: true,
 				video: true,
@@ -61,11 +61,11 @@ export class AssetsRepository {
 		return result ? toDomainEntity(Asset, result) : null;
 	}
 
-	async findByFolderId(folderId: bigint): Promise<Asset[]> {
-		this.logger.debug(`폴더별 에셋 조회: ${folderId.toString()}`);
+	async findByFolderId(folderSeq: bigint): Promise<Asset[]> {
+		this.logger.debug(`폴더별 에셋 조회: ${folderSeq.toString()}`);
 
 		const result = await this.txHost.tx.asset.findMany({
-			where: { folderId },
+			where: { folderSeq },
 			include: { space: true, folder: true, createdBy: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -101,7 +101,7 @@ export class AssetsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<Prisma.AssetUncheckedCreateInput, "assetId">,
+		data: AutoIdentityCreateInput<Prisma.AssetUncheckedCreateInput, "id">,
 	): Promise<Asset> {
 		this.logger.debug(`에셋 생성: ${data.storageKey}`);
 		const result = await this.txHost.tx.asset.create({
@@ -114,11 +114,11 @@ export class AssetsRepository {
 
 	async updateById(
 		id: bigint,
-		data: AutoIdentityUpdateInput<Prisma.AssetUncheckedUpdateInput, "assetId">,
+		data: AutoIdentityUpdateInput<Prisma.AssetUncheckedUpdateInput, "id">,
 	): Promise<Asset> {
 		this.logger.debug(`에셋 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.asset.update({
-			where: { id },
+			where: { seq: id },
 			data,
 			include: { space: true, folder: true, createdBy: true },
 		});
@@ -130,7 +130,7 @@ export class AssetsRepository {
 		this.logger.debug(`에셋 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.delete({
-			where: { id },
+			where: { seq: id },
 			include: { space: true, folder: true, createdBy: true },
 		});
 

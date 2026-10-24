@@ -12,8 +12,8 @@ export function buildAssetQueryWhere(
 ): Prisma.AssetWhereInput {
 	return {
 		...(baseWhere ?? {}),
-		...(input.folderId ? { folderId: input.folderId } : {}),
-		...(input.spaceId ? { spaceId: input.spaceId } : {}),
+		...(input.folderSeq ? { folderSeq: input.folderSeq } : {}),
+		...(input.spaceSeq ? { spaceSeq: input.spaceSeq } : {}),
 		...(input.kind ? { kind: input.kind } : {}),
 		...(input.status ? { status: input.status } : {}),
 		...(input.search ? { originalName: containsFilter(input.search) } : {}),

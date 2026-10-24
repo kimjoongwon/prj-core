@@ -19,12 +19,12 @@ export class PoliciesRepository {
 		>,
 	) {}
 
-	async findManyBySpaceId(spaceId: bigint): Promise<Policy[]> {
-		this.logger.debug(`Policy 목록 조회: spaceId=${spaceId.toString()}`);
+	async findManyBySpaceId(spaceSeq: bigint): Promise<Policy[]> {
+		this.logger.debug(`Policy 목록 조회: spaceSeq=${spaceSeq.toString()}`);
 
 		const results = await this.txHost.tx.policy.findMany({
 			where: {
-				spaceId,
+				spaceSeq,
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
@@ -34,15 +34,15 @@ export class PoliciesRepository {
 		return results.map((result) => toDomainEntity(Policy, result));
 	}
 
-	async findByIdInSpace(id: bigint, spaceId: bigint): Promise<Policy | null> {
+	async findByIdInSpace(id: bigint, spaceSeq: bigint): Promise<Policy | null> {
 		this.logger.debug(
-			`Policy 조회: id=${id.toString()}, spaceId=${spaceId.toString()}`,
+			`Policy 조회: id=${id.toString()}, spaceSeq=${spaceSeq.toString()}`,
 		);
 
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
-				id,
-				spaceId,
+				seq: id,
+				spaceSeq,
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
@@ -52,12 +52,12 @@ export class PoliciesRepository {
 	}
 
 	async findByNameInSpace(
-		spaceId: bigint,
+		spaceSeq: bigint,
 		name: string,
 	): Promise<Policy | null> {
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
-				spaceId,
+				spaceSeq,
 				name,
 				removedAt: null,
 			},
@@ -69,30 +69,30 @@ export class PoliciesRepository {
 
 	async findActivePolicyIdsInSpace(
 		policyIds: bigint[],
-		spaceId: bigint,
+		spaceSeq: bigint,
 	): Promise<bigint[]> {
 		if (policyIds.length === 0) return [];
 
 		const results = await this.txHost.tx.policy.findMany({
 			where: {
-				id: { in: policyIds },
-				spaceId,
+				seq: { in: policyIds },
+				spaceSeq,
 				removedAt: null,
 			},
-			select: { id: true },
+			select: { seq: true },
 		});
 
-		return results.map((policy) => policy.id);
+		return results.map((policy) => policy.seq);
 	}
 
 	async create(
 		data: AutoIdentityCreateInput<
 			Prisma.PolicyUncheckedCreateInput,
-			"policyId"
+			"id"
 		>,
 	): Promise<Policy> {
 		this.logger.debug(
-			`Policy 생성: spaceId=${data.spaceId.toString()}, name=${data.name}`,
+			`Policy 생성: spaceSeq=${data.spaceSeq.toString()}, name=${data.name}`,
 		);
 		const result = await this.txHost.tx.policy.create({
 			data,
@@ -106,12 +106,12 @@ export class PoliciesRepository {
 		id: bigint,
 		data: AutoIdentityUpdateInput<
 			Prisma.PolicyUncheckedUpdateInput,
-			"policyId"
+			"id"
 		>,
 	): Promise<Policy> {
 		this.logger.debug(`Policy 수정: id=${id.toString()}`);
 		const result = await this.txHost.tx.policy.update({
-			where: { id },
+			where: { seq: id },
 			data,
 			include: this.includePolicyDetails(),
 		});
@@ -123,7 +123,7 @@ export class PoliciesRepository {
 		this.logger.debug(`Policy 소프트 삭제: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.policy.update({
-			where: { id },
+			where: { seq: id },
 			data: { removedAt: new Date() },
 			include: this.includePolicyDetails(),
 		});

@@ -127,7 +127,7 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderId: 1n } as UploadAssetDto, disguisedPdfFile),
+			controller.uploadAsset({ folderSeq: 1n } as UploadAssetDto, disguisedPdfFile),
 		).rejects.toThrow(BadRequestException);
 		expect(commandBus.execute).not.toHaveBeenCalled();
 		await expect(rm(disguisedPdfFile.path, { force: false })).rejects.toThrow();
@@ -160,7 +160,7 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderId: 1n } as UploadAssetDto, pngFile),
+			controller.uploadAsset({ folderSeq: 1n } as UploadAssetDto, pngFile),
 		).resolves.toEqual({ id: "asset-1" });
 		await expect(rm(pngFile.path, { force: false })).rejects.toThrow();
 	});
@@ -180,7 +180,7 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderId: 1n } as UploadAssetDto, pngFile),
+			controller.uploadAsset({ folderSeq: 1n } as UploadAssetDto, pngFile),
 		).rejects.toThrow("storage failed");
 		await expect(rm(pngFile.path, { force: false })).rejects.toThrow();
 	});

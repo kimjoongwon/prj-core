@@ -7,9 +7,9 @@ import { SubjectResponseDto } from "./subject-response.dto";
 export class AbilityResponseDto extends EntityResponseType(Ability, {
 	pick: [
 		"id",
-		"actionId",
+		"actionSeq",
 		"action",
-		"subjectId",
+		"subjectSeq",
 		"subject",
 		"inverted",
 		"name",

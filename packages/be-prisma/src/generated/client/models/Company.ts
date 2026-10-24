@@ -27,16 +27,16 @@ export type AggregateCompany = {
 }
 
 export type CompanyAvgAggregateOutputType = {
-  id: number | null
+  seq: number | null
 }
 
 export type CompanySumAggregateOutputType = {
-  id: bigint | null
+  seq: bigint | null
 }
 
 export type CompanyMinAggregateOutputType = {
-  companyId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -50,8 +50,8 @@ export type CompanyMinAggregateOutputType = {
 }
 
 export type CompanyMaxAggregateOutputType = {
-  companyId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -65,8 +65,8 @@ export type CompanyMaxAggregateOutputType = {
 }
 
 export type CompanyCountAggregateOutputType = {
-  companyId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -82,16 +82,16 @@ export type CompanyCountAggregateOutputType = {
 
 
 export type CompanyAvgAggregateInputType = {
-  id?: true
+  seq?: true
 }
 
 export type CompanySumAggregateInputType = {
-  id?: true
+  seq?: true
 }
 
 export type CompanyMinAggregateInputType = {
-  companyId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -105,8 +105,8 @@ export type CompanyMinAggregateInputType = {
 }
 
 export type CompanyMaxAggregateInputType = {
-  companyId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -120,8 +120,8 @@ export type CompanyMaxAggregateInputType = {
 }
 
 export type CompanyCountAggregateInputType = {
-  companyId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -222,8 +222,8 @@ export type CompanyGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type CompanyGroupByOutputType = {
-  companyId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -260,8 +260,8 @@ export type CompanyWhereInput = {
   AND?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   OR?: Prisma.CompanyWhereInput[]
   NOT?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
-  companyId?: Prisma.StringFilter<"Company"> | string
-  id?: Prisma.BigIntFilter<"Company"> | bigint | number
+  id?: Prisma.StringFilter<"Company"> | string
+  seq?: Prisma.BigIntFilter<"Company"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Company"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Company"> | Date | string | null
@@ -276,8 +276,8 @@ export type CompanyWhereInput = {
 }
 
 export type CompanyOrderByWithRelationInput = {
-  companyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -292,8 +292,8 @@ export type CompanyOrderByWithRelationInput = {
 }
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
-  companyId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   AND?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   OR?: Prisma.CompanyWhereInput[]
   NOT?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
@@ -308,11 +308,11 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   businessNo?: Prisma.StringFilter<"Company"> | string
   logoImageFileId?: Prisma.StringNullableFilter<"Company"> | string | null
   fitnessCenters?: Prisma.FitnessCenterListRelationFilter
-}, "id" | "companyId">
+}, "seq" | "id">
 
 export type CompanyOrderByWithAggregationInput = {
-  companyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -334,8 +334,8 @@ export type CompanyScalarWhereWithAggregatesInput = {
   AND?: Prisma.CompanyScalarWhereWithAggregatesInput | Prisma.CompanyScalarWhereWithAggregatesInput[]
   OR?: Prisma.CompanyScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CompanyScalarWhereWithAggregatesInput | Prisma.CompanyScalarWhereWithAggregatesInput[]
-  companyId?: Prisma.StringWithAggregatesFilter<"Company"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"Company"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"Company"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Company"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Company"> | Date | string | null
@@ -349,8 +349,8 @@ export type CompanyScalarWhereWithAggregatesInput = {
 }
 
 export type CompanyCreateInput = {
-  companyId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -365,8 +365,8 @@ export type CompanyCreateInput = {
 }
 
 export type CompanyUncheckedCreateInput = {
-  companyId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -381,8 +381,8 @@ export type CompanyUncheckedCreateInput = {
 }
 
 export type CompanyUpdateInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -397,8 +397,8 @@ export type CompanyUpdateInput = {
 }
 
 export type CompanyUncheckedUpdateInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -413,8 +413,8 @@ export type CompanyUncheckedUpdateInput = {
 }
 
 export type CompanyCreateManyInput = {
-  companyId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -428,8 +428,8 @@ export type CompanyCreateManyInput = {
 }
 
 export type CompanyUpdateManyMutationInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -443,8 +443,8 @@ export type CompanyUpdateManyMutationInput = {
 }
 
 export type CompanyUncheckedUpdateManyInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -458,8 +458,8 @@ export type CompanyUncheckedUpdateManyInput = {
 }
 
 export type CompanyCountOrderByAggregateInput = {
-  companyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -473,12 +473,12 @@ export type CompanyCountOrderByAggregateInput = {
 }
 
 export type CompanyAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
 }
 
 export type CompanyMaxOrderByAggregateInput = {
-  companyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -492,8 +492,8 @@ export type CompanyMaxOrderByAggregateInput = {
 }
 
 export type CompanyMinOrderByAggregateInput = {
-  companyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -507,7 +507,7 @@ export type CompanyMinOrderByAggregateInput = {
 }
 
 export type CompanySumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
 }
 
 export type CompanyScalarRelationFilter = {
@@ -530,8 +530,8 @@ export type CompanyUpdateOneRequiredWithoutFitnessCentersNestedInput = {
 }
 
 export type CompanyCreateWithoutFitnessCentersInput = {
-  companyId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -545,8 +545,8 @@ export type CompanyCreateWithoutFitnessCentersInput = {
 }
 
 export type CompanyUncheckedCreateWithoutFitnessCentersInput = {
-  companyId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -576,8 +576,8 @@ export type CompanyUpdateToOneWithWhereWithoutFitnessCentersInput = {
 }
 
 export type CompanyUpdateWithoutFitnessCentersInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -591,8 +591,8 @@ export type CompanyUpdateWithoutFitnessCentersInput = {
 }
 
 export type CompanyUncheckedUpdateWithoutFitnessCentersInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -637,8 +637,8 @@ export type CompanyCountOutputTypeCountFitnessCentersArgs<ExtArgs extends runtim
 
 
 export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  companyId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -654,8 +654,8 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 }, ExtArgs["result"]["company"]>
 
 export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  companyId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -669,8 +669,8 @@ export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 }, ExtArgs["result"]["company"]>
 
 export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  companyId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -684,8 +684,8 @@ export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 }, ExtArgs["result"]["company"]>
 
 export type CompanySelectScalar = {
-  companyId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -698,7 +698,7 @@ export type CompanySelectScalar = {
   logoImageFileId?: boolean
 }
 
-export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"companyId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "address" | "phone" | "email" | "businessNo" | "logoImageFileId", ExtArgs["result"]["company"]>
+export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "address" | "phone" | "email" | "businessNo" | "logoImageFileId", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fitnessCenters?: boolean | Prisma.Company$fitnessCentersArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
@@ -712,8 +712,8 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     fitnessCenters: Prisma.$FitnessCenterPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    companyId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -825,8 +825,8 @@ export interface CompanyDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * // Get first 10 Companies
    * const companies = await prisma.company.findMany({ take: 10 })
    *
-   * // Only select the `companyId`
-   * const companyWithCompanyIdOnly = await prisma.company.findMany({ select: { companyId: true } })
+   * // Only select the `id`
+   * const companyWithIdOnly = await prisma.company.findMany({ select: { id: true } })
    *
    */
   findMany<T extends CompanyFindManyArgs>(args?: Prisma.SelectSubset<T, CompanyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -870,9 +870,9 @@ export interface CompanyDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    *
-   * // Create many Companies and only return the `companyId`
-   * const companyWithCompanyIdOnly = await prisma.company.createManyAndReturn({
-   *   select: { companyId: true },
+   * // Create many Companies and only return the `id`
+   * const companyWithIdOnly = await prisma.company.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -961,9 +961,9 @@ export interface CompanyDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    *
-   * // Update zero or more Companies and only return the `companyId`
-   * const companyWithCompanyIdOnly = await prisma.company.updateManyAndReturn({
-   *   select: { companyId: true },
+   * // Update zero or more Companies and only return the `id`
+   * const companyWithIdOnly = await prisma.company.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1166,8 +1166,8 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Company model
  */
 export interface CompanyFieldRefs {
-  readonly companyId: Prisma.FieldRef<"Company", 'String'>
-  readonly id: Prisma.FieldRef<"Company", 'BigInt'>
+  readonly id: Prisma.FieldRef<"Company", 'String'>
+  readonly seq: Prisma.FieldRef<"Company", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Company", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Company", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Company", 'DateTime'>

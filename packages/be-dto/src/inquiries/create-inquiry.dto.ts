@@ -25,12 +25,12 @@ export class CreateInquiryDto extends IntersectionType(
 	@BigIntIdFieldOptional({
 		description: "고객 ID",
 	})
-	customerId?: bigint;
+	customerSeq?: bigint;
 
 	@BigIntIdFieldOptional({
 		description: "담당자 ID",
 	})
-	assigneeId?: bigint;
+	assigneeSeq?: bigint;
 
 	@StringFieldOptional({
 		description: "문의 내용 (첫 메시지)",

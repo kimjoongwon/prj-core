@@ -8,8 +8,8 @@ export class SpaceAssociationDto extends EntityResponseType(SpaceAssociation, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"spaceId",
-		"groupId",
+		"spaceSeq",
+		"groupSeq",
 		"group",
 	] as const,
 	relations: {

@@ -5,10 +5,10 @@ import { SYSTEM_SPACE_ULID } from "./system-space-ulid";
 
 export async function getSignUpSpaceOrThrow(
 	spacesService: SpaceAggregate,
-	spaceId: bigint,
+	spaceSeq: bigint,
 ): Promise<{ id: bigint }> {
-	const space = await spacesService.getById(spaceId);
-	if (!space || space.removedAt || space.spaceId === SYSTEM_SPACE_ULID) {
+	const space = await spacesService.getById(spaceSeq);
+	if (!space || space.removedAt || space.spaceSeq === SYSTEM_SPACE_ULID) {
 		throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
 	}
 
@@ -18,7 +18,7 @@ export async function getSignUpSpaceOrThrow(
 
 	try {
 		// 가입 가능한 공간은 시설이 연결된 운영 공간으로 제한합니다.
-		await spacesService.getFitnessCenterBySpaceId(spaceId);
+		await spacesService.getFitnessCenterBySpaceId(spaceSeq);
 	} catch (error) {
 		if (error instanceof NotFoundException) {
 			throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");

@@ -15,7 +15,7 @@ import {
  * DDD 원칙에 따라 actionId로 Action을 참조합니다.
  */
 export class UpdateAbilityDto extends PartialType(
-	PickType(Ability, ["actionId", "subjectId"] as const),
+	PickType(Ability, ["actionSeq", "subjectSeq"] as const),
 ) {
 	@ApiProperty({
 		description: "대상 필드 목록 (빈 배열이면 전체 필드)",

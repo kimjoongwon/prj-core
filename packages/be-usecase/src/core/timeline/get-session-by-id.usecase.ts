@@ -8,8 +8,8 @@ export class GetSessionByIdUseCase {
 
 	execute(query: GetSessionByIdQuery): Promise<unknown> {
 		return this.timelinesService.findSessionInTimeline(
-			query.timelineId,
-			query.sessionId,
+			query.timelineSeq,
+			query.sessionSeq,
 		);
 	}
 }

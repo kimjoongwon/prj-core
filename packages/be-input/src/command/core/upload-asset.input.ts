@@ -1,5 +1,5 @@
 export interface UploadAssetCommandInput {
-	folderId: bigint;
+	folderSeq: bigint;
 }
 
 export interface UploadedAssetFileInput {

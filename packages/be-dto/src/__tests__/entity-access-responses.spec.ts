@@ -49,8 +49,8 @@ describe("접근·인증 Entity 응답", () => {
 	it("정책·항목·권한·행위 중첩 응답에서 공개 필드만 남긴다", () => {
 		const response = serializeAccessResponse(RoleAssignmentResponseDto, {
 			id: 1n,
-			roleId: 2n,
-			policyId: 3n,
+			roleSeq: 2n,
+			policySeq: 3n,
 			isActive: true,
 			priority: 0,
 			roleAssignmentId: "private-assignment",
@@ -58,13 +58,13 @@ describe("접근·인증 Entity 응답", () => {
 			policy: {
 				id: 3n,
 				name: "admins",
-				policyId: "private-policy",
+				policySeq: "private-policy",
 				unknown: true,
 				roleAssignments: [],
 				entries: [
 					{
 						id: 4n,
-						abilityId: 5n,
+						abilitySeq: 5n,
 						policyEntryId: "private-entry",
 						unknown: true,
 						ability: {
@@ -72,12 +72,12 @@ describe("접근·인증 Entity 응답", () => {
 							name: "read",
 							fields: ["email"],
 							conditions: { owner: "${user.id}" },
-							abilityId: "private-ability",
+							abilitySeq: "private-ability",
 							unknown: true,
 							action: {
 								id: 6n,
 								name: "read",
-								actionId: "private-action",
+								actionSeq: "private-action",
 								unknown: true,
 							},
 							subject: {
@@ -93,12 +93,12 @@ describe("접근·인증 Entity 응답", () => {
 		});
 		expect(response).not.toHaveProperty("roleAssignmentId");
 		expect(response).not.toHaveProperty("unknown");
-		expect(response.policy).not.toHaveProperty("policyId");
+		expect(response.policy).not.toHaveProperty("policySeq");
 		expect(response.policy).not.toHaveProperty("roleAssignments");
 		expect(response.policy.entries[0]).not.toHaveProperty("policyEntryId");
-		expect(response.policy.entries[0].ability).not.toHaveProperty("abilityId");
+		expect(response.policy.entries[0].ability).not.toHaveProperty("abilitySeq");
 		expect(response.policy.entries[0].ability.action).not.toHaveProperty(
-			"actionId",
+			"actionSeq",
 		);
 		expect(response.policy.entries[0].ability.subject).toEqual({
 			name: "User",
@@ -134,30 +134,30 @@ describe("접근·인증 Entity 응답", () => {
 				id: 1n,
 				name: "User",
 				email: "user@example.com",
-				spaceId: 2n,
+				spaceSeq: 2n,
 				password: "hash",
-				userId: "private-user",
+				userSeq: "private-user",
 				unknown: true,
 				passwordHistory: [{ hash: "secret" }],
 			},
 		});
 		expect(response.accessToken).toBe("access");
 		expect(response.refreshToken).toBe("refresh");
-		expect(response.user.spaceId).toBe("2");
+		expect(response.user.spaceSeq).toBe("2");
 		for (const privateKey of [
 			"password",
-			"userId",
+			"userSeq",
 			"unknown",
 			"passwordHistory",
 		])
 			expect(response.user).not.toHaveProperty(privateKey);
 		const detail = serializeAccessResponse(UserDetailResponseDto, {
 			id: 1n,
-			spaceId: 2n,
+			spaceSeq: 2n,
 			password: "hash",
 			unknown: true,
 		});
-		expect(detail.spaceId).toBe("2");
+		expect(detail.spaceSeq).toBe("2");
 		expect(detail).not.toHaveProperty("password");
 		expect(detail).not.toHaveProperty("unknown");
 	});
@@ -245,8 +245,8 @@ describe("접근·인증 Entity 응답", () => {
 		expect(schemas.PolicyResponseDto.required?.sort()).toEqual(
 			[
 				"id",
-				"spaceId",
-				"createdById",
+				"spaceSeq",
+				"createdBySeq",
 				"name",
 				"displayName",
 				"description",

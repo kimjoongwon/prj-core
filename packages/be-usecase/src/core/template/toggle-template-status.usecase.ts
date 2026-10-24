@@ -7,6 +7,6 @@ export class ToggleTemplateStatusUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	execute(command: ToggleTemplateStatusCommand): Promise<unknown> {
-		return this.templateService.toggleStatus(command.templateId);
+		return this.templateService.toggleStatus(command.templateSeq);
 	}
 }

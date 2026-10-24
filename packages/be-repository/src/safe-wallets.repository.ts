@@ -36,7 +36,7 @@ export class SafeWalletsRepository {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: safeWalletInclude,
 		});
 
@@ -47,7 +47,7 @@ export class SafeWalletsRepository {
 		this.logger.debug(`트랜잭션 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.findUnique({
-			where: { safeWalletId: id },
+			where: { id },
 			include: {
 				transactions: {
 					orderBy: [{ createdAt: "desc" }],
@@ -71,11 +71,11 @@ export class SafeWalletsRepository {
 		return result ? (toDomainData(result) as SafeWalletRecord) : null;
 	}
 
-	async findBySpaceId(spaceId: bigint): Promise<SafeWalletRecord[]> {
-		this.logger.debug(`Space별 지갑 조회: ${spaceId.toString()}`);
+	async findBySpaceId(spaceSeq: bigint): Promise<SafeWalletRecord[]> {
+		this.logger.debug(`Space별 지갑 조회: ${spaceSeq.toString()}`);
 
 		const results = await this.txHost.tx.safeWallet.findMany({
-			where: { spaceId, removedAt: null },
+			where: { spaceSeq, removedAt: null },
 			include: safeWalletInclude,
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -109,7 +109,7 @@ export class SafeWalletsRepository {
 	async create(
 		data: AutoIdentityCreateInput<
 			Prisma.SafeWalletUncheckedCreateInput,
-			"safeWalletId"
+			"id"
 		>,
 	): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 생성: ${data.address}`);
@@ -125,12 +125,12 @@ export class SafeWalletsRepository {
 		id: bigint,
 		data: AutoIdentityUpdateInput<
 			Prisma.SafeWalletUncheckedUpdateInput,
-			"safeWalletId"
+			"id"
 		>,
 	): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.safeWallet.update({
-			where: { id },
+			where: { seq: id },
 			data,
 			include: safeWalletInclude,
 		});
@@ -142,7 +142,7 @@ export class SafeWalletsRepository {
 		this.logger.debug(`지갑 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.delete({
-			where: { id },
+			where: { seq: id },
 			include: safeWalletInclude,
 		});
 

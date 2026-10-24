@@ -25,7 +25,7 @@ export class RolesRepository {
 		this.logger.debug(`ID로 역할 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.role.findUnique({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return result ? toDomainEntity(Role, result) : null;
@@ -97,7 +97,7 @@ export class RolesRepository {
 		this.logger.debug(`역할 수정: ${id.toString()}`);
 
 		const result = await this.txHost.tx.role.update({
-			where: { id },
+			where: { seq: id },
 			data,
 		});
 
@@ -111,7 +111,7 @@ export class RolesRepository {
 		this.logger.debug(`역할 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.role.delete({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return toDomainEntity(Role, result);
@@ -121,11 +121,11 @@ export class RolesRepository {
 	 * 역할에 연결된 테넌트 수 조회
 	 * 삭제 가능 여부 체크용
 	 */
-	async countTenantsByRoleId(roleId: bigint): Promise<number> {
-		this.logger.debug(`역할에 연결된 테넌트 수 조회: ${roleId.toString()}`);
+	async countTenantsByRoleId(roleSeq: bigint): Promise<number> {
+		this.logger.debug(`역할에 연결된 테넌트 수 조회: ${roleSeq.toString()}`);
 
 		return this.txHost.tx.tenant.count({
-			where: { roleId },
+			where: { roleSeq },
 		});
 	}
 }

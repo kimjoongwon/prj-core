@@ -18,11 +18,11 @@ export class ContentAggregate {
 	listCommunityPosts(
 		input: CommunityPostListInput,
 	): Promise<{ items: CommunityPostRecord[]; totalCount: number }> {
-		this.logger.debug(`커뮤니티 게시글 목록 조회: ${input.spaceId}`);
+		this.logger.debug(`커뮤니티 게시글 목록 조회: ${input.spaceSeq}`);
 
 		return this.repository.findCommunityPostsBySpaceId({
 			skip: input.skip,
-			spaceId: input.spaceId,
+			spaceSeq: input.spaceSeq,
 			take: input.take,
 		});
 	}
@@ -39,10 +39,10 @@ export class ContentAggregate {
 		}
 
 		return this.repository.createCommunityPost({
-			spaceId: input.spaceId,
+			spaceSeq: input.spaceSeq,
 			text,
 			title,
-			userId: input.userId,
+			userSeq: input.userSeq,
 		});
 	}
 }

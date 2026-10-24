@@ -85,9 +85,9 @@ export class TimelinesController {
 
 	/**
 	 * 타임라인 상세 조회
-	 * GET /api/v1/timelines/:timelineId
+	 * GET /api/v1/timelines/:timelineSeq
 	 */
-	@Get(":timelineId")
+	@Get(":timelineSeq")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "getTimelineById",
@@ -96,7 +96,7 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -104,9 +104,9 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	@ResponseMessage("타임라인 조회 성공")
 	async getTimelineById(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
 	) {
-		return this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		return this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
 	}
 
 	/**
@@ -131,9 +131,9 @@ export class TimelinesController {
 
 	/**
 	 * 타임라인 수정
-	 * PATCH /api/v1/timelines/:timelineId
+	 * PATCH /api/v1/timelines/:timelineSeq
 	 */
-	@Patch(":timelineId")
+	@Patch(":timelineSeq")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "updateTimeline",
@@ -142,7 +142,7 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -151,17 +151,17 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	@ResponseMessage("타임라인 수정 성공")
 	async updateTimeline(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
 		@Body() dto: UpdateTimelineDto,
 	) {
-		return this.commandBus.execute(new UpdateTimelineCommand(timelineId, dto));
+		return this.commandBus.execute(new UpdateTimelineCommand(timelineSeq, dto));
 	}
 
 	/**
 	 * 타임라인 삭제 (소프트 삭제)
-	 * DELETE /api/v1/timelines/:timelineId
+	 * DELETE /api/v1/timelines/:timelineSeq
 	 */
-	@Delete(":timelineId")
+	@Delete(":timelineSeq")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		operationId: "deleteTimeline",
@@ -171,16 +171,16 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 404, 500)
 	@ResponseMessage("타임라인 삭제 성공")
 	async deleteTimeline(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
 	): Promise<void> {
-		await this.commandBus.execute(new DeleteTimelineCommand(timelineId));
+		await this.commandBus.execute(new DeleteTimelineCommand(timelineSeq));
 	}
 
 	// ============================================================================
@@ -189,9 +189,9 @@ export class TimelinesController {
 
 	/**
 	 * 세션 목록 조회
-	 * GET /api/v1/timelines/:timelineId/sessions
+	 * GET /api/v1/timelines/:timelineSeq/sessions
 	 */
-	@Get(":timelineId/sessions")
+	@Get(":timelineSeq/sessions")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "getSessions",
@@ -200,7 +200,7 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -208,18 +208,18 @@ export class TimelinesController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("세션 목록 조회 성공")
 	async getSessions(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
 		@Query() query: QuerySessionDto,
 	) {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
-		return this.queryBus.execute(new GetSessionsQuery(timelineId, query));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
+		return this.queryBus.execute(new GetSessionsQuery(timelineSeq, query));
 	}
 
 	/**
 	 * 세션 상세 조회
-	 * GET /api/v1/timelines/:timelineId/sessions/:sessionId
+	 * GET /api/v1/timelines/:timelineSeq/sessions/:sessionSeq
 	 */
-	@Get(":timelineId/sessions/:sessionId")
+	@Get(":timelineSeq/sessions/:sessionSeq")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "getSessionById",
@@ -228,12 +228,12 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "sessionId",
+		name: "sessionSeq",
 		description: "세션 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -241,20 +241,20 @@ export class TimelinesController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	@ResponseMessage("세션 조회 성공")
 	async getSessionById(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
-		@Param("sessionId", ParseBigIntIdPipe) sessionId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
+		@Param("sessionSeq", ParseBigIntIdPipe) sessionSeq: bigint,
 	) {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
 		return this.queryBus.execute(
-			new GetSessionByIdQuery(timelineId, sessionId),
+			new GetSessionByIdQuery(timelineSeq, sessionSeq),
 		);
 	}
 
 	/**
 	 * 세션 등록
-	 * POST /api/v1/timelines/:timelineId/sessions
+	 * POST /api/v1/timelines/:timelineSeq/sessions
 	 */
-	@Post(":timelineId/sessions")
+	@Post(":timelineSeq/sessions")
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({
 		operationId: "createSession",
@@ -263,7 +263,7 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -272,18 +272,18 @@ export class TimelinesController {
 	@ApiResponseEntity(SessionDto, HttpStatus.CREATED)
 	@ResponseMessage("세션 생성 성공")
 	async createSession(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
 		@Body() dto: CreateSessionDto,
 	) {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
-		return this.commandBus.execute(new CreateSessionCommand(timelineId, dto));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
+		return this.commandBus.execute(new CreateSessionCommand(timelineSeq, dto));
 	}
 
 	/**
 	 * 세션 수정
-	 * PATCH /api/v1/timelines/:timelineId/sessions/:sessionId
+	 * PATCH /api/v1/timelines/:timelineSeq/sessions/:sessionSeq
 	 */
-	@Patch(":timelineId/sessions/:sessionId")
+	@Patch(":timelineSeq/sessions/:sessionSeq")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "updateSession",
@@ -293,12 +293,12 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "sessionId",
+		name: "sessionSeq",
 		description: "세션 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -307,21 +307,21 @@ export class TimelinesController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	@ResponseMessage("세션 수정 성공")
 	async updateSession(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
-		@Param("sessionId", ParseBigIntIdPipe) sessionId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
+		@Param("sessionSeq", ParseBigIntIdPipe) sessionSeq: bigint,
 		@Body() dto: UpdateSessionDto,
 	) {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
 		return this.commandBus.execute(
-			new UpdateSessionCommand(timelineId, sessionId, dto),
+			new UpdateSessionCommand(timelineSeq, sessionSeq, dto),
 		);
 	}
 
 	/**
 	 * 세션 삭제 (소프트 삭제)
-	 * DELETE /api/v1/timelines/:timelineId/sessions/:sessionId
+	 * DELETE /api/v1/timelines/:timelineSeq/sessions/:sessionSeq
 	 */
-	@Delete(":timelineId/sessions/:sessionId")
+	@Delete(":timelineSeq/sessions/:sessionSeq")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		operationId: "deleteSession",
@@ -331,24 +331,24 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "sessionId",
+		name: "sessionSeq",
 		description: "세션 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 404, 500)
 	@ResponseMessage("세션 삭제 성공")
 	async deleteSession(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
-		@Param("sessionId", ParseBigIntIdPipe) sessionId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
+		@Param("sessionSeq", ParseBigIntIdPipe) sessionSeq: bigint,
 	): Promise<void> {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
 		await this.commandBus.execute(
-			new DeleteSessionCommand(timelineId, sessionId),
+			new DeleteSessionCommand(timelineSeq, sessionSeq),
 		);
 	}
 
@@ -358,9 +358,9 @@ export class TimelinesController {
 
 	/**
 	 * 프로그램 목록 조회
-	 * GET /api/v1/timelines/:timelineId/sessions/:sessionId/programs
+	 * GET /api/v1/timelines/:timelineSeq/sessions/:sessionSeq/programs
 	 */
-	@Get(":timelineId/sessions/:sessionId/programs")
+	@Get(":timelineSeq/sessions/:sessionSeq/programs")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "getPrograms",
@@ -369,12 +369,12 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "sessionId",
+		name: "sessionSeq",
 		description: "세션 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -382,20 +382,20 @@ export class TimelinesController {
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("프로그램 목록 조회 성공")
 	async getPrograms(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
-		@Param("sessionId", ParseBigIntIdPipe) sessionId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
+		@Param("sessionSeq", ParseBigIntIdPipe) sessionSeq: bigint,
 		@Query() query: QueryProgramDto,
 	) {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
-		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
-		return this.queryBus.execute(new GetProgramsQuery(sessionId, query));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineSeq, sessionSeq));
+		return this.queryBus.execute(new GetProgramsQuery(sessionSeq, query));
 	}
 
 	/**
 	 * 프로그램 상세 조회
-	 * GET /api/v1/timelines/:timelineId/sessions/:sessionId/programs/:programId
+	 * GET /api/v1/timelines/:timelineSeq/sessions/:sessionSeq/programs/:programSeq
 	 */
-	@Get(":timelineId/sessions/:sessionId/programs/:programId")
+	@Get(":timelineSeq/sessions/:sessionSeq/programs/:programSeq")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "getProgramById",
@@ -404,17 +404,17 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "sessionId",
+		name: "sessionSeq",
 		description: "세션 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "programId",
+		name: "programSeq",
 		description: "프로그램 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -422,20 +422,20 @@ export class TimelinesController {
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	@ResponseMessage("프로그램 조회 성공")
 	async getProgramById(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
-		@Param("sessionId", ParseBigIntIdPipe) sessionId: bigint,
-		@Param("programId", ParseBigIntIdPipe) programId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
+		@Param("sessionSeq", ParseBigIntIdPipe) sessionSeq: bigint,
+		@Param("programSeq", ParseBigIntIdPipe) programSeq: bigint,
 	) {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
-		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
-		return this.queryBus.execute(new GetProgramByIdQuery(sessionId, programId));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineSeq, sessionSeq));
+		return this.queryBus.execute(new GetProgramByIdQuery(sessionSeq, programSeq));
 	}
 
 	/**
 	 * 프로그램 등록
-	 * POST /api/v1/timelines/:timelineId/sessions/:sessionId/programs
+	 * POST /api/v1/timelines/:timelineSeq/sessions/:sessionSeq/programs
 	 */
-	@Post(":timelineId/sessions/:sessionId/programs")
+	@Post(":timelineSeq/sessions/:sessionSeq/programs")
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({
 		operationId: "createProgram",
@@ -445,12 +445,12 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "sessionId",
+		name: "sessionSeq",
 		description: "세션 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -459,20 +459,20 @@ export class TimelinesController {
 	@ApiResponseEntity(ProgramDto, HttpStatus.CREATED)
 	@ResponseMessage("프로그램 생성 성공")
 	async createProgram(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
-		@Param("sessionId", ParseBigIntIdPipe) sessionId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
+		@Param("sessionSeq", ParseBigIntIdPipe) sessionSeq: bigint,
 		@Body() dto: CreateProgramDto,
 	) {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
-		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
-		return this.commandBus.execute(new CreateProgramCommand(sessionId, dto));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineSeq, sessionSeq));
+		return this.commandBus.execute(new CreateProgramCommand(sessionSeq, dto));
 	}
 
 	/**
 	 * 프로그램 수정
-	 * PATCH /api/v1/timelines/:timelineId/sessions/:sessionId/programs/:programId
+	 * PATCH /api/v1/timelines/:timelineSeq/sessions/:sessionSeq/programs/:programSeq
 	 */
-	@Patch(":timelineId/sessions/:sessionId/programs/:programId")
+	@Patch(":timelineSeq/sessions/:sessionSeq/programs/:programSeq")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "updateProgram",
@@ -482,17 +482,17 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "sessionId",
+		name: "sessionSeq",
 		description: "세션 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "programId",
+		name: "programSeq",
 		description: "프로그램 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -501,23 +501,23 @@ export class TimelinesController {
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	@ResponseMessage("프로그램 수정 성공")
 	async updateProgram(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
-		@Param("sessionId", ParseBigIntIdPipe) sessionId: bigint,
-		@Param("programId", ParseBigIntIdPipe) programId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
+		@Param("sessionSeq", ParseBigIntIdPipe) sessionSeq: bigint,
+		@Param("programSeq", ParseBigIntIdPipe) programSeq: bigint,
 		@Body() dto: UpdateProgramDto,
 	) {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
-		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineSeq, sessionSeq));
 		return this.commandBus.execute(
-			new UpdateProgramCommand(sessionId, programId, dto),
+			new UpdateProgramCommand(sessionSeq, programSeq, dto),
 		);
 	}
 
 	/**
 	 * 프로그램 삭제 (소프트 삭제)
-	 * DELETE /api/v1/timelines/:timelineId/sessions/:sessionId/programs/:programId
+	 * DELETE /api/v1/timelines/:timelineSeq/sessions/:sessionSeq/programs/:programSeq
 	 */
-	@Delete(":timelineId/sessions/:sessionId/programs/:programId")
+	@Delete(":timelineSeq/sessions/:sessionSeq/programs/:programSeq")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		operationId: "deleteProgram",
@@ -526,31 +526,31 @@ export class TimelinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "timelineId",
+		name: "timelineSeq",
 		description: "타임라인 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "sessionId",
+		name: "sessionSeq",
 		description: "세션 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiParam({
-		name: "programId",
+		name: "programSeq",
 		description: "프로그램 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ResponseMessage("프로그램 삭제 성공")
 	async deleteProgram(
-		@Param("timelineId", ParseBigIntIdPipe) timelineId: bigint,
-		@Param("sessionId", ParseBigIntIdPipe) sessionId: bigint,
-		@Param("programId", ParseBigIntIdPipe) programId: bigint,
+		@Param("timelineSeq", ParseBigIntIdPipe) timelineSeq: bigint,
+		@Param("sessionSeq", ParseBigIntIdPipe) sessionSeq: bigint,
+		@Param("programSeq", ParseBigIntIdPipe) programSeq: bigint,
 	): Promise<void> {
-		await this.queryBus.execute(new GetTimelineByIdQuery(timelineId));
-		await this.queryBus.execute(new GetSessionByIdQuery(timelineId, sessionId));
+		await this.queryBus.execute(new GetTimelineByIdQuery(timelineSeq));
+		await this.queryBus.execute(new GetSessionByIdQuery(timelineSeq, sessionSeq));
 		await this.commandBus.execute(
-			new DeleteProgramCommand(sessionId, programId),
+			new DeleteProgramCommand(sessionSeq, programSeq),
 		);
 	}
 }

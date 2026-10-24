@@ -12,10 +12,10 @@ export class CreateRoutineUseCase {
 	) {}
 
 	execute(command: CreateRoutineCommand): Promise<unknown> {
-		const userId = this.authContext.userDto?.id;
-		if (!userId) {
+		const userSeq = this.authContext.userDto?.id;
+		if (!userSeq) {
 			throw new UnauthorizedException("로그인이 필요합니다");
 		}
-		return this.routinesService.createRoutine(command, userId);
+		return this.routinesService.createRoutine(command, userSeq);
 	}
 }

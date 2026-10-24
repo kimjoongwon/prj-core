@@ -95,8 +95,8 @@ export class InquiriesController {
 	})
 	@ResponseMessage("문의 목록 조회 성공")
 	async getInquiries(@Query() query: QueryInquiryDto) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
+		const spaceSeq = this.spaceContext.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
@@ -119,8 +119,8 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryStatsDto, HttpStatus.OK)
 	@ResponseMessage("문의 통계 조회 성공")
 	async getStats() {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
+		const spaceSeq = this.spaceContext.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
@@ -147,7 +147,7 @@ export class InquiriesController {
 		return this.queryBus.execute(new GetInquiryCreateFormBootstrapQuery());
 	}
 
-	@Get(":inquiryId/form/update")
+	@Get(":inquirySeq/form/update")
 	@ApiOperation({
 		operationId: "getUpdateInquiryForm",
 		summary: "문의 수정 폼 bootstrap 조회",
@@ -156,7 +156,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -169,14 +169,14 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryCreateUpdateFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("문의 수정 폼 bootstrap 조회 성공")
 	async getUpdateInquiryForm(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
 	): Promise<InquiryCreateUpdateFormBootstrapDto> {
 		return this.queryBus.execute(
-			new GetInquiryUpdateFormBootstrapQuery(inquiryId),
+			new GetInquiryUpdateFormBootstrapQuery(inquirySeq),
 		);
 	}
 
-	@Get(":inquiryId")
+	@Get(":inquirySeq")
 	@ApiOperation({
 		operationId: "getInquiryById",
 		summary: "문의 상세 조회",
@@ -185,7 +185,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -198,9 +198,9 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDetailDto, HttpStatus.OK)
 	@ResponseMessage("문의 상세 조회 성공")
 	async getInquiryById(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
 	): Promise<Inquiry> {
-		return this.queryBus.execute(new GetInquiryByIdQuery(inquiryId));
+		return this.queryBus.execute(new GetInquiryByIdQuery(inquirySeq));
 	}
 
 	@Post()
@@ -223,8 +223,8 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.CREATED)
 	@ResponseMessage("문의 등록 성공")
 	async createInquiry(@Body() dto: CreateInquiryDto): Promise<Inquiry> {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
+		const spaceSeq = this.spaceContext.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
@@ -234,11 +234,11 @@ export class InquiriesController {
 		}
 
 		return this.commandBus.execute(
-			new CreateInquiryCommand(dto, spaceId, actorUserId),
+			new CreateInquiryCommand(dto, spaceSeq, actorUserId),
 		);
 	}
 
-	@Patch(":inquiryId")
+	@Patch(":inquirySeq")
 	@ApiOperation({
 		operationId: "updateInquiry",
 		summary: "문의 수정",
@@ -246,7 +246,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -263,13 +263,13 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("문의 수정 성공")
 	async updateInquiry(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
 		@Body() dto: UpdateInquiryDto,
 	): Promise<Inquiry> {
-		return this.commandBus.execute(new UpdateInquiryCommand(inquiryId, dto));
+		return this.commandBus.execute(new UpdateInquiryCommand(inquirySeq, dto));
 	}
 
-	@Delete(":inquiryId")
+	@Delete(":inquirySeq")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		operationId: "deleteInquiry",
@@ -278,7 +278,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -290,12 +290,12 @@ export class InquiriesController {
 	)
 	@ResponseMessage("문의 삭제 성공")
 	async deleteInquiry(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
 	): Promise<void> {
-		await this.commandBus.execute(new DeleteInquiryCommand(inquiryId));
+		await this.commandBus.execute(new DeleteInquiryCommand(inquirySeq));
 	}
 
-	@Patch(":inquiryId/assign")
+	@Patch(":inquirySeq/assign")
 	@ApiOperation({
 		operationId: "assignInquiry",
 		summary: "담당자 배정",
@@ -304,7 +304,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -312,12 +312,12 @@ export class InquiriesController {
 		schema: {
 			type: "object",
 			properties: {
-				assigneeId: {
+				assigneeSeq: {
 					type: "string",
 					description: "담당자 ID (canonical decimal BIGINT string)",
 				},
 			},
-			required: ["assigneeId"],
+			required: ["assigneeSeq"],
 		},
 	})
 	@ApiErrors(
@@ -330,15 +330,15 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("담당자 배정 성공")
 	async assignInquiry(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
-		@Body("assigneeId", ParseBigIntIdPipe) assigneeId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
+		@Body("assigneeSeq", ParseBigIntIdPipe) assigneeSeq: bigint,
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
-			new AssignInquiryCommand(inquiryId, assigneeId),
+			new AssignInquiryCommand(inquirySeq, assigneeSeq),
 		);
 	}
 
-	@Patch(":inquiryId/status")
+	@Patch(":inquirySeq/status")
 	@ApiOperation({
 		operationId: "updateInquiryStatus",
 		summary: "상태 변경",
@@ -347,7 +347,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -382,15 +382,15 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("상태 변경 성공")
 	async updateInquiryStatus(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
 		@Body() body: { status: InquiryStatus },
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
-			new UpdateInquiryStatusCommand(inquiryId, body.status),
+			new UpdateInquiryStatusCommand(inquirySeq, body.status),
 		);
 	}
 
-	@Patch(":inquiryId/priority")
+	@Patch(":inquirySeq/priority")
 	@ApiOperation({
 		operationId: "updateInquiryPriority",
 		summary: "우선순위 변경",
@@ -398,7 +398,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -424,15 +424,15 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("우선순위 변경 성공")
 	async updateInquiryPriority(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
 		@Body() body: { priority: InquiryPriority },
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
-			new UpdateInquiryPriorityCommand(inquiryId, body.priority),
+			new UpdateInquiryPriorityCommand(inquirySeq, body.priority),
 		);
 	}
 
-	@Get(":inquiryId/messages")
+	@Get(":inquirySeq/messages")
 	@ApiOperation({
 		operationId: "getInquiryMessages",
 		summary: "메시지 목록 조회",
@@ -440,7 +440,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -456,18 +456,18 @@ export class InquiriesController {
 	})
 	@ResponseMessage("메시지 목록 조회 성공")
 	async getMessages(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
 		@Query() query: { skip?: number; take?: number },
 	) {
 		return this.queryBus.execute(
 			new GetInquiryMessagesQuery({
-				inquiryId,
+				inquirySeq,
 				...query,
 			}),
 		);
 	}
 
-	@Get(":inquiryId/participants")
+	@Get(":inquirySeq/participants")
 	@ApiOperation({
 		operationId: "getInquiryParticipants",
 		summary: "참여자 목록 조회",
@@ -475,7 +475,7 @@ export class InquiriesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "inquiryId",
+		name: "inquirySeq",
 		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -488,8 +488,8 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryParticipant, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("참여자 목록 조회 성공")
 	async getParticipants(
-		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Param("inquirySeq", ParseBigIntIdPipe) inquirySeq: bigint,
 	): Promise<InquiryParticipant[]> {
-		return this.queryBus.execute(new GetInquiryParticipantsQuery(inquiryId));
+		return this.queryBus.execute(new GetInquiryParticipantsQuery(inquirySeq));
 	}
 }

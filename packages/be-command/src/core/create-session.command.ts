@@ -7,10 +7,10 @@ export class CreateSessionCommand implements CreateSessionCommandInput {
 	readonly startDateTime?: CreateSessionCommandInput["startDateTime"];
 	readonly endDateTime?: CreateSessionCommandInput["endDateTime"];
 	readonly recurringDayOfWeek?: CreateSessionCommandInput["recurringDayOfWeek"];
-	readonly timelineId!: CreateSessionCommandInput["timelineId"];
+	readonly timelineSeq!: CreateSessionCommandInput["timelineSeq"];
 
-	constructor(timelineId: bigint, input: CreateSessionCommandInput) {
+	constructor(timelineSeq: bigint, input: CreateSessionCommandInput) {
 		Object.assign(this, input);
-		this.timelineId = timelineId;
+		this.timelineSeq = timelineSeq;
 	}
 }

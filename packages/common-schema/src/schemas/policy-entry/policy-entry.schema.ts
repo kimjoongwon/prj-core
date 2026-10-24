@@ -5,11 +5,11 @@ import { AbstractSchema } from "../abstract.schema";
 export class PolicyEntrySchema
 	extends AbstractSchema
 {
-	policyEntryId!: string;
+	id!: string;
 
 	@BigIntIdValidation({ description: "Policy ID" })
-	policyId!: bigint;
+	policySeq!: bigint;
 
 	@BigIntIdValidation({ description: "Ability ID" })
-	abilityId!: bigint;
+	abilitySeq!: bigint;
 }

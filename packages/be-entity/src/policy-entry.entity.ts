@@ -9,15 +9,15 @@ import type { Policy } from "./policy.entity";
 @AbstractEntityFields()
 export class PolicyEntry extends PolicyEntrySchema {
 	@Exclude({ toPlainOnly: true })
-	declare policyEntryId: PolicyEntrySchema["policyEntryId"];
+	declare id: PolicyEntrySchema["id"];
 	@BigIntIdFieldMetadata({ description: "PolicyEntry ID" })
-	declare id: bigint;
+	declare seq: bigint;
 
 	@BigIntIdFieldMetadata({ description: "Policy ID" })
-	declare policyId: PolicyEntrySchema["policyId"];
+	declare policySeq: PolicyEntrySchema["policySeq"];
 
 	@BigIntIdFieldMetadata({ description: "Ability ID" })
-	declare abilityId: PolicyEntrySchema["abilityId"];
+	declare abilitySeq: PolicyEntrySchema["abilitySeq"];
 
 	@ApiProperty({
 		description: "생성 일시",

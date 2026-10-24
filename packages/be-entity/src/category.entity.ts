@@ -14,16 +14,16 @@ import { User } from "./user.entity";
 export class Category extends CategorySchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare categoryId: CategorySchema["categoryId"];
+	declare id: CategorySchema["id"];
 
 	@StringFieldMetadata({ default: "" })
 	declare name: CategorySchema["name"];
 	@BigIntIdFieldMetadata()
-	declare spaceId: CategorySchema["spaceId"];
+	declare spaceSeq: CategorySchema["spaceSeq"];
 	@BigIntIdFieldMetadata({ nullable: true, default: null })
-	declare parentId: CategorySchema["parentId"];
+	declare parentSeq: CategorySchema["parentSeq"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true })
-	declare createdById: CategorySchema["createdById"];
+	declare createdBySeq: CategorySchema["createdBySeq"];
 
 	@ClassField(() => Category, { required: false })
 	parent?: Category;
@@ -76,8 +76,8 @@ export class Category extends CategorySchema {
 
 	toOption() {
 		return {
-			key: this.id,
-			value: this.id,
+			key: this.seq,
+			value: this.seq,
 			text: this.name,
 		};
 	}

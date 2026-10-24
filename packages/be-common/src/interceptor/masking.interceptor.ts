@@ -124,13 +124,13 @@ export class MaskingInterceptor implements NestInterceptor {
 		// 마스킹 규칙이 없으면 그대로 반환
 		if (maskingRules.size === 0) {
 			this.logger.debug(
-				`마스킹 규칙 없음: userId=${user.id}, subject=${subjectName}`,
+				`마스킹 규칙 없음: userSeq=${user.id}, subject=${subjectName}`,
 			);
 			return next.handle();
 		}
 
 		this.logger.debug(
-			`마스킹 규칙 적용: userId=${user.id}, subject=${subjectName}, fields=${Array.from(maskingRules.keys()).join(",")}`,
+			`마스킹 규칙 적용: userSeq=${user.id}, subject=${subjectName}, fields=${Array.from(maskingRules.keys()).join(",")}`,
 		);
 
 		return next

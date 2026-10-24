@@ -1,7 +1,7 @@
 import type { GetTimelinesQueryInput } from "@cocrepo/input";
 
 export class GetTimelinesQuery implements GetTimelinesQueryInput {
-	readonly timelineId?: GetTimelinesQueryInput["timelineId"];
+	readonly timelineSeq?: GetTimelinesQueryInput["timelineSeq"];
 	readonly search?: GetTimelinesQueryInput["search"];
 	readonly contentLanguageCode?: GetTimelinesQueryInput["contentLanguageCode"];
 	readonly sort?: GetTimelinesQueryInput["sort"];

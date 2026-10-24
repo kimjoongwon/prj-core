@@ -17,17 +17,17 @@ import { User } from "./user.entity";
 export class AlbumEntry extends AlbumEntrySchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare albumEntryId: AlbumEntrySchema["albumEntryId"];
+	declare id: AlbumEntrySchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceId: AlbumEntrySchema["spaceId"];
+	declare spaceSeq: AlbumEntrySchema["spaceSeq"];
 	@BigIntIdFieldMetadata({ description: "앨범 ID" })
-	declare albumId: AlbumEntrySchema["albumId"];
+	declare albumSeq: AlbumEntrySchema["albumSeq"];
 	@BigIntIdFieldMetadata({ description: "에셋 ID" })
-	declare assetId: AlbumEntrySchema["assetId"];
+	declare assetSeq: AlbumEntrySchema["assetSeq"];
 	@NumberFieldMetadata({ description: "표시 순서", int: true })
 	declare position: AlbumEntrySchema["position"];
 
@@ -37,7 +37,7 @@ export class AlbumEntry extends AlbumEntrySchema {
 	@StringFieldOptionalMetadata({ nullable: true, description: "캡션" })
 	declare caption: AlbumEntrySchema["caption"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdById: AlbumEntrySchema["createdById"];
+	declare createdBySeq: AlbumEntrySchema["createdBySeq"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

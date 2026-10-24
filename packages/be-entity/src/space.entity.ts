@@ -19,7 +19,7 @@ import { Tenant } from "./tenant.entity";
 export class Space extends SpaceSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare spaceId: SpaceSchema["spaceId"];
+	declare id: SpaceSchema["id"];
 
 	@StringFieldMetadata({
 		description: "Space의 표시 이름. 공간 선택·목록·검색의 원천입니다.",

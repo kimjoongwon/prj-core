@@ -1,7 +1,7 @@
 import type { GetInquiryMessagesQueryInput } from "@cocrepo/input";
 
 export class GetInquiryMessagesQuery implements GetInquiryMessagesQueryInput {
-	readonly inquiryId!: GetInquiryMessagesQueryInput["inquiryId"];
+	readonly inquirySeq!: GetInquiryMessagesQueryInput["inquirySeq"];
 	readonly skip?: GetInquiryMessagesQueryInput["skip"];
 	readonly take?: GetInquiryMessagesQueryInput["take"];
 

@@ -29,15 +29,15 @@ import { User } from "./user.entity";
 export class InquiryMessage extends InquiryMessageSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare inquiryMessageId: InquiryMessageSchema["inquiryMessageId"];
+	declare id: InquiryMessageSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 스레드 ID" })
-	declare threadId: InquiryMessageSchema["threadId"];
+	declare threadSeq: InquiryMessageSchema["threadSeq"];
 	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
-	declare inquiryId: InquiryMessageSchema["inquiryId"];
+	declare inquirySeq: InquiryMessageSchema["inquirySeq"];
 	@EnumFieldMetadata(() => SenderType, { description: "발신자 유형" })
 	declare senderType: InquiryMessageSchema["senderType"];
 	@StringFieldMetadata({ description: "메시지 내용" })
@@ -53,7 +53,7 @@ export class InquiryMessage extends InquiryMessageSchema {
 	// Nullable 필드
 	// ============================================================================
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "발신자 ID" })
-	declare senderId: InquiryMessageSchema["senderId"];
+	declare senderSeq: InquiryMessageSchema["senderSeq"];
 	@UUIDFieldOptionalMetadata({
 		nullable: true,
 		description: "클라이언트 메시지 ID",

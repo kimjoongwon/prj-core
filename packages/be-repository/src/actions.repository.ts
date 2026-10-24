@@ -55,7 +55,7 @@ export class ActionsRepository {
 		this.logger.debug(`ID로 Action 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.action.findUnique({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return result ? toDomainEntity(Action, result) : null;
@@ -114,7 +114,7 @@ export class ActionsRepository {
 		this.logger.debug(`Action 수정: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.action.update({
-			where: { id },
+			where: { seq: id },
 			data,
 		});
 
@@ -128,7 +128,7 @@ export class ActionsRepository {
 		this.logger.debug(`Action 소프트 삭제: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.action.update({
-			where: { id },
+			where: { seq: id },
 			data: { removedAt: new Date() },
 		});
 

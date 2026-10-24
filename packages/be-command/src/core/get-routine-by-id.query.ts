@@ -2,7 +2,7 @@ import type { SpaceScope } from "@cocrepo/type";
 
 export class GetRoutineByIdQuery {
 	constructor(
-		readonly routineId: bigint,
+		readonly routineSeq: bigint,
 		readonly spaceScope?: SpaceScope,
 	) {}
 }

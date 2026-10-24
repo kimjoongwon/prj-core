@@ -6,7 +6,7 @@ import { PickType } from "@nestjs/swagger";
  * 폴더 생성 DTO
  */
 export class CreateFolderDto extends PickType(Folder, [
-	"parentFolderId",
+	"parentFolderSeq",
 ] as const) {
 	@StringField({
 		description: "폴더명",

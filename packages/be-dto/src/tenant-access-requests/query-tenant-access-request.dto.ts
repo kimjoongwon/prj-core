@@ -8,7 +8,7 @@ import { EntityQueryType } from "../query/entity-query-type";
 
 export class QueryTenantAccessRequestDto extends EntityQueryType(
 	TenantAccessRequest,
-	["status", "spaceId", "requesterId"] as const,
+	["status", "spaceSeq", "requesterSeq"] as const,
 ) {
 	@StringFieldOptional({
 		description: "검색어 (신청자 이름/이메일, 시설명)",

@@ -14,22 +14,22 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** InquiryMessage의 DB 필드 타입과 공통 검증입니다. */
 export class InquiryMessageSchema
-	extends PickSchemaType(AbstractSchema, ["id", "createdAt"] as const)
+	extends PickSchemaType(AbstractSchema, ["seq", "createdAt"] as const)
 {
-	inquiryMessageId!: string;
+	id!: string;
 
-	declare id: bigint;
+	declare seq: bigint;
 
 	declare createdAt: Date;
 
 	@BigIntIdValidation({ description: "소속 스레드 ID" })
-	threadId!: bigint;
+	threadSeq!: bigint;
 
 	@BigIntIdValidation({ description: "소속 문의 ID" })
-	inquiryId!: bigint;
+	inquirySeq!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "발신자 ID" })
-	senderId!: bigint | null;
+	senderSeq!: bigint | null;
 
 	@EnumValidation(() => SenderType, { description: "발신자 유형" })
 	senderType!: SenderType;

@@ -22,18 +22,18 @@ export class AIAgentLogsRepository {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.aIAgentLog.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: { inquiry: true, message: true },
 		});
 
 		return result ? toDomainEntity(AIAgentLog, result) : null;
 	}
 
-	async findByInquiryId(inquiryId: bigint): Promise<AIAgentLog[]> {
-		this.logger.debug(`문의별 AI 로그 조회: ${inquiryId.toString()}`);
+	async findByInquiryId(inquirySeq: bigint): Promise<AIAgentLog[]> {
+		this.logger.debug(`문의별 AI 로그 조회: ${inquirySeq.toString()}`);
 
 		const results = await this.txHost.tx.aIAgentLog.findMany({
-			where: { inquiryId },
+			where: { inquirySeq },
 			include: { inquiry: true, message: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -41,11 +41,11 @@ export class AIAgentLogsRepository {
 		return results.map((item) => toDomainEntity(AIAgentLog, item));
 	}
 
-	async findByMessageId(messageId: bigint): Promise<AIAgentLog | null> {
-		this.logger.debug(`메시지별 AI 로그 조회: ${messageId}`);
+	async findByMessageId(messageSeq: bigint): Promise<AIAgentLog | null> {
+		this.logger.debug(`메시지별 AI 로그 조회: ${messageSeq}`);
 
 		const result = await this.txHost.tx.aIAgentLog.findFirst({
-			where: { messageId },
+			where: { messageSeq },
 			include: { inquiry: true, message: true },
 		});
 
@@ -78,10 +78,10 @@ export class AIAgentLogsRepository {
 	async create(
 		data: AutoIdentityCreateInput<
 			Prisma.AIAgentLogUncheckedCreateInput,
-			"aiAgentLogId"
+			"id"
 		>,
 	): Promise<AIAgentLog> {
-		this.logger.debug(`로그 생성: ${data.inquiryId.toString()}`);
+		this.logger.debug(`로그 생성: ${data.inquirySeq.toString()}`);
 		const result = await this.txHost.tx.aIAgentLog.create({
 			data,
 			include: { inquiry: true, message: true },
@@ -94,16 +94,16 @@ export class AIAgentLogsRepository {
 		this.logger.debug(`로그 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.aIAgentLog.delete({
-			where: { id },
+			where: { seq: id },
 			include: { inquiry: true, message: true },
 		});
 
 		return toDomainEntity(AIAgentLog, result);
 	}
 
-	async countByInquiryId(inquiryId: bigint): Promise<number> {
+	async countByInquiryId(inquirySeq: bigint): Promise<number> {
 		return this.txHost.tx.aIAgentLog.count({
-			where: { inquiryId },
+			where: { inquirySeq },
 		});
 	}
 }

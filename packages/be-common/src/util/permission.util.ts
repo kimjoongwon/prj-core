@@ -37,7 +37,7 @@ function resolveTenantSpaceCategoryName(
 export function resolveTenantSpaceId(
 	tenant: ContextTenantSnapshot,
 ): DatabaseId | undefined {
-	return tenant.space?.id ?? tenant.spaceId ?? undefined;
+	return tenant.space?.id ?? tenant.spaceSeq ?? undefined;
 }
 
 /**

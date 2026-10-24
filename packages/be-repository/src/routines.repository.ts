@@ -34,7 +34,7 @@ export class RoutinesRepository {
 			...(params.spaceIds || params.contentLanguageCode
 				? {
 						space: {
-							...(params.spaceIds ? { id: { in: params.spaceIds } } : {}),
+							...(params.spaceIds ? { seq: { in: params.spaceIds } } : {}),
 							...(params.contentLanguageCode
 								? { contentLanguageCode: params.contentLanguageCode }
 								: {}),
@@ -64,16 +64,16 @@ export class RoutinesRepository {
 	 * 내부 숫자 ID로 루틴 하나를 조회합니다.
 	 */
 	async findRoutineById(
-		routineId: bigint,
+		routineSeq: bigint,
 		spaceIds?: bigint[],
 	): Promise<Routine | null> {
-		this.logger.debug(`루틴 단건 조회: ${routineId}`);
+		this.logger.debug(`루틴 단건 조회: ${routineSeq}`);
 
 		const result = await this.txHost.tx.routine.findFirst({
 			where: {
-				id: routineId,
+				seq: routineSeq,
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
 			},
 			include: this.includeRoutineDetails(),
 		});
@@ -87,10 +87,10 @@ export class RoutinesRepository {
 	async createRoutine(data: {
 		name: string;
 		label: string;
-		spaceId: bigint;
-		createdById?: bigint;
+		spaceSeq: bigint;
+		createdBySeq?: bigint;
 		activities?: {
-			taskId: bigint;
+			taskSeq: bigint;
 			order: number;
 			repetitions: number;
 			restTime: number;
@@ -103,12 +103,12 @@ export class RoutinesRepository {
 			data: {
 				name: data.name,
 				label: data.label,
-				spaceId: data.spaceId,
-				...(data.createdById ? { createdById: data.createdById } : {}),
+				spaceSeq: data.spaceSeq,
+				...(data.createdBySeq ? { createdBySeq: data.createdBySeq } : {}),
 				activities: data.activities
 					? {
 							create: data.activities.map((activity) => ({
-								taskId: activity.taskId,
+								taskSeq: activity.taskSeq,
 								order: activity.order,
 								repetitions: activity.repetitions,
 								restTime: activity.restTime,
@@ -127,12 +127,12 @@ export class RoutinesRepository {
 	 * 루틴 기본 정보와 활동 목록을 갱신합니다.
 	 */
 	async updateRoutine(
-		routineId: bigint,
+		routineSeq: bigint,
 		data: {
 			name?: string;
 			label?: string;
 			activities?: {
-				taskId: bigint;
+				taskSeq: bigint;
 				order: number;
 				repetitions: number;
 				restTime: number;
@@ -140,10 +140,10 @@ export class RoutinesRepository {
 			}[];
 		},
 	): Promise<Routine> {
-		this.logger.debug(`루틴 수정: ${routineId}`);
+		this.logger.debug(`루틴 수정: ${routineSeq}`);
 
 		const result = await this.txHost.tx.routine.update({
-			where: { id: routineId },
+			where: { seq: routineSeq },
 			data: {
 				name: data.name,
 				label: data.label,
@@ -153,7 +153,7 @@ export class RoutinesRepository {
 						: {
 								deleteMany: {},
 								create: data.activities.map((activity) => ({
-									taskId: activity.taskId,
+									taskSeq: activity.taskSeq,
 									order: activity.order,
 									repetitions: activity.repetitions,
 									restTime: activity.restTime,
@@ -170,17 +170,17 @@ export class RoutinesRepository {
 	/**
 	 * 루틴과 종속 활동을 소프트 삭제합니다.
 	 */
-	async softDeleteRoutine(routineId: bigint): Promise<void> {
-		this.logger.debug(`루틴 소프트 삭제: ${routineId}`);
+	async softDeleteRoutine(routineSeq: bigint): Promise<void> {
+		this.logger.debug(`루틴 소프트 삭제: ${routineSeq}`);
 
 		const removedAt = new Date();
 		await this.txHost.tx.routine.update({
-			where: { id: routineId },
+			where: { seq: routineSeq },
 			data: { removedAt },
 		});
 		await this.txHost.tx.activity.updateMany({
 			where: {
-				routineId,
+				routineSeq,
 				removedAt: null,
 			},
 			data: { removedAt },
@@ -190,12 +190,12 @@ export class RoutinesRepository {
 	/**
 	 * 특정 루틴을 사용하는 Program 수를 반환합니다.
 	 */
-	async countProgramsUsingRoutine(routineId: bigint): Promise<number> {
-		this.logger.debug(`루틴 사용 Program 수 조회: ${routineId}`);
+	async countProgramsUsingRoutine(routineSeq: bigint): Promise<number> {
+		this.logger.debug(`루틴 사용 Program 수 조회: ${routineSeq}`);
 
 		return this.txHost.tx.program.count({
 			where: {
-				routineId,
+				routineSeq,
 				removedAt: null,
 			},
 		});

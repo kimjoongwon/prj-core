@@ -72,7 +72,7 @@ export class TranslationsRepository {
 		this.logger.debug(`ID로 번역 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.translation.findUnique({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return result ? toDomainEntity(Translation, result) : null;
@@ -157,7 +157,7 @@ export class TranslationsRepository {
 		this.logger.debug(`번역 수정: ${id.toString()}`);
 
 		const result = await this.txHost.tx.translation.update({
-			where: { id },
+			where: { seq: id },
 			data,
 		});
 
@@ -171,7 +171,7 @@ export class TranslationsRepository {
 		this.logger.debug(`번역 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.translation.delete({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return toDomainEntity(Translation, result);

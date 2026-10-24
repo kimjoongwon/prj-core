@@ -27,7 +27,8 @@ import { Subject } from "./subject.entity";
 @AbstractEntityFields()
 export class Ability extends AbilitySchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) declare abilityId: AbilitySchema["abilityId"];
+	@Exclude({ toPlainOnly: true })
+	declare id: AbilitySchema["id"];
 
 	// 메타데이터
 	/** 권한 이름 (재사용 가능한 고유 이름) */
@@ -50,9 +51,9 @@ export class Ability extends AbilitySchema {
 
 	// 연결 대상
 	/** Subject ID (권한 대상) */
-	@BigIntIdFieldMetadata() declare subjectId: AbilitySchema["subjectId"];
+	@BigIntIdFieldMetadata() declare subjectSeq: AbilitySchema["subjectSeq"];
 	/** Action ID (행위 정의) */
-	@BigIntIdFieldMetadata() declare actionId: AbilitySchema["actionId"];
+	@BigIntIdFieldMetadata() declare actionSeq: AbilitySchema["actionSeq"];
 
 	// RoleAssignment에서 조회할 때 설정되는 필드 (optional)
 	/** 우선순위 (Policy assignment priority 값) */

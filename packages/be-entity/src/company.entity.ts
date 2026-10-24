@@ -13,7 +13,7 @@ import { FitnessCenter } from "./fitness-center.entity";
 export class Company extends CompanySchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare companyId: CompanySchema["companyId"];
+	declare id: CompanySchema["id"];
 
 	@StringFieldMetadata()
 	declare name: CompanySchema["name"];

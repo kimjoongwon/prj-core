@@ -6,11 +6,11 @@ import { PartialType, PickType } from "@nestjs/swagger";
  */
 export class UpdateAlbumDto extends PartialType(
 	PickType(Album, [
-		"spaceId",
+		"spaceSeq",
 		"name",
 		"description",
 		"sortOrder",
-		"coverAssetId",
-		"createdById",
+		"coverAssetSeq",
+		"createdBySeq",
 	] as const),
 ) {}

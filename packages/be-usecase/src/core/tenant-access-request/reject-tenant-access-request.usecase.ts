@@ -11,7 +11,7 @@ export class RejectTenantAccessRequestUseCase {
 	execute(command: RejectTenantAccessRequestCommand): Promise<unknown> {
 		return this.tenantAccessRequestService.reject({
 			tenantAccessRequestId: command.tenantAccessRequestId,
-			reviewerId: command.reviewerId,
+			reviewerSeq: command.reviewerSeq,
 			reviewComment: command.reviewComment,
 		});
 	}

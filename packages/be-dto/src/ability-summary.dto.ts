@@ -8,8 +8,8 @@ export class AbilitySummaryDto extends EntityResponseType(Ability, {
 	pick: [
 		"id",
 		"name",
-		"actionId",
-		"subjectId",
+		"actionSeq",
+		"subjectSeq",
 		"inverted",
 		"priority",
 		"action",

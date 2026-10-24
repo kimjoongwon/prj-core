@@ -1,6 +1,6 @@
 export class GetSessionByIdQuery {
 	constructor(
-		readonly timelineId: bigint,
-		readonly sessionId: bigint,
+		readonly timelineSeq: bigint,
+		readonly sessionSeq: bigint,
 	) {}
 }

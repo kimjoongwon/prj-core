@@ -15,12 +15,12 @@ import {
 import { BadRequestException, ConflictException } from "@nestjs/common";
 import { ReservationAggregate } from "../src/reservation/reservation.aggregate";
 
-const spaceId = 101n;
+const spaceSeq = 101n;
 const tenantId = 606n;
-const userId = 202n;
-const timelineId = 303n;
-const sessionId = 404n;
-const programId = 505n;
+const userSeq = 202n;
+const timelineSeq = 303n;
+const sessionSeq = 404n;
+const programSeq = 505n;
 const occurrenceStartAt = new Date("2026-06-01T10:00:00.000Z");
 
 describe("ReservationAggregate", () => {
@@ -68,20 +68,20 @@ describe("ReservationAggregate", () => {
 		);
 
 		const result = await service.create({
-			spaceId,
-			userId,
+			spaceSeq,
+			userSeq,
 			input: buildCreateInput("idem-confirmed"),
 		});
 
 		expect(result.status).toBe(ReservationStatus.CONFIRMED);
 		expect(repository.create).toHaveBeenCalledWith(
 			expect.objectContaining({
-				spaceId,
-				createdById: userId,
-				userId,
-				timelineId,
-				sessionId,
-				programId,
+				spaceSeq,
+				createdBySeq: userSeq,
+				userSeq,
+				timelineSeq,
+				sessionSeq,
+				programSeq,
 				status: ReservationStatus.CONFIRMED,
 				waitlistPosition: null,
 				idempotencyKey: "idem-confirmed",
@@ -100,8 +100,8 @@ describe("ReservationAggregate", () => {
 		);
 
 		const result = await service.create({
-			spaceId,
-			userId,
+			spaceSeq,
+			userSeq,
 			input: buildCreateInput("idem-waitlisted"),
 		});
 
@@ -120,8 +120,8 @@ describe("ReservationAggregate", () => {
 		repository.findByUserAndIdempotencyKey.mockResolvedValue(existing);
 
 		const result = await service.create({
-			spaceId,
-			userId,
+			spaceSeq,
+			userSeq,
 			input: buildCreateInput("idem-existing"),
 		});
 
@@ -137,8 +137,8 @@ describe("ReservationAggregate", () => {
 
 		await expect(
 			service.create({
-				spaceId,
-				userId,
+				spaceSeq,
+				userSeq,
 				input: buildCreateInput("idem-duplicate"),
 			}),
 		).rejects.toThrow(ConflictException);
@@ -169,8 +169,8 @@ describe("ReservationAggregate", () => {
 		repository.findNextWaitlisted.mockResolvedValue(nextWaitlisted);
 
 		await service.cancel({
-			spaceId,
-			userId,
+			spaceSeq,
+			userSeq,
 			reservationId: reservation.id,
 			cancelReason: "일정 변경",
 			now,
@@ -203,8 +203,8 @@ describe("ReservationAggregate", () => {
 
 		await expect(
 			service.cancel({
-				spaceId,
-				userId,
+				spaceSeq,
+				userSeq,
 				reservationId: 777n,
 				now: new Date("2026-06-01T08:00:00.000Z"),
 			}),
@@ -215,9 +215,9 @@ describe("ReservationAggregate", () => {
 
 function buildCreateInput(idempotencyKey: string) {
 	return {
-		timelineId,
-		sessionId,
-		programId,
+		timelineSeq,
+		sessionSeq,
+		programSeq,
 		occurrenceStartAt,
 		idempotencyKey,
 		memo: null,
@@ -226,20 +226,20 @@ function buildCreateInput(idempotencyKey: string) {
 
 function buildProgram(input: { capacity: number }): BookingProgramRecord {
 	return {
-		id: programId,
+		id: programSeq,
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
-		routineId: 808n,
-		sessionId,
-		instructorId: 909n,
+		routineSeq: 808n,
+		sessionSeq,
+		instructorSeq: 909n,
 		capacity: input.capacity,
 		name: "Morning Flow",
 		level: "BEGINNER",
 		routineNameSnapshot: "Flow",
 		routineLabelSnapshot: "Flow Label",
 		session: {
-			id: sessionId,
+			id: sessionSeq,
 			createdAt: new Date("2026-01-01T00:00:00.000Z"),
 			updatedAt: null,
 			removedAt: null,
@@ -248,16 +248,16 @@ function buildProgram(input: { capacity: number }): BookingProgramRecord {
 			startDateTime: occurrenceStartAt,
 			endDateTime: new Date("2026-06-01T11:00:00.000Z"),
 			recurringDayOfWeek: null,
-			timelineId,
+			timelineSeq,
 			name: "10AM",
 			description: null,
 			timeline: {
-				id: timelineId,
+				id: timelineSeq,
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
 				updatedAt: null,
 				removedAt: null,
-				spaceId,
-				createdById: null,
+				spaceSeq,
+				createdBySeq: null,
 				name: "June",
 				description: null,
 			},
@@ -272,12 +272,12 @@ function buildReservation(input: Record<string, unknown> = {}): Reservation {
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
-		spaceId,
-		createdById: input.createdById === undefined ? userId : input.createdById,
-		userId,
-		timelineId,
-		sessionId,
-		programId,
+		spaceSeq,
+		createdBySeq: input.createdBySeq === undefined ? userSeq : input.createdBySeq,
+		userSeq,
+		timelineSeq,
+		sessionSeq,
+		programSeq,
 		occurrenceStartAt,
 		status: input.status ?? ReservationStatus.CONFIRMED,
 		memo: null,

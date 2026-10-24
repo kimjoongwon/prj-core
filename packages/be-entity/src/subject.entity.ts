@@ -16,7 +16,8 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class Subject extends SubjectSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) declare subjectId: SubjectSchema["subjectId"];
+	@Exclude({ toPlainOnly: true })
+	declare id: SubjectSchema["id"];
 
 	@StringFieldMetadata() declare name: SubjectSchema["name"];
 	@StringFieldOptionalMetadata({ nullable: true })

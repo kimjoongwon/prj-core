@@ -4,7 +4,7 @@ export class UpdateTimelineCommand implements UpdateTimelineCommandInput {
 	readonly description?: UpdateTimelineCommandInput["description"];
 
 	constructor(
-		readonly timelineId: bigint,
+		readonly timelineSeq: bigint,
 		input: UpdateTimelineCommandInput,
 	) {
 		Object.assign(this, input);

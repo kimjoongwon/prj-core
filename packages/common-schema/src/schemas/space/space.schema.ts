@@ -4,7 +4,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Space의 DB 필드 타입과 공통 검증입니다. */
 export class SpaceSchema extends AbstractSchema {
-	spaceId!: string;
+	id!: string;
 
 	@StringValidation({
 		description: "Space의 표시 이름. 공간 선택·목록·검색의 원천입니다.",

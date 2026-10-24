@@ -34,7 +34,7 @@ export class RefreshTokenWithIdpUseCase {
 			throw new UnauthorizedException("리프레시 토큰이 존재하지 않습니다");
 		}
 
-		const clientId = resolveClientIdFromSessionId(command.sessionId);
+		const clientId = resolveClientIdFromSessionId(command.sessionSeq);
 		const client = await resolveOidcClient(this.oidcClientService, clientId, {
 			requireActive: false,
 			requireLoginPage: false,
@@ -47,7 +47,7 @@ export class RefreshTokenWithIdpUseCase {
 		const user = await (
 			this.usersService as UserService & {
 				findByUserIdWithTenants: (
-					userId: string,
+					userSeq: string,
 				) => ReturnType<UserService["getByIdWithTenants"]>;
 			}
 		).findByUserIdWithTenants(payload.sub);
@@ -56,11 +56,11 @@ export class RefreshTokenWithIdpUseCase {
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
 		}
 
-		if (command.sessionId) {
+		if (command.sessionSeq) {
 			const newRefreshToken = tokenResponse.refresh_token || refreshToken;
 			await this.tokenStorageService.updateSession(
 				payload.sub,
-				command.sessionId,
+				command.sessionSeq,
 				newRefreshToken,
 			);
 		}
@@ -81,7 +81,7 @@ export class RefreshTokenWithIdpUseCase {
 		return {
 			accessToken: tokenResponse.access_token,
 			refreshToken: tokenResponse.refresh_token || refreshToken,
-			sessionId: command.sessionId ?? null,
+			sessionSeq: command.sessionSeq ?? null,
 			accessTokenExpiresAt: now + tokenResponse.expires_in * 1000,
 			refreshTokenExpiresAt: now + 30 * 24 * 60 * 60 * 1000,
 			user,

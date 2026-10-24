@@ -122,7 +122,7 @@ export class InquiryAggregate {
 	}
 
 	async getUpdateFormBootstrap(
-		inquiryId: bigint,
+		inquirySeq: bigint,
 		spaceIds?: bigint[],
 	): Promise<
 		CreateUpdateFormBootstrap<{
@@ -135,7 +135,7 @@ export class InquiryAggregate {
 			status: InquiryStatus;
 		}>
 	> {
-		const inquiry = await this.findByIdWithDetails(inquiryId, spaceIds);
+		const inquiry = await this.findByIdWithDetails(inquirySeq, spaceIds);
 
 		return {
 			mode: "UPDATE",
@@ -178,16 +178,16 @@ export class InquiryAggregate {
 		});
 
 		const defaultThread = await this.repository.createThread({
-			inquiryId: inquiry.id,
-			createdById: data.customerId ?? actorUserId,
+			inquirySeq: inquiry.id,
+			createdBySeq: data.customerSeq ?? actorUserId,
 			title: inquiry.title,
 		});
 
 		if (initialContent && initialContent.trim().length > 0) {
 			await this.sendMessage({
-				inquiryId: inquiry.id,
-				actorUserId: data.customerId ?? actorUserId,
-				threadId: defaultThread.id,
+				inquirySeq: inquiry.id,
+				actorUserId: data.customerSeq ?? actorUserId,
+				threadSeq: defaultThread.id,
 				content: initialContent,
 				contentType: "TEXT",
 				senderType: "USER",
@@ -229,35 +229,35 @@ export class InquiryAggregate {
 	// ============================================================================
 
 	async listMessages(params: {
-		inquiryId: bigint;
+		inquirySeq: bigint;
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: InquiryMessage[]; totalCount: number }> {
-		await this.findById(params.inquiryId);
+		await this.findById(params.inquirySeq);
 		return this.repository.findMessagesByInquiryId(params);
 	}
 
 	async sendMessage(params: {
-		inquiryId: bigint;
+		inquirySeq: bigint;
 		actorUserId: bigint;
-		threadId?: bigint;
+		threadSeq?: bigint;
 		content: string;
 		contentType?: MessageContentType;
 		senderType?: SenderType;
 		clientMessageId?: string;
 	}): Promise<InquiryMessage> {
-		const inquiry = await this.findById(params.inquiryId);
+		const inquiry = await this.findById(params.inquirySeq);
 		if (inquiry.status === "CLOSED") {
 			throw new BadRequestException(
 				"종료된 문의에는 메시지를 전송할 수 없습니다",
 			);
 		}
 
-		const thread = params.threadId
-			? await this.repository.findThreadById(params.threadId)
-			: await this.repository.findDefaultThreadByInquiryId(params.inquiryId);
+		const thread = params.threadSeq
+			? await this.repository.findThreadById(params.threadSeq)
+			: await this.repository.findDefaultThreadByInquiryId(params.inquirySeq);
 
-		if (!thread || thread.inquiryId !== params.inquiryId) {
+		if (!thread || thread.inquirySeq !== params.inquirySeq) {
 			throw new NotFoundException("문의 스레드를 찾을 수 없습니다");
 		}
 
@@ -275,9 +275,9 @@ export class InquiryAggregate {
 
 		const senderType = params.senderType ?? "USER";
 		const message = await this.repository.createMessage({
-			inquiryId: params.inquiryId,
-			threadId: thread.id,
-			senderId: params.actorUserId,
+			inquirySeq: params.inquirySeq,
+			threadSeq: thread.id,
+			senderSeq: params.actorUserId,
 			content: params.content,
 			contentType: params.contentType ?? "TEXT",
 			senderType,
@@ -286,23 +286,23 @@ export class InquiryAggregate {
 
 		await Promise.all([
 			this.repository.touchThreadAfterMessage(thread.id, params.content),
-			this.repository.recordMessageActivityById(params.inquiryId),
+			this.repository.recordMessageActivityById(params.inquirySeq),
 			this.repository.incrementParticipantUnreadByInquiryId(
-				params.inquiryId,
+				params.inquirySeq,
 				params.actorUserId,
 			),
 		]);
 
-		if (inquiry.customerId !== params.actorUserId) {
-			await this.repository.recordFirstResponseById(params.inquiryId);
+		if (inquiry.customerSeq !== params.actorUserId) {
+			await this.repository.recordFirstResponseById(params.inquirySeq);
 		}
 
 		return message;
 	}
 
-	async getParticipants(inquiryId: bigint): Promise<InquiryParticipant[]> {
-		await this.findById(inquiryId);
-		return this.repository.findParticipantsByInquiryId(inquiryId);
+	async getParticipants(inquirySeq: bigint): Promise<InquiryParticipant[]> {
+		await this.findById(inquirySeq);
+		return this.repository.findParticipantsByInquiryId(inquirySeq);
 	}
 
 	// ============================================================================
@@ -313,8 +313,8 @@ export class InquiryAggregate {
 	 * 담당자 배정
 	 * - NEW 상태면 OPEN으로 변경
 	 */
-	async assignTo(id: bigint, assigneeId: bigint): Promise<Inquiry> {
-		this.logger.debug(`담당자 배정: ${id} -> ${assigneeId}`);
+	async assignTo(id: bigint, assigneeSeq: bigint): Promise<Inquiry> {
+		this.logger.debug(`담당자 배정: ${id} -> ${assigneeSeq}`);
 
 		const inquiry = await this.findById(id);
 
@@ -325,7 +325,7 @@ export class InquiryAggregate {
 			);
 		}
 
-		return this.repository.updateAssigneeById(id, assigneeId);
+		return this.repository.updateAssigneeById(id, assigneeSeq);
 	}
 
 	// ============================================================================
@@ -417,7 +417,7 @@ export class InquiryAggregate {
 	 * SLA 초과 문의 목록
 	 */
 	async getOverdueList(params?: {
-		spaceId?: bigint;
+		spaceSeq?: bigint;
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: Inquiry[]; totalCount: number }> {
@@ -433,11 +433,11 @@ export class InquiryAggregate {
 	 * 감정 분석
 	 * 실제 구현은 별도 AI 서비스 또는 UseCase에서 처리
 	 */
-	async analyzeSentiment(inquiryId: bigint) {
-		this.logger.debug(`감정 분석 요청: ${inquiryId}`);
+	async analyzeSentiment(inquirySeq: bigint) {
+		this.logger.debug(`감정 분석 요청: ${inquirySeq}`);
 
 		// 존재 확인
-		await this.findById(inquiryId);
+		await this.findById(inquirySeq);
 
 		// TODO: 실제 AI 서비스 연동
 		throw new BadRequestException("감정 분석 기능이 아직 구현되지 않았습니다");

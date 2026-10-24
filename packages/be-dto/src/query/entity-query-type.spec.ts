@@ -64,27 +64,27 @@ describe("EntityQueryType", () => {
 
 	it("preserves migrated domain Query wire contracts", async () => {
 		const validAssetQuery = plainToInstance(AssetQueryDto, {
-			folderId: "123",
+			folderSeq: "123",
 			kind: "IMAGE",
 			status: "READY",
 		});
 		const invalidAssetQuery = plainToInstance(AssetQueryDto, {
-			folderId: "0",
+			folderSeq: "0",
 			kind: "invalid",
 		});
 		const partialEmailQuery = plainToInstance(QueryUsersDto, {
 			email: "partial",
 		});
 		const nullTimelineQuery = plainToInstance(QueryTimelineDto, {
-			timelineId: "null",
+			timelineSeq: "null",
 		});
 
-		expect(validAssetQuery.folderId).toBe(123n);
+		expect(validAssetQuery.folderSeq).toBe(123n);
 		expect(await validate(validAssetQuery)).toHaveLength(0);
 		expect((await validate(invalidAssetQuery)).length).toBeGreaterThan(0);
 		expect(partialEmailQuery.email).toBe("partial");
 		expect(await validate(partialEmailQuery)).toHaveLength(0);
-		expect(nullTimelineQuery.timelineId).toBeNull();
+		expect(nullTimelineQuery.timelineSeq).toBeNull();
 	});
 
 	it("does not expose Entity defaults in Query Swagger metadata", () => {
@@ -188,7 +188,7 @@ describe("EntityQueryType", () => {
 		},
 		{
 			queryType: AlbumQueryDto,
-			filterKey: "spaceId",
+			filterKey: "spaceSeq",
 			wireFilter: "123",
 			parsedFilter: 123n,
 			invalidFilter: "0",
@@ -209,14 +209,14 @@ describe("EntityQueryType", () => {
 		},
 		{
 			queryType: QueryTenantAccessRequestDto,
-			filterKey: "spaceId",
+			filterKey: "spaceSeq",
 			wireFilter: "123",
 			parsedFilter: 123n,
 			invalidFilter: "0",
 		},
 		{
 			queryType: QueryTenantAccessRequestDto,
-			filterKey: "requesterId",
+			filterKey: "requesterSeq",
 			wireFilter: "456",
 			parsedFilter: 456n,
 			invalidFilter: "-1",
@@ -264,24 +264,24 @@ describe("EntityQueryType", () => {
 
 	it("Entity와 의미가 다른 ID null 및 검색 계약은 Query 선언을 유지한다", async () => {
 		const inquiryQuery = plainToInstance(QueryInquiryDto, {
-			assigneeId: null,
-			customerId: null,
+			assigneeSeq: null,
+			customerSeq: null,
 		});
 		const folderQuery = plainToInstance(FolderQueryDto, {
-			parentFolderId: null,
+			parentFolderSeq: null,
 		});
 		const timelineQuery = plainToInstance(QueryTimelineDto, {
-			timelineId: "null",
+			timelineSeq: "null",
 			search: "null",
 		});
 
 		expect(
 			(await validate(inquiryQuery)).map((error) => error.property).sort(),
-		).toEqual(["assigneeId", "customerId"]);
+		).toEqual(["assigneeSeq", "customerSeq"]);
 		expect(
 			(await validate(folderQuery)).map((error) => error.property),
-		).toContain("parentFolderId");
-		expect(timelineQuery).toMatchObject({ timelineId: null, search: null });
+		).toContain("parentFolderSeq");
+		expect(timelineQuery).toMatchObject({ timelineSeq: null, search: null });
 		expect(await validate(timelineQuery)).toHaveLength(0);
 	});
 });

@@ -7,17 +7,17 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Category의 DB 필드 타입과 공통 검증입니다. */
 export class CategorySchema extends AbstractSchema {
-	categoryId!: string;
+	id!: string;
 
 	@StringValidation()
 	name!: string;
 
 	@BigIntIdValidation({ nullable: true })
-	parentId!: bigint | null;
+	parentSeq!: bigint | null;
 
 	@BigIntIdValidation()
-	spaceId!: bigint;
+	spaceSeq!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true })
-	createdById!: bigint | null;
+	createdBySeq!: bigint | null;
 }

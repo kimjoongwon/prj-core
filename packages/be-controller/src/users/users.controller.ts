@@ -62,7 +62,7 @@ export class UsersController {
 		return this.queryBus.execute(new GetUsersBySpaceQuery(query));
 	}
 
-	@Get(":userId")
+	@Get(":userSeq")
 	@ApiOperation({
 		operationId: "getUserById",
 		summary: "사용자 상세 조회",
@@ -71,7 +71,7 @@ export class UsersController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userId",
+		name: "userSeq",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -83,18 +83,18 @@ export class UsersController {
 	)
 	@ApiResponseEntity(UserDetailResponseDto, HttpStatus.OK)
 	@ResponseMessage("회원 상세 조회 성공")
-	async getUserById(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
+	async getUserById(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
+		const spaceSeq = this.spaceContext.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
 		return this.queryBus.execute(
-			new GetUserDetailForSpaceQuery(userId, spaceId),
+			new GetUserDetailForSpaceQuery(userSeq, spaceSeq),
 		);
 	}
 
-	@Get(":userId/tenants/:tenantId")
+	@Get(":userSeq/tenants/:tenantId")
 	@ApiOperation({
 		operationId: "getUserTenantDetail",
 		summary: "사용자 Tenant 상세 조회",
@@ -103,7 +103,7 @@ export class UsersController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userId",
+		name: "userSeq",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -120,16 +120,16 @@ export class UsersController {
 	@ApiResponseEntity(UserTenantDetailResponseDto, HttpStatus.OK)
 	@ResponseMessage("사용자 테넌트 상세 조회 성공")
 	async getUserTenantDetail(
-		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+		@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint,
 		@Param("tenantId", ParseBigIntIdPipe) tenantId: bigint,
 	) {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
+		const spaceSeq = this.spaceContext.spaceSeq;
+		if (!spaceSeq) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
 		return this.queryBus.execute(
-			new GetUserTenantDetailQuery(userId, tenantId, spaceId),
+			new GetUserTenantDetailQuery(userSeq, tenantId, spaceSeq),
 		);
 	}
 }

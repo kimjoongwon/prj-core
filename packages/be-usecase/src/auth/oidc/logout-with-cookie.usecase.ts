@@ -41,12 +41,12 @@ export class LogoutWithCookieUseCase {
 	): Promise<LogoutWithCookieResult> {
 		// OP end_session의 id_token_hint로 쓸 ID Token을 세션 레코드에서
 		// 꺼낸다. 아래 deleteSession이 레코드를 지우기 전에 읽어야 한다.
-		const sessionLookup = command.sessionId
-			? await this.tokenStorageService.getSessionBySessionId(command.sessionId)
+		const sessionLookup = command.sessionSeq
+			? await this.tokenStorageService.getSessionBySessionId(command.sessionSeq)
 			: null;
 		// 클라이언트 조회는 end_session URL 구성과 OP 토큰 폐기에만 쓴다.
 		// 조회가 실패해도 RP 쿠키 정리까지 막히지 않게 best-effort로 진행한다.
-		const clientId = resolveClientIdFromSessionId(command.sessionId);
+		const clientId = resolveClientIdFromSessionId(command.sessionSeq);
 		let client: ResolvedOidcClient | null = null;
 		try {
 			client = await resolveOidcClient(this.oidcClientService, clientId, {
@@ -93,10 +93,10 @@ export class LogoutWithCookieUseCase {
 					);
 				}
 
-				if (command.sessionId) {
+				if (command.sessionSeq) {
 					await this.tokenStorageService.deleteSession(
 						payload.sub,
-						command.sessionId,
+						command.sessionSeq,
 					);
 				} else {
 					await this.tokenStorageService.deleteRefreshToken(payload.sub);

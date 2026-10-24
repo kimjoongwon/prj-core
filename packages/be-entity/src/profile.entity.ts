@@ -13,7 +13,7 @@ import { User } from "./user.entity";
 export class Profile extends ProfileSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare profileId: ProfileSchema["profileId"];
+	declare id: ProfileSchema["id"];
 
 	@UUIDFieldMetadata({ nullable: true })
 	declare avatarFileId: ProfileSchema["avatarFileId"];
@@ -24,7 +24,7 @@ export class Profile extends ProfileSchema {
 	@StringFieldMetadata()
 	declare address: ProfileSchema["address"];
 	@BigIntIdFieldMetadata()
-	declare userId: ProfileSchema["userId"];
+	declare userSeq: ProfileSchema["userSeq"];
 	@ClassField(() => User, { required: false })
 	user?: User;
 }

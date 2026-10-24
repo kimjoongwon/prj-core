@@ -56,7 +56,7 @@ export class EmailVerificationAggregate {
 					status: "PENDING",
 					expiresAt,
 					verifiedAt: null,
-					verifiedUserId: null,
+					verifiedUserSeq: null,
 					lastSentAt,
 					sendCount: { increment: 1 },
 					lastSendStatus: null,
@@ -148,11 +148,11 @@ export class EmailVerificationAggregate {
 		return verification;
 	}
 
-	async markVerified(id: bigint, userId: bigint) {
+	async markVerified(id: bigint, userSeq: bigint) {
 		return this.repository.updateById(id, {
 			status: "VERIFIED",
 			verifiedAt: new Date(),
-			verifiedUserId: userId,
+			verifiedUserSeq: userSeq,
 		});
 	}
 
@@ -168,7 +168,7 @@ export class EmailVerificationAggregate {
 		lastSentAt: Date | null;
 		sendCount: number;
 		lastSendStatus: string | null;
-		verifiedUserId: bigint | null;
+		verifiedUserSeq: bigint | null;
 	}) {
 		const resendAvailableAt = this.getResendAvailableAt(
 			verification.lastSentAt,
@@ -186,7 +186,7 @@ export class EmailVerificationAggregate {
 			lastSentAt: verification.lastSentAt,
 			sendCount: verification.sendCount,
 			lastSendStatus: verification.lastSendStatus,
-			verifiedUserId: verification.verifiedUserId,
+			verifiedUserSeq: verification.verifiedUserSeq,
 			canResend:
 				verification.status !== "VERIFIED" &&
 				(!resendAvailableAt || resendAvailableAt.getTime() <= Date.now()),

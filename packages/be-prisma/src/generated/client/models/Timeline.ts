@@ -27,49 +27,49 @@ export type AggregateTimeline = {
 }
 
 export type TimelineAvgAggregateOutputType = {
-  id: number | null
-  spaceId: number | null
-  createdById: number | null
+  seq: number | null
+  spaceSeq: number | null
+  createdBySeq: number | null
 }
 
 export type TimelineSumAggregateOutputType = {
-  id: bigint | null
-  spaceId: bigint | null
-  createdById: bigint | null
+  seq: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
 }
 
 export type TimelineMinAggregateOutputType = {
-  timelineId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  createdById: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
   name: string | null
   description: string | null
 }
 
 export type TimelineMaxAggregateOutputType = {
-  timelineId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  createdById: bigint | null
+  spaceSeq: bigint | null
+  createdBySeq: bigint | null
   name: string | null
   description: string | null
 }
 
 export type TimelineCountAggregateOutputType = {
-  timelineId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceId: number
-  createdById: number
+  spaceSeq: number
+  createdBySeq: number
   name: number
   description: number
   _all: number
@@ -77,49 +77,49 @@ export type TimelineCountAggregateOutputType = {
 
 
 export type TimelineAvgAggregateInputType = {
-  id?: true
-  spaceId?: true
-  createdById?: true
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
 }
 
 export type TimelineSumAggregateInputType = {
-  id?: true
-  spaceId?: true
-  createdById?: true
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
 }
 
 export type TimelineMinAggregateInputType = {
-  timelineId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
   name?: true
   description?: true
 }
 
 export type TimelineMaxAggregateInputType = {
-  timelineId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
   name?: true
   description?: true
 }
 
 export type TimelineCountAggregateInputType = {
-  timelineId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
   name?: true
   description?: true
   _all?: true
@@ -212,13 +212,13 @@ export type TimelineGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 export type TimelineGroupByOutputType = {
-  timelineId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint
-  createdById: bigint | null
+  spaceSeq: bigint
+  createdBySeq: bigint | null
   name: string
   description: string | null
   _count: TimelineCountAggregateOutputType | null
@@ -247,13 +247,13 @@ export type TimelineWhereInput = {
   AND?: Prisma.TimelineWhereInput | Prisma.TimelineWhereInput[]
   OR?: Prisma.TimelineWhereInput[]
   NOT?: Prisma.TimelineWhereInput | Prisma.TimelineWhereInput[]
-  timelineId?: Prisma.StringFilter<"Timeline"> | string
-  id?: Prisma.BigIntFilter<"Timeline"> | bigint | number
+  id?: Prisma.StringFilter<"Timeline"> | string
+  seq?: Prisma.BigIntFilter<"Timeline"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Timeline"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Timeline"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Timeline"> | bigint | number | null
+  spaceSeq?: Prisma.BigIntFilter<"Timeline"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Timeline"> | bigint | number | null
   name?: Prisma.StringFilter<"Timeline"> | string
   description?: Prisma.StringNullableFilter<"Timeline"> | string | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
@@ -263,13 +263,13 @@ export type TimelineWhereInput = {
 }
 
 export type TimelineOrderByWithRelationInput = {
-  timelineId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
@@ -279,32 +279,32 @@ export type TimelineOrderByWithRelationInput = {
 }
 
 export type TimelineWhereUniqueInput = Prisma.AtLeast<{
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   AND?: Prisma.TimelineWhereInput | Prisma.TimelineWhereInput[]
   OR?: Prisma.TimelineWhereInput[]
   NOT?: Prisma.TimelineWhereInput | Prisma.TimelineWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Timeline"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Timeline"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Timeline"> | bigint | number | null
+  spaceSeq?: Prisma.BigIntFilter<"Timeline"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Timeline"> | bigint | number | null
   name?: Prisma.StringFilter<"Timeline"> | string
   description?: Prisma.StringNullableFilter<"Timeline"> | string | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
-}, "id" | "timelineId">
+}, "seq" | "id">
 
 export type TimelineOrderByWithAggregationInput = {
-  timelineId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TimelineCountOrderByAggregateInput
@@ -318,20 +318,20 @@ export type TimelineScalarWhereWithAggregatesInput = {
   AND?: Prisma.TimelineScalarWhereWithAggregatesInput | Prisma.TimelineScalarWhereWithAggregatesInput[]
   OR?: Prisma.TimelineScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TimelineScalarWhereWithAggregatesInput | Prisma.TimelineScalarWhereWithAggregatesInput[]
-  timelineId?: Prisma.StringWithAggregatesFilter<"Timeline"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"Timeline"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"Timeline"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"Timeline"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Timeline"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Timeline"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Timeline"> | Date | string | null
-  spaceId?: Prisma.BigIntWithAggregatesFilter<"Timeline"> | bigint | number
-  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"Timeline"> | bigint | number | null
+  spaceSeq?: Prisma.BigIntWithAggregatesFilter<"Timeline"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableWithAggregatesFilter<"Timeline"> | bigint | number | null
   name?: Prisma.StringWithAggregatesFilter<"Timeline"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Timeline"> | string | null
 }
 
 export type TimelineCreateInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -344,13 +344,13 @@ export type TimelineCreateInput = {
 }
 
 export type TimelineUncheckedCreateInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
@@ -358,8 +358,8 @@ export type TimelineUncheckedCreateInput = {
 }
 
 export type TimelineUpdateInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -372,13 +372,13 @@ export type TimelineUpdateInput = {
 }
 
 export type TimelineUncheckedUpdateInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
@@ -386,20 +386,20 @@ export type TimelineUncheckedUpdateInput = {
 }
 
 export type TimelineCreateManyInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   name: string
   description?: string | null
 }
 
 export type TimelineUpdateManyMutationInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -408,13 +408,13 @@ export type TimelineUpdateManyMutationInput = {
 }
 
 export type TimelineUncheckedUpdateManyInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -435,51 +435,51 @@ export type TimelineOrderByRelationAggregateInput = {
 }
 
 export type TimelineCountOrderByAggregateInput = {
-  timelineId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
 
 export type TimelineAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TimelineMaxOrderByAggregateInput = {
-  timelineId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
 
 export type TimelineMinOrderByAggregateInput = {
-  timelineId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
 
 export type TimelineSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TimelineCreateNestedOneWithoutReservationsInput = {
@@ -595,8 +595,8 @@ export type TimelineUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type TimelineCreateWithoutReservationsInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -608,13 +608,13 @@ export type TimelineCreateWithoutReservationsInput = {
 }
 
 export type TimelineUncheckedCreateWithoutReservationsInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
@@ -637,8 +637,8 @@ export type TimelineUpdateToOneWithWhereWithoutReservationsInput = {
 }
 
 export type TimelineUpdateWithoutReservationsInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -650,21 +650,21 @@ export type TimelineUpdateWithoutReservationsInput = {
 }
 
 export type TimelineUncheckedUpdateWithoutReservationsInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
 }
 
 export type TimelineCreateWithoutSessionsInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -676,13 +676,13 @@ export type TimelineCreateWithoutSessionsInput = {
 }
 
 export type TimelineUncheckedCreateWithoutSessionsInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  createdById?: bigint | number | null
+  spaceSeq: bigint | number
+  createdBySeq?: bigint | number | null
   name: string
   description?: string | null
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTimelineInput
@@ -705,8 +705,8 @@ export type TimelineUpdateToOneWithWhereWithoutSessionsInput = {
 }
 
 export type TimelineUpdateWithoutSessionsInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -718,21 +718,21 @@ export type TimelineUpdateWithoutSessionsInput = {
 }
 
 export type TimelineUncheckedUpdateWithoutSessionsInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTimelineNestedInput
 }
 
 export type TimelineCreateWithoutSpaceInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -744,12 +744,12 @@ export type TimelineCreateWithoutSpaceInput = {
 }
 
 export type TimelineUncheckedCreateWithoutSpaceInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
@@ -786,20 +786,20 @@ export type TimelineScalarWhereInput = {
   AND?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
   OR?: Prisma.TimelineScalarWhereInput[]
   NOT?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
-  timelineId?: Prisma.StringFilter<"Timeline"> | string
-  id?: Prisma.BigIntFilter<"Timeline"> | bigint | number
+  id?: Prisma.StringFilter<"Timeline"> | string
+  seq?: Prisma.BigIntFilter<"Timeline"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Timeline"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Timeline"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Timeline"> | bigint | number
-  createdById?: Prisma.BigIntNullableFilter<"Timeline"> | bigint | number | null
+  spaceSeq?: Prisma.BigIntFilter<"Timeline"> | bigint | number
+  createdBySeq?: Prisma.BigIntNullableFilter<"Timeline"> | bigint | number | null
   name?: Prisma.StringFilter<"Timeline"> | string
   description?: Prisma.StringNullableFilter<"Timeline"> | string | null
 }
 
 export type TimelineCreateWithoutCreatedByInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -811,12 +811,12 @@ export type TimelineCreateWithoutCreatedByInput = {
 }
 
 export type TimelineUncheckedCreateWithoutCreatedByInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
+  spaceSeq: bigint | number
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
@@ -850,19 +850,19 @@ export type TimelineUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type TimelineCreateManySpaceInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   name: string
   description?: string | null
 }
 
 export type TimelineUpdateWithoutSpaceInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -874,12 +874,12 @@ export type TimelineUpdateWithoutSpaceInput = {
 }
 
 export type TimelineUncheckedUpdateWithoutSpaceInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
@@ -887,30 +887,30 @@ export type TimelineUncheckedUpdateWithoutSpaceInput = {
 }
 
 export type TimelineUncheckedUpdateManyWithoutSpaceInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TimelineCreateManyCreatedByInput = {
-  timelineId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
+  spaceSeq: bigint | number
   name: string
   description?: string | null
 }
 
 export type TimelineUpdateWithoutCreatedByInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -922,12 +922,12 @@ export type TimelineUpdateWithoutCreatedByInput = {
 }
 
 export type TimelineUncheckedUpdateWithoutCreatedByInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
@@ -935,12 +935,12 @@ export type TimelineUncheckedUpdateWithoutCreatedByInput = {
 }
 
 export type TimelineUncheckedUpdateManyWithoutCreatedByInput = {
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -986,13 +986,13 @@ export type TimelineCountOutputTypeCountReservationsArgs<ExtArgs extends runtime
 
 
 export type TimelineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  timelineId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   name?: boolean
   description?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -1003,13 +1003,13 @@ export type TimelineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 }, ExtArgs["result"]["timeline"]>
 
 export type TimelineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  timelineId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   name?: boolean
   description?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -1017,13 +1017,13 @@ export type TimelineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 }, ExtArgs["result"]["timeline"]>
 
 export type TimelineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  timelineId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   name?: boolean
   description?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -1031,18 +1031,18 @@ export type TimelineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 }, ExtArgs["result"]["timeline"]>
 
 export type TimelineSelectScalar = {
-  timelineId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   name?: boolean
   description?: boolean
 }
 
-export type TimelineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"timelineId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById" | "name" | "description", ExtArgs["result"]["timeline"]>
+export type TimelineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq" | "name" | "description", ExtArgs["result"]["timeline"]>
 export type TimelineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Timeline$createdByArgs<ExtArgs>
@@ -1068,13 +1068,13 @@ export type $TimelinePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     reservations: Prisma.$ReservationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    timelineId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    spaceId: bigint
-    createdById: bigint | null
+    spaceSeq: bigint
+    createdBySeq: bigint | null
     name: string
     description: string | null
   }, ExtArgs["result"]["timeline"]>
@@ -1160,8 +1160,8 @@ export interface TimelineDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * // Get first 10 Timelines
    * const timelines = await prisma.timeline.findMany({ take: 10 })
    *
-   * // Only select the `timelineId`
-   * const timelineWithTimelineIdOnly = await prisma.timeline.findMany({ select: { timelineId: true } })
+   * // Only select the `id`
+   * const timelineWithIdOnly = await prisma.timeline.findMany({ select: { id: true } })
    *
    */
   findMany<T extends TimelineFindManyArgs>(args?: Prisma.SelectSubset<T, TimelineFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1205,9 +1205,9 @@ export interface TimelineDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   ]
    * })
    *
-   * // Create many Timelines and only return the `timelineId`
-   * const timelineWithTimelineIdOnly = await prisma.timeline.createManyAndReturn({
-   *   select: { timelineId: true },
+   * // Create many Timelines and only return the `id`
+   * const timelineWithIdOnly = await prisma.timeline.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1296,9 +1296,9 @@ export interface TimelineDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   ]
    * })
    *
-   * // Update zero or more Timelines and only return the `timelineId`
-   * const timelineWithTimelineIdOnly = await prisma.timeline.updateManyAndReturn({
-   *   select: { timelineId: true },
+   * // Update zero or more Timelines and only return the `id`
+   * const timelineWithIdOnly = await prisma.timeline.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1504,13 +1504,13 @@ export interface Prisma__TimelineClient<T, Null = never, ExtArgs extends runtime
  * Fields of the Timeline model
  */
 export interface TimelineFieldRefs {
-  readonly timelineId: Prisma.FieldRef<"Timeline", 'String'>
-  readonly id: Prisma.FieldRef<"Timeline", 'BigInt'>
+  readonly id: Prisma.FieldRef<"Timeline", 'String'>
+  readonly seq: Prisma.FieldRef<"Timeline", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Timeline", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Timeline", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Timeline", 'DateTime'>
-  readonly spaceId: Prisma.FieldRef<"Timeline", 'BigInt'>
-  readonly createdById: Prisma.FieldRef<"Timeline", 'BigInt'>
+  readonly spaceSeq: Prisma.FieldRef<"Timeline", 'BigInt'>
+  readonly createdBySeq: Prisma.FieldRef<"Timeline", 'BigInt'>
   readonly name: Prisma.FieldRef<"Timeline", 'String'>
   readonly description: Prisma.FieldRef<"Timeline", 'String'>
 }

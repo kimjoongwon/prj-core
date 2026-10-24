@@ -40,14 +40,14 @@ describe("CaslAbilityFactory", () => {
 	it("Role Policy로부터 권한을 생성해야 한다", async () => {
 		const user = {
 			id: 101n,
-			spaceId: 301n,
+			spaceSeq: 301n,
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
 					id: 201n,
-					spaceId: 301n,
-					roleId: 401n,
+					spaceSeq: 301n,
+					roleSeq: 401n,
 					role: { id: 401n },
 				},
 			],
@@ -82,14 +82,14 @@ describe("CaslAbilityFactory", () => {
 	it("같은 권한 조합에서는 RoleAssignment priority가 높은 정책이 우선해야 한다", async () => {
 		const user = {
 			id: 101n,
-			spaceId: 301n,
+			spaceSeq: 301n,
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
 					id: 201n,
-					spaceId: 301n,
-					roleId: 401n,
+					spaceSeq: 301n,
+					roleSeq: 401n,
 					role: { id: 401n },
 				},
 			],
@@ -142,14 +142,14 @@ describe("CaslAbilityFactory", () => {
 	it("현재 space 컨텍스트가 없으면 빈 권한을 생성해야 한다", async () => {
 		const user = {
 			id: 101n,
-			spaceId: 301n,
+			spaceSeq: 301n,
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
 					id: 201n,
-					spaceId: 301n,
-					roleId: 401n,
+					spaceSeq: 301n,
+					roleSeq: 401n,
 					role: { id: 401n },
 				},
 			],
@@ -169,20 +169,20 @@ describe("CaslAbilityFactory", () => {
 	it("같은 spaceId에 중복 tenant가 있어도 첫 tenant의 roleId로 조회해야 한다", async () => {
 		const user = {
 			id: 101n,
-			spaceId: 301n,
+			spaceSeq: 301n,
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
 					id: 201n,
-					spaceId: 301n,
-					roleId: 401n,
+					spaceSeq: 301n,
+					roleSeq: 401n,
 					role: { id: 401n, name: "PLATFORM_ADMIN" },
 				},
 				{
 					id: 202n,
-					spaceId: 301n,
-					roleId: 402n,
+					spaceSeq: 301n,
+					roleSeq: 402n,
 					role: { id: 402n, name: "COMPANY_MANAGER" },
 				},
 			],
@@ -207,20 +207,20 @@ describe("CaslAbilityFactory", () => {
 
 		const conditions = factory.parseConditions(
 			{
-				spaceId: "${user.currentSpaceId}",
+				spaceSeq: "${user.currentSpaceId}",
 				label: "space-${user.currentSpaceId}",
-				nested: { tenantId: "${user.currentTenantId}" },
+				nested: { tenantId: "${user.currentTenantSeq}" },
 			},
 			{
 				user: {
 					currentSpaceId: databaseId,
-					currentTenantId: 201n,
+					currentTenantSeq: 201n,
 				},
 			},
 		);
 
 		expect(conditions).toEqual({
-			spaceId: databaseId,
+			spaceSeq: databaseId,
 			label: `space-${databaseId}`,
 			nested: { tenantId: 201n },
 		});

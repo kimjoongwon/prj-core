@@ -14,7 +14,7 @@ import { Space } from "./space.entity";
 export class FitnessCenter extends FitnessCenterSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare fitnessCenterId: FitnessCenterSchema["fitnessCenterId"];
+	declare id: FitnessCenterSchema["id"];
 
 	@StringFieldMetadata()
 	declare address: FitnessCenterSchema["address"];
@@ -23,9 +23,9 @@ export class FitnessCenter extends FitnessCenterSchema {
 	@StringFieldMetadata()
 	declare email: FitnessCenterSchema["email"];
 	@BigIntIdFieldMetadata()
-	declare companyId: FitnessCenterSchema["companyId"];
+	declare companySeq: FitnessCenterSchema["companySeq"];
 	@BigIntIdFieldMetadata()
-	declare spaceId: FitnessCenterSchema["spaceId"];
+	declare spaceSeq: FitnessCenterSchema["spaceSeq"];
 	@UUIDFieldOptionalMetadata({ nullable: true })
 	declare imageFileId: FitnessCenterSchema["imageFileId"];
 

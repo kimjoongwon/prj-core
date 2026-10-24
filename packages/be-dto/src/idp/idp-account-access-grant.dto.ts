@@ -11,7 +11,7 @@ export class IdpAccountAccessGrantDto {
 	tenantId!: bigint;
 
 	@BigIntIdField({ description: "접근 대상 Space ID" })
-	spaceId!: bigint;
+	spaceSeq!: bigint;
 
 	@StringField({ description: "접근 대상 Space 이름" })
 	spaceName!: string;
@@ -23,7 +23,7 @@ export class IdpAccountAccessGrantDto {
 	spaceLabel!: string | null;
 
 	@BigIntIdField({ description: "부여된 Role ID" })
-	roleId!: bigint;
+	roleSeq!: bigint;
 
 	@StringField({ description: "부여된 Role 식별자" })
 	roleName!: string;

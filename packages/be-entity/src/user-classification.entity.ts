@@ -9,12 +9,12 @@ import { User } from "./user.entity";
 export class UserClassification extends UserClassificationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare userClassificationId: UserClassificationSchema["userClassificationId"];
+	declare id: UserClassificationSchema["id"];
 
 	@BigIntIdFieldMetadata()
-	declare categoryId: UserClassificationSchema["categoryId"];
+	declare categorySeq: UserClassificationSchema["categorySeq"];
 	@BigIntIdFieldMetadata()
-	declare userId: UserClassificationSchema["userId"];
+	declare userSeq: UserClassificationSchema["userSeq"];
 	@ClassField(() => User, { required: false })
 	user?: User;
 	@ClassField(() => Category, { required: false })

@@ -27,7 +27,7 @@ export class SpaceContext {
 	}
 
 	/** 현재 요청 Tenant에서 파생된 Space ID */
-	get spaceId(): DatabaseId | undefined {
+	get spaceSeq(): DatabaseId | undefined {
 		return this.cls.get<DatabaseId>(CONTEXT_KEYS.SPACE_ID);
 	}
 
@@ -55,27 +55,27 @@ export class SpaceContext {
 	/**
 	 * Prisma Where 절용 Space 소유 리소스 필터
 	 * undefined면 전체, * 필터 없음)
-	 * { spaceId: { in: [...] } } 형태
+	 * { spaceSeq: { in: [...] } } 형태
 	 */
-	get spaceFilter(): { spaceId: { in: DatabaseId[] } } | undefined {
+	get spaceFilter(): { spaceSeq: { in: DatabaseId[] } } | undefined {
 		const ids = this.spaceIds;
-		return ids ? { spaceId: { in: ids } } : undefined;
+		return ids ? { spaceSeq: { in: ids } } : undefined;
 	}
 
 	/**
 	 * Prisma Where 절용 현재 Space 필터
 	 * 생성/수정처럼 현재 선택 Space 하나에 묶어야 할 때 사용합니다.
 	 */
-	get currentSpaceFilter(): { spaceId: DatabaseId } | undefined {
-		const spaceId = this.spaceId;
-		return spaceId ? { spaceId } : undefined;
+	get currentSpaceFilter(): { spaceSeq: DatabaseId } | undefined {
+		const spaceSeq = this.spaceSeq;
+		return spaceSeq ? { spaceSeq } : undefined;
 	}
 
 	/**
 	 * 특정 Space 접근 권한
 	 */
-	canAccessSpace(spaceId: DatabaseId): boolean {
+	canAccessSpace(spaceSeq: DatabaseId): boolean {
 		const ids = this.spaceIds;
-		return ids === undefined ? true : ids.includes(spaceId);
+		return ids === undefined ? true : ids.includes(spaceSeq);
 	}
 }

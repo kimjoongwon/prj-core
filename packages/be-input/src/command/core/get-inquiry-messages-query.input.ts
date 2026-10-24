@@ -1,5 +1,5 @@
 export interface GetInquiryMessagesQueryInput {
-	inquiryId: bigint;
+	inquirySeq: bigint;
 	skip?: number;
 	take?: number;
 }

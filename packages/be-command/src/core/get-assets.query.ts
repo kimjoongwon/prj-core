@@ -1,8 +1,8 @@
 import type { GetAssetsQueryInput } from "@cocrepo/input";
 
 export class GetAssetsQuery implements GetAssetsQueryInput {
-	readonly folderId?: GetAssetsQueryInput["folderId"];
-	readonly spaceId?: GetAssetsQueryInput["spaceId"];
+	readonly folderSeq?: GetAssetsQueryInput["folderSeq"];
+	readonly spaceSeq?: GetAssetsQueryInput["spaceSeq"];
 	readonly kind?: GetAssetsQueryInput["kind"];
 	readonly status?: GetAssetsQueryInput["status"];
 	readonly search?: GetAssetsQueryInput["search"];

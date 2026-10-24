@@ -1,7 +1,7 @@
 export interface CreateReservationInput {
-	timelineId: bigint;
-	sessionId: bigint;
-	programId: bigint;
+	timelineSeq: bigint;
+	sessionSeq: bigint;
+	programSeq: bigint;
 	occurrenceStartAt: Date;
 	idempotencyKey: string;
 	memo?: string | null;

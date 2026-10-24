@@ -7,6 +7,6 @@ export class GetTaskRoutinesUseCase {
 	constructor(private readonly taskService: TaskAggregate) {}
 
 	execute(query: GetTaskRoutinesQuery): Promise<unknown> {
-		return this.taskService.findTaskRoutines(query.taskId, query.spaceId);
+		return this.taskService.findTaskRoutines(query.taskSeq, query.spaceSeq);
 	}
 }

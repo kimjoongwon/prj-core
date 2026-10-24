@@ -24,15 +24,15 @@ import type { User } from "./user.entity";
 export class InquiryParticipant extends InquiryParticipantSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare inquiryParticipantId: InquiryParticipantSchema["inquiryParticipantId"];
+	declare id: InquiryParticipantSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
-	declare inquiryId: InquiryParticipantSchema["inquiryId"];
+	declare inquirySeq: InquiryParticipantSchema["inquirySeq"];
 	@BigIntIdFieldMetadata({ description: "참여자 ID" })
-	declare userId: InquiryParticipantSchema["userId"];
+	declare userSeq: InquiryParticipantSchema["userSeq"];
 	@EnumFieldMetadata(() => InquiryParticipantRole, {
 		description: "참여자 역할",
 	})
@@ -53,7 +53,7 @@ export class InquiryParticipant extends InquiryParticipantSchema {
 		nullable: true,
 		description: "소속 스레드 ID",
 	})
-	declare threadId: InquiryParticipantSchema["threadId"];
+	declare threadSeq: InquiryParticipantSchema["threadSeq"];
 	@DateFieldMetadata({ nullable: true, description: "마지막 접속 시간" })
 	declare lastSeenAt: InquiryParticipantSchema["lastSeenAt"];
 	@DateFieldMetadata({ nullable: true, description: "마지막 읽은 시간" })

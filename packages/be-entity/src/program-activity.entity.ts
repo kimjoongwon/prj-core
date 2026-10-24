@@ -15,11 +15,11 @@ import { Program } from "./program.entity";
 export class ProgramActivity extends ProgramActivitySchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare programActivityId: ProgramActivitySchema["programActivityId"];
+	declare id: ProgramActivitySchema["id"];
 
 	@BigIntIdFieldMetadata()
-	declare programId: ProgramActivitySchema["programId"];
-	@BigIntIdFieldMetadata() declare taskId: ProgramActivitySchema["taskId"];
+	declare programSeq: ProgramActivitySchema["programSeq"];
+	@BigIntIdFieldMetadata() declare taskSeq: ProgramActivitySchema["taskSeq"];
 	@NumberFieldMetadata() declare order: ProgramActivitySchema["order"];
 	@NumberFieldMetadata()
 	declare repetitions: ProgramActivitySchema["repetitions"];

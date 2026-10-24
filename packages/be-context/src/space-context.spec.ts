@@ -15,10 +15,10 @@ describe("SpaceContext", () => {
 		const context = new SpaceContext(cls as unknown as ClsService);
 
 		expect(context.tenantId).toBe(201n);
-		expect(context.spaceId).toBe(301n);
+		expect(context.spaceSeq).toBe(301n);
 		expect(context.spaceIds).toEqual([301n, 302n]);
-		expect(context.spaceFilter).toEqual({ spaceId: { in: [301n, 302n] } });
-		expect(context.currentSpaceFilter).toEqual({ spaceId: 301n });
+		expect(context.spaceFilter).toEqual({ spaceSeq: { in: [301n, 302n] } });
+		expect(context.currentSpaceFilter).toEqual({ spaceSeq: 301n });
 		expect(context.canAccessSpace(302n)).toBe(true);
 		expect(context.canAccessSpace(999n)).toBe(false);
 	});

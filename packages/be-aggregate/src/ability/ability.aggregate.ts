@@ -58,21 +58,21 @@ export class AbilityAggregate {
 	 * 현재 Tenant의 Policy만 펼쳐서 Ability를 계산합니다.
 	 *
 	 * @param roleIds - Role ID 배열
-	 * @param spaceId - 현재 Space ID
+	 * @param spaceSeq - 현재 Space ID
 	 * @returns 병합된 Ability 배열
 	 */
 	async getMergedAbilities(
 		roleIds: bigint[],
-		spaceId: bigint,
+		spaceSeq: bigint,
 	): Promise<Ability[]> {
 		this.logger.debug(
-			`RoleAssignment 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceId=${spaceId}`,
+			`RoleAssignment 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceSeq=${spaceSeq}`,
 		);
 
 		const roleAssignments =
 			await this.roleAssignmentsRepository.findActiveByRoleIdsInSpace(
 				roleIds,
-				spaceId,
+				spaceSeq,
 			);
 
 		return this.mergeAbilities(
@@ -89,7 +89,7 @@ export class AbilityAggregate {
 	 */
 	async createAbility(input: CreateAbilityInput): Promise<Ability> {
 		this.logger.debug(
-			`권한 정의 생성: name=${input.name}, subjectId=${input.subjectId}, actionId=${input.actionId}`,
+			`권한 정의 생성: name=${input.name}, subjectSeq=${input.subjectSeq}, actionSeq=${input.actionSeq}`,
 		);
 
 		this.validateAbilityData(input);
@@ -138,8 +138,8 @@ export class AbilityAggregate {
 	 * Ability 데이터 유효성 검증
 	 */
 	private validateAbilityData(data: CreateAbilityInput): void {
-		// actionId, subjectId, name 필수
-		if (!data.actionId || !data.subjectId || !data.name) {
+		// actionSeq, subjectSeq, name 필수
+		if (!data.actionSeq || !data.subjectSeq || !data.name) {
 			throw new BadRequestException(ABILITY_ERRORS.INVALID_DATA);
 		}
 	}

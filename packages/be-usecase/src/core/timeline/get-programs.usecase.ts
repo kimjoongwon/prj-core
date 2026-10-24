@@ -11,7 +11,7 @@ export class GetProgramsUseCase {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
 		const programResult = await this.timelinesService.findProgramsInSession(
-			query.sessionId,
+			query.sessionSeq,
 			{
 				skip,
 				take,

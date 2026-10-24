@@ -46,7 +46,7 @@ export class AbilitiesRepository {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.ability.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: {
 				subject: true,
 				action: true,
@@ -64,7 +64,7 @@ export class AbilitiesRepository {
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
-				id: { in: ids },
+				seq: { in: ids },
 				removedAt: null,
 			},
 			include: {
@@ -80,12 +80,12 @@ export class AbilitiesRepository {
 	/**
 	 * Subject ID로 Ability 목록 조회
 	 */
-	async findBySubjectId(subjectId: bigint): Promise<Ability[]> {
-		this.logger.debug(`Subject ID로 Ability 조회: subjectId=${subjectId}`);
+	async findBySubjectId(subjectSeq: bigint): Promise<Ability[]> {
+		this.logger.debug(`Subject ID로 Ability 조회: subjectSeq=${subjectSeq}`);
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
-				subjectId,
+				subjectSeq,
 				removedAt: null,
 			},
 			include: {
@@ -104,11 +104,11 @@ export class AbilitiesRepository {
 	async create(
 		data: AutoIdentityCreateInput<
 			Prisma.AbilityUncheckedCreateInput,
-			"abilityId"
+			"id"
 		>,
 	): Promise<Ability> {
 		this.logger.debug(
-			`Ability 생성: subjectId=${data.subjectId}, actionId=${data.actionId}`,
+			`Ability 생성: subjectSeq=${data.subjectSeq}, actionSeq=${data.actionSeq}`,
 		);
 		const result = await this.txHost.tx.ability.create({
 			data,
@@ -128,12 +128,12 @@ export class AbilitiesRepository {
 		id: bigint,
 		data: AutoIdentityUpdateInput<
 			Prisma.AbilityUncheckedUpdateInput,
-			"abilityId"
+			"id"
 		>,
 	): Promise<Ability> {
 		this.logger.debug(`Ability 수정: id=${id.toString()}`);
 		const result = await this.txHost.tx.ability.update({
-			where: { id },
+			where: { seq: id },
 			data,
 			include: {
 				subject: true,
@@ -151,7 +151,7 @@ export class AbilitiesRepository {
 		this.logger.debug(`Ability 소프트 삭제: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.ability.update({
-			where: { id },
+			where: { seq: id },
 			data: { removedAt: new Date() },
 			include: {
 				subject: true,

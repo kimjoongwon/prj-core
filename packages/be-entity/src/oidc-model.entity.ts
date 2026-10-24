@@ -14,7 +14,7 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 export class OidcModel extends OidcModelSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare oidcModelId: OidcModelSchema["oidcModelId"];
+	declare id: OidcModelSchema["id"];
 
 	// ============================================================================
 	// 필수 필드

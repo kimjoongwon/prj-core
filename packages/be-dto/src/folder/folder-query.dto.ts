@@ -13,16 +13,16 @@ import { Folder } from "@cocrepo/entity";
  *
  * 필터 계약:
  * - name -> containsFilter (일반 string)
- * - parentFolderId, tenantId -> 정확 매칭 (*Id)
+ * - parentFolderSeq, tenantId -> 정확 매칭 (*Id)
  *
  * 커스텀 처리:
  * - statusFilter -> removedAt 필터
  */
 export class FolderQueryDto extends EntityQueryType(Folder, [
-	"spaceId",
+	"spaceSeq",
 ] as const) {
 	@BigIntIdFieldOptional({ description: "상위 폴더 ID 필터 (null이면 루트)" })
-	parentFolderId?: bigint;
+	parentFolderSeq?: bigint;
 
 	@StringFieldOptional({ description: "폴더명 검색 (부분 일치)" })
 	name?: string;

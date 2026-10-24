@@ -8,8 +8,8 @@ import { IsOptional } from "class-validator";
  */
 export class UpdateAssetDto extends PartialType(
 	PickType(Asset, [
-		"spaceId",
-		"folderId",
+		"spaceSeq",
+		"folderSeq",
 		"kind",
 		"status",
 		"originalName",
@@ -18,7 +18,7 @@ export class UpdateAssetDto extends PartialType(
 		"extension",
 		"checksum",
 		"metadata",
-		"createdById",
+		"createdBySeq",
 	] as const),
 ) {
 	@IsOptional()

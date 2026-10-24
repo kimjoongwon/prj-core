@@ -1,6 +1,6 @@
 export class DeleteTaskCommand {
 	constructor(
-		readonly taskId: bigint,
-		readonly spaceId: bigint,
+		readonly taskSeq: bigint,
+		readonly spaceSeq: bigint,
 	) {}
 }

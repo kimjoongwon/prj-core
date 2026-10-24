@@ -5,8 +5,8 @@ import { EntityResponseType } from "../mapped-types";
 export class PolicyEntryResponseDto extends EntityResponseType(PolicyEntry, {
 	pick: [
 		"id",
-		"policyId",
-		"abilityId",
+		"policySeq",
+		"abilitySeq",
 		"createdAt",
 		"updatedAt",
 		"removedAt",

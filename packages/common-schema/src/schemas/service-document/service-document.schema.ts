@@ -18,7 +18,7 @@ import { AbstractSchema } from "../abstract.schema";
 export class ServiceDocumentSchema
 	extends AbstractSchema
 {
-	serviceDocumentId!: string;
+	id!: string;
 
 	@EnumValidation(() => ServiceDocumentKind, { description: "문서 종류" })
 	kind!: ServiceDocumentKind;

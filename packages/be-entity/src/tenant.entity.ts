@@ -14,16 +14,16 @@ import { User } from "./user.entity";
 export class Tenant extends TenantSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare tenantId: TenantSchema["tenantId"];
+	declare id: TenantSchema["id"];
 
 	@BooleanFieldMetadata()
 	main!: boolean;
 	@BigIntIdFieldMetadata()
-	declare spaceId: TenantSchema["spaceId"];
+	declare spaceSeq: TenantSchema["spaceSeq"];
 	@BigIntIdFieldMetadata()
-	declare userId: TenantSchema["userId"];
+	declare userSeq: TenantSchema["userSeq"];
 	@BigIntIdFieldMetadata()
-	declare roleId: TenantSchema["roleId"];
+	declare roleSeq: TenantSchema["roleSeq"];
 	@ClassField(() => Space, { required: false })
 	space?: Space;
 	@ClassField(() => User, { required: false })

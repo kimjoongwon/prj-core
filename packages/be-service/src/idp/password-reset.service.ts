@@ -118,7 +118,7 @@ export class PasswordResetService {
 
 		// Redis 저장
 		await this.saveResetToken(hashedToken, {
-			userId: user.id,
+			userSeq: user.id,
 			email: user.email,
 		});
 
@@ -210,7 +210,7 @@ export class PasswordResetService {
 		const recentPasswords =
 			passwordPolicy.reuseLimit > 0
 				? await prisma.passwordHistory.findMany({
-						where: { user: { id: tokenData.userId } },
+						where: { user: { id: tokenData.userSeq } },
 						orderBy: { createdAt: "desc" },
 						take: passwordPolicy.reuseLimit,
 						select: { passwordHash: true },
@@ -247,7 +247,7 @@ export class PasswordResetService {
 			isPermanentlyLocked: false,
 		};
 		await prisma.user.update({
-			where: { id: tokenData.userId },
+			where: { id: tokenData.userSeq },
 			data: {
 				password: hashedPassword.value,
 				passwordChangedAt: new Date(),
@@ -260,14 +260,14 @@ export class PasswordResetService {
 		// 5. 비밀번호 히스토리 저장
 		await prisma.passwordHistory.create({
 			data: {
-				user: { connect: { id: tokenData.userId } },
+				user: { connect: { id: tokenData.userSeq } },
 				passwordHash: hashedPassword.value,
 			},
 		});
 
 		// 오래된 히스토리 정리 (현재 포함 최근 reuseLimit개만 유지)
 		const allHistory = await prisma.passwordHistory.findMany({
-			where: { user: { id: tokenData.userId } },
+			where: { user: { id: tokenData.userSeq } },
 			orderBy: { createdAt: "desc" },
 			select: { id: true },
 		});
@@ -293,13 +293,13 @@ export class PasswordResetService {
 
 	private async saveResetToken(
 		hashedToken: string,
-		data: { userId: bigint; email: string },
+		data: { userSeq: bigint; email: string },
 	): Promise<void> {
 		const key = `${RESET_TOKEN_PREFIX}${hashedToken}`;
 		await this.redisService.set(
 			key,
 			JSON.stringify({
-				userId: data.userId.toString(),
+				userSeq: data.userSeq.toString(),
 				email: data.email,
 			}),
 			TOKEN_TTL_SECONDS,
@@ -308,17 +308,17 @@ export class PasswordResetService {
 
 	private async getResetToken(
 		hashedToken: string,
-	): Promise<{ userId: bigint; email: string } | null> {
+	): Promise<{ userSeq: bigint; email: string } | null> {
 		const key = `${RESET_TOKEN_PREFIX}${hashedToken}`;
 		const data = await this.redisService.get(key);
 		if (!data) return null;
 		try {
 			const parsed = JSON.parse(data) as {
-				userId: string | number;
+				userSeq: string | number;
 				email: string;
 			};
 			return {
-				userId: BigInt(parsed.userId),
+				userSeq: BigInt(parsed.userSeq),
 				email: parsed.email,
 			};
 		} catch {

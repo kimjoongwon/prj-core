@@ -20,7 +20,7 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class WhitelistEntry extends WhitelistEntrySchema {
 	@BigIntIdFieldMetadata({ description: "ID" })
-	declare id: bigint;
+	declare seq: bigint;
 	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 	@DateFieldOptionalMetadata({ nullable: true, description: "수정일" })
@@ -28,7 +28,7 @@ export class WhitelistEntry extends WhitelistEntrySchema {
 
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	declare whitelistEntryId: WhitelistEntrySchema["whitelistEntryId"];
+	declare id: WhitelistEntrySchema["id"];
 
 	// ============================================================================
 	// 기본 필드

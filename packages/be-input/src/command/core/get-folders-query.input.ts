@@ -1,6 +1,6 @@
 export interface GetFoldersQueryInput {
-	parentFolderId?: bigint;
-	spaceId?: bigint;
+	parentFolderSeq?: bigint;
+	spaceSeq?: bigint;
 	name?: string;
 	statusFilter?: string;
 	sort?: string[];

@@ -17,7 +17,7 @@ import { EntityQueryType } from "../query/entity-query-type";
  *
  * 필터 계약:
  * - category, channel, priority (enum -> 직접 매핑)
- * - assigneeId, customerId (*Id -> 정확 매칭)
+ * - assigneeSeq, customerSeq (*Id -> 정확 매칭)
  *
  * 커스텀 처리:
  * - search (제목, 고객명 OR 검색)
@@ -58,12 +58,12 @@ export class QueryInquiryDto extends EntityQueryType(Inquiry, [
 	@BigIntIdFieldOptional({
 		description: "담당자 ID",
 	})
-	assigneeId?: bigint;
+	assigneeSeq?: bigint;
 
 	@BigIntIdFieldOptional({
 		description: "고객 ID",
 	})
-	customerId?: bigint;
+	customerSeq?: bigint;
 
 	// -------------------------------------------------------------------------
 	// 필터 - 날짜 범위

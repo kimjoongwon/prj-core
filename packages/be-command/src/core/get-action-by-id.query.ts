@@ -1,3 +1,3 @@
 export class GetActionByIdQuery {
-	constructor(readonly actionId: bigint) {}
+	constructor(readonly actionSeq: bigint) {}
 }

@@ -36,7 +36,7 @@ describe("RolesGuard", () => {
 		tenants: [
 			{
 				id: 201n,
-				spaceId: 301n,
+				spaceSeq: 301n,
 				role: {
 					name: SYSTEM_ROLES.MEMBER,
 				},
@@ -47,7 +47,7 @@ describe("RolesGuard", () => {
 
 	const createMockTenant = (overrides: Record<string, unknown> = {}) => ({
 		id: 201n,
-		spaceId: 301n,
+		spaceSeq: 301n,
 		role: {
 			name: SYSTEM_ROLES.MEMBER,
 		},
@@ -228,19 +228,19 @@ describe("RolesGuard", () => {
 					tenants: [
 						{
 							id: 201n,
-							spaceId: 301n,
+							spaceSeq: 301n,
 							role: { name: SYSTEM_ROLES.MEMBER },
 						},
 						{
 							id: 202n,
-							spaceId: 302n,
+							spaceSeq: 302n,
 							role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 						},
 					],
 				});
 				const tenant = createMockTenant({
 					id: 202n,
-					spaceId: 302n,
+					spaceSeq: 302n,
 					role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 				});
 				mockClsService.get.mockImplementation((key: string) => {

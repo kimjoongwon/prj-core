@@ -1,3 +1,3 @@
 export class GetAssetByIdQuery {
-	constructor(readonly assetId: bigint) {}
+	constructor(readonly assetSeq: bigint) {}
 }

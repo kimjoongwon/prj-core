@@ -3,11 +3,11 @@ import { type IntegrationUlid, parseIntegrationUlid } from "@cocrepo/type";
 
 type ReservationCreatedPayload = {
 	reservationId: IntegrationUlid;
-	userId: IntegrationUlid;
-	spaceId: IntegrationUlid;
-	timelineId: IntegrationUlid;
-	sessionId: IntegrationUlid;
-	programId: IntegrationUlid;
+	userSeq: IntegrationUlid;
+	spaceSeq: IntegrationUlid;
+	timelineSeq: IntegrationUlid;
+	sessionSeq: IntegrationUlid;
+	programSeq: IntegrationUlid;
 	occurredAt: Date;
 };
 
@@ -23,19 +23,19 @@ export function toReservationCreatedEventPayload(source: {
 			"reservationId",
 			source.reservation.reservationId,
 		),
-		userId: requirePublicUlid("userId", source.reservation.user?.userId),
-		spaceId: requirePublicUlid("spaceId", source.reservation.space?.spaceId),
-		timelineId: requirePublicUlid(
-			"timelineId",
-			source.reservation.timeline?.timelineId,
+		userSeq: requirePublicUlid("userSeq", source.reservation.user?.userSeq),
+		spaceSeq: requirePublicUlid("spaceSeq", source.reservation.space?.spaceSeq),
+		timelineSeq: requirePublicUlid(
+			"timelineSeq",
+			source.reservation.timeline?.timelineSeq,
 		),
-		sessionId: requirePublicUlid(
-			"sessionId",
-			source.reservation.session?.sessionId,
+		sessionSeq: requirePublicUlid(
+			"sessionSeq",
+			source.reservation.session?.sessionSeq,
 		),
-		programId: requirePublicUlid(
-			"programId",
-			source.reservation.program?.programId,
+		programSeq: requirePublicUlid(
+			"programSeq",
+			source.reservation.program?.programSeq,
 		),
 		occurredAt: source.occurredAt,
 	};

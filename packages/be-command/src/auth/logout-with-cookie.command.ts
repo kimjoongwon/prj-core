@@ -5,7 +5,7 @@ export class LogoutWithCookieCommand {
 		readonly accessTokenCookie: string | undefined,
 		readonly authorizationHeader: string | undefined,
 		/** OIDC session protocol ID. */
-		readonly sessionId: string | undefined,
+		readonly sessionSeq: string | undefined,
 		readonly res: Response,
 	) {}
 }

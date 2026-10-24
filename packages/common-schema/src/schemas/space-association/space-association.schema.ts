@@ -5,11 +5,11 @@ import { AbstractSchema } from "../abstract.schema";
 export class SpaceAssociationSchema
 	extends AbstractSchema
 {
-	spaceAssociationId!: string;
+	id!: string;
 
 	@BigIntIdValidation()
-	spaceId!: bigint;
+	spaceSeq!: bigint;
 
 	@BigIntIdValidation()
-	groupId!: bigint;
+	groupSeq!: bigint;
 }

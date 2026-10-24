@@ -7,6 +7,6 @@ export class GetIdpAccountAccessGrantFormBootstrapUseCase {
 	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	execute(query: GetIdpAccountAccessGrantFormQuery): Promise<unknown> {
-		return this.idpAccountService.getAccessGrantFormBootstrap(query.userId);
+		return this.idpAccountService.getAccessGrantFormBootstrap(query.userSeq);
 	}
 }

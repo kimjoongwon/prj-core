@@ -22,7 +22,7 @@ export class WhitelistEntriesRepository {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.whitelistEntry.findUnique({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return result ? toDomainEntity(WhitelistEntry, result) : null;
@@ -101,7 +101,7 @@ export class WhitelistEntriesRepository {
 
 		const normalizedData = await this.normalizeUpdateData(id, data);
 		const result = await this.txHost.tx.whitelistEntry.update({
-			where: { id },
+			where: { seq: id },
 			data: normalizedData,
 		});
 
@@ -112,7 +112,7 @@ export class WhitelistEntriesRepository {
 		this.logger.debug(`ID 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.whitelistEntry.delete({
-			where: { id },
+			where: { seq: id },
 		});
 
 		return toDomainEntity(WhitelistEntry, result);
@@ -136,7 +136,7 @@ export class WhitelistEntriesRepository {
 		data: Prisma.WhitelistEntryUncheckedUpdateInput,
 	): Promise<Prisma.WhitelistEntryUncheckedUpdateInput> {
 		const current = await this.txHost.tx.whitelistEntry.findUnique({
-			where: { id },
+			where: { seq: id },
 			select: { type: true, value: true },
 		});
 

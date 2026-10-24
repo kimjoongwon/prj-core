@@ -19,7 +19,7 @@ export class ServiceDocumentsRepository {
 		this.logger.debug(`서비스 문서 ID 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.serviceDocument.findFirst({
-			where: { id, removedAt: null },
+			where: { seq: id, removedAt: null },
 		});
 
 		return result ? toDomainEntity(ServiceDocument, result) : null;
@@ -92,7 +92,7 @@ export class ServiceDocumentsRepository {
 		data: Prisma.ServiceDocumentUncheckedUpdateInput,
 	): Promise<ServiceDocument> {
 		const result = await this.txHost.tx.serviceDocument.update({
-			where: { id },
+			where: { seq: id },
 			data,
 		});
 
@@ -101,13 +101,13 @@ export class ServiceDocumentsRepository {
 
 	async publishById(id: bigint): Promise<ServiceDocument> {
 		const target = await this.txHost.tx.serviceDocument.findUniqueOrThrow({
-			where: { id },
+			where: { seq: id },
 		});
 		const publishedAt = new Date();
 
 		await this.txHost.tx.serviceDocument.updateMany({
 			where: {
-				id: { not: id },
+				seq: { not: id },
 				kind: target.kind,
 				platform: target.platform,
 				locale: target.locale,
@@ -118,7 +118,7 @@ export class ServiceDocumentsRepository {
 		});
 
 		const result = await this.txHost.tx.serviceDocument.update({
-			where: { id },
+			where: { seq: id },
 			data: { status: "PUBLISHED", publishedAt },
 		});
 
@@ -127,7 +127,7 @@ export class ServiceDocumentsRepository {
 
 	async archiveById(id: bigint): Promise<ServiceDocument> {
 		const result = await this.txHost.tx.serviceDocument.update({
-			where: { id },
+			where: { seq: id },
 			data: { status: "ARCHIVED" },
 		});
 
@@ -136,7 +136,7 @@ export class ServiceDocumentsRepository {
 
 	async removeById(id: bigint): Promise<ServiceDocument> {
 		const result = await this.txHost.tx.serviceDocument.update({
-			where: { id },
+			where: { seq: id },
 			data: { removedAt: new Date(), status: "ARCHIVED" },
 		});
 

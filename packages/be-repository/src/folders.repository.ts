@@ -25,7 +25,7 @@ export class FoldersRepository {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.folder.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: { space: true, parent: true, createdBy: true },
 		});
 
@@ -36,7 +36,7 @@ export class FoldersRepository {
 		this.logger.debug(`하위폴더 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.folder.findUnique({
-			where: { id },
+			where: { seq: id },
 			include: {
 				space: true,
 				parent: true,
@@ -65,11 +65,11 @@ export class FoldersRepository {
 		return result ? toDomainEntity(Folder, result) : null;
 	}
 
-	async findBySpaceId(spaceId: bigint): Promise<Folder[]> {
-		this.logger.debug(`Space별 폴더 조회: ${spaceId.toString()}`);
+	async findBySpaceId(spaceSeq: bigint): Promise<Folder[]> {
+		this.logger.debug(`Space별 폴더 조회: ${spaceSeq.toString()}`);
 
 		const result = await this.txHost.tx.folder.findMany({
-			where: { spaceId },
+			where: { spaceSeq },
 			include: { space: true, parent: true, createdBy: true },
 			orderBy: [{ path: "asc" }],
 		});
@@ -77,14 +77,14 @@ export class FoldersRepository {
 		return result.map((item) => toDomainEntity(Folder, item));
 	}
 
-	async findByParentFolderId(parentFolderId: bigint | null): Promise<Folder[]> {
+	async findByParentFolderId(parentFolderSeq: bigint | null): Promise<Folder[]> {
 		this.logger.debug(
-			`상위 폴더 기준 조회: ${parentFolderId ? parentFolderId.toString() : "root"}`,
+			`상위 폴더 기준 조회: ${parentFolderSeq ? parentFolderSeq.toString() : "root"}`,
 		);
 
 		const result = await this.txHost.tx.folder.findMany({
 			where: {
-				parentFolderId,
+				parentFolderSeq,
 			},
 			include: { space: true, parent: true, createdBy: true },
 			orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
@@ -119,7 +119,7 @@ export class FoldersRepository {
 	async create(
 		data: AutoIdentityCreateInput<
 			Prisma.FolderUncheckedCreateInput,
-			"folderId"
+			"id"
 		>,
 	): Promise<Folder> {
 		this.logger.debug(`폴더 생성: ${data.name}`);
@@ -135,12 +135,12 @@ export class FoldersRepository {
 		id: bigint,
 		data: AutoIdentityUpdateInput<
 			Prisma.FolderUncheckedUpdateInput,
-			"folderId"
+			"id"
 		>,
 	): Promise<Folder> {
 		this.logger.debug(`폴더 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.folder.update({
-			where: { id },
+			where: { seq: id },
 			data,
 			include: { space: true, parent: true, createdBy: true },
 		});
@@ -152,7 +152,7 @@ export class FoldersRepository {
 		this.logger.debug(`폴더 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.folder.delete({
-			where: { id },
+			where: { seq: id },
 			include: { space: true, parent: true, createdBy: true },
 		});
 

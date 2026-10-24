@@ -7,6 +7,6 @@ export class GetIdpAccountByIdUseCase {
 	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	execute(query: GetIdpAccountQuery): Promise<unknown> {
-		return this.idpAccountService.getById(query.userId);
+		return this.idpAccountService.getById(query.userSeq);
 	}
 }

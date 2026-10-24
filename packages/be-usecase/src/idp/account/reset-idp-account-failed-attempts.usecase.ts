@@ -7,6 +7,6 @@ export class ResetIdpAccountFailedAttemptsUseCase {
 	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	async execute(command: ResetIdpAccountFailedAttemptsCommand): Promise<void> {
-		await this.idpAccountService.resetFailedAttempts(command.userId);
+		await this.idpAccountService.resetFailedAttempts(command.userSeq);
 	}
 }

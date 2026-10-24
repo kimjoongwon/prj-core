@@ -114,7 +114,7 @@ export class InteractionLoginService {
 			this.logger.debug(`비활성 계정: ${normalizedEmail}`);
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
-				userId: user.id,
+				userSeq: user.id,
 				result: "FAILURE",
 				failureReason: "ACCOUNT_INACTIVE",
 			});
@@ -126,7 +126,7 @@ export class InteractionLoginService {
 			this.logger.debug(`영구 잠금 계정: ${normalizedEmail}`);
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
-				userId: user.id,
+				userSeq: user.id,
 				result: "LOCKED",
 				failureReason: "ACCOUNT_LOCKED_PERMANENT",
 			});
@@ -139,7 +139,7 @@ export class InteractionLoginService {
 				this.logger.debug(`일시 잠금 중: ${normalizedEmail}`);
 				await this.directUserRepository.createAuditLog({
 					...auditBase,
-					userId: user.id,
+					userSeq: user.id,
 					result: "LOCKED",
 					failureReason: "ACCOUNT_LOCKED_TEMPORARY",
 				});
@@ -182,13 +182,13 @@ export class InteractionLoginService {
 		await this.directUserRepository.updateLoginSuccess(user.id, ipAddress);
 		await this.directUserRepository.createAuditLog({
 			...auditBase,
-			userId: user.id,
+			userSeq: user.id,
 			result: "SUCCESS",
 		});
 
 		return {
 			success: true,
-			userId: user.userId,
+			userSeq: user.userSeq,
 		};
 	}
 
@@ -197,7 +197,7 @@ export class InteractionLoginService {
 	 * 잠금 임계값은 SecurityPolicy DB에서 조회합니다.
 	 */
 	private async handleLoginFailure(
-		userId: bigint,
+		userSeq: bigint,
 		_email: string,
 		currentAttempts: number,
 		auditBase: {
@@ -216,12 +216,12 @@ export class InteractionLoginService {
 
 		// 영구 잠금 임계값 도달
 		if (newAttempts >= policy.permanentLockThreshold) {
-			await this.directUserRepository.updateLoginFailure(userId, newAttempts, {
+			await this.directUserRepository.updateLoginFailure(userSeq, newAttempts, {
 				isPermanentlyLocked: true,
 			});
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
-				userId,
+				userSeq,
 				result: "LOCKED",
 				failureReason: "ACCOUNT_LOCKED_PERMANENT",
 			});
@@ -231,12 +231,12 @@ export class InteractionLoginService {
 		// 일시 잠금 임계값 도달
 		if (newAttempts >= policy.temporaryLockThreshold) {
 			const lockedUntil = new Date(Date.now() + policy.temporaryLockDurationMs);
-			await this.directUserRepository.updateLoginFailure(userId, newAttempts, {
+			await this.directUserRepository.updateLoginFailure(userSeq, newAttempts, {
 				lockedUntil,
 			});
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
-				userId,
+				userSeq,
 				result: "LOCKED",
 				failureReason: "ACCOUNT_LOCKED_TEMPORARY",
 			});
@@ -250,10 +250,10 @@ export class InteractionLoginService {
 		}
 
 		// 일반 실패
-		await this.directUserRepository.updateLoginFailure(userId, newAttempts);
+		await this.directUserRepository.updateLoginFailure(userSeq, newAttempts);
 		await this.directUserRepository.createAuditLog({
 			...auditBase,
-			userId,
+			userSeq,
 			result: "FAILURE",
 			failureReason: "INVALID_CREDENTIALS",
 		});

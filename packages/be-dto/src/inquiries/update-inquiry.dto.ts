@@ -27,5 +27,5 @@ export class UpdateInquiryDto extends PartialType(
 	@BigIntIdFieldOptional({
 		description: "담당자 ID",
 	})
-	assigneeId?: bigint;
+	assigneeSeq?: bigint;
 }

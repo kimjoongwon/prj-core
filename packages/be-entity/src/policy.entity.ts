@@ -16,15 +16,15 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Policy extends PolicySchema {
 	@Exclude({ toPlainOnly: true })
-	declare policyId: PolicySchema["policyId"];
+	declare id: PolicySchema["id"];
 	@BigIntIdFieldMetadata({ description: "Policy ID" })
-	declare id: bigint;
+	declare seq: bigint;
 
 	@BigIntIdFieldMetadata({ description: "Space ID" })
-	declare spaceId: PolicySchema["spaceId"];
+	declare spaceSeq: PolicySchema["spaceSeq"];
 
 	@BigIntIdFieldMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdById: PolicySchema["createdById"];
+	declare createdBySeq: PolicySchema["createdBySeq"];
 
 	@StringFieldMetadata({
 		description: "정책 식별자",

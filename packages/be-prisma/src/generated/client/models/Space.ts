@@ -27,16 +27,16 @@ export type AggregateSpace = {
 }
 
 export type SpaceAvgAggregateOutputType = {
-  id: number | null
+  seq: number | null
 }
 
 export type SpaceSumAggregateOutputType = {
-  id: bigint | null
+  seq: bigint | null
 }
 
 export type SpaceMinAggregateOutputType = {
-  spaceId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -46,8 +46,8 @@ export type SpaceMinAggregateOutputType = {
 }
 
 export type SpaceMaxAggregateOutputType = {
-  spaceId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -57,8 +57,8 @@ export type SpaceMaxAggregateOutputType = {
 }
 
 export type SpaceCountAggregateOutputType = {
-  spaceId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -70,16 +70,16 @@ export type SpaceCountAggregateOutputType = {
 
 
 export type SpaceAvgAggregateInputType = {
-  id?: true
+  seq?: true
 }
 
 export type SpaceSumAggregateInputType = {
-  id?: true
+  seq?: true
 }
 
 export type SpaceMinAggregateInputType = {
-  spaceId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -89,8 +89,8 @@ export type SpaceMinAggregateInputType = {
 }
 
 export type SpaceMaxAggregateInputType = {
-  spaceId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -100,8 +100,8 @@ export type SpaceMaxAggregateInputType = {
 }
 
 export type SpaceCountAggregateInputType = {
-  spaceId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -198,8 +198,8 @@ export type SpaceGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 export type SpaceGroupByOutputType = {
-  spaceId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -232,8 +232,8 @@ export type SpaceWhereInput = {
   AND?: Prisma.SpaceWhereInput | Prisma.SpaceWhereInput[]
   OR?: Prisma.SpaceWhereInput[]
   NOT?: Prisma.SpaceWhereInput | Prisma.SpaceWhereInput[]
-  spaceId?: Prisma.StringFilter<"Space"> | string
-  id?: Prisma.BigIntFilter<"Space"> | bigint | number
+  id?: Prisma.StringFilter<"Space"> | string
+  seq?: Prisma.BigIntFilter<"Space"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
@@ -264,8 +264,8 @@ export type SpaceWhereInput = {
 }
 
 export type SpaceOrderByWithRelationInput = {
-  spaceId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -296,8 +296,8 @@ export type SpaceOrderByWithRelationInput = {
 }
 
 export type SpaceWhereUniqueInput = Prisma.AtLeast<{
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   AND?: Prisma.SpaceWhereInput | Prisma.SpaceWhereInput[]
   OR?: Prisma.SpaceWhereInput[]
   NOT?: Prisma.SpaceWhereInput | Prisma.SpaceWhereInput[]
@@ -328,11 +328,11 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   assets?: Prisma.AssetListRelationFilter
   derivatives?: Prisma.DerivativeListRelationFilter
   timelines?: Prisma.TimelineListRelationFilter
-}, "id" | "spaceId">
+}, "seq" | "id">
 
 export type SpaceOrderByWithAggregationInput = {
-  spaceId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -350,8 +350,8 @@ export type SpaceScalarWhereWithAggregatesInput = {
   AND?: Prisma.SpaceScalarWhereWithAggregatesInput | Prisma.SpaceScalarWhereWithAggregatesInput[]
   OR?: Prisma.SpaceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SpaceScalarWhereWithAggregatesInput | Prisma.SpaceScalarWhereWithAggregatesInput[]
-  spaceId?: Prisma.StringWithAggregatesFilter<"Space"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"Space"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"Space"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"Space"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Space"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Space"> | Date | string | null
@@ -361,8 +361,8 @@ export type SpaceScalarWhereWithAggregatesInput = {
 }
 
 export type SpaceCreateInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -393,8 +393,8 @@ export type SpaceCreateInput = {
 }
 
 export type SpaceUncheckedCreateInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -425,8 +425,8 @@ export type SpaceUncheckedCreateInput = {
 }
 
 export type SpaceUpdateInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -457,8 +457,8 @@ export type SpaceUpdateInput = {
 }
 
 export type SpaceUncheckedUpdateInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -489,8 +489,8 @@ export type SpaceUncheckedUpdateInput = {
 }
 
 export type SpaceCreateManyInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -500,8 +500,8 @@ export type SpaceCreateManyInput = {
 }
 
 export type SpaceUpdateManyMutationInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -511,8 +511,8 @@ export type SpaceUpdateManyMutationInput = {
 }
 
 export type SpaceUncheckedUpdateManyInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -527,8 +527,8 @@ export type SpaceScalarRelationFilter = {
 }
 
 export type SpaceCountOrderByAggregateInput = {
-  spaceId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -538,12 +538,12 @@ export type SpaceCountOrderByAggregateInput = {
 }
 
 export type SpaceAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
 }
 
 export type SpaceMaxOrderByAggregateInput = {
-  spaceId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -553,8 +553,8 @@ export type SpaceMaxOrderByAggregateInput = {
 }
 
 export type SpaceMinOrderByAggregateInput = {
-  spaceId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -564,7 +564,7 @@ export type SpaceMinOrderByAggregateInput = {
 }
 
 export type SpaceSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
 }
 
 export type SpaceCreateNestedOneWithoutAlbumEntriesInput = {
@@ -866,8 +866,8 @@ export type SpaceUpdateOneRequiredWithoutTimelinesNestedInput = {
 }
 
 export type SpaceCreateWithoutAlbumEntriesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -897,8 +897,8 @@ export type SpaceCreateWithoutAlbumEntriesInput = {
 }
 
 export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -944,8 +944,8 @@ export type SpaceUpdateToOneWithWhereWithoutAlbumEntriesInput = {
 }
 
 export type SpaceUpdateWithoutAlbumEntriesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -975,8 +975,8 @@ export type SpaceUpdateWithoutAlbumEntriesInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1006,8 +1006,8 @@ export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
 }
 
 export type SpaceCreateWithoutAlbumsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1037,8 +1037,8 @@ export type SpaceCreateWithoutAlbumsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutAlbumsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1084,8 +1084,8 @@ export type SpaceUpdateToOneWithWhereWithoutAlbumsInput = {
 }
 
 export type SpaceUpdateWithoutAlbumsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1115,8 +1115,8 @@ export type SpaceUpdateWithoutAlbumsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutAlbumsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1146,8 +1146,8 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
 }
 
 export type SpaceCreateWithoutAssetsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1177,8 +1177,8 @@ export type SpaceCreateWithoutAssetsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutAssetsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1224,8 +1224,8 @@ export type SpaceUpdateToOneWithWhereWithoutAssetsInput = {
 }
 
 export type SpaceUpdateWithoutAssetsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1255,8 +1255,8 @@ export type SpaceUpdateWithoutAssetsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutAssetsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1286,8 +1286,8 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
 }
 
 export type SpaceCreateWithoutCategoriesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1317,8 +1317,8 @@ export type SpaceCreateWithoutCategoriesInput = {
 }
 
 export type SpaceUncheckedCreateWithoutCategoriesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1364,8 +1364,8 @@ export type SpaceUpdateToOneWithWhereWithoutCategoriesInput = {
 }
 
 export type SpaceUpdateWithoutCategoriesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1395,8 +1395,8 @@ export type SpaceUpdateWithoutCategoriesInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutCategoriesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1426,8 +1426,8 @@ export type SpaceUncheckedUpdateWithoutCategoriesInput = {
 }
 
 export type SpaceCreateWithoutContentsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1457,8 +1457,8 @@ export type SpaceCreateWithoutContentsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutContentsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1504,8 +1504,8 @@ export type SpaceUpdateToOneWithWhereWithoutContentsInput = {
 }
 
 export type SpaceUpdateWithoutContentsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1535,8 +1535,8 @@ export type SpaceUpdateWithoutContentsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutContentsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1566,8 +1566,8 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
 }
 
 export type SpaceCreateWithoutDerivativesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1597,8 +1597,8 @@ export type SpaceCreateWithoutDerivativesInput = {
 }
 
 export type SpaceUncheckedCreateWithoutDerivativesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1644,8 +1644,8 @@ export type SpaceUpdateToOneWithWhereWithoutDerivativesInput = {
 }
 
 export type SpaceUpdateWithoutDerivativesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1675,8 +1675,8 @@ export type SpaceUpdateWithoutDerivativesInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutDerivativesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1706,8 +1706,8 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
 }
 
 export type SpaceCreateWithoutEmailVerificationsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1737,8 +1737,8 @@ export type SpaceCreateWithoutEmailVerificationsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutEmailVerificationsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1784,8 +1784,8 @@ export type SpaceUpdateToOneWithWhereWithoutEmailVerificationsInput = {
 }
 
 export type SpaceUpdateWithoutEmailVerificationsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1815,8 +1815,8 @@ export type SpaceUpdateWithoutEmailVerificationsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1846,8 +1846,8 @@ export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
 }
 
 export type SpaceCreateWithoutFitnessCenterInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1877,8 +1877,8 @@ export type SpaceCreateWithoutFitnessCenterInput = {
 }
 
 export type SpaceUncheckedCreateWithoutFitnessCenterInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1924,8 +1924,8 @@ export type SpaceUpdateToOneWithWhereWithoutFitnessCenterInput = {
 }
 
 export type SpaceUpdateWithoutFitnessCenterInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1955,8 +1955,8 @@ export type SpaceUpdateWithoutFitnessCenterInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutFitnessCenterInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1986,8 +1986,8 @@ export type SpaceUncheckedUpdateWithoutFitnessCenterInput = {
 }
 
 export type SpaceCreateWithoutFoldersInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2017,8 +2017,8 @@ export type SpaceCreateWithoutFoldersInput = {
 }
 
 export type SpaceUncheckedCreateWithoutFoldersInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2064,8 +2064,8 @@ export type SpaceUpdateToOneWithWhereWithoutFoldersInput = {
 }
 
 export type SpaceUpdateWithoutFoldersInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2095,8 +2095,8 @@ export type SpaceUpdateWithoutFoldersInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutFoldersInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2126,8 +2126,8 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
 }
 
 export type SpaceCreateWithoutGroupsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2157,8 +2157,8 @@ export type SpaceCreateWithoutGroupsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutGroupsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2204,8 +2204,8 @@ export type SpaceUpdateToOneWithWhereWithoutGroupsInput = {
 }
 
 export type SpaceUpdateWithoutGroupsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2235,8 +2235,8 @@ export type SpaceUpdateWithoutGroupsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutGroupsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2266,8 +2266,8 @@ export type SpaceUncheckedUpdateWithoutGroupsInput = {
 }
 
 export type SpaceCreateWithoutInquiriesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2297,8 +2297,8 @@ export type SpaceCreateWithoutInquiriesInput = {
 }
 
 export type SpaceUncheckedCreateWithoutInquiriesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2344,8 +2344,8 @@ export type SpaceUpdateToOneWithWhereWithoutInquiriesInput = {
 }
 
 export type SpaceUpdateWithoutInquiriesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2375,8 +2375,8 @@ export type SpaceUpdateWithoutInquiriesInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutInquiriesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2406,8 +2406,8 @@ export type SpaceUncheckedUpdateWithoutInquiriesInput = {
 }
 
 export type SpaceCreateWithoutPoliciesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2437,8 +2437,8 @@ export type SpaceCreateWithoutPoliciesInput = {
 }
 
 export type SpaceUncheckedCreateWithoutPoliciesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2484,8 +2484,8 @@ export type SpaceUpdateToOneWithWhereWithoutPoliciesInput = {
 }
 
 export type SpaceUpdateWithoutPoliciesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2515,8 +2515,8 @@ export type SpaceUpdateWithoutPoliciesInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutPoliciesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2546,8 +2546,8 @@ export type SpaceUncheckedUpdateWithoutPoliciesInput = {
 }
 
 export type SpaceCreateWithoutReservationsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2577,8 +2577,8 @@ export type SpaceCreateWithoutReservationsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutReservationsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2624,8 +2624,8 @@ export type SpaceUpdateToOneWithWhereWithoutReservationsInput = {
 }
 
 export type SpaceUpdateWithoutReservationsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2655,8 +2655,8 @@ export type SpaceUpdateWithoutReservationsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutReservationsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2686,8 +2686,8 @@ export type SpaceUncheckedUpdateWithoutReservationsInput = {
 }
 
 export type SpaceCreateWithoutRoutinesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2717,8 +2717,8 @@ export type SpaceCreateWithoutRoutinesInput = {
 }
 
 export type SpaceUncheckedCreateWithoutRoutinesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2764,8 +2764,8 @@ export type SpaceUpdateToOneWithWhereWithoutRoutinesInput = {
 }
 
 export type SpaceUpdateWithoutRoutinesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2795,8 +2795,8 @@ export type SpaceUpdateWithoutRoutinesInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutRoutinesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2826,8 +2826,8 @@ export type SpaceUncheckedUpdateWithoutRoutinesInput = {
 }
 
 export type SpaceCreateWithoutSafeWalletsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2857,8 +2857,8 @@ export type SpaceCreateWithoutSafeWalletsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2904,8 +2904,8 @@ export type SpaceUpdateToOneWithWhereWithoutSafeWalletsInput = {
 }
 
 export type SpaceUpdateWithoutSafeWalletsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2935,8 +2935,8 @@ export type SpaceUpdateWithoutSafeWalletsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2966,8 +2966,8 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
 }
 
 export type SpaceCreateWithoutAssociationsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2997,8 +2997,8 @@ export type SpaceCreateWithoutAssociationsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutAssociationsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3044,8 +3044,8 @@ export type SpaceUpdateToOneWithWhereWithoutAssociationsInput = {
 }
 
 export type SpaceUpdateWithoutAssociationsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3075,8 +3075,8 @@ export type SpaceUpdateWithoutAssociationsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutAssociationsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3106,8 +3106,8 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
 }
 
 export type SpaceCreateWithoutClassificationInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3137,8 +3137,8 @@ export type SpaceCreateWithoutClassificationInput = {
 }
 
 export type SpaceUncheckedCreateWithoutClassificationInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3184,8 +3184,8 @@ export type SpaceUpdateToOneWithWhereWithoutClassificationInput = {
 }
 
 export type SpaceUpdateWithoutClassificationInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3215,8 +3215,8 @@ export type SpaceUpdateWithoutClassificationInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutClassificationInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3246,8 +3246,8 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
 }
 
 export type SpaceCreateWithoutTasksInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3277,8 +3277,8 @@ export type SpaceCreateWithoutTasksInput = {
 }
 
 export type SpaceUncheckedCreateWithoutTasksInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3324,8 +3324,8 @@ export type SpaceUpdateToOneWithWhereWithoutTasksInput = {
 }
 
 export type SpaceUpdateWithoutTasksInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3355,8 +3355,8 @@ export type SpaceUpdateWithoutTasksInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutTasksInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3386,8 +3386,8 @@ export type SpaceUncheckedUpdateWithoutTasksInput = {
 }
 
 export type SpaceCreateWithoutTenantAccessRequestsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3417,8 +3417,8 @@ export type SpaceCreateWithoutTenantAccessRequestsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutTenantAccessRequestsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3464,8 +3464,8 @@ export type SpaceUpdateToOneWithWhereWithoutTenantAccessRequestsInput = {
 }
 
 export type SpaceUpdateWithoutTenantAccessRequestsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3495,8 +3495,8 @@ export type SpaceUpdateWithoutTenantAccessRequestsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutTenantAccessRequestsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3526,8 +3526,8 @@ export type SpaceUncheckedUpdateWithoutTenantAccessRequestsInput = {
 }
 
 export type SpaceCreateWithoutTenantsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3557,8 +3557,8 @@ export type SpaceCreateWithoutTenantsInput = {
 }
 
 export type SpaceUncheckedCreateWithoutTenantsInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3604,8 +3604,8 @@ export type SpaceUpdateToOneWithWhereWithoutTenantsInput = {
 }
 
 export type SpaceUpdateWithoutTenantsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3635,8 +3635,8 @@ export type SpaceUpdateWithoutTenantsInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutTenantsInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3666,8 +3666,8 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
 }
 
 export type SpaceCreateWithoutTimelinesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3697,8 +3697,8 @@ export type SpaceCreateWithoutTimelinesInput = {
 }
 
 export type SpaceUncheckedCreateWithoutTimelinesInput = {
-  spaceId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -3744,8 +3744,8 @@ export type SpaceUpdateToOneWithWhereWithoutTimelinesInput = {
 }
 
 export type SpaceUpdateWithoutTimelinesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3775,8 +3775,8 @@ export type SpaceUpdateWithoutTimelinesInput = {
 }
 
 export type SpaceUncheckedUpdateWithoutTimelinesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3999,8 +3999,8 @@ export type SpaceCountOutputTypeCountTimelinesArgs<ExtArgs extends runtime.Types
 
 
 export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  spaceId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -4032,8 +4032,8 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }, ExtArgs["result"]["space"]>
 
 export type SpaceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  spaceId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -4043,8 +4043,8 @@ export type SpaceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 }, ExtArgs["result"]["space"]>
 
 export type SpaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  spaceId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -4054,8 +4054,8 @@ export type SpaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 }, ExtArgs["result"]["space"]>
 
 export type SpaceSelectScalar = {
-  spaceId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -4064,7 +4064,7 @@ export type SpaceSelectScalar = {
   contentLanguageCode?: boolean
 }
 
-export type SpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"spaceId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "contentLanguageCode", ExtArgs["result"]["space"]>
+export type SpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "contentLanguageCode", ExtArgs["result"]["space"]>
 export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fitnessCenter?: boolean | Prisma.Space$fitnessCenterArgs<ExtArgs>
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
@@ -4118,8 +4118,8 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     timelines: Prisma.$TimelinePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    spaceId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -4218,8 +4218,8 @@ export interface SpaceDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * // Get first 10 Spaces
    * const spaces = await prisma.space.findMany({ take: 10 })
    *
-   * // Only select the `spaceId`
-   * const spaceWithSpaceIdOnly = await prisma.space.findMany({ select: { spaceId: true } })
+   * // Only select the `id`
+   * const spaceWithIdOnly = await prisma.space.findMany({ select: { id: true } })
    *
    */
   findMany<T extends SpaceFindManyArgs>(args?: Prisma.SelectSubset<T, SpaceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -4263,9 +4263,9 @@ export interface SpaceDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    *
-   * // Create many Spaces and only return the `spaceId`
-   * const spaceWithSpaceIdOnly = await prisma.space.createManyAndReturn({
-   *   select: { spaceId: true },
+   * // Create many Spaces and only return the `id`
+   * const spaceWithIdOnly = await prisma.space.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -4354,9 +4354,9 @@ export interface SpaceDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    *
-   * // Update zero or more Spaces and only return the `spaceId`
-   * const spaceWithSpaceIdOnly = await prisma.space.updateManyAndReturn({
-   *   select: { spaceId: true },
+   * // Update zero or more Spaces and only return the `id`
+   * const spaceWithIdOnly = await prisma.space.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -4579,8 +4579,8 @@ export interface Prisma__SpaceClient<T, Null = never, ExtArgs extends runtime.Ty
  * Fields of the Space model
  */
 export interface SpaceFieldRefs {
-  readonly spaceId: Prisma.FieldRef<"Space", 'String'>
-  readonly id: Prisma.FieldRef<"Space", 'BigInt'>
+  readonly id: Prisma.FieldRef<"Space", 'String'>
+  readonly seq: Prisma.FieldRef<"Space", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Space", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Space", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Space", 'DateTime'>
