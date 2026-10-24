@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -9,8 +9,8 @@
 		"ignoreUnknown": false,
 		"includes": [
 			"./apps/admin/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
-				"./apps/core/api/**/*.{cjs,js,jsx,mjs,ts,tsx}",
-				"./apps/design/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
+			"./apps/core/api/**/*.{cjs,js,jsx,mjs,ts,tsx}",
+			"./apps/design/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/dolmen/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/idp/api/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/idp/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
@@ -38,7 +38,7 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true,
+			"preset": "recommended",
 			"suspicious": {
 				"noExplicitAny": "error",
 				"noShadowRestrictedNames": "off",
@@ -69,7 +69,7 @@
 				"noDangerouslySetInnerHtml": "off"
 			},
 			"nursery": {
-				"useSortedClasses": "off"
+				"useTailwindSortedClasses": "off"
 			}
 		}
 	},
@@ -85,5 +85,17 @@
 		"parser": {
 			"tailwindDirectives": true
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": ["packages/fe-mo-ui/**"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noReactNativeRawText": "off"
+					}
+				}
+			}
+		}
+	]
 }

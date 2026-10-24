@@ -56,17 +56,17 @@
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
+    "class-validator": "^0.14.4",
     "dayjs": "catalog:",
     "path-parser": "6.1.0",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.1.14",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/type": "workspace:*",
-    "es-toolkit": "^1.26.1"
+    "es-toolkit": "^1.52.0"
   },
   "repository": {
     "type": "git",

@@ -30,13 +30,13 @@
   },
   "devDependencies": {
     "@cocrepo/tsconfig": "workspace:*",
-    "@nestjs/common": "^11.2.3",
-    "@nestjs/config": "^4.0.2",
+    "@nestjs/common": "^11.2.8",
+    "@nestjs/config": "^4.0.4",
     "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
-    "jest": "^30.5.1",
+    "jest": "^30.5.2",
     "reflect-metadata": "^0.2.2",
-    "ts-jest": "^29.4.12",
+    "ts-jest": "^29.4.15",
     "typescript": "catalog:"
   },
   "exports": {

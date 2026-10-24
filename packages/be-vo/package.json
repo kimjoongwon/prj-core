@@ -42,9 +42,9 @@
     "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
     "bcrypt": "^6.0.0",
-    "jest": "^30.5.1",
-    "libphonenumber-js": "^1.11.17",
-    "ts-jest": "^29.4.12",
+    "jest": "^30.5.2",
+    "libphonenumber-js": "^1.13.15",
+    "ts-jest": "^29.4.15",
     "typescript": "catalog:"
   },
   "private": true
