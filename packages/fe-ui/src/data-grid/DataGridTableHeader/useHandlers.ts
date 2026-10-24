@@ -1,7 +1,7 @@
 "use client";
 
 import { type Column, flexRender, type Header } from "@tanstack/react-table";
-import { isValidElement, type ReactNode, useMemo } from "react";
+import { isValidElement, type ReactNode } from "react";
 import type { Translate } from "../../i18n";
 import type { DataGridRow } from "../DataGrid";
 import type { DataGridTableState } from "../DataGridTable/DataGridTable";
@@ -42,34 +42,29 @@ const getHeaderAccessibleLabel = <TData extends DataGridRow>(
 export const useHandlers = <TData extends DataGridRow>(
 	state: DataGridTableState<TData>,
 ) => {
-	const handlers = useMemo(
-		() => ({
-			translate,
-			getHeaderLabel,
-			getHeaderAccessibleLabel,
-			toggleSorting: (column: Column<TData, unknown>) => () =>
-				column.toggleSorting(),
-			selectionCheckboxRef: (input: HTMLInputElement | null) => {
-				if (!input) return;
-				const table = state.instance;
-				input.indeterminate = Boolean(
-					table &&
-						!table.getIsAllRowsSelected() &&
-						table.getIsSomeRowsSelected(),
-				);
-			},
-			changeColumnSizing: (columnId: string, size: number | null) => {
-				const table = state.instance;
-				if (!table) return;
-				if (size == null) {
-					table.getColumn(columnId)?.resetSize();
-					return;
-				}
-				table.setColumnSizing((sizing) => ({ ...sizing, [columnId]: size }));
-			},
-		}),
-		[state],
-	);
+	const handlers = {
+		translate,
+		getHeaderLabel,
+		getHeaderAccessibleLabel,
+		toggleSorting: (column: Column<TData, unknown>) => () =>
+			column.toggleSorting(),
+		selectionCheckboxRef: (input: HTMLInputElement | null) => {
+			if (!input) return;
+			const table = state.instance;
+			input.indeterminate = Boolean(
+				table && !table.getIsAllRowsSelected() && table.getIsSomeRowsSelected(),
+			);
+		},
+		changeColumnSizing: (columnId: string, size: number | null) => {
+			const table = state.instance;
+			if (!table) return;
+			if (size == null) {
+				table.getColumn(columnId)?.resetSize();
+				return;
+			}
+			table.setColumnSizing((sizing) => ({ ...sizing, [columnId]: size }));
+		},
+	};
 	const selectionMode =
 		state.selection?.mode === "none" ? undefined : state.selection?.mode;
 	const table = state.instance;

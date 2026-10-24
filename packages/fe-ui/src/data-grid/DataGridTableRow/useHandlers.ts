@@ -2,7 +2,7 @@
 
 import type { Cell, Row } from "@tanstack/react-table";
 import { action, reaction, runInAction } from "mobx";
-import { type KeyboardEvent, useMemo } from "react";
+import type { KeyboardEvent } from "react";
 import type { DataGridRow } from "../DataGrid";
 import type { DataGridTableState } from "../DataGridTable/DataGridTable";
 import type {
@@ -258,38 +258,34 @@ export function getCellInteractions<T extends DataGridRow>(
 export function useHandlers<T extends DataGridRow>(
 	state: DataGridTableRowState<T>,
 ) {
-	return useMemo(
-		() => ({
-			getRowInteractionProps: (row: Row<T>) =>
-				getRowInteractionProps(state, row),
-			observeEditRequests: (
-				tableState: Pick<DataGridTableState<T>, "instance">,
-				row: Row<T>,
-			) =>
-				reaction(
-					() => state.editRequest,
-					(request) =>
-						openRequestedCell(
-							state,
-							tableState.instance?.getRow(row.id) ?? row,
-							request,
-						),
-					{ fireImmediately: true },
-				),
-			getCellInteractions: (
-				row: Row<T>,
-				cell: Cell<T, unknown>,
-				onCellValueChange: CellValueChange<T> | undefined,
-				onMoveToAdjacentCell: AdjacentCellMove,
-			) =>
-				getCellInteractions(
-					state,
-					row,
-					cell,
-					onCellValueChange,
-					onMoveToAdjacentCell,
-				),
-		}),
-		[state],
-	);
+	return {
+		getRowInteractionProps: (row: Row<T>) => getRowInteractionProps(state, row),
+		observeEditRequests: (
+			tableState: Pick<DataGridTableState<T>, "instance">,
+			row: Row<T>,
+		) =>
+			reaction(
+				() => state.editRequest,
+				(request) =>
+					openRequestedCell(
+						state,
+						tableState.instance?.getRow(row.id) ?? row,
+						request,
+					),
+				{ fireImmediately: true },
+			),
+		getCellInteractions: (
+			row: Row<T>,
+			cell: Cell<T, unknown>,
+			onCellValueChange: CellValueChange<T> | undefined,
+			onMoveToAdjacentCell: AdjacentCellMove,
+		) =>
+			getCellInteractions(
+				state,
+				row,
+				cell,
+				onCellValueChange,
+				onMoveToAdjacentCell,
+			),
+	};
 }

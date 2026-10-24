@@ -7,6 +7,8 @@ import type { NextConfig } from "next";
 // 강제되지만, 라우트 핸들러는 요청 시점의 DOLMEN_API_URL env를 읽는다.
 const nextConfig: NextConfig = {
 	output: "standalone",
+	// React Compiler로 자동 메모이제이션(fe-ui의 수동 useMemo 제거 근거)
+	reactCompiler: true,
 	basePath: "/dolmen",
 	turbopack: {
 		root: path.join(__dirname, "../../.."),

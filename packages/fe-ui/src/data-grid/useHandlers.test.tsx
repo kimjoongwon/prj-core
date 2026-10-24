@@ -132,11 +132,12 @@ describe("DataGrid observable와 담당 handlers", () => {
 		]);
 	});
 
-	it("서로 다른 Hook과 재렌더가 같은 원본값을 사용하고 callback 참조를 유지한다", () => {
+	// callback 참조의 안정성은 훅이 아니라 소비 앱 빌드 시점의 React Compiler가
+	// 담당하므로, 여기서는 재렌더 이후 동작과 원본값 공유만 검증한다.
+	it("서로 다른 Hook과 재렌더가 같은 원본값을 사용한다", () => {
 		const { state } = createEmployeeState();
 		const first = renderHook(() => useHandlers(state));
 		const second = renderHook(() => useHandlers(state));
-		const originalCallback = first.result.current.setValue;
 		act(() => first.result.current.setValue(originalEmployee, "name", "편집"));
 		act(() =>
 			second.result.current.setValue(
@@ -146,7 +147,10 @@ describe("DataGrid observable와 담당 handlers", () => {
 			),
 		);
 		first.rerender();
-		expect(first.result.current.setValue).toBe(originalCallback);
+		act(() =>
+			first.result.current.setValue(originalEmployee, "name", "재렌더 후 편집"),
+		);
+		act(() => first.result.current.setValue(originalEmployee, "name", "김민서"));
 		expect(getChangesSnapshot(state).updated).toEqual([]);
 	});
 

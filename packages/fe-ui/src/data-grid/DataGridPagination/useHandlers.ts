@@ -1,7 +1,6 @@
 "use client";
 
 import type { PaginationState, Updater } from "@tanstack/react-table";
-import { useMemo } from "react";
 import type { DataGridPaginationState } from "./DataGridPagination";
 
 type DataGridPageItem =
@@ -70,27 +69,24 @@ export const changeTablePagination = (
 
 /** 페이지 표시 데이터와 이동 동작을 제공합니다. */
 export const useHandlers = (state: DataGridPaginationState) => {
-	const handlers = useMemo(() => {
-		const currentPage = () =>
-			Math.min(
-				Math.max(1, toTablePaginationState(state).pageIndex + 1),
-				getTotalPages(state),
-			);
-		const moveToPage = (page: number) => {
-			void changeTablePagination(state, {
-				pageIndex: page - 1,
-				pageSize: state.query.pagination.take,
-			});
-		};
-		return {
-			changeTablePagination: (pagination: Updater<PaginationState>) =>
-				changeTablePagination(state, pagination),
-			previousPage: () => moveToPage(Math.max(1, currentPage() - 1)),
-			nextPage: () =>
-				moveToPage(Math.min(getTotalPages(state), currentPage() + 1)),
-			pageHandler: (page: number) => () => moveToPage(page),
-		};
-	}, [state]);
+	const currentPage = () =>
+		Math.min(
+			Math.max(1, toTablePaginationState(state).pageIndex + 1),
+			getTotalPages(state),
+		);
+	const moveToPage = (page: number) => {
+		void changeTablePagination(state, {
+			pageIndex: page - 1,
+			pageSize: state.query.pagination.take,
+		});
+	};
+	const handlers = {
+		changeTablePagination: (pagination: Updater<PaginationState>) =>
+			changeTablePagination(state, pagination),
+		previousPage: () => moveToPage(Math.max(1, currentPage() - 1)),
+		nextPage: () => moveToPage(Math.min(getTotalPages(state), currentPage() + 1)),
+		pageHandler: (page: number) => () => moveToPage(page),
+	};
 	const pagination = toTablePaginationState(state);
 	const totalPages = getTotalPages(state);
 	const page = Math.min(Math.max(1, pagination.pageIndex + 1), totalPages);

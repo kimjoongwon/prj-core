@@ -2,7 +2,7 @@
 
 import type { DataGridGroupableColumnItem } from "@cocrepo/type";
 import type { GroupingState, Updater } from "@tanstack/react-table";
-import { type DragEvent, useMemo } from "react";
+import type { DragEvent } from "react";
 import { getGroupableColumnItems } from "../columns/columnConfig";
 import type { DataGridRow } from "../DataGrid";
 import { getGrouping } from "../DataGridTable/useHandlers";
@@ -29,60 +29,56 @@ const getGroupingWithColumn = (
 export const useHandlers = <TData extends DataGridRow>(
 	state: DataGridGroupPanelState<TData>,
 ) => {
-	const handlers = useMemo(() => {
-		const changeGrouping = (next: Updater<GroupingState>) => {
-			const grouping = getGrouping(state);
-			return state.querySetter({
-				groupBy: typeof next === "function" ? next(grouping) : next,
-				skip: 0,
-			});
-		};
-		const dropAt =
-			(insertIndex?: number) => (event: DragEvent<HTMLElement>) => {
-				event.preventDefault();
-				const columnId =
-					event.dataTransfer.getData(GROUP_COLUMN_DATA_TYPE) ||
-					event.dataTransfer.getData("text/plain");
-				if (
-					!getGroupableColumnItems(state.table.columns).some(
-						(column) => column.id === columnId,
-					)
+	const changeGrouping = (next: Updater<GroupingState>) => {
+		const grouping = getGrouping(state);
+		return state.querySetter({
+			groupBy: typeof next === "function" ? next(grouping) : next,
+			skip: 0,
+		});
+	};
+	const dropAt =
+		(insertIndex?: number) => (event: DragEvent<HTMLElement>) => {
+			event.preventDefault();
+			const columnId =
+				event.dataTransfer.getData(GROUP_COLUMN_DATA_TYPE) ||
+				event.dataTransfer.getData("text/plain");
+			if (
+				!getGroupableColumnItems(state.table.columns).some(
+					(column) => column.id === columnId,
 				)
-					return;
-				void changeGrouping(
-					getGroupingWithColumn(getGrouping(state), columnId, insertIndex),
-				);
-			};
-		return {
-			changeGrouping,
-			dragOver: (event: DragEvent<HTMLElement>) => event.preventDefault(),
-			drop: dropAt(),
-			dropAt,
-			dragColumn: (columnId: string) => (event: DragEvent<HTMLElement>) => {
-				event.dataTransfer.effectAllowed = "move";
-				event.dataTransfer.setData(GROUP_COLUMN_DATA_TYPE, columnId);
-				event.dataTransfer.setData("text/plain", columnId);
-			},
-			addColumn: (columnId: string) => () => {
-				void changeGrouping(
-					getGroupingWithColumn(getGrouping(state), columnId),
-				);
-			},
-			removeColumn: (columnId: string) => () => {
-				void changeGrouping(getGrouping(state).filter((id) => id !== columnId));
-			},
-			moveColumn: (columnId: string, offset: -1 | 1) => () => {
-				const grouping = getGrouping(state);
-				const index = grouping.indexOf(columnId);
-				const nextIndex = index + offset;
-				if (index < 0 || nextIndex < 0 || nextIndex >= grouping.length) return;
-				const next = [...grouping];
-				const [column] = next.splice(index, 1);
-				next.splice(nextIndex, 0, column);
-				void changeGrouping(next);
-			},
+			)
+				return;
+			void changeGrouping(
+				getGroupingWithColumn(getGrouping(state), columnId, insertIndex),
+			);
 		};
-	}, [state]);
+	const handlers = {
+		changeGrouping,
+		dragOver: (event: DragEvent<HTMLElement>) => event.preventDefault(),
+		drop: dropAt(),
+		dropAt,
+		dragColumn: (columnId: string) => (event: DragEvent<HTMLElement>) => {
+			event.dataTransfer.effectAllowed = "move";
+			event.dataTransfer.setData(GROUP_COLUMN_DATA_TYPE, columnId);
+			event.dataTransfer.setData("text/plain", columnId);
+		},
+		addColumn: (columnId: string) => () => {
+			void changeGrouping(getGroupingWithColumn(getGrouping(state), columnId));
+		},
+		removeColumn: (columnId: string) => () => {
+			void changeGrouping(getGrouping(state).filter((id) => id !== columnId));
+		},
+		moveColumn: (columnId: string, offset: -1 | 1) => () => {
+			const grouping = getGrouping(state);
+			const index = grouping.indexOf(columnId);
+			const nextIndex = index + offset;
+			if (index < 0 || nextIndex < 0 || nextIndex >= grouping.length) return;
+			const next = [...grouping];
+			const [column] = next.splice(index, 1);
+			next.splice(nextIndex, 0, column);
+			void changeGrouping(next);
+		},
+	};
 	const grouping = getGrouping(state);
 	const groupableColumns = getGroupableColumnItems(state.table.columns);
 	const columnMap = new Map(
