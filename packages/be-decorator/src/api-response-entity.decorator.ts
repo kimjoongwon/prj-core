@@ -7,6 +7,7 @@ import {
 	type Type,
 } from "@nestjs/common";
 import { ApiExtraModels, ApiResponse, getSchemaPath } from "@nestjs/swagger";
+import type { ReferenceObject, SchemaObject } from "@nestjs/swagger";
 import {
 	DTO_CLASS_METADATA,
 	DTO_EXCLUDE_FIELDS_METADATA,
@@ -73,7 +74,7 @@ const getDataSchema = (
 /**
  * 기본 페이지네이션 스키마 (metaDto가 없을 때 사용)
  */
-const getDefaultPaginationSchema = (): Record<string, unknown> => ({
+const getDefaultPaginationSchema = (): SchemaObject => ({
 	type: "object",
 	properties: {
 		total: { type: "number", description: "전체 항목 수" },
@@ -116,7 +117,7 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 	const isPrimitive = getPrimitiveSchema(dataDto) !== null;
 
 	// 기본 속성 정의
-	const properties: Record<string, unknown> = {
+	const properties: Record<string, SchemaObject | ReferenceObject> = {
 		httpStatus: {
 			type: "number",
 			nullable: false,

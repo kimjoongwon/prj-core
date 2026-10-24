@@ -1,51 +1,51 @@
 {
-  "name": "@cocrepo/vo",
-  "version": "0.1.0",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "Value Object 패키지 - 도메인 불변 값 객체",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
-  "scripts": {
-    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
-    "type-check:prod": "tsc --noEmit",
-    "build": "tsc --build",
-    "start:dev": "tsc --build --watch",
-    "format": "biome check --write .",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "clean": "rm -rf dist && rm -rf node_modules",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "peerDependencies": {
-    "bcrypt": "^6.0.0",
-    "libphonenumber-js": "^1.11.17"
-  },
-  "devDependencies": {
-    "@cocrepo/tsconfig": "workspace:*",
-    "@types/bcrypt": "^5.0.2",
-    "@types/jest": "^30.0.0",
-    "@types/node": "catalog:",
-    "bcrypt": "^6.0.0",
-    "jest": "^30.5.2",
-    "libphonenumber-js": "^1.13.15",
-    "ts-jest": "^29.4.15",
-    "typescript": "catalog:"
-  },
-  "private": true
+	"name": "@cocrepo/vo",
+	"version": "0.1.0",
+	"publishConfig": {
+		"access": "public"
+	},
+	"description": "Value Object 패키지 - 도메인 불변 값 객체",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"require": "./dist/index.js",
+			"default": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+		"type-check:prod": "tsc --noEmit",
+		"build": "tsc --build",
+		"start:dev": "tsc --build --watch",
+		"format": "biome check --write .",
+		"test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
+		"test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+		"test:cov": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+		"clean": "rm -rf dist && rm -rf node_modules",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"peerDependencies": {
+		"bcrypt": "^6.0.0",
+		"libphonenumber-js": "^1.11.17"
+	},
+	"devDependencies": {
+		"@cocrepo/tsconfig": "workspace:*",
+		"@types/bcrypt": "^5.0.2",
+		"@types/jest": "^30.0.0",
+		"@types/node": "catalog:",
+		"bcrypt": "^6.0.0",
+		"jest": "^30.5.2",
+		"libphonenumber-js": "^1.13.15",
+		"ts-jest": "^29.4.15",
+		"typescript": "catalog:"
+	},
+	"private": true
 }

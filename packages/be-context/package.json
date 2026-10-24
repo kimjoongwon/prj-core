@@ -1,29 +1,30 @@
 {
-  "name": "@cocrepo/context",
-  "version": "0.1.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc --build",
-    "type-check": "tsc --noEmit",
-    "type-check:prod": "tsc --noEmit",
-    "start:dev": "tsc --build --watch",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "dependencies": {
-    "@cocrepo/constant": "workspace:*",
-    "@cocrepo/entity": "workspace:*",
-    "@cocrepo/type": "workspace:*"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^11.2.3",
-    "nestjs-cls": "^6.1.0"
-  },
-  "devDependencies": {
-    "@nestjs/common": "^11.2.8",
-    "nestjs-cls": "^6.3.1"
-  },
-  "private": true
+	"name": "@cocrepo/context",
+	"version": "0.1.0",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc --build",
+		"type-check": "tsc --noEmit",
+		"type-check:prod": "tsc --noEmit",
+		"start:dev": "tsc --build --watch",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"dependencies": {
+		"@cocrepo/constant": "workspace:*",
+		"@cocrepo/entity": "workspace:*",
+		"@cocrepo/type": "workspace:*"
+	},
+	"peerDependencies": {
+		"@nestjs/common": "^12.0.0",
+		"nestjs-cls": "^7.0.1"
+	},
+	"devDependencies": {
+		"@nestjs/common": "^12.0.0",
+		"nestjs-cls": "^7.0.1",
+		"@types/jest": "^30.0.0"
+	},
+	"private": true
 }

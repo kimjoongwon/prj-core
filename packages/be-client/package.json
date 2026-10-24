@@ -1,50 +1,50 @@
 {
-  "name": "@cocrepo/client",
-  "version": "0.1.0",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "External system client layer for cocrepo",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "type-check": "tsc --noEmit",
-    "type-check:prod": "tsc --noEmit",
-    "build": "tsc --build",
-    "start:dev": "tsc --build --watch",
-    "format": "biome check --write .",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch",
-    "clean": "rm -rf dist && rm -rf node_modules",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^11.2.3",
-    "@nestjs/config": "^4.0.2"
-  },
-  "devDependencies": {
-    "@cocrepo/tsconfig": "workspace:*",
-    "@nestjs/common": "^11.2.8",
-    "@nestjs/config": "^4.0.4",
-    "@types/jest": "^30.0.0",
-    "@types/node": "catalog:",
-    "jest": "^30.5.2",
-    "reflect-metadata": "^0.2.2",
-    "ts-jest": "^29.4.15",
-    "typescript": "catalog:"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
-  "private": true
+	"name": "@cocrepo/client",
+	"version": "0.1.0",
+	"publishConfig": {
+		"access": "public"
+	},
+	"description": "External system client layer for cocrepo",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"type-check": "tsc --noEmit",
+		"type-check:prod": "tsc --noEmit",
+		"build": "tsc --build",
+		"start:dev": "tsc --build --watch",
+		"format": "biome check --write .",
+		"test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
+		"test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+		"clean": "rm -rf dist && rm -rf node_modules",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"peerDependencies": {
+		"@nestjs/common": "^12.0.0",
+		"@nestjs/config": "^12.0.0"
+	},
+	"devDependencies": {
+		"@cocrepo/tsconfig": "workspace:*",
+		"@nestjs/common": "^12.0.0",
+		"@nestjs/config": "^12.0.0",
+		"@types/jest": "^30.0.0",
+		"@types/node": "catalog:",
+		"jest": "^30.5.2",
+		"reflect-metadata": "^0.2.2",
+		"ts-jest": "^29.4.15",
+		"typescript": "catalog:"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"require": "./dist/index.js",
+			"default": "./dist/index.js"
+		}
+	},
+	"private": true
 }

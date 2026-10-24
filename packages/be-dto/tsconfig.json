@@ -1,21 +1,43 @@
 {
-  "extends": "@cocrepo/tsconfig/nestjs-package.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "useDefineForClassFields": false,
-    "strictPropertyInitialization": false,
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
-  },
-  "references": [
-    { "path": "../common-constant" },
-    { "path": "../be-prisma" },
-    { "path": "../be-decorator" },
-    { "path": "../be-entity" },
-    { "path": "../common-enum" },
-    { "path": "../common-schema" },
-    { "path": "../common-toolkit" }
-  ],
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+	"extends": "@cocrepo/tsconfig/nestjs-package.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"useDefineForClassFields": false,
+		"strictPropertyInitialization": false,
+		"tsBuildInfoFile": "./dist/.tsbuildinfo",
+		"types": [
+			"jest"
+		]
+	},
+	"references": [
+		{
+			"path": "../common-constant"
+		},
+		{
+			"path": "../be-prisma"
+		},
+		{
+			"path": "../be-decorator"
+		},
+		{
+			"path": "../be-entity"
+		},
+		{
+			"path": "../common-enum"
+		},
+		{
+			"path": "../common-schema"
+		},
+		{
+			"path": "../common-toolkit"
+		}
+	],
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"dist"
+	]
 }

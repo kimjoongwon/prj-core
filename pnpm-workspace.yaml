@@ -62,7 +62,7 @@ onlyBuiltDependencies:
   - nestjs-pino
 
 packageExtensions:
-  '@nestjs-cls/transactional-adapter-prisma@1.3.2':
+  '@nestjs-cls/transactional-adapter-prisma@2.0.1':
     peerDependenciesMeta:
       prisma:
         optional: true

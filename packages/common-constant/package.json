@@ -51,6 +51,9 @@
   "dependencies": {
     "@cocrepo/type": "workspace:*"
   },
+  "devDependencies": {
+    "@types/node": "catalog:"
+  },
   "private": false,
   "repository": {
     "type": "git",

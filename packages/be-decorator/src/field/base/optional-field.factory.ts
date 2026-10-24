@@ -2,6 +2,7 @@ import { applyDecorators } from "@nestjs/common";
 import { IsUndefinable } from "../../validator.decorators";
 import type {
 	BaseFieldOptions,
+	FieldDecoratorOptions,
 	OptionalFieldOptions,
 } from "./field-options.types";
 
@@ -20,20 +21,21 @@ import type {
  * @returns Optional 필드 데코레이터 함수
  */
 export function createOptionalField<T extends BaseFieldOptions>(
-	fieldDecorator: (options?: unknown) => PropertyDecorator,
+	fieldDecorator: (options?: FieldDecoratorOptions<T>) => PropertyDecorator,
 ) {
 	return (options?: OptionalFieldOptions<T>): PropertyDecorator => {
-		return applyDecorators(
-			IsUndefinable(),
-			fieldDecorator({ required: false, ...options }),
-		);
+		// required를 제거한 제네릭 옵션을 되살리는 조립이라 TS가 동등성을 증명하지 못한다.
+		const fieldOptions = { required: false, ...options } as FieldDecoratorOptions<T>;
+		return applyDecorators(IsUndefinable(), fieldDecorator(fieldOptions));
 	};
 }
 
 /** 선택 입력의 Swagger 표시만 적용하며 검증 조건을 추가하지 않습니다. */
 export function createOptionalFieldMetadata<T extends BaseFieldOptions>(
-	fieldDecorator: (options?: unknown) => PropertyDecorator,
+	fieldDecorator: (options?: FieldDecoratorOptions<T>) => PropertyDecorator,
 ) {
-	return (options?: OptionalFieldOptions<T>): PropertyDecorator =>
-		fieldDecorator({ required: false, ...options });
+	return (options?: OptionalFieldOptions<T>): PropertyDecorator => {
+		const fieldOptions = { required: false, ...options } as FieldDecoratorOptions<T>;
+		return fieldDecorator(fieldOptions);
+	};
 }

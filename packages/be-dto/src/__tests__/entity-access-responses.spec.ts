@@ -255,11 +255,11 @@ describe("접근·인증 Entity 응답", () => {
 				"removedAt",
 			].sort(),
 		);
-		expect(schemas.PolicyResponseDto.properties.entries).toMatchObject({
+		expect(schemas.PolicyResponseDto.properties?.entries).toMatchObject({
 			type: "array",
 			items: { $ref: "#/components/schemas/PolicyEntryResponseDto" },
 		});
-		expect(schemas.PolicyEntryResponseDto.properties.ability).toMatchObject({
+		expect(schemas.PolicyEntryResponseDto.properties?.ability).toMatchObject({
 			allOf: [{ $ref: "#/components/schemas/AbilityResponseDto" }],
 		});
 		expect(schemas.IdpAccountDto.required?.sort()).toEqual(
@@ -289,12 +289,12 @@ describe("접근·인증 Entity 응답", () => {
 				"canResend",
 			].sort(),
 		);
-		expect(schemas.OidcClientDto.properties.loginUi).toMatchObject({
+		expect(schemas.OidcClientDto.properties?.loginUi).toMatchObject({
 			type: "object",
 			additionalProperties: true,
 			nullable: true,
 		});
-		expect(schemas.TenantAccessRequestDto.properties.reviewer).toMatchObject({
+		expect(schemas.TenantAccessRequestDto.properties?.reviewer).toMatchObject({
 			nullable: true,
 			allOf: [{ $ref: "#/components/schemas/UserDto" }],
 		});
