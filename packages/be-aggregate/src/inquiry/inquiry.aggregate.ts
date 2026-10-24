@@ -48,7 +48,7 @@ export class InquiryAggregate {
 	/**
 	 * ID로 문의 조회
 	 */
-	async findById(id: bigint): Promise<Inquiry> {
+	async findById(id: string): Promise<Inquiry> {
 		const inquiry = await this.repository.findById(id);
 		if (!inquiry) {
 			throw new NotFoundException("문의를 찾을 수 없습니다");
@@ -59,7 +59,7 @@ export class InquiryAggregate {
 	/**
 	 * ID로 상세 조회 (스레드, 메시지, 참여자 포함)
 	 */
-	async findByIdWithDetails(id: bigint, spaceIds?: bigint[]): Promise<Inquiry> {
+	async findByIdWithDetails(id: string, spaceIds?: bigint[]): Promise<Inquiry> {
 		const inquiry =
 			await this.repository.findByIdWithThreadsAndMessagesAndParticipants(
 				id,
@@ -122,7 +122,7 @@ export class InquiryAggregate {
 	}
 
 	async getUpdateFormBootstrap(
-		inquirySeq: bigint,
+		inquiryId: bigint,
 		spaceIds?: bigint[],
 	): Promise<
 		CreateUpdateFormBootstrap<{
@@ -135,7 +135,7 @@ export class InquiryAggregate {
 			status: InquiryStatus;
 		}>
 	> {
-		const inquiry = await this.findByIdWithDetails(inquirySeq, spaceIds);
+		const inquiry = await this.findByIdWithDetails(inquiryId, spaceIds);
 
 		return {
 			mode: "UPDATE",
@@ -179,15 +179,15 @@ export class InquiryAggregate {
 
 		const defaultThread = await this.repository.createThread({
 			inquirySeq: inquiry.id,
-			createdBySeq: data.customerSeq ?? actorUserId,
+			createdById: data.customerId ?? actorUserId,
 			title: inquiry.title,
 		});
 
 		if (initialContent && initialContent.trim().length > 0) {
 			await this.sendMessage({
-				inquirySeq: inquiry.id,
-				actorUserId: data.customerSeq ?? actorUserId,
-				threadSeq: defaultThread.id,
+				inquiryId: inquiry.id,
+				actorUserId: data.customerId ?? actorUserId,
+				threadId: defaultThread.id,
 				content: initialContent,
 				contentType: "TEXT",
 				senderType: "USER",
@@ -201,7 +201,7 @@ export class InquiryAggregate {
 	 * 문의 수정
 	 */
 	async update(
-		id: bigint,
+		id: string,
 		data: UpdateInquiryAggregateInput,
 	): Promise<Inquiry> {
 		this.logger.debug(`문의 수정: ${id}`);
@@ -215,7 +215,7 @@ export class InquiryAggregate {
 	/**
 	 * 소프트 삭제
 	 */
-	async softDelete(id: bigint): Promise<Inquiry> {
+	async softDelete(id: string): Promise<Inquiry> {
 		this.logger.debug(`문의 소프트 삭제: ${id}`);
 
 		// 존재 확인
@@ -229,35 +229,35 @@ export class InquiryAggregate {
 	// ============================================================================
 
 	async listMessages(params: {
-		inquirySeq: bigint;
+		inquiryId: bigint;
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: InquiryMessage[]; totalCount: number }> {
-		await this.findById(params.inquirySeq);
+		await this.findById(params.inquiryId);
 		return this.repository.findMessagesByInquiryId(params);
 	}
 
 	async sendMessage(params: {
-		inquirySeq: bigint;
+		inquiryId: bigint;
 		actorUserId: bigint;
-		threadSeq?: bigint;
+		threadId?: bigint;
 		content: string;
 		contentType?: MessageContentType;
 		senderType?: SenderType;
 		clientMessageId?: string;
 	}): Promise<InquiryMessage> {
-		const inquiry = await this.findById(params.inquirySeq);
+		const inquiry = await this.findById(params.inquiryId);
 		if (inquiry.status === "CLOSED") {
 			throw new BadRequestException(
 				"종료된 문의에는 메시지를 전송할 수 없습니다",
 			);
 		}
 
-		const thread = params.threadSeq
-			? await this.repository.findThreadById(params.threadSeq)
-			: await this.repository.findDefaultThreadByInquiryId(params.inquirySeq);
+		const thread = params.threadId
+			? await this.repository.findThreadById(params.threadId)
+			: await this.repository.findDefaultThreadByInquiryId(params.inquiryId);
 
-		if (!thread || thread.inquirySeq !== params.inquirySeq) {
+		if (!thread || thread.inquirySeq !== params.inquiryId) {
 			throw new NotFoundException("문의 스레드를 찾을 수 없습니다");
 		}
 
@@ -275,9 +275,9 @@ export class InquiryAggregate {
 
 		const senderType = params.senderType ?? "USER";
 		const message = await this.repository.createMessage({
-			inquirySeq: params.inquirySeq,
+			inquirySeq: params.inquiryId,
 			threadSeq: thread.id,
-			senderSeq: params.actorUserId,
+			senderId: params.actorUserId,
 			content: params.content,
 			contentType: params.contentType ?? "TEXT",
 			senderType,
@@ -286,23 +286,23 @@ export class InquiryAggregate {
 
 		await Promise.all([
 			this.repository.touchThreadAfterMessage(thread.id, params.content),
-			this.repository.recordMessageActivityById(params.inquirySeq),
+			this.repository.recordMessageActivityById(params.inquiryId),
 			this.repository.incrementParticipantUnreadByInquiryId(
-				params.inquirySeq,
+				params.inquiryId,
 				params.actorUserId,
 			),
 		]);
 
 		if (inquiry.customerSeq !== params.actorUserId) {
-			await this.repository.recordFirstResponseById(params.inquirySeq);
+			await this.repository.recordFirstResponseById(params.inquiryId);
 		}
 
 		return message;
 	}
 
-	async getParticipants(inquirySeq: bigint): Promise<InquiryParticipant[]> {
-		await this.findById(inquirySeq);
-		return this.repository.findParticipantsByInquiryId(inquirySeq);
+	async getParticipants(inquiryId: bigint): Promise<InquiryParticipant[]> {
+		await this.findById(inquiryId);
+		return this.repository.findParticipantsByInquiryId(inquiryId);
 	}
 
 	// ============================================================================
@@ -313,8 +313,8 @@ export class InquiryAggregate {
 	 * 담당자 배정
 	 * - NEW 상태면 OPEN으로 변경
 	 */
-	async assignTo(id: bigint, assigneeSeq: bigint): Promise<Inquiry> {
-		this.logger.debug(`담당자 배정: ${id} -> ${assigneeSeq}`);
+	async assignTo(id: string, assigneeId: bigint): Promise<Inquiry> {
+		this.logger.debug(`담당자 배정: ${id} -> ${assigneeId}`);
 
 		const inquiry = await this.findById(id);
 
@@ -325,7 +325,7 @@ export class InquiryAggregate {
 			);
 		}
 
-		return this.repository.updateAssigneeById(id, assigneeSeq);
+		return this.repository.updateAssigneeById(id, assigneeId);
 	}
 
 	// ============================================================================
@@ -335,7 +335,7 @@ export class InquiryAggregate {
 	/**
 	 * 상태 변경 (상태 머신 검증)
 	 */
-	async updateStatus(id: bigint, newStatus: InquiryStatus): Promise<Inquiry> {
+	async updateStatus(id: string, newStatus: InquiryStatus): Promise<Inquiry> {
 		this.logger.debug(`상태 변경: ${id} -> ${newStatus}`);
 
 		const inquiry = await this.findById(id);
@@ -355,7 +355,7 @@ export class InquiryAggregate {
 	 * 우선순위 변경
 	 */
 	async updatePriority(
-		id: bigint,
+		id: string,
 		priority: InquiryPriority,
 	): Promise<Inquiry> {
 		this.logger.debug(`우선순위 변경: ${id} -> ${priority}`);
@@ -417,7 +417,7 @@ export class InquiryAggregate {
 	 * SLA 초과 문의 목록
 	 */
 	async getOverdueList(params?: {
-		spaceSeq?: bigint;
+		spaceId?: bigint;
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: Inquiry[]; totalCount: number }> {
@@ -433,11 +433,11 @@ export class InquiryAggregate {
 	 * 감정 분석
 	 * 실제 구현은 별도 AI 서비스 또는 UseCase에서 처리
 	 */
-	async analyzeSentiment(inquirySeq: bigint) {
-		this.logger.debug(`감정 분석 요청: ${inquirySeq}`);
+	async analyzeSentiment(inquiryId: bigint) {
+		this.logger.debug(`감정 분석 요청: ${inquiryId}`);
 
 		// 존재 확인
-		await this.findById(inquirySeq);
+		await this.findById(inquiryId);
 
 		// TODO: 실제 AI 서비스 연동
 		throw new BadRequestException("감정 분석 기능이 아직 구현되지 않았습니다");
@@ -447,7 +447,7 @@ export class InquiryAggregate {
 	 * 감정 분석 결과 업데이트 (AI 서비스에서 호출)
 	 */
 	async updateSentiment(
-		id: bigint,
+		id: string,
 		sentiment: SentimentType,
 		sentimentScore: number,
 	): Promise<Inquiry> {
@@ -462,7 +462,7 @@ export class InquiryAggregate {
 	/**
 	 * 읽지 않은 메시지 수 초기화
 	 */
-	async resetUnreadCount(id: bigint): Promise<Inquiry> {
+	async resetUnreadCount(id: string): Promise<Inquiry> {
 		this.logger.debug(`읽지 않은 메시지 수 초기화: ${id}`);
 		return this.repository.resetUnreadCountById(id);
 	}
@@ -470,7 +470,7 @@ export class InquiryAggregate {
 	/**
 	 * 읽지 않은 메시지 수 증가
 	 */
-	async incrementUnreadCount(id: bigint): Promise<Inquiry> {
+	async incrementUnreadCount(id: string): Promise<Inquiry> {
 		this.logger.debug(`읽지 않은 메시지 수 증가: ${id}`);
 		return this.repository.incrementUnreadCountById(id);
 	}
@@ -482,7 +482,7 @@ export class InquiryAggregate {
 	/**
 	 * 첫 응답 시간 기록
 	 */
-	async recordFirstResponse(id: bigint): Promise<Inquiry> {
+	async recordFirstResponse(id: string): Promise<Inquiry> {
 		this.logger.debug(`첫 응답 기록: ${id}`);
 		return this.repository.recordFirstResponseById(id);
 	}

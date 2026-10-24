@@ -13,14 +13,14 @@ export class ReservationCreatedLogHandler
 			event as ReservationCreatedEvent & {
 				payload: {
 					reservationId: string;
-					userSeq: string;
-					spaceSeq: string;
+					userId: string;
+					spaceId: string;
 				};
 			}
 		).payload;
 
 		this.logger.debug(
-			`Reservation created: reservationId=${payload.reservationId}, userSeq=${payload.userSeq}, spaceSeq=${payload.spaceSeq}`,
+			`Reservation created: reservationId=${payload.reservationId}, userId=${payload.userId}, spaceId=${payload.spaceId}`,
 		);
 	}
 }

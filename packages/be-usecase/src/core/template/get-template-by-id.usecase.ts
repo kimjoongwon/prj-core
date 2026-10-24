@@ -7,6 +7,6 @@ export class GetTemplateByIdUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	execute(query: GetTemplateByIdQuery): Promise<unknown> {
-		return this.templateService.getTemplateById(query.templateSeq);
+		return this.templateService.getTemplateById(query.templateId);
 	}
 }

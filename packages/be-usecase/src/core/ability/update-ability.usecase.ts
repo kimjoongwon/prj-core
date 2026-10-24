@@ -10,11 +10,11 @@ export class UpdateAbilityUseCase {
 
 	async execute(command: UpdateAbilityCommand): Promise<unknown> {
 		const existing = await this.abilitiesService.getAbilityById(
-			command.abilitySeq,
+			command.abilityId,
 		);
 		if (!existing) {
 			throw new NotFoundException(ABILITY_ERRORS.NOT_FOUND);
 		}
-		return this.abilitiesService.updateAbility(command.abilitySeq, command);
+		return this.abilitiesService.updateAbility(command.abilityId, command);
 	}
 }

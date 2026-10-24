@@ -15,7 +15,6 @@ import { Session } from "./session.entity";
 @AbstractEntityFields()
 export class Program extends ProgramSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: ProgramSchema["id"];
 
 	@BigIntIdFieldMetadata() declare routineSeq: ProgramSchema["routineSeq"];

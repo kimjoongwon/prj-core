@@ -59,15 +59,15 @@ export class RoutineAggregate {
 	 * spaceScope 기본값은 INCLUDE_ANCESTORS (상위 Space 공유 자원 접근 허용)
 	 */
 	async findRoutineById(
-		routineSeq: bigint,
+		routineId: bigint,
 		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Routine> {
-		this.logger.debug(`루틴 단건 조회: ${routineSeq}`);
+		this.logger.debug(`루틴 단건 조회: ${routineId}`);
 
 		const spaceIds = this.resolveReadableSpaceIds(spaceScope);
 
 		const routine = await this.routinesRepository.findRoutineById(
-			routineSeq,
+			routineId,
 			spaceIds,
 		);
 
@@ -80,27 +80,27 @@ export class RoutineAggregate {
 
 	/**
 	 * 루틴 등록
-	 * createdBySeq = 현재 로그인 사용자 ID
-	 * spaceSeq = 현재 Space ID
+	 * createdById = 현재 로그인 사용자 ID
+	 * spaceId = 현재 Space ID
 	 */
 	async createRoutine(
 		dto: {
 			name: string;
 			label: string;
 			activities?: {
-				taskSeq: bigint;
+				taskId: bigint;
 				order?: number;
 				repetitions?: number;
 				restTime?: number;
 				notes?: string;
 			}[];
 		},
-		userSeq: bigint,
+		userId: bigint,
 	): Promise<Routine> {
 		this.logger.debug(`루틴 등록: name=${dto.name}`);
 
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new Error("Space 컨텍스트가 설정되지 않았습니다");
 		}
 
@@ -109,23 +109,23 @@ export class RoutineAggregate {
 		return this.routinesRepository.createRoutine({
 			name: dto.name,
 			label: dto.label,
-			spaceSeq,
-			createdBySeq: userSeq,
+			spaceId,
+			createdById: userId,
 			activities: this.normalizeRoutineActivities(dto.activities),
 		});
 	}
 
 	/**
 	 * 루틴 수정
-	 * 현재 Space가 소유한 루틴(routine.spaceSeq === currentSpaceId)만 수정 가능합니다.
+	 * 현재 Space가 소유한 루틴(routine.spaceId === currentSpaceId)만 수정 가능합니다.
 	 */
 	async updateRoutine(
-		routineSeq: bigint,
+		routineId: bigint,
 		dto: {
 			name?: string;
 			label?: string;
 			activities?: {
-				taskSeq: bigint;
+				taskId: bigint;
 				order?: number;
 				repetitions?: number;
 				restTime?: number;
@@ -133,22 +133,22 @@ export class RoutineAggregate {
 			}[];
 		},
 	): Promise<Routine> {
-		this.logger.debug(`루틴 수정: ${routineSeq}`);
+		this.logger.debug(`루틴 수정: ${routineId}`);
 
-		const spaceSeq = this.spaceContext.spaceSeq;
+		const spaceId = this.spaceContext.spaceId;
 		const routine = await this.findRoutineById(
-			routineSeq,
+			routineId,
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
 		await this.validateRoutineActivityTasks(dto.activities);
 
 		// 현재 Space 소유 여부 확인
-		if (routine.spaceSeq !== spaceSeq) {
+		if (routine.spaceSeq !== spaceId) {
 			throw new ForbiddenException(ROUTINE_ERRORS.ROUTINE_NOT_OWNED);
 		}
 
-		return this.routinesRepository.updateRoutine(routineSeq, {
+		return this.routinesRepository.updateRoutine(routineId, {
 			name: dto.name,
 			label: dto.label,
 			activities: this.normalizeRoutineActivities(dto.activities),
@@ -157,7 +157,7 @@ export class RoutineAggregate {
 
 	private async validateRoutineActivityTasks(
 		activities?: {
-			taskSeq: bigint;
+			taskId: bigint;
 		}[],
 	): Promise<void> {
 		if (!activities) {
@@ -166,25 +166,25 @@ export class RoutineAggregate {
 
 		const taskIds = new Set<bigint>();
 		for (const activity of activities) {
-			if (taskIds.has(activity.taskSeq)) {
+			if (taskIds.has(activity.taskId)) {
 				throw new ConflictException(
 					ROUTINE_ERRORS.ROUTINE_ACTIVITY_TASK_DUPLICATED,
 				);
 			}
-			taskIds.add(activity.taskSeq);
+			taskIds.add(activity.taskId);
 		}
 
 		const accessibleSpaceIds =
 			this.spaceContext.spaceIds ??
-			(this.spaceContext.spaceSeq ? [this.spaceContext.spaceSeq] : []);
+			(this.spaceContext.spaceId ? [this.spaceContext.spaceId] : []);
 		const tasks = await this.tasksRepository.findTasksByIds(
 			Array.from(taskIds),
 			accessibleSpaceIds,
 		);
 		const taskById = new Map(tasks.map((task) => [task.id, task]));
 
-		for (const taskSeq of taskIds) {
-			const task = taskById.get(taskSeq);
+		for (const taskId of taskIds) {
+			const task = taskById.get(taskId);
 			if (!task?.exercise?.videoFileId) {
 				throw new BadRequestException(
 					ROUTINE_ERRORS.TASK_EXERCISE_NOT_SCHEDULABLE,
@@ -204,12 +204,12 @@ export class RoutineAggregate {
 			return this.spaceContext.spaceIds;
 		}
 
-		return this.spaceContext.spaceSeq ? [this.spaceContext.spaceSeq] : [];
+		return this.spaceContext.spaceId ? [this.spaceContext.spaceId] : [];
 	}
 
 	private normalizeRoutineActivities(
 		activities?: {
-			taskSeq: bigint;
+			taskId: bigint;
 			order?: number;
 			repetitions?: number;
 			restTime?: number;
@@ -217,7 +217,7 @@ export class RoutineAggregate {
 		}[],
 	):
 		| {
-				taskSeq: bigint;
+				taskId: bigint;
 				order: number;
 				repetitions: number;
 				restTime: number;
@@ -229,7 +229,7 @@ export class RoutineAggregate {
 		}
 
 		return activities.map((activity, index) => ({
-			taskSeq: activity.taskSeq,
+			taskId: activity.taskId,
 			order: activity.order ?? index + 1,
 			repetitions: activity.repetitions ?? this.DEFAULT_ACTIVITY_REPETITIONS,
 			restTime: activity.restTime ?? this.DEFAULT_ACTIVITY_REST_TIME,
@@ -242,28 +242,28 @@ export class RoutineAggregate {
 	 * - 현재 Space가 소유한 루틴만 삭제 가능
 	 * - Program에서 사용 중인 루틴은 삭제 불가
 	 */
-	async removeRoutine(routineSeq: bigint): Promise<void> {
-		this.logger.debug(`루틴 삭제: ${routineSeq}`);
+	async removeRoutine(routineId: bigint): Promise<void> {
+		this.logger.debug(`루틴 삭제: ${routineId}`);
 
-		const spaceSeq = this.spaceContext.spaceSeq;
+		const spaceId = this.spaceContext.spaceId;
 		const routine = await this.findRoutineById(
-			routineSeq,
+			routineId,
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
 		// 현재 Space 소유 여부 확인
-		if (routine.spaceSeq !== spaceSeq) {
+		if (routine.spaceSeq !== spaceId) {
 			throw new ForbiddenException(ROUTINE_ERRORS.ROUTINE_NOT_OWNED);
 		}
 
 		// Program 사용 여부 확인
 		const programCount =
-			await this.routinesRepository.countProgramsUsingRoutine(routineSeq);
+			await this.routinesRepository.countProgramsUsingRoutine(routineId);
 
 		if (programCount > 0) {
 			throw new ConflictException(ROUTINE_ERRORS.ROUTINE_IN_USE);
 		}
 
-		await this.routinesRepository.softDeleteRoutine(routineSeq);
+		await this.routinesRepository.softDeleteRoutine(routineId);
 	}
 }

@@ -14,7 +14,6 @@ import { TemplateVariable } from "./template-variable.entity";
 @AbstractEntityFields()
 export class Template extends TemplateSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: TemplateSchema["id"];
 
 	// ============================================================================

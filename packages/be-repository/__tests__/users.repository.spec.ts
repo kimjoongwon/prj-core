@@ -116,9 +116,9 @@ describe("UsersRepository", () => {
 
 			expect(mockTxHost.tx.tenant.findFirst).toHaveBeenCalledWith({
 				where: {
-					tenantId: "tenant-test-id",
-					user: { userSeq: "user-test-id" },
-					space: { spaceSeq: "space-test-id" },
+					id: "tenant-test-id",
+					user: { id: "user-test-id" },
+					space: { id: "space-test-id" },
 					removedAt: null,
 				},
 				include: {
@@ -136,7 +136,7 @@ describe("UsersRepository", () => {
 								where: {
 									removedAt: null,
 									policy: {
-										space: { spaceSeq: "space-test-id" },
+										space: { id: "space-test-id" },
 										removedAt: null,
 									},
 								},
@@ -204,7 +204,7 @@ describe("UsersRepository", () => {
 						tenants: {
 							some: {
 								space: {
-									id: { in: [101n, 102n] },
+									seq: { in: [101n, 102n] },
 								},
 								removedAt: null,
 							},
@@ -243,7 +243,7 @@ describe("UsersRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith({
-				where: { id: userSeq },
+				where: { seq: userSeq },
 				include: expect.objectContaining({
 					tenants: expect.any(Object),
 					profiles: true,
@@ -264,7 +264,7 @@ describe("UsersRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith({
-				where: { id: userSeq },
+				where: { seq: userSeq },
 				include: expect.any(Object),
 			});
 			expect(result).toBeNull();
@@ -389,7 +389,7 @@ describe("UsersRepository", () => {
 				removedAt: null,
 				tenants: {
 					some: {
-						space: { id: { in: [1n] } },
+						space: { seq: { in: [1n] } },
 						removedAt: null,
 					},
 				},
@@ -401,7 +401,7 @@ describe("UsersRepository", () => {
 					tenants: expect.objectContaining({
 						where: {
 							removedAt: null,
-							space: { id: { in: [1n] } },
+							space: { seq: { in: [1n] } },
 						},
 						include: {
 							role: true,
@@ -448,7 +448,7 @@ describe("UsersRepository", () => {
 						role: {
 							name: { in: ["MANAGER"] },
 						},
-						space: { id: { in: [1n] } },
+						space: { seq: { in: [1n] } },
 						removedAt: null,
 					},
 				},
@@ -496,7 +496,7 @@ describe("UsersRepository", () => {
 						],
 						tenants: {
 							some: {
-								space: { id: { in: [1n] } },
+								space: { seq: { in: [1n] } },
 								removedAt: null,
 							},
 						},
@@ -547,11 +547,11 @@ describe("UsersRepository", () => {
 			expect(mockTxHost.tx.user.findFirst).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: {
-						id: 101n,
+						seq: 101n,
 						removedAt: null,
 						tenants: {
 							some: {
-								space: { id: { in: [1n] } },
+								space: { seq: { in: [1n] } },
 								removedAt: null,
 							},
 						},
@@ -560,7 +560,7 @@ describe("UsersRepository", () => {
 			);
 			expect(mockTxHost.tx.user.update).toHaveBeenCalledWith(
 				expect.objectContaining({
-					where: { id: 101n },
+					where: { seq: 101n },
 					data: { status: { upsert: { create: { isActive: false }, update: { isActive: false } } } },
 				}),
 			);

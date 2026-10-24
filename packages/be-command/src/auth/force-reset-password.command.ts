@@ -1,3 +1,3 @@
 export class ForceResetPasswordCommand {
-	constructor(readonly userSeq: bigint) {}
+	constructor(readonly userId: string) {}
 }

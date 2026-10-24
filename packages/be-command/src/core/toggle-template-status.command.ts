@@ -1,3 +1,3 @@
 export class ToggleTemplateStatusCommand {
-	constructor(readonly templateSeq: bigint) {}
+	constructor(readonly templateId: string) {}
 }

@@ -8,7 +8,6 @@ import type { Role } from "./role.entity";
 /** Role에 Space별 Policy를 할당합니다. */
 @AbstractEntityFields()
 export class RoleAssignment extends RoleAssignmentSchema {
-	@Exclude({ toPlainOnly: true })
 	declare id: RoleAssignmentSchema["id"];
 	@BigIntIdFieldMetadata({ description: "Role assignment ID" })
 	declare seq: bigint;

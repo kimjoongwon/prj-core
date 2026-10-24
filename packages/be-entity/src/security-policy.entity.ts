@@ -26,7 +26,6 @@ export class SecurityPolicy extends SecurityPolicySchema {
 	declare updatedAt: Date | null;
 
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: SecurityPolicySchema["id"];
 
 	// ============================================================================

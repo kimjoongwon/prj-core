@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	ApproveTenantAccessRequestCommand,
 	GetTenantAccessRequestForReviewQuery,
@@ -61,15 +61,15 @@ export class TenantAccessRequestsController {
 	@ResponseMessage("테넌트 접근 신청 승인 목록 조회 성공")
 	getRequests(@Query() query: QueryTenantAccessRequestDto) {
 		this.authContext.assertAuthenticated();
-		const userSeq = this.authContext.user?.id;
-		if (!userSeq) {
+		const userId = this.authContext.user?.id;
+		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return this.queryBus.execute(
 			new ListTenantAccessRequestsForReviewQuery({
 				...query,
-				reviewerSeq: userSeq,
+				reviewerId: userId,
 			}),
 		);
 	}
@@ -96,17 +96,17 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 상세 조회 성공")
 	getRequest(
-		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
-		tenantAccessRequestId: bigint,
+		@Param("tenantAccessRequestId", ParseUlidPipe)
+		tenantAccessRequestId: string,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();
-		const userSeq = this.authContext.user?.id;
-		if (!userSeq) {
+		const userId = this.authContext.user?.id;
+		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return this.queryBus.execute(
-			new GetTenantAccessRequestForReviewQuery(tenantAccessRequestId, userSeq),
+			new GetTenantAccessRequestForReviewQuery(tenantAccessRequestId, userId),
 		);
 	}
 
@@ -142,18 +142,18 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 승인 성공")
 	approve(
-		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
-		tenantAccessRequestId: bigint,
+		@Param("tenantAccessRequestId", ParseUlidPipe)
+		tenantAccessRequestId: string,
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();
-		const userSeq = this.authContext.user?.id;
-		if (!userSeq) {
+		const userId = this.authContext.user?.id;
+		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return this.commandBus.execute(
-			new ApproveTenantAccessRequestCommand(tenantAccessRequestId, userSeq, dto),
+			new ApproveTenantAccessRequestCommand(tenantAccessRequestId, userId, dto),
 		);
 	}
 
@@ -184,18 +184,18 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 반려 성공")
 	reject(
-		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
-		tenantAccessRequestId: bigint,
+		@Param("tenantAccessRequestId", ParseUlidPipe)
+		tenantAccessRequestId: string,
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();
-		const userSeq = this.authContext.user?.id;
-		if (!userSeq) {
+		const userId = this.authContext.user?.id;
+		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
 		return this.commandBus.execute(
-			new RejectTenantAccessRequestCommand(tenantAccessRequestId, userSeq, dto),
+			new RejectTenantAccessRequestCommand(tenantAccessRequestId, userId, dto),
 		);
 	}
 }

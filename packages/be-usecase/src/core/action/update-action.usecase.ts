@@ -8,7 +8,7 @@ export class UpdateActionUseCase {
 
 	execute(command: UpdateActionCommand): Promise<unknown> {
 		const input = command;
-		return this.actionsService.updateAction(command.actionSeq, {
+		return this.actionsService.updateAction(command.actionId, {
 			...(input.name !== undefined && { name: input.name }),
 			...(input.displayName !== undefined && {
 				displayName: input.displayName,

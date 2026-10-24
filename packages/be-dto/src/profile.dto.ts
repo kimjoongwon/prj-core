@@ -12,9 +12,7 @@ export class ProfileDto extends EntityResponseType(Profile, {
 		"name",
 		"nickname",
 		"address",
-		"userSeq",
-		"user",
-	] as const,
+		"user"] as const,
 	relations: {
 		user: () => UserDto,
 	},

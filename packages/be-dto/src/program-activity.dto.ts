@@ -7,8 +7,6 @@ export class ProgramActivityDto extends EntityResponseType(ProgramActivity, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"programSeq",
-		"taskSeq",
 		"order",
 		"repetitions",
 		"restTime",
@@ -18,6 +16,5 @@ export class ProgramActivityDto extends EntityResponseType(ProgramActivity, {
 		"exerciseDuration",
 		"exerciseCount",
 		"imageFileId",
-		"videoFileId",
-	] as const,
+		"videoFileId"] as const,
 }) {}

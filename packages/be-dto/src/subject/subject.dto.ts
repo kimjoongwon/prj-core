@@ -11,6 +11,5 @@ export class SubjectDto extends EntityResponseType(Subject, {
 		"displayName",
 		"icon",
 		"group",
-		"order",
-	] as const,
+		"order"] as const,
 }) {}

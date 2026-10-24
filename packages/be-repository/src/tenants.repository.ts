@@ -25,22 +25,22 @@ export class TenantsRepository {
 		this.logger = new Logger("TenantsRepository");
 	}
 
-	async findById(id: bigint): Promise<Tenant | null> {
-		this.logger.debug(`ID로 조회: ${id.toString()}`);
+	async findById(id: string): Promise<Tenant | null> {
+		this.logger.debug(`공개 ID로 조회: ${id}`);
 
 		const result = await this.txHost.tx.tenant.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: { user: true, space: true, role: true },
 		});
 
 		return result ? toDomainEntity(Tenant, result) : null;
 	}
 
-	async findByIdWithRelations(id: bigint): Promise<Tenant | null> {
+	async findByIdWithRelations(id: string): Promise<Tenant | null> {
 		this.logger.debug(`관계 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenant.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: {
 				user: true,
 				space: true,
@@ -170,7 +170,7 @@ export class TenantsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.TenantUncheckedUpdateInput,
 			"id"
@@ -178,7 +178,7 @@ export class TenantsRepository {
 	): Promise<Tenant> {
 		this.logger.debug(`테넌트 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.tenant.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: { user: true, space: true, role: true },
 		});
@@ -223,11 +223,11 @@ export class TenantsRepository {
 		return toDomainEntity(Tenant, result);
 	}
 
-	async deleteById(id: bigint): Promise<Tenant> {
+	async deleteById(id: string): Promise<Tenant> {
 		this.logger.debug(`테넌트 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenant.delete({
-			where: { seq: id },
+			where: { id },
 			include: { user: true, space: true, role: true },
 		});
 

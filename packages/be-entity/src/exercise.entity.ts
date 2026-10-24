@@ -14,7 +14,6 @@ import { Task } from "./task.entity";
 @AbstractEntityFields()
 export class Exercise extends ExerciseSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: ExerciseSchema["id"];
 
 	@NumberFieldMetadata() declare duration: ExerciseSchema["duration"];

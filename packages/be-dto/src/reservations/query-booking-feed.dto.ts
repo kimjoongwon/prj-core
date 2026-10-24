@@ -3,8 +3,6 @@ import { EntityQueryType } from "../query/entity-query-type";
 import { Reservation } from "@cocrepo/entity";
 
 export class QueryBookingFeedDto extends EntityQueryType(Reservation, [
-	"timelineSeq",
-	"programSeq",
 ] as const) {
 	@DateFieldOptional({ description: "조회 시작 일시" })
 	dateFrom?: Date;

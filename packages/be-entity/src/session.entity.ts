@@ -23,7 +23,6 @@ import { Timeline } from "./timeline.entity";
 @AbstractEntityFields()
 export class Session extends SessionSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: SessionSchema["id"];
 
 	@EnumFieldMetadata(() => SessionTypes)

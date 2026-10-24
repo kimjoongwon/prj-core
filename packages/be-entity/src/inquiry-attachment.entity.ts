@@ -20,7 +20,6 @@ import type { InquiryMessage } from "./inquiry-message.entity";
 @AbstractEntityFields()
 export class InquiryAttachment extends InquiryAttachmentSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: InquiryAttachmentSchema["id"];
 
 	// ============================================================================

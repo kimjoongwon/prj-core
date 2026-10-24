@@ -9,8 +9,8 @@ export class GetTaskExerciseUseCase {
 	execute(query: GetTaskExerciseQuery): Promise<unknown> {
 		const currentSpaceScope = "CURRENT" as NonNullable<typeof query.spaceScope>;
 		return this.taskService.getExerciseByTaskId(
-			query.taskSeq,
-			query.spaceSeq,
+			query.taskId,
+			query.spaceId,
 			query.spaceScope ?? currentSpaceScope,
 		);
 	}

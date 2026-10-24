@@ -17,7 +17,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class UserStatus extends UserStatusSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
 	declare id: UserStatusSchema["id"];
 

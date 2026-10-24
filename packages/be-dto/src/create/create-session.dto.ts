@@ -1,3 +1,5 @@
+import {
+	ULIDField, StringField } from "@cocrepo/decorator/field";
 import { Session } from "@cocrepo/entity";
 import { PickType } from "@nestjs/swagger";
 
@@ -7,7 +9,9 @@ export class CreateSessionDto extends PickType(Session, [
 	"startDateTime",
 	"endDateTime",
 	"recurringDayOfWeek",
-	"timelineSeq",
 	"name",
 	"description",
-] as const) {}
+] as const) {
+	@ULIDField({ description: "타임라인 공개 ID (ULID)" })
+	timelineId!: string;
+}

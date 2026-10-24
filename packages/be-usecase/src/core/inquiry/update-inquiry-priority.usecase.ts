@@ -8,7 +8,7 @@ export class UpdateInquiryPriorityUseCase {
 
 	execute(command: UpdateInquiryPriorityCommand): Promise<unknown> {
 		return this.inquiryService.updatePriority(
-			command.inquirySeq,
+			command.inquiryId,
 			command.priority,
 		);
 	}

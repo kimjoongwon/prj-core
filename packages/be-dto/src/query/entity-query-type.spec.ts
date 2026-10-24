@@ -64,27 +64,26 @@ describe("EntityQueryType", () => {
 
 	it("preserves migrated domain Query wire contracts", async () => {
 		const validAssetQuery = plainToInstance(AssetQueryDto, {
-			folderSeq: "123",
+			folderId: "01JFDER00000000000000000AA",
 			kind: "IMAGE",
 			status: "READY",
 		});
 		const invalidAssetQuery = plainToInstance(AssetQueryDto, {
-			folderSeq: "0",
 			kind: "invalid",
 		});
 		const partialEmailQuery = plainToInstance(QueryUsersDto, {
 			email: "partial",
 		});
 		const nullTimelineQuery = plainToInstance(QueryTimelineDto, {
-			timelineSeq: "null",
+			timelineId: "null",
 		});
 
-		expect(validAssetQuery.folderSeq).toBe(123n);
+		expect(validAssetQuery.folderId).toBe("01JFDER00000000000000000AA");
 		expect(await validate(validAssetQuery)).toHaveLength(0);
 		expect((await validate(invalidAssetQuery)).length).toBeGreaterThan(0);
 		expect(partialEmailQuery.email).toBe("partial");
 		expect(await validate(partialEmailQuery)).toHaveLength(0);
-		expect(nullTimelineQuery.timelineSeq).toBeNull();
+		expect(nullTimelineQuery.timelineId).toBeNull();
 	});
 
 	it("does not expose Entity defaults in Query Swagger metadata", () => {
@@ -188,10 +187,10 @@ describe("EntityQueryType", () => {
 		},
 		{
 			queryType: AlbumQueryDto,
-			filterKey: "spaceSeq",
-			wireFilter: "123",
-			parsedFilter: 123n,
-			invalidFilter: "0",
+			filterKey: "spaceId",
+			wireFilter: "01JAAAAAAAAAAAAAAAAAAAAAAA",
+			parsedFilter: "01JAAAAAAAAAAAAAAAAAAAAAAA",
+			invalidFilter: "invalid",
 		},
 		{
 			queryType: QueryIdpAccountDto,
@@ -209,17 +208,17 @@ describe("EntityQueryType", () => {
 		},
 		{
 			queryType: QueryTenantAccessRequestDto,
-			filterKey: "spaceSeq",
-			wireFilter: "123",
-			parsedFilter: 123n,
-			invalidFilter: "0",
+			filterKey: "spaceId",
+			wireFilter: "01JAAAAAAAAAAAAAAAAAAAAAAA",
+			parsedFilter: "01JAAAAAAAAAAAAAAAAAAAAAAA",
+			invalidFilter: "invalid",
 		},
 		{
 			queryType: QueryTenantAccessRequestDto,
-			filterKey: "requesterSeq",
-			wireFilter: "456",
-			parsedFilter: 456n,
-			invalidFilter: "-1",
+			filterKey: "requesterId",
+			wireFilter: "01JBBBBBBBBBBBBBBBBBBBBBBB",
+			parsedFilter: "01JBBBBBBBBBBBBBBBBBBBBBBB",
+			invalidFilter: "invalid",
 		},
 		{
 			queryType: QueryOidcSessionDto,
@@ -271,7 +270,7 @@ describe("EntityQueryType", () => {
 			parentFolderSeq: null,
 		});
 		const timelineQuery = plainToInstance(QueryTimelineDto, {
-			timelineSeq: "null",
+			timelineId: "null",
 			search: "null",
 		});
 
@@ -281,7 +280,7 @@ describe("EntityQueryType", () => {
 		expect(
 			(await validate(folderQuery)).map((error) => error.property),
 		).toContain("parentFolderSeq");
-		expect(timelineQuery).toMatchObject({ timelineSeq: null, search: null });
+		expect(timelineQuery).toMatchObject({ timelineId: null, search: null });
 		expect(await validate(timelineQuery)).toHaveLength(0);
 	});
 });

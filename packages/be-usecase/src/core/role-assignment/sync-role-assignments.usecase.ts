@@ -10,7 +10,7 @@ export class SyncRoleAssignmentsUseCase {
 
 	execute(command: SyncRoleAssignmentsCommand): Promise<unknown> {
 		return this.roleAssignmentService.syncRoleAssignments(
-			command.roleSeq,
+			command.roleId,
 			command.assignments,
 		);
 	}

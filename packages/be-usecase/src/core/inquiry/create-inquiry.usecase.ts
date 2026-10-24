@@ -9,15 +9,15 @@ export class CreateInquiryUseCase {
 	execute(command: CreateInquiryCommand): Promise<unknown> {
 		return this.inquiryService.create(
 			{
-				spaceSeq: command.spaceSeq,
-				createdBySeq: command.actorUserId,
+				spaceId: command.spaceId,
+				createdById: command.actorUserId,
 				title: command.title,
 				category: command.category,
 				channel: command.channel,
 				source: command.source,
 				priority: command.priority,
-				customerSeq: command.customerSeq,
-				assigneeSeq: command.assigneeSeq,
+				customerId: command.customerId,
+				assigneeId: command.assigneeId,
 			},
 			command.actorUserId,
 			command.content,

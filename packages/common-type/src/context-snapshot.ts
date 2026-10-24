@@ -15,7 +15,8 @@ export interface ContextAssociationSnapshot {
 }
 
 export interface ContextRoleSnapshot {
-	id: DatabaseId;
+	/** 역할 공개 ID (ULID) */
+	id: string;
 	name?: string | null;
 	classification?: ContextClassificationSnapshot | null;
 	associations?: ContextAssociationSnapshot[];
@@ -26,7 +27,8 @@ export interface ContextFitnessCenterSnapshot {
 }
 
 export interface ContextSpaceSnapshot {
-	id: DatabaseId;
+	/** 공간 공개 ID (ULID) */
+	id: string;
 	classification?: ContextClassificationSnapshot | null;
 	spaceClassification?: ContextClassificationSnapshot | null;
 	spaceClassifications?: ContextClassificationSnapshot[] | null;
@@ -34,7 +36,8 @@ export interface ContextSpaceSnapshot {
 }
 
 export interface ContextTenantSnapshot {
-	id: DatabaseId;
+	/** 테넌트 공개 ID (ULID) */
+	id: string;
 	roleSeq: DatabaseId;
 	userSeq?: DatabaseId;
 	spaceSeq: DatabaseId;
@@ -44,7 +47,8 @@ export interface ContextTenantSnapshot {
 }
 
 export interface ContextUserSnapshot {
-	id: DatabaseId;
+	/** 사용자 공개 ID (ULID) */
+	id: string;
 	currentTenantSeq?: DatabaseId | null;
 	spaceSeq?: DatabaseId;
 	email?: string;

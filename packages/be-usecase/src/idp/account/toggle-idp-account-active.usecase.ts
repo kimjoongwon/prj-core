@@ -7,6 +7,6 @@ export class ToggleIdpAccountActiveUseCase {
 	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	execute(command: ToggleIdpAccountActiveCommand): Promise<unknown> {
-		return this.idpAccountService.toggleActive(command.userSeq);
+		return this.idpAccountService.toggleActive(command.userId);
 	}
 }

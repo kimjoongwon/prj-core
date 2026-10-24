@@ -47,7 +47,7 @@ export class ConfirmEmailVerificationUseCase {
 				nickname: verification.nickname,
 				phone: verification.phone,
 				address: verification.address,
-				spaceSeq: verification.spaceSeq,
+				spaceId: verification.spaceSeq,
 				email: verification.email,
 				passwordHash: verification.passwordHash,
 			});

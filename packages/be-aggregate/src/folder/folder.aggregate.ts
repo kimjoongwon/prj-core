@@ -31,7 +31,7 @@ export class FolderAggregate {
 	async getFolders(
 		query: GetFoldersQueryInput,
 	): Promise<{ data: Folder[]; totalCount: number }> {
-		const spaceSeq = this.getRequiredSpaceId();
+		const spaceId = this.getRequiredSpaceId();
 		const spaceIds = this.spaceContext.spaceIds;
 		const where = this.applySpaceScope(
 			buildFolderQueryWhere(
@@ -43,7 +43,7 @@ export class FolderAggregate {
 			spaceIds,
 		);
 
-		this.logger.debug(`폴더 목록 조회: space=${spaceSeq}`);
+		this.logger.debug(`폴더 목록 조회: space=${spaceId}`);
 
 		const folderResult = await this.foldersRepository.findMany({
 			where,
@@ -60,11 +60,11 @@ export class FolderAggregate {
 
 	async createFolder(
 		input: CreateFolderInput,
-		createdBySeq: bigint,
+		createdById: bigint,
 	): Promise<Folder> {
-		const spaceSeq = this.getRequiredSpaceId();
+		const spaceId = this.getRequiredSpaceId();
 		const folder = new Folder();
-		folder.parentFolderSeq = input.parentFolderSeq ?? null;
+		folder.parentFolderSeq = input.parentFolderId ?? null;
 		folder.name = input.name.trim();
 
 		if (!folder.name) {
@@ -78,7 +78,7 @@ export class FolderAggregate {
 			);
 			if (
 				!parentFolder ||
-				parentFolder.spaceSeq !== spaceSeq ||
+				parentFolder.spaceSeq !== spaceId ||
 				parentFolder.removedAt
 			) {
 				throw new NotFoundException("상위 폴더를 찾을 수 없습니다");
@@ -95,7 +95,7 @@ export class FolderAggregate {
 
 		const siblingFolders = folder.parentFolderSeq
 			? await this.foldersRepository.findByParentFolderId(folder.parentFolderSeq)
-			: (await this.foldersRepository.findBySpaceId(spaceSeq)).filter(
+			: (await this.foldersRepository.findBySpaceId(spaceId)).filter(
 					(currentFolder) => currentFolder.parentFolderSeq === null,
 				);
 		const nextSortOrder =
@@ -106,28 +106,28 @@ export class FolderAggregate {
 				: 0;
 
 		this.logger.debug(
-			`폴더 생성: space=${spaceSeq}, parent=${folder.parentFolderSeq ?? "root"}, name=${folder.name}`,
+			`폴더 생성: space=${spaceId}, parent=${folder.parentFolderSeq ?? "root"}, name=${folder.name}`,
 		);
 
 		return this.foldersRepository.create({
-			spaceSeq,
-			parentFolderSeq: folder.parentFolderSeq,
+			spaceId,
+			parentFolderId: folder.parentFolderSeq,
 			name: folder.name,
 			path,
 			sortOrder: nextSortOrder,
-			createdBySeq,
+			createdById,
 		});
 	}
 
 	async updateFolder(
-		folderSeq: bigint,
+		folderId: bigint,
 		input: UpdateFolderInput,
 	): Promise<Folder> {
-		const spaceSeq = this.getRequiredSpaceId();
+		const spaceId = this.getRequiredSpaceId();
 		const allFolders = (
-			await this.foldersRepository.findBySpaceId(spaceSeq)
+			await this.foldersRepository.findBySpaceId(spaceId)
 		).filter((folder) => !folder.removedAt);
-		const currentFolder = allFolders.find((folder) => folder.id === folderSeq);
+		const currentFolder = allFolders.find((folder) => folder.id === folderId);
 
 		if (!currentFolder) {
 			throw new NotFoundException("폴더를 찾을 수 없습니다");
@@ -140,8 +140,8 @@ export class FolderAggregate {
 		}
 
 		const nextParentFolderId =
-			input.parentFolderSeq !== undefined
-				? (input.parentFolderSeq ?? null)
+			input.parentFolderId !== undefined
+				? (input.parentFolderId ?? null)
 				: currentFolder.parentFolderSeq;
 
 		if (nextParentFolderId === currentFolder.id) {
@@ -206,9 +206,9 @@ export class FolderAggregate {
 					)
 				: currentFolder.sortOrder;
 
-		const updatedFolder = await this.foldersRepository.updateById(folderSeq, {
+		const updatedFolder = await this.foldersRepository.updateById(folderId, {
 			name: nextName,
-			parentFolderSeq: nextParentFolderId,
+			parentFolderId: nextParentFolderId,
 			path: nextPath,
 			sortOrder: nextSortOrder,
 		});
@@ -226,11 +226,11 @@ export class FolderAggregate {
 		return updatedFolder;
 	}
 
-	async deleteFolder(folderSeq: bigint): Promise<void> {
-		const folder = await this.foldersRepository.findByIdWithChildren(folderSeq);
-		const spaceSeq = this.getRequiredSpaceId();
+	async deleteFolder(folderId: bigint): Promise<void> {
+		const folder = await this.foldersRepository.findByIdWithChildren(folderId);
+		const spaceId = this.getRequiredSpaceId();
 
-		if (!folder || folder.spaceSeq !== spaceSeq || folder.removedAt) {
+		if (!folder || folder.spaceSeq !== spaceId || folder.removedAt) {
 			throw new NotFoundException("폴더를 찾을 수 없습니다");
 		}
 
@@ -242,18 +242,18 @@ export class FolderAggregate {
 			throw new BadRequestException("에셋이 남아 있어 삭제할 수 없습니다");
 		}
 
-		await this.foldersRepository.removeById(folderSeq);
+		await this.foldersRepository.removeById(folderId);
 	}
 
 	private getRequiredSpaceId(): bigint {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new BadRequestException(
 				"x-tenant-id 헤더가 필요합니다. Space를 선택해주세요.",
 			);
 		}
 
-		return spaceSeq;
+		return spaceId;
 	}
 
 	private applySpaceScope(

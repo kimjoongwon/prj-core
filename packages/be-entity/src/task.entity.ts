@@ -14,7 +14,6 @@ import type { User } from "./user.entity";
 @AbstractEntityFields()
 export class Task extends TaskSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: TaskSchema["id"];
 
 	@BigIntIdFieldMetadata() declare spaceSeq: TaskSchema["spaceSeq"];

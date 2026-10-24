@@ -17,7 +17,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Group extends GroupSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
 	declare id: GroupSchema["id"];
 

@@ -1,3 +1,3 @@
 export interface MoveAssetCommandInput {
-	targetFolderId: bigint;
+	targetFolderId: string;
 }

@@ -41,11 +41,11 @@ export class UsersRepository {
 	/**
 	 * ID로 조회 (기본 정보만)
 	 */
-	async findById(id: bigint): Promise<User | null> {
-		this.logger.debug(`ID로 조회: ${id.toString()}`);
+	async findById(id: string): Promise<User | null> {
+		this.logger.debug(`공개 ID로 조회: ${id}`);
 
 		const result = await this.txHost.tx.user.findUnique({
-			where: { seq: id },
+			where: { id },
 		});
 
 		return result ? toDomainEntity(User, result) : null;
@@ -56,12 +56,12 @@ export class UsersRepository {
 	 * 현재 선택 Tenant는 UserStatus 1:1 관계에서 읽어 평평하게 포함합니다(CLS 스냅샷 계약 유지).
 	 */
 	async findByIdWithTenantsAndProfiles(
-		id: bigint,
+		id: string,
 	): Promise<(User & { currentTenantSeq: bigint | null }) | null> {
-		this.logger.debug(`ID로 사용자 조회: ${id.toString()}`);
+		this.logger.debug(`공개 ID로 사용자 조회: ${id}`);
 
 		const result = await this.txHost.tx.user.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: {
 				tenants: {
 					orderBy: {
@@ -148,12 +148,7 @@ export class UsersRepository {
 	): Promise<(User & { currentTenantSeq: bigint | null }) | null> {
 		this.logger.debug(`사용자 ULID로 조회: ${userSeq}`);
 
-		const user = await this.txHost.tx.user.findUnique({
-			where: { id: userSeq },
-			select: { seq: true },
-		});
-
-		return user ? this.findByIdWithTenantsAndProfiles(user.seq) : null;
+		return this.findByIdWithTenantsAndProfiles(userSeq);
 	}
 
 	/**
@@ -263,7 +258,7 @@ export class UsersRepository {
 	 */
 	async findManyIdpAccounts(params: {
 		input: IdpAccountListInput;
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 	}): Promise<{ data: IdpAccountRecord[]; totalCount: number }> {
 		this.logger.debug(
 			`IDP 계정 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개`,
@@ -301,7 +296,7 @@ export class UsersRepository {
 	 */
 	async findIdpAccountById(params: {
 		userSeq: bigint;
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 	}): Promise<IdpAccountRecord | null> {
 		this.logger.debug(`IDP 계정 조회: ${params.userSeq}`);
 
@@ -327,7 +322,7 @@ export class UsersRepository {
 			lockedUntil?: Date | null;
 			isPermanentlyLocked?: boolean;
 		};
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 	}): Promise<IdpAccountRecord | null> {
 		this.logger.debug(`IDP 계정 수정: ${params.userSeq}`);
 
@@ -359,7 +354,7 @@ export class UsersRepository {
 		orderBy: Prisma.UserOrderByWithRelationInput[];
 		skip: number;
 		take: number;
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 		includedRoleNames?: string[];
 	}): Promise<{ users: User[]; totalCount: number }> {
 		this.logger.debug(
@@ -381,7 +376,7 @@ export class UsersRepository {
 						where: {
 							removedAt: null,
 							...(params.spaceIds
-								? { space: { seq: { in: params.spaceIds } } }
+								? { space: { id: { in: params.spaceIds } } }
 								: {}),
 							...(params.includedRoleNames?.length
 								? {
@@ -427,7 +422,7 @@ export class UsersRepository {
 
 	private applySpaceScopeToUserWhere(
 		where: Prisma.UserWhereInput,
-		spaceIds?: bigint[],
+		spaceIds?: string[],
 	): Prisma.UserWhereInput {
 		if (spaceIds === undefined) {
 			return where;
@@ -447,7 +442,7 @@ export class UsersRepository {
 				...(tenantsFilter ?? {}),
 				some: {
 					...existingSome,
-					space: { seq: { in: spaceIds } },
+					space: { id: { in: spaceIds } },
 					removedAt: null,
 				},
 			},
@@ -458,7 +453,7 @@ export class UsersRepository {
 	 * 접근 가능한 Space ID 목록으로 회원 통계 조회
 	 */
 	async countStatsBySpaceIds(params?: {
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 	}): Promise<UserStats> {
 		const queryParams = params ?? {};
 		this.logger.debug(
@@ -475,7 +470,7 @@ export class UsersRepository {
 				? {
 						tenants: {
 							some: {
-								space: { seq: { in: queryParams.spaceIds } },
+								space: { id: { in: queryParams.spaceIds } },
 								removedAt: null,
 							},
 						},
@@ -525,7 +520,7 @@ export class UsersRepository {
 	 */
 	async findByIdAndSpaceIdsWithRelations(
 		userSeq: string,
-		spaceIds?: bigint[],
+		spaceIds?: string[],
 	): Promise<User | null> {
 		this.logger.debug(
 			`ID와 Space 범위로 조회: userSeq=${userSeq.slice(-8)}, scope=${spaceIds?.join(",") ?? "all"}`,
@@ -538,7 +533,7 @@ export class UsersRepository {
 					? {
 							tenants: {
 								some: {
-									space: { seq: { in: spaceIds } },
+									space: { id: { in: spaceIds } },
 									removedAt: null,
 								},
 							},
@@ -677,6 +672,26 @@ export class UsersRepository {
 		});
 
 		return toDomainEntity(User, result);
+	}
+
+	/** 공개 ULID로 사용자의 현재 Tenant 선택값을 UserStatus에 저장합니다. */
+	async updateCurrentTenantIdByPublicIds(
+		userId: string,
+		tenantId: string,
+	): Promise<void> {
+		this.logger.debug(`현재 Tenant 저장(공개 ID): userId=${userId}`);
+
+		await this.txHost.tx.user.update({
+			where: { id: userId },
+			data: {
+				status: {
+					upsert: {
+						create: { currentTenant: { connect: { id: tenantId } } },
+						update: { currentTenant: { connect: { id: tenantId } } },
+					},
+				},
+			},
+		});
 	}
 
 	/** 사용자의 현재 Tenant 선택값을 UserStatus에 저장합니다. */

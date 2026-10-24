@@ -34,11 +34,11 @@ export class SubjectsRepository {
 	/**
 	 * ID로 Subject 조회
 	 */
-	async findById(id: bigint): Promise<Subject | null> {
+	async findById(id: string): Promise<Subject | null> {
 		this.logger.debug(`ID로 Subject 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.subject.findUnique({
-			where: { seq: id },
+			where: { id },
 		});
 
 		return result ? toDomainEntity(Subject, result) : null;
@@ -105,13 +105,13 @@ export class SubjectsRepository {
 	 * Subject 수정
 	 */
 	async updateById(
-		id: bigint,
+		id: string,
 		data: Prisma.SubjectUncheckedUpdateInput,
 	): Promise<Subject> {
 		this.logger.debug(`Subject 수정: ${id.toString()}`);
 
 		const result = await this.txHost.tx.subject.update({
-			where: { seq: id },
+			where: { id },
 			data,
 		});
 
@@ -121,11 +121,11 @@ export class SubjectsRepository {
 	/**
 	 * Subject 소프트 삭제
 	 */
-	async removeById(id: bigint): Promise<Subject> {
+	async removeById(id: string): Promise<Subject> {
 		this.logger.debug(`Subject 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.subject.update({
-			where: { seq: id },
+			where: { id },
 			data: { removedAt: new Date() },
 		});
 

@@ -5,11 +5,11 @@ export class UpdateInquiryCommand implements UpdateInquiryCommandInput {
 	readonly category?: UpdateInquiryCommandInput["category"];
 	readonly status?: UpdateInquiryCommandInput["status"];
 	readonly priority?: UpdateInquiryCommandInput["priority"];
-	readonly assigneeSeq?: UpdateInquiryCommandInput["assigneeSeq"];
+	readonly assigneeId?: UpdateInquiryCommandInput["assigneeId"];
 	readonly isRealtimeChat?: UpdateInquiryCommandInput["isRealtimeChat"];
 
 	constructor(
-		readonly inquirySeq: bigint,
+		readonly inquiryId: string,
 		input: UpdateInquiryCommandInput,
 	) {
 		Object.assign(this, input);

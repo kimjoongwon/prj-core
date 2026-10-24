@@ -8,13 +8,10 @@ export class AbilitySummaryDto extends EntityResponseType(Ability, {
 	pick: [
 		"id",
 		"name",
-		"actionSeq",
-		"subjectSeq",
 		"inverted",
 		"priority",
 		"action",
-		"subject",
-	] as const,
+		"subject"] as const,
 	relations: { action: () => ActionDto, subject: () => SubjectSummaryDto },
 }) {
 	declare action?: ActionDto;

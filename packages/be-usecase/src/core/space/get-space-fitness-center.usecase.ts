@@ -7,6 +7,6 @@ export class GetSpaceFitnessCenterUseCase {
 	constructor(private readonly spaceService: SpaceAggregate) {}
 
 	execute(query: GetSpaceFitnessCenterQuery): Promise<unknown> {
-		return this.spaceService.getFitnessCenterBySpaceId(query.spaceSeq);
+		return this.spaceService.getFitnessCenterBySpaceId(query.spaceId);
 	}
 }

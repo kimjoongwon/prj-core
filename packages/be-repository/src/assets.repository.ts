@@ -21,22 +21,22 @@ export class AssetsRepository {
 		this.logger = new Logger("AssetsRepository");
 	}
 
-	async findById(id: bigint): Promise<Asset | null> {
+	async findById(id: string): Promise<Asset | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: { space: true, folder: true, createdBy: true },
 		});
 
 		return result ? toDomainEntity(Asset, result) : null;
 	}
 
-	async findByIdWithRelations(id: bigint): Promise<Asset | null> {
+	async findByIdWithRelations(id: string): Promise<Asset | null> {
 		this.logger.debug(`관계 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: {
 				image: true,
 				video: true,
@@ -101,11 +101,20 @@ export class AssetsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<Prisma.AssetUncheckedCreateInput, "id">,
+		data: AutoIdentityCreateInput<
+			Omit<Prisma.AssetUncheckedCreateInput, "spaceSeq" | "folderSeq" | "createdBySeq">,
+			"id"
+		> & { spaceId: string; folderId?: string | null; createdById?: string | null },
 	): Promise<Asset> {
 		this.logger.debug(`에셋 생성: ${data.storageKey}`);
+		const { spaceId, folderId, createdById, ...rest } = data;
 		const result = await this.txHost.tx.asset.create({
-			data,
+			data: {
+				...rest,
+				space: { connect: { id: spaceId } },
+				...(folderId && { folder: { connect: { id: folderId } } }),
+				...(createdById && { createdBy: { connect: { id: createdById } } }),
+			} as Prisma.AssetCreateInput,
 			include: { space: true, folder: true, createdBy: true },
 		});
 
@@ -113,12 +122,12 @@ export class AssetsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<Prisma.AssetUncheckedUpdateInput, "id">,
 	): Promise<Asset> {
 		this.logger.debug(`에셋 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.asset.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: { space: true, folder: true, createdBy: true },
 		});
@@ -126,11 +135,11 @@ export class AssetsRepository {
 		return toDomainEntity(Asset, result);
 	}
 
-	async deleteById(id: bigint): Promise<Asset> {
+	async deleteById(id: string): Promise<Asset> {
 		this.logger.debug(`에셋 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.delete({
-			where: { seq: id },
+			where: { id },
 			include: { space: true, folder: true, createdBy: true },
 		});
 

@@ -20,8 +20,8 @@ const publicDates = {
 
 const assetInput = {
 	...publicDates,
-	id: 1n,
-	assetSeq: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+	id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+	seq: 1n,
 	spaceSeq: 2n,
 	folderSeq: 3n,
 	kind: "IMAGE",
@@ -53,13 +53,12 @@ describe("Entity 기반 콘텐츠 응답의 공개 필드 계약", () => {
 		expect(response.sizeBytes).toBe(4096);
 		expect(response.publicUrl).toBe(assetInput.publicUrl);
 		expect(serialized).toMatchObject({
-			id: "1",
+			id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
 			sizeBytes: 4096,
 			metadata: assetInput.metadata,
 			publicUrl: assetInput.publicUrl,
 		});
 		for (const privateField of [
-			"assetSeq",
 			"password",
 			"unexpected",
 			"createdBy",

@@ -9,11 +9,8 @@ export class UserAssociationDto extends EntityResponseType(UserAssociation, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"userSeq",
-		"groupSeq",
 		"group",
-		"user",
-	] as const,
+		"user"] as const,
 	relations: {
 		group: () => GroupDto,
 		user: () => UserDto,

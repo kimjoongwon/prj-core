@@ -36,23 +36,23 @@ export class IdpAccountAggregate {
 		});
 	}
 
-	async getById(userSeq: bigint) {
-		this.logger.debug(`IDP 계정 상세 조회: ${userSeq}`);
+	async getById(userId: bigint) {
+		this.logger.debug(`IDP 계정 상세 조회: ${userId}`);
 
-		const user = await this.findAccountInScope(userSeq);
-		const accessGrants = await this.getAccessGrants(userSeq);
+		const user = await this.findAccountInScope(userId);
+		const accessGrants = await this.getAccessGrants(userId);
 
 		return { ...user, accessGrants };
 	}
 
-	async getRecentAuditLogs(userSeq: bigint, limit = 5) {
-		return this.auditLogsRepository.findByUserId(userSeq, limit);
+	async getRecentAuditLogs(userId: bigint, limit = 5) {
+		return this.auditLogsRepository.findByUserId(userId, limit);
 	}
 
-	async getAccessGrantFormBootstrap(userSeq: bigint) {
-		this.logger.debug(`계정 접근 권한 부여 폼 조회: ${userSeq}`);
+	async getAccessGrantFormBootstrap(userId: bigint) {
+		this.logger.debug(`계정 접근 권한 부여 폼 조회: ${userId}`);
 
-		await this.findAccountInScope(userSeq);
+		await this.findAccountInScope(userId);
 
 		const [spaceResult, roles] = await Promise.all([
 			this.spacesRepository.findManyWithFitnessCenter({
@@ -98,12 +98,12 @@ export class IdpAccountAggregate {
 		return {
 			mode: "CREATE",
 			defaultObject: {
-				spaceSeq: spaceOptions[0]?.value ?? "",
-				roleSeq: roleOptions[0]?.value ?? "",
+				spaceId: spaceOptions[0]?.value ?? "",
+				roleId: roleOptions[0]?.value ?? "",
 			},
 			options: {
-				spaceSeq: spaceOptions,
-				roleSeq: roleOptions,
+				spaceId: spaceOptions,
+				roleId: roleOptions,
 			},
 			ui: {
 				readOnlyPaths: [],
@@ -111,24 +111,24 @@ export class IdpAccountAggregate {
 				disabledPaths: [],
 			},
 			fieldMeta: {
-				spaceSeq: { label: "Space" },
-				roleSeq: { label: "Role" },
+				spaceId: { label: "Space" },
+				roleId: { label: "Role" },
 			},
 		};
 	}
 
 	@Transactional()
-	async grantAccess(userSeq: bigint, input: GrantIdpAccountAccessInput) {
+	async grantAccess(userId: bigint, input: GrantIdpAccountAccessInput) {
 		this.logger.debug(
-			`계정 접근 권한 부여: user=${userSeq}, space=${input.spaceSeq}, role=${input.roleSeq}`,
+			`계정 접근 권한 부여: user=${userId}, space=${input.spaceId}, role=${input.roleId}`,
 		);
 
-		await this.findAccountInScope(userSeq);
+		await this.findAccountInScope(userId);
 
 		const [space, roles] = await Promise.all([
-			this.spacesRepository.findById(input.spaceSeq),
+			this.spacesRepository.findById(input.spaceId),
 			this.rolesRepository.findMany({
-				where: { id: input.roleSeq, removedAt: null },
+				where: { id: input.roleId, removedAt: null },
 				orderBy: [{ createdAt: "asc" }],
 			}),
 		]);
@@ -136,7 +136,7 @@ export class IdpAccountAggregate {
 		if (
 			!space ||
 			space.removedAt !== null ||
-			this.isSpaceOutOfScope(input.spaceSeq)
+			this.isSpaceOutOfScope(input.spaceId)
 		) {
 			throw new NotFoundException("권한을 부여할 Space를 찾을 수 없습니다");
 		}
@@ -147,21 +147,21 @@ export class IdpAccountAggregate {
 		}
 
 		await this.tenantsRepository.upsertByUserIdAndSpaceId({
-			userSeq,
-			spaceSeq: input.spaceSeq,
-			roleSeq: input.roleSeq,
+			userId,
+			spaceId: input.spaceId,
+			roleId: input.roleId,
 		});
 
-		return this.getById(userSeq);
+		return this.getById(userId);
 	}
 
 	@Transactional()
-	async toggleActive(userSeq: bigint) {
-		this.logger.debug(`계정 활성/비활성 토글: ${userSeq}`);
+	async toggleActive(userId: bigint) {
+		this.logger.debug(`계정 활성/비활성 토글: ${userId}`);
 
-		const user = await this.findAccountInScope(userSeq);
+		const user = await this.findAccountInScope(userId);
 		const updated = await this.usersRepository.updateIdpAccountById({
-			userSeq,
+			userId,
 			data: { isActive: !user.isActive },
 			spaceIds: this.spaceContext.spaceIds,
 		});
@@ -174,11 +174,11 @@ export class IdpAccountAggregate {
 	}
 
 	@Transactional()
-	async resetFailedAttempts(userSeq: bigint): Promise<void> {
-		this.logger.debug(`실패 횟수 초기화: ${userSeq}`);
+	async resetFailedAttempts(userId: bigint): Promise<void> {
+		this.logger.debug(`실패 횟수 초기화: ${userId}`);
 
 		const updated = await this.usersRepository.updateIdpAccountById({
-			userSeq,
+			userId,
 			data: {
 				failedLoginAttempts: 0,
 				lockedUntil: null,
@@ -192,9 +192,9 @@ export class IdpAccountAggregate {
 		}
 	}
 
-	private async findAccountInScope(userSeq: bigint) {
+	private async findAccountInScope(userId: bigint) {
 		const user = await this.usersRepository.findIdpAccountById({
-			userSeq,
+			userId,
 			spaceIds: this.spaceContext.spaceIds,
 		});
 
@@ -205,10 +205,10 @@ export class IdpAccountAggregate {
 		return user;
 	}
 
-	private async getAccessGrants(userSeq: bigint) {
+	private async getAccessGrants(userId: bigint) {
 		const tenants = await this.tenantsRepository.findManyWithSpaceAndRole({
 			where: {
-				user: { id: userSeq },
+				user: { id: userId },
 				removedAt: null,
 				...(this.spaceContext.spaceIds
 					? { space: { id: { in: this.spaceContext.spaceIds } } }
@@ -230,10 +230,10 @@ export class IdpAccountAggregate {
 			const company = fitnessCenter?.company;
 			return {
 				tenantId: tenant.id,
-				spaceSeq: tenant.spaceSeq,
+				spaceId: tenant.spaceSeq,
 				spaceName: tenant.space?.name ?? tenant.spaceSeq,
 				spaceLabel: tenant.space?.label ?? company?.label ?? null,
-				roleSeq: tenant.roleSeq,
+				roleId: tenant.roleSeq,
 				roleName: tenant.role.name,
 				roleDisplayName: tenant.role.displayName ?? null,
 				grantedAt: tenant.createdAt,
@@ -242,8 +242,8 @@ export class IdpAccountAggregate {
 		});
 	}
 
-	private isSpaceOutOfScope(spaceSeq: bigint): boolean {
+	private isSpaceOutOfScope(spaceId: bigint): boolean {
 		const spaceIds = this.spaceContext.spaceIds;
-		return spaceIds !== undefined && !spaceIds.includes(spaceSeq);
+		return spaceIds !== undefined && !spaceIds.includes(spaceId);
 	}
 }

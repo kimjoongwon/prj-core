@@ -23,7 +23,6 @@ import type { User } from "./user.entity";
 @AbstractEntityFields()
 export class InquiryParticipant extends InquiryParticipantSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: InquiryParticipantSchema["id"];
 
 	// ============================================================================

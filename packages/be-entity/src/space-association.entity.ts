@@ -7,7 +7,6 @@ import { Group } from "./group.entity";
 @AbstractEntityFields()
 export class SpaceAssociation extends SpaceAssociationSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: SpaceAssociationSchema["id"];
 
 	@BigIntIdFieldMetadata()

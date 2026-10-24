@@ -7,6 +7,6 @@ export class GetInquiryParticipantsUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(query: GetInquiryParticipantsQuery): Promise<unknown> {
-		return this.inquiryService.getParticipants(query.inquirySeq);
+		return this.inquiryService.getParticipants(query.inquiryId);
 	}
 }

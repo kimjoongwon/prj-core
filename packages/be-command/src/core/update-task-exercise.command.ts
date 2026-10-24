@@ -10,9 +10,9 @@ export class UpdateTaskExerciseCommand
 	readonly videoFileId?: UpdateTaskExerciseCommandInput["videoFileId"];
 
 	constructor(
-		readonly taskSeq: bigint,
+		readonly taskId: string,
 		input: UpdateTaskExerciseCommandInput,
-		readonly spaceSeq: bigint,
+		readonly spaceId: string,
 	) {
 		Object.assign(this, input);
 	}

@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	ConfirmEmailVerificationCommand,
 	ForceResetPasswordCommand,
@@ -46,7 +46,6 @@ import {
 	TokenRefreshResponseDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
-import { formatDatabaseId } from "@cocrepo/type";
 import {
 	BadRequestException,
 	Body,
@@ -163,12 +162,12 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response,
 		@Headers(REQUEST_HEADER_KEYS.REFRESH_TOKEN) refreshTokenHeader?: string,
 	) {
-		const sessionSeq = req.cookies?.sessionSeq;
+		const sessionId = req.cookies?.sessionId;
 		return this.commandBus.execute(
 			new RefreshTokenWithIdpCommand(
 				req.cookies?.refreshToken,
 				refreshTokenHeader,
-				sessionSeq,
+				sessionId,
 				res,
 			),
 		);
@@ -219,10 +218,7 @@ export class AuthController {
 		@Body() signUpDto: SignUpPayloadDto,
 		@Headers(REQUEST_HEADER_KEYS.TENANT_ID) requestedSpaceId?: string,
 	) {
-		if (
-			requestedSpaceId &&
-			requestedSpaceId !== formatDatabaseId(signUpDto.spaceSeq)
-		) {
+		if (requestedSpaceId && requestedSpaceId !== signUpDto.spaceId) {
 			throw new BadRequestException("SIGN_UP_SPACE_HEADER_MISMATCH");
 		}
 
@@ -340,12 +336,12 @@ export class AuthController {
 	@ApiResponseEntity(LogoutResponseDto, HttpStatus.OK)
 	@ResponseMessage("로그아웃 성공")
 	async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-		const sessionSeq = req.cookies?.sessionSeq;
+		const sessionId = req.cookies?.sessionId;
 		return this.commandBus.execute(
 			new LogoutWithCookieCommand(
 				req.cookies?.accessToken,
 				req.headers.authorization,
-				sessionSeq,
+				sessionId,
 				res,
 			),
 		);
@@ -388,58 +384,58 @@ export class AuthController {
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
-	@Post("users/:userSeq/unlock")
+	@Post("users/:userId/unlock")
 	@ApiOperation({
 		operationId: "unlockAccount",
 		summary: "계정 잠금 해제",
 		description: "잠긴 계정을 해제합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
-	@ApiParam({ name: "userSeq", type: String })
+	@ApiParam({ name: "userId", type: String })
 	@ApiAuth()
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("계정 잠금이 해제되었습니다.")
-	async unlockAccount(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
-		return this.commandBus.execute(new UnlockAccountCommand(userSeq));
+	async unlockAccount(@Param("userId", ParseUlidPipe) userId: string) {
+		return this.commandBus.execute(new UnlockAccountCommand(userId));
 	}
 
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
-	@Post("users/:userSeq/force-reset-password")
+	@Post("users/:userId/force-reset-password")
 	@ApiOperation({
 		operationId: "forceResetPassword",
 		summary: "비밀번호 강제 재설정",
 		description:
 			"임시 비밀번호를 생성하여 이메일로 발송합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
-	@ApiParam({ name: "userSeq", type: String })
+	@ApiParam({ name: "userId", type: String })
 	@ApiAuth()
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("임시 비밀번호가 이메일로 발송되었습니다.")
-	async forceResetPassword(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
-		return this.commandBus.execute(new ForceResetPasswordCommand(userSeq));
+	async forceResetPassword(@Param("userId", ParseUlidPipe) userId: string) {
+		return this.commandBus.execute(new ForceResetPasswordCommand(userId));
 	}
 
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
-	@Post("users/:userSeq/invalidate-sessions")
+	@Post("users/:userId/invalidate-sessions")
 	@ApiOperation({
 		operationId: "invalidateUserSessions",
 		summary: "사용자 전체 세션 무효화",
 		description:
 			"특정 사용자의 모든 세션을 강제 종료합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
-	@ApiParam({ name: "userSeq", type: String })
+	@ApiParam({ name: "userId", type: String })
 	@ApiAuth()
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("사용자의 모든 세션이 무효화되었습니다.")
 	async invalidateUserSessions(
-		@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint,
+		@Param("userId", ParseUlidPipe) userId: string,
 	) {
-		return this.commandBus.execute(new InvalidateUserSessionsCommand(userSeq));
+		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
 	}
 }

@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateTaskCommand,
 	DeleteTaskCommand,
@@ -64,8 +64,8 @@ export class TasksController {
 	@ApiResponseEntity(TaskDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Task 목록 조회 성공")
 	async getTasks(@Query() query: GetExercisesQueryDto) {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
@@ -74,13 +74,13 @@ export class TasksController {
 		return this.queryBus.execute(
 			new FindTasksQuery({
 				...query,
-				spaceSeq,
+				spaceId,
 				spaceScope,
 			}),
 		);
 	}
 
-	@Get(":taskSeq/exercise")
+	@Get(":taskId/exercise")
 	@ApiOperation({
 		operationId: "getTaskExercise",
 		summary: "Task의 Exercise detail 조회",
@@ -88,23 +88,23 @@ export class TasksController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "taskSeq",
+		name: "taskId",
 		description: "Task ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	@ResponseMessage("Task Exercise 조회 성공")
-	async getTaskExercise(@Param("taskSeq", ParseBigIntIdPipe) taskSeq: bigint) {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+	async getTaskExercise(@Param("taskId", ParseUlidPipe) taskId: string) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.queryBus.execute(new GetTaskExerciseQuery(taskSeq, spaceSeq));
+		return this.queryBus.execute(new GetTaskExerciseQuery(taskId, spaceId));
 	}
 
-	@Get(":taskSeq/routines")
+	@Get(":taskId/routines")
 	@ApiOperation({
 		operationId: "getTaskRoutines",
 		summary: "Task 연관 루틴 조회",
@@ -112,7 +112,7 @@ export class TasksController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "taskSeq",
+		name: "taskId",
 		description: "Task ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -120,14 +120,14 @@ export class TasksController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Task 연관 루틴 조회 성공")
 	async getTaskRoutines(
-		@Param("taskSeq", ParseBigIntIdPipe) taskSeq: bigint,
+		@Param("taskId", ParseUlidPipe) taskId: string,
 	): Promise<Routine[]> {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.queryBus.execute(new GetTaskRoutinesQuery(taskSeq, spaceSeq));
+		return this.queryBus.execute(new GetTaskRoutinesQuery(taskId, spaceId));
 	}
 
 	@Post()
@@ -148,20 +148,20 @@ export class TasksController {
 	@ApiResponseEntity(TaskDto, HttpStatus.CREATED)
 	@ResponseMessage("Task 생성 성공")
 	async createTask(@Body() dto: CreateExerciseDto): Promise<Task> {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const userSeq = this.authContext.user?.id;
-		if (!userSeq) {
+		const userId = this.authContext.user?.id;
+		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		return this.commandBus.execute(new CreateTaskCommand(dto, spaceSeq, userSeq));
+		return this.commandBus.execute(new CreateTaskCommand(dto, spaceId, userId));
 	}
 
-	@Patch(":taskSeq/exercise")
+	@Patch(":taskId/exercise")
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
@@ -171,7 +171,7 @@ export class TasksController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "taskSeq",
+		name: "taskId",
 		description: "Task ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -183,20 +183,20 @@ export class TasksController {
 	@ApiResponseEntity(TaskDto, HttpStatus.OK)
 	@ResponseMessage("Task Exercise 수정 성공")
 	async updateTaskExercise(
-		@Param("taskSeq", ParseBigIntIdPipe) taskSeq: bigint,
+		@Param("taskId", ParseUlidPipe) taskId: string,
 		@Body() dto: UpdateExerciseDto,
 	): Promise<Task> {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
 		return this.commandBus.execute(
-			new UpdateTaskExerciseCommand(taskSeq, dto, spaceSeq),
+			new UpdateTaskExerciseCommand(taskId, dto, spaceId),
 		);
 	}
 
-	@Delete(":taskSeq")
+	@Delete(":taskId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -207,20 +207,20 @@ export class TasksController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "taskSeq",
+		name: "taskId",
 		description: "Task ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ResponseMessage("Task 삭제 성공")
 	async deleteTask(
-		@Param("taskSeq", ParseBigIntIdPipe) taskSeq: bigint,
+		@Param("taskId", ParseUlidPipe) taskId: string,
 	): Promise<void> {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		await this.commandBus.execute(new DeleteTaskCommand(taskSeq, spaceSeq));
+		await this.commandBus.execute(new DeleteTaskCommand(taskId, spaceId));
 	}
 }

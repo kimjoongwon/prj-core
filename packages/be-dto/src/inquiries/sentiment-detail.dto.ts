@@ -7,8 +7,6 @@ export class SentimentDetailDto extends EntityResponseType(SentimentAnalysis, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"inquirySeq",
-		"messageSeq",
 		"sentiment",
 		"score",
 		"confidence",

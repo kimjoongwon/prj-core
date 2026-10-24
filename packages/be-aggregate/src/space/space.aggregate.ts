@@ -40,14 +40,14 @@ export class SpaceAggregate {
 	 * Space의 FitnessCenter detail 조회
 	 */
 	async getFitnessCenterBySpaceId(
-		spaceSeq: bigint,
+		spaceId: bigint,
 	): Promise<
 		NonNullable<
 			Awaited<ReturnType<SpacesRepository["findFitnessCenterBySpaceId"]>>
 		>
 	> {
 		const fitnessCenter =
-			await this.repository.findFitnessCenterBySpaceId(spaceSeq);
+			await this.repository.findFitnessCenterBySpaceId(spaceId);
 		if (!fitnessCenter) {
 			throw new NotFoundException("시설 정보를 찾을 수 없습니다");
 		}
@@ -109,10 +109,10 @@ export class SpaceAggregate {
 	 * Space의 FitnessCenter detail 수정
 	 */
 	async updateFitnessCenterBySpaceId(
-		spaceSeq: bigint,
+		spaceId: bigint,
 		input: UpdateSpaceFitnessCenterCommandInput,
 	): Promise<Space> {
-		await this.getFitnessCenterBySpaceId(spaceSeq);
+		await this.getFitnessCenterBySpaceId(spaceId);
 
 		// 이름/라벨/콘텐츠 언어는 Space 컬럼으로, 시설 속성은 FitnessCenter로 나눠 반영합니다.
 		const spaceUpdate: Prisma.SpaceUncheckedUpdateInput = {};
@@ -126,7 +126,7 @@ export class SpaceAggregate {
 			spaceUpdate.label = input.label;
 		}
 		if (Object.keys(spaceUpdate).length > 0) {
-			await this.repository.updateById(spaceSeq, spaceUpdate);
+			await this.repository.updateById(spaceId, spaceUpdate);
 		}
 
 		const fitnessCenterUpdate = {
@@ -138,14 +138,14 @@ export class SpaceAggregate {
 			}),
 		};
 		if (Object.keys(fitnessCenterUpdate).length === 0) {
-			const space = await this.repository.findById(spaceSeq);
+			const space = await this.repository.findById(spaceId);
 			if (!space) {
 				throw new NotFoundException("공간을 찾을 수 없습니다");
 			}
 			return space;
 		}
 
-		return this.repository.updateFitnessCenterBySpaceId(spaceSeq, {
+		return this.repository.updateFitnessCenterBySpaceId(spaceId, {
 			fitnessCenter: fitnessCenterUpdate,
 		});
 	}
@@ -153,8 +153,8 @@ export class SpaceAggregate {
 	/**
 	 * SpaceCategory 위계 기반 접근 가능한 Space ID 배열 조회
 	 */
-	getAccessibleSpaceIds(spaceSeq: bigint): Promise<bigint[]> {
-		return this.repository.findSpaceIdsByCategoryHierarchy(spaceSeq);
+	getAccessibleSpaceIds(spaceId: bigint): Promise<bigint[]> {
+		return this.repository.findSpaceIdsByCategoryHierarchy(spaceId);
 	}
 
 	/**

@@ -13,13 +13,13 @@ export class DeleteTimelineUseCase {
 	) {}
 
 	execute(command: DeleteTimelineCommand): Promise<void> {
-		const spaceSeq = this.spaceContext.tenant?.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.tenant?.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}
 		return this.timelinesService.deleteTimelineFromSpace(
-			command.timelineSeq,
-			spaceSeq,
+			command.timelineId,
+			spaceId,
 		);
 	}
 }

@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	CreateAbilityCommand,
 	DeleteAbilityCommand,
@@ -107,7 +107,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 조회 성공")
 	async getAbilityById(
-		@Param("id", ParseBigIntIdPipe) id: bigint,
+		@Param("id", ParseUlidPipe) id: string,
 	): Promise<Ability> {
 		return this.queryBus.execute(new GetAbilityByIdQuery(id));
 	}
@@ -169,7 +169,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 정의 수정 성공")
 	async updateAbility(
-		@Param("id", ParseBigIntIdPipe) id: bigint,
+		@Param("id", ParseUlidPipe) id: string,
 		@Body() dto: UpdateAbilityDto,
 	): Promise<Ability> {
 		return this.commandBus.execute(new UpdateAbilityCommand(id, dto));
@@ -200,7 +200,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 삭제 성공")
 	async deleteAbility(
-		@Param("id", ParseBigIntIdPipe) id: bigint,
+		@Param("id", ParseUlidPipe) id: string,
 	): Promise<Ability> {
 		return this.commandBus.execute(new DeleteAbilityCommand(id));
 	}

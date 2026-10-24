@@ -19,9 +19,9 @@ export class EmailVerificationsRepository {
 		>,
 	) {}
 
-	async findById(id: bigint): Promise<EmailVerification | null> {
+	async findById(id: string): Promise<EmailVerification | null> {
 		const result = await this.txHost.tx.emailVerification.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: { space: true, verifiedUser: true },
 		});
 
@@ -79,26 +79,30 @@ export class EmailVerificationsRepository {
 
 	async create(
 		data: AutoIdentityCreateInput<
-			Prisma.EmailVerificationUncheckedCreateInput,
+			Omit<Prisma.EmailVerificationUncheckedCreateInput, "spaceSeq">,
 			"id"
-		>,
+		> & { spaceId: string },
 	): Promise<EmailVerification> {
+		const { spaceId, ...rest } = data;
 		const result = await this.txHost.tx.emailVerification.create({
-			data,
+			data: {
+				...rest,
+				space: { connect: { id: spaceId } },
+			} as Prisma.EmailVerificationCreateInput,
 			include: { space: true, verifiedUser: true },
 		});
 		return toDomainEntity(EmailVerification, result);
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.EmailVerificationUncheckedUpdateInput,
 			"id"
 		>,
 	): Promise<EmailVerification> {
 		const result = await this.txHost.tx.emailVerification.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: { space: true, verifiedUser: true },
 		});

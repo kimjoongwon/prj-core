@@ -20,8 +20,8 @@ export class GetMyReservationsUseCase {
 		const skip = params.skip ?? 0;
 		const take = params.take ?? 20;
 		const result = await this.reservationService.getMine({
-			spaceSeq: context.spaceSeq,
-			userSeq: context.userSeq,
+			spaceId: context.spaceId,
+			userId: context.userId,
 			from: params.from,
 			to: params.to,
 			status: params.status,

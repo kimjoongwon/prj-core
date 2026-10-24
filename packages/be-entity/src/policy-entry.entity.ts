@@ -8,7 +8,6 @@ import type { Policy } from "./policy.entity";
 /** Policy와 Ability를 연결하는 구성 링크입니다. */
 @AbstractEntityFields()
 export class PolicyEntry extends PolicyEntrySchema {
-	@Exclude({ toPlainOnly: true })
 	declare id: PolicyEntrySchema["id"];
 	@BigIntIdFieldMetadata({ description: "PolicyEntry ID" })
 	declare seq: bigint;

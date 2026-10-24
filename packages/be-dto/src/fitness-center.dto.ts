@@ -34,12 +34,9 @@ export class FitnessCenterDto extends EntityResponseType(FitnessCenter, {
 		"address",
 		"phone",
 		"email",
-		"companySeq",
 		"imageFileId",
-		"spaceSeq",
 		"company",
-		"space",
-	] as const,
+		"space"] as const,
 	relations: {
 		company: () => CompanyDto,
 		space: () => FitnessCenterSpaceDto,

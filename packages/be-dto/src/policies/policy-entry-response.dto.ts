@@ -5,13 +5,10 @@ import { EntityResponseType } from "../mapped-types";
 export class PolicyEntryResponseDto extends EntityResponseType(PolicyEntry, {
 	pick: [
 		"id",
-		"policySeq",
-		"abilitySeq",
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"ability",
-	] as const,
+		"ability"] as const,
 	relations: { ability: () => AbilityResponseDto },
 }) {
 	declare ability?: AbilityResponseDto;

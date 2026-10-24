@@ -100,7 +100,8 @@ describe("SpacesRepository", () => {
 				id?: string | bigint;
 				address?: string;
 				company?: {
-					id?: string | bigint;
+					id?: string;
+					seq?: string | bigint;
 					businessNo?: string;
 					fitnessCenters?: Array<{ id?: string | bigint }>;
 				};
@@ -111,10 +112,12 @@ describe("SpacesRepository", () => {
 			space as
 				| (Space & {
 						fitnessCenter?: {
-							id?: string | bigint;
+							id?: string;
+							seq?: string | bigint;
 							address?: string;
 							company?: {
-								id?: string | bigint;
+								id?: string;
+								seq?: string | bigint;
 								businessNo?: string;
 								fitnessCenters?: Array<{ id?: string | bigint }>;
 							};
@@ -183,7 +186,7 @@ describe("SpacesRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.space.findUnique).toHaveBeenCalledWith({
-				where: { id: spaceSeq },
+				where: { seq: spaceSeq },
 			});
 			expect(result).toBeInstanceOf(Space);
 			expect(result?.id).toBe(mockSpaceData.id);
@@ -215,7 +218,7 @@ describe("SpacesRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.space.findUnique).toHaveBeenCalledWith({
-				where: { spaceSeq: mockSpaceData.id },
+				where: { id: mockSpaceData.id },
 				include: {
 					fitnessCenter: {
 						include: {
@@ -369,7 +372,7 @@ describe("SpacesRepository", () => {
 			});
 			expect(result?.spaceSeq).toBe(mockSpaceData.id);
 			expect(
-				(result as { company?: { id?: string | bigint } } | null)?.company?.id,
+				(result as { company?: { seq?: string | bigint } } | null)?.company?.seq,
 			).toBe(mockCompanyData.seq);
 		});
 	});
@@ -412,7 +415,7 @@ describe("SpacesRepository", () => {
 		it("Company는 Space 없이 만들고 FitnessCenter에 공개 ID 관계를 연결해야 한다", async () => {
 			// Given
 			mockTxHost.tx.company.create.mockResolvedValue({
-				id: mockCompanyData.seq,
+				seq: mockCompanyData.seq,
 			});
 			mockTxHost.tx.fitnessCenter.create.mockResolvedValue({
 				id: "fitness-center-test-id",
@@ -448,7 +451,7 @@ describe("SpacesRepository", () => {
 					spaceSeq: mockSpaceDbId,
 				}),
 			});
-			expect(getFitnessCenter(result)?.company?.id).toBe(mockCompanyData.seq);
+			expect(getFitnessCenter(result)?.company?.seq).toBe(mockCompanyData.seq);
 		});
 	});
 
@@ -466,7 +469,7 @@ describe("SpacesRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.space.update).toHaveBeenCalledWith({
-				where: { id: mockSpaceDbId },
+				where: { seq: mockSpaceDbId },
 				data: updateData,
 			});
 			expect(result?.updatedAt).toEqual(updateData.updatedAt);
@@ -534,7 +537,7 @@ describe("SpacesRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.space.update).toHaveBeenCalledWith({
-				where: { id: mockSpaceDbId },
+				where: { seq: mockSpaceDbId },
 				data: { removedAt: expect.any(Date) },
 			});
 			expect(result).toBeInstanceOf(Space);
@@ -558,7 +561,7 @@ describe("SpacesRepository", () => {
 			// Then
 			expect(mockTxHost.tx.space.findMany).toHaveBeenCalledWith({
 				where: {
-					id: { in: [mockSpaceDbId, mockSecondSpaceDbId] },
+					seq: { in: [mockSpaceDbId, mockSecondSpaceDbId] },
 					removedAt: null,
 				},
 				include: {
@@ -599,7 +602,7 @@ describe("SpacesRepository", () => {
 			// Then
 			expect(mockTxHost.tx.spaceClassification.findFirst).toHaveBeenCalledWith({
 				where: {
-					space: { id: 100n, removedAt: null },
+					space: { seq: 100n, removedAt: null },
 					removedAt: null,
 					category: {
 						removedAt: null,

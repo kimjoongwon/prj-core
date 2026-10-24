@@ -1,3 +1,3 @@
 export class UnlockAccountCommand {
-	constructor(readonly userSeq: bigint) {}
+	constructor(readonly userId: string) {}
 }

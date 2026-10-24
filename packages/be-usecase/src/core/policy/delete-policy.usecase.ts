@@ -7,6 +7,6 @@ export class DeletePolicyUseCase {
 	constructor(private readonly policyService: PolicyAggregate) {}
 
 	execute(command: DeletePolicyCommand): Promise<unknown> {
-		return this.policyService.deletePolicy(command.policySeq);
+		return this.policyService.deletePolicy(command.policyId);
 	}
 }

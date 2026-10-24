@@ -23,6 +23,5 @@ export class OidcClientDto extends EntityResponseType(OidcClient, {
 		"loginUi",
 		"logoUri",
 		"policyUri",
-		"tosUri",
-	] as const,
+		"tosUri"] as const,
 }) {}

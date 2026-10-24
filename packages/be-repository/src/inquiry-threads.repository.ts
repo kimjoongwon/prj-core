@@ -25,11 +25,11 @@ export class InquiryThreadsRepository {
 		this.logger = new Logger("InquiryThreadsRepository");
 	}
 
-	async findById(id: bigint): Promise<InquiryThread | null> {
+	async findById(id: string): Promise<InquiryThread | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiryThread.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: { inquiry: true, createdBy: true },
 		});
 
@@ -152,7 +152,7 @@ export class InquiryThreadsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.InquiryThreadUncheckedUpdateInput,
 			"id"
@@ -160,7 +160,7 @@ export class InquiryThreadsRepository {
 	): Promise<InquiryThread> {
 		this.logger.debug(`수정: ${id.toString()}`);
 		const result = await this.txHost.tx.inquiryThread.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: { inquiry: true, createdBy: true },
 		});
@@ -168,11 +168,11 @@ export class InquiryThreadsRepository {
 		return toDomainEntity(InquiryThread, result);
 	}
 
-	async removeById(id: bigint): Promise<InquiryThread> {
+	async removeById(id: string): Promise<InquiryThread> {
 		this.logger.debug(`삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiryThread.delete({
-			where: { seq: id },
+			where: { id },
 			include: { inquiry: true, createdBy: true },
 		});
 

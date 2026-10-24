@@ -11,7 +11,7 @@ export class GetSessionsUseCase {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
 		const sessionResult = await this.timelinesService.findSessionsInTimeline(
-			query.timelineSeq,
+			query.timelineId,
 			{
 				skip,
 				take,

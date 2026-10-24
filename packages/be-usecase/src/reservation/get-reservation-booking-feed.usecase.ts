@@ -20,12 +20,12 @@ export class GetReservationBookingFeedUseCase {
 		const skip = params.skip ?? 0;
 		const take = params.take ?? 50;
 		const result = await this.reservationService.getBookingFeed({
-			spaceSeq: context.spaceSeq,
-			userSeq: context.userSeq,
+			spaceId: context.spaceId,
+			userId: context.userId,
 			from: params.dateFrom,
 			to: params.dateTo,
-			timelineSeq: params.timelineSeq,
-			programSeq: params.programSeq,
+			timelineId: params.timelineId,
+			programId: params.programId,
 			search: params.search,
 			skip,
 			take,

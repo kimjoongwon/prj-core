@@ -8,10 +8,7 @@ export class RoleAssociationDto extends EntityResponseType(RoleAssociation, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"roleSeq",
-		"groupSeq",
-		"group",
-	] as const,
+		"group"] as const,
 	relations: {
 		group: () => GroupDto,
 	},

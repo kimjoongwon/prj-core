@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	CreateSpaceCommand,
 	GetSpaceFitnessCenterQuery,
@@ -63,7 +63,7 @@ export class SpacesController {
 		);
 	}
 
-	@Get(":spaceSeq/fitness-center")
+	@Get(":spaceId/fitness-center")
 	@ApiOperation({
 		operationId: "getSpaceFitnessCenter",
 		summary: "공간의 시설 detail 조회",
@@ -71,7 +71,7 @@ export class SpacesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "spaceSeq",
+		name: "spaceId",
 		description: "Space ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -80,13 +80,13 @@ export class SpacesController {
 	@ResponseMessage("공간 시설 조회 성공")
 	@HttpCode(HttpStatus.OK)
 	async getSpaceFitnessCenter(
-		@Param("spaceSeq", ParseBigIntIdPipe) spaceSeq: bigint,
+		@Param("spaceId", ParseUlidPipe) spaceId: string,
 	): Promise<FitnessCenter> {
-		if (!this.spaceContext.canAccessSpace(spaceSeq)) {
+		if (!this.spaceContext.canAccessSpace(spaceId)) {
 			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
 		}
 
-		return this.queryBus.execute(new GetSpaceFitnessCenterQuery(spaceSeq));
+		return this.queryBus.execute(new GetSpaceFitnessCenterQuery(spaceId));
 	}
 
 	@Post()
@@ -110,7 +110,7 @@ export class SpacesController {
 		return this.commandBus.execute(new CreateSpaceCommand(dto));
 	}
 
-	@Patch(":spaceSeq/fitness-center")
+	@Patch(":spaceId/fitness-center")
 	@ApiOperation({
 		operationId: "updateSpaceFitnessCenter",
 		summary: "공간의 시설 detail 수정",
@@ -119,7 +119,7 @@ export class SpacesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "spaceSeq",
+		name: "spaceId",
 		description: "Space ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -132,15 +132,15 @@ export class SpacesController {
 	@ResponseMessage("공간 시설 수정 성공")
 	@HttpCode(HttpStatus.OK)
 	async updateSpaceFitnessCenter(
-		@Param("spaceSeq", ParseBigIntIdPipe) spaceSeq: bigint,
+		@Param("spaceId", ParseUlidPipe) spaceId: string,
 		@Body() dto: UpdateFitnessCenterDto,
 	): Promise<Space> {
-		if (!this.spaceContext.canAccessSpace(spaceSeq)) {
+		if (!this.spaceContext.canAccessSpace(spaceId)) {
 			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
 		}
 
 		return this.commandBus.execute(
-			new UpdateSpaceFitnessCenterCommand(spaceSeq, dto),
+			new UpdateSpaceFitnessCenterCommand(spaceId, dto),
 		);
 	}
 }

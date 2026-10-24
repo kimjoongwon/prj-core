@@ -15,7 +15,6 @@ import type { User } from "./user.entity";
 @AbstractEntityFields()
 export class Timeline extends TimelineSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: TimelineSchema["id"];
 
 	@BigIntIdFieldMetadata() declare spaceSeq: TimelineSchema["spaceSeq"];

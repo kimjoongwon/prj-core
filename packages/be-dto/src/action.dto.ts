@@ -12,6 +12,5 @@ export class ActionDto extends EntityResponseType(Action, {
 		"description",
 		"group",
 		"order",
-		"config",
-	] as const,
+		"config"] as const,
 }) {}

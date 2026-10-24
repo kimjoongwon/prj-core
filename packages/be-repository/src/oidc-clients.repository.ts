@@ -15,15 +15,15 @@ export class OidcClientsRepository {
 		>,
 	) {}
 
-	async findById(id: bigint): Promise<OidcClient | null> {
+	async findById(id: string): Promise<OidcClient | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.findUnique({
-			where: { seq: id },
+			where: { id },
 		});
 		return result ? toDomainEntity(OidcClient, result) : null;
 	}
 
-	async findByIdOrThrow(id: bigint): Promise<OidcClient> {
+	async findByIdOrThrow(id: string): Promise<OidcClient> {
 		const result = await this.findById(id);
 		if (!result) {
 			throw new Error(`OidcClient not found: ${id.toString()}`);
@@ -92,21 +92,21 @@ export class OidcClientsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: Prisma.OidcClientUncheckedUpdateInput,
 	): Promise<OidcClient> {
 		this.logger.debug(`업데이트 중: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.update({
-			where: { seq: id },
+			where: { id },
 			data,
 		});
 		return toDomainEntity(OidcClient, result);
 	}
 
-	async removeById(id: bigint): Promise<OidcClient> {
+	async removeById(id: string): Promise<OidcClient> {
 		this.logger.debug(`소프트 삭제: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.update({
-			where: { seq: id },
+			where: { id },
 			data: { removedAt: new Date(), isActive: false },
 		});
 		return toDomainEntity(OidcClient, result);

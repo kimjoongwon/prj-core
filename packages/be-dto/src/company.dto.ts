@@ -15,8 +15,7 @@ export class CompanyDto extends EntityResponseType(Company, {
 		"email",
 		"businessNo",
 		"logoImageFileId",
-		"fitnessCenters",
-	] as const,
+		"fitnessCenters"] as const,
 	relations: {
 		fitnessCenters: () => FitnessCenterDto,
 	},

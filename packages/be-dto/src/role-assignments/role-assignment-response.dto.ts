@@ -7,15 +7,12 @@ export class RoleAssignmentResponseDto extends EntityResponseType(
 	{
 		pick: [
 			"id",
-			"roleSeq",
-			"policySeq",
 			"isActive",
 			"priority",
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"policy",
-		] as const,
+			"policy"] as const,
 		relations: { policy: () => PolicyResponseDto },
 	},
 ) {

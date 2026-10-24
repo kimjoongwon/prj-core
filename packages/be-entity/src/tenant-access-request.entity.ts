@@ -16,7 +16,6 @@ import { Tenant } from "./tenant.entity";
 import { User } from "./user.entity";
 @AbstractEntityFields()
 export class TenantAccessRequest extends TenantAccessRequestSchema {
-	@Exclude({ toPlainOnly: true })
 	declare id: TenantAccessRequestSchema["id"];
 	@BigIntIdFieldMetadata({ description: "신청자 ID" })
 	declare requesterSeq: TenantAccessRequestSchema["requesterSeq"];

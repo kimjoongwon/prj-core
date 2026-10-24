@@ -5,16 +5,13 @@ import { PolicyEntryResponseDto } from "./policy-entry-response.dto";
 export class PolicyResponseDto extends EntityResponseType(Policy, {
 	pick: [
 		"id",
-		"spaceSeq",
-		"createdBySeq",
 		"name",
 		"displayName",
 		"description",
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"entries",
-	] as const,
+		"entries"] as const,
 	relations: { entries: () => PolicyEntryResponseDto },
 }) {
 	declare entries?: PolicyEntryResponseDto[];

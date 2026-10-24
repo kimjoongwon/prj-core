@@ -15,16 +15,16 @@ export class GetTimelineByIdUseCase {
 	execute(query: GetTimelineByIdQuery): Promise<unknown> {
 		this.requireTimelineSpaceId();
 		return this.timelinesService.findTimelineForSpace(
-			query.timelineSeq,
+			query.timelineId,
 			this.spaceContext.spaceIds,
 		);
 	}
 
 	private requireTimelineSpaceId(): bigint {
-		const spaceSeq = this.spaceContext.tenant?.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.tenant?.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}
-		return spaceSeq;
+		return spaceId;
 	}
 }

@@ -7,7 +7,7 @@ export class PreviewTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	async execute(query: PreviewTemplateQuery): Promise<unknown> {
-		return this.templateService.preview(query.templateSeq, {
+		return this.templateService.preview(query.templateId, {
 			variables: query.dto.variables,
 		});
 	}

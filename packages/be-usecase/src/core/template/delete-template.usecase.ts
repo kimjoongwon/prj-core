@@ -7,6 +7,6 @@ export class DeleteTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	async execute(command: DeleteTemplateCommand): Promise<void> {
-		await this.templateService.remove(command.templateSeq);
+		await this.templateService.remove(command.templateId);
 	}
 }

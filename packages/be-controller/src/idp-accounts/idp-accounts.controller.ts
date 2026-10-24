@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	GetIdpAccountAccessGrantFormQuery,
 	GetIdpAccountQuery,
@@ -74,7 +74,7 @@ export class IdpAccountsController {
 		return this.queryBus.execute(new GetIdpAccountsQuery(query));
 	}
 
-	@Get(":userSeq")
+	@Get(":userId")
 	@ApiOperation({
 		operationId: "getIdpAccount",
 		summary: "IDP 계정 상세 조회",
@@ -82,18 +82,18 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userSeq",
+		name: "userId",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
 	@ResponseMessage("계정 상세 조회 성공")
-	async getAccount(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
-		return this.queryBus.execute(new GetIdpAccountQuery(userSeq));
+	async getAccount(@Param("userId", ParseUlidPipe) userId: string) {
+		return this.queryBus.execute(new GetIdpAccountQuery(userId));
 	}
 
-	@Get(":userSeq/access-grant-form")
+	@Get(":userId/access-grant-form")
 	@ApiOperation({
 		operationId: "getIdpAccountAccessGrantForm",
 		summary: "IDP 계정 접근 권한 부여 폼 조회",
@@ -102,18 +102,18 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userSeq",
+		name: "userId",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountAccessGrantFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("계정 접근 권한 부여 폼 조회 성공")
-	async getAccessGrantForm(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
-		return this.queryBus.execute(new GetIdpAccountAccessGrantFormQuery(userSeq));
+	async getAccessGrantForm(@Param("userId", ParseUlidPipe) userId: string) {
+		return this.queryBus.execute(new GetIdpAccountAccessGrantFormQuery(userId));
 	}
 
-	@Post(":userSeq/access-grants")
+	@Post(":userId/access-grants")
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		operationId: "grantIdpAccountAccess",
@@ -123,7 +123,7 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userSeq",
+		name: "userId",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -135,15 +135,15 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
 	@ResponseMessage("계정 접근 권한 부여 성공")
 	async grantAccess(
-		@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint,
+		@Param("userId", ParseUlidPipe) userId: string,
 		@Body() dto: GrantIdpAccountAccessDto,
 	) {
 		return this.commandBus.execute(
-			new GrantIdpAccountAccessCommand(userSeq, dto),
+			new GrantIdpAccountAccessCommand(userId, dto),
 		);
 	}
 
-	@Patch(":userSeq/toggle-active")
+	@Patch(":userId/toggle-active")
 	@ApiOperation({
 		operationId: "toggleIdpAccountActive",
 		summary: "계정 활성/비활성 토글",
@@ -151,18 +151,18 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userSeq",
+		name: "userId",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상태 변경 성공")
-	async toggleActive(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
-		return this.commandBus.execute(new ToggleIdpAccountActiveCommand(userSeq));
+	async toggleActive(@Param("userId", ParseUlidPipe) userId: string) {
+		return this.commandBus.execute(new ToggleIdpAccountActiveCommand(userId));
 	}
 
-	@Post(":userSeq/reset-failed-attempts")
+	@Post(":userId/reset-failed-attempts")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		operationId: "resetIdpAccountFailedAttempts",
@@ -171,17 +171,17 @@ export class IdpAccountsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userSeq",
+		name: "userId",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ResponseMessage("실패 횟수 초기화 성공")
 	async resetFailedAttempts(
-		@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint,
+		@Param("userId", ParseUlidPipe) userId: string,
 	): Promise<void> {
 		await this.commandBus.execute(
-			new ResetIdpAccountFailedAttemptsCommand(userSeq),
+			new ResetIdpAccountFailedAttemptsCommand(userId),
 		);
 	}
 }

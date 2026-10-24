@@ -9,11 +9,8 @@ export class TaskDto extends EntityResponseType(Task, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"spaceSeq",
-		"createdBySeq",
 		"exercise",
-		"activities",
-	] as const,
+		"activities"] as const,
 	relations: {
 		exercise: () => ExerciseDto,
 		activities: () => ActivityDto,

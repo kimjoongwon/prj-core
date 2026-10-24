@@ -1,8 +1,8 @@
 import type { CreateAbilityCommandInput } from "@cocrepo/input";
 
 export class CreateAbilityCommand implements CreateAbilityCommandInput {
-	readonly actionSeq!: CreateAbilityCommandInput["actionSeq"];
-	readonly subjectSeq!: CreateAbilityCommandInput["subjectSeq"];
+	readonly actionId!: CreateAbilityCommandInput["actionId"];
+	readonly subjectId!: CreateAbilityCommandInput["subjectId"];
 	readonly fields?: CreateAbilityCommandInput["fields"];
 	readonly conditions?: CreateAbilityCommandInput["conditions"];
 	readonly inverted?: CreateAbilityCommandInput["inverted"];

@@ -47,14 +47,14 @@ export class AuthContext {
 		return this.cls.get<ContextTenantSnapshot>(CONTEXT_KEYS.TENANT);
 	}
 
-	/** 현재 Tenant ID */
-	get tenantId(): DatabaseId | undefined {
-		return this.cls.get<DatabaseId>(CONTEXT_KEYS.TENANT_ID);
+	/** 현재 Tenant 공개 ID (ULID) */
+	get tenantId(): string | undefined {
+		return this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
 	}
 
-	/** 현재 Tenant에서 파생된 Space ID */
-	get spaceSeq(): DatabaseId | undefined {
-		return this.cls.get<DatabaseId>(CONTEXT_KEYS.SPACE_ID);
+	/** 현재 Tenant에서 파생된 Space 공개 ID (ULID) */
+	get spaceId(): string | undefined {
+		return this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 	}
 
 	// ═══════════════════════════════════════════════════════════
@@ -78,14 +78,14 @@ export class AuthContext {
 		return this.user?.isSuperManager() ?? false;
 	}
 
-	/** 접근 가능한 Space IDs */
-	get accessibleSpaceIds(): DatabaseId[] | undefined {
+	/** 접근 가능한 Space 공개 IDs (ULID) */
+	get accessibleSpaceIds(): string[] | undefined {
 		return this.user?.accessibleSpaceIds;
 	}
 
-	/** 특정 Space 접근 권한 */
-	canAccessSpace(spaceSeq: DatabaseId): boolean {
-		return this.user?.canAccessSpace(spaceSeq) ?? false;
+	/** 특정 Space 접근 권한 (공개 ULID 기준) */
+	canAccessSpace(spaceId: string): boolean {
+		return this.user?.canAccessSpace(spaceId) ?? false;
 	}
 
 	// ═══════════════════════════════════════════════════════════

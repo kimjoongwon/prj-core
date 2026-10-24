@@ -34,14 +34,14 @@ export class PoliciesRepository {
 		return results.map((result) => toDomainEntity(Policy, result));
 	}
 
-	async findByIdInSpace(id: bigint, spaceSeq: bigint): Promise<Policy | null> {
+	async findByIdInSpace(id: string, spaceSeq: bigint): Promise<Policy | null> {
 		this.logger.debug(
 			`Policy 조회: id=${id.toString()}, spaceSeq=${spaceSeq.toString()}`,
 		);
 
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
-				seq: id,
+				id,
 				spaceSeq,
 				removedAt: null,
 			},
@@ -103,7 +103,7 @@ export class PoliciesRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.PolicyUncheckedUpdateInput,
 			"id"
@@ -111,7 +111,7 @@ export class PoliciesRepository {
 	): Promise<Policy> {
 		this.logger.debug(`Policy 수정: id=${id.toString()}`);
 		const result = await this.txHost.tx.policy.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: this.includePolicyDetails(),
 		});
@@ -119,11 +119,11 @@ export class PoliciesRepository {
 		return toDomainEntity(Policy, result);
 	}
 
-	async removeById(id: bigint): Promise<Policy> {
+	async removeById(id: string): Promise<Policy> {
 		this.logger.debug(`Policy 소프트 삭제: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.policy.update({
-			where: { seq: id },
+			where: { id },
 			data: { removedAt: new Date() },
 			include: this.includePolicyDetails(),
 		});

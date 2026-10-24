@@ -49,7 +49,7 @@ describe("RoleAssignmentsRepository", () => {
 				where: {
 					roleSeq: { in: [10n] },
 					removedAt: null,
-					policy: { space: { id: 30n }, removedAt: null },
+					policy: { space: { seq: 30n }, removedAt: null },
 				},
 				include: expect.objectContaining({
 					role: true,
@@ -72,7 +72,7 @@ describe("RoleAssignmentsRepository", () => {
 				where: expect.objectContaining({
 					roleSeq: { in: [10n, 11n] },
 					isActive: true,
-					policy: { space: { id: 30n }, removedAt: null },
+					policy: { space: { seq: 30n }, removedAt: null },
 				}),
 			}),
 		);

@@ -19,7 +19,6 @@ import { Folder } from "@cocrepo/entity";
  * - statusFilter -> removedAt 필터
  */
 export class FolderQueryDto extends EntityQueryType(Folder, [
-	"spaceSeq",
 ] as const) {
 	@BigIntIdFieldOptional({ description: "상위 폴더 ID 필터 (null이면 루트)" })
 	parentFolderSeq?: bigint;

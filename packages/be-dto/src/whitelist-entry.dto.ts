@@ -9,6 +9,5 @@ export class WhitelistEntryDto extends EntityResponseType(WhitelistEntry, {
 		"type",
 		"value",
 		"description",
-		"isActive",
-	] as const,
+		"isActive"] as const,
 }) {}

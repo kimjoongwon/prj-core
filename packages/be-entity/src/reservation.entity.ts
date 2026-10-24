@@ -21,7 +21,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Reservation extends ReservationSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: ReservationSchema["id"];
 
 	@BigIntIdFieldMetadata({ description: "Space ID" })

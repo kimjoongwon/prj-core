@@ -15,17 +15,17 @@ export class ServiceDocumentsRepository {
 		>,
 	) {}
 
-	async findById(id: bigint): Promise<ServiceDocument | null> {
+	async findById(id: string): Promise<ServiceDocument | null> {
 		this.logger.debug(`서비스 문서 ID 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.serviceDocument.findFirst({
-			where: { seq: id, removedAt: null },
+			where: { id, removedAt: null },
 		});
 
 		return result ? toDomainEntity(ServiceDocument, result) : null;
 	}
 
-	async findByIdOrThrow(id: bigint): Promise<ServiceDocument> {
+	async findByIdOrThrow(id: string): Promise<ServiceDocument> {
 		const result = await this.findById(id);
 		if (!result) {
 			throw new Error(`ServiceDocument not found: ${id.toString()}`);
@@ -88,26 +88,26 @@ export class ServiceDocumentsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: Prisma.ServiceDocumentUncheckedUpdateInput,
 	): Promise<ServiceDocument> {
 		const result = await this.txHost.tx.serviceDocument.update({
-			where: { seq: id },
+			where: { id },
 			data,
 		});
 
 		return toDomainEntity(ServiceDocument, result);
 	}
 
-	async publishById(id: bigint): Promise<ServiceDocument> {
+	async publishById(id: string): Promise<ServiceDocument> {
 		const target = await this.txHost.tx.serviceDocument.findUniqueOrThrow({
-			where: { seq: id },
+			where: { id },
 		});
 		const publishedAt = new Date();
 
 		await this.txHost.tx.serviceDocument.updateMany({
 			where: {
-				seq: { not: id },
+				id: { not: id },
 				kind: target.kind,
 				platform: target.platform,
 				locale: target.locale,
@@ -118,25 +118,25 @@ export class ServiceDocumentsRepository {
 		});
 
 		const result = await this.txHost.tx.serviceDocument.update({
-			where: { seq: id },
+			where: { id },
 			data: { status: "PUBLISHED", publishedAt },
 		});
 
 		return toDomainEntity(ServiceDocument, result);
 	}
 
-	async archiveById(id: bigint): Promise<ServiceDocument> {
+	async archiveById(id: string): Promise<ServiceDocument> {
 		const result = await this.txHost.tx.serviceDocument.update({
-			where: { seq: id },
+			where: { id },
 			data: { status: "ARCHIVED" },
 		});
 
 		return toDomainEntity(ServiceDocument, result);
 	}
 
-	async removeById(id: bigint): Promise<ServiceDocument> {
+	async removeById(id: string): Promise<ServiceDocument> {
 		const result = await this.txHost.tx.serviceDocument.update({
-			where: { seq: id },
+			where: { id },
 			data: { removedAt: new Date(), status: "ARCHIVED" },
 		});
 

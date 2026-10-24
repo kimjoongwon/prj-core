@@ -1,3 +1,3 @@
 export class PublishServiceDocumentCommand {
-	constructor(readonly serviceDocumentId: bigint) {}
+	constructor(readonly serviceDocumentId: string) {}
 }

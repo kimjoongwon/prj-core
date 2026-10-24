@@ -15,7 +15,6 @@ import { User } from "./user.entity";
 /** Space별 Ability를 묶어 Role에 할당하는 권한 정책입니다. */
 @AbstractEntityFields()
 export class Policy extends PolicySchema {
-	@Exclude({ toPlainOnly: true })
 	declare id: PolicySchema["id"];
 	@BigIntIdFieldMetadata({ description: "Policy ID" })
 	declare seq: bigint;

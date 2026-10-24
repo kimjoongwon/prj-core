@@ -24,7 +24,6 @@ import { Video } from "./video.entity";
 @AbstractEntityFields()
 export class Asset extends AssetSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: AssetSchema["id"];
 
 	// ============================================================================

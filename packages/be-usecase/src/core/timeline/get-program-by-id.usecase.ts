@@ -8,8 +8,8 @@ export class GetProgramByIdUseCase {
 
 	execute(query: GetProgramByIdQuery): Promise<unknown> {
 		return this.timelinesService.findProgramInSession(
-			query.sessionSeq,
-			query.programSeq,
+			query.sessionId,
+			query.programId,
 		);
 	}
 }

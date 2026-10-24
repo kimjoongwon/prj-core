@@ -22,7 +22,6 @@ import type { InquiryMessage } from "./inquiry-message.entity";
 @AbstractEntityFields()
 export class SentimentAnalysis extends SentimentAnalysisSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: SentimentAnalysisSchema["id"];
 
 	// ============================================================================

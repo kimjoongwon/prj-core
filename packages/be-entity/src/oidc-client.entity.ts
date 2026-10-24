@@ -12,7 +12,6 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class OidcClient extends OidcClientSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: OidcClientSchema["id"];
 
 	@StringFieldMetadata({

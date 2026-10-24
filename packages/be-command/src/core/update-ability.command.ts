@@ -1,8 +1,8 @@
 import type { UpdateAbilityCommandInput } from "@cocrepo/input";
 
 export class UpdateAbilityCommand implements UpdateAbilityCommandInput {
-	readonly actionSeq?: UpdateAbilityCommandInput["actionSeq"];
-	readonly subjectSeq?: UpdateAbilityCommandInput["subjectSeq"];
+	readonly actionId?: UpdateAbilityCommandInput["actionId"];
+	readonly subjectId?: UpdateAbilityCommandInput["subjectId"];
 	readonly fields?: UpdateAbilityCommandInput["fields"];
 	readonly conditions?: UpdateAbilityCommandInput["conditions"];
 	readonly inverted?: UpdateAbilityCommandInput["inverted"];
@@ -11,7 +11,7 @@ export class UpdateAbilityCommand implements UpdateAbilityCommandInput {
 	readonly description?: UpdateAbilityCommandInput["description"];
 
 	constructor(
-		readonly abilitySeq: bigint,
+		readonly abilityId: string,
 		input: UpdateAbilityCommandInput,
 	) {
 		Object.assign(this, input);

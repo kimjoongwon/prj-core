@@ -67,7 +67,7 @@ describe("RolesRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.role.findUnique).toHaveBeenCalledWith({
-				where: { id: roleSeq },
+				where: { seq: roleSeq },
 			});
 			expect(result).toBeInstanceOf(Role);
 			expect(result?.id).toBe(mockRoleData.id);
@@ -84,7 +84,7 @@ describe("RolesRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.role.findUnique).toHaveBeenCalledWith({
-				where: { id: roleSeq },
+				where: { seq: roleSeq },
 			});
 			expect(result).toBeNull();
 		});
@@ -193,7 +193,7 @@ describe("RolesRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.role.update).toHaveBeenCalledWith({
-				where: { id: roleSeq },
+				where: { seq: roleSeq },
 				data: updateData,
 			});
 			expect(result).toBeInstanceOf(Role);

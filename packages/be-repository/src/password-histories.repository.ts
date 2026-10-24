@@ -18,11 +18,11 @@ export class PasswordHistoriesRepository {
 		this.logger = new Logger("PasswordHistoriesRepository");
 	}
 
-	async findById(id: bigint): Promise<PasswordHistory | null> {
+	async findById(id: string): Promise<PasswordHistory | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: { user: true },
 		});
 
@@ -91,11 +91,11 @@ export class PasswordHistoriesRepository {
 		return toDomainEntity(PasswordHistory, result);
 	}
 
-	async deleteById(id: bigint): Promise<PasswordHistory> {
+	async deleteById(id: string): Promise<PasswordHistory> {
 		this.logger.debug(`ID 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.delete({
-			where: { seq: id },
+			where: { id },
 			include: { user: true },
 		});
 

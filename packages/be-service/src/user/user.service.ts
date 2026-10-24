@@ -33,30 +33,27 @@ export class UserService {
 	}
 
 	/** 내부 숫자 ID로 사용자와 Tenant/Profile 권한 그래프를 조회합니다. */
-	getByIdWithTenants(userSeq: bigint): Promise<User | null> {
-		return this.repository.findByIdWithTenantsAndProfiles(userSeq);
+	getByIdWithTenants(userId: string): Promise<User | null> {
+		return this.repository.findByIdWithTenantsAndProfiles(userId);
 	}
 
 	/**
 	 * 현재 Space에서 사용자에게 속한 Tenant 상세와 권한 그래프를 조회합니다.
 	 */
 	async getTenantDetailForUser(
-		userSeq: bigint,
-		tenantId: bigint,
-		_spaceId: bigint,
+		userId: string,
+		tenantId: string,
+		_spaceId: string,
 	): Promise<Tenant> {
-		const [user, tenantSnapshot] = await Promise.all([
-			this.repository.findById(userSeq),
-			this.tenantsRepository.findById(tenantId),
-		]);
-		if (!user || !tenantSnapshot?.tenantId || !tenantSnapshot.space?.spaceSeq) {
+		const tenantSnapshot = await this.tenantsRepository.findById(tenantId);
+		if (!tenantSnapshot?.id || !tenantSnapshot.space?.id) {
 			throw new NotFoundException("사용자의 테넌트를 찾을 수 없습니다");
 		}
 
 		const tenant = await this.repository.findTenantDetailForUserInSpace(
-			user.userSeq,
-			tenantSnapshot.tenantId,
-			tenantSnapshot.space.spaceSeq,
+			userId,
+			tenantSnapshot.id,
+			tenantSnapshot.space.id,
 		);
 		if (!tenant) {
 			throw new NotFoundException("사용자의 테넌트를 찾을 수 없습니다");
@@ -65,14 +62,14 @@ export class UserService {
 	}
 
 	/** 현재 Tenant를 영구 저장하고 인증 사용자 캐시를 무효화합니다. */
-	async setCurrentTenant(userSeq: bigint, tenantId: bigint): Promise<void> {
-		const user = await this.repository.findById(userSeq);
+	async setCurrentTenant(userId: string, tenantId: string): Promise<void> {
+		const user = await this.repository.findById(userId);
 		if (!user) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		await this.repository.updateCurrentTenantId(userSeq, tenantId);
-		await this.authCacheService.invalidate(user.userSeq);
+		await this.repository.updateCurrentTenantIdByPublicIds(userId, tenantId);
+		await this.authCacheService.invalidate(user.id);
 	}
 
 	/**
@@ -91,7 +88,7 @@ export class UserService {
 	 * UseCase에서 Prisma 조건으로 변환한 입력에 Space scope를 합성합니다.
 	 */
 	async getUsersBySpace(input: GetUsersInput): Promise<GetUsersResult> {
-		const currentSpaceId = this.spaceCtx.spaceSeq;
+		const currentSpaceId = this.spaceCtx.spaceId;
 		const scopedSpaceIds = this.spaceCtx.spaceIds;
 
 		this.logger.debug(
@@ -126,7 +123,7 @@ export class UserService {
 
 	private applySpaceScope(
 		where: Prisma.UserWhereInput,
-		scopedSpaceIds?: bigint[],
+		scopedSpaceIds?: string[],
 	): Prisma.UserWhereInput {
 		if (scopedSpaceIds === undefined) {
 			return where;
@@ -155,25 +152,20 @@ export class UserService {
 	 * PLATFORM_ADMIN처럼 유효 범위가 undefined면 Space 제한 없이 조회합니다.
 	 *
 	 * @param userSeq 조회할 사용자 ULID
-	 * @param spaceSeq 현재 선택된 Space ULID
+	 * @param spaceId 현재 선택된 Space 공개 ULID
 	 * @returns 접근 범위 안의 사용자 상세
 	 */
 	async getUserDetailForSpace(
-		userSeq: bigint,
-		spaceSeq: bigint,
+		userId: string,
+		spaceId: string,
 	): Promise<User> {
 		const scopedSpaceIds = this.spaceCtx.spaceIds;
 		this.logger.debug(
-			`Space 내 사용자 상세 조회: userSeq=${userSeq.toString()}, selectedSpaceId=${spaceSeq.toString()}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,
+			`Space 내 사용자 상세 조회: userId=${userId}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,
 		);
 
-		const targetUser = await this.repository.findById(userSeq);
-		if (!targetUser?.userSeq) {
-			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
-		}
-
 		const user = await this.repository.findByIdAndSpaceIdsWithRelations(
-			targetUser.userSeq,
+			userId,
 			scopedSpaceIds,
 		);
 
@@ -187,16 +179,16 @@ export class UserService {
 	/**
 	 * 계정 잠금 해제 (관리자 전용)
 	 */
-	async unlockAccount(userSeq: bigint): Promise<void> {
-		this.logger.debug(`계정 잠금 해제: userSeq=${userSeq.toString()}`);
+	async unlockAccount(userId: string): Promise<void> {
+		this.logger.debug(`계정 잠금 해제: userId=${userId}`);
 
-		const user = await this.repository.findById(userSeq);
+		const user = await this.repository.findById(userId);
 		if (!user) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		await this.repository.unlockAccount(user.userSeq);
-		await this.authCacheService.invalidate(user.userSeq);
+		await this.repository.unlockAccount(user.id);
+		await this.authCacheService.invalidate(user.id);
 	}
 
 	/**
@@ -206,11 +198,11 @@ export class UserService {
 	 * @returns 생성된 임시 비밀번호 (관리자 확인용)
 	 */
 	async forceResetPassword(
-		userSeq: bigint,
+		userId: string,
 	): Promise<{ temporaryPassword: string; email: string }> {
-		this.logger.debug(`비밀번호 강제 재설정: userSeq=${userSeq.toString()}`);
+		this.logger.debug(`비밀번호 강제 재설정: userId=${userId}`);
 
-		const user = await this.repository.findById(userSeq);
+		const user = await this.repository.findById(userId);
 		if (!user) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
@@ -221,13 +213,13 @@ export class UserService {
 		// 비밀번호 변경
 		const plainPassword = PlainPassword.create(temporaryPassword);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
-		await this.repository.updatePassword(user.userSeq, hashedPassword.value);
+		await this.repository.updatePassword(user.id, hashedPassword.value);
 
 		// 잠금도 해제
-		await this.repository.unlockAccount(user.userSeq);
+		await this.repository.unlockAccount(user.id);
 
 		// 캐시 무효화
-		await this.authCacheService.invalidate(user.userSeq);
+		await this.authCacheService.invalidate(user.id);
 
 		return { temporaryPassword, email: user.email };
 	}
@@ -235,15 +227,15 @@ export class UserService {
 	/**
 	 * 사용자 보안 정보 조회 (관리자 전용)
 	 */
-	async getSecurityInfo(userSeq: bigint) {
-		this.logger.debug(`사용자 보안 정보 조회: userSeq=${userSeq.toString()}`);
+	async getSecurityInfo(userId: string) {
+		this.logger.debug(`사용자 보안 정보 조회: userId=${userId}`);
 
-		const user = await this.repository.findById(userSeq);
+		const user = await this.repository.findById(userId);
 		if (!user) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		const info = await this.repository.findSecurityInfoById(user.userSeq);
+		const info = await this.repository.findSecurityInfoById(user.id);
 		if (!info) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
@@ -290,8 +282,8 @@ export class UserService {
 		phone: string;
 		address: string;
 		password: string;
-		spaceSeq: bigint;
-		roleSeq: bigint;
+		spaceId: string;
+		roleId: string;
 		nickname?: string;
 	}): Promise<User> {
 		const email = Email.create(params.email);
@@ -308,8 +300,8 @@ export class UserService {
 			},
 			tenants: {
 				create: {
-					space: { connect: { id: params.spaceSeq } },
-					role: { connect: { id: params.roleSeq } },
+					space: { connect: { id: params.spaceId } },
+					role: { connect: { id: params.roleId } },
 				},
 			},
 			profiles: {

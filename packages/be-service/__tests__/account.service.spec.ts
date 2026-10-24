@@ -48,12 +48,12 @@ describe("AccountService", () => {
 					spaceSeq: 11n,
 					roleSeq: 12n,
 					role: {
-						roleSeq: "01J00000000000000000000012",
+						roleId: "01J00000000000000000000012",
 						name: "MEMBER",
 						displayName: "회원",
 					},
 					space: {
-						spaceSeq: "01J00000000000000000000011",
+						spaceId: "01J00000000000000000000011",
 						name: "System Fitness Center",
 					},
 				},
@@ -69,15 +69,15 @@ describe("AccountService", () => {
 			sub: "user-1",
 			roles: [
 				{
-					spaceSeq: "01J00000000000000000000011",
-					roleSeq: "01J00000000000000000000012",
+					spaceId: "01J00000000000000000000011",
+					roleId: "01J00000000000000000000012",
 					roleName: "MEMBER",
 					roleDisplayName: "회원",
 				},
 			],
 			spaces: [
 				{
-					spaceSeq: "01J00000000000000000000011",
+					spaceId: "01J00000000000000000000011",
 					spaceName: "System Fitness Center",
 				},
 			],

@@ -1,7 +1,7 @@
 export interface CreateProgramCommandInput {
 	name: string;
-	routineSeq: bigint;
-	instructorSeq: bigint;
+	routineId: string;
+	instructorId: string;
 	capacity: number;
 	level?: string | null;
 }

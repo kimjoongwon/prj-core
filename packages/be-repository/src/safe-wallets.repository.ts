@@ -32,11 +32,11 @@ export class SafeWalletsRepository {
 		this.logger = new Logger("SafeWalletsRepository");
 	}
 
-	async findById(id: bigint): Promise<SafeWalletRecord | null> {
+	async findById(id: string): Promise<SafeWalletRecord | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: safeWalletInclude,
 		});
 
@@ -122,7 +122,7 @@ export class SafeWalletsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.SafeWalletUncheckedUpdateInput,
 			"id"
@@ -130,7 +130,7 @@ export class SafeWalletsRepository {
 	): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.safeWallet.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: safeWalletInclude,
 		});
@@ -138,11 +138,11 @@ export class SafeWalletsRepository {
 		return toDomainData(result);
 	}
 
-	async removeById(id: bigint): Promise<SafeWalletRecord> {
+	async removeById(id: string): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.delete({
-			where: { seq: id },
+			where: { id },
 			include: safeWalletInclude,
 		});
 

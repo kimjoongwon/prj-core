@@ -132,17 +132,20 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 	it("Ability의 엄격한 boolean과 JSON 입력은 DTO 전용 계약을 유지한다", async () => {
 		await expect(
 			validateRequest(CreateAbilityDto, {
-				actionSeq: "1",
-				subjectSeq: "2",
+				actionId: "01JCCCCCCCCCCCCCCCCCCCCCCC",
+				subjectId: "01JDDDDDDDDDDDDDDDDDDDDDDD",
 				name: "read",
 				inverted: false,
 				conditions: { ownerId: "1" },
 			}),
-		).resolves.toMatchObject({ actionSeq: 1n, subjectSeq: 2n });
+		).resolves.toMatchObject({
+			actionId: "01JCCCCCCCCCCCCCCCCCCCCCCC",
+			subjectId: "01JDDDDDDDDDDDDDDDDDDDDDDD",
+		});
 		await expect(
 			validateRequest(CreateAbilityDto, {
-				actionSeq: "1",
-				subjectSeq: "2",
+				actionId: "01JCCCCCCCCCCCCCCCCCCCCCCC",
+				subjectId: "01JDDDDDDDDDDDDDDDDDDDDDDD",
 				name: "read",
 				inverted: "false",
 			}),

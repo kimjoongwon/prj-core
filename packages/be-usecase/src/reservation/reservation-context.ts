@@ -9,19 +9,19 @@ export class ReservationUseCaseContext {
 		private readonly spaceContext: SpaceContext,
 	) {}
 
-	requireContext(): { spaceSeq: bigint; userSeq: bigint } {
-		const spaceSeq = this.spaceContext.tenant?.spaceSeq;
-		if (!spaceSeq) {
+	requireContext(): { spaceId: bigint; userId: bigint } {
+		const spaceId = this.spaceContext.tenant?.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(RESERVATION_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const userSeq = this.authContext.userDto?.id;
-		if (!userSeq) {
+		const userId = this.authContext.userDto?.id;
+		if (!userId) {
 			throw new UnauthorizedException(
 				RESERVATION_ERRORS.USER_NOT_AUTHENTICATED,
 			);
 		}
 
-		return { spaceSeq, userSeq };
+		return { spaceId, userId };
 	}
 }

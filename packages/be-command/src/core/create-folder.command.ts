@@ -1,11 +1,11 @@
 import type { CreateFolderCommandInput } from "@cocrepo/input";
 export class CreateFolderCommand implements CreateFolderCommandInput {
-	readonly parentFolderSeq?: CreateFolderCommandInput["parentFolderSeq"];
+	readonly parentFolderId?: CreateFolderCommandInput["parentFolderId"];
 	readonly name!: CreateFolderCommandInput["name"];
 
 	constructor(
 		input: CreateFolderCommandInput,
-		readonly createdBySeq: bigint,
+		readonly createdById: string,
 	) {
 		Object.assign(this, input);
 	}

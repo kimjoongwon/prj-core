@@ -56,7 +56,7 @@ export class EmailVerificationAggregate {
 					status: "PENDING",
 					expiresAt,
 					verifiedAt: null,
-					verifiedUserSeq: null,
+					verifiedUserId: null,
 					lastSentAt,
 					sendCount: { increment: 1 },
 					lastSendStatus: null,
@@ -79,7 +79,7 @@ export class EmailVerificationAggregate {
 		};
 	}
 
-	async resend(id: bigint) {
+	async resend(id: string) {
 		const existing = await this.repository.findById(id);
 		if (!existing || existing.removedAt) {
 			throw new BadRequestException(EMAIL_VERIFICATION_ERROR.INVALID_TOKEN);
@@ -148,16 +148,18 @@ export class EmailVerificationAggregate {
 		return verification;
 	}
 
-	async markVerified(id: bigint, userSeq: bigint) {
+	async markVerified(id: string, userId: string) {
 		return this.repository.updateById(id, {
 			status: "VERIFIED",
 			verifiedAt: new Date(),
-			verifiedUserSeq: userSeq,
+			verifiedUser: { connect: { id: userId } },
+		} as Parameters<EmailVerificationsRepository["updateById"]>[1] & {
+			verifiedUser?: { connect: { id: string } };
 		});
 	}
 
 	toDto(verification: {
-		id: bigint;
+		id: string;
 		createdAt: Date;
 		updatedAt: Date | null;
 		email: string;
@@ -168,7 +170,7 @@ export class EmailVerificationAggregate {
 		lastSentAt: Date | null;
 		sendCount: number;
 		lastSendStatus: string | null;
-		verifiedUserSeq: bigint | null;
+		verifiedUser?: { id?: string | null } | null;
 	}) {
 		const resendAvailableAt = this.getResendAvailableAt(
 			verification.lastSentAt,
@@ -186,7 +188,7 @@ export class EmailVerificationAggregate {
 			lastSentAt: verification.lastSentAt,
 			sendCount: verification.sendCount,
 			lastSendStatus: verification.lastSendStatus,
-			verifiedUserSeq: verification.verifiedUserSeq,
+			verifiedUserId: verification.verifiedUser?.id ?? null,
 			canResend:
 				verification.status !== "VERIFIED" &&
 				(!resendAvailableAt || resendAvailableAt.getTime() <= Date.now()),
@@ -195,7 +197,7 @@ export class EmailVerificationAggregate {
 	}
 
 	private async sendAndRecord(
-		verificationId: bigint,
+		verificationId: string,
 		email: string,
 		rawToken: string,
 	): Promise<void> {

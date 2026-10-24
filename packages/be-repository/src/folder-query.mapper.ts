@@ -12,13 +12,13 @@ export function buildFolderQueryWhere(
 ): Prisma.FolderWhereInput {
 	return {
 		...(baseWhere ?? {}),
-		...(input.parentFolderSeq !== undefined
+		...(input.parentFolderId !== undefined
 			? {
 					parent:
-						input.parentFolderSeq === null ? null : { seq: input.parentFolderSeq },
+						input.parentFolderId === null ? null : { id: input.parentFolderId },
 				}
 			: {}),
-		...(input.spaceSeq ? { space: { seq: input.spaceSeq } } : {}),
+		...(input.spaceId ? { space: { id: input.spaceId } } : {}),
 		...(input.name ? { name: containsFilter(input.name) } : {}),
 		removedAt: removedAtFilter(input.statusFilter === "deleted"),
 	};

@@ -13,7 +13,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Category extends CategorySchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: CategorySchema["id"];
 
 	@StringFieldMetadata({ default: "" })

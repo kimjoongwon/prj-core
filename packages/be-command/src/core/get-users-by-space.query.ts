@@ -11,7 +11,7 @@ export class GetUsersBySpaceQuery implements GetUsersBySpaceQueryInput {
 	readonly status?: GetUsersBySpaceQueryInput["status"];
 	readonly isActive?: GetUsersBySpaceQueryInput["isActive"];
 	readonly isRemoved?: GetUsersBySpaceQueryInput["isRemoved"];
-	readonly categorySeq?: GetUsersBySpaceQueryInput["categorySeq"];
+	readonly categoryId?: GetUsersBySpaceQueryInput["categoryId"];
 	readonly groupIds?: GetUsersBySpaceQueryInput["groupIds"];
 	readonly createdFrom?: GetUsersBySpaceQueryInput["createdFrom"];
 	readonly createdTo?: GetUsersBySpaceQueryInput["createdTo"];

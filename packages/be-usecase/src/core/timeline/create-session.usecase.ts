@@ -8,7 +8,7 @@ export class CreateSessionUseCase {
 
 	execute(command: CreateSessionCommand): Promise<unknown> {
 		return this.timelinesService.createSessionInTimeline(
-			command.timelineSeq,
+			command.timelineId,
 			command,
 		);
 	}

@@ -1,6 +1,6 @@
 export class GetProgramByIdQuery {
 	constructor(
-		readonly sessionSeq: bigint,
-		readonly programSeq: bigint,
+		readonly sessionId: string,
+		readonly programId: string,
 	) {}
 }

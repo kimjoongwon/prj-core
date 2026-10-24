@@ -24,7 +24,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class InquiryThread extends InquiryThreadSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: InquiryThreadSchema["id"];
 
 	// ============================================================================

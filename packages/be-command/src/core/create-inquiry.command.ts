@@ -5,14 +5,14 @@ export class CreateInquiryCommand implements CreateInquiryCommandInput {
 	readonly channel!: CreateInquiryCommandInput["channel"];
 	readonly source?: CreateInquiryCommandInput["source"];
 	readonly priority?: CreateInquiryCommandInput["priority"];
-	readonly customerSeq?: CreateInquiryCommandInput["customerSeq"];
-	readonly assigneeSeq?: CreateInquiryCommandInput["assigneeSeq"];
+	readonly customerId?: CreateInquiryCommandInput["customerId"];
+	readonly assigneeId?: CreateInquiryCommandInput["assigneeId"];
 	readonly content?: CreateInquiryCommandInput["content"];
 
 	constructor(
 		input: CreateInquiryCommandInput,
-		readonly spaceSeq: bigint,
-		readonly actorUserId: bigint,
+		readonly spaceId: string,
+		readonly actorUserId: string,
 	) {
 		Object.assign(this, input);
 	}

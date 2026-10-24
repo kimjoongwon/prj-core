@@ -7,6 +7,6 @@ export class UpdateInquiryStatusUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(command: UpdateInquiryStatusCommand): Promise<unknown> {
-		return this.inquiryService.updateStatus(command.inquirySeq, command.status);
+		return this.inquiryService.updateStatus(command.inquiryId, command.status);
 	}
 }

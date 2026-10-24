@@ -150,12 +150,12 @@ export class OidcDirectUsersRepository {
 	 * ID로 사용자 조회 (Tenants 포함)
 	 * AccountService의 claims 빌드에 사용합니다.
 	 */
-	async findByIdWithTenants(id: bigint) {
+	async findByIdWithTenants(id: string) {
 		this.logger.debug(`ID로 사용자 조회: ${id.toString()}`);
 
 		const prisma = await this.directPrismaProvider.getClient();
 		return prisma.user.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: {
 				tenants: {
 					include: {

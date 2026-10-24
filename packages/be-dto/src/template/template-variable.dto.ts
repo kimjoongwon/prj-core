@@ -9,7 +9,5 @@ export class TemplateVariableDto extends EntityResponseType(TemplateVariable, {
 		"name",
 		"description",
 		"defaultValue",
-		"isRequired",
-		"templateSeq",
-	] as const,
+		"isRequired"] as const,
 }) {}

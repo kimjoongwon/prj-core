@@ -8,12 +8,9 @@ export class TimelineDto extends EntityResponseType(Timeline, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
-		"spaceSeq",
-		"createdBySeq",
 		"name",
 		"description",
-		"sessions",
-	] as const,
+		"sessions"] as const,
 	relations: {
 		sessions: () => SessionDto,
 	},

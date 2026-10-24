@@ -1,3 +1,3 @@
 export class GetTemplateByIdQuery {
-	constructor(readonly templateSeq: bigint) {}
+	constructor(readonly templateId: string) {}
 }

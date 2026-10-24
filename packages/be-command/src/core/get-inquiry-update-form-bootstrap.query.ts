@@ -1,3 +1,3 @@
 export class GetInquiryUpdateFormBootstrapQuery {
-	constructor(readonly inquirySeq: bigint) {}
+	constructor(readonly inquiryId: string) {}
 }

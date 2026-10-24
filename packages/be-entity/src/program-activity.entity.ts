@@ -14,7 +14,6 @@ import { Program } from "./program.entity";
 @AbstractEntityFields()
 export class ProgramActivity extends ProgramActivitySchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: ProgramActivitySchema["id"];
 
 	@BigIntIdFieldMetadata()

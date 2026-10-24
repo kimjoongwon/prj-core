@@ -1,3 +1,3 @@
 export class DeleteFolderCommand {
-	constructor(readonly folderSeq: bigint) {}
+	constructor(readonly folderId: string) {}
 }

@@ -19,15 +19,15 @@ describe("QueryInput mapper", () => {
 	it("검색 문자열과 ID 필터를 Prisma where로 변환한다", () => {
 		expect(
 			buildAssetQueryWhere({
-				folderSeq: 1n,
-				spaceSeq: 2n,
+				folderId: "01JFOLDER00000000000000000A",
+				spaceId: "01JSPACE00000000000000000S",
 				kind: AssetKind.IMAGE,
 				status: AssetStatus.READY,
 				search: "photo",
 			}),
 		).toEqual({
-			folderSeq: 1n,
-			spaceSeq: 2n,
+			folder: { id: "01JFOLDER00000000000000000A" },
+			space: { id: "01JSPACE00000000000000000S" },
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: { contains: "photo", mode: "insensitive" },
@@ -113,12 +113,12 @@ describe("QueryInput mapper", () => {
 
 		expect(
 			buildTenantAccessRequestQueryWhere({
-				reviewerSeq: 1n,
+				reviewerId: "01JREVIEW00000000000000000R",
 				search: "club",
-				spaceSeq: 2n,
+				spaceId: "01JSPACE00000000000000000S",
 			}),
 		).toEqual({
-			space: { id: 2n },
+			space: { id: "01JSPACE00000000000000000S" },
 			OR: [
 				{ requester: { name: { contains: "club", mode: "insensitive" } } },
 				{ requester: { email: { contains: "club", mode: "insensitive" } } },

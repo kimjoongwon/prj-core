@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateTranslationCommand,
 	DeleteTranslationCommand,
@@ -101,7 +101,7 @@ export class TranslationsController {
 	@ApiResponseEntity(TranslationResponseDto, HttpStatus.OK)
 	@ResponseMessage("번역 수정 성공")
 	updateTranslation(
-		@Param("translationId", ParseBigIntIdPipe) translationId: bigint,
+		@Param("translationId", ParseUlidPipe) translationId: string,
 		@Body() dto: UpdateTranslationDto,
 	) {
 		return this.commandBus.execute(
@@ -161,7 +161,7 @@ export class TranslationsController {
 	@ApiErrors(401, 403, 404, 500)
 	@ResponseMessage("번역 삭제 성공")
 	async deleteTranslation(
-		@Param("translationId", ParseBigIntIdPipe) translationId: bigint,
+		@Param("translationId", ParseUlidPipe) translationId: string,
 	): Promise<void> {
 		await this.commandBus.execute(new DeleteTranslationCommand(translationId));
 	}

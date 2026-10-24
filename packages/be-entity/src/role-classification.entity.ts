@@ -8,7 +8,6 @@ import { Role } from "./role.entity";
 @AbstractEntityFields()
 export class RoleClassification extends RoleClassificationSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: RoleClassificationSchema["id"];
 
 	@BigIntIdFieldMetadata()

@@ -1,4 +1,5 @@
 import {
+	ULIDFieldOptional,
 	DateFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
@@ -8,8 +9,14 @@ import { EntityQueryType } from "../query/entity-query-type";
 
 export class QueryTenantAccessRequestDto extends EntityQueryType(
 	TenantAccessRequest,
-	["status", "spaceSeq", "requesterSeq"] as const,
+	["status"] as const,
 ) {
+	@ULIDFieldOptional({ description: "공간 공개 ID (ULID) 정확 매칭" })
+	spaceId?: string;
+
+	@ULIDFieldOptional({ description: "신청자 공개 ID (ULID) 정확 매칭" })
+	requesterId?: string;
+
 	@StringFieldOptional({
 		description: "검색어 (신청자 이름/이메일, 시설명)",
 	})

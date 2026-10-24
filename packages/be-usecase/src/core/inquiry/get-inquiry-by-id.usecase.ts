@@ -12,7 +12,7 @@ export class GetInquiryByIdUseCase {
 
 	execute(query: GetInquiryByIdQuery): Promise<unknown> {
 		return this.inquiryService.findByIdWithDetails(
-			query.inquirySeq,
+			query.inquiryId,
 			this.spaceContext.spaceIds,
 		);
 	}

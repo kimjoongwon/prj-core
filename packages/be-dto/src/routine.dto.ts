@@ -11,11 +11,8 @@ export class RoutineDto extends EntityResponseType(Routine, {
 		"removedAt",
 		"name",
 		"label",
-		"spaceSeq",
-		"createdBySeq",
 		"programs",
-		"activities",
-	] as const,
+		"activities"] as const,
 	relations: {
 		programs: () => ProgramDto,
 		activities: () => ActivityDto,

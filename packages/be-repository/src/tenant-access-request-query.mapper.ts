@@ -12,8 +12,8 @@ export function buildTenantAccessRequestQueryWhere(
 ): Prisma.TenantAccessRequestWhereInput {
 	const where: Prisma.TenantAccessRequestWhereInput = {
 		...(baseWhere ?? {}),
-		...(input.spaceSeq ? { space: { seq: input.spaceSeq } } : {}),
-		...(input.requesterSeq ? { requester: { seq: input.requesterSeq } } : {}),
+		...(input.spaceId ? { space: { id: input.spaceId } } : {}),
+		...(input.requesterId ? { requester: { id: input.requesterId } } : {}),
 		...(input.status ? { status: input.status } : {}),
 	};
 	const createdAt = dateRangeFilter(input.createdFrom, input.createdTo);

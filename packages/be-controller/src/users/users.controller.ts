@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	GetUserDetailForSpaceQuery,
 	GetUsersBySpaceQuery,
@@ -62,7 +62,7 @@ export class UsersController {
 		return this.queryBus.execute(new GetUsersBySpaceQuery(query));
 	}
 
-	@Get(":userSeq")
+	@Get(":userId")
 	@ApiOperation({
 		operationId: "getUserById",
 		summary: "사용자 상세 조회",
@@ -71,7 +71,7 @@ export class UsersController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userSeq",
+		name: "userId",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -83,18 +83,18 @@ export class UsersController {
 	)
 	@ApiResponseEntity(UserDetailResponseDto, HttpStatus.OK)
 	@ResponseMessage("회원 상세 조회 성공")
-	async getUserById(@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint) {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+	async getUserById(@Param("userId", ParseUlidPipe) userId: string) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
 		return this.queryBus.execute(
-			new GetUserDetailForSpaceQuery(userSeq, spaceSeq),
+			new GetUserDetailForSpaceQuery(userId, spaceId),
 		);
 	}
 
-	@Get(":userSeq/tenants/:tenantId")
+	@Get(":userId/tenants/:tenantId")
 	@ApiOperation({
 		operationId: "getUserTenantDetail",
 		summary: "사용자 Tenant 상세 조회",
@@ -103,7 +103,7 @@ export class UsersController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "userSeq",
+		name: "userId",
 		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -120,16 +120,16 @@ export class UsersController {
 	@ApiResponseEntity(UserTenantDetailResponseDto, HttpStatus.OK)
 	@ResponseMessage("사용자 테넌트 상세 조회 성공")
 	async getUserTenantDetail(
-		@Param("userSeq", ParseBigIntIdPipe) userSeq: bigint,
-		@Param("tenantId", ParseBigIntIdPipe) tenantId: bigint,
+		@Param("userId", ParseUlidPipe) userId: string,
+		@Param("tenantId", ParseUlidPipe) tenantId: string,
 	) {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
 		return this.queryBus.execute(
-			new GetUserTenantDetailQuery(userSeq, tenantId, spaceSeq),
+			new GetUserTenantDetailQuery(userId, tenantId, spaceId),
 		);
 	}
 }

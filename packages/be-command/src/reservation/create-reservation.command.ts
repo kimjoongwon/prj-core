@@ -1,9 +1,9 @@
 import type { CreateReservationCommandInput } from "@cocrepo/input";
 
 export class CreateReservationCommand implements CreateReservationCommandInput {
-	readonly timelineSeq!: CreateReservationCommandInput["timelineSeq"];
-	readonly sessionSeq!: CreateReservationCommandInput["sessionSeq"];
-	readonly programSeq!: CreateReservationCommandInput["programSeq"];
+	readonly timelineId!: CreateReservationCommandInput["timelineId"];
+	readonly sessionId!: CreateReservationCommandInput["sessionId"];
+	readonly programId!: CreateReservationCommandInput["programId"];
 	readonly occurrenceStartAt!: CreateReservationCommandInput["occurrenceStartAt"];
 	readonly idempotencyKey!: CreateReservationCommandInput["idempotencyKey"];
 	readonly memo?: CreateReservationCommandInput["memo"];

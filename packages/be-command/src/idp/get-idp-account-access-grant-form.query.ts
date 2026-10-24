@@ -1,3 +1,3 @@
 export class GetIdpAccountAccessGrantFormQuery {
-	constructor(readonly userSeq: bigint) {}
+	constructor(readonly userId: string) {}
 }

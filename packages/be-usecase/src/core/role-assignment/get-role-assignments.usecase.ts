@@ -9,6 +9,6 @@ export class GetRoleAssignmentsUseCase {
 	) {}
 
 	execute(query: GetRoleAssignmentsQuery): Promise<unknown> {
-		return this.roleAssignmentService.getRoleAssignments(query.roleSeq);
+		return this.roleAssignmentService.getRoleAssignments(query.roleId);
 	}
 }

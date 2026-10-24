@@ -28,7 +28,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class InquiryMessage extends InquiryMessageSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: InquiryMessageSchema["id"];
 
 	// ============================================================================

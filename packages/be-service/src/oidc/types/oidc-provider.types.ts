@@ -17,14 +17,14 @@ export interface AccountClaims {
 }
 
 export interface AccountRoleClaim {
-	spaceSeq: string;
-	roleSeq: string;
+	spaceId: string;
+	roleId: string;
 	roleName?: string;
 	roleDisplayName?: string | null;
 }
 
 export interface AccountSpaceClaim {
-	spaceSeq: string;
+	spaceId: string;
 	spaceName?: string;
 }
 

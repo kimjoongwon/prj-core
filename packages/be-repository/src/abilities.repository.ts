@@ -42,11 +42,11 @@ export class AbilitiesRepository {
 	/**
 	 * ID로 조회 (Subject, Action 포함)
 	 */
-	async findById(id: bigint): Promise<Ability | null> {
+	async findById(id: string): Promise<Ability | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.ability.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: {
 				subject: true,
 				action: true,
@@ -103,15 +103,20 @@ export class AbilitiesRepository {
 	 */
 	async create(
 		data: AutoIdentityCreateInput<
-			Prisma.AbilityUncheckedCreateInput,
+			Omit<Prisma.AbilityUncheckedCreateInput, "actionSeq" | "subjectSeq">,
 			"id"
-		>,
+		> & { actionId: string; subjectId: string },
 	): Promise<Ability> {
 		this.logger.debug(
-			`Ability 생성: subjectSeq=${data.subjectSeq}, actionSeq=${data.actionSeq}`,
+			`Ability 생성: actionId=${data.actionId}, subjectId=${data.subjectId}`,
 		);
+		const { actionId, subjectId, ...rest } = data;
 		const result = await this.txHost.tx.ability.create({
-			data,
+			data: {
+				...rest,
+				action: { connect: { id: actionId } },
+				subject: { connect: { id: subjectId } },
+			} as unknown as Prisma.AbilityCreateInput,
 			include: {
 				subject: true,
 				action: true,
@@ -125,16 +130,26 @@ export class AbilitiesRepository {
 	 * Ability 수정
 	 */
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
-			Prisma.AbilityUncheckedUpdateInput,
+			Omit<Prisma.AbilityUncheckedUpdateInput, "actionSeq" | "subjectSeq">,
 			"id"
-		>,
+		> & {
+			actionId?: string;
+			subjectId?: string;
+		},
 	): Promise<Ability> {
-		this.logger.debug(`Ability 수정: id=${id.toString()}`);
+		this.logger.debug(`Ability 수정: id=${id}`);
+		const { actionId, subjectId, ...rest } = data;
 		const result = await this.txHost.tx.ability.update({
-			where: { seq: id },
-			data,
+			where: { id },
+			data: {
+				...rest,
+				...(actionId !== undefined && { action: { connect: { id: actionId } } }),
+				...(subjectId !== undefined && {
+					subject: { connect: { id: subjectId } },
+				}),
+			} as Prisma.AbilityUpdateInput,
 			include: {
 				subject: true,
 				action: true,
@@ -147,11 +162,11 @@ export class AbilitiesRepository {
 	/**
 	 * Ability 소프트 삭제
 	 */
-	async removeById(id: bigint): Promise<Ability> {
+	async removeById(id: string): Promise<Ability> {
 		this.logger.debug(`Ability 소프트 삭제: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.ability.update({
-			where: { seq: id },
+			where: { id },
 			data: { removedAt: new Date() },
 			include: {
 				subject: true,

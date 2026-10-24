@@ -18,7 +18,6 @@ import { Tenant } from "./tenant.entity";
 @AbstractEntityFields()
 export class Space extends SpaceSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: SpaceSchema["id"];
 
 	@StringFieldMetadata({

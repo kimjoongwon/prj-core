@@ -16,13 +16,13 @@ export class InvalidateUserSessionsUseCase {
 	) {}
 
 	async execute(command: InvalidateUserSessionsCommand): Promise<boolean> {
-		const user = await this.usersService.getByIdWithTenants(command.userSeq);
-		if (!user?.userSeq) {
+		const user = await this.usersService.getByIdWithTenants(command.userId);
+		if (!user?.id) {
 			throw new UnauthorizedException("사용자 공개 식별자를 찾을 수 없습니다");
 		}
 
-		await this.tokenStorageService.deleteRefreshToken(user.userSeq);
-		await this.authCacheService.invalidate(user.userSeq);
+		await this.tokenStorageService.deleteRefreshToken(user.id);
+		await this.authCacheService.invalidate(user.id);
 		return true;
 	}
 }

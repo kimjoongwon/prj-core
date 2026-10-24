@@ -50,22 +50,22 @@ export class TenantAccessRequestsRepository {
 		return toDomainEntity(TenantAccessRequest, result);
 	}
 
-	async findById(id: bigint): Promise<TenantAccessRequest | null> {
+	async findById(id: string): Promise<TenantAccessRequest | null> {
 		this.logger.debug(`테넌트 접근 신청 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: tenantAccessRequestInclude,
 		});
 
 		return result ? this.toTenantAccessRequest(result) : null;
 	}
 
-	async findByIdWithRelations(id: bigint): Promise<TenantAccessRequest | null> {
+	async findByIdWithRelations(id: string): Promise<TenantAccessRequest | null> {
 		this.logger.debug(`테넌트 접근 신청 상세 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: tenantAccessRequestInclude,
 		});
 
@@ -117,7 +117,7 @@ export class TenantAccessRequestsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.TenantAccessRequestUncheckedUpdateInput,
 			"id"
@@ -125,7 +125,7 @@ export class TenantAccessRequestsRepository {
 	): Promise<TenantAccessRequest> {
 		this.logger.debug(`테넌트 접근 신청 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.tenantAccessRequest.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: tenantAccessRequestInclude,
 		});

@@ -7,6 +7,6 @@ export class DeleteInquiryUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	execute(command: DeleteInquiryCommand): Promise<unknown> {
-		return this.inquiryService.softDelete(command.inquirySeq);
+		return this.inquiryService.softDelete(command.inquiryId);
 	}
 }

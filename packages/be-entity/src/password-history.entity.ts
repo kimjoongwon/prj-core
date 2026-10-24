@@ -14,7 +14,6 @@ export class PasswordHistory extends PasswordHistorySchema {
 	declare createdAt: Date;
 
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: PasswordHistorySchema["id"];
 
 	// ============================================================================

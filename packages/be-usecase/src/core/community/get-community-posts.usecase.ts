@@ -30,16 +30,16 @@ export class GetCommunityPostsUseCase {
 		};
 	}
 
-	private requireCommunityContext(): { spaceSeq: bigint; userSeq: bigint } {
-		const spaceSeq = this.spaceContext.tenant?.spaceSeq;
-		if (!spaceSeq) {
+	private requireCommunityContext(): { spaceId: bigint; userId: bigint } {
+		const spaceId = this.spaceContext.tenant?.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(COMMON_ERRORS.SPACE_NOT_SELECTED);
 		}
-		const userSeq = this.authContext.userDto?.id;
-		if (!userSeq) {
+		const userId = this.authContext.userDto?.id;
+		if (!userId) {
 			throw new UnauthorizedException(COMMON_ERRORS.USER_NOT_FOUND);
 		}
-		return { spaceSeq, userSeq };
+		return { spaceId, userId };
 	}
 
 	private toCommunityPostDto(

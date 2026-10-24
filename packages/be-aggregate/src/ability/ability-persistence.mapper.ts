@@ -8,8 +8,8 @@ export function toAbilityCreateData(
 	input: CreateAbilityInput,
 ): AbilityCreateData {
 	return {
-		actionSeq: input.actionSeq,
-		subjectSeq: input.subjectSeq,
+		actionId: input.actionId,
+		subjectId: input.subjectId,
 		fields: input.fields ?? [],
 		conditions: (input.conditions ?? null) as AbilityCreateData["conditions"],
 		inverted: input.inverted ?? false,
@@ -24,8 +24,8 @@ export function toAbilityUpdateData(
 ): AbilityUpdateData {
 	const data: AbilityUpdateData = {};
 
-	if (input.actionSeq !== undefined) data.actionSeq = input.actionSeq;
-	if (input.subjectSeq !== undefined) data.subjectSeq = input.subjectSeq;
+	if (input.actionId !== undefined) data.actionId = input.actionId;
+	if (input.subjectId !== undefined) data.subjectId = input.subjectId;
 	if (input.fields !== undefined) data.fields = input.fields;
 	if (input.conditions !== undefined) {
 		data.conditions = input.conditions as AbilityUpdateData["conditions"];

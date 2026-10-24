@@ -10,7 +10,6 @@ export class InquiryAttachmentDto extends EntityResponseType(
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"messageSeq",
 			"fileName",
 			"mimeType",
 			"url",

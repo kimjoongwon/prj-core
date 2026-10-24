@@ -13,6 +13,5 @@ export class TemplateDto extends EntityResponseType(Template, {
 		"subject",
 		"content",
 		"description",
-		"isActive",
-	] as const,
+		"isActive"] as const,
 }) {}

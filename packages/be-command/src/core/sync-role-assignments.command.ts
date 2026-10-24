@@ -7,7 +7,7 @@ export class SyncRoleAssignmentsCommand
 	readonly assignments!: SyncRoleAssignmentsCommandInput["assignments"];
 
 	constructor(
-		readonly roleSeq: bigint,
+		readonly roleId: string,
 		input: SyncRoleAssignmentsCommandInput,
 	) {
 		Object.assign(this, input);

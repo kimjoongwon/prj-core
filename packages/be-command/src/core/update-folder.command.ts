@@ -1,10 +1,10 @@
 import type { UpdateFolderCommandInput } from "@cocrepo/input";
 export class UpdateFolderCommand implements UpdateFolderCommandInput {
-	readonly parentFolderSeq?: UpdateFolderCommandInput["parentFolderSeq"];
+	readonly parentFolderId?: UpdateFolderCommandInput["parentFolderId"];
 	readonly name?: UpdateFolderCommandInput["name"];
 
 	constructor(
-		readonly folderSeq: bigint,
+		readonly folderId: string,
 		input: UpdateFolderCommandInput,
 	) {
 		Object.assign(this, input);

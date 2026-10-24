@@ -15,7 +15,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Folder extends FolderSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: FolderSchema["id"];
 
 	// ============================================================================

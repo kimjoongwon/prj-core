@@ -9,7 +9,7 @@ export interface GetUsersBySpaceQueryInput {
 	status?: string;
 	isActive?: boolean;
 	isRemoved?: boolean;
-	categorySeq?: bigint;
+	categoryId?: string;
 	groupIds?: bigint[];
 	createdFrom?: Date;
 	createdTo?: Date;

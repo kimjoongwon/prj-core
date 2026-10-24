@@ -13,7 +13,6 @@ import { Space } from "./space.entity";
 @AbstractEntityFields()
 export class FitnessCenter extends FitnessCenterSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: FitnessCenterSchema["id"];
 
 	@StringFieldMetadata()

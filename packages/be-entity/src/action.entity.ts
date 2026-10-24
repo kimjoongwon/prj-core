@@ -39,7 +39,6 @@ export type {
 @AbstractEntityFields()
 export class Action extends ActionSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: ActionSchema["id"];
 
 	/** Action 이름 ('create', 'read', 'read:masked:email' 등) */

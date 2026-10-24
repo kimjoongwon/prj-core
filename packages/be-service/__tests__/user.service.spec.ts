@@ -157,15 +157,15 @@ describe("UserService", () => {
 				mockUser as unknown as Awaited<ReturnType<UsersRepository["findById"]>>,
 			);
 			const tenant = {
-				id: 201n,
-				tenantId: "tenant-public-id",
+				id: "tenant-public-id",
+				seq: 201n,
 				userSeq: 101n,
 				spaceSeq: 301n,
 				roleSeq: 401n,
 				main: true,
 				space: {
-					id: 301n,
-					spaceSeq: "space-public-id",
+					id: "space-public-id",
+					seq: 301n,
 				},
 			};
 			mockTenantsRepository.findById.mockResolvedValue(
@@ -205,8 +205,8 @@ describe("UserService", () => {
 			// Given
 			const email = "test@example.com";
 			const authUser = {
-				id: 101n,
-				userSeq: "user-public-id",
+				id: "user-public-id",
+				seq: 101n,
 				email: "test@example.com",
 				password: "$2b$10$hashedPassword",
 			};

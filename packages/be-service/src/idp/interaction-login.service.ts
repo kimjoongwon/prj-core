@@ -114,7 +114,7 @@ export class InteractionLoginService {
 			this.logger.debug(`비활성 계정: ${normalizedEmail}`);
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
-				userSeq: user.id,
+				userSeq: user.seq,
 				result: "FAILURE",
 				failureReason: "ACCOUNT_INACTIVE",
 			});
@@ -126,7 +126,7 @@ export class InteractionLoginService {
 			this.logger.debug(`영구 잠금 계정: ${normalizedEmail}`);
 			await this.directUserRepository.createAuditLog({
 				...auditBase,
-				userSeq: user.id,
+				userSeq: user.seq,
 				result: "LOCKED",
 				failureReason: "ACCOUNT_LOCKED_PERMANENT",
 			});
@@ -139,7 +139,7 @@ export class InteractionLoginService {
 				this.logger.debug(`일시 잠금 중: ${normalizedEmail}`);
 				await this.directUserRepository.createAuditLog({
 					...auditBase,
-					userSeq: user.id,
+					userSeq: user.seq,
 					result: "LOCKED",
 					failureReason: "ACCOUNT_LOCKED_TEMPORARY",
 				});
@@ -150,7 +150,7 @@ export class InteractionLoginService {
 				};
 			}
 			// 잠금 시간 경과 → 자동 해제
-			await this.directUserRepository.clearLock(user.id);
+			await this.directUserRepository.clearLock(user.seq);
 		}
 
 		// 5. 비밀번호 검증
@@ -161,7 +161,7 @@ export class InteractionLoginService {
 
 			if (!isValid) {
 				return this.handleLoginFailure(
-					user.id,
+					user.seq,
 					normalizedEmail,
 					user.failedLoginAttempts,
 					auditBase,
@@ -170,7 +170,7 @@ export class InteractionLoginService {
 		} catch (error) {
 			this.logger.debug(`비밀번호 검증 오류: ${error}`);
 			return this.handleLoginFailure(
-				user.id,
+				user.seq,
 				normalizedEmail,
 				user.failedLoginAttempts,
 				auditBase,
@@ -179,16 +179,16 @@ export class InteractionLoginService {
 
 		// 6. 로그인 성공
 		this.logger.debug(`로그인 성공: ${normalizedEmail}`);
-		await this.directUserRepository.updateLoginSuccess(user.id, ipAddress);
+		await this.directUserRepository.updateLoginSuccess(user.seq, ipAddress);
 		await this.directUserRepository.createAuditLog({
 			...auditBase,
-			userSeq: user.id,
+			userSeq: user.seq,
 			result: "SUCCESS",
 		});
 
 		return {
 			success: true,
-			userSeq: user.userSeq,
+			userId: user.id,
 		};
 	}
 

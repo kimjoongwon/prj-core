@@ -40,11 +40,11 @@ export class InquiriesRepository {
 	/**
 	 * ID로 조회 (기본 정보만)
 	 */
-	async findById(id: bigint): Promise<Inquiry | null> {
+	async findById(id: string): Promise<Inquiry | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: this.includeInquiryRelations(),
 		});
 
@@ -55,14 +55,14 @@ export class InquiriesRepository {
 	 * ID로 조회 (스레드, 메시지, 참여자 포함)
 	 */
 	async findByIdWithThreadsAndMessagesAndParticipants(
-		id: bigint,
+		id: string,
 		spaceIds?: bigint[],
 	): Promise<Inquiry | null> {
 		this.logger.debug(`ID로 상세 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.findFirst({
 			where: {
-				seq: id,
+				id,
 				...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
 			},
 			include: {
@@ -210,11 +210,11 @@ export class InquiriesRepository {
 	/**
 	 * 스레드 ID로 조회
 	 */
-	async findThreadById(id: bigint): Promise<InquiryThread | null> {
+	async findThreadById(id: string): Promise<InquiryThread | null> {
 		this.logger.debug(`스레드 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiryThread.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: { inquiry: true, createdBy: true },
 		});
 
@@ -376,7 +376,7 @@ export class InquiriesRepository {
 	 * ID로 업데이트
 	 */
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.InquiryUncheckedUpdateInput,
 			"id"
@@ -384,7 +384,7 @@ export class InquiriesRepository {
 	): Promise<Inquiry> {
 		this.logger.debug(`업데이트 중: ${id.toString()}`);
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: this.includeInquiryRelations(),
 		});
@@ -395,11 +395,11 @@ export class InquiriesRepository {
 	/**
 	 * 소프트 삭제
 	 */
-	async removeById(id: bigint): Promise<Inquiry> {
+	async removeById(id: string): Promise<Inquiry> {
 		this.logger.debug(`소프트 삭제 중: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: { removedAt: new Date() },
 			include: this.includeInquiryRelations(),
 		});
@@ -414,11 +414,11 @@ export class InquiriesRepository {
 	/**
 	 * 담당자 배정
 	 */
-	async updateAssigneeById(id: bigint, assigneeSeq: bigint): Promise<Inquiry> {
+	async updateAssigneeById(id: string, assigneeSeq: bigint): Promise<Inquiry> {
 		this.logger.debug(`담당자 배정: ${id} -> ${assigneeSeq}`);
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: {
 				assigneeSeq,
 				status: "OPEN",
@@ -529,7 +529,7 @@ export class InquiriesRepository {
 	/**
 	 * 상태 업데이트
 	 */
-	async updateStatusById(id: bigint, status: InquiryStatus): Promise<Inquiry> {
+	async updateStatusById(id: string, status: InquiryStatus): Promise<Inquiry> {
 		this.logger.debug(`상태 업데이트: ${id.toString()} -> ${status}`);
 
 		const updateData: Prisma.InquiryUncheckedUpdateInput = { status };
@@ -542,7 +542,7 @@ export class InquiriesRepository {
 		}
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: updateData,
 			include: this.includeInquiryRelations(),
 		});
@@ -554,13 +554,13 @@ export class InquiriesRepository {
 	 * 우선순위 업데이트
 	 */
 	async updatePriorityById(
-		id: bigint,
+		id: string,
 		priority: InquiryPriority,
 	): Promise<Inquiry> {
 		this.logger.debug(`우선순위 업데이트: ${id.toString()} -> ${priority}`);
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: { priority },
 			include: this.includeInquiryRelations(),
 		});
@@ -741,14 +741,14 @@ export class InquiriesRepository {
 	 * 감정 분석 업데이트
 	 */
 	async updateSentimentById(
-		id: bigint,
+		id: string,
 		sentiment: SentimentType,
 		sentimentScore: number,
 	): Promise<Inquiry> {
 		this.logger.debug(`감정 분석 업데이트: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: { sentiment, sentimentScore },
 			include: this.includeInquiryRelations(),
 		});
@@ -763,11 +763,11 @@ export class InquiriesRepository {
 	/**
 	 * 읽지 않은 메시지 수 초기화
 	 */
-	async resetUnreadCountById(id: bigint): Promise<Inquiry> {
+	async resetUnreadCountById(id: string): Promise<Inquiry> {
 		this.logger.debug(`읽지 않은 메시지 수 초기화: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: { unreadCount: 0 },
 			include: this.includeInquiryRelations(),
 		});
@@ -778,11 +778,11 @@ export class InquiriesRepository {
 	/**
 	 * 읽지 않은 메시지 수 증가
 	 */
-	async incrementUnreadCountById(id: bigint): Promise<Inquiry> {
+	async incrementUnreadCountById(id: string): Promise<Inquiry> {
 		this.logger.debug(`읽지 않은 메시지 수 증가: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: {
 				unreadCount: { increment: 1 },
 			},
@@ -795,11 +795,11 @@ export class InquiriesRepository {
 	/**
 	 * 마지막 메시지 시각 및 unreadCount 반영
 	 */
-	async recordMessageActivityById(id: bigint): Promise<Inquiry> {
+	async recordMessageActivityById(id: string): Promise<Inquiry> {
 		this.logger.debug(`문의 메시지 활동 반영: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: {
 				lastMessageAt: new Date(),
 				unreadCount: { increment: 1 },
@@ -817,11 +817,11 @@ export class InquiriesRepository {
 	/**
 	 * 첫 응답 시간 기록
 	 */
-	async recordFirstResponseById(id: bigint): Promise<Inquiry> {
+	async recordFirstResponseById(id: string): Promise<Inquiry> {
 		this.logger.debug(`첫 응답 기록: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.update({
-			where: { seq: id },
+			where: { id },
 			data: {
 				firstResponseAt: new Date(),
 			},

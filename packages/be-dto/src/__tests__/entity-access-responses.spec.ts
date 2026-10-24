@@ -131,33 +131,32 @@ describe("접근·인증 Entity 응답", () => {
 			accessTokenExpiresAt: 10,
 			refreshTokenExpiresAt: 20,
 			user: {
-				id: 1n,
+				id: "01J00000000000000000000000",
+				seq: 1n,
 				name: "User",
 				email: "user@example.com",
-				spaceSeq: 2n,
 				password: "hash",
-				userSeq: "private-user",
 				unknown: true,
 				passwordHistory: [{ hash: "secret" }],
 			},
 		});
 		expect(response.accessToken).toBe("access");
 		expect(response.refreshToken).toBe("refresh");
-		expect(response.user.spaceSeq).toBe("2");
+		expect(response.user.id).toBe("01J00000000000000000000000");
 		for (const privateKey of [
 			"password",
-			"userSeq",
 			"unknown",
 			"passwordHistory",
 		])
 			expect(response.user).not.toHaveProperty(privateKey);
 		const detail = serializeAccessResponse(UserDetailResponseDto, {
-			id: 1n,
-			spaceSeq: 2n,
+			id: "01J00000000000000000000009",
 			password: "hash",
 			unknown: true,
 		});
-		expect(detail.spaceSeq).toBe("2");
+		expect(detail.id).toBe("01J00000000000000000000009");
+		expect(detail).not.toHaveProperty("spaceSeq");
+		expect(detail).not.toHaveProperty("currentTenantSeq");
 		expect(detail).not.toHaveProperty("password");
 		expect(detail).not.toHaveProperty("unknown");
 	});
@@ -245,8 +244,6 @@ describe("접근·인증 Entity 응답", () => {
 		expect(schemas.PolicyResponseDto.required?.sort()).toEqual(
 			[
 				"id",
-				"spaceSeq",
-				"createdBySeq",
 				"name",
 				"displayName",
 				"description",

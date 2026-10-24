@@ -7,6 +7,6 @@ export class GetSubjectByIdUseCase {
 	constructor(private readonly subjectsService: SubjectAggregate) {}
 
 	execute(query: GetSubjectByIdQuery): Promise<unknown> {
-		return this.subjectsService.getSubjectById(query.subjectSeq);
+		return this.subjectsService.getSubjectById(query.subjectId);
 	}
 }

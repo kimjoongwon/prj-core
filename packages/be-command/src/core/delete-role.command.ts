@@ -1,3 +1,3 @@
 export class DeleteRoleCommand {
-	constructor(readonly roleSeq: bigint) {}
+	constructor(readonly roleId: string) {}
 }

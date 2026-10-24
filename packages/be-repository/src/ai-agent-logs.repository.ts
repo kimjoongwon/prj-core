@@ -18,11 +18,11 @@ export class AIAgentLogsRepository {
 		this.logger = new Logger("AIAgentLogsRepository");
 	}
 
-	async findById(id: bigint): Promise<AIAgentLog | null> {
+	async findById(id: string): Promise<AIAgentLog | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.aIAgentLog.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: { inquiry: true, message: true },
 		});
 
@@ -90,11 +90,11 @@ export class AIAgentLogsRepository {
 		return toDomainEntity(AIAgentLog, result);
 	}
 
-	async deleteById(id: bigint): Promise<AIAgentLog> {
+	async deleteById(id: string): Promise<AIAgentLog> {
 		this.logger.debug(`로그 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.aIAgentLog.delete({
-			where: { seq: id },
+			where: { id },
 			include: { inquiry: true, message: true },
 		});
 

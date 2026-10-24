@@ -24,7 +24,6 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class ServiceDocument extends ServiceDocumentSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: ServiceDocumentSchema["id"];
 
 	@EnumFieldMetadata(() => ServiceDocumentKind, { description: "문서 종류" })

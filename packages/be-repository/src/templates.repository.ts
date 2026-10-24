@@ -18,11 +18,11 @@ export class TemplatesRepository {
 	/**
 	 * ID로 조회 (variables 포함)
 	 */
-	async findById(id: bigint): Promise<Template | null> {
+	async findById(id: string): Promise<Template | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: {
 				variables: { include: { template: { select: { id: true } } } },
 			},
@@ -34,7 +34,7 @@ export class TemplatesRepository {
 	/**
 	 * ID로 조회 (없으면 에러)
 	 */
-	async findByIdOrThrow(id: bigint): Promise<Template> {
+	async findByIdOrThrow(id: string): Promise<Template> {
 		const result = await this.findById(id);
 		if (!result) {
 			throw new Error(`Template not found: ${id.toString()}`);
@@ -134,13 +134,13 @@ export class TemplatesRepository {
 	 * ID로 업데이트
 	 */
 	async updateById(
-		id: bigint,
+		id: string,
 		data: Prisma.TemplateUncheckedUpdateInput,
 	): Promise<Template> {
 		this.logger.debug(`업데이트 중: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.update({
-			where: { seq: id },
+			where: { id },
 			data,
 		});
 
@@ -151,7 +151,7 @@ export class TemplatesRepository {
 	 * Template 업데이트 + 변수 전체 교체 (기존 삭제 → 새로 생성)
 	 */
 	async updateWithVariables(
-		id: bigint,
+		id: string,
 		templateData: Prisma.TemplateUncheckedUpdateInput,
 		variables: Array<{
 			name: string;
@@ -164,12 +164,12 @@ export class TemplatesRepository {
 
 		// 기존 변수 전체 삭제
 		await this.txHost.tx.templateVariable.deleteMany({
-			where: { templateSeq: id },
+			where: { template: { id } },
 		});
 
 		// 템플릿 업데이트 + 새 변수 생성
 		const result = await this.txHost.tx.template.update({
-			where: { seq: id },
+			where: { id },
 			data: {
 				...templateData,
 				variables: {
@@ -187,11 +187,11 @@ export class TemplatesRepository {
 	/**
 	 * 소프트 삭제 (removedAt 설정 + isActive 비활성화)
 	 */
-	async removeById(id: bigint): Promise<Template> {
+	async removeById(id: string): Promise<Template> {
 		this.logger.debug(`소프트 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.update({
-			where: { seq: id },
+			where: { id },
 			data: { removedAt: new Date(), isActive: false },
 		});
 

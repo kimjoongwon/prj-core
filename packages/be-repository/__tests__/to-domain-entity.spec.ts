@@ -110,7 +110,7 @@ describe("toDomainEntity", () => {
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
 				updatedAt: null,
 			},
-			tenants: [{ id: 303n, spaceSeq: 404n }],
+			tenants: [{ id: "01JTENANT0000000000000000T", seq: 303n, spaceSeq: 404n, space: { id: "01J00000000000000000000404" } }],
 		};
 
 		const result = toDomainEntity(User, persistenceRow);
@@ -124,7 +124,7 @@ describe("toDomainEntity", () => {
 		expect(result.status?.currentTenantSeq).toBe(202n);
 		expect(result.status?.lockedUntil).toBe(lockedUntil);
 		expect(result.status?.isActive).toBe(true);
-		expect(result.canAccessSpace(404n)).toBe(true);
+		expect(result.canAccessSpace("01J00000000000000000000404")).toBe(true);
 	});
 
 	it("Policy graph의 기존 nested Entity prototype과 순환·공유 참조를 보존한다", () => {

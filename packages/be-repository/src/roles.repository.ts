@@ -21,11 +21,11 @@ export class RolesRepository {
 	/**
 	 * ID로 역할 조회
 	 */
-	async findById(id: bigint): Promise<Role | null> {
+	async findById(id: string): Promise<Role | null> {
 		this.logger.debug(`ID로 역할 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.role.findUnique({
-			where: { seq: id },
+			where: { id },
 		});
 
 		return result ? toDomainEntity(Role, result) : null;
@@ -91,13 +91,13 @@ export class RolesRepository {
 	 * 역할 수정
 	 */
 	async updateById(
-		id: bigint,
+		id: string,
 		data: Prisma.RoleUncheckedUpdateInput,
 	): Promise<Role> {
 		this.logger.debug(`역할 수정: ${id.toString()}`);
 
 		const result = await this.txHost.tx.role.update({
-			where: { seq: id },
+			where: { id },
 			data,
 		});
 
@@ -107,11 +107,11 @@ export class RolesRepository {
 	/**
 	 * 역할 삭제
 	 */
-	async deleteById(id: bigint): Promise<Role> {
+	async deleteById(id: string): Promise<Role> {
 		this.logger.debug(`역할 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.role.delete({
-			where: { seq: id },
+			where: { id },
 		});
 
 		return toDomainEntity(Role, result);

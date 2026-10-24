@@ -32,11 +32,11 @@ export class ContentsRepository {
 		this.logger = new Logger("ContentsRepository");
 	}
 
-	async findById(id: bigint): Promise<ContentRecord | null> {
+	async findById(id: string): Promise<ContentRecord | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.content.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: contentInclude,
 		});
 
@@ -178,7 +178,7 @@ export class ContentsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.ContentUncheckedUpdateInput,
 			"id"
@@ -186,7 +186,7 @@ export class ContentsRepository {
 	): Promise<ContentRecord> {
 		this.logger.debug(`콘텐츠 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.content.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: contentInclude,
 		});
@@ -194,11 +194,11 @@ export class ContentsRepository {
 		return toDomainData(result);
 	}
 
-	async removeById(id: bigint): Promise<ContentRecord> {
+	async removeById(id: string): Promise<ContentRecord> {
 		this.logger.debug(`콘텐츠 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.content.delete({
-			where: { seq: id },
+			where: { id },
 			include: contentInclude,
 		});
 

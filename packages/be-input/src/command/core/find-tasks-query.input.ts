@@ -2,7 +2,7 @@ import type { LanguageCode } from "@cocrepo/prisma";
 import type { SpaceScope } from "@cocrepo/type";
 
 export interface FindTasksQueryInput {
-	spaceSeq: bigint;
+	spaceId: string;
 	spaceScope: SpaceScope;
 	skip?: number;
 	take?: number;

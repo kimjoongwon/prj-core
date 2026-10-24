@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	DeleteAssetCommand,
 	GetAssetByIdQuery,
@@ -85,7 +85,7 @@ export class AssetsController {
 		return this.queryBus.execute(new GetAssetsQuery(query));
 	}
 
-	@Get(":assetSeq")
+	@Get(":assetId")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([
@@ -100,18 +100,18 @@ export class AssetsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "assetSeq",
+		name: "assetId",
 		description: "에셋 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(AssetDto, HttpStatus.OK)
 	@ResponseMessage("에셋 상세 조회 성공")
-	async getAssetById(@Param("assetSeq", ParseBigIntIdPipe) assetSeq: bigint) {
-		return this.queryBus.execute(new GetAssetByIdQuery(assetSeq));
+	async getAssetById(@Param("assetId", ParseUlidPipe) assetId: string) {
+		return this.queryBus.execute(new GetAssetByIdQuery(assetId));
 	}
 
-	@Get(":assetSeq/content")
+	@Get(":assetId/content")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([
@@ -127,18 +127,18 @@ export class AssetsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "assetSeq",
+		name: "assetId",
 		description: "에셋 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiProduces("*/*")
 	@ApiErrors(400, 401, 403, 404, 500)
 	async getAssetContent(
-		@Param("assetSeq", ParseBigIntIdPipe) assetSeq: bigint,
+		@Param("assetId", ParseUlidPipe) assetId: string,
 		@Res() res: Response,
 	) {
 		const content = await this.queryBus.execute(
-			new GetAssetContentQuery(assetSeq),
+			new GetAssetContentQuery(assetId),
 		);
 
 		res.setHeader("Content-Type", content.contentType);
@@ -179,9 +179,9 @@ export class AssetsController {
 	@ApiBody({
 		schema: {
 			type: "object",
-			required: ["folderSeq", "file"],
+			required: ["folderId", "file"],
 			properties: {
-				folderSeq: {
+				folderId: {
 					type: "string",
 					description: "업로드 대상 폴더 ID (canonical decimal BIGINT string)",
 				},
@@ -203,20 +203,20 @@ export class AssetsController {
 		try {
 			await validateUploadedAssetFile(file);
 
-			const userSeq = this.authContext.user?.id;
-			if (!userSeq) {
+			const userId = this.authContext.user?.id;
+			if (!userId) {
 				throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 			}
 
 			return await this.commandBus.execute(
-				new UploadAssetCommand(dto, file, userSeq),
+				new UploadAssetCommand(dto, file, userId),
 			);
 		} finally {
 			await removeUploadedAssetTemporaryFile(file);
 		}
 	}
 
-	@Patch(":assetSeq/move")
+	@Patch(":assetId/move")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -227,7 +227,7 @@ export class AssetsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "assetSeq",
+		name: "assetId",
 		description: "에셋 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -239,13 +239,13 @@ export class AssetsController {
 	@ApiResponseEntity(AssetDto, HttpStatus.OK)
 	@ResponseMessage("에셋 이동 성공")
 	async moveAsset(
-		@Param("assetSeq", ParseBigIntIdPipe) assetSeq: bigint,
+		@Param("assetId", ParseUlidPipe) assetId: string,
 		@Body() dto: MoveAssetDto,
 	) {
-		return this.commandBus.execute(new MoveAssetCommand(assetSeq, dto));
+		return this.commandBus.execute(new MoveAssetCommand(assetId, dto));
 	}
 
-	@Delete(":assetSeq")
+	@Delete(":assetId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -256,15 +256,15 @@ export class AssetsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "assetSeq",
+		name: "assetId",
 		description: "에셋 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ResponseMessage("에셋 삭제 성공")
 	async removeAsset(
-		@Param("assetSeq", ParseBigIntIdPipe) assetSeq: bigint,
+		@Param("assetId", ParseUlidPipe) assetId: string,
 	): Promise<void> {
-		await this.commandBus.execute(new DeleteAssetCommand(assetSeq));
+		await this.commandBus.execute(new DeleteAssetCommand(assetId));
 	}
 }

@@ -1,3 +1,3 @@
 export class DeleteAbilityCommand {
-	constructor(readonly abilitySeq: bigint) {}
+	constructor(readonly abilityId: string) {}
 }

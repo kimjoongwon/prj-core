@@ -12,7 +12,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Profile extends ProfileSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: ProfileSchema["id"];
 
 	@UUIDFieldMetadata({ nullable: true })

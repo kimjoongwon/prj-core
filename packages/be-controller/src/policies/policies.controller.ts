@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreatePolicyCommand,
 	DeletePolicyCommand,
@@ -62,7 +62,7 @@ export class PoliciesController {
 		return this.queryBus.execute(new ListPoliciesQuery());
 	}
 
-	@Get(":policySeq")
+	@Get(":policyId")
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getPolicyById",
@@ -71,15 +71,15 @@ export class PoliciesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "policySeq",
+		name: "policyId",
 		description: "Policy ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
 	@ResponseMessage("정책 조회 성공")
-	async getPolicyById(@Param("policySeq", ParseBigIntIdPipe) policySeq: bigint) {
-		return this.queryBus.execute(new GetPolicyByIdQuery(policySeq));
+	async getPolicyById(@Param("policyId", ParseUlidPipe) policyId: string) {
+		return this.queryBus.execute(new GetPolicyByIdQuery(policyId));
 	}
 
 	@Post()
@@ -102,7 +102,7 @@ export class PoliciesController {
 		return this.commandBus.execute(new CreatePolicyCommand(dto));
 	}
 
-	@Patch(":policySeq")
+	@Patch(":policyId")
 	@HttpCode(HttpStatus.OK)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
@@ -112,7 +112,7 @@ export class PoliciesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "policySeq",
+		name: "policyId",
 		description: "Policy ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -124,13 +124,13 @@ export class PoliciesController {
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
 	@ResponseMessage("정책 수정 성공")
 	async updatePolicy(
-		@Param("policySeq", ParseBigIntIdPipe) policySeq: bigint,
+		@Param("policyId", ParseUlidPipe) policyId: string,
 		@Body() dto: UpdatePolicyDto,
 	) {
-		return this.commandBus.execute(new UpdatePolicyCommand(policySeq, dto));
+		return this.commandBus.execute(new UpdatePolicyCommand(policyId, dto));
 	}
 
-	@Delete(":policySeq")
+	@Delete(":policyId")
 	@HttpCode(HttpStatus.OK)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
@@ -140,18 +140,18 @@ export class PoliciesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "policySeq",
+		name: "policyId",
 		description: "Policy ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
 	@ResponseMessage("정책 삭제 성공")
-	async deletePolicy(@Param("policySeq", ParseBigIntIdPipe) policySeq: bigint) {
-		return this.commandBus.execute(new DeletePolicyCommand(policySeq));
+	async deletePolicy(@Param("policyId", ParseUlidPipe) policyId: string) {
+		return this.commandBus.execute(new DeletePolicyCommand(policyId));
 	}
 
-	@Put(":policySeq/entries")
+	@Put(":policyId/entries")
 	@HttpCode(HttpStatus.OK)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
@@ -162,7 +162,7 @@ export class PoliciesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "policySeq",
+		name: "policyId",
 		description: "Policy ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -176,11 +176,11 @@ export class PoliciesController {
 	})
 	@ResponseMessage("정책 권한 동기화 성공")
 	async syncPolicyEntries(
-		@Param("policySeq", ParseBigIntIdPipe) policySeq: bigint,
+		@Param("policyId", ParseUlidPipe) policyId: string,
 		@Body() dto: SyncPolicyEntriesDto,
 	) {
 		return this.commandBus.execute(
-			new SyncPolicyEntriesCommand(policySeq, dto.entries),
+			new SyncPolicyEntriesCommand(policyId, dto.entries),
 		);
 	}
 }

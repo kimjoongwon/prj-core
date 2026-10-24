@@ -4,6 +4,6 @@ export interface EmailVerificationCreateInput {
 	nickname: string;
 	phone: string;
 	address: string;
-	spaceSeq: bigint;
+	spaceId: string;
 	passwordHash: string;
 }

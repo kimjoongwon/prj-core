@@ -27,37 +27,37 @@ export class RoleAssignmentAggregate {
 		private readonly spaceContext: SpaceContext,
 	) {}
 
-	async getRoleAssignments(roleSeq: bigint): Promise<RoleAssignment[]> {
-		const spaceSeq = this.requireSpaceId();
-		await this.assertRoleExists(roleSeq);
-		return this.roleAssignmentsRepository.findByRoleIdInSpace(roleSeq, spaceSeq);
+	async getRoleAssignments(roleId: bigint): Promise<RoleAssignment[]> {
+		const spaceId = this.requireSpaceId();
+		await this.assertRoleExists(roleId);
+		return this.roleAssignmentsRepository.findByRoleIdInSpace(roleId, spaceId);
 	}
 
 	@Transactional()
 	async syncRoleAssignments(
-		roleSeq: bigint,
+		roleId: bigint,
 		roleAssignments: SyncRoleAssignmentInputItem[],
 	): Promise<RoleAssignment[]> {
-		const spaceSeq = this.requireSpaceId();
-		await this.assertRoleExists(roleSeq);
+		const spaceId = this.requireSpaceId();
+		await this.assertRoleExists(roleId);
 		await this.assertPoliciesBelongToSpace(
-			roleAssignments.map((policy) => policy.policySeq),
-			spaceSeq,
+			roleAssignments.map((policy) => policy.policyId),
+			spaceId,
 		);
 
 		this.logger.debug(
-			`RoleAssignment 동기화: roleSeq=${roleSeq}, spaceSeq=${spaceSeq}`,
+			`RoleAssignment 동기화: roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
 		return this.roleAssignmentsRepository.syncByRoleId(
-			roleSeq,
+			roleId,
 			roleAssignments,
-			spaceSeq,
+			spaceId,
 		);
 	}
 
-	private async assertRoleExists(roleSeq: bigint): Promise<void> {
-		const role = await this.rolesRepository.findById(roleSeq);
+	private async assertRoleExists(roleId: bigint): Promise<void> {
+		const role = await this.rolesRepository.findById(roleId);
 		if (!role) {
 			throw new NotFoundException("역할을 찾을 수 없습니다");
 		}
@@ -65,7 +65,7 @@ export class RoleAssignmentAggregate {
 
 	private async assertPoliciesBelongToSpace(
 		policyIds: bigint[],
-		spaceSeq: bigint,
+		spaceId: bigint,
 	): Promise<void> {
 		const uniquePolicyIds = Array.from(new Set(policyIds));
 		if (uniquePolicyIds.length === 0) return;
@@ -73,7 +73,7 @@ export class RoleAssignmentAggregate {
 		const scopedPolicyIds =
 			await this.policiesRepository.findActivePolicyIdsInSpace(
 				uniquePolicyIds,
-				spaceSeq,
+				spaceId,
 			);
 		const scopedSet = new Set(scopedPolicyIds);
 		const invalidIds = uniquePolicyIds.filter((id) => !scopedSet.has(id));
@@ -86,10 +86,10 @@ export class RoleAssignmentAggregate {
 	}
 
 	private requireSpaceId(): bigint {
-		const spaceSeq = this.spaceContext.spaceSeq;
-		if (!spaceSeq) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
-		return spaceSeq;
+		return spaceId;
 	}
 }

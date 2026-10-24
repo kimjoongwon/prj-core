@@ -22,7 +22,6 @@ export class TemplateVariable extends TemplateVariableSchema {
 	declare updatedAt: Date | null;
 
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: TemplateVariableSchema["id"];
 
 	// ============================================================================

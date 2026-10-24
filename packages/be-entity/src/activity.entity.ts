@@ -13,7 +13,6 @@ import { Task } from "./task.entity";
 @AbstractEntityFields()
 export class Activity extends ActivitySchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: ActivitySchema["id"];
 
 	@BigIntIdFieldMetadata() declare routineSeq: ActivitySchema["routineSeq"];

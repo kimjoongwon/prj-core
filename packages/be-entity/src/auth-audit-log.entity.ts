@@ -22,7 +22,6 @@ export class AuthAuditLog extends AuthAuditLogSchema {
 	declare createdAt: Date;
 
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: AuthAuditLogSchema["id"];
 
 	// ============================================================================

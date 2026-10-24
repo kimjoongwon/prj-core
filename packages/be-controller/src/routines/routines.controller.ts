@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateRoutineCommand,
 	DeleteRoutineCommand,
@@ -66,9 +66,9 @@ export class RoutinesController {
 
 	/**
 	 * 루틴 상세 조회
-	 * GET /api/v1/routines/:routineSeq
+	 * GET /api/v1/routines/:routineId
 	 */
-	@Get(":routineSeq")
+	@Get(":routineId")
 	@ApiOperation({
 		operationId: "getRoutine",
 		summary: "루틴 상세 조회",
@@ -77,7 +77,7 @@ export class RoutinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "routineSeq",
+		name: "routineId",
 		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -89,9 +89,9 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	@ResponseMessage("루틴 상세 조회 성공")
 	async getRoutine(
-		@Param("routineSeq", ParseBigIntIdPipe) routineSeq: bigint,
+		@Param("routineId", ParseUlidPipe) routineId: string,
 	): Promise<Routine> {
-		return this.queryBus.execute(new GetRoutineByIdQuery(routineSeq));
+		return this.queryBus.execute(new GetRoutineByIdQuery(routineId));
 	}
 
 	/**
@@ -125,9 +125,9 @@ export class RoutinesController {
 
 	/**
 	 * 루틴 수정
-	 * PATCH /api/v1/routines/:routineSeq
+	 * PATCH /api/v1/routines/:routineId
 	 */
-	@Patch(":routineSeq")
+	@Patch(":routineId")
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
@@ -138,7 +138,7 @@ export class RoutinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "routineSeq",
+		name: "routineId",
 		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -155,17 +155,17 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	@ResponseMessage("루틴 수정 성공")
 	async updateRoutine(
-		@Param("routineSeq", ParseBigIntIdPipe) routineSeq: bigint,
+		@Param("routineId", ParseUlidPipe) routineId: string,
 		@Body() dto: UpdateRoutineDto,
 	): Promise<Routine> {
-		return this.commandBus.execute(new UpdateRoutineCommand(routineSeq, dto));
+		return this.commandBus.execute(new UpdateRoutineCommand(routineId, dto));
 	}
 
 	/**
 	 * 루틴 삭제 (소프트 삭제)
-	 * DELETE /api/v1/routines/:routineSeq
+	 * DELETE /api/v1/routines/:routineId
 	 */
-	@Delete(":routineSeq")
+	@Delete(":routineId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
@@ -177,7 +177,7 @@ export class RoutinesController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "routineSeq",
+		name: "routineId",
 		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -190,8 +190,8 @@ export class RoutinesController {
 	)
 	@ResponseMessage("루틴 삭제 성공")
 	async deleteRoutine(
-		@Param("routineSeq", ParseBigIntIdPipe) routineSeq: bigint,
+		@Param("routineId", ParseUlidPipe) routineId: string,
 	): Promise<void> {
-		await this.commandBus.execute(new DeleteRoutineCommand(routineSeq));
+		await this.commandBus.execute(new DeleteRoutineCommand(routineId));
 	}
 }

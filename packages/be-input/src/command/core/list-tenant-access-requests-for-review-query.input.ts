@@ -1,9 +1,9 @@
 import type { TenantAccessRequestStatus } from "@cocrepo/prisma";
 
 export interface ListTenantAccessRequestsForReviewQueryInput {
-	reviewerSeq: bigint;
-	spaceSeq?: bigint;
-	requesterSeq?: bigint;
+	reviewerId: string;
+	spaceId?: string;
+	requesterId?: string;
 	status?: TenantAccessRequestStatus;
 	search?: string;
 	createdFrom?: Date;

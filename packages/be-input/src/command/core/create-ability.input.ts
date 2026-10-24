@@ -1,6 +1,6 @@
 export interface CreateAbilityCommandInput {
-	actionSeq: bigint;
-	subjectSeq: bigint;
+	actionId: string;
+	subjectId: string;
 	fields?: string[];
 	conditions?: unknown;
 	inverted?: boolean;

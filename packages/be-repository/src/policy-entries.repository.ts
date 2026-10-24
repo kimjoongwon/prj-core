@@ -71,14 +71,14 @@ export class PolicyEntriesRepository {
 		return this.findActiveByPolicyId(policySeq);
 	}
 
-	async removeByAbilityId(abilitySeq: bigint): Promise<number> {
+	async removeByAbilityId(abilityId: string): Promise<number> {
 		this.logger.debug(
-			`Ability ID로 PolicyEntry 소프트 삭제: abilitySeq=${abilitySeq.toString()}`,
+			`Ability 공개 ID로 PolicyEntry 소프트 삭제: abilityId=${abilityId}`,
 		);
 
 		const result = await this.txHost.tx.policyEntry.updateMany({
 			where: {
-				abilitySeq,
+				ability: { id: abilityId },
 				removedAt: null,
 			},
 			data: {

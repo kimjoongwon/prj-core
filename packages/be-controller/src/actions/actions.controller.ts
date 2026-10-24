@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RoleCategoryGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RoleCategoryGuard } from "@cocrepo/be-common";
 import {
 	CreateActionCommand,
 	DeleteActionCommand,
@@ -89,7 +89,7 @@ export class ActionsController {
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 조회 성공")
-	async getActionById(@Param("id", ParseBigIntIdPipe) id: bigint) {
+	async getActionById(@Param("id", ParseUlidPipe) id: string) {
 		return this.queryBus.execute(new GetActionByIdQuery(id));
 	}
 
@@ -143,7 +143,7 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 수정 성공")
 	async updateAction(
-		@Param("id", ParseBigIntIdPipe) id: bigint,
+		@Param("id", ParseUlidPipe) id: string,
 		@Body() dto: UpdateActionDto,
 	) {
 		return this.commandBus.execute(new UpdateActionCommand(id, dto));
@@ -173,7 +173,7 @@ export class ActionsController {
 	)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 삭제 성공")
-	async deleteAction(@Param("id", ParseBigIntIdPipe) id: bigint) {
+	async deleteAction(@Param("id", ParseUlidPipe) id: string) {
 		return this.commandBus.execute(new DeleteActionCommand(id));
 	}
 }

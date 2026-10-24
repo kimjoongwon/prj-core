@@ -11,7 +11,7 @@ export class GetTenantAccessRequestForReviewUseCase {
 	execute(query: GetTenantAccessRequestForReviewQuery): Promise<unknown> {
 		return this.tenantAccessRequestService.findForReview({
 			tenantAccessRequestId: query.tenantAccessRequestId,
-			reviewerSeq: query.reviewerSeq,
+			reviewerId: query.reviewerId,
 		});
 	}
 }

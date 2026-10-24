@@ -17,7 +17,7 @@ type OidcClaimTenant = TenantWithRelations & {
 function hasOidcClaimIds(
 	tenant: TenantWithRelations,
 ): tenant is OidcClaimTenant {
-	return Boolean(tenant.space?.spaceSeq && tenant.role?.roleSeq);
+	return Boolean(tenant.space?.id && tenant.role?.id);
 }
 
 /**
@@ -100,8 +100,7 @@ export class AccountService {
 	 * 사용자 정보로부터 전체 claims 빌드
 	 */
 	private buildFullClaims(user: {
-		id: bigint;
-		userSeq: string;
+		id: string;
 		name: string;
 		email: string;
 		phone: string;
@@ -114,7 +113,7 @@ export class AccountService {
 		);
 
 		return {
-			sub: user.userSeq,
+			sub: user.id,
 			name: user.name,
 			updated_at: user.updatedAt
 				? Math.floor(user.updatedAt.getTime() / 1000)
@@ -124,13 +123,13 @@ export class AccountService {
 			phone_number: user.phone,
 			phone_number_verified: true,
 			roles: tenants?.map((t) => ({
-				spaceSeq: t.space.spaceSeq,
-				roleSeq: t.role.roleSeq,
+				spaceId: t.space.id,
+				roleId: t.role.id,
 				roleName: t.role?.name,
 				roleDisplayName: t.role?.displayName,
 			})),
 			spaces: tenants?.map((t) => ({
-				spaceSeq: t.space.spaceSeq,
+				spaceId: t.space.id,
 				spaceName: t.space?.name,
 			})),
 		};

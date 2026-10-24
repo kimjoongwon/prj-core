@@ -14,12 +14,10 @@ export class SessionDto extends EntityResponseType(Session, {
 		"startDateTime",
 		"endDateTime",
 		"recurringDayOfWeek",
-		"timelineSeq",
 		"name",
 		"description",
 		"programs",
-		"timeline",
-	] as const,
+		"timeline"] as const,
 	relations: {
 		programs: () => ProgramDto,
 		timeline: () => TimelineDto,

@@ -7,7 +7,7 @@ export class SendTestTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	async execute(command: SendTestTemplateCommand): Promise<unknown> {
-		return this.templateService.sendTest(command.templateSeq, {
+		return this.templateService.sendTest(command.templateId, {
 			recipient: command.recipient,
 			variables: command.variables,
 		});

@@ -5,5 +5,5 @@ type SpaceWithFitnessCenterResult = Awaited<
 >[number];
 
 export type AuthSpaceResult = SpaceWithFitnessCenterResult & {
-	tenantId?: bigint | null;
+	tenantId?: string | null;
 };

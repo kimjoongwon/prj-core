@@ -1,3 +1,3 @@
 export class GetIdpAccountQuery {
-	constructor(readonly userSeq: bigint) {}
+	constructor(readonly userId: string) {}
 }

@@ -29,8 +29,7 @@ export class UserDetailResponseDto extends EntityResponseType(User, {
 		"profiles",
 		"tenants",
 		"associations",
-		"classification",
-	] as const,
+		"classification"] as const,
 	relations: {
 		profiles: () => ProfileDto,
 		tenants: () => TenantDto,
@@ -38,18 +37,14 @@ export class UserDetailResponseDto extends EntityResponseType(User, {
 		classification: () => UserClassificationDto,
 	},
 	extraFields: [
-		"spaceSeq",
 		"failedLoginAttempts",
 		"lockedUntil",
 		"isPermanentlyLocked",
 		"lastLoginAt",
 		"lastLoginIp",
 		"isActive",
-		"currentTenantSeq",
 	],
 }) {
-	@BigIntIdField({ description: "소속 공간 ID" })
-	spaceSeq: bigint;
 
 	@NumberField({ description: "로그인 실패 횟수" })
 	failedLoginAttempts: number;
@@ -69,11 +64,6 @@ export class UserDetailResponseDto extends EntityResponseType(User, {
 	@BooleanField({ description: "활성 상태" })
 	isActive: boolean;
 
-	@BigIntIdField({
-		nullable: true,
-		description: "현재 선택된 Tenant membership ID",
-	})
-	currentTenantSeq: bigint | null;
 
 	declare profiles?: ProfileDto[];
 	declare tenants?: TenantDto[];

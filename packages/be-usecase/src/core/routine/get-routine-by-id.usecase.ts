@@ -9,7 +9,7 @@ export class GetRoutineByIdUseCase {
 	execute(query: GetRoutineByIdQuery): Promise<unknown> {
 		const currentSpaceScope = "CURRENT" as NonNullable<typeof query.spaceScope>;
 		return this.routinesService.findRoutineById(
-			query.routineSeq,
+			query.routineId,
 			currentSpaceScope,
 		);
 	}

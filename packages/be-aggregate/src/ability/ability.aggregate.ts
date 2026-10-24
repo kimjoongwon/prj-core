@@ -38,7 +38,7 @@ export class AbilityAggregate {
 	 * @param id - Ability ID
 	 * @returns Ability 또는 null
 	 */
-	async getAbilityById(id: bigint): Promise<Ability | null> {
+	async getAbilityById(id: string): Promise<Ability | null> {
 		this.logger.debug(`ID로 Ability 조회: id=${id}`);
 
 		return this.abilitiesRepository.findById(id);
@@ -58,21 +58,21 @@ export class AbilityAggregate {
 	 * 현재 Tenant의 Policy만 펼쳐서 Ability를 계산합니다.
 	 *
 	 * @param roleIds - Role ID 배열
-	 * @param spaceSeq - 현재 Space ID
+	 * @param spaceId - 현재 Space ID
 	 * @returns 병합된 Ability 배열
 	 */
 	async getMergedAbilities(
 		roleIds: bigint[],
-		spaceSeq: bigint,
+		spaceId: bigint,
 	): Promise<Ability[]> {
 		this.logger.debug(
-			`RoleAssignment 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceSeq=${spaceSeq}`,
+			`RoleAssignment 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceId=${spaceId}`,
 		);
 
 		const roleAssignments =
 			await this.roleAssignmentsRepository.findActiveByRoleIdsInSpace(
 				roleIds,
-				spaceSeq,
+				spaceId,
 			);
 
 		return this.mergeAbilities(
@@ -89,7 +89,7 @@ export class AbilityAggregate {
 	 */
 	async createAbility(input: CreateAbilityInput): Promise<Ability> {
 		this.logger.debug(
-			`권한 정의 생성: name=${input.name}, subjectSeq=${input.subjectSeq}, actionSeq=${input.actionSeq}`,
+			`권한 정의 생성: name=${input.name}, subjectId=${input.subjectId}, actionId=${input.actionId}`,
 		);
 
 		this.validateAbilityData(input);
@@ -106,7 +106,7 @@ export class AbilityAggregate {
 	 * @returns 수정된 Ability
 	 * @description Ability 정의만 수정합니다. RoleAssignment 메타데이터(isActive, priority)는 변경되지 않습니다.
 	 */
-	async updateAbility(id: bigint, input: UpdateAbilityInput): Promise<Ability> {
+	async updateAbility(id: string, input: UpdateAbilityInput): Promise<Ability> {
 		this.logger.debug(`권한 정의 수정: id=${id}`);
 
 		const data = toAbilityUpdateData(input);
@@ -121,7 +121,7 @@ export class AbilityAggregate {
 	 * @description Ability와 연결된 모든 PolicyEntry를 소프트 삭제합니다.
 	 */
 	@Transactional()
-	async deleteAbility(id: bigint): Promise<Ability> {
+	async deleteAbility(id: string): Promise<Ability> {
 		this.logger.debug(`권한 삭제: id=${id}`);
 
 		// 1. Ability 소프트 삭제
@@ -138,8 +138,8 @@ export class AbilityAggregate {
 	 * Ability 데이터 유효성 검증
 	 */
 	private validateAbilityData(data: CreateAbilityInput): void {
-		// actionSeq, subjectSeq, name 필수
-		if (!data.actionSeq || !data.subjectSeq || !data.name) {
+		// actionId, subjectId, name 필수
+		if (!data.actionId || !data.subjectId || !data.name) {
 			throw new BadRequestException(ABILITY_ERRORS.INVALID_DATA);
 		}
 	}

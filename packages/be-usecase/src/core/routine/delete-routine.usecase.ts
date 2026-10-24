@@ -7,6 +7,6 @@ export class DeleteRoutineUseCase {
 	constructor(private readonly routinesService: RoutineAggregate) {}
 
 	execute(command: DeleteRoutineCommand): Promise<void> {
-		return this.routinesService.removeRoutine(command.routineSeq);
+		return this.routinesService.removeRoutine(command.routineId);
 	}
 }

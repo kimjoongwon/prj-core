@@ -14,7 +14,6 @@ import { RoleClassification } from "./role-classification.entity";
 @AbstractEntityFields()
 export class Role extends RoleSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
 	declare id: RoleSchema["id"];
 

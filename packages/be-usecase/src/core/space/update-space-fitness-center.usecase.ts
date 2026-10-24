@@ -8,7 +8,7 @@ export class UpdateSpaceFitnessCenterUseCase {
 
 	execute(command: UpdateSpaceFitnessCenterCommand): Promise<unknown> {
 		return this.spaceService.updateFitnessCenterBySpaceId(
-			command.spaceSeq,
+			command.spaceId,
 			command,
 		);
 	}

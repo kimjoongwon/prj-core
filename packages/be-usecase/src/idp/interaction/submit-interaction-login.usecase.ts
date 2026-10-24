@@ -38,7 +38,7 @@ export class SubmitInteractionLoginUseCase {
 		const loginResult = await this.interactionService.completeLogin(
 			command.req,
 			command.res,
-			result.userSeq!,
+			result.userId!,
 			command.remember || false,
 		);
 

@@ -11,11 +11,8 @@ export class SpaceClassificationDto extends EntityResponseType(
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"spaceSeq",
-			"categorySeq",
 			"category",
-			"space",
-		] as const,
+			"space"] as const,
 		relations: {
 			category: () => CategoryDto,
 			space: () => SpaceDto,

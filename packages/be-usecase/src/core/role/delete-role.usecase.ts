@@ -7,6 +7,6 @@ export class DeleteRoleUseCase {
 	constructor(private readonly rolesService: RoleAggregate) {}
 
 	execute(command: DeleteRoleCommand): Promise<unknown> {
-		return this.rolesService.delete(command.roleSeq);
+		return this.rolesService.delete(command.roleId);
 	}
 }

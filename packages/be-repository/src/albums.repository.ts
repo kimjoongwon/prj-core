@@ -21,11 +21,11 @@ export class AlbumsRepository {
 		this.logger = new Logger("AlbumsRepository");
 	}
 
-	async findById(id: bigint): Promise<Album | null> {
+	async findById(id: string): Promise<Album | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.album.findUnique({
-			where: { seq: id },
+			where: { id },
 			include: { space: true, coverAsset: true, createdBy: true },
 		});
 
@@ -104,12 +104,12 @@ export class AlbumsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<Prisma.AlbumUncheckedUpdateInput, "id">,
 	): Promise<Album> {
 		this.logger.debug(`앨범 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.album.update({
-			where: { seq: id },
+			where: { id },
 			data,
 			include: { space: true, coverAsset: true, createdBy: true },
 		});
@@ -117,11 +117,11 @@ export class AlbumsRepository {
 		return toDomainEntity(Album, result);
 	}
 
-	async removeById(id: bigint): Promise<Album> {
+	async removeById(id: string): Promise<Album> {
 		this.logger.debug(`앨범 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.album.delete({
-			where: { seq: id },
+			where: { id },
 			include: { space: true, coverAsset: true, createdBy: true },
 		});
 

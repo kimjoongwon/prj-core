@@ -44,9 +44,9 @@ export class ReservationAggregate {
 			date: string;
 			startsAt: Date;
 			endsAt: Date;
-			timelineSeq: bigint;
-			sessionSeq: bigint;
-			programSeq: bigint;
+			timelineId: bigint;
+			sessionId: bigint;
+			programId: bigint;
 			timelineName: string;
 			sessionName: string;
 			programName: string;
@@ -67,11 +67,11 @@ export class ReservationAggregate {
 	}> {
 		const feedWindow = this.resolveFeedWindow(input.from, input.to);
 		const programs = await this.repository.findBookingPrograms({
-			spaceSeq: input.spaceSeq,
+			spaceSeq: input.spaceId,
 			from: feedWindow.from,
 			to: feedWindow.to,
-			timelineSeq: input.timelineSeq,
-			programSeq: input.programSeq,
+			timelineId: input.timelineId,
+			programId: input.programId,
 			search: input.search,
 			skip: input.skip,
 			take: input.take,
@@ -84,14 +84,14 @@ export class ReservationAggregate {
 		);
 		const [reservations, coachNames] = await Promise.all([
 			this.repository.findReservationsForFeed({
-				spaceSeq: input.spaceSeq,
-				userSeq: input.userSeq,
+				spaceId: input.spaceId,
+				userId: input.userId,
 				from: feedWindow.from,
 				to: feedWindow.to,
 				programIds,
 			}),
 			this.repository.findCoachNames(
-				programs.map((program) => program.instructorSeq),
+				programs.map((program) => program.instructorId),
 			),
 		]);
 
@@ -112,8 +112,8 @@ export class ReservationAggregate {
 								occurrence.startsAt,
 							),
 						) ?? [],
-					userSeq: input.userSeq,
-					coachName: coachNames.get(occurrence.program.instructorSeq) ?? null,
+					userId: input.userId,
+					coachName: coachNames.get(occurrence.program.instructorId) ?? null,
 				}),
 			);
 
@@ -124,8 +124,8 @@ export class ReservationAggregate {
 	}
 
 	async getMine(params: {
-		spaceSeq: bigint;
-		userSeq: bigint;
+		spaceId: bigint;
+		userId: bigint;
 		from?: Date;
 		to?: Date;
 		status?: ReservationStatus;
@@ -137,8 +137,8 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async create(params: {
-		spaceSeq: bigint;
-		userSeq: bigint;
+		spaceId: bigint;
+		userId: bigint;
 		input: CreateReservationInput;
 	}): Promise<Reservation> {
 		const createResult = await this.createWithResult(params);
@@ -147,18 +147,18 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async createWithResult(params: {
-		spaceSeq: bigint;
-		userSeq: bigint;
+		spaceId: bigint;
+		userId: bigint;
 		input: CreateReservationInput;
 	}) {
 		this.logger.debug(
-			`예약 생성 요청: user=${params.userSeq}, program=${params.input.programSeq}`,
+			`예약 생성 요청: user=${params.userId}, program=${params.input.programId}`,
 		);
 
-		await this.assertUserCanBookSpace(params.userSeq, params.spaceSeq);
+		await this.assertUserCanBookSpace(params.userId, params.spaceId);
 
 		const existingByKey = await this.repository.findByUserAndIdempotencyKey(
-			params.userSeq,
+			params.userId,
 			params.input.idempotencyKey,
 		);
 		if (existingByKey) {
@@ -169,10 +169,10 @@ export class ReservationAggregate {
 		}
 
 		const program = await this.repository.findBookingProgram({
-			spaceSeq: params.spaceSeq,
-			timelineSeq: params.input.timelineSeq,
-			sessionSeq: params.input.sessionSeq,
-			programSeq: params.input.programSeq,
+			spaceSeq: params.spaceId,
+			timelineSeq: params.input.timelineId,
+			sessionId: params.input.sessionId,
+			programId: params.input.programId,
 		});
 		if (!program) {
 			throw new NotFoundException(RESERVATION_ERRORS.PROGRAM_NOT_FOUND);
@@ -184,8 +184,8 @@ export class ReservationAggregate {
 		);
 
 		const duplicate = await this.repository.findActiveDuplicate({
-			userSeq: params.userSeq,
-			programSeq: params.input.programSeq,
+			userSeq: params.userId,
+			programSeq: params.input.programId,
 			occurrenceStartAt: params.input.occurrenceStartAt,
 		});
 		if (duplicate) {
@@ -193,7 +193,7 @@ export class ReservationAggregate {
 		}
 
 		const confirmedCount = await this.repository.countByProgramOccurrence({
-			programSeq: params.input.programSeq,
+			programSeq: params.input.programId,
 			occurrenceStartAt: params.input.occurrenceStartAt,
 			status: ReservationStatus.CONFIRMED,
 		});
@@ -201,18 +201,18 @@ export class ReservationAggregate {
 		const waitlistPosition = shouldConfirm
 			? null
 			: (await this.repository.getMaxWaitlistPosition({
-					programSeq: params.input.programSeq,
+					programSeq: params.input.programId,
 					occurrenceStartAt: params.input.occurrenceStartAt,
 				})) + 1;
 		const now = new Date();
 
 		const reservation = await this.repository.create({
-			spaceSeq: params.spaceSeq,
-			createdBySeq: params.userSeq,
-			userSeq: params.userSeq,
-			timelineSeq: params.input.timelineSeq,
-			sessionSeq: params.input.sessionSeq,
-			programSeq: params.input.programSeq,
+			spaceSeq: params.spaceId,
+			createdBySeq: params.userId,
+			userSeq: params.userId,
+			timelineSeq: params.input.timelineId,
+			sessionId: params.input.sessionId,
+			programId: params.input.programId,
 			occurrenceStartAt: params.input.occurrenceStartAt,
 			status: shouldConfirm
 				? ReservationStatus.CONFIRMED
@@ -233,16 +233,16 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async cancel(params: {
-		spaceSeq: bigint;
-		userSeq: bigint;
+		spaceId: bigint;
+		userId: bigint;
 		reservationId: bigint;
 		cancelReason?: string | null;
 		now?: Date;
 	}): Promise<Reservation> {
 		const reservation = await this.repository.findByIdForUser({
 			reservationId: params.reservationId,
-			userSeq: params.userSeq,
-			spaceSeq: params.spaceSeq,
+			userId: params.userId,
+			spaceId: params.spaceId,
 		});
 		if (!reservation) {
 			throw new NotFoundException(RESERVATION_ERRORS.RESERVATION_NOT_FOUND);
@@ -266,7 +266,7 @@ export class ReservationAggregate {
 
 		if (wasConfirmed) {
 			await this.promoteWaitlistIfPossible({
-				programSeq: reservation.programSeq,
+				programId: reservation.programSeq,
 				occurrenceStartAt: reservation.occurrenceStartAt,
 				now,
 			});
@@ -276,12 +276,12 @@ export class ReservationAggregate {
 	}
 
 	private async assertUserCanBookSpace(
-		userSeq: bigint,
-		spaceSeq: bigint,
+		userId: bigint,
+		spaceId: bigint,
 	): Promise<void> {
 		const tenant = await this.tenantsRepository.findActiveByUserIdAndSpaceId(
-			userSeq,
-			spaceSeq,
+			userId,
+			spaceId,
 		);
 		if (!tenant) {
 			throw new ForbiddenException(RESERVATION_ERRORS.SPACE_ACCESS_REQUIRED);
@@ -289,7 +289,7 @@ export class ReservationAggregate {
 	}
 
 	private async promoteWaitlistIfPossible(params: {
-		programSeq: bigint;
+		programId: bigint;
 		occurrenceStartAt: Date;
 		now: Date;
 	}): Promise<void> {
@@ -467,7 +467,7 @@ export class ReservationAggregate {
 		startsAt: Date;
 		endsAt: Date;
 		reservations: Reservation[];
-		userSeq: bigint;
+		userId: bigint;
 		coachName: string | null;
 	}) {
 		const confirmedCount = params.reservations.filter(
@@ -479,11 +479,11 @@ export class ReservationAggregate {
 		const myReservation =
 			params.reservations.find(
 				(reservation) =>
-					reservation.userSeq === params.userSeq &&
+					reservation.userSeq === params.userId &&
 					ACTIVE_RESERVATION_STATUSES.includes(reservation.status),
 			) ??
 			params.reservations.find(
-				(reservation) => reservation.userSeq === params.userSeq,
+				(reservation) => reservation.userSeq === params.userId,
 			);
 		const availableSeatCount = Math.max(
 			params.program.capacity - confirmedCount,
@@ -501,9 +501,9 @@ export class ReservationAggregate {
 			date: params.startsAt.toISOString().slice(0, 10),
 			startsAt: params.startsAt,
 			endsAt: params.endsAt,
-			timelineSeq: params.program.session.timeline.id,
-			sessionSeq: params.program.session.id,
-			programSeq: params.program.id,
+			timelineId: params.program.session.timeline.id,
+			sessionId: params.program.session.id,
+			programId: params.program.id,
 			timelineName: params.program.session.timeline.name,
 			sessionName: params.program.session.name,
 			programName: params.program.name,
@@ -577,7 +577,7 @@ export class ReservationAggregate {
 		);
 	}
 
-	private buildOccurrenceKey(programSeq: bigint, startsAt: Date): string {
-		return `${programSeq}:${startsAt.toISOString()}`;
+	private buildOccurrenceKey(programId: bigint, startsAt: Date): string {
+		return `${programId}:${startsAt.toISOString()}`;
 	}
 }

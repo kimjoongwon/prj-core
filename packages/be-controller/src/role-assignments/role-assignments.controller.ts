@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	GetRoleAssignmentsQuery,
 	SyncRoleAssignmentsCommand,
@@ -37,7 +37,7 @@ export class RoleAssignmentsController {
 		private readonly queryBus: QueryBus,
 	) {}
 
-	@Get(":roleSeq/assignments")
+	@Get(":roleId/assignments")
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getRoleAssignments",
@@ -46,7 +46,7 @@ export class RoleAssignmentsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "roleSeq",
+		name: "roleId",
 		description: "Role ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -55,11 +55,11 @@ export class RoleAssignmentsController {
 		isArray: true,
 	})
 	@ResponseMessage("역할 정책 할당 목록 조회 성공")
-	async getRoleAssignments(@Param("roleSeq", ParseBigIntIdPipe) roleSeq: bigint) {
-		return this.queryBus.execute(new GetRoleAssignmentsQuery(roleSeq));
+	async getRoleAssignments(@Param("roleId", ParseUlidPipe) roleId: string) {
+		return this.queryBus.execute(new GetRoleAssignmentsQuery(roleId));
 	}
 
-	@Put(":roleSeq/assignments")
+	@Put(":roleId/assignments")
 	@HttpCode(HttpStatus.OK)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
@@ -70,7 +70,7 @@ export class RoleAssignmentsController {
 	})
 	@ApiAuth()
 	@ApiParam({
-		name: "roleSeq",
+		name: "roleId",
 		description: "Role ID (canonical decimal BIGINT string)",
 		type: String,
 	})
@@ -84,11 +84,11 @@ export class RoleAssignmentsController {
 	})
 	@ResponseMessage("역할 정책 할당 동기화 성공")
 	async syncRoleAssignments(
-		@Param("roleSeq", ParseBigIntIdPipe) roleSeq: bigint,
+		@Param("roleId", ParseUlidPipe) roleId: string,
 		@Body() dto: SyncRoleAssignmentsDto,
 	) {
 		return this.commandBus.execute(
-			new SyncRoleAssignmentsCommand(roleSeq, {
+			new SyncRoleAssignmentsCommand(roleId, {
 				assignments: dto.assignments,
 			}),
 		);

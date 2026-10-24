@@ -8,7 +8,7 @@ export class UpdateTemplateUseCase {
 
 	execute(command: UpdateTemplateCommand): Promise<unknown> {
 		const input = command;
-		return this.templateService.update(command.templateSeq, {
+		return this.templateService.update(command.templateId, {
 			name: input.name,
 			subject: input.subject,
 			content: input.content,

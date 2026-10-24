@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateRoleCommand,
 	DeleteRoleCommand,
@@ -71,7 +71,7 @@ export class RolesController {
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("역할 조회 성공")
-	async getRoleById(@Param("id", ParseBigIntIdPipe) id: bigint) {
+	async getRoleById(@Param("id", ParseUlidPipe) id: string) {
 		return this.queryBus.execute(new GetRoleByIdQuery(id));
 	}
 
@@ -120,7 +120,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("역할 수정 성공")
 	async updateRole(
-		@Param("id", ParseBigIntIdPipe) id: bigint,
+		@Param("id", ParseUlidPipe) id: string,
 		@Body() dto: UpdateRoleDto,
 	) {
 		return this.commandBus.execute(new UpdateRoleCommand(id, dto));
@@ -145,7 +145,7 @@ export class RolesController {
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("역할 삭제 성공")
-	async deleteRole(@Param("id", ParseBigIntIdPipe) id: bigint) {
+	async deleteRole(@Param("id", ParseUlidPipe) id: string) {
 		return this.commandBus.execute(new DeleteRoleCommand(id));
 	}
 }

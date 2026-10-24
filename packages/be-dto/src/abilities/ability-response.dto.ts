@@ -7,15 +7,12 @@ import { SubjectResponseDto } from "./subject-response.dto";
 export class AbilityResponseDto extends EntityResponseType(Ability, {
 	pick: [
 		"id",
-		"actionSeq",
 		"action",
-		"subjectSeq",
 		"subject",
 		"inverted",
 		"name",
 		"createdAt",
-		"updatedAt",
-	] as const,
+		"updatedAt"] as const,
 	relations: {
 		action: () => ActionResponseDto,
 		subject: () => SubjectResponseDto,

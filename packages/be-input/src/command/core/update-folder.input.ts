@@ -1,4 +1,4 @@
 export interface UpdateFolderCommandInput {
-	parentFolderSeq?: bigint | null;
+	parentFolderId?: string | null;
 	name?: string;
 }

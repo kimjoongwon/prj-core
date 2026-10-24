@@ -7,7 +7,7 @@ export class UnlockAccountUseCase {
 	constructor(private readonly usersService: UserService) {}
 
 	async execute(command: UnlockAccountCommand): Promise<boolean> {
-		await this.usersService.unlockAccount(command.userSeq);
+		await this.usersService.unlockAccount(command.userId);
 		return true;
 	}
 }

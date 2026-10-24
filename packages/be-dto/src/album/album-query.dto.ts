@@ -1,4 +1,5 @@
 import {
+	ULIDFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
@@ -11,15 +12,16 @@ import { EntityQueryType } from "../query/entity-query-type";
  * 앨범 목록 조회용 Query DTO
  *
  * 필터 계약:
+ * - spaceId -> 공개 ULID 정확 매칭
  * - name -> containsFilter (일반 string)
- * - tenantId -> 정확 매핑 (*Id)
  *
  * 커스텀 처리:
  * - statusFilter -> removedAt 필터
  */
-export class AlbumQueryDto extends EntityQueryType(Album, [
-	"spaceSeq",
-] as const) {
+export class AlbumQueryDto extends EntityQueryType(Album, [] as const) {
+	@ULIDFieldOptional({ description: "공간 공개 ID (ULID) 정확 매칭" })
+	spaceId?: string;
+
 	@StringFieldOptional({ description: "앨범명 검색 (부분 일치)" })
 	name?: string;
 

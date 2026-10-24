@@ -1,10 +1,10 @@
 export interface BookingFeedInput {
-	spaceSeq: bigint;
-	userSeq: bigint;
+	spaceId: string;
+	userId: string;
 	from?: Date;
 	to?: Date;
-	timelineSeq?: bigint;
-	programSeq?: bigint;
+	timelineId?: string;
+	programId?: string;
 	search?: string;
 	skip?: number;
 	take?: number;

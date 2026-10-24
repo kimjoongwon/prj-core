@@ -7,6 +7,6 @@ export class DeleteFolderUseCase {
 	constructor(private readonly folderService: FolderAggregate) {}
 
 	async execute(command: DeleteFolderCommand): Promise<void> {
-		await this.folderService.deleteFolder(command.folderSeq);
+		await this.folderService.deleteFolder(command.folderId);
 	}
 }

@@ -18,7 +18,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class EmailVerification extends EmailVerificationSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: EmailVerificationSchema["id"];
 
 	@StringFieldMetadata({ description: "이메일" })

@@ -8,7 +8,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class UserClassification extends UserClassificationSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: UserClassificationSchema["id"];
 
 	@BigIntIdFieldMetadata()

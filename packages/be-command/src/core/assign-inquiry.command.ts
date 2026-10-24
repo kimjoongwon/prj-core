@@ -1,6 +1,6 @@
 export class AssignInquiryCommand {
 	constructor(
-		readonly inquirySeq: bigint,
-		readonly assigneeSeq: bigint,
+		readonly inquiryId: string,
+		readonly assigneeId: string,
 	) {}
 }

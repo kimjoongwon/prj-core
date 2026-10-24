@@ -1,3 +1,3 @@
 export class GetPolicyByIdQuery {
-	constructor(readonly policySeq: bigint) {}
+	constructor(readonly policyId: string) {}
 }

@@ -15,7 +15,6 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Routine extends RoutineSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	declare id: RoutineSchema["id"];
 
 	@StringFieldMetadata() declare name: RoutineSchema["name"];

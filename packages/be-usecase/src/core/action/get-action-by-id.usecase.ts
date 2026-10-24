@@ -7,6 +7,6 @@ export class GetActionByIdUseCase {
 	constructor(private readonly actionsService: ActionAggregate) {}
 
 	execute(query: GetActionByIdQuery): Promise<unknown> {
-		return this.actionsService.getActionById(query.actionSeq);
+		return this.actionsService.getActionById(query.actionId);
 	}
 }
