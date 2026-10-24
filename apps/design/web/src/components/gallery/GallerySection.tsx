@@ -17,7 +17,9 @@ export function GallerySection({
 }: GallerySectionProps) {
 	return (
 		<section id={id} className="scroll-mt-6">
-			<SectionSurface>
+			{/* shadow-surface는 twMerge가 variant의 shadow-none을 대체합니다.
+			    그림자 토큰(--surface-shadow)이 패널에서 실시간 반영되는지 보여줍니다. */}
+			<SectionSurface className="shadow-surface">
 				<div className="flex flex-col gap-5 p-5">
 					<div>
 						<Typography.Heading level={2} weight="semibold">
