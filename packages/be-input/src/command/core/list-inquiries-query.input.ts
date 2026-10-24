@@ -14,7 +14,7 @@ export interface ListInquiriesQueryInput {
 	inquiryStatus?: InquiryStatus;
 	customerId?: string;
 	assigneeId?: string;
-	spaceIds?: bigint[];
+	spaceIds?: string[];
 	startDate?: Date;
 	endDate?: Date;
 	sort?: string[];

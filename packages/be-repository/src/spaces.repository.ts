@@ -97,7 +97,7 @@ export class SpacesRepository {
 	 * FitnessCenter를 포함한 Space 목록 조회
 	 */
 	async findManyWithFitnessCenter(params?: {
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 		skip?: number;
 		take?: number;
 		search?: string;
@@ -110,7 +110,7 @@ export class SpacesRepository {
 
 		const where: Prisma.SpaceWhereInput = {
 			removedAt: null,
-			...(queryParams.spaceIds ? { seq: { in: queryParams.spaceIds } } : {}),
+			...(queryParams.spaceIds ? { id: { in: queryParams.spaceIds } } : {}),
 			...(queryParams.contentLanguageCode
 				? { contentLanguageCode: queryParams.contentLanguageCode }
 				: {}),
@@ -203,12 +203,12 @@ export class SpacesRepository {
 	 * Space에 종속된 FitnessCenter 조회
 	 */
 	async findFitnessCenterBySpaceId(
-		spaceSeq: bigint,
+		spaceId: string,
 	): Promise<FitnessCenter | null> {
-		this.logger.debug(`Space의 FitnessCenter 조회: ${spaceSeq.toString()}`);
+		this.logger.debug(`Space의 FitnessCenter 조회: ${spaceId}`);
 
 		const result = await this.txHost.tx.fitnessCenter.findFirst({
-			where: { spaceSeq },
+			where: { space: { id: spaceId } },
 			include: {
 				company: true,
 				space: true,
@@ -307,15 +307,15 @@ export class SpacesRepository {
 	 * Space의 FitnessCenter detail 수정
 	 */
 	async updateFitnessCenterBySpaceId(
-		spaceSeq: bigint,
+		spaceId: string,
 		data: {
 			fitnessCenter: Prisma.FitnessCenterUncheckedUpdateInput;
 		},
 	): Promise<Space> {
-		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceSeq.toString()}`);
+		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceId}`);
 
 		const fitnessCenter = await this.txHost.tx.fitnessCenter.findFirst({
-			where: { spaceSeq },
+			where: { space: { id: spaceId } },
 			select: { id: true },
 		});
 
@@ -328,7 +328,7 @@ export class SpacesRepository {
 			data: data.fitnessCenter,
 		});
 
-		const space = await this.findByIdSeq(spaceSeq);
+		const space = await this.findById(spaceId);
 		if (!space) {
 			throw new Error("FITNESS_CENTER_UPDATE_FAILED");
 		}
@@ -340,17 +340,17 @@ export class SpacesRepository {
 	 * Space Category 위계 기반 Space ID 배열을 조회합니다.
 	 */
 	async findSpaceIdsByCategoryHierarchy(
-		spaceSeq: bigint,
+		spaceId: string,
 		scope: SpaceResourceScope = SpaceResourceScope.WITH_DESCENDANTS,
-	): Promise<bigint[]> {
+	): Promise<string[]> {
 		this.logger.debug(
-			`카테고리 위계 기반 Space ID 조회: spaceSeq=${spaceSeq.toString()}, scope=${scope}`,
+			`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId}, scope=${scope}`,
 		);
 
 		const spaceClassification =
 			await this.txHost.tx.spaceClassification.findFirst({
 				where: {
-					space: { seq: spaceSeq, removedAt: null },
+					space: { id: spaceId, removedAt: null },
 					removedAt: null,
 					category: {
 						removedAt: null,
@@ -360,7 +360,7 @@ export class SpacesRepository {
 			});
 
 		if (!spaceClassification) {
-			return [spaceSeq];
+			return [spaceId];
 		}
 
 		const categories = await this.txHost.tx.category.findMany({
@@ -432,13 +432,13 @@ export class SpacesRepository {
 				category: { id: { in: [...categoryIds] } },
 				space: { removedAt: null },
 			},
-			select: { spaceSeq: true },
+			select: { id: true },
 		});
 
 		return [
 			...new Set([
-				spaceSeq,
-				...classifications.map((classification) => classification.spaceSeq),
+				spaceId,
+				...classifications.map((classification) => classification.id),
 			]),
 		];
 	}

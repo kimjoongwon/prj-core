@@ -62,8 +62,8 @@ export class AbilityAggregate {
 	 * @returns 병합된 Ability 배열
 	 */
 	async getMergedAbilities(
-		roleIds: bigint[],
-		spaceId: bigint,
+		roleIds: string[],
+		spaceId: string,
 	): Promise<Ability[]> {
 		this.logger.debug(
 			`RoleAssignment 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceId=${spaceId}`,

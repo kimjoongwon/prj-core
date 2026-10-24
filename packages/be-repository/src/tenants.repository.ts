@@ -92,17 +92,17 @@ export class TenantsRepository {
 	}
 
 	async findActiveByUserIdAndSpaceId(
-		userSeq: bigint,
-		spaceSeq: bigint,
+		userId: string,
+		spaceId: string,
 	): Promise<Tenant | null> {
 		this.logger.debug(
-			`활성 사용자+Space 테넌트 조회: ${userSeq.toString()}/${spaceSeq.toString()}`,
+			`활성 사용자+Space 테넌트 조회: ${userId}/${spaceId}`,
 		);
 
 		const result = await this.txHost.tx.tenant.findFirst({
 			where: {
-				userSeq,
-				spaceSeq,
+				user: { id: userId },
+				space: { id: spaceId },
 				removedAt: null,
 			},
 			include: { role: true, space: true, user: true },
@@ -187,18 +187,18 @@ export class TenantsRepository {
 	}
 
 	async upsertByUserIdAndSpaceId(data: {
-		userSeq: bigint;
-		spaceSeq: bigint;
-		roleSeq: bigint;
+		userId: string;
+		spaceId: string;
+		roleId: string;
 	}): Promise<Tenant> {
 		this.logger.debug(
-			`테넌트 upsert: user=${data.userSeq.toString()}, space=${data.spaceSeq.toString()}`,
+			`테넌트 upsert: user=${data.userId}, space=${data.spaceId}`,
 		);
 
 		const existing = await this.txHost.tx.tenant.findFirst({
 			where: {
-				userSeq: data.userSeq,
-				spaceSeq: data.spaceSeq,
+				user: { id: data.userId },
+				space: { id: data.spaceId },
 			},
 			select: { id: true },
 		});
@@ -206,16 +206,16 @@ export class TenantsRepository {
 			? await this.txHost.tx.tenant.update({
 					where: { id: existing.id },
 					data: {
-						roleSeq: data.roleSeq,
+						role: { connect: { id: data.roleId } },
 						removedAt: null,
 					},
 					include: { user: true, space: true, role: true },
 				})
 			: await this.txHost.tx.tenant.create({
 					data: {
-						userSeq: data.userSeq,
-						spaceSeq: data.spaceSeq,
-						roleSeq: data.roleSeq,
+						user: { connect: { id: data.userId } },
+						space: { connect: { id: data.spaceId } },
+						role: { connect: { id: data.roleId } },
 					},
 					include: { user: true, space: true, role: true },
 				});

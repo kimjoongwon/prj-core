@@ -56,7 +56,7 @@ export class EmailVerificationAggregate {
 					status: "PENDING",
 					expiresAt,
 					verifiedAt: null,
-					verifiedUserId: null,
+					verifiedUser: { disconnect: true },
 					lastSentAt,
 					sendCount: { increment: 1 },
 					lastSendStatus: null,
@@ -153,8 +153,6 @@ export class EmailVerificationAggregate {
 			status: "VERIFIED",
 			verifiedAt: new Date(),
 			verifiedUser: { connect: { id: userId } },
-		} as Parameters<EmailVerificationsRepository["updateById"]>[1] & {
-			verifiedUser?: { connect: { id: string } };
 		});
 	}
 

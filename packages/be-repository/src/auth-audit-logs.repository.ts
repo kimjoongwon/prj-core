@@ -55,11 +55,11 @@ export class AuthAuditLogsRepository {
 	/**
 	 * 특정 사용자의 최근 인증 로그 조회
 	 */
-	async findByUserId(userSeq: bigint, limit: number): Promise<AuthAuditLog[]> {
-		this.logger.debug(`사용자별 인증 로그 조회: ${userSeq}, limit=${limit}`);
+	async findByUserId(userId: string, limit: number): Promise<AuthAuditLog[]> {
+		this.logger.debug(`사용자별 인증 로그 조회: ${userId}, limit=${limit}`);
 
 		const logs = await this.txHost.tx.authAuditLog.findMany({
-			where: { userSeq },
+			where: { user: { id: userId } },
 			include: { user: true },
 			orderBy: { createdAt: "desc" },
 			take: limit,

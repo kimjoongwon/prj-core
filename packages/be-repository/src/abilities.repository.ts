@@ -59,12 +59,12 @@ export class AbilitiesRepository {
 	/**
 	 * ID 목록으로 Ability 목록 조회 (Subject, Action 포함)
 	 */
-	async findByIds(ids: bigint[]): Promise<Ability[]> {
+	async findByIds(ids: string[]): Promise<Ability[]> {
 		this.logger.debug(`ID 목록으로 조회: ids.length=${ids.length}`);
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
-				seq: { in: ids },
+				id: { in: ids },
 				removedAt: null,
 			},
 			include: {

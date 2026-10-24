@@ -65,11 +65,11 @@ export class FoldersRepository {
 		return result ? toDomainEntity(Folder, result) : null;
 	}
 
-	async findBySpaceId(spaceSeq: bigint): Promise<Folder[]> {
-		this.logger.debug(`Space별 폴더 조회: ${spaceSeq.toString()}`);
+	async findBySpaceId(spaceId: string): Promise<Folder[]> {
+		this.logger.debug(`Space별 폴더 조회: ${spaceId}`);
 
 		const result = await this.txHost.tx.folder.findMany({
-			where: { spaceSeq },
+			where: { space: { id: spaceId } },
 			include: { space: true, parent: true, createdBy: true },
 			orderBy: [{ path: "asc" }],
 		});
@@ -77,14 +77,14 @@ export class FoldersRepository {
 		return result.map((item) => toDomainEntity(Folder, item));
 	}
 
-	async findByParentFolderId(parentFolderSeq: bigint | null): Promise<Folder[]> {
+	async findByParentFolderId(parentFolderId: string | null): Promise<Folder[]> {
 		this.logger.debug(
-			`상위 폴더 기준 조회: ${parentFolderSeq ? parentFolderSeq.toString() : "root"}`,
+			`상위 폴더 기준 조회: ${parentFolderId ?? "root"}`,
 		);
 
 		const result = await this.txHost.tx.folder.findMany({
 			where: {
-				parentFolderSeq,
+				parent: { id: parentFolderId },
 			},
 			include: { space: true, parent: true, createdBy: true },
 			orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
@@ -118,13 +118,23 @@ export class FoldersRepository {
 
 	async create(
 		data: AutoIdentityCreateInput<
-			Prisma.FolderUncheckedCreateInput,
+			Omit<Prisma.FolderUncheckedCreateInput, "spaceSeq" | "parentFolderSeq" | "createdBySeq">,
 			"id"
-		>,
+		> & {
+			spaceId: string;
+			parentFolderId?: string | null;
+			createdById?: string | null;
+		},
 	): Promise<Folder> {
 		this.logger.debug(`폴더 생성: ${data.name}`);
+		const { spaceId, parentFolderId, createdById, ...rest } = data;
 		const result = await this.txHost.tx.folder.create({
-			data,
+			data: {
+				...rest,
+				space: { connect: { id: spaceId } },
+				...(parentFolderId && { parent: { connect: { id: parentFolderId } } }),
+				...(createdById && { createdBy: { connect: { id: createdById } } }),
+			} as Prisma.FolderCreateInput,
 			include: { space: true, parent: true, createdBy: true },
 		});
 
@@ -134,14 +144,20 @@ export class FoldersRepository {
 	async updateById(
 		id: string,
 		data: AutoIdentityUpdateInput<
-			Prisma.FolderUncheckedUpdateInput,
+			Omit<Prisma.FolderUncheckedUpdateInput, "parentFolderSeq">,
 			"id"
-		>,
+		> & { parentFolderId?: string | null },
 	): Promise<Folder> {
-		this.logger.debug(`폴더 수정: ${id.toString()}`);
+		this.logger.debug(`폴더 수정: ${id}`);
+		const { parentFolderId, ...rest } = data;
 		const result = await this.txHost.tx.folder.update({
 			where: { id },
-			data,
+			data: {
+				...rest,
+				...(parentFolderId !== undefined && {
+					parent: { connect: { id: parentFolderId } },
+				}),
+			} as Prisma.FolderUpdateInput,
 			include: { space: true, parent: true, createdBy: true },
 		});
 

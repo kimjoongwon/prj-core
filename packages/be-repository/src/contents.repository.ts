@@ -108,12 +108,12 @@ export class ContentsRepository {
 
 	async findCommunityPostsBySpaceId(params: {
 		skip?: number;
-		spaceSeq: bigint;
+		spaceId: string;
 		take?: number;
 	}): Promise<{ items: CommunityPostRecord[]; totalCount: number }> {
 		const where: Prisma.ContentWhereInput = {
 			removedAt: null,
-			spaceSeq: params.spaceSeq,
+			space: { id: params.spaceId },
 			post: {
 				is: {
 					removedAt: null,
@@ -138,20 +138,20 @@ export class ContentsRepository {
 	}
 
 	async createCommunityPost(params: {
-		spaceSeq: bigint;
+		spaceId: string;
 		text: string;
 		title?: string | null;
-		userSeq: bigint;
+		userId: string;
 	}): Promise<CommunityPostRecord> {
 		this.logger.debug("커뮤니티 게시글 생성");
 
 		const result = await this.txHost.tx.content.create({
 			data: {
-				createdBySeq: params.userSeq,
+				createdBy: { connect: { id: params.userId } },
 				post: {
 					create: {},
 				},
-				spaceSeq: params.spaceSeq,
+				space: { connect: { id: params.spaceId } },
 				text: params.text,
 				title: params.title ?? null,
 				type: TextTypes.Textarea,

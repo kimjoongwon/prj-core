@@ -123,12 +123,19 @@ export class AssetsRepository {
 
 	async updateById(
 		id: string,
-		data: AutoIdentityUpdateInput<Prisma.AssetUncheckedUpdateInput, "id">,
+		data: AutoIdentityUpdateInput<
+			Omit<Prisma.AssetUncheckedUpdateInput, "folderSeq">,
+			"id"
+		> & { folderId?: string | null },
 	): Promise<Asset> {
-		this.logger.debug(`에셋 수정: ${id.toString()}`);
+		this.logger.debug(`에셋 수정: ${id}`);
+		const { folderId, ...rest } = data;
 		const result = await this.txHost.tx.asset.update({
 			where: { id },
-			data,
+			data: {
+				...rest,
+				...(folderId !== undefined && { folder: { connect: { id: folderId } } }),
+			} as Prisma.AssetUpdateInput,
 			include: { space: true, folder: true, createdBy: true },
 		});
 

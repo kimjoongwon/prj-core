@@ -19,12 +19,12 @@ export class PoliciesRepository {
 		>,
 	) {}
 
-	async findManyBySpaceId(spaceSeq: bigint): Promise<Policy[]> {
-		this.logger.debug(`Policy 목록 조회: spaceSeq=${spaceSeq.toString()}`);
+	async findManyBySpaceId(spaceId: string): Promise<Policy[]> {
+		this.logger.debug(`Policy 목록 조회: spaceId=${spaceId}`);
 
 		const results = await this.txHost.tx.policy.findMany({
 			where: {
-				spaceSeq,
+				space: { id: spaceId },
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
@@ -34,15 +34,15 @@ export class PoliciesRepository {
 		return results.map((result) => toDomainEntity(Policy, result));
 	}
 
-	async findByIdInSpace(id: string, spaceSeq: bigint): Promise<Policy | null> {
+	async findByIdInSpace(id: string, spaceId: string): Promise<Policy | null> {
 		this.logger.debug(
-			`Policy 조회: id=${id.toString()}, spaceSeq=${spaceSeq.toString()}`,
+			`Policy 조회: id=${id}, spaceId=${spaceId}`,
 		);
 
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
 				id,
-				spaceSeq,
+				space: { id: spaceId },
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
@@ -52,12 +52,12 @@ export class PoliciesRepository {
 	}
 
 	async findByNameInSpace(
-		spaceSeq: bigint,
+		spaceId: string,
 		name: string,
 	): Promise<Policy | null> {
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
-				spaceSeq,
+				space: { id: spaceId },
 				name,
 				removedAt: null,
 			},
@@ -68,34 +68,37 @@ export class PoliciesRepository {
 	}
 
 	async findActivePolicyIdsInSpace(
-		policyIds: bigint[],
-		spaceSeq: bigint,
-	): Promise<bigint[]> {
+		policyIds: string[],
+		spaceId: string,
+	): Promise<string[]> {
 		if (policyIds.length === 0) return [];
 
 		const results = await this.txHost.tx.policy.findMany({
 			where: {
-				seq: { in: policyIds },
-				spaceSeq,
+				id: { in: policyIds },
+				space: { id: spaceId },
 				removedAt: null,
 			},
-			select: { seq: true },
+			select: { id: true },
 		});
 
-		return results.map((policy) => policy.seq);
+		return results.map((policy) => policy.id);
 	}
 
 	async create(
 		data: AutoIdentityCreateInput<
-			Prisma.PolicyUncheckedCreateInput,
+			Omit<Prisma.PolicyUncheckedCreateInput, "spaceSeq" | "createdBySeq">,
 			"id"
-		>,
+		> & { spaceId: string; createdById?: string | null },
 	): Promise<Policy> {
-		this.logger.debug(
-			`Policy 생성: spaceSeq=${data.spaceSeq.toString()}, name=${data.name}`,
-		);
+		this.logger.debug(`Policy 생성: spaceId=${data.spaceId}, name=${data.name}`);
+		const { spaceId, createdById, ...rest } = data;
 		const result = await this.txHost.tx.policy.create({
-			data,
+			data: {
+				...rest,
+				space: { connect: { id: spaceId } },
+				...(createdById && { createdBy: { connect: { id: createdById } } }),
+			} as Prisma.PolicyCreateInput,
 			include: this.includePolicyDetails(),
 		});
 

@@ -19,7 +19,7 @@ export class RoutinesRepository {
 	 * Space 계층 공유를 지원하는 루틴 목록을 조회합니다.
 	 */
 	async findManyRoutines(params: {
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 		skip: number;
 		take: number;
 		search?: string;
@@ -34,7 +34,7 @@ export class RoutinesRepository {
 			...(params.spaceIds || params.contentLanguageCode
 				? {
 						space: {
-							...(params.spaceIds ? { seq: { in: params.spaceIds } } : {}),
+							...(params.spaceIds ? { id: { in: params.spaceIds } } : {}),
 							...(params.contentLanguageCode
 								? { contentLanguageCode: params.contentLanguageCode }
 								: {}),
@@ -64,16 +64,16 @@ export class RoutinesRepository {
 	 * 내부 숫자 ID로 루틴 하나를 조회합니다.
 	 */
 	async findRoutineById(
-		routineSeq: bigint,
-		spaceIds?: bigint[],
+		routineId: string,
+		spaceIds?: string[],
 	): Promise<Routine | null> {
-		this.logger.debug(`루틴 단건 조회: ${routineSeq}`);
+		this.logger.debug(`루틴 단건 조회: ${routineId}`);
 
 		const result = await this.txHost.tx.routine.findFirst({
 			where: {
-				seq: routineSeq,
+				id: routineId,
 				removedAt: null,
-				...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			},
 			include: this.includeRoutineDetails(),
 		});
@@ -87,10 +87,10 @@ export class RoutinesRepository {
 	async createRoutine(data: {
 		name: string;
 		label: string;
-		spaceSeq: bigint;
-		createdBySeq?: bigint;
+		spaceId: string;
+		createdById?: string;
 		activities?: {
-			taskSeq: bigint;
+			taskId: string;
 			order: number;
 			repetitions: number;
 			restTime: number;
@@ -103,12 +103,14 @@ export class RoutinesRepository {
 			data: {
 				name: data.name,
 				label: data.label,
-				spaceSeq: data.spaceSeq,
-				...(data.createdBySeq ? { createdBySeq: data.createdBySeq } : {}),
+				space: { connect: { id: data.spaceId } },
+				...(data.createdById
+					? { createdBy: { connect: { id: data.createdById } } }
+					: {}),
 				activities: data.activities
 					? {
 							create: data.activities.map((activity) => ({
-								taskSeq: activity.taskSeq,
+								task: { connect: { id: activity.taskId } },
 								order: activity.order,
 								repetitions: activity.repetitions,
 								restTime: activity.restTime,
@@ -127,12 +129,12 @@ export class RoutinesRepository {
 	 * 루틴 기본 정보와 활동 목록을 갱신합니다.
 	 */
 	async updateRoutine(
-		routineSeq: bigint,
+		routineId: string,
 		data: {
 			name?: string;
 			label?: string;
 			activities?: {
-				taskSeq: bigint;
+				taskId: string;
 				order: number;
 				repetitions: number;
 				restTime: number;
@@ -140,10 +142,10 @@ export class RoutinesRepository {
 			}[];
 		},
 	): Promise<Routine> {
-		this.logger.debug(`루틴 수정: ${routineSeq}`);
+		this.logger.debug(`루틴 수정: ${routineId}`);
 
 		const result = await this.txHost.tx.routine.update({
-			where: { seq: routineSeq },
+			where: { id: routineId },
 			data: {
 				name: data.name,
 				label: data.label,
@@ -153,7 +155,7 @@ export class RoutinesRepository {
 						: {
 								deleteMany: {},
 								create: data.activities.map((activity) => ({
-									taskSeq: activity.taskSeq,
+									task: { connect: { id: activity.taskId } },
 									order: activity.order,
 									repetitions: activity.repetitions,
 									restTime: activity.restTime,
@@ -170,17 +172,17 @@ export class RoutinesRepository {
 	/**
 	 * 루틴과 종속 활동을 소프트 삭제합니다.
 	 */
-	async softDeleteRoutine(routineSeq: bigint): Promise<void> {
-		this.logger.debug(`루틴 소프트 삭제: ${routineSeq}`);
+	async softDeleteRoutine(routineId: string): Promise<void> {
+		this.logger.debug(`루틴 소프트 삭제: ${routineId}`);
 
 		const removedAt = new Date();
 		await this.txHost.tx.routine.update({
-			where: { seq: routineSeq },
+			where: { id: routineId },
 			data: { removedAt },
 		});
 		await this.txHost.tx.activity.updateMany({
 			where: {
-				routineSeq,
+				routine: { id: routineId },
 				removedAt: null,
 			},
 			data: { removedAt },
@@ -190,12 +192,12 @@ export class RoutinesRepository {
 	/**
 	 * 특정 루틴을 사용하는 Program 수를 반환합니다.
 	 */
-	async countProgramsUsingRoutine(routineSeq: bigint): Promise<number> {
-		this.logger.debug(`루틴 사용 Program 수 조회: ${routineSeq}`);
+	async countProgramsUsingRoutine(routineId: string): Promise<number> {
+		this.logger.debug(`루틴 사용 Program 수 조회: ${routineId}`);
 
 		return this.txHost.tx.program.count({
 			where: {
-				routineSeq,
+				routine: { id: routineId },
 				removedAt: null,
 			},
 		});

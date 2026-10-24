@@ -22,7 +22,7 @@ export class RoleAggregate {
 	/**
 	 * ID로 역할 조회
 	 */
-	getById(id: bigint): Promise<Role | null> {
+	getById(id: string): Promise<Role | null> {
 		return this.repository.findById(id);
 	}
 

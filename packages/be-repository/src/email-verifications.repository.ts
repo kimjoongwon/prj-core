@@ -97,13 +97,15 @@ export class EmailVerificationsRepository {
 	async updateById(
 		id: string,
 		data: AutoIdentityUpdateInput<
-			Prisma.EmailVerificationUncheckedUpdateInput,
+			Omit<Prisma.EmailVerificationUncheckedUpdateInput, "verifiedUserSeq">,
 			"id"
-		>,
+		> & {
+			verifiedUser?: { connect: { id: string } } | { disconnect: true };
+		},
 	): Promise<EmailVerification> {
 		const result = await this.txHost.tx.emailVerification.update({
 			where: { id },
-			data,
+			data: data as Prisma.EmailVerificationUpdateInput,
 			include: { space: true, verifiedUser: true },
 		});
 

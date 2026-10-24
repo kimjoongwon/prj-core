@@ -59,7 +59,7 @@ export class InquiryAggregate {
 	/**
 	 * ID로 상세 조회 (스레드, 메시지, 참여자 포함)
 	 */
-	async findByIdWithDetails(id: string, spaceIds?: bigint[]): Promise<Inquiry> {
+	async findByIdWithDetails(id: string, spaceIds?: string[]): Promise<Inquiry> {
 		const inquiry =
 			await this.repository.findByIdWithThreadsAndMessagesAndParticipants(
 				id,
@@ -122,8 +122,8 @@ export class InquiryAggregate {
 	}
 
 	async getUpdateFormBootstrap(
-		inquiryId: bigint,
-		spaceIds?: bigint[],
+		inquiryId: string,
+		spaceIds?: string[],
 	): Promise<
 		CreateUpdateFormBootstrap<{
 			title: string;
@@ -164,7 +164,7 @@ export class InquiryAggregate {
 	@Transactional()
 	async create(
 		data: CreateInquiryAggregateInput,
-		actorUserId: bigint,
+		actorUserId: string,
 		initialContent?: string | null,
 	): Promise<Inquiry> {
 		this.logger.debug("문의 생성 중...");
@@ -178,7 +178,7 @@ export class InquiryAggregate {
 		});
 
 		const defaultThread = await this.repository.createThread({
-			inquirySeq: inquiry.id,
+			inquiryId: inquiry.id,
 			createdById: data.customerId ?? actorUserId,
 			title: inquiry.title,
 		});
@@ -229,7 +229,7 @@ export class InquiryAggregate {
 	// ============================================================================
 
 	async listMessages(params: {
-		inquiryId: bigint;
+		inquiryId: string;
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: InquiryMessage[]; totalCount: number }> {
@@ -238,9 +238,9 @@ export class InquiryAggregate {
 	}
 
 	async sendMessage(params: {
-		inquiryId: bigint;
-		actorUserId: bigint;
-		threadId?: bigint;
+		inquiryId: string;
+		actorUserId: string;
+		threadId?: string;
 		content: string;
 		contentType?: MessageContentType;
 		senderType?: SenderType;
@@ -257,7 +257,7 @@ export class InquiryAggregate {
 			? await this.repository.findThreadById(params.threadId)
 			: await this.repository.findDefaultThreadByInquiryId(params.inquiryId);
 
-		if (!thread || thread.inquirySeq !== params.inquiryId) {
+		if (!thread || thread.inquiry?.id !== params.inquiryId) {
 			throw new NotFoundException("문의 스레드를 찾을 수 없습니다");
 		}
 
@@ -275,8 +275,8 @@ export class InquiryAggregate {
 
 		const senderType = params.senderType ?? "USER";
 		const message = await this.repository.createMessage({
-			inquirySeq: params.inquiryId,
-			threadSeq: thread.id,
+			inquiryId: params.inquiryId,
+			threadId: thread.id,
 			senderId: params.actorUserId,
 			content: params.content,
 			contentType: params.contentType ?? "TEXT",
@@ -293,14 +293,14 @@ export class InquiryAggregate {
 			),
 		]);
 
-		if (inquiry.customerSeq !== params.actorUserId) {
+		if (inquiry.customer?.id !== params.actorUserId) {
 			await this.repository.recordFirstResponseById(params.inquiryId);
 		}
 
 		return message;
 	}
 
-	async getParticipants(inquiryId: bigint): Promise<InquiryParticipant[]> {
+	async getParticipants(inquiryId: string): Promise<InquiryParticipant[]> {
 		await this.findById(inquiryId);
 		return this.repository.findParticipantsByInquiryId(inquiryId);
 	}
@@ -313,7 +313,7 @@ export class InquiryAggregate {
 	 * 담당자 배정
 	 * - NEW 상태면 OPEN으로 변경
 	 */
-	async assignTo(id: string, assigneeId: bigint): Promise<Inquiry> {
+	async assignTo(id: string, assigneeId: string): Promise<Inquiry> {
 		this.logger.debug(`담당자 배정: ${id} -> ${assigneeId}`);
 
 		const inquiry = await this.findById(id);
@@ -373,7 +373,7 @@ export class InquiryAggregate {
 	/**
 	 * 상태별/카테고리별 통계
 	 */
-	async getStats(spaceIds?: bigint[]): Promise<{
+	async getStats(spaceIds?: string[]): Promise<{
 		byStatus: Array<{ status: InquiryStatus; count: number }>;
 		byCategory: Array<{ category: InquiryCategory; count: number }>;
 		overdue: {
@@ -401,7 +401,7 @@ export class InquiryAggregate {
 
 	private applySpaceScope(
 		where: Prisma.InquiryWhereInput,
-		spaceIds?: bigint[],
+		spaceIds?: string[],
 	): Prisma.InquiryWhereInput {
 		if (spaceIds === undefined) {
 			return where;
@@ -433,7 +433,7 @@ export class InquiryAggregate {
 	 * 감정 분석
 	 * 실제 구현은 별도 AI 서비스 또는 UseCase에서 처리
 	 */
-	async analyzeSentiment(inquiryId: bigint) {
+	async analyzeSentiment(inquiryId: string) {
 		this.logger.debug(`감정 분석 요청: ${inquiryId}`);
 
 		// 존재 확인

@@ -36,7 +36,7 @@ export class TimelinesRepository {
 	 * Space 기반 타임라인 목록 조회 (세션 수 포함)
 	 */
 	async findManyTimelines(params: {
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 		skip: number;
 		take: number;
 		search?: string | null;
@@ -50,7 +50,7 @@ export class TimelinesRepository {
 			...(params.spaceIds || params.contentLanguageCode
 				? {
 						space: {
-							...(params.spaceIds ? { seq: { in: params.spaceIds } } : {}),
+							...(params.spaceIds ? { id: { in: params.spaceIds } } : {}),
 							...(params.contentLanguageCode
 								? { contentLanguageCode: params.contentLanguageCode }
 								: {}),
@@ -86,14 +86,14 @@ export class TimelinesRepository {
 	/**
 	 * ID와 spaceId로 타임라인 단건 조회 (createdBy, space, 세션 수 포함)
 	 */
-	async findTimelineById(timelineSeq: bigint, spaceIds?: bigint[]) {
-		this.logger.debug(`타임라인 상세 조회: ${timelineSeq.toString()}`);
+	async findTimelineById(timelineId: string, spaceIds?: string[]) {
+		this.logger.debug(`타임라인 상세 조회: ${timelineId}`);
 
 		const timeline = await this.txHost.tx.timeline.findFirst({
 			where: {
-				seq: timelineSeq,
+				id: timelineId,
 				removedAt: null,
-				...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			},
 			include: {
 				createdBy: { select: { id: true, name: true } },
@@ -113,8 +113,8 @@ export class TimelinesRepository {
 	async createTimeline(data: {
 		name: string;
 		description?: string | null;
-		spaceSeq: bigint;
-		createdBySeq: bigint;
+		spaceId: string;
+		createdById: string;
 	}) {
 		this.logger.debug("타임라인 생성");
 
@@ -122,8 +122,8 @@ export class TimelinesRepository {
 			data: {
 				name: data.name,
 				description: data.description,
-				spaceSeq: data.spaceSeq,
-				createdBySeq: data.createdBySeq,
+				space: { connect: { id: data.spaceId } },
+				createdBy: { connect: { id: data.createdById } },
 			},
 			include: {
 				space: { select: { id: true } },
@@ -138,13 +138,13 @@ export class TimelinesRepository {
 	 * 타임라인 수정
 	 */
 	async updateTimeline(
-		timelineSeq: bigint,
+		timelineId: string,
 		data: { name?: string; description?: string | null },
 	) {
-		this.logger.debug(`타임라인 수정: ${timelineSeq}`);
+		this.logger.debug(`타임라인 수정: ${timelineId}`);
 
 		const timeline = await this.txHost.tx.timeline.update({
-			where: { seq: timelineSeq },
+			where: { id: timelineId },
 			data,
 		});
 
@@ -154,11 +154,11 @@ export class TimelinesRepository {
 	/**
 	 * 타임라인 소프트 삭제
 	 */
-	async softDeleteTimeline(timelineSeq: bigint): Promise<void> {
-		this.logger.debug(`타임라인 소프트 삭제: ${timelineSeq}`);
+	async softDeleteTimeline(timelineId: string): Promise<void> {
+		this.logger.debug(`타임라인 소프트 삭제: ${timelineId}`);
 
 		await this.txHost.tx.timeline.update({
-			where: { seq: timelineSeq },
+			where: { id: timelineId },
 			data: { removedAt: new Date() },
 		});
 	}
@@ -168,15 +168,15 @@ export class TimelinesRepository {
 	 */
 	async countTimelinesWithName(
 		name: string,
-		spaceSeq: bigint,
-		excludeId?: bigint,
+		spaceId: string,
+		excludeId?: string,
 	): Promise<number> {
 		return this.txHost.tx.timeline.count({
 			where: {
 				name,
-				spaceSeq,
+				space: { id: spaceId },
 				removedAt: null,
-				...(excludeId ? { seq: { not: excludeId } } : {}),
+				...(excludeId ? { id: { not: excludeId } } : {}),
 			},
 		});
 	}
@@ -189,13 +189,13 @@ export class TimelinesRepository {
 	 * 타임라인 기반 세션 목록 조회 (프로그램 수 포함)
 	 */
 	async findManySessions(
-		timelineSeq: bigint,
+		timelineId: string,
 		params: { skip: number; take: number; search?: string | null },
 	) {
-		this.logger.debug(`세션 목록 조회: timelineSeq=${timelineSeq.toString()}`);
+		this.logger.debug(`세션 목록 조회: timelineId=${timelineId}`);
 
 		const where: Prisma.SessionWhereInput = {
-			timelineSeq,
+			timeline: { id: timelineId },
 			removedAt: null,
 			...(params.search
 				? { name: { contains: params.search, mode: "insensitive" } }
@@ -224,13 +224,13 @@ export class TimelinesRepository {
 	/**
 	 * timelineSeq + sessionId로 세션 단건 조회 (timeline 관계 포함)
 	 */
-	async findSessionById(timelineSeq: bigint, sessionSeq: bigint) {
-		this.logger.debug(`세션 상세 조회: ${sessionSeq.toString()}`);
+	async findSessionById(timelineId: string, sessionId: string) {
+		this.logger.debug(`세션 상세 조회: ${sessionId}`);
 
 		const session = await this.txHost.tx.session.findFirst({
 			where: {
-				seq: sessionSeq,
-				timelineSeq,
+				id: sessionId,
+				timeline: { id: timelineId },
 				removedAt: null,
 			},
 			include: {
@@ -249,13 +249,17 @@ export class TimelinesRepository {
 	 */
 	async createSession(
 		data: AutoIdentityCreateInput<
-			Prisma.SessionUncheckedCreateInput,
+			Omit<Prisma.SessionUncheckedCreateInput, "timelineSeq">,
 			"id"
-		>,
+		> & { timelineId: string },
 	) {
 		this.logger.debug("세션 생성");
+		const { timelineId, ...rest } = data;
 		const session = await this.txHost.tx.session.create({
-			data,
+			data: {
+				...rest,
+				timeline: { connect: { id: timelineId } },
+			} as Prisma.SessionCreateInput,
 			include: { timeline: { select: { id: true } } },
 		});
 
@@ -266,15 +270,15 @@ export class TimelinesRepository {
 	 * 세션 수정
 	 */
 	async updateSession(
-		sessionSeq: bigint,
+		sessionId: string,
 		data: AutoIdentityUpdateInput<
 			Prisma.SessionUncheckedUpdateInput,
 			"id"
 		>,
 	) {
-		this.logger.debug(`세션 수정: ${sessionSeq.toString()}`);
+		this.logger.debug(`세션 수정: ${sessionId}`);
 		const session = await this.txHost.tx.session.update({
-			where: { seq: sessionSeq },
+			where: { id: sessionId },
 			data,
 			include: { timeline: { select: { id: true } } },
 		});
@@ -285,11 +289,11 @@ export class TimelinesRepository {
 	/**
 	 * 세션 소프트 삭제
 	 */
-	async softDeleteSession(sessionSeq: bigint): Promise<void> {
-		this.logger.debug(`세션 소프트 삭제: ${sessionSeq.toString()}`);
+	async softDeleteSession(sessionId: string): Promise<void> {
+		this.logger.debug(`세션 소프트 삭제: ${sessionId}`);
 
 		await this.txHost.tx.session.update({
-			where: { seq: sessionSeq },
+			where: { id: sessionId },
 			data: { removedAt: new Date() },
 		});
 	}
@@ -302,13 +306,13 @@ export class TimelinesRepository {
 	 * 세션 기반 프로그램 목록 조회
 	 */
 	async findManyPrograms(
-		sessionSeq: bigint,
+		sessionId: string,
 		params: { skip: number; take: number },
 	) {
-		this.logger.debug(`프로그램 목록 조회: sessionSeq=${sessionSeq.toString()}`);
+		this.logger.debug(`프로그램 목록 조회: sessionId=${sessionId}`);
 
 		const where: Prisma.ProgramWhereInput = {
-			sessionSeq,
+			session: { id: sessionId },
 			removedAt: null,
 		};
 
@@ -352,14 +356,14 @@ export class TimelinesRepository {
 	/**
 	 * sessionSeq + programId로 프로그램 단건 조회 (routine, session 포함)
 	 */
-	async findProgramById(sessionSeq: bigint, programSeq: bigint) {
-		this.logger.debug(`프로그램 상세 조회: ${programSeq.toString()}`);
+	async findProgramById(sessionId: string, programId: string) {
+		this.logger.debug(`프로그램 상세 조회: ${programId}`);
 
 		return this.txHost.tx.program
 			.findFirst({
 				where: {
-					seq: programSeq,
-					sessionSeq,
+					id: programId,
+					session: { id: sessionId },
 					removedAt: null,
 				},
 				include: {
@@ -400,9 +404,9 @@ export class TimelinesRepository {
 	 */
 	async createProgram(data: {
 		name: string;
-		routineSeq: bigint;
-		sessionSeq: bigint;
-		instructorSeq: bigint;
+		routineId: string;
+		sessionId: string;
+		instructorId: string;
 		capacity: number;
 		level?: string | null;
 		routineNameSnapshot?: string | null;
@@ -413,9 +417,9 @@ export class TimelinesRepository {
 		const program = await this.txHost.tx.program.create({
 			data: {
 				name: data.name,
-				routineSeq: data.routineSeq,
-				sessionSeq: data.sessionSeq,
-				instructorSeq: data.instructorSeq,
+				routine: { connect: { id: data.routineId } },
+				session: { connect: { id: data.sessionId } },
+				instructor: { connect: { id: data.instructorId } },
 				capacity: data.capacity,
 				level: data.level,
 				routineNameSnapshot: data.routineNameSnapshot,
@@ -434,7 +438,7 @@ export class TimelinesRepository {
 	 * 프로그램 수정
 	 */
 	async updateProgram(
-		programSeq: bigint,
+		programId: string,
 		data: {
 			name?: string;
 			routineSeq?: bigint;
@@ -445,9 +449,9 @@ export class TimelinesRepository {
 			routineLabelSnapshot?: string | null;
 		},
 	) {
-		this.logger.debug(`프로그램 수정: ${programSeq}`);
+		this.logger.debug(`프로그램 수정: ${programId}`);
 		const program = await this.txHost.tx.program.update({
-			where: { seq: programSeq },
+			where: { id: programId },
 			data,
 			include: {
 				routine: { select: { id: true } },
@@ -461,18 +465,18 @@ export class TimelinesRepository {
 	/**
 	 * 프로그램 소프트 삭제
 	 */
-	async softDeleteProgram(programSeq: bigint): Promise<void> {
-		this.logger.debug(`프로그램 소프트 삭제: ${programSeq}`);
+	async softDeleteProgram(programId: string): Promise<void> {
+		this.logger.debug(`프로그램 소프트 삭제: ${programId}`);
 
 		const removedAt = new Date();
 
 		await this.txHost.tx.program.update({
-			where: { seq: programSeq },
+			where: { id: programId },
 			data: { removedAt },
 		});
 		await this.txHost.tx.programActivity.updateMany({
 			where: {
-				programSeq,
+				program: { id: programId },
 				removedAt: null,
 			},
 			data: { removedAt },
@@ -480,9 +484,9 @@ export class TimelinesRepository {
 	}
 
 	async createProgramActivities(
-		programSeq: bigint,
+		programId: string,
 		activities: {
-			taskSeq: bigint;
+			taskId: string;
 			order: number;
 			repetitions: number;
 			restTime: number;
@@ -499,60 +503,52 @@ export class TimelinesRepository {
 			return;
 		}
 
-		await this.txHost.tx.programActivity.createMany({
-			data: activities.map((activity) => ({
-				programSeq,
-				taskSeq: activity.taskSeq,
-				order: activity.order,
-				repetitions: activity.repetitions,
-				restTime: activity.restTime,
-				notes: activity.notes ?? null,
-				exerciseName: activity.exerciseName,
-				exerciseDescription: activity.exerciseDescription ?? null,
-				exerciseDuration: activity.exerciseDuration,
-				exerciseCount: activity.exerciseCount,
-				imageFileId: activity.imageFileId ?? null,
-				videoFileId: activity.videoFileId ?? null,
-			})),
-		});
+		await Promise.all(
+			activities.map((activity) =>
+				this.txHost.tx.programActivity.create({
+					data: {
+						program: { connect: { id: programId } },
+						task: { connect: { id: activity.taskId } },
+						order: activity.order,
+						repetitions: activity.repetitions,
+						restTime: activity.restTime,
+						notes: activity.notes ?? null,
+						exerciseName: activity.exerciseName,
+						exerciseDescription: activity.exerciseDescription ?? null,
+						exerciseDuration: activity.exerciseDuration,
+						exerciseCount: activity.exerciseCount,
+						imageFileId: activity.imageFileId ?? null,
+						videoFileId: activity.videoFileId ?? null,
+					} as unknown as Prisma.ProgramActivityCreateInput,
+				}),
+			),
+		);
 	}
 
 	async replaceProgramActivities(
-		programSeq: bigint,
-		activities: {
-			taskSeq: bigint;
-			order: number;
-			repetitions: number;
-			restTime: number;
-			notes?: string | null;
-			exerciseName: string;
-			exerciseDescription?: string | null;
-			exerciseDuration: number;
-			exerciseCount: number;
-			imageFileId?: string | null;
-			videoFileId?: string | null;
-		}[],
+		programId: string,
+		activities: Parameters<TimelinesRepository["createProgramActivities"]>[1],
 	): Promise<void> {
 		await this.txHost.tx.programActivity.deleteMany({
-			where: { programSeq },
+			where: { program: { id: programId } },
 		});
-		await this.createProgramActivities(programSeq, activities);
+		await this.createProgramActivities(programId, activities);
 	}
 
 	/**
 	 * 세션 내 동일 루틴 프로그램 수 조회 (루틴 중복 확인용)
 	 */
 	async countProgramsWithRoutine(
-		sessionSeq: bigint,
-		routineSeq: bigint,
-		excludeId?: bigint,
+		sessionId: string,
+		routineId: string,
+		excludeId?: string,
 	): Promise<number> {
 		return this.txHost.tx.program.count({
 			where: {
-				sessionSeq,
-				routineSeq,
+				session: { id: sessionId },
+				routine: { id: routineId },
 				removedAt: null,
-				...(excludeId ? { seq: { not: excludeId } } : {}),
+				...(excludeId ? { id: { not: excludeId } } : {}),
 			},
 		});
 	}

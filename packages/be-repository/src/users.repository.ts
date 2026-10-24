@@ -295,15 +295,15 @@ export class UsersRepository {
 	 * IDP 계정 상세 projection 조회.
 	 */
 	async findIdpAccountById(params: {
-		userSeq: bigint;
+		userId: string;
 		spaceIds?: string[];
 	}): Promise<IdpAccountRecord | null> {
-		this.logger.debug(`IDP 계정 조회: ${params.userSeq}`);
+		this.logger.debug(`IDP 계정 조회: ${params.userId}`);
 
 		return this.txHost.tx.user
 			.findFirst({
 				where: this.applySpaceScopeToUserWhere(
-					{ seq: params.userSeq, removedAt: null },
+					{ id: params.userId, removedAt: null },
 					params.spaceIds,
 				),
 				select: IDP_ACCOUNT_SELECT,
@@ -315,7 +315,7 @@ export class UsersRepository {
 	 * IDP 계정 projection 수정. data는 UserStatus 상태 필드만 다룹니다.
 	 */
 	async updateIdpAccountById(params: {
-		userSeq: bigint;
+		userId: string;
 		data: {
 			isActive?: boolean;
 			failedLoginAttempts?: number;
@@ -324,10 +324,10 @@ export class UsersRepository {
 		};
 		spaceIds?: string[];
 	}): Promise<IdpAccountRecord | null> {
-		this.logger.debug(`IDP 계정 수정: ${params.userSeq}`);
+		this.logger.debug(`IDP 계정 수정: ${params.userId}`);
 
 		const account = await this.findIdpAccountById({
-			userSeq: params.userSeq,
+			userId: params.userId,
 			spaceIds: params.spaceIds,
 		});
 		if (!account) {
@@ -335,7 +335,7 @@ export class UsersRepository {
 		}
 
 		const updated = await this.txHost.tx.user.update({
-			where: { seq: params.userSeq },
+			where: { id: params.userId },
 			data: {
 				status: { upsert: { create: params.data, update: params.data } },
 			},

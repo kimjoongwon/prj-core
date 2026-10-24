@@ -56,14 +56,14 @@ export class InquiriesRepository {
 	 */
 	async findByIdWithThreadsAndMessagesAndParticipants(
 		id: string,
-		spaceIds?: bigint[],
+		spaceIds?: string[],
 	): Promise<Inquiry | null> {
 		this.logger.debug(`ID로 상세 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiry.findFirst({
 			where: {
 				id,
-				...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			},
 			include: {
 				...this.includeInquiryRelations(),
@@ -175,13 +175,21 @@ export class InquiriesRepository {
 	 */
 	async createThread(
 		data: AutoIdentityCreateInput<
-			Prisma.InquiryThreadUncheckedCreateInput,
+			Omit<
+				Prisma.InquiryThreadUncheckedCreateInput,
+				"inquirySeq" | "createdBySeq"
+			>,
 			"id"
-		>,
+		> & { inquiryId: string; createdById?: string | null },
 	): Promise<InquiryThread> {
-		this.logger.debug(`문의 스레드 생성: ${data.inquirySeq.toString()}`);
+		this.logger.debug(`문의 스레드 생성: ${data.inquiryId}`);
+		const { inquiryId, createdById, ...rest } = data;
 		const result = await this.txHost.tx.inquiryThread.create({
-			data,
+			data: {
+				...rest,
+				inquiry: { connect: { id: inquiryId } },
+				...(createdById && { createdBy: { connect: { id: createdById } } }),
+			} as Prisma.InquiryThreadCreateInput,
 			include: { inquiry: true, createdBy: true },
 		});
 
@@ -192,13 +200,13 @@ export class InquiriesRepository {
 	 * 문의의 기본 스레드 조회
 	 */
 	async findDefaultThreadByInquiryId(
-		inquirySeq: bigint,
+		inquiryId: string,
 	): Promise<InquiryThread | null> {
-		this.logger.debug(`기본 스레드 조회: ${inquirySeq}`);
+		this.logger.debug(`기본 스레드 조회: ${inquiryId}`);
 
 		const result = await this.txHost.tx.inquiryThread.findFirst({
 			where: {
-				inquirySeq,
+				inquiry: { id: inquiryId },
 			},
 			include: { inquiry: true, createdBy: true },
 			orderBy: { createdAt: "asc" },
@@ -225,14 +233,14 @@ export class InquiriesRepository {
 	 * 문의별 메시지 목록 조회
 	 */
 	async findMessagesByInquiryId(params: {
-		inquirySeq: bigint;
+		inquiryId: string;
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: InquiryMessage[]; totalCount: number }> {
-		this.logger.debug(`문의별 메시지 조회: ${params.inquirySeq}`);
+		this.logger.debug(`문의별 메시지 조회: ${params.inquiryId}`);
 
 		const where: Prisma.InquiryMessageWhereInput = {
-			inquirySeq: params.inquirySeq,
+			inquiry: { id: params.inquiryId },
 			isDeleted: false,
 		};
 
@@ -268,12 +276,12 @@ export class InquiriesRepository {
 	 * clientMessageId 중복 여부 확인
 	 */
 	async existsMessageByClientMessageId(
-		threadSeq: bigint,
+		threadId: string,
 		clientMessageId: string,
 	): Promise<boolean> {
 		const count = await this.txHost.tx.inquiryMessage.count({
 			where: {
-				threadSeq,
+				thread: { id: threadId },
 				clientMessageId,
 			},
 		});
@@ -286,13 +294,26 @@ export class InquiriesRepository {
 	 */
 	async createMessage(
 		data: AutoIdentityCreateInput<
-			Prisma.InquiryMessageUncheckedCreateInput,
+			Omit<
+				Prisma.InquiryMessageUncheckedCreateInput,
+				"inquirySeq" | "threadSeq" | "senderSeq"
+			>,
 			"id"
-		>,
+		> & {
+			inquiryId: string;
+			threadId: string;
+			senderId?: string | null;
+		},
 	): Promise<InquiryMessage> {
-		this.logger.debug(`메시지 생성: ${data.inquirySeq.toString()}`);
+		this.logger.debug(`메시지 생성: ${data.inquiryId}`);
+		const { inquiryId, threadId, senderId, ...rest } = data;
 		const result = await this.txHost.tx.inquiryMessage.create({
-			data,
+			data: {
+				...rest,
+				inquiry: { connect: { id: inquiryId } },
+				thread: { connect: { id: threadId } },
+				...(senderId && { sender: { connect: { id: senderId } } }),
+			} as Prisma.InquiryMessageCreateInput,
 			include: {
 				sender: {
 					select: { id: true, name: true, email: true },
@@ -311,13 +332,13 @@ export class InquiriesRepository {
 	 * 메시지 생성 후 스레드 집계 반영
 	 */
 	async touchThreadAfterMessage(
-		threadSeq: bigint,
+		threadId: string,
 		preview: string,
 	): Promise<InquiryThread> {
-		this.logger.debug(`스레드 마지막 메시지 갱신: ${threadSeq}`);
+		this.logger.debug(`스레드 마지막 메시지 갱신: ${threadId}`);
 
 		const result = await this.txHost.tx.inquiryThread.update({
-			where: { seq: threadSeq },
+			where: { id: threadId },
 			data: {
 				lastMessageAt: new Date(),
 				lastMessagePreview: preview.slice(0, 100),
@@ -333,13 +354,13 @@ export class InquiriesRepository {
 	 * 참여자 목록 조회
 	 */
 	async findParticipantsByInquiryId(
-		inquirySeq: bigint,
+		inquiryId: string,
 	): Promise<InquiryParticipant[]> {
-		this.logger.debug(`참여자 조회: ${inquirySeq}`);
+		this.logger.debug(`참여자 조회: ${inquiryId}`);
 
 		const results = await this.txHost.tx.inquiryParticipant.findMany({
 			where: {
-				inquirySeq,
+				inquiry: { id: inquiryId },
 				leftAt: null,
 			},
 			include: {
@@ -355,14 +376,14 @@ export class InquiriesRepository {
 	}
 
 	async incrementParticipantUnreadByInquiryId(
-		inquirySeq: bigint,
-		excludeUserId?: bigint,
+		inquiryId: string,
+		excludeUserId?: string,
 	): Promise<number> {
 		const result = await this.txHost.tx.inquiryParticipant.updateMany({
 			where: {
-				inquirySeq,
+				inquiry: { id: inquiryId },
 				leftAt: null,
-				...(excludeUserId ? { userSeq: { not: excludeUserId } } : {}),
+				...(excludeUserId && { user: { id: { not: excludeUserId } } }),
 			},
 			data: {
 				unreadCount: { increment: 1 },
@@ -414,13 +435,16 @@ export class InquiriesRepository {
 	/**
 	 * 담당자 배정
 	 */
-	async updateAssigneeById(id: string, assigneeSeq: bigint): Promise<Inquiry> {
-		this.logger.debug(`담당자 배정: ${id} -> ${assigneeSeq}`);
+	async updateAssigneeById(
+		id: string,
+		assigneeId: string,
+	): Promise<Inquiry> {
+		this.logger.debug(`담당자 배정: ${id} -> ${assigneeId}`);
 
 		const result = await this.txHost.tx.inquiry.update({
 			where: { id },
 			data: {
-				assigneeSeq,
+				assignee: { connect: { id: assigneeId } },
 				status: "OPEN",
 			},
 			include: this.includeInquiryRelations(),
@@ -634,7 +658,7 @@ export class InquiriesRepository {
 	/**
 	 * 상태별 문의 수 조회
 	 */
-	async countByStatus(spaceIds?: bigint[]): Promise<
+	async countByStatus(spaceIds?: string[]): Promise<
 		{
 			status: InquiryStatus;
 			count: number;
@@ -647,7 +671,7 @@ export class InquiriesRepository {
 		const results = await this.txHost.tx.inquiry.groupBy({
 			by: ["status"],
 			where: {
-				...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 				removedAt: null,
 			},
 			_count: {
@@ -664,7 +688,7 @@ export class InquiriesRepository {
 	/**
 	 * 카테고리별 문의 수 조회
 	 */
-	async countByCategory(spaceIds?: bigint[]): Promise<
+	async countByCategory(spaceIds?: string[]): Promise<
 		{
 			category: InquiryCategory;
 			count: number;
@@ -677,7 +701,7 @@ export class InquiriesRepository {
 		const results = await this.txHost.tx.inquiry.groupBy({
 			by: ["category"],
 			where: {
-				...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 				removedAt: null,
 			},
 			_count: {
@@ -694,7 +718,7 @@ export class InquiriesRepository {
 	/**
 	 * SLA 위반 문의 수 조회
 	 */
-	async countOverdue(spaceIds?: bigint[]): Promise<{
+	async countOverdue(spaceIds?: string[]): Promise<{
 		responseOverdue: number;
 		resolveOverdue: number;
 		total: number;
@@ -705,7 +729,7 @@ export class InquiriesRepository {
 
 		const now = new Date();
 		const baseWhere: Prisma.InquiryWhereInput = {
-			...(spaceIds ? { spaceSeq: { in: spaceIds } } : {}),
+			...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			removedAt: null,
 			resolvedAt: null,
 		};

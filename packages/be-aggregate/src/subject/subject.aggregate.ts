@@ -147,7 +147,7 @@ export class SubjectAggregate {
 	 * @param name - Subject 이름
 	 * @returns Subject ID 또는 null
 	 */
-	async getSubjectIdByName(name: string): Promise<bigint | null> {
+	async getSubjectIdByName(name: string): Promise<string | null> {
 		const subject = await this.repository.findByName(name);
 		return subject?.id ?? null;
 	}

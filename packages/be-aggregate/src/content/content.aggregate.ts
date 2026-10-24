@@ -22,7 +22,7 @@ export class ContentAggregate {
 
 		return this.repository.findCommunityPostsBySpaceId({
 			skip: input.skip,
-			spaceSeq: input.spaceId,
+			spaceId: input.spaceId,
 			take: input.take,
 		});
 	}
@@ -39,7 +39,7 @@ export class ContentAggregate {
 		}
 
 		return this.repository.createCommunityPost({
-			spaceSeq: input.spaceId,
+			spaceId: input.spaceId,
 			text,
 			title,
 			userId: input.userId,

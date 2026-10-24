@@ -6,7 +6,7 @@ import type { InquiriesRepository } from "@cocrepo/repository";
 type InquiryNumericIds = {
 	spaceId: bigint;
 	createdById?: bigint | null;
-	customerId?: bigint | null;
+	customerId?: string | null;
 	assigneeId?: bigint | null;
 };
 

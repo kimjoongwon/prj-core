@@ -48,8 +48,8 @@ export class TenantAccessRequestAggregate {
 	}
 
 	async findForReview(params: {
-		tenantAccessRequestId: bigint;
-		reviewerId: bigint;
+		tenantAccessRequestId: string;
+		reviewerId: string;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
 		await this.assertCanReview({
@@ -62,8 +62,8 @@ export class TenantAccessRequestAggregate {
 
 	@Transactional()
 	async approve(params: {
-		tenantAccessRequestId: bigint;
-		reviewerId: bigint;
+		tenantAccessRequestId: string;
+		reviewerId: string;
 		reviewComment?: string | null;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
@@ -75,9 +75,9 @@ export class TenantAccessRequestAggregate {
 		});
 
 		const tenant = await this.tenantsRepository.upsertByUserIdAndSpaceId({
-			userSeq: request.requesterSeq,
-			spaceSeq: request.spaceSeq,
-			roleSeq: request.requestedRoleSeq,
+			userId: request.requester?.id ?? "",
+			spaceId: request.space?.id ?? "",
+			roleId: request.requestedRole?.id ?? "",
 		});
 
 		return this.repository.updateById(params.tenantAccessRequestId, {
@@ -85,14 +85,14 @@ export class TenantAccessRequestAggregate {
 			reviewerId: params.reviewerId,
 			reviewComment: params.reviewComment ?? null,
 			reviewedAt: new Date(),
-			appliedTenantId: tenant.id,
+			appliedTenant: { connect: { id: tenant.id } },
 		});
 	}
 
 	@Transactional()
 	async reject(params: {
-		tenantAccessRequestId: bigint;
-		reviewerId: bigint;
+		tenantAccessRequestId: string;
+		reviewerId: string;
 		reviewComment?: string | null;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
@@ -147,7 +147,7 @@ export class TenantAccessRequestAggregate {
 
 	private async assertCanReview(params: {
 		request: TenantAccessRequest;
-		reviewerId: bigint;
+		reviewerId: string;
 		action: "read" | "approve" | "reject";
 	}): Promise<void> {
 		const scope = await this.getReviewerScope(params.reviewerId);
@@ -155,7 +155,7 @@ export class TenantAccessRequestAggregate {
 			return;
 		}
 
-		if (!scope.managedSpaceIds.includes(params.request.spaceSeq)) {
+		if (!scope.managedSpaceIds.includes(params.request.space?.id ?? "")) {
 			throw new ForbiddenException("해당 Space 신청을 처리할 권한이 없습니다");
 		}
 
@@ -169,7 +169,7 @@ export class TenantAccessRequestAggregate {
 		}
 	}
 
-	private async getReviewerScope(reviewerId: bigint): Promise<ReviewerScope> {
+	private async getReviewerScope(reviewerId: string): Promise<ReviewerScope> {
 		const reviewer =
 			await this.usersRepository.findByIdWithTenantsAndProfiles(reviewerId);
 		if (!reviewer) {
@@ -186,9 +186,9 @@ export class TenantAccessRequestAggregate {
 			),
 			managedSpaceIds: activeTenants
 				.filter((tenant) => tenant.role?.name === SYSTEM_ROLES.COMPANY_MANAGER)
-				.map((tenant) => tenant.spaceId)
+				.map((tenant) => tenant.space?.id)
 				.filter(
-					(spaceId): spaceId is bigint =>
+					(spaceId): spaceId is string =>
 						spaceId !== undefined && spaceId !== null,
 				),
 		};

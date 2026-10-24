@@ -119,14 +119,24 @@ export class TenantAccessRequestsRepository {
 	async updateById(
 		id: string,
 		data: AutoIdentityUpdateInput<
-			Prisma.TenantAccessRequestUncheckedUpdateInput,
+			Omit<
+				Prisma.TenantAccessRequestUncheckedUpdateInput,
+				"reviewerSeq" | "appliedTenantSeq"
+			>,
 			"id"
-		>,
+		> & {
+			reviewerId?: string;
+			appliedTenant?: { connect: { id: string } };
+		},
 	): Promise<TenantAccessRequest> {
-		this.logger.debug(`테넌트 접근 신청 수정: ${id.toString()}`);
+		this.logger.debug(`테넌트 접근 신청 수정: ${id}`);
+		const { reviewerId, ...rest } = data;
 		const result = await this.txHost.tx.tenantAccessRequest.update({
 			where: { id },
-			data,
+			data: {
+				...rest,
+				...(reviewerId && { reviewer: { connect: { id: reviewerId } } }),
+			} as Prisma.TenantAccessRequestUpdateInput,
 			include: tenantAccessRequestInclude,
 		});
 

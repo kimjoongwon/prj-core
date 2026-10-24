@@ -10,7 +10,6 @@ import {
 	TenantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
-import { formatDatabaseId } from "@cocrepo/type";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
 
@@ -36,7 +35,7 @@ export class IdpAccountAggregate {
 		});
 	}
 
-	async getById(userId: bigint) {
+	async getById(userId: string) {
 		this.logger.debug(`IDP 계정 상세 조회: ${userId}`);
 
 		const user = await this.findAccountInScope(userId);
@@ -45,11 +44,11 @@ export class IdpAccountAggregate {
 		return { ...user, accessGrants };
 	}
 
-	async getRecentAuditLogs(userId: bigint, limit = 5) {
+	async getRecentAuditLogs(userId: string, limit = 5) {
 		return this.auditLogsRepository.findByUserId(userId, limit);
 	}
 
-	async getAccessGrantFormBootstrap(userId: bigint) {
+	async getAccessGrantFormBootstrap(userId: string) {
 		this.logger.debug(`계정 접근 권한 부여 폼 조회: ${userId}`);
 
 		await this.findAccountInScope(userId);
@@ -79,8 +78,8 @@ export class IdpAccountAggregate {
 			).fitnessCenter;
 			const company = fitnessCenter?.company;
 			return {
-				value: formatDatabaseId(space.id),
-				label: space.name ?? formatDatabaseId(space.id),
+				value: space.id,
+				label: space.name ?? space.id,
 				description:
 					space.label ??
 					fitnessCenter?.address ??
@@ -90,7 +89,7 @@ export class IdpAccountAggregate {
 			};
 		});
 		const roleOptions = roles.map((role) => ({
-			value: formatDatabaseId(role.id),
+			value: role.id,
 			label: role.displayName ?? role.name,
 			description: role.description ?? role.name,
 		}));
@@ -118,7 +117,7 @@ export class IdpAccountAggregate {
 	}
 
 	@Transactional()
-	async grantAccess(userId: bigint, input: GrantIdpAccountAccessInput) {
+	async grantAccess(userId: string, input: GrantIdpAccountAccessInput) {
 		this.logger.debug(
 			`계정 접근 권한 부여: user=${userId}, space=${input.spaceId}, role=${input.roleId}`,
 		);
@@ -156,7 +155,7 @@ export class IdpAccountAggregate {
 	}
 
 	@Transactional()
-	async toggleActive(userId: bigint) {
+	async toggleActive(userId: string) {
 		this.logger.debug(`계정 활성/비활성 토글: ${userId}`);
 
 		const user = await this.findAccountInScope(userId);
@@ -174,7 +173,7 @@ export class IdpAccountAggregate {
 	}
 
 	@Transactional()
-	async resetFailedAttempts(userId: bigint): Promise<void> {
+	async resetFailedAttempts(userId: string): Promise<void> {
 		this.logger.debug(`실패 횟수 초기화: ${userId}`);
 
 		const updated = await this.usersRepository.updateIdpAccountById({
@@ -192,7 +191,7 @@ export class IdpAccountAggregate {
 		}
 	}
 
-	private async findAccountInScope(userId: bigint) {
+	private async findAccountInScope(userId: string) {
 		const user = await this.usersRepository.findIdpAccountById({
 			userId,
 			spaceIds: this.spaceContext.spaceIds,
@@ -205,7 +204,7 @@ export class IdpAccountAggregate {
 		return user;
 	}
 
-	private async getAccessGrants(userId: bigint) {
+	private async getAccessGrants(userId: string) {
 		const tenants = await this.tenantsRepository.findManyWithSpaceAndRole({
 			where: {
 				user: { id: userId },
@@ -242,7 +241,7 @@ export class IdpAccountAggregate {
 		});
 	}
 
-	private isSpaceOutOfScope(spaceId: bigint): boolean {
+	private isSpaceOutOfScope(spaceId: string): boolean {
 		const spaceIds = this.spaceContext.spaceIds;
 		return spaceIds !== undefined && !spaceIds.includes(spaceId);
 	}

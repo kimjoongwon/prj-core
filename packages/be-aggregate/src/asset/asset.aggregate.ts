@@ -65,12 +65,12 @@ export class AssetAggregate {
 		};
 	}
 
-	async getAssetById(assetId: bigint) {
+	async getAssetById(assetId: string) {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		return this.serializeAsset(asset);
 	}
 
-	async getAssetContent(assetId: bigint) {
+	async getAssetContent(assetId: string) {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		const object = await this.objectStorageService.getObject(asset.storageKey);
 
@@ -84,7 +84,7 @@ export class AssetAggregate {
 		};
 	}
 
-	async moveAsset(assetId: bigint, dto: MoveAssetCommandInput) {
+	async moveAsset(assetId: string, dto: MoveAssetCommandInput) {
 		const currentSpaceId = this.getCurrentSpaceId();
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		const targetFolder = await this.foldersRepository.findById(
@@ -115,7 +115,7 @@ export class AssetAggregate {
 
 		if (
 			this.spaceContext.spaceIds !== undefined &&
-			asset.spaceSeq !== this.getCurrentSpaceId()
+			asset.space?.id !== this.getCurrentSpaceId()
 		) {
 			throw new ForbiddenException("현재 Space의 에셋만 삭제할 수 있습니다");
 		}
@@ -127,7 +127,7 @@ export class AssetAggregate {
 	async uploadAsset(
 		dto: UploadAssetCommandInput,
 		file: UploadedAssetFile | undefined,
-		createdById: bigint,
+		createdById: string,
 	) {
 		if (!file) {
 			throw new BadRequestException("업로드할 파일이 필요합니다");
@@ -140,7 +140,7 @@ export class AssetAggregate {
 		if (
 			!targetFolder ||
 			targetFolder.removedAt ||
-			targetFolder.spaceSeq !== spaceId
+			targetFolder.space?.id !== spaceId
 		) {
 			throw new NotFoundException("업로드할 폴더를 찾을 수 없습니다");
 		}
@@ -281,7 +281,7 @@ export class AssetAggregate {
 	}
 
 	private buildStorageKey(
-		spaceId: bigint,
+		spaceId: string,
 		kind: AssetKind,
 		extension: string | null,
 	): StorageKey {

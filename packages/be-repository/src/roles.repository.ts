@@ -121,11 +121,11 @@ export class RolesRepository {
 	 * 역할에 연결된 테넌트 수 조회
 	 * 삭제 가능 여부 체크용
 	 */
-	async countTenantsByRoleId(roleSeq: bigint): Promise<number> {
-		this.logger.debug(`역할에 연결된 테넌트 수 조회: ${roleSeq.toString()}`);
+	async countTenantsByRoleId(roleId: string): Promise<number> {
+		this.logger.debug(`역할에 연결된 테넌트 수 조회: ${roleId}`);
 
 		return this.txHost.tx.tenant.count({
-			where: { roleSeq },
+			where: { role: { id: roleId } },
 		});
 	}
 }
