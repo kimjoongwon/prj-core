@@ -17,6 +17,7 @@ import DataGridSection from "./sections/DataGridSection";
 import FeedbackSection from "./sections/FeedbackSection";
 import FormInputSection from "./sections/FormInputSection";
 import OverlaySection from "./sections/OverlaySection";
+import ResourceLinkCards from "./ResourceLinkCards";
 import ShadowSection from "./sections/ShadowSection";
 import SurfaceRhythmSection from "./sections/SurfaceRhythmSection";
 
@@ -109,6 +110,7 @@ const ComponentGalleryExplorer = observer(function ComponentGalleryExplorer() {
 						← 링크 아카이브로
 					</Link>
 				</div>
+				<ResourceLinkCards />
 				<nav
 					aria-label="갤러리 섹션"
 					className="mt-6 flex flex-wrap gap-1.5"
