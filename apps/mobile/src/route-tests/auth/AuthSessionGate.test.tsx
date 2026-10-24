@@ -131,7 +131,7 @@ describe("AuthSessionGate", () => {
 					? JSON.stringify({
 							address: "서울 강남구",
 							contentLanguageCode: "ko_KR",
-							fitnessCenterName: "강남점",
+							spaceName: "강남점",
 							spaceId: "101",
 							tenantId: "201",
 							version: 2,
@@ -159,7 +159,7 @@ describe("AuthSessionGate", () => {
 		expect(mobileSession.authStatus).toBe("authenticated");
 		expect(mobileApiScope.tenantId).toBe("201");
 		expect(mobileApiScope.spaceId).toBe("101");
-		expect(mobileApiScope.fitnessCenterName).toBe("강남점");
+		expect(mobileApiScope.spaceName).toBe("강남점");
 		expect(mobileApiScope.isSpaceSelectionResolved).toBe(true);
 		expect(mockGetCurrentSpace).toHaveBeenCalled();
 		expect(mockSetApiSessionScope).toHaveBeenCalledWith(mobileApiScope);

@@ -131,8 +131,7 @@ export class AccountService {
 			})),
 			spaces: tenants?.map((t) => ({
 				spaceId: t.space.spaceId,
-				// 클레임 키는 기존 클라이언트와의 호환을 유지하고, 값의 원천만 Space 이름으로 바꿉니다.
-				fitnessCenterName: t.space?.name,
+				spaceName: t.space?.name,
 			})),
 		};
 	}

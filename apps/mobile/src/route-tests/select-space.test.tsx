@@ -160,14 +160,14 @@ describe("mobile select space route", () => {
     });
     expect(mobileApiScope.tenantId).toBe("201");
     expect(mobileApiScope.spaceId).toBe("101");
-    expect(mobileApiScope.fitnessCenterName).toBe("강남점");
+    expect(mobileApiScope.spaceName).toBe("강남점");
     const persistedSelectionCall = (
       SecureStore.setItemAsync as jest.Mock
     ).mock.calls.find(([key]) => String(key).includes("space-selection"));
     expect(JSON.parse(persistedSelectionCall?.[1] ?? "{}")).toMatchObject({
-      fitnessCenterName: "강남점",
+      spaceName: "강남점",
       logoImageFileId: "company-logo-branch",
-      version: 2,
+      version: 3,
     });
     expect(mockInvalidateQueries).toHaveBeenCalled();
     expect(mockReplace).toHaveBeenCalledWith("/");

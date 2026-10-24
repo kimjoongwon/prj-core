@@ -89,7 +89,7 @@ export interface AccountBootstrapSpaceLike {
 export interface AccountTenantSelection {
 	tenantId: DecimalId;
 	spaceId: DecimalId;
-	fitnessCenterName: string;
+	spaceName: string;
 	contentLanguageCode?: string | null;
 }
 
@@ -101,7 +101,7 @@ export interface AccountBootstrapLike {
 	setAvailableSpaces: (spaces: AccountTenantSelection[]) => void;
 	setCurrentTenant: (
 		tenantId: DecimalId,
-		fitnessCenterName: string,
+		spaceName: string,
 		contentLanguageCode?: string | null,
 		spaceId?: DecimalId | null,
 	) => void;

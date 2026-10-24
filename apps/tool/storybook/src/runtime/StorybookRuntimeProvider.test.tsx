@@ -34,7 +34,7 @@ async function createSpaceSnapshot() {
 
 	return observer(function SpaceSnapshot() {
 		const account = useApp().account;
-		const value = `${account.currentTenantId ?? "none"}:${account.currentSpaceId ?? "none"}:${account.currentFitnessCenterName ?? "none"}:${account.isSelectionResolved ? "resolved" : "pending"}`;
+		const value = `${account.currentTenantId ?? "none"}:${account.currentSpaceId ?? "none"}:${account.currentSpaceName ?? "none"}:${account.isSelectionResolved ? "resolved" : "pending"}`;
 
 		return <output aria-label="storybook-admin-space">{value}</output>;
 	});

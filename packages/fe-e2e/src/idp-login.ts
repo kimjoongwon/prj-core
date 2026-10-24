@@ -127,7 +127,7 @@ async function waitForConsoleSpaceSelection(
 					account?: {
 						tenantId?: unknown;
 						spaceId?: unknown;
-						fitnessCenterName?: unknown;
+						spaceName?: unknown;
 						contentLanguageCode?: unknown;
 					};
 				};
@@ -135,12 +135,12 @@ async function waitForConsoleSpaceSelection(
 				if (
 					typeof account?.tenantId === "string" &&
 					typeof account.spaceId === "string" &&
-					typeof account.fitnessCenterName === "string"
+					typeof account.spaceName === "string"
 				) {
 					return {
 						tenantId: account.tenantId,
 						spaceId: account.spaceId,
-						fitnessCenterName: account.fitnessCenterName,
+						spaceName: account.spaceName,
 						contentLanguageCode:
 							typeof account.contentLanguageCode === "string"
 								? account.contentLanguageCode

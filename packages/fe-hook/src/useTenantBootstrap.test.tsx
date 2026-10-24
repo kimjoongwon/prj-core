@@ -120,13 +120,13 @@ describe("useTenantBootstrap", () => {
 			{
 				tenantId: "1",
 				spaceId: "100",
-				fitnessCenterName: "Fitness Center A",
+				spaceName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
 			{
 				tenantId: "2",
 				spaceId: "101",
-				fitnessCenterName: "Fitness Center B",
+				spaceName: "Fitness Center B",
 				contentLanguageCode: "en_US",
 			},
 		]);

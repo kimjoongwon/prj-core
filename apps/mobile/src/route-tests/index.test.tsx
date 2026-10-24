@@ -395,7 +395,7 @@ describe("mobile reservation booking routes", () => {
     mobileApiScope.setSpaceInfo({
       tenantId: "tenant-1",
       spaceId: "space-1",
-      fitnessCenterName: "강남점",
+      spaceName: "강남점",
       contentLanguageCode: "ko_KR",
     });
     bookingFeedQuery = createQuery([

@@ -4,7 +4,9 @@ import type { PersistStorage } from "../persistence/persistStorage";
 import type { AuthSession } from "./authSession";
 
 const ACCOUNT_PERSIST_SECTION = "account";
-const ACCOUNT_TENANT_SELECTION_PERSIST_VERSION = 2 as const;
+const ACCOUNT_TENANT_SELECTION_PERSIST_VERSION = 3 as const;
+// version 2는 이름 키가 fitnessCenterName이던 시절의 저장 형태입니다.
+const LEGACY_ACCOUNT_TENANT_SELECTION_PERSIST_VERSION = 2 as const;
 
 /**
  * RootStore가 AccountStore를 조립할 때 제공하는 완성된 의존성입니다.
@@ -17,7 +19,7 @@ export interface AccountStoreDependencies {
 export interface AccountSpaceInfo {
 	tenantId: DecimalId;
 	spaceId: DecimalId;
-	fitnessCenterName: string;
+	spaceName: string;
 	contentLanguageCode?: string | null;
 }
 
@@ -25,10 +27,15 @@ interface PersistedAccountTenantSelection {
 	version: typeof ACCOUNT_TENANT_SELECTION_PERSIST_VERSION;
 	tenantId: DecimalId | null;
 	spaceId: DecimalId | null;
-	fitnessCenterName: string | null;
+	spaceName: string | null;
 	contentLanguageCode: string | null;
 	availableSpaces: AccountSpaceInfo[];
 }
+
+/** version 2 저장 형태에는 이름이 fitnessCenterName 키로 남아 있습니다. */
+type PersistedAccountTenantSelectionRecord = PersistedAccountTenantSelection & {
+	fitnessCenterName?: unknown;
+};
 
 /**
  * AccountStore - 현재 로그인 계정의 인증 세션과 tenant/space 선택 상태를 관리합니다.
@@ -39,7 +46,7 @@ export class AccountStore {
 	currentTenantId: DecimalId | null = null;
 	selectedTenantId: DecimalId | null = null;
 	currentSpaceId: DecimalId | null = null;
-	currentFitnessCenterName: string | null = null;
+	currentSpaceName: string | null = null;
 	contentLanguageCode: string | null = null;
 	availableSpaces: AccountSpaceInfo[] = [];
 	isHydrated = false;
@@ -70,7 +77,7 @@ export class AccountStore {
 			this.currentTenantId = persisted.tenantId;
 			this.selectedTenantId = persisted.tenantId;
 			this.currentSpaceId = persisted.spaceId;
-			this.currentFitnessCenterName = persisted.fitnessCenterName;
+			this.currentSpaceName = persisted.spaceName;
 			this.contentLanguageCode = persisted.contentLanguageCode ?? null;
 			this.availableSpaces = persisted.availableSpaces;
 		}
@@ -90,7 +97,7 @@ export class AccountStore {
 	 */
 	setCurrentTenant(
 		tenantId: DecimalId,
-		fitnessCenterName: string,
+		spaceName: string,
 		contentLanguageCode?: string | null,
 		spaceId?: DecimalId | null,
 	): void {
@@ -100,7 +107,7 @@ export class AccountStore {
 			(space) => space.tenantId === tenantId,
 		);
 		this.currentSpaceId = spaceId ?? selectedSpace?.spaceId ?? null;
-		this.currentFitnessCenterName = fitnessCenterName;
+		this.currentSpaceName = spaceName;
 		this.contentLanguageCode =
 			contentLanguageCode === undefined
 				? (selectedSpace?.contentLanguageCode ?? null)
@@ -121,7 +128,7 @@ export class AccountStore {
 		this.currentTenantId = null;
 		this.selectedTenantId = null;
 		this.currentSpaceId = null;
-		this.currentFitnessCenterName = null;
+		this.currentSpaceName = null;
 		this.contentLanguageCode = null;
 	}
 
@@ -181,10 +188,9 @@ export class AccountStore {
 			version: ACCOUNT_TENANT_SELECTION_PERSIST_VERSION,
 			tenantId: normalizePersistedTenantId(data),
 			spaceId: normalizePersistedSpaceId(data),
-			fitnessCenterName:
-				normalizePersistedTenantId(data) !== null &&
-				typeof data.fitnessCenterName === "string"
-					? data.fitnessCenterName
+			spaceName:
+				normalizePersistedTenantId(data) !== null
+					? normalizePersistedSpaceName(data)
 					: null,
 			contentLanguageCode:
 				normalizePersistedTenantId(data) !== null &&
@@ -201,7 +207,7 @@ export class AccountStore {
 				version: ACCOUNT_TENANT_SELECTION_PERSIST_VERSION,
 				tenantId: this.currentTenantId,
 				spaceId: this.currentSpaceId,
-				fitnessCenterName: this.currentFitnessCenterName,
+				spaceName: this.currentSpaceName,
 				contentLanguageCode: this.contentLanguageCode,
 				availableSpaces: this.availableSpaces,
 			}),
@@ -223,11 +229,27 @@ function isPersistedRecord(value: unknown): value is Record<string, unknown> {
 
 function isPersistedAccountTenantSelection(
 	value: unknown,
-): value is PersistedAccountTenantSelection {
+): value is PersistedAccountTenantSelectionRecord {
 	return (
 		isPersistedRecord(value) &&
-		value.version === ACCOUNT_TENANT_SELECTION_PERSIST_VERSION
+		(value.version === ACCOUNT_TENANT_SELECTION_PERSIST_VERSION ||
+			value.version === LEGACY_ACCOUNT_TENANT_SELECTION_PERSIST_VERSION)
 	);
+}
+
+function normalizePersistedSpaceName(
+	data: PersistedAccountTenantSelectionRecord,
+): string | null {
+	if (typeof data.spaceName === "string") {
+		return data.spaceName;
+	}
+
+	// version 2 저장 형태에서 이름 키를 옮겨 읽습니다.
+	if (typeof data.fitnessCenterName === "string") {
+		return data.fitnessCenterName;
+	}
+
+	return null;
 }
 
 function isEmptyPersistedAccountTenantSelection(
@@ -237,7 +259,7 @@ function isEmptyPersistedAccountTenantSelection(
 		data.version === ACCOUNT_TENANT_SELECTION_PERSIST_VERSION &&
 		data.tenantId === null &&
 		data.spaceId === null &&
-		data.fitnessCenterName === null &&
+		data.spaceName === null &&
 		data.contentLanguageCode === null &&
 		data.availableSpaces.length === 0
 	);
@@ -275,18 +297,15 @@ function normalizeAccountSpaces(spaces: Iterable<unknown>): AccountSpaceInfo[] {
 
 		const tenantId = normalizeDecimalId(space.tenantId);
 		const spaceId = normalizeDecimalId(space.spaceId);
-		if (
-			tenantId === null ||
-			spaceId === null ||
-			typeof space.fitnessCenterName !== "string"
-		) {
+		const spaceName = readPersistedSpaceName(space);
+		if (tenantId === null || spaceId === null || spaceName === null) {
 			continue;
 		}
 
 		normalizedSpaces.push({
 			tenantId,
 			spaceId,
-			fitnessCenterName: space.fitnessCenterName,
+			spaceName,
 			contentLanguageCode:
 				typeof space.contentLanguageCode === "string"
 					? space.contentLanguageCode
@@ -295,4 +314,17 @@ function normalizeAccountSpaces(spaces: Iterable<unknown>): AccountSpaceInfo[] {
 	}
 
 	return normalizedSpaces;
+}
+
+function readPersistedSpaceName(space: Record<string, unknown>): string | null {
+	if (typeof space.spaceName === "string") {
+		return space.spaceName;
+	}
+
+	// version 2 저장 형태의 목록 항목에서 이름 키를 옮겨 읽습니다.
+	if (typeof space.fitnessCenterName === "string") {
+		return space.fitnessCenterName;
+	}
+
+	return null;
 }

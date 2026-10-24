@@ -180,7 +180,7 @@ describe("mobile expo tabs layout", () => {
     mobileApiScope.clear();
     mobileApiScope.setSpaceInfo({
       address: "서울 강남구",
-      fitnessCenterName: "강남점",
+      spaceName: "강남점",
       spaceId: "101",
       tenantId: "201",
     });
