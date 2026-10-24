@@ -5,6 +5,7 @@ import {
 	type ViewProps,
 	type ViewStyle,
 } from "react-native";
+import type { ViewInstance } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { tv } from "tailwind-variants";
 export type ScreenFrameEdge = "top" | "right" | "bottom" | "left";
@@ -35,7 +36,7 @@ const screenFrameClassNames = tv({
 		frame: "flex-1",
 	},
 });
-export const ScreenFrame = forwardRef<View, ScreenFrameProps>(
+export const ScreenFrame = forwardRef<ViewInstance, ScreenFrameProps>(
 	(
 		{
 			backgroundColor,
