@@ -1,78 +1,78 @@
 {
-  "name": "@cocrepo/hook",
-  "version": "1.3.18",
-  "description": "Shared React hook library",
-  "publishConfig": {
-    "access": "public"
-  },
-  "exports": {
-    ".": {
-      "types": "./index.ts",
-      "import": "./index.ts",
-      "default": "./index.ts"
-    },
-    "./useFormField": {
-      "types": "./src/useFormField.ts",
-      "import": "./src/useFormField.ts",
-      "default": "./src/useFormField.ts"
-    },
-    "./package.json": "./package.json"
-  },
-  "main": "./index.ts",
-  "module": "./index.ts",
-  "types": "./index.ts",
-  "files": [
-    "src",
-    "index.ts",
-    "README.md",
-    "!dist/**/*.map",
-    "!dist/**/*.tsbuildinfo",
-    "!src/**/test/**",
-    "!src/**/tests/**",
-    "!src/**/*.test.*",
-    "!src/**/*.spec.*"
-  ],
-  "scripts": {
-    "build": "echo 'Build not needed - using source files directly'",
-    "start:dev": "echo 'Development mode - no build needed'",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "format": "biome check --write .",
-    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
-    "type-check:prod": "tsc --noEmit",
-    "test": "vitest --passWithNoTests",
-    "test:watch": "vitest --watch",
-    "clean": "rm -rf .turbo && rm -rf node_modules",
-    "clean:dist": "echo 'No dist folder to clean'",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "author": "kimjoongwon",
-  "license": "ISC",
-  "dependencies": {
-    "@cocrepo/api": "workspace:*",
-    "@cocrepo/constant": "workspace:*",
-    "@cocrepo/store": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*",
-    "@cocrepo/type": "workspace:*",
-    "@tanstack/react-query": "catalog:",
-    "next": "^16.4.3",
-    "nuqs": "catalog:"
-  },
-  "devDependencies": {
-    "@types/react": "catalog:",
-    "mobx": "catalog:",
-    "mobx-react-lite": "catalog:",
-    "react": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
-  },
-  "peerDependencies": {
-    "react": ">=18.0.0"
-  },
-  "private": false,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kimjoongwon/prj-core.git",
-    "directory": "packages/fe-hook"
-  }
+	"name": "@cocrepo/hook",
+	"version": "2.0.0",
+	"description": "Shared React hook library",
+	"publishConfig": {
+		"access": "public"
+	},
+	"exports": {
+		".": {
+			"types": "./index.ts",
+			"import": "./index.ts",
+			"default": "./index.ts"
+		},
+		"./useFormField": {
+			"types": "./src/useFormField.ts",
+			"import": "./src/useFormField.ts",
+			"default": "./src/useFormField.ts"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./index.ts",
+	"module": "./index.ts",
+	"types": "./index.ts",
+	"files": [
+		"src",
+		"index.ts",
+		"README.md",
+		"!dist/**/*.map",
+		"!dist/**/*.tsbuildinfo",
+		"!src/**/test/**",
+		"!src/**/tests/**",
+		"!src/**/*.test.*",
+		"!src/**/*.spec.*"
+	],
+	"scripts": {
+		"build": "echo 'Build not needed - using source files directly'",
+		"start:dev": "echo 'Development mode - no build needed'",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"format": "biome check --write .",
+		"type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+		"type-check:prod": "tsc --noEmit",
+		"test": "vitest --passWithNoTests",
+		"test:watch": "vitest --watch",
+		"clean": "rm -rf .turbo && rm -rf node_modules",
+		"clean:dist": "echo 'No dist folder to clean'",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"author": "kimjoongwon",
+	"license": "ISC",
+	"dependencies": {
+		"@cocrepo/api": "workspace:*",
+		"@cocrepo/constant": "workspace:*",
+		"@cocrepo/store": "workspace:*",
+		"@cocrepo/toolkit": "workspace:*",
+		"@cocrepo/type": "workspace:*",
+		"@tanstack/react-query": "catalog:",
+		"next": "^16.4.3",
+		"nuqs": "catalog:"
+	},
+	"devDependencies": {
+		"@types/react": "catalog:",
+		"mobx": "catalog:",
+		"mobx-react-lite": "catalog:",
+		"react": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
+	},
+	"peerDependencies": {
+		"react": ">=18.0.0"
+	},
+	"private": false,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kimjoongwon/prj-core.git",
+		"directory": "packages/fe-hook"
+	}
 }

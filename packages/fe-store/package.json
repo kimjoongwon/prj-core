@@ -1,80 +1,80 @@
 {
-  "name": "@cocrepo/store",
-  "version": "1.0.13",
-  "description": "Global state management library using MobX",
-  "publishConfig": {
-    "access": "public"
-  },
-  "exports": {
-    ".": {
-      "types": "./index.ts",
-      "import": "./index.ts",
-      "default": "./index.ts"
-    },
-    "./package.json": "./package.json"
-  },
-  "main": "./index.ts",
-  "module": "./index.ts",
-  "types": "./index.ts",
-  "files": [
-    "src",
-    "index.ts",
-    "README.md",
-    "!dist/**/*.map",
-    "!dist/**/*.tsbuildinfo",
-    "!src/**/test/**",
-    "!src/**/tests/**",
-    "!src/**/*.test.*",
-    "!src/**/*.spec.*"
-  ],
-  "scripts": {
-    "build": "echo 'Build not needed - using source files directly'",
-    "start:dev": "echo 'Development mode - no build needed'",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "format": "biome check --write .",
-    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
-    "type-check:prod": "tsc --noEmit",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "clean": "rm -rf .turbo && rm -rf node_modules",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "author": "kimjoongwon",
-  "license": "ISC",
-  "peerDependencies": {
-    "@cocrepo/api": "workspace:*"
-  },
-  "dependencies": {
-    "@casl/ability": "^6.8.1",
-    "@cocrepo/constant": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*",
-    "@cocrepo/type": "workspace:*"
-  },
-  "devDependencies": {
-    "@casl/ability": "^6.7.1",
-    "@heroui/react": "3.1.0",
-    "@tanstack/react-query": "catalog:",
-    "@testing-library/jest-dom": "catalog:",
-    "@testing-library/react": "catalog:",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react-swc": "catalog:",
-    "@vitest/ui": "catalog:",
-    "jsdom": "catalog:",
-    "mobx": "catalog:",
-    "mobx-react-lite": "catalog:",
-    "nuqs": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
-  },
-  "private": false,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kimjoongwon/prj-core.git",
-    "directory": "packages/fe-store"
-  }
+	"name": "@cocrepo/store",
+	"version": "2.0.0",
+	"description": "Global state management library using MobX",
+	"publishConfig": {
+		"access": "public"
+	},
+	"exports": {
+		".": {
+			"types": "./index.ts",
+			"import": "./index.ts",
+			"default": "./index.ts"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./index.ts",
+	"module": "./index.ts",
+	"types": "./index.ts",
+	"files": [
+		"src",
+		"index.ts",
+		"README.md",
+		"!dist/**/*.map",
+		"!dist/**/*.tsbuildinfo",
+		"!src/**/test/**",
+		"!src/**/tests/**",
+		"!src/**/*.test.*",
+		"!src/**/*.spec.*"
+	],
+	"scripts": {
+		"build": "echo 'Build not needed - using source files directly'",
+		"start:dev": "echo 'Development mode - no build needed'",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"format": "biome check --write .",
+		"type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+		"type-check:prod": "tsc --noEmit",
+		"test": "vitest",
+		"test:watch": "vitest --watch",
+		"clean": "rm -rf .turbo && rm -rf node_modules",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"author": "kimjoongwon",
+	"license": "ISC",
+	"peerDependencies": {
+		"@cocrepo/api": "workspace:*"
+	},
+	"dependencies": {
+		"@casl/ability": "^6.8.1",
+		"@cocrepo/constant": "workspace:*",
+		"@cocrepo/toolkit": "workspace:*",
+		"@cocrepo/type": "workspace:*"
+	},
+	"devDependencies": {
+		"@casl/ability": "^6.7.1",
+		"@heroui/react": "3.1.0",
+		"@tanstack/react-query": "catalog:",
+		"@testing-library/jest-dom": "catalog:",
+		"@testing-library/react": "catalog:",
+		"@types/node": "catalog:",
+		"@types/react": "catalog:",
+		"@types/react-dom": "catalog:",
+		"@vitejs/plugin-react-swc": "catalog:",
+		"@vitest/ui": "catalog:",
+		"jsdom": "catalog:",
+		"mobx": "catalog:",
+		"mobx-react-lite": "catalog:",
+		"nuqs": "catalog:",
+		"react": "catalog:",
+		"react-dom": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
+	},
+	"private": false,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kimjoongwon/prj-core.git",
+		"directory": "packages/fe-store"
+	}
 }
