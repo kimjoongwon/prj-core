@@ -1,5 +1,6 @@
 import { forwardRef, type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
+import type { ViewInstance } from "react-native";
 import { tv } from "tailwind-variants";
 import { joinClassNames } from "../class-name";
 import { stackGapRootClasses, type StackGap } from "../stack-gap";
@@ -68,7 +69,7 @@ const hStackClassNames = tv({
 	},
 });
 
-export const HStack = forwardRef<View, HStackProps>(
+export const HStack = forwardRef<ViewInstance, HStackProps>(
 	(
 		{
 			alignItems,
