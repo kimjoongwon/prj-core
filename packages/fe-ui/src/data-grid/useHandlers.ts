@@ -2,7 +2,6 @@
 
 import type { SortingState } from "@tanstack/react-table";
 import { action } from "mobx";
-import { useMemo } from "react";
 import {
 	DATA_GRID_DEFAULT_PAGE_SIZE,
 	type DataGridQueryState,
@@ -86,6 +85,7 @@ export const setValue = action(
 		}
 		const originalFields = state.originalValues.get(row.id) ?? {};
 		// Object.hasOwn은 ES2022 lib이 필요해 소비 앱(tsconfig lib ES2020) 컴파일을 깨므로 own-property 등가 검사로 대체합니다.
+		// biome-ignore lint/suspicious/noPrototypeBuiltins: 위와 같은 이유로 Object.hasOwn 대신 등가 검사를 유지합니다.
 		if (!Object.prototype.hasOwnProperty.call(originalFields, fieldName)) {
 			originalFields[fieldName] = row[field];
 			state.originalValues.set(row.id, originalFields);
@@ -172,26 +172,22 @@ export const combineRowsWithChanges = <TData extends DataGridRow>(
 		.map((row) => ({ ...row })),
 ];
 
-/** DataGrid 데이터에 대한 동작을 안정된 참조로 제공합니다. */
+/** DataGrid 데이터에 대한 동작을 제공합니다. */
 export const useHandlers = <TData extends DataGridRow>(
 	state: DataGridState<TData>,
-) =>
-	useMemo(
-		() => ({
-			updateQuery: (query: Record<string, unknown>) =>
-				updateQuery(state.query, query),
-			addRow: (row: TData) => addRow(state, row),
-			setValue: <TField extends keyof TData>(
-				row: TData,
-				field: TField,
-				value: TData[TField],
-			) => setValue(state, row, field, value),
-			deleteRow: (rowId: Key) => deleteRow(state, rowId),
-			clearChanges: () => clearChanges(state),
-			getRow: (row: TData) => getRow(state, row),
-			getChangesSnapshot: () => getChangesSnapshot(state),
-			combineRowsWithChanges: (rows: TData[]) =>
-				combineRowsWithChanges(state, rows),
-		}),
-		[state],
-	);
+) => ({
+	updateQuery: (query: Record<string, unknown>) =>
+		updateQuery(state.query, query),
+	addRow: (row: TData) => addRow(state, row),
+	setValue: <TField extends keyof TData>(
+		row: TData,
+		field: TField,
+		value: TData[TField],
+	) => setValue(state, row, field, value),
+	deleteRow: (rowId: Key) => deleteRow(state, rowId),
+	clearChanges: () => clearChanges(state),
+	getRow: (row: TData) => getRow(state, row),
+	getChangesSnapshot: () => getChangesSnapshot(state),
+	combineRowsWithChanges: (rows: TData[]) =>
+		combineRowsWithChanges(state, rows),
+});
