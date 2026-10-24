@@ -105,33 +105,15 @@ export class SpacesRepository {
 			...(queryParams.contentLanguageCode
 				? { contentLanguageCode: queryParams.contentLanguageCode }
 				: {}),
-			fitnessCenter: {
-				is: {
-					removedAt: null,
-					company: {
-						is: {
-							removedAt: null,
-						},
-					},
-				},
-			},
+			// 이름의 원천이 Space이므로 목록 노출에 FitnessCenter를 요구하지 않습니다.
+			// 회사명·사업자번호 검색만 상세 관계를 선택적으로 참조합니다.
 			...(queryParams.search
 				? {
 						OR: [
 							{
-								fitnessCenter: {
-									is: {
-										removedAt: null,
-										name: {
-											contains: queryParams.search,
-											mode: "insensitive",
-										},
-										company: {
-											is: {
-												removedAt: null,
-											},
-										},
-									},
+								name: {
+									contains: queryParams.search,
+									mode: "insensitive",
 								},
 							},
 							{
@@ -236,11 +218,11 @@ export class SpacesRepository {
 	/**
 	 * Space 생성
 	 */
-	async create(data?: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
-		this.logger.debug("Space 생성");
+	async create(data: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
+		this.logger.debug(`Space 생성: ${data.name}`);
 
 		const result = await this.txHost.tx.space.create({
-			data: data ?? {},
+			data,
 		});
 
 		return toDomainEntity(Space, result);

@@ -8,6 +8,10 @@ model Space {
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt            DateTime?             @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 공간 이름
+  name                 String
+  /// @displayName 라벨
+  label                String?
   /// @displayName 콘텐츠 언어
   contentLanguageCode  LanguageCode          @default(ko_KR) @map("content_language_code")
   fitnessCenter        FitnessCenter?

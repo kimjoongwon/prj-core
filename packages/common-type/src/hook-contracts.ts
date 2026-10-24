@@ -73,9 +73,10 @@ export interface UseAbilitiesReturn<TAbility = unknown> {
 export interface AccountBootstrapSpaceLike {
 	id?: DecimalId | null;
 	tenantId?: DecimalId | null;
+	name?: string | null;
+	label?: string | null;
 	contentLanguageCode?: string | null;
 	fitnessCenter?: {
-		name?: string | null;
 		company?: {
 			name?: string | null;
 		} | null;

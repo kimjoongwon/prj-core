@@ -26,13 +26,29 @@ function toAccountBootstrapSpace(
 	const fitnessCenter = normalizeFitnessCenter(source.fitnessCenter);
 	const id = toWireId(source.id);
 	const tenantId = toWireId(source.tenantId);
+	const name = normalizeSpaceText(source.name);
+	const label = normalizeSpaceText(source.label);
 
 	return {
 		id: id ?? undefined,
 		tenantId: tenantId ?? undefined,
+		name,
+		label,
 		contentLanguageCode,
 		fitnessCenter,
 	};
+}
+
+function normalizeSpaceText(value: unknown): string | null | undefined {
+	if (typeof value === "string") {
+		return value;
+	}
+
+	if (value === null) {
+		return null;
+	}
+
+	return undefined;
 }
 
 export function normalizeAccountBootstrapSpaces(
@@ -74,7 +90,6 @@ function normalizeFitnessCenter(
 	const company = normalizeCompany(source.company);
 
 	return {
-		name: typeof source.name === "string" ? source.name : null,
 		company,
 	};
 }
@@ -117,7 +132,7 @@ export type {
 	UseAccountBootstrapReturn,
 } from "@cocrepo/type";
 
-export function resolveCurrentSpaceFitnessCenterName(
+export function resolveCurrentSpaceDisplayName(
 	currentSpace: AccountBootstrapSpaceLike | null | undefined,
 	spaces: AccountBootstrapSpaceLike[],
 ) {
@@ -131,9 +146,8 @@ export function resolveCurrentSpaceFitnessCenterName(
 	}
 
 	return (
-		currentSpace.fitnessCenter?.name ??
-		spaces.find((space) => isSameWireId(space.id, currentSpaceId))
-			?.fitnessCenter?.name ??
+		currentSpace.name ??
+		spaces.find((space) => isSameWireId(space.id, currentSpaceId))?.name ??
 		""
 	);
 }
@@ -168,7 +182,7 @@ export function useTenantBootstrap<
 				.map((space) => ({
 					tenantId: space.tenantId!,
 					spaceId: space.id!,
-					fitnessCenterName: space.fitnessCenter?.name ?? "",
+					fitnessCenterName: space.name ?? "",
 					contentLanguageCode: space.contentLanguageCode ?? null,
 				})),
 		);
@@ -187,7 +201,7 @@ export function useTenantBootstrap<
 		) {
 			account.setCurrentTenant(
 				currentSpace.tenantId,
-				resolveCurrentSpaceFitnessCenterName(currentSpace, spaces),
+				resolveCurrentSpaceDisplayName(currentSpace, spaces),
 				currentSpace.contentLanguageCode ??
 					spaces.find((space) => isSameWireId(space.id, currentSpace.id))
 						?.contentLanguageCode ??

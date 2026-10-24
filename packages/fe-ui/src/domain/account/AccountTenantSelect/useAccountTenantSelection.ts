@@ -17,17 +17,12 @@ export interface UseAccountTenantSelectionReturn {
 function resolveFitnessCenterName(
 	space:
 		| {
-				fitnessCenter?: {
-					name?: string | null;
-					company?: { name?: string | null } | null;
-				} | null;
+				name?: string | null;
 		  }
 		| null
 		| undefined,
 ): string | null {
-	return (
-		space?.fitnessCenter?.name ?? space?.fitnessCenter?.company?.name ?? null
-	);
+	return space?.name ?? null;
 }
 
 /** Tenant 선택을 서버에 영구 저장하고 account 캐시를 확정합니다. */

@@ -90,18 +90,16 @@ describe("useTenantBootstrap", () => {
 			{
 				id: asId("100"),
 				tenantId: asId("1"),
+				name: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
-				fitnessCenter: {
-					name: "Fitness Center A",
-				},
+				fitnessCenter: {},
 			},
 			{
 				id: asId("101"),
 				tenantId: asId("2"),
+				name: "Fitness Center B",
 				contentLanguageCode: "en_US",
-				fitnessCenter: {
-					name: "Fitness Center B",
-				},
+				fitnessCenter: {},
 			},
 		];
 
@@ -197,16 +195,18 @@ describe("isWireId", () => {
 				{
 					id: BigInt("101"),
 					tenantId: BigInt("2"),
-					fitnessCenter: { name: "Fitness Center B" },
+					name: "Fitness Center B",
+					fitnessCenter: {},
 				},
 			]),
 		).toEqual([
 			{
 				id: "101",
 				tenantId: "2",
+				name: "Fitness Center B",
+				label: undefined,
 				contentLanguageCode: undefined,
 				fitnessCenter: {
-					name: "Fitness Center B",
 					company: undefined,
 				},
 			},

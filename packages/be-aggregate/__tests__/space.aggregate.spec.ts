@@ -93,10 +93,12 @@ describe("SpaceAggregate", () => {
 			mockRepository.create.mockResolvedValue(mockSpace as unknown as Space);
 
 			// When
-			const result = await service.createPersonalSpace();
+			const result = await service.createPersonalSpace("개인 공간");
 
 			// Then
-			expect(mockRepository.create).toHaveBeenCalledWith();
+			expect(mockRepository.create).toHaveBeenCalledWith({
+				name: "개인 공간",
+			});
 			expect(result).toEqual(mockSpace);
 		});
 	});
@@ -130,21 +132,23 @@ describe("SpaceAggregate", () => {
 	});
 
 	describe("create", () => {
-		it("옵션 없이 Space를 생성해야 한다", async () => {
+		it("최소 옵션으로 Space를 생성해야 한다", async () => {
 			// Given
 			mockRepository.create.mockResolvedValue(mockSpace as unknown as Space);
 
 			// When
-			const result = await service.create();
+			const result = await service.create({ name: "테스트 공간" });
 
 			// Then
-			expect(mockRepository.create).toHaveBeenCalledWith(undefined);
+			expect(mockRepository.create).toHaveBeenCalledWith({
+				name: "테스트 공간",
+			});
 			expect(result).toEqual(mockSpace);
 		});
 
 		it("옵션과 함께 Space를 생성해야 한다", async () => {
 			// Given
-			const createData = { id: 102n };
+			const createData = { id: 102n, name: "테스트 공간" };
 			const createdSpace = { ...mockSpace, id: createData.id };
 			mockRepository.create.mockResolvedValue(createdSpace as unknown as Space);
 
@@ -181,6 +185,8 @@ describe("SpaceAggregate", () => {
 
 			// Then
 			expect(mockRepository.create).toHaveBeenCalledWith({
+				name: input.name,
+				label: input.label,
 				contentLanguageCode: input.contentLanguageCode,
 			});
 			expect(mockRepository.createFitnessCenterBySpaceId).toHaveBeenCalledWith(
@@ -196,8 +202,6 @@ describe("SpaceAggregate", () => {
 						logoImageFileId: input.logoImageFileId,
 					},
 					fitnessCenter: {
-						name: input.name,
-						label: input.label,
 						address: input.address,
 						phone: input.phone,
 						email: input.email,
@@ -235,13 +239,13 @@ describe("SpaceAggregate", () => {
 			// Then
 			expect(mockRepository.updateById).toHaveBeenCalledWith(101n, {
 				contentLanguageCode: input.contentLanguageCode,
+				name: input.name,
+				label: input.label,
 			});
 			expect(mockRepository.updateFitnessCenterBySpaceId).toHaveBeenCalledWith(
 				101n,
 				{
 					fitnessCenter: {
-						name: input.name,
-						label: input.label,
 						address: input.address,
 						phone: input.phone,
 						email: input.email,
@@ -257,6 +261,7 @@ describe("SpaceAggregate", () => {
 			mockRepository.findFitnessCenterBySpaceId.mockResolvedValue(
 				mockFitnessCenter as never,
 			);
+			mockRepository.findById.mockResolvedValue(mockSpace as never);
 			mockRepository.updateFitnessCenterBySpaceId.mockResolvedValue(
 				mockSpace as never,
 			);
@@ -267,15 +272,13 @@ describe("SpaceAggregate", () => {
 			});
 
 			// Then
-			expect(mockRepository.updateById).not.toHaveBeenCalled();
-			expect(mockRepository.updateFitnessCenterBySpaceId).toHaveBeenCalledWith(
-				101n,
-				{
-					fitnessCenter: {
-						name: "업데이트 센터",
-					},
-				},
-			);
+			// 이름의 원천이 Space이므로 Space만 수정하고 시설 수정은 건너뜁니다.
+			expect(mockRepository.updateById).toHaveBeenCalledWith(101n, {
+				name: "업데이트 센터",
+			});
+			expect(
+				mockRepository.updateFitnessCenterBySpaceId,
+			).not.toHaveBeenCalled();
 		});
 	});
 

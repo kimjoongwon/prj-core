@@ -44,8 +44,6 @@ export type FitnessCenterMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  name: string | null
-  label: string | null
   address: string | null
   phone: string | null
   email: string | null
@@ -60,8 +58,6 @@ export type FitnessCenterMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  name: string | null
-  label: string | null
   address: string | null
   phone: string | null
   email: string | null
@@ -76,8 +72,6 @@ export type FitnessCenterCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
-  name: number
-  label: number
   address: number
   phone: number
   email: number
@@ -106,8 +100,6 @@ export type FitnessCenterMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  name?: true
-  label?: true
   address?: true
   phone?: true
   email?: true
@@ -122,8 +114,6 @@ export type FitnessCenterMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  name?: true
-  label?: true
   address?: true
   phone?: true
   email?: true
@@ -138,8 +128,6 @@ export type FitnessCenterCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  name?: true
-  label?: true
   address?: true
   phone?: true
   email?: true
@@ -241,8 +229,6 @@ export type FitnessCenterGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  name: string
-  label: string | null
   address: string
   phone: string
   email: string
@@ -280,8 +266,6 @@ export type FitnessCenterWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"FitnessCenter"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
-  name?: Prisma.StringFilter<"FitnessCenter"> | string
-  label?: Prisma.StringNullableFilter<"FitnessCenter"> | string | null
   address?: Prisma.StringFilter<"FitnessCenter"> | string
   phone?: Prisma.StringFilter<"FitnessCenter"> | string
   email?: Prisma.StringFilter<"FitnessCenter"> | string
@@ -298,8 +282,6 @@ export type FitnessCenterOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  name?: Prisma.SortOrder
-  label?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -320,8 +302,6 @@ export type FitnessCenterWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"FitnessCenter"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
-  name?: Prisma.StringFilter<"FitnessCenter"> | string
-  label?: Prisma.StringNullableFilter<"FitnessCenter"> | string | null
   address?: Prisma.StringFilter<"FitnessCenter"> | string
   phone?: Prisma.StringFilter<"FitnessCenter"> | string
   email?: Prisma.StringFilter<"FitnessCenter"> | string
@@ -337,8 +317,6 @@ export type FitnessCenterOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  name?: Prisma.SortOrder
-  label?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -361,8 +339,6 @@ export type FitnessCenterScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FitnessCenter"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FitnessCenter"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FitnessCenter"> | Date | string | null
-  name?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
-  label?: Prisma.StringNullableWithAggregatesFilter<"FitnessCenter"> | string | null
   address?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
   phone?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
   email?: Prisma.StringWithAggregatesFilter<"FitnessCenter"> | string
@@ -377,8 +353,6 @@ export type FitnessCenterCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name: string
-  label?: string | null
   address: string
   phone: string
   email: string
@@ -393,8 +367,6 @@ export type FitnessCenterUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name: string
-  label?: string | null
   address: string
   phone: string
   email: string
@@ -409,8 +381,6 @@ export type FitnessCenterUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -425,8 +395,6 @@ export type FitnessCenterUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -441,8 +409,6 @@ export type FitnessCenterCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name: string
-  label?: string | null
   address: string
   phone: string
   email: string
@@ -457,8 +423,6 @@ export type FitnessCenterUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -471,8 +435,6 @@ export type FitnessCenterUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -497,8 +459,6 @@ export type FitnessCenterCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  label?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -519,8 +479,6 @@ export type FitnessCenterMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  label?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -535,8 +493,6 @@ export type FitnessCenterMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  label?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -636,8 +592,6 @@ export type FitnessCenterCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name: string
-  label?: string | null
   address: string
   phone: string
   email: string
@@ -651,8 +605,6 @@ export type FitnessCenterUncheckedCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name: string
-  label?: string | null
   address: string
   phone: string
   email: string
@@ -695,8 +647,6 @@ export type FitnessCenterScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"FitnessCenter"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"FitnessCenter"> | Date | string | null
-  name?: Prisma.StringFilter<"FitnessCenter"> | string
-  label?: Prisma.StringNullableFilter<"FitnessCenter"> | string | null
   address?: Prisma.StringFilter<"FitnessCenter"> | string
   phone?: Prisma.StringFilter<"FitnessCenter"> | string
   email?: Prisma.StringFilter<"FitnessCenter"> | string
@@ -711,8 +661,6 @@ export type FitnessCenterCreateWithoutSpaceInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name: string
-  label?: string | null
   address: string
   phone: string
   email: string
@@ -726,8 +674,6 @@ export type FitnessCenterUncheckedCreateWithoutSpaceInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name: string
-  label?: string | null
   address: string
   phone: string
   email: string
@@ -757,8 +703,6 @@ export type FitnessCenterUpdateWithoutSpaceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -772,8 +716,6 @@ export type FitnessCenterUncheckedUpdateWithoutSpaceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -787,8 +729,6 @@ export type FitnessCenterCreateManyCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  name: string
-  label?: string | null
   address: string
   phone: string
   email: string
@@ -802,8 +742,6 @@ export type FitnessCenterUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -817,8 +755,6 @@ export type FitnessCenterUncheckedUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -832,8 +768,6 @@ export type FitnessCenterUncheckedUpdateManyWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -849,8 +783,6 @@ export type FitnessCenterSelect<ExtArgs extends runtime.Types.Extensions.Interna
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  name?: boolean
-  label?: boolean
   address?: boolean
   phone?: boolean
   email?: boolean
@@ -867,8 +799,6 @@ export type FitnessCenterSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  name?: boolean
-  label?: boolean
   address?: boolean
   phone?: boolean
   email?: boolean
@@ -885,8 +815,6 @@ export type FitnessCenterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  name?: boolean
-  label?: boolean
   address?: boolean
   phone?: boolean
   email?: boolean
@@ -903,8 +831,6 @@ export type FitnessCenterSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  name?: boolean
-  label?: boolean
   address?: boolean
   phone?: boolean
   email?: boolean
@@ -913,7 +839,7 @@ export type FitnessCenterSelectScalar = {
   imageFileId?: boolean
 }
 
-export type FitnessCenterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"fitnessCenterId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "address" | "phone" | "email" | "companyId" | "spaceId" | "imageFileId", ExtArgs["result"]["fitnessCenter"]>
+export type FitnessCenterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"fitnessCenterId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "address" | "phone" | "email" | "companyId" | "spaceId" | "imageFileId", ExtArgs["result"]["fitnessCenter"]>
 export type FitnessCenterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -939,14 +865,6 @@ export type $FitnessCenterPayload<ExtArgs extends runtime.Types.Extensions.Inter
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    /**
-     * @displayName 이름
-     */
-    name: string
-    /**
-     * @displayName 라벨
-     */
-    label: string | null
     /**
      * @displayName 주소
      */
@@ -1392,8 +1310,6 @@ export interface FitnessCenterFieldRefs {
   readonly createdAt: Prisma.FieldRef<"FitnessCenter", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FitnessCenter", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"FitnessCenter", 'DateTime'>
-  readonly name: Prisma.FieldRef<"FitnessCenter", 'String'>
-  readonly label: Prisma.FieldRef<"FitnessCenter", 'String'>
   readonly address: Prisma.FieldRef<"FitnessCenter", 'String'>
   readonly phone: Prisma.FieldRef<"FitnessCenter", 'String'>
   readonly email: Prisma.FieldRef<"FitnessCenter", 'String'>

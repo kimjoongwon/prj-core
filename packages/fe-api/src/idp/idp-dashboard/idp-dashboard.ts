@@ -29,6 +29,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useQuery,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
@@ -239,7 +240,7 @@ export const prefetchGetIdpDashboardStatsQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpDashboardStatsQueryOptions(options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -265,11 +266,19 @@ export const getGetIdpDashboardStatsSuspenseQueryOptions = <
 		Awaited<ReturnType<typeof getIdpDashboardStats>>
 	> = ({ signal }) => getIdpDashboardStats({ signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getIdpDashboardStats>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetIdpDashboardStatsSuspenseQueryResult = NonNullable<
@@ -514,7 +523,7 @@ export const prefetchGetIdpDashboardStatsInfiniteQuery = async <
 	const queryOptions =
 		getGetIdpDashboardStatsSuspenseInfiniteQueryOptions(options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -696,7 +705,7 @@ export const prefetchGetIdpLoginTrendQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpLoginTrendQueryOptions(options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -722,11 +731,19 @@ export const getGetIdpLoginTrendSuspenseQueryOptions = <
 		Awaited<ReturnType<typeof getIdpLoginTrend>>
 	> = ({ signal }) => getIdpLoginTrend({ signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getIdpLoginTrend>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetIdpLoginTrendSuspenseQueryResult = NonNullable<
@@ -969,7 +986,7 @@ export const prefetchGetIdpLoginTrendInfiniteQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpLoginTrendSuspenseInfiniteQueryOptions(options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

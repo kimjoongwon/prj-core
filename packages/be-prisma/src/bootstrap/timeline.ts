@@ -152,7 +152,8 @@ export async function createTimelineSessionExerciseDomainData(
 	// works from these in-memory maps.
 	const [fitnessCenters, createdByUsers, fallbackUser] = await Promise.all([
 		prisma.fitnessCenter.findMany({
-			where: { name: { in: timelineFitnessCenterNames } },
+			where: { space: { name: { in: timelineFitnessCenterNames } } },
+			include: { space: true },
 		}),
 		prisma.user.findMany({ where: { email: { in: createdByEmails } } }),
 		prisma.user.findFirst({ where: { email: resolveSystemAdminSeedData()[0]?.email } }),
@@ -163,7 +164,10 @@ export async function createTimelineSessionExerciseDomainData(
 	}
 
 	const fitnessCenterByName = new Map(
-		fitnessCenters.map((fitnessCenter) => [fitnessCenter.name, fitnessCenter]),
+		fitnessCenters.map((fitnessCenter) => [
+			fitnessCenter.space.name,
+			fitnessCenter,
+		]),
 	);
 	const userByCreatedByEmail = new Map(
 		createdByUsers.map((user) => [user.email, user]),
