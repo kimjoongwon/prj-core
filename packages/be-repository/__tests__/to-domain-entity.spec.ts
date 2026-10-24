@@ -86,8 +86,8 @@ describe("toDomainEntity", () => {
 	it("Prisma scalar를 변형하지 않고 User/UserStatus 관계를 복원한다", () => {
 		const lockedUntil = new Date("2030-01-01T00:00:00.000Z");
 		const persistenceRow = {
-			id: 101n,
-			userSeq: "01J00000000000000000000000",
+			seq: 101n,
+			id: "01J00000000000000000000000",
 			name: "관리자",
 			email: "ADMIN@EXAMPLE.COM",
 			phone: "010-0000-0000",
@@ -97,8 +97,8 @@ describe("toDomainEntity", () => {
 			updatedAt: null,
 			removedAt: null,
 			status: {
-				userStatusId: "01J0000000000000000000000S",
-				id: 901n,
+				id: "01J0000000000000000000000S",
+				seq: 901n,
 				userSeq: 101n,
 				failedLoginAttempts: 0,
 				lockedUntil,
@@ -117,9 +117,9 @@ describe("toDomainEntity", () => {
 
 		expect(result).toBeInstanceOf(User);
 		expect(result.email).toBe("ADMIN@EXAMPLE.COM");
-		expect(result.userSeq).toBe(persistenceRow.userSeq);
+		expect(result.id).toBe(persistenceRow.id);
 		expect(result.password).toBe(persistenceRow.password);
-		expect(result.id).toBe(101n);
+		expect(result.seq).toBe(101n);
 		expect(result.status).toBeInstanceOf(UserStatus);
 		expect(result.status?.currentTenantSeq).toBe(202n);
 		expect(result.status?.lockedUntil).toBe(lockedUntil);
