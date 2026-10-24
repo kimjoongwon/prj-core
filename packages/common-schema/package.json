@@ -1,68 +1,69 @@
 {
-  "name": "@cocrepo/schema",
-  "version": "0.1.0",
-  "description": "공유 검증 스키마 (프론트엔드/백엔드)",
-  "publishConfig": {
-    "access": "public"
-  },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "node": "./dist/index.js",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/index.js",
-      "default": "./dist/esm/index.js"
-    }
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "!dist/**/*.map",
-    "!dist/**/*.tsbuildinfo",
-    "!dist/**/*.spec.*",
-    "!dist/**/*.test.*",
-    "!src/**/test/**",
-    "!src/**/tests/**",
-    "!src/**/*.test.*",
-    "!src/**/*.spec.*"
-  ],
-  "scripts": {
-    "build": "rm -rf dist && tsc --build && tsc -p tsconfig.esm.json && node scripts/write-esm-package-json.mjs",
-    "start:dev": "tsc --build --watch",
-    "test": "vitest run --passWithNoTests --exclude 'dist/**'",
-    "type-check": "tsc --noEmit",
-    "type-check:prod": "tsc --noEmit",
-    "format": "biome check --write .",
-    "clean": "rm -rf dist && rm -rf node_modules",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "dependencies": {
-    "@cocrepo/constant": "workspace:*",
-    "@cocrepo/enum": "workspace:*",
-    "@cocrepo/type": "workspace:*",
-    "class-validator": "^0.14.4"
-  },
-  "devDependencies": {
-    "@types/node": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
-  },
-  "keywords": [
-    "validation",
-    "schema",
-    "class-validator",
-    "dto"
-  ],
-  "author": "cocrepo",
-  "license": "ISC",
-  "private": false,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kimjoongwon/prj-core.git",
-    "directory": "packages/common-schema"
-  }
+	"name": "@cocrepo/schema",
+	"version": "0.1.0",
+	"description": "공유 검증 스키마 (프론트엔드/백엔드)",
+	"publishConfig": {
+		"access": "public"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"node": "./dist/index.js",
+			"import": "./dist/esm/index.js",
+			"require": "./dist/index.js",
+			"default": "./dist/esm/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"!dist/**/*.map",
+		"!dist/**/*.tsbuildinfo",
+		"!dist/**/*.spec.*",
+		"!dist/**/*.test.*",
+		"!src/**/test/**",
+		"!src/**/tests/**",
+		"!src/**/*.test.*",
+		"!src/**/*.spec.*"
+	],
+	"scripts": {
+		"build": "rm -rf dist && tsc --build && tsc -p tsconfig.esm.json && node scripts/write-esm-package-json.mjs",
+		"start:dev": "tsc --build --watch",
+		"test": "vitest run --passWithNoTests --exclude 'dist/**'",
+		"type-check": "tsc --noEmit",
+		"type-check:prod": "tsc --noEmit",
+		"format": "biome check --write .",
+		"clean": "rm -rf dist && rm -rf node_modules",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"dependencies": {
+		"@cocrepo/constant": "workspace:*",
+		"@cocrepo/enum": "workspace:*",
+		"@cocrepo/type": "workspace:*",
+		"class-validator": "^0.15.1"
+	},
+	"devDependencies": {
+		"@types/node": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:",
+		"@types/jest": "^30.0.0"
+	},
+	"keywords": [
+		"validation",
+		"schema",
+		"class-validator",
+		"dto"
+	],
+	"author": "cocrepo",
+	"license": "ISC",
+	"private": false,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kimjoongwon/prj-core.git",
+		"directory": "packages/common-schema"
+	}
 }

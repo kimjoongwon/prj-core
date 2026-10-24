@@ -1,7 +1,7 @@
 import { prepareEntityResponseType } from "@cocrepo/dto";
 import { plainToInstance } from "class-transformer";
 
-type Constructor<T = object> = new (...args: never[]) => T;
+type Constructor<T = object> = new (...args: unknown[]) => T;
 
 interface TransformToDtoOptions {
 	isArray?: boolean;

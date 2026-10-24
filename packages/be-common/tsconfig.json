@@ -1,27 +1,48 @@
 {
-  "extends": "@cocrepo/tsconfig/nestjs-package.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
-  },
-  "references": [
-    { "path": "../common-constant" },
-    { "path": "../be-decorator" },
-    { "path": "../be-entity" },
-    { "path": "../common-enum" },
-    { "path": "../be-prisma" },
-    { "path": "../be-repository" },
-    { "path": "../be-service" },
-    { "path": "../common-toolkit" }
-  ],
-  "include": ["src/**/*.ts"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/test/**",
-    "**/__tests__/**",
-    "**/*.spec.ts",
-    "**/*.test.ts"
-  ]
+	"extends": "@cocrepo/tsconfig/nestjs-package.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"tsBuildInfoFile": "./dist/.tsbuildinfo",
+		"types": [
+			"node"
+		]
+	},
+	"references": [
+		{
+			"path": "../common-constant"
+		},
+		{
+			"path": "../be-decorator"
+		},
+		{
+			"path": "../be-entity"
+		},
+		{
+			"path": "../common-enum"
+		},
+		{
+			"path": "../be-prisma"
+		},
+		{
+			"path": "../be-repository"
+		},
+		{
+			"path": "../be-service"
+		},
+		{
+			"path": "../common-toolkit"
+		}
+	],
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"src/test/**",
+		"**/__tests__/**",
+		"**/*.spec.ts",
+		"**/*.test.ts"
+	]
 }

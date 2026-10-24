@@ -230,8 +230,10 @@ export class OidcConfigurationService {
 	private renderLogoutConfirmation(
 		ctx: Parameters<
 			NonNullable<
-				NonNullable<OidcConfiguration["features"]>["rpInitiatedLogout"]
-			>["logoutSource"]
+				NonNullable<
+					NonNullable<OidcConfiguration["features"]>["rpInitiatedLogout"]
+				>["logoutSource"]
+			>
 		>[0],
 		form: string,
 		firstPartyClientIds: Set<string>,
@@ -262,8 +264,10 @@ export class OidcConfigurationService {
 	private renderPostLogoutSuccess(
 		ctx: Parameters<
 			NonNullable<
-				NonNullable<OidcConfiguration["features"]>["rpInitiatedLogout"]
-			>["postLogoutSuccessSource"]
+				NonNullable<
+					NonNullable<OidcConfiguration["features"]>["rpInitiatedLogout"]
+				>["postLogoutSuccessSource"]
+			>
 		>[0],
 		render: () => unknown,
 		clientLoginUrls: Map<string, string>,
