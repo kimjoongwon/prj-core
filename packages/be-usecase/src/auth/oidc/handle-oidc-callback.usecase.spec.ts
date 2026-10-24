@@ -216,7 +216,7 @@ describe("HandleOidcCallbackUseCase", () => {
 		expect(tokenService.setAccessTokenCookie).toHaveBeenCalled();
 		expect(tokenService.setRefreshTokenCookie).toHaveBeenCalled();
 		expect(res.cookie).toHaveBeenCalledWith(
-			"sessionSeq",
+			"sessionId",
 			"admin-web.0123456789abcdef0123456789abcdef",
 			expect.any(Object),
 		);

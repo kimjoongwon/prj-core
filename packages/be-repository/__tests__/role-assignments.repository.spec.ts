@@ -3,6 +3,9 @@ import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { RoleAssignmentsRepository } from "../src/role-assignments.repository";
 
+const ROLE_ID = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
+const SPACE_ID = "01JBBBBBBBBBBBBBBBBBBBBBBBB";
+
 describe("RoleAssignmentsRepository", () => {
 	let repository: RoleAssignmentsRepository;
 	const roleAssignment = {
@@ -31,25 +34,24 @@ describe("RoleAssignmentsRepository", () => {
 		roleAssignment.findMany.mockResolvedValue([
 			{
 				id: 1n,
-				roleSeq: 10n,
-				policySeq: 20n,
+				role: { connect: { id: ROLE_ID } },
+				policy: { connect: { id: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } },
 				isActive: false,
 				priority: 10,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				removedAt: null,
-				policy: { entries: [] },
 			},
 		]);
 
-		const result = await repository.findByRoleIdInSpace(10n, 30n);
+		const result = await repository.findByRoleIdInSpace(ROLE_ID, SPACE_ID);
 
 		expect(roleAssignment.findMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				where: {
-					roleSeq: { in: [10n] },
+					role: { id: { in: [ROLE_ID] } },
 					removedAt: null,
-					policy: { space: { seq: 30n }, removedAt: null },
+					policy: { space: { id: SPACE_ID }, removedAt: null },
 				},
 				include: expect.objectContaining({
 					role: true,
@@ -65,14 +67,14 @@ describe("RoleAssignmentsRepository", () => {
 	it("CASL 계산용 조회는 활성 Assignment만 포함해야 한다", async () => {
 		roleAssignment.findMany.mockResolvedValue([]);
 
-		await repository.findActiveByRoleIdsInSpace([10n, 11n], 30n);
+		await repository.findActiveByRoleIdsInSpace([ROLE_ID, "01JCCCCCCCCCCCCCCCCCCCCCCCC"], SPACE_ID);
 
 		expect(roleAssignment.findMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				where: expect.objectContaining({
-					roleSeq: { in: [10n, 11n] },
+					role: { id: { in: [ROLE_ID, "01JCCCCCCCCCCCCCCCCCCCCCCCC"] } },
 					isActive: true,
-					policy: { space: { seq: 30n }, removedAt: null },
+					policy: { space: { id: SPACE_ID }, removedAt: null },
 				}),
 			}),
 		);
@@ -85,19 +87,19 @@ describe("RoleAssignmentsRepository", () => {
 		roleAssignment.findMany.mockResolvedValue([]);
 
 		await repository.syncByRoleId(
-			10n,
+			ROLE_ID,
 			[
-				{ policySeq: 20n, isActive: true, priority: 1 },
-				{ policySeq: 20n, isActive: false, priority: 20 },
+				{ policyId: "01JBBBBBBBBBBBBBBBBBBBBBBBB", isActive: true, priority: 1 },
+				{ policyId: "01JBBBBBBBBBBBBBBBBBBBBBBBB", isActive: false, priority: 20 },
 			],
-			30n,
+			SPACE_ID,
 		);
 
 		expect(roleAssignment.create).toHaveBeenCalledTimes(1);
 		expect(roleAssignment.create).toHaveBeenCalledWith({
 			data: {
-				roleSeq: 10n,
-				policySeq: 20n,
+				role: { connect: { id: ROLE_ID } },
+				policy: { connect: { id: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } },
 				isActive: false,
 				priority: 20,
 				removedAt: null,

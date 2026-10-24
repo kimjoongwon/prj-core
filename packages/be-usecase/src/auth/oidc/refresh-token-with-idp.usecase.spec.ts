@@ -102,7 +102,7 @@ describe("RefreshTokenWithIdpUseCase", () => {
 			"admin-web.0123456789abcdef0123456789abcdef",
 			"rotated-refresh-token",
 		);
-		expect(result.sessionSeq).toBe(
+		expect(result.sessionId).toBe(
 			"admin-web.0123456789abcdef0123456789abcdef",
 		);
 		expect(result.refreshToken).toBe("rotated-refresh-token");
@@ -113,7 +113,7 @@ describe("RefreshTokenWithIdpUseCase", () => {
 		);
 	});
 
-	it("Given 헤더 기반 갱신(sessionSeq 없음) When 실행하면 Then sessionId를 null로 반환한다", async () => {
+	it("Given 헤더 기반 갱신(sessionId 없음) When 실행하면 Then sessionId를 null로 반환한다", async () => {
 		const { tokenStorageService, useCase } = createUseCase();
 		const res = { cookie: jest.fn() } as unknown as Response;
 
@@ -127,6 +127,6 @@ describe("RefreshTokenWithIdpUseCase", () => {
 		);
 
 		expect(tokenStorageService.updateSession).not.toHaveBeenCalled();
-		expect(result.sessionSeq).toBeNull();
+		expect(result.sessionId).toBeNull();
 	});
 });

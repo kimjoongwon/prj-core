@@ -45,7 +45,7 @@ describe("RoleAggregate", () => {
 	describe("getById", () => {
 		it("ID로 역할을 조회해야 한다", async () => {
 			// Given
-			const roleSeq = 101n;
+			const roleSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
 			mockRepository.findById.mockResolvedValue(mockRole as unknown as Role);
 
 			// When
@@ -58,7 +58,7 @@ describe("RoleAggregate", () => {
 
 		it("역할이 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const roleSeq = 999n;
+			const roleSeq = "01JCCCCCCCCCCCCCCCCCCCCCCCC";
 			mockRepository.findById.mockResolvedValue(null);
 
 			// When
@@ -157,7 +157,7 @@ describe("RoleAggregate", () => {
 	describe("update", () => {
 		it("역할을 업데이트해야 한다", async () => {
 			// Given
-			const roleSeq = 101n;
+			const roleSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
 			const role = { ...mockRole };
 			const input = {
 				displayName: "수정된 역할",
@@ -183,7 +183,7 @@ describe("RoleAggregate", () => {
 			// When / Then
 			await expect(
 				service.update(
-					999n,
+					"01JCCCCCCCCCCCCCCCCCCCCCCCC",
 					{ displayName: "없음", description: "없음" } as never,
 				),
 			).rejects.toBeInstanceOf(NotFoundException);
@@ -193,7 +193,7 @@ describe("RoleAggregate", () => {
 	describe("delete", () => {
 		it("역할을 삭제해야 한다", async () => {
 			// Given
-			const roleSeq = 101n;
+			const roleSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
 			const role = { ...mockRole };
 			mockRepository.findById.mockResolvedValue(role as unknown as Role);
 			mockRepository.countTenantsByRoleId.mockResolvedValue(0);
@@ -209,7 +209,7 @@ describe("RoleAggregate", () => {
 
 		it("연결된 사용자가 있으면 삭제를 막아야 한다", async () => {
 			// Given
-			const roleSeq = 101n;
+			const roleSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
 			mockRepository.findById.mockResolvedValue(mockRole as unknown as Role);
 			mockRepository.countTenantsByRoleId.mockResolvedValue(2);
 

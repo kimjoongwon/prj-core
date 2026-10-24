@@ -26,13 +26,12 @@ describe("UserService", () => {
 	let mockAuthCacheService: jest.Mocked<AuthCacheService>;
 
 	const mockUser = {
-		id: 101n,
-		userSeq: "user-public-id",
+		id: "user-public-id",
+		seq: 101n,
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",
 		password: "$2b$10$hashedPassword",
-		spaceSeq: 301n,
 		tenants: [
 			{
 				id: 201n,
@@ -106,11 +105,14 @@ describe("UserService", () => {
 			mockUser as unknown as Awaited<ReturnType<UsersRepository["findById"]>>,
 		);
 
-		await service.setCurrentTenant(101n, 201n);
+		await service.setCurrentTenant(
+			"user-public-id",
+			"tenant-public-id",
+		);
 
-		expect(mockRepository.updateCurrentTenantId).toHaveBeenCalledWith(
-			101n,
-			201n,
+		expect(mockRepository.updateCurrentTenantIdByPublicIds).toHaveBeenCalledWith(
+			"user-public-id",
+			"tenant-public-id",
 		);
 		expect(mockAuthCacheService.invalidate).toHaveBeenCalledWith(
 			"user-public-id",
@@ -175,7 +177,11 @@ describe("UserService", () => {
 				tenant as unknown as TenantDetailResult,
 			);
 
-			const result = await service.getTenantDetailForUser(101n, 201n, 301n);
+			const result = await service.getTenantDetailForUser(
+			"user-public-id",
+			"01JTENANT0000000000000000T1",
+			"01JSPACE0000000000000000S1",
+		);
 
 			expect(
 				mockRepository.findTenantDetailForUserInSpace,
@@ -195,7 +201,11 @@ describe("UserService", () => {
 			mockRepository.findTenantDetailForUserInSpace.mockResolvedValue(null);
 
 			await expect(
-				service.getTenantDetailForUser(999n, 201n, 301n),
+				service.getTenantDetailForUser(
+				"user-missing-id",
+				"01JTENANT0000000000000000T1",
+				"01JSPACE0000000000000000S1",
+			),
 			).rejects.toThrow("사용자의 테넌트를 찾을 수 없습니다");
 		});
 	});
@@ -446,7 +456,10 @@ describe("UserService", () => {
 				mockUser as unknown as UserWithRelations,
 			);
 
-			const result = await service.getUserDetailForSpace(101n, 301n);
+			const result = await service.getUserDetailForSpace(
+			"user-public-id",
+			"01JSPACE0000000000000000S1",
+		);
 
 			expect(
 				mockRepository.findByIdAndSpaceIdsWithRelations,
@@ -469,7 +482,10 @@ describe("UserService", () => {
 				mockUser as unknown as UserWithRelations,
 			);
 
-			const result = await service.getUserDetailForSpace(101n, 901n);
+			const result = await service.getUserDetailForSpace(
+			"user-public-id",
+			"01JSPACE0000000000000000S9",
+		);
 
 			expect(
 				mockRepository.findByIdAndSpaceIdsWithRelations,
@@ -480,7 +496,12 @@ describe("UserService", () => {
 		it("유효 Space 범위에서 사용자를 찾지 못하면 오류를 반환해야 한다", async () => {
 			mockRepository.findByIdAndSpaceIdsWithRelations.mockResolvedValue(null);
 
-			await expect(service.getUserDetailForSpace(999n, 301n)).rejects.toThrow(
+			await expect(
+			service.getUserDetailForSpace(
+				"user-missing-id",
+				"01JSPACE0000000000000000S1",
+			),
+		).rejects.toThrow(
 				"사용자를 찾을 수 없습니다",
 			);
 		});

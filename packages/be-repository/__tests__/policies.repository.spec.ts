@@ -30,23 +30,22 @@ describe("PoliciesRepository", () => {
 		policy.findMany.mockResolvedValue([
 			{
 				id: 1n,
-				spaceSeq: 10n,
+				space: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" },
 				name: "Alpha",
 				createdBySeq: 20n,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				removedAt: null,
-				space: {},
 				createdBy: {},
 				entries: [],
 			},
 		]);
 
-		const result = await repository.findManyBySpaceId(10n);
+		const result = await repository.findManyBySpaceId("01JAAAAAAAAAAAAAAAAAAAAAAAA");
 
 		expect(policy.findMany).toHaveBeenCalledWith({
 			where: {
-				spaceSeq: 10n,
+				space: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" },
 				removedAt: null,
 			},
 			include: {

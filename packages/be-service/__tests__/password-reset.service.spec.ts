@@ -51,33 +51,33 @@ describe("PasswordResetService", () => {
 		service = module.get<PasswordResetService>(PasswordResetService);
 	});
 
-	it("reset token payload는 bigint userId를 문자열로 저장해야 한다", async () => {
+	it("reset token payload는 공개 userId(ULID)를 문자열로 저장해야 한다", async () => {
 		await (
 			service as never as {
 				saveResetToken: (
 					hashedToken: string,
-					data: { userSeq: bigint; email: string },
+					data: { userId: string; email: string },
 				) => Promise<void>;
 			}
 		).saveResetToken("hashed-token", {
-			userSeq: 101n,
+			userId: "01JPPPPPPPPPPPPPPPPPPPPPPPP01",
 			email: "tester@example.com",
 		});
 
 		expect(redisService.set).toHaveBeenCalledWith(
 			"password-reset:hashed-token",
 			JSON.stringify({
-				userSeq: "101",
+				userId: "01JPPPPPPPPPPPPPPPPPPPPPPPP01",
 				email: "tester@example.com",
 			}),
 			TOKEN_TTL_SECONDS,
 		);
 	});
 
-	it("저장된 reset token payload를 읽을 때 문자열 userId를 bigint로 복원해야 한다", async () => {
+	it("저장된 reset token payload를 읽을 때 userId를 그대로 복원해야 한다", async () => {
 		redisService.get.mockResolvedValue(
 			JSON.stringify({
-				userSeq: "101",
+				userId: "01JPPPPPPPPPPPPPPPPPPPPPPPP01",
 				email: "tester@example.com",
 			}),
 		);
@@ -86,12 +86,12 @@ describe("PasswordResetService", () => {
 			service as never as {
 				getResetToken: (
 					hashedToken: string,
-				) => Promise<{ userSeq: bigint; email: string } | null>;
+				) => Promise<{ userId: string; email: string } | null>;
 			}
 		).getResetToken("hashed-token");
 
 		expect(result).toEqual({
-			userSeq: 101n,
+			userId: "01JPPPPPPPPPPPPPPPPPPPPPPPP01",
 			email: "tester@example.com",
 		});
 	});

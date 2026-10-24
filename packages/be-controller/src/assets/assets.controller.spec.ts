@@ -119,7 +119,7 @@ describe("AssetsController", () => {
 		const controller = new AssetsController(
 			commandBus as unknown as CommandBus,
 			{} as QueryBus,
-			{ user: { id: 1n } } as AuthContext,
+			{ user: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" } } as unknown as AuthContext,
 		);
 		const disguisedPdfFile = await createTemporaryAssetUploadFile(
 			"image/png",
@@ -127,7 +127,7 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderSeq: 1n } as UploadAssetDto, disguisedPdfFile),
+			controller.uploadAsset({ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto, disguisedPdfFile),
 		).rejects.toThrow(BadRequestException);
 		expect(commandBus.execute).not.toHaveBeenCalled();
 		await expect(rm(disguisedPdfFile.path, { force: false })).rejects.toThrow();
@@ -152,7 +152,7 @@ describe("AssetsController", () => {
 		const controller = new AssetsController(
 			commandBus as unknown as CommandBus,
 			{} as QueryBus,
-			{ user: { id: 1n } } as AuthContext,
+			{ user: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" } } as unknown as AuthContext,
 		);
 		const pngFile = await createTemporaryAssetUploadFile(
 			"image/png",
@@ -160,7 +160,7 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderSeq: 1n } as UploadAssetDto, pngFile),
+			controller.uploadAsset({ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto, pngFile),
 		).resolves.toEqual({ id: "asset-1" });
 		await expect(rm(pngFile.path, { force: false })).rejects.toThrow();
 	});
@@ -172,7 +172,7 @@ describe("AssetsController", () => {
 		const controller = new AssetsController(
 			commandBus as unknown as CommandBus,
 			{} as QueryBus,
-			{ user: { id: 1n } } as AuthContext,
+			{ user: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" } } as unknown as AuthContext,
 		);
 		const pngFile = await createTemporaryAssetUploadFile(
 			"image/png",
@@ -180,7 +180,7 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderSeq: 1n } as UploadAssetDto, pngFile),
+			controller.uploadAsset({ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto, pngFile),
 		).rejects.toThrow("storage failed");
 		await expect(rm(pngFile.path, { force: false })).rejects.toThrow();
 	});

@@ -8,13 +8,12 @@ import { GetCurrentSpaceUseCase } from "./get-current-space.usecase";
 import { SetCurrentSpaceUseCase } from "./set-current-space.usecase";
 
 const activeTenant = {
-	id: 201n,
-	spaceSeq: 101n,
+	id: "01JTENANT000000000000000002",
+	space: { id: "01JSPACE0000000000000000101" },
 	removedAt: null,
 };
 const currentSpace = {
-	id: 101n,
-	spaceSeq: "01J00000000000000000001001",
+	id: "01JSPACE0000000000000000101",
 	fitnessCenter: {
 		name: "Current Fitness Center",
 		company: {
@@ -23,11 +22,12 @@ const currentSpace = {
 	},
 };
 
-function createDependencies(currentTenantSeq: bigint | null = activeTenant.id) {
+function createDependencies(
+	currentTenantId: string | null = activeTenant.id,
+) {
 	const user = {
-		id: 301n,
-		userSeq: "01J00000000000000000002001",
-		currentTenantSeq,
+		id: "01JUSER00000000000000000301",
+		currentTenantId,
 		tenants: [activeTenant],
 	};
 	const cls = {
@@ -56,7 +56,7 @@ describe("current-space use cases", () => {
 
 	it("Given currentTenantId가 없거나 접근할 수 없음 When 현재 Space를 조회하면 Then null을 반환한다", async () => {
 		const noSelection = createDependencies(null);
-		const invalidSelection = createDependencies(999n);
+		const invalidSelection = createDependencies("01JTENANT000000000000000099");
 
 		await expect(
 			new GetCurrentSpaceUseCase(noSelection.cls, noSelection.spaces).execute(
@@ -80,7 +80,10 @@ describe("current-space use cases", () => {
 				new SetCurrentSpaceCommand({ tenantId: activeTenant.id }),
 			),
 		).resolves.toEqual({ ...currentSpace, tenantId: activeTenant.id });
-		expect(users.setCurrentTenant).toHaveBeenCalledWith(301n, activeTenant.id);
+		expect(users.setCurrentTenant).toHaveBeenCalledWith(
+			"01JUSER00000000000000000301",
+			activeTenant.id,
+		);
 	});
 
 	it("Given 소유하지 않은 Tenant When 현재 Space를 설정하면 Then 저장하지 않고 거부한다", async () => {
@@ -88,7 +91,7 @@ describe("current-space use cases", () => {
 		const useCase = new SetCurrentSpaceUseCase(cls, spaces, users);
 
 		await expect(
-			useCase.execute(new SetCurrentSpaceCommand({ tenantId: 999n })),
+			useCase.execute(new SetCurrentSpaceCommand({ tenantId: "01JTENANT000000000000000099" })),
 		).rejects.toBeInstanceOf(ForbiddenException);
 		expect(users.setCurrentTenant).not.toHaveBeenCalled();
 	});

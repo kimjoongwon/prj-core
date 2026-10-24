@@ -38,7 +38,7 @@ export class Space extends SpaceSchema {
 		description: "이 Space 접근에 사용할 Tenant ID",
 		nullable: true,
 	})
-	tenantId?: bigint | null;
+	tenantId?: string | null;
 	@ClassField(() => Tenant, {
 		required: false,
 		swagger: false,

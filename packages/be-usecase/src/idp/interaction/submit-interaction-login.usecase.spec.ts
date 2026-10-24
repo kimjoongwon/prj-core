@@ -77,7 +77,7 @@ describe("SubmitInteractionLoginUseCase", () => {
 		} = createUseCase();
 		interactionLoginService.validateUser.mockResolvedValue({
 			success: true,
-			userSeq: "user-1",
+			userId: "user-1",
 		});
 
 		const result = await useCase.execute(
@@ -172,7 +172,7 @@ describe("SubmitInteractionLoginUseCase", () => {
 		} = createUseCase();
 		interactionLoginService.validateUser.mockResolvedValue({
 			success: true,
-			userSeq: "user-1",
+			userId: "user-1",
 		});
 		interactionService.completeLogin.mockResolvedValue({
 			redirectTo: "https://client.example.com/callback",

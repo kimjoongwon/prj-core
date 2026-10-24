@@ -70,7 +70,7 @@ describe("space fitness-center use cases", () => {
 			>,
 		);
 		const useCase = new GetSpaceFitnessCenterUseCase(spaces);
-		const spaceSeq = 101n;
+		const spaceSeq = "01JSPACE0000000000000000101";
 
 		await expect(
 			useCase.execute(new GetSpaceFitnessCenterQuery(spaceSeq)),
@@ -96,7 +96,7 @@ describe("space fitness-center use cases", () => {
 				ReturnType<SpaceAggregate["updateFitnessCenterBySpaceId"]>
 			>,
 		);
-		const spaceSeq = 101n;
+		const spaceSeq = "01JSPACE0000000000000000101";
 		const command = new UpdateSpaceFitnessCenterCommand(spaceSeq, {
 			contentLanguageCode: "en_US",
 			name: "수정 피트니스",

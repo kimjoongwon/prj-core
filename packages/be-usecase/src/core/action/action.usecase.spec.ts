@@ -62,7 +62,7 @@ describe("action use cases", () => {
 				ReturnType<ActionAggregate["updateAction"]>
 			>,
 		);
-		const actionSeq = 101n;
+		const actionSeq = "01JACTION00000000000000000101";
 		const command = new UpdateActionCommand(actionSeq, {
 			name: "action.update",
 			config: { method: "PATCH" },
@@ -88,7 +88,7 @@ describe("action use cases", () => {
 				ReturnType<ActionAggregate["deleteAction"]>
 			>,
 		);
-		const actionSeq = 101n;
+		const actionSeq = "01JACTION00000000000000000101";
 		const useCase = new DeleteActionUseCase(actions);
 
 		await expect(

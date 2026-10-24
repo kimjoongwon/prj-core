@@ -4,6 +4,8 @@ import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { RolesRepository } from "../src/roles.repository";
 
+const ROLE_ID = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
+
 describe("RolesRepository", () => {
 	let repository: RolesRepository;
 	let mockTxHost: {
@@ -63,11 +65,11 @@ describe("RolesRepository", () => {
 			mockTxHost.tx.role.findUnique.mockResolvedValue(mockRoleData);
 
 			// When
-			const result = await repository.findById(roleSeq);
+			const result = await repository.findById(ROLE_ID);
 
 			// Then
 			expect(mockTxHost.tx.role.findUnique).toHaveBeenCalledWith({
-				where: { seq: roleSeq },
+				where: { id: ROLE_ID },
 			});
 			expect(result).toBeInstanceOf(Role);
 			expect(result?.id).toBe(mockRoleData.id);
@@ -80,11 +82,11 @@ describe("RolesRepository", () => {
 			mockTxHost.tx.role.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findById(roleSeq);
+			const result = await repository.findById(ROLE_ID);
 
 			// Then
 			expect(mockTxHost.tx.role.findUnique).toHaveBeenCalledWith({
-				where: { seq: roleSeq },
+				where: { id: ROLE_ID },
 			});
 			expect(result).toBeNull();
 		});
@@ -189,11 +191,11 @@ describe("RolesRepository", () => {
 			});
 
 			// When
-			const result = await repository.updateById(roleSeq, updateData);
+			const result = await repository.updateById(ROLE_ID, updateData);
 
 			// Then
 			expect(mockTxHost.tx.role.update).toHaveBeenCalledWith({
-				where: { seq: roleSeq },
+				where: { id: ROLE_ID },
 				data: updateData,
 			});
 			expect(result).toBeInstanceOf(Role);

@@ -3,6 +3,8 @@ import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { PolicyEntriesRepository } from "../src/policy-entries.repository";
 
+const POLICY_ID = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
+
 describe("PolicyEntriesRepository", () => {
 	let repository: PolicyEntriesRepository;
 	const policyEntry = {
@@ -31,20 +33,19 @@ describe("PolicyEntriesRepository", () => {
 		policyEntry.findMany.mockResolvedValue([
 			{
 				id: 1n,
-				policySeq: 10n,
-				abilitySeq: 20n,
+				policy: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" },
+				ability: { id: "01JBBBBBBBBBBBBBBBBBBBBBBBB" },
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				removedAt: null,
-				ability: {},
 			},
 		]);
 
-		const result = await repository.findActiveByPolicyId(10n);
+		const result = await repository.findActiveByPolicyId(POLICY_ID);
 
 		expect(policyEntry.findMany).toHaveBeenCalledWith({
 			where: {
-				policySeq: 10n,
+				policy: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" },
 				removedAt: null,
 				ability: { removedAt: null },
 			},
@@ -68,14 +69,14 @@ describe("PolicyEntriesRepository", () => {
 		policyEntry.create.mockResolvedValue({});
 		policyEntry.findMany.mockResolvedValue([]);
 
-		await repository.syncByPolicyId(10n, [20n, 20n]);
+		await repository.syncByPolicyId(POLICY_ID, ["01JBBBBBBBBBBBBBBBBBBBBBBBB", "01JBBBBBBBBBBBBBBBBBBBBBBBB"]);
 
 		expect(policyEntry.create).toHaveBeenCalledTimes(1);
 		expect(policyEntry.create).toHaveBeenCalledWith({
 			data: {
-				policySeq: 10n,
-				abilitySeq: 20n,
-			},
+				policy: { connect: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" } },
+				ability: { connect: { id: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } },
+			} as never,
 		});
 		expect(policyEntry.update).not.toHaveBeenCalled();
 	});
