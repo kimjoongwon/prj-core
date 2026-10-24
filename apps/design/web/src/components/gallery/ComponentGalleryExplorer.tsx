@@ -17,6 +17,7 @@ import DataGridSection from "./sections/DataGridSection";
 import FeedbackSection from "./sections/FeedbackSection";
 import FormInputSection from "./sections/FormInputSection";
 import OverlaySection from "./sections/OverlaySection";
+import ShadowSection from "./sections/ShadowSection";
 import SurfaceRhythmSection from "./sections/SurfaceRhythmSection";
 
 const gallerySectionLinks = [
@@ -25,6 +26,7 @@ const gallerySectionLinks = [
 	{ id: "data-display", label: "데이터 표시" },
 	{ id: "feedback", label: "피드백" },
 	{ id: "surface-rhythm", label: "표면·리듬" },
+	{ id: "shadows", label: "입체·그림자" },
 	{ id: "overlay", label: "오버레이" },
 	{ id: "data-grid", label: "DataGrid" },
 ];
@@ -129,6 +131,7 @@ const ComponentGalleryExplorer = observer(function ComponentGalleryExplorer() {
 					<DataDisplaySection />
 					<FeedbackSection />
 					<SurfaceRhythmSection />
+					<ShadowSection />
 					<OverlaySection />
 					<DataGridSection />
 				</div>
