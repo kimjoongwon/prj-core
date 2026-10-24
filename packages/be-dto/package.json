@@ -31,7 +31,7 @@
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/schema": "workspace:*",
     "@cocrepo/type": "workspace:*",
-    "@nestjs/mapped-types": "^2.1.0"
+    "@nestjs/mapped-types": "^2.1.1"
   },
   "peerDependencies": {
     "@nestjs/common": "^11.2.3",
@@ -41,11 +41,11 @@
   },
   "devDependencies": {
     "@cocrepo/tsconfig": "workspace:*",
-    "@nestjs/common": "^11.2.3",
+    "@nestjs/common": "^11.2.8",
     "@nestjs/swagger": "^11.4.7",
     "@types/node": "catalog:",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2",
+    "class-validator": "^0.14.4",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

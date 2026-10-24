@@ -44,7 +44,7 @@
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/enum": "workspace:*",
     "@cocrepo/type": "workspace:*",
-    "class-validator": "^0.14.2"
+    "class-validator": "^0.14.4"
   },
   "devDependencies": {
     "@types/node": "catalog:",

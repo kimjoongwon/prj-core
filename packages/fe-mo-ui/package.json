@@ -46,7 +46,7 @@
     "@cocrepo/type": "workspace:*",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
-    "tailwind-variants": "^3.2.2"
+    "tailwind-variants": "^3.3.1"
   },
   "peerDependencies": {
     "@gorhom/bottom-sheet": ">=5.2.9",
@@ -58,20 +58,20 @@
   },
   "devDependencies": {
     "@expo/dom-webview": "~57.0.1",
-    "@expo/metro-runtime": "~57.0.15",
+    "@expo/metro-runtime": "~57.0.17",
     "@gorhom/bottom-sheet": "catalog:",
     "@react-native/jest-preset": "0.86.3",
     "@storybook/react-native": "10.4.0",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
-    "@types/react": "catalog:",
-    "expo": "~57.0.22",
-    "expo-constants": "~57.0.18",
-    "expo-linking": "~57.0.10",
-    "expo-router": "~57.0.21",
+    "@types/react": "~19.2.18",
+    "expo": "~57.0.31",
+    "expo-constants": "~57.0.22",
+    "expo-linking": "~57.0.13",
+    "expo-router": "~57.0.29",
     "heroui-native": "catalog:",
     "jest": "^29.7.0",
-    "jest-expo": "~57.0.5",
+    "jest-expo": "~57.0.6",
     "lottie-react-native": "~7.3.8",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -83,7 +83,7 @@
     "react-test-renderer": "19.2.3",
     "storybook": "10.4.0",
     "typescript": "~6.0.3",
-    "uniwind": "^1.6.3"
+    "uniwind": "^1.13.0"
   },
   "private": false,
   "repository": {
