@@ -8,7 +8,6 @@ import type {
 	Updater,
 } from "@tanstack/react-table";
 import { action } from "mobx";
-import { useMemo } from "react";
 import type {
 	DataGridQueryState,
 	DataGridRow,
@@ -49,53 +48,50 @@ export const useHandlers = <TData extends DataGridRow>(
 ) => {
 	const groupingHandlers = useGroupHandlers(state.groupPanel);
 	const paginationHandlers = usePaginationHandlers(state.pagination);
-	const handlers = useMemo(
-		() => ({
-			getRowId,
-			changeExpandedRows: action((nextExpanded: Updater<ExpandedState>) => {
-				state.table.expandedRowIds =
-					typeof nextExpanded === "function"
-						? nextExpanded(state.table.expandedRowIds)
-						: nextExpanded;
-			}),
-			changeSorting: (nextSorting: Updater<SortingState>) => {
-				const sorting =
-					typeof nextSorting === "function"
-						? nextSorting(state.query.sort)
-						: nextSorting;
-				void state.querySetter({
-					sort: sorting.length === 0 ? null : getSortQueryValues(sorting),
-					skip: 0,
-				});
-			},
-			changeRowSelection: action(
-				(nextSelection: Updater<RowSelectionState>) => {
-					const selectedKeys =
-						state.table.selectionSource?.selectedKeys ??
-						state.table.selectedRowKeys;
-					const currentSelection = Object.fromEntries(
-						Array.from(selectedKeys, (key) => [key, true]),
-					);
-					const selection =
-						typeof nextSelection === "function"
-							? nextSelection(currentSelection)
-							: nextSelection;
-					const nextKeys = new Set(
-						Object.entries(selection)
-							.filter(([, selected]) => selected)
-							.map(([key]) => key),
-					);
-					if (state.table.selectionSource?.setSelectedKeys) {
-						state.table.selectionSource.setSelectedKeys(nextKeys);
-					} else {
-						state.table.selectedRowKeys = nextKeys;
-					}
-					state.table.selection?.onSelectionChange?.(nextKeys);
-				},
-			),
+	const handlers = {
+		getRowId,
+		changeExpandedRows: action((nextExpanded: Updater<ExpandedState>) => {
+			state.table.expandedRowIds =
+				typeof nextExpanded === "function"
+					? nextExpanded(state.table.expandedRowIds)
+					: nextExpanded;
 		}),
-		[state],
-	);
+		changeSorting: (nextSorting: Updater<SortingState>) => {
+			const sorting =
+				typeof nextSorting === "function"
+					? nextSorting(state.query.sort)
+					: nextSorting;
+			void state.querySetter({
+				sort: sorting.length === 0 ? null : getSortQueryValues(sorting),
+				skip: 0,
+			});
+		},
+		changeRowSelection: action(
+			(nextSelection: Updater<RowSelectionState>) => {
+				const selectedKeys =
+					state.table.selectionSource?.selectedKeys ??
+					state.table.selectedRowKeys;
+				const currentSelection = Object.fromEntries(
+					Array.from(selectedKeys, (key) => [key, true]),
+				);
+				const selection =
+					typeof nextSelection === "function"
+						? nextSelection(currentSelection)
+						: nextSelection;
+				const nextKeys = new Set(
+					Object.entries(selection)
+						.filter(([, selected]) => selected)
+						.map(([key]) => key),
+				);
+				if (state.table.selectionSource?.setSelectedKeys) {
+					state.table.selectionSource.setSelectedKeys(nextKeys);
+				} else {
+					state.table.selectedRowKeys = nextKeys;
+				}
+				state.table.selection?.onSelectionChange?.(nextKeys);
+			},
+		),
+	};
 	const selectedKeys =
 		state.table.selectionSource?.selectedKeys ?? state.table.selectedRowKeys;
 	return {

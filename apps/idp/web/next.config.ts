@@ -13,6 +13,8 @@ const idpApiInternalUrl =
 const nextConfig: NextConfig = {
 	// Docker 배포를 위한 standalone 출력 모드
 	output: "standalone",
+	// React Compiler로 자동 메모이제이션(fe-ui의 수동 useMemo 제거 근거)
+	reactCompiler: true,
 	// Turbopack 모노레포 설정
 	turbopack: {
 		// 모노레포 루트 디렉토리 설정 (워크스페이스 패키지 해석용)

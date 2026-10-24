@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
 	output: "standalone",
+	// React Compiler로 자동 메모이제이션(fe-ui의 수동 useMemo 제거 근거)
+	reactCompiler: true,
 	basePath: "/live",
 	// 브라우저 fetch/video src는 basePath가 자동으로 붙지 않으므로 환경변수로 노출한다.
 	env: {
