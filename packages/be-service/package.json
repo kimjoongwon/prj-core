@@ -1,90 +1,90 @@
 {
-  "name": "@cocrepo/service",
-  "version": "0.1.0",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "Business logic and service layer for cocrepo",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
-    "type-check:prod": "tsc --noEmit",
-    "build": "rm -rf dist && tsc --build",
-    "start:dev": "tsc --build --watch",
-    "format": "biome check --write .",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "clean": "rm -rf dist && rm -rf node_modules",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "dependencies": {
-    "@cocrepo/constant": "workspace:*",
-    "@cocrepo/context": "workspace:*",
-    "@cocrepo/entity": "workspace:*",
-    "@cocrepo/input": "workspace:*",
-    "@cocrepo/prisma": "workspace:*",
-    "@cocrepo/repository": "workspace:*",
-    "@cocrepo/type": "workspace:*",
-    "@cocrepo/vo": "workspace:*",
-    "nestjs-i18n": "^10.4.14"
-  },
-  "peerDependencies": {
-    "@aws-sdk/client-s3": "^3.1131.0",
-    "@nestjs/common": "^11.2.3",
-    "@nestjs/config": "^4.0.2",
-    "@nestjs/jwt": "^11.0.0",
-    "@nestjs/swagger": "^11.4.7",
-    "@prisma/adapter-pg": "^7.0.0",
-    "bcrypt": "^6.0.0",
-    "class-transformer": "^0.5.1",
-    "ioredis": "^5.8.2",
-    "libphonenumber-js": "^1.11.17",
-    "nestjs-cls": "^6.1.0",
-    "nodemailer": "^10.0.9",
-    "oidc-provider": "^8.5.1",
-    "pg": "^8.16.0"
-  },
-  "devDependencies": {
-    "@aws-sdk/client-s3": "^3.1131.0",
-    "@cocrepo/tsconfig": "workspace:*",
-    "@nestjs/common": "^11.2.3",
-    "@nestjs/config": "^4.0.2",
-    "@nestjs/jwt": "^11.0.0",
-    "@nestjs/swagger": "^11.4.7",
-    "@nestjs/testing": "^11.2.3",
-    "@prisma/adapter-pg": "^7.0.0",
-    "@types/bcrypt": "^5.0.2",
-    "@types/express": "^5.0.3",
-    "@types/jest": "^30.0.0",
-    "@types/node": "catalog:",
-    "@types/oidc-provider": "^8.5.2",
-    "bcrypt": "^6.0.0",
-    "class-transformer": "^0.5.1",
-    "ioredis": "^5.8.2",
-    "jest": "^30.5.1",
-    "jest-mock-extended": "^4.0.0",
-    "libphonenumber-js": "^1.11.17",
-    "nestjs-cls": "^6.1.0",
-    "nestjs-i18n": "^10.4.14",
-    "nodemailer": "^10.0.9",
-    "pg": "^8.16.0",
-    "ts-jest": "^29.4.12",
-    "typescript": "catalog:"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
-  "private": true
+	"name": "@cocrepo/service",
+	"version": "0.1.0",
+	"publishConfig": {
+		"access": "public"
+	},
+	"description": "Business logic and service layer for cocrepo",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+		"type-check:prod": "tsc --noEmit",
+		"build": "rm -rf dist && tsc --build",
+		"start:dev": "tsc --build --watch",
+		"format": "biome check --write .",
+		"test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
+		"test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+		"test:cov": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+		"clean": "rm -rf dist && rm -rf node_modules",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"dependencies": {
+		"@cocrepo/constant": "workspace:*",
+		"@cocrepo/context": "workspace:*",
+		"@cocrepo/entity": "workspace:*",
+		"@cocrepo/input": "workspace:*",
+		"@cocrepo/prisma": "workspace:*",
+		"@cocrepo/repository": "workspace:*",
+		"@cocrepo/type": "workspace:*",
+		"@cocrepo/vo": "workspace:*",
+		"nestjs-i18n": "^10.8.5"
+	},
+	"peerDependencies": {
+		"@aws-sdk/client-s3": "^3.1131.0",
+		"@nestjs/common": "^12.0.0",
+		"@nestjs/config": "^12.0.0",
+		"@nestjs/jwt": "^12.0.0",
+		"@nestjs/swagger": "^12.0.0",
+		"@prisma/adapter-pg": "^7.0.0",
+		"bcrypt": "^6.0.0",
+		"class-transformer": "^0.5.1",
+		"ioredis": "^5.8.2",
+		"libphonenumber-js": "^1.11.17",
+		"nestjs-cls": "^7.0.1",
+		"nodemailer": "^10.0.9",
+		"oidc-provider": "^8.5.1",
+		"pg": "^8.16.0"
+	},
+	"devDependencies": {
+		"@aws-sdk/client-s3": "^3.1156.0",
+		"@cocrepo/tsconfig": "workspace:*",
+		"@nestjs/common": "^12.0.0",
+		"@nestjs/config": "^12.0.0",
+		"@nestjs/jwt": "^12.0.0",
+		"@nestjs/swagger": "^12.0.0",
+		"@nestjs/testing": "^12.0.0",
+		"@prisma/adapter-pg": "^7.10.1",
+		"@types/bcrypt": "^5.0.2",
+		"@types/express": "^5.0.6",
+		"@types/jest": "^30.0.0",
+		"@types/node": "catalog:",
+		"@types/oidc-provider": "^8.8.1",
+		"bcrypt": "^6.0.0",
+		"class-transformer": "^0.5.1",
+		"ioredis": "^5.11.1",
+		"jest": "^30.5.2",
+		"jest-mock-extended": "^4.0.2",
+		"libphonenumber-js": "^1.13.15",
+		"nestjs-cls": "^7.0.1",
+		"nestjs-i18n": "^10.4.14",
+		"nodemailer": "^10.2.1",
+		"pg": "^8.23.1",
+		"ts-jest": "^29.4.15",
+		"typescript": "catalog:"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"require": "./dist/index.js",
+			"default": "./dist/index.js"
+		}
+	},
+	"private": true
 }

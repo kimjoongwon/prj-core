@@ -1,110 +1,110 @@
 {
-  "name": "@cocrepo/prisma",
-  "version": "1.0.11",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "Prisma schema and client for the core project",
-  "main": "./dist/src/index.js",
-  "types": "./dist/src/index.d.ts",
-  "files": [
-    "dist",
-    "generated",
-    "README.md",
-    "src/generated/client/enums.ts"
-  ],
-  "scripts": {
-    "reference:prepare": "pnpm exec turbo run build --filter=@cocrepo/constant",
-    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
-    "type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
-    "generate": "prisma generate && node ./scripts/fix-generated-client-module-format.mjs",
-    "public:enums": "tsx ./scripts/generate-public-enums.ts",
-    "public:enums:check": "tsx ./scripts/check-public-enums.ts",
-    "schema:check": "tsx ./scripts/validate-schema-conventions.ts",
-    "build": "rm -rf dist && pnpm run schema:check && tsc --build",
-    "start:dev": "tsc --build --watch",
-    "format": "biome check --write .",
-    "db:pull": "prisma db pull",
-    "db:pull:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma db pull",
-    "db:pull:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma db pull",
-    "db:push": "prisma db push",
-    "db:push:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma db push",
-    "db:push:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma db push",
-    "db:studio": "prisma studio",
-    "db:studio:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma studio",
-    "db:studio:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma studio",
-    "db:migrate": "prisma migrate dev",
-    "db:migrate:deploy": "prisma migrate deploy",
-    "db:migrate:deploy:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma migrate deploy",
-    "db:migrate:deploy:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma migrate deploy",
-    "db:reset": "prisma migrate reset",
-    "db:reset:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma migrate reset",
-    "db:bootstrap": "pnpm reference:prepare && tsx seed.ts",
-    "db:bootstrap:stg": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx seed.ts",
-    "db:data:migrate": "pnpm reference:prepare && tsx data-migrate.ts",
-    "db:data:migrate:stg": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx data-migrate.ts",
-    "db:data:migrate:prod": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD tsx data-migrate.ts",
-    "db:seed": "pnpm db:bootstrap",
-    "db:seed:stg": "pnpm db:bootstrap:stg",
-    "db:e2e:reset": "pnpm reference:prepare && tsx ./scripts/reset-e2e-database.ts",
-    "clean": "rm -rf dist && rm -rf node_modules",
-    "test": "vitest --passWithNoTests",
-    "test:ui": "vitest --ui",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "prisma": {
-    "seed": "tsx seed.ts"
-  },
-  "dependencies": {
-    "@cocrepo/constant": "workspace:*",
-    "@prisma/adapter-pg": "^7.0.0",
-    "bcrypt": "^6.0.0",
-    "pg": "^8.13.1"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^11.2.3",
-    "@nestjs/platform-express": "^11.2.3",
-    "@nestjs/swagger": "^11.4.7",
-    "@prisma/client": "catalog:",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2"
-  },
-  "devDependencies": {
-    "@nestjs/common": "^11.2.3",
-    "@nestjs/platform-express": "^11.2.3",
-    "@nestjs/swagger": "^11.4.7",
-    "@prisma/client": "catalog:",
-    "@prisma/internals": "7.10.0",
-    "@types/bcrypt": "^5.0.2",
-    "@types/node": "catalog:",
-    "@types/pg": "^8.11.10",
-    "bcrypt": "^6.0.0",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2",
-    "concurrently": "^9.2.0",
-    "cross-env": "^10.1.0",
-    "dotenv": "^16.4.7",
-    "libphonenumber-js": "^1.12.10",
-    "prisma": "catalog:",
-    "ts-jenum": "^2.2.2",
-    "ts-node": "^10.9.2",
-    "tsx": "catalog:",
-    "vitest": "catalog:"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/src/index.d.ts",
-      "require": "./dist/src/index.js",
-      "default": "./dist/src/index.js"
-    },
-    "./enums": {
-      "types": "./src/generated/client/enums.ts",
-      "import": "./src/generated/client/enums.ts",
-      "require": "./dist/src/generated/client/enums.js",
-      "default": "./src/generated/client/enums.ts"
-    }
-  },
-  "private": true
+	"name": "@cocrepo/prisma",
+	"version": "1.0.11",
+	"publishConfig": {
+		"access": "public"
+	},
+	"description": "Prisma schema and client for the core project",
+	"main": "./dist/src/index.js",
+	"types": "./dist/src/index.d.ts",
+	"files": [
+		"dist",
+		"generated",
+		"README.md",
+		"src/generated/client/enums.ts"
+	],
+	"scripts": {
+		"reference:prepare": "pnpm exec turbo run build --filter=@cocrepo/constant",
+		"type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+		"type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
+		"generate": "prisma generate && node ./scripts/fix-generated-client-module-format.mjs",
+		"public:enums": "tsx ./scripts/generate-public-enums.ts",
+		"public:enums:check": "tsx ./scripts/check-public-enums.ts",
+		"schema:check": "tsx ./scripts/validate-schema-conventions.ts",
+		"build": "rm -rf dist && pnpm run schema:check && tsc --build",
+		"start:dev": "tsc --build --watch",
+		"format": "biome check --write .",
+		"db:pull": "prisma db pull",
+		"db:pull:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma db pull",
+		"db:pull:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma db pull",
+		"db:push": "prisma db push",
+		"db:push:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma db push",
+		"db:push:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma db push",
+		"db:studio": "prisma studio",
+		"db:studio:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma studio",
+		"db:studio:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma studio",
+		"db:migrate": "prisma migrate dev",
+		"db:migrate:deploy": "prisma migrate deploy",
+		"db:migrate:deploy:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma migrate deploy",
+		"db:migrate:deploy:prod": "cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD prisma migrate deploy",
+		"db:reset": "prisma migrate reset",
+		"db:reset:stg": "cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG prisma migrate reset",
+		"db:bootstrap": "pnpm reference:prepare && tsx seed.ts",
+		"db:bootstrap:stg": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx seed.ts",
+		"db:data:migrate": "pnpm reference:prepare && tsx data-migrate.ts",
+		"db:data:migrate:stg": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_STG DIRECT_URL=$DIRECT_URL_STG tsx data-migrate.ts",
+		"db:data:migrate:prod": "pnpm reference:prepare && cross-env DATABASE_URL=$DATABASE_URL_PROD DIRECT_URL=$DIRECT_URL_PROD tsx data-migrate.ts",
+		"db:seed": "pnpm db:bootstrap",
+		"db:seed:stg": "pnpm db:bootstrap:stg",
+		"db:e2e:reset": "pnpm reference:prepare && tsx ./scripts/reset-e2e-database.ts",
+		"clean": "rm -rf dist && rm -rf node_modules",
+		"test": "vitest --passWithNoTests",
+		"test:ui": "vitest --ui",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"prisma": {
+		"seed": "tsx seed.ts"
+	},
+	"dependencies": {
+		"@cocrepo/constant": "workspace:*",
+		"@prisma/adapter-pg": "^7.10.1",
+		"bcrypt": "^6.0.0",
+		"pg": "^8.23.1"
+	},
+	"peerDependencies": {
+		"@nestjs/common": "^12.0.0",
+		"@nestjs/platform-express": "^12.0.0",
+		"@nestjs/swagger": "^12.0.0",
+		"@prisma/client": "catalog:",
+		"class-transformer": "^0.5.1",
+		"class-validator": "^0.15.1"
+	},
+	"devDependencies": {
+		"@nestjs/common": "^12.0.0",
+		"@nestjs/platform-express": "^12.0.0",
+		"@nestjs/swagger": "^12.0.0",
+		"@prisma/client": "catalog:",
+		"@prisma/internals": "7.10.0",
+		"@types/bcrypt": "^5.0.2",
+		"@types/node": "catalog:",
+		"@types/pg": "^8.23.1",
+		"bcrypt": "^6.0.0",
+		"class-transformer": "^0.5.1",
+		"class-validator": "^0.15.1",
+		"concurrently": "^9.2.5",
+		"cross-env": "^10.1.0",
+		"dotenv": "^16.6.1",
+		"libphonenumber-js": "^1.13.15",
+		"prisma": "catalog:",
+		"ts-jenum": "^2.2.2",
+		"ts-node": "^10.9.2",
+		"tsx": "catalog:",
+		"vitest": "catalog:"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/src/index.d.ts",
+			"require": "./dist/src/index.js",
+			"default": "./dist/src/index.js"
+		},
+		"./enums": {
+			"types": "./src/generated/client/enums.ts",
+			"import": "./src/generated/client/enums.ts",
+			"require": "./dist/src/generated/client/enums.js",
+			"default": "./src/generated/client/enums.ts"
+		}
+	},
+	"private": true
 }

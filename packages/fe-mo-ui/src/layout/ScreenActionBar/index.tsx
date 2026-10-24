@@ -1,5 +1,6 @@
 import { forwardRef, type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
+import type { ViewInstance } from "react-native";
 import { tv } from "tailwind-variants";
 import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
@@ -20,7 +21,7 @@ export interface ScreenActionBarProps extends Omit<ViewProps, "children"> {
 	secondaryActionLabel?: string;
 }
 
-const ScreenActionBarComponent = forwardRef<View, ScreenActionBarProps>(
+const ScreenActionBarComponent = forwardRef<ViewInstance, ScreenActionBarProps>(
 	(
 		{
 			children,

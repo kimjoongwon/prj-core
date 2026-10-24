@@ -15,16 +15,16 @@
     "clean": "rm -rf node_modules && rm -rf .next"
   },
   "dependencies": {
-    "@cocrepo/ui": "workspace:^1.5.0",
-    "@heroui/react": "catalog:",
-    "@heroui/styles": "catalog:",
+    "@cocrepo/ui": "workspace:^",
+    "@heroui/react": "3.1.0",
+    "@heroui/styles": "3.1.0",
     "@react-three/drei": "10.7.9",
     "@react-three/fiber": "9.8.2",
     "framer-motion": "catalog:",
     "lucide-react": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
-    "next": "^16.3.5",
+    "next": "^16.4.3",
     "react": "catalog:",
     "react-dom": "catalog:",
     "three": "0.186.1"

@@ -27,11 +27,13 @@ type RawIdpAccountRecord = Prisma.UserGetPayload<{
 
 /** API/DTO 형상 유지를 위해 status 관계를 펼친 레코드 형태입니다. */
 export type IdpAccountRecord = Omit<RawIdpAccountRecord, "status"> &
-	RawIdpAccountRecord["status"];
+	NonNullable<RawIdpAccountRecord["status"]>;
 
 export function flattenIdpAccountRecord(
 	raw: RawIdpAccountRecord,
 ): IdpAccountRecord {
 	const { status, ...account } = raw;
-	return { ...account, ...status };
+	// Prisma 타입은 status를 null 가능 관계로 표기하지만 UserStatus는 1:1 필수 분리라
+	// 런타임에는 항상 존재한다. null이면 전개가 no-op라 형상이 유지된다.
+	return { ...account, ...status! };
 }

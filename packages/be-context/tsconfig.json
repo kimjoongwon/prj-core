@@ -1,26 +1,38 @@
 {
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "incremental": true,
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "composite": true,
-    "tsBuildInfoFile": "dist/.tsbuildinfo",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "strict": true
-  },
-  "references": [
-    { "path": "../common-constant" },
-    { "path": "../be-entity" }
-  ],
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "dist",
+		"incremental": true,
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true,
+		"composite": true,
+		"tsBuildInfoFile": "dist/.tsbuildinfo",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"target": "ES2022",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"types": [
+			"jest"
+		]
+	},
+	"references": [
+		{
+			"path": "../common-constant"
+		},
+		{
+			"path": "../be-entity"
+		}
+	],
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"node_modules",
+		"dist"
+	]
 }

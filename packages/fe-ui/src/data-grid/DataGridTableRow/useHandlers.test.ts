@@ -4,7 +4,7 @@ import {
 	createTable,
 	getCoreRowModel,
 } from "@tanstack/react-table";
-import { configure, observable } from "mobx";
+import { configure, observable, observableRef } from "mobx";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { moveToAdjacentCell } from "../DataGridTableBody/useHandlers";
 import type { DataGridTableRowState } from "./DataGridTableRow";
@@ -59,7 +59,7 @@ describe("DataGrid 행 편집 handlers", () => {
 		const cell = row.getVisibleCells()[1];
 		const state = observable<DataGridTableRowState<EditableRecord>>(
 			{ editingCell: null },
-			{ editingCell: observable.ref },
+			{ editingCell: observableRef },
 		);
 		const commitValue = vi.fn();
 		const moveCell = vi.fn();
@@ -90,7 +90,7 @@ describe("DataGrid 행 편집 handlers", () => {
 		const cell = row.getVisibleCells()[1];
 		const state = observable<DataGridTableRowState<EditableRecord>>(
 			{ editingCell: null },
-			{ editingCell: observable.ref },
+			{ editingCell: observableRef },
 		);
 		const commitValue = vi.fn();
 		const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
@@ -120,7 +120,7 @@ describe("DataGrid 행 편집 handlers", () => {
 		const nextRow = table.getRow("beta");
 		const state = observable<DataGridTableRowState<EditableRecord>>(
 			{ editingCell: null },
-			{ editingCell: observable.ref },
+			{ editingCell: observableRef },
 		);
 		const commitValue = vi.fn();
 		startEditingCell(state, firstRow, firstCell);
@@ -147,7 +147,7 @@ describe("DataGrid 행 편집 handlers", () => {
 		});
 		const state = observable<DataGridTableRowState<EditableRecord>>(
 			{ editingCell: null },
-			{ editingCell: observable.ref },
+			{ editingCell: observableRef },
 		);
 		moveToAdjacentCell(table, state, "alpha", "name", "next");
 		expect(state.editingCell).toMatchObject({

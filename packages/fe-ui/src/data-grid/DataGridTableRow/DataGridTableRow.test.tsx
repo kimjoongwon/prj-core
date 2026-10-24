@@ -1,6 +1,6 @@
 import { createTable, getCoreRowModel } from "@tanstack/react-table";
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { observable, runInAction } from "mobx";
+import { observable, observableRef, runInAction } from "mobx";
 import { describe, expect, it, vi } from "vitest";
 import type { DataGridTableState } from "../DataGridTable/DataGridTable";
 import {
@@ -31,8 +31,8 @@ describe("DataGridTableRow 편집 요청", () => {
 		>(
 			{ editingCell: null, editRequest: undefined, onClick },
 			{
-				editingCell: observable.ref,
-				editRequest: observable.ref,
+				editingCell: observableRef,
+				editRequest: observableRef,
 				onClick: false,
 			},
 		);
@@ -49,7 +49,7 @@ describe("DataGridTableRow 편집 요청", () => {
 				getSubRows: undefined,
 				instance: table,
 			},
-			{ columns: observable.ref, instance: false, row: false },
+			{ columns: observableRef, instance: false, row: false },
 		);
 		const { unmount } = render(
 			<table>
