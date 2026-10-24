@@ -98,11 +98,12 @@ export function useFormField<
 	}));
 
 	// setValue with action wrapper and debug name
-	const setValue = action((newValue: TValue) => {
-		localState.value = newValue;
-	}, `useFormField.setValue[${debugPath}]`) as unknown as (
-		value: TValue,
-	) => void;
+	const setValue = action(
+		`useFormField.setValue[${debugPath}]`,
+		(newValue: TValue) => {
+			localState.value = newValue;
+		},
+	) as unknown as (value: TValue) => void;
 
 	useEffect(() => {
 		if (isSinglePath) {
