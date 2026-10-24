@@ -37,19 +37,10 @@ function formatDateTime(value: Date | null) {
 function getSpaceName(request: TenantAccessRequestDto) {
 	const space = request.space as
 		| (TenantAccessRequestDto["space"] & {
-				fitnessCenter?: {
-					name?: string | null;
-					company?: {
-						name?: string | null;
-					} | null;
-				} | null;
+				name?: string | null;
 		  })
 		| undefined;
-	return (
-		space?.fitnessCenter?.name ??
-		space?.fitnessCenter?.company?.name ??
-		request.spaceId
-	);
+	return space?.name ?? request.spaceId;
 }
 function getRoleName(request: TenantAccessRequestDto) {
 	return (

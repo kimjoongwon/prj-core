@@ -32,6 +32,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -251,7 +252,7 @@ export const prefetchGetPasswordPolicyQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetPasswordPolicyQueryOptions(options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -277,11 +278,19 @@ export const getGetPasswordPolicySuspenseQueryOptions = <
 		Awaited<ReturnType<typeof getPasswordPolicy>>
 	> = ({ signal }) => getPasswordPolicy({ signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getPasswordPolicy>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetPasswordPolicySuspenseQueryResult = NonNullable<
@@ -526,7 +535,7 @@ export const prefetchGetPasswordPolicyInfiniteQuery = async <
 	const queryOptions =
 		getGetPasswordPolicySuspenseInfiniteQueryOptions(options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -850,7 +859,7 @@ export const prefetchValidateResetTokenQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getValidateResetTokenQueryOptions(token, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -880,11 +889,19 @@ export const getValidateResetTokenSuspenseQueryOptions = <
 		Awaited<ReturnType<typeof validateResetToken>>
 	> = ({ signal }) => validateResetToken(token, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof validateResetToken>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type ValidateResetTokenSuspenseQueryResult = NonNullable<
@@ -1148,7 +1165,7 @@ export const prefetchValidateResetTokenInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

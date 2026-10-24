@@ -59,15 +59,15 @@ export class SpaceAggregate {
 	 * 새 Space 생성
 	 * 회원가입 시 개인 Space 생성에 사용
 	 */
-	createPersonalSpace(): Promise<Space> {
-		this.logger.debug("개인 Space 생성");
-		return this.repository.create();
+	createPersonalSpace(name: string): Promise<Space> {
+		this.logger.debug(`개인 Space 생성: ${name}`);
+		return this.repository.create({ name });
 	}
 
 	/**
 	 * Space 생성 (옵션 포함)
 	 */
-	create(data?: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
+	create(data: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
 		return this.repository.create(data);
 	}
 
@@ -81,6 +81,8 @@ export class SpaceAggregate {
 		this.logger.debug(`공간 생성: businessNo=${input.businessNo}`);
 
 		const space = await this.repository.create({
+			name: input.name,
+			label: input.label ?? null,
 			contentLanguageCode: input.contentLanguageCode,
 		});
 
@@ -95,8 +97,6 @@ export class SpaceAggregate {
 				logoImageFileId: input.logoImageFileId ?? null,
 			},
 			fitnessCenter: {
-				name: input.name,
-				label: input.label ?? null,
 				address: input.address,
 				phone: input.phone,
 				email: input.email,
@@ -114,23 +114,39 @@ export class SpaceAggregate {
 	): Promise<Space> {
 		await this.getFitnessCenterBySpaceId(spaceId);
 
+		// 이름/라벨/콘텐츠 언어는 Space 컬럼으로, 시설 속성은 FitnessCenter로 나눠 반영합니다.
+		const spaceUpdate: Prisma.SpaceUncheckedUpdateInput = {};
 		if (input.contentLanguageCode !== undefined) {
-			await this.repository.updateById(spaceId, {
-				contentLanguageCode: input.contentLanguageCode,
-			});
+			spaceUpdate.contentLanguageCode = input.contentLanguageCode;
+		}
+		if (input.name !== undefined) {
+			spaceUpdate.name = input.name;
+		}
+		if (input.label !== undefined) {
+			spaceUpdate.label = input.label;
+		}
+		if (Object.keys(spaceUpdate).length > 0) {
+			await this.repository.updateById(spaceId, spaceUpdate);
+		}
+
+		const fitnessCenterUpdate = {
+			...(input.address !== undefined && { address: input.address }),
+			...(input.phone !== undefined && { phone: input.phone }),
+			...(input.email !== undefined && { email: input.email }),
+			...(input.imageFileId !== undefined && {
+				imageFileId: input.imageFileId,
+			}),
+		};
+		if (Object.keys(fitnessCenterUpdate).length === 0) {
+			const space = await this.repository.findById(spaceId);
+			if (!space) {
+				throw new NotFoundException("공간을 찾을 수 없습니다");
+			}
+			return space;
 		}
 
 		return this.repository.updateFitnessCenterBySpaceId(spaceId, {
-			fitnessCenter: {
-				...(input.name !== undefined && { name: input.name }),
-				...(input.label !== undefined && { label: input.label }),
-				...(input.address !== undefined && { address: input.address }),
-				...(input.phone !== undefined && { phone: input.phone }),
-				...(input.email !== undefined && { email: input.email }),
-				...(input.imageFileId !== undefined && {
-					imageFileId: input.imageFileId,
-				}),
-			},
+			fitnessCenter: fitnessCenterUpdate,
 		});
 	}
 

@@ -131,7 +131,7 @@ export class AccountService {
 			})),
 			spaces: tenants?.map((t) => ({
 				spaceId: t.space.spaceId,
-				fitnessCenterName: t.space?.fitnessCenter?.name,
+				spaceName: t.space?.name,
 			})),
 		};
 	}

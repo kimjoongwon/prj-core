@@ -423,8 +423,6 @@ export const FitnessCenterScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  name: 'name',
-  label: 'label',
   address: 'address',
   phone: 'phone',
   email: 'email',
@@ -1055,6 +1053,8 @@ export const SpaceScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
+  name: 'name',
+  label: 'label',
   contentLanguageCode: 'contentLanguageCode'
 } as const
 

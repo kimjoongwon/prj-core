@@ -27,11 +27,23 @@ const DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO = "/";
 const NATIVE_SESSION_STORAGE_KEY = "plate.mobile.native.session.v1";
 const NATIVE_SPACE_SELECTION_STORAGE_KEY =
 	"plate.mobile.native.space-selection.v1";
-const NATIVE_SPACE_SELECTION_PERSIST_VERSION = 2 as const;
+const NATIVE_SPACE_SELECTION_PERSIST_VERSION = 3 as const;
+// version 2는 이름 키가 fitnessCenterName이던 시절의 저장 형태입니다.
+const LEGACY_NATIVE_SPACE_SELECTION_PERSIST_VERSION = 2 as const;
 
 interface PersistedNativeSpaceSelection extends MobileSpaceInfo {
 	version: typeof NATIVE_SPACE_SELECTION_PERSIST_VERSION;
 }
+
+/**
+ * version 2 저장 형태에는 이름이 fitnessCenterName 키로 남아 있습니다.
+ * guard가 나머지 필드를 검증하므로 이름 키만 unknown으로 읽습니다.
+ */
+type PersistedNativeSpaceSelectionRecord = Omit<MobileSpaceInfo, "spaceName"> & {
+	version: number;
+	spaceName: unknown;
+	fitnessCenterName?: unknown;
+};
 
 const toStringArray = (value: AuthQueryValue | undefined): string[] =>
 	typeof value === "string" ? [value] : (value ?? []);
@@ -119,23 +131,39 @@ const isOptionalNullableString = (value: unknown) =>
 
 const isPersistedNativeSpaceSelection = (
 	value: unknown,
-): value is PersistedNativeSpaceSelection => {
+): value is PersistedNativeSpaceSelectionRecord => {
 	if (typeof value !== "object" || value === null) {
 		return false;
 	}
 
 	const selection = value as Record<string, unknown>;
+	const isKnownVersion =
+		selection.version === NATIVE_SPACE_SELECTION_PERSIST_VERSION ||
+		selection.version === LEGACY_NATIVE_SPACE_SELECTION_PERSIST_VERSION;
+	const hasName =
+		typeof selection.spaceName === "string" ||
+		typeof selection.fitnessCenterName === "string";
 	return (
-		selection.version === NATIVE_SPACE_SELECTION_PERSIST_VERSION &&
+		isKnownVersion &&
 		typeof selection.tenantId === "string" &&
 		typeof selection.spaceId === "string" &&
-		typeof selection.fitnessCenterName === "string" &&
+		hasName &&
 		isOptionalNullableString(selection.address) &&
 		isOptionalNullableString(selection.contentLanguageCode) &&
 		isOptionalNullableString(selection.imageFileId) &&
 		isOptionalNullableString(selection.logoImageFileId)
 	);
 };
+
+const resolvePersistedSpaceName = (
+	selection: PersistedNativeSpaceSelectionRecord,
+): string =>
+	typeof selection.spaceName === "string"
+		? selection.spaceName
+		: // version 2 저장 형태에서 이름 키를 옮겨 읽습니다.
+			typeof selection.fitnessCenterName === "string"
+			? selection.fitnessCenterName
+			: "";
 
 /**
  * 현재 모바일 Space/FitnessCenter 선택을 versioned SecureStore payload로 저장합니다.
@@ -151,7 +179,8 @@ export const saveNativeSpaceSelection = async (space: MobileSpaceInfo) => {
 };
 
 /**
- * version 2 선택만 복원하고 versionless 또는 이전 payload는 폐기합니다.
+ * version 3 선택을 복원하고, version 2는 이름 키를 옮겨 읽습니다.
+ * 그 외 payload는 폐기합니다.
  */
 export const loadNativeSpaceSelection =
 	async (): Promise<MobileSpaceInfo | null> => {
@@ -172,10 +201,10 @@ export const loadNativeSpaceSelection =
 			return {
 				address: selection.address,
 				contentLanguageCode: selection.contentLanguageCode,
-				fitnessCenterName: selection.fitnessCenterName,
 				imageFileId: selection.imageFileId,
 				logoImageFileId: selection.logoImageFileId,
 				spaceId: selection.spaceId,
+				spaceName: resolvePersistedSpaceName(selection),
 				tenantId: selection.tenantId,
 			};
 		} catch {

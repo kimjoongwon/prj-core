@@ -2855,6 +2855,12 @@ export const runtimeManifest: RuntimeManifest = {
           "minimum": 1,
           "maximum": 200,
           "type": "number"
+        },
+        "query:timelineId": {
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "nullable": true,
+          "default": null,
+          "type": "string"
         }
       },
       "responseSchemas": {
@@ -6238,23 +6244,24 @@ export const runtimeManifest: RuntimeManifest = {
               "$ref": "#/components/schemas/LanguageCode"
             }
           ]
-        }
-      },
-      "required": [
-        "id",
-        "contentLanguageCode"
-      ]
-    },
-    "FitnessCenterDto": {
-      "type": "object",
-      "properties": {
+        },
         "name": {
           "type": "string"
         },
         "label": {
           "type": "string",
           "nullable": true
-        },
+        }
+      },
+      "required": [
+        "id",
+        "contentLanguageCode",
+        "name"
+      ]
+    },
+    "FitnessCenterDto": {
+      "type": "object",
+      "properties": {
         "address": {
           "type": "string"
         },
@@ -6321,7 +6328,6 @@ export const runtimeManifest: RuntimeManifest = {
         }
       },
       "required": [
-        "name",
         "address",
         "phone",
         "email",
@@ -6336,6 +6342,15 @@ export const runtimeManifest: RuntimeManifest = {
     "SpaceDto": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string",
+          "description": "Space의 표시 이름. 공간 선택·목록·검색의 원천입니다."
+        },
+        "label": {
+          "type": "string",
+          "description": "Space 표시 이름 아래에 함께 보여주는 보조 라벨입니다.",
+          "nullable": true
+        },
         "contentLanguageCode": {
           "description": "이 Space에서 작성되는 운영 리소스의 콘텐츠 언어",
           "default": "ko_KR",
@@ -6387,6 +6402,7 @@ export const runtimeManifest: RuntimeManifest = {
         }
       },
       "required": [
+        "name",
         "contentLanguageCode",
         "id",
         "createdAt",
@@ -6448,13 +6464,6 @@ export const runtimeManifest: RuntimeManifest = {
     "CreateSpaceWithFitnessCenterDto": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string"
-        },
-        "label": {
-          "type": "string",
-          "nullable": true
-        },
         "address": {
           "type": "string"
         },
@@ -6467,6 +6476,13 @@ export const runtimeManifest: RuntimeManifest = {
         "imageFileId": {
           "type": "string",
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "nullable": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string",
           "nullable": true
         },
         "space": {
@@ -6497,10 +6513,10 @@ export const runtimeManifest: RuntimeManifest = {
         }
       },
       "required": [
-        "name",
         "address",
         "phone",
         "email",
+        "name",
         "contentLanguageCode",
         "businessNo"
       ]
@@ -6508,13 +6524,6 @@ export const runtimeManifest: RuntimeManifest = {
     "UpdateFitnessCenterDto": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string"
-        },
-        "label": {
-          "type": "string",
-          "nullable": true
-        },
         "address": {
           "type": "string"
         },
@@ -6527,6 +6536,14 @@ export const runtimeManifest: RuntimeManifest = {
         "imageFileId": {
           "type": "string",
           "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "nullable": true
+        },
+        "name": {
+          "type": "string",
+          "nullable": true
+        },
+        "label": {
+          "type": "string",
           "nullable": true
         },
         "contentLanguageCode": {

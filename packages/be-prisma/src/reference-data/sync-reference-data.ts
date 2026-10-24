@@ -7,7 +7,7 @@ import type {
 	Subject,
 } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
-import { SYSTEM_SPACE_ULID } from "./constants";
+import { SYSTEM_SPACE_NAME, SYSTEM_SPACE_ULID } from "./constants";
 import {
 	abilitySeedData,
 	actionSeedData,
@@ -47,6 +47,7 @@ async function ensureSystemSpace(db: DbClient): Promise<void> {
 		},
 		create: {
 			spaceId: SYSTEM_SPACE_ULID,
+			name: SYSTEM_SPACE_NAME,
 		},
 	});
 }

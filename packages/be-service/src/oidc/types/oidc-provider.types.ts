@@ -25,7 +25,7 @@ export interface AccountRoleClaim {
 
 export interface AccountSpaceClaim {
 	spaceId: string;
-	fitnessCenterName?: string;
+	spaceName?: string;
 }
 
 export interface ClaimsParameterMember {

@@ -93,7 +93,7 @@ function createCompanyFixture() {
 /**
  * Space에 유일하게 연결되는 FitnessCenter fixture를 만듭니다.
  */
-function createFitnessCenterFixture(id: bigint, spaceId: bigint, name: string) {
+function createFitnessCenterFixture(id: bigint, spaceId: bigint) {
 	return {
 		id,
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
@@ -101,8 +101,6 @@ function createFitnessCenterFixture(id: bigint, spaceId: bigint, name: string) {
 		removedAt: null,
 		spaceId,
 		companyId: SHARED_COMPANY_ID,
-		name,
-		label: null,
 		address: "Seoul",
 		phone: "02-1234-5678",
 		email: `${spaceId.toString()}@fitness-center.example.com`,
@@ -117,19 +115,17 @@ function createFitnessCenterFixture(id: bigint, spaceId: bigint, name: string) {
 function createSpaceFixture(
 	spaceId: bigint,
 	fitnessCenterId: bigint,
-	fitnessCenterName: string,
+	spaceName: string,
 ) {
 	return {
 		id: spaceId,
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
+		name: spaceName,
+		label: null,
 		contentLanguageCode: "ko_KR",
-		fitnessCenter: createFitnessCenterFixture(
-			fitnessCenterId,
-			spaceId,
-			fitnessCenterName,
-		),
+		fitnessCenter: createFitnessCenterFixture(fitnessCenterId, spaceId),
 	};
 }
 
@@ -227,11 +223,7 @@ describe("FitnessCenter API (E2E)", () => {
 					spaceId === COMPANY_MANAGER_SPACE_ID
 						? COMPANY_MANAGER_FITNESS_CENTER_ID
 						: MEMBER_FITNESS_CENTER_ID;
-				return createFitnessCenterFixture(
-					fitnessCenterId,
-					spaceId,
-					"CoreFit Center",
-				);
+				return createFitnessCenterFixture(fitnessCenterId, spaceId);
 			},
 		);
 		spaceServiceMock.createSpaceWithFitnessCenter.mockResolvedValue(
@@ -257,12 +249,9 @@ describe("FitnessCenter API (E2E)", () => {
 				);
 				return {
 					...space,
+					label: input.label ?? null,
 					contentLanguageCode:
 						input.contentLanguageCode ?? space.contentLanguageCode,
-					fitnessCenter: {
-						...space.fitnessCenter,
-						label: input.label ?? null,
-					},
 				};
 			},
 		);
@@ -471,9 +460,12 @@ describe("FitnessCenter API (E2E)", () => {
 		expect(forwardedDto).not.toHaveProperty("companyId");
 		expect(forwardedDto).not.toHaveProperty("businessNo");
 		expect(forwardedDto).not.toHaveProperty("logoImageFileId");
-		expect(response.body.data.fitnessCenter).toMatchObject({
+		// 이름/라벨은 Space 응답 루트에 노출되고 시설 응답은 참조 정보만 담습니다.
+		expect(response.body.data).toMatchObject({
 			name: updateDto.name,
 			label: updateDto.label,
+		});
+		expect(response.body.data.fitnessCenter).toMatchObject({
 			companyId: SHARED_COMPANY_ID.toString(),
 			company: {
 				id: SHARED_COMPANY_ID.toString(),
@@ -481,6 +473,7 @@ describe("FitnessCenter API (E2E)", () => {
 				businessNo: COMPANY_BUSINESS_NO,
 			},
 		});
+		expect(response.body.data.fitnessCenter).not.toHaveProperty("name");
 	});
 
 	it("접근 불가한 space의 FitnessCenter 수정은 403을 반환해야 한다", async () => {

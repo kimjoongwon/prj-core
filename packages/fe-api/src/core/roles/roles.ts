@@ -35,6 +35,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -230,7 +231,7 @@ export const prefetchGetRolesQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetRolesQueryOptions(options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -252,11 +253,19 @@ export const getGetRolesSuspenseQueryOptions = <
 		signal,
 	}) => getRoles({ signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getRoles>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetRolesSuspenseQueryResult = NonNullable<
@@ -498,7 +507,7 @@ export const prefetchGetRolesInfiniteQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetRolesSuspenseInfiniteQueryOptions(options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -787,7 +796,7 @@ export const prefetchGetRoleByIdQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetRoleByIdQueryOptions(id, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -816,11 +825,19 @@ export const getGetRoleByIdSuspenseQueryOptions = <
 		signal,
 	}) => getRoleById(id, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getRoleById>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetRoleByIdSuspenseQueryResult = NonNullable<
@@ -1074,7 +1091,7 @@ export const prefetchGetRoleByIdInfiniteQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetRoleByIdSuspenseInfiniteQueryOptions(id, options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

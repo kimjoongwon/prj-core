@@ -1,5 +1,5 @@
 // @data-type: MASTER
-// @description: Company 아래에서 Space와 1:1로 연결되는 피트니스 센터 정보를 관리
+// @description: Company 아래에서 Space와 1:1로 연결되는 피트니스 센터 시설 정보를 관리합니다. 공간의 이름은 Space가 소유합니다.
 /// @displayName 피트니스 센터
 model FitnessCenter {
   fitnessCenterId String    @unique @default(ulid()) @map("fitness_center_id") @db.Char(26)
@@ -7,10 +7,6 @@ model FitnessCenter {
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)
-  /// @displayName 이름
-  name            String
-  /// @displayName 라벨
-  label           String?
   /// @displayName 주소
   address         String
   /// @displayName 전화번호

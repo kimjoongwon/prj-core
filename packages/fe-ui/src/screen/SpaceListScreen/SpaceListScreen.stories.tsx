@@ -18,6 +18,7 @@ const defaultArgs: ComponentProps<typeof SpaceListScreen> = {
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			updatedAt: null,
 			removedAt: null,
+			name: "샘플 피트니스 센터 1",
 			contentLanguageCode: "ko_KR",
 			fitnessCenter: {
 				id: 1n,
@@ -39,7 +40,6 @@ const defaultArgs: ComponentProps<typeof SpaceListScreen> = {
 					name: "샘플 운영사 1",
 				},
 				email: "center1@example.com",
-				name: "샘플 피트니스 센터 1",
 				phone: "010-1234-5670",
 			},
 			id: 1n,
@@ -48,6 +48,7 @@ const defaultArgs: ComponentProps<typeof SpaceListScreen> = {
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			updatedAt: null,
 			removedAt: null,
+			name: "샘플 피트니스 센터 2",
 			contentLanguageCode: "ko_KR",
 			fitnessCenter: {
 				id: 1n,
@@ -69,7 +70,6 @@ const defaultArgs: ComponentProps<typeof SpaceListScreen> = {
 					name: "샘플 운영사 2",
 				},
 				email: "center2@example.com",
-				name: "샘플 피트니스 센터 2",
 				phone: "010-5555-5555",
 			},
 			id: 2n,

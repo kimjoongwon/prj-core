@@ -48,7 +48,7 @@ const ProfileTabRoute = observer(() => {
 		<MyPageScreen
 			accountDescription="Plate 예약 알림과 계정 상태를 관리합니다."
 			currentSpaceName={
-				mobileApiScope.fitnessCenterName ?? "지점 선택 필요"
+				mobileApiScope.spaceName ?? "지점 선택 필요"
 			}
 			displayName="회원"
 			isAuthenticated={mobileSession.isAuthenticated}

@@ -8,8 +8,6 @@ export interface TenantWithRelations {
 	};
 	space?: {
 		spaceId: string;
-		fitnessCenter?: {
-			name: string;
-		} | null;
-	};
+		name: string;
+	} | null;
 }
