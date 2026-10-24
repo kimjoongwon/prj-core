@@ -40,6 +40,8 @@ export type SpaceMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
+  name: string | null
+  label: string | null
   contentLanguageCode: $Enums.LanguageCode | null
 }
 
@@ -49,6 +51,8 @@ export type SpaceMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
+  name: string | null
+  label: string | null
   contentLanguageCode: $Enums.LanguageCode | null
 }
 
@@ -58,6 +62,8 @@ export type SpaceCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
+  name: number
+  label: number
   contentLanguageCode: number
   _all: number
 }
@@ -77,6 +83,8 @@ export type SpaceMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
+  name?: true
+  label?: true
   contentLanguageCode?: true
 }
 
@@ -86,6 +94,8 @@ export type SpaceMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
+  name?: true
+  label?: true
   contentLanguageCode?: true
 }
 
@@ -95,6 +105,8 @@ export type SpaceCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
+  name?: true
+  label?: true
   contentLanguageCode?: true
   _all?: true
 }
@@ -191,6 +203,8 @@ export type SpaceGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
+  name: string
+  label: string | null
   contentLanguageCode: $Enums.LanguageCode
   _count: SpaceCountAggregateOutputType | null
   _avg: SpaceAvgAggregateOutputType | null
@@ -223,6 +237,8 @@ export type SpaceWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
+  name?: Prisma.StringFilter<"Space"> | string
+  label?: Prisma.StringNullableFilter<"Space"> | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFilter<"Space"> | $Enums.LanguageCode
   fitnessCenter?: Prisma.XOR<Prisma.FitnessCenterNullableScalarRelationFilter, Prisma.FitnessCenterWhereInput> | null
   associations?: Prisma.SpaceAssociationListRelationFilter
@@ -253,6 +269,8 @@ export type SpaceOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrder
+  label?: Prisma.SortOrderInput | Prisma.SortOrder
   contentLanguageCode?: Prisma.SortOrder
   fitnessCenter?: Prisma.FitnessCenterOrderByWithRelationInput
   associations?: Prisma.SpaceAssociationOrderByRelationAggregateInput
@@ -286,6 +304,8 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Space"> | Date | string | null
+  name?: Prisma.StringFilter<"Space"> | string
+  label?: Prisma.StringNullableFilter<"Space"> | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFilter<"Space"> | $Enums.LanguageCode
   fitnessCenter?: Prisma.XOR<Prisma.FitnessCenterNullableScalarRelationFilter, Prisma.FitnessCenterWhereInput> | null
   associations?: Prisma.SpaceAssociationListRelationFilter
@@ -316,6 +336,8 @@ export type SpaceOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrder
+  label?: Prisma.SortOrderInput | Prisma.SortOrder
   contentLanguageCode?: Prisma.SortOrder
   _count?: Prisma.SpaceCountOrderByAggregateInput
   _avg?: Prisma.SpaceAvgOrderByAggregateInput
@@ -333,6 +355,8 @@ export type SpaceScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Space"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Space"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Space"> | Date | string | null
+  name?: Prisma.StringWithAggregatesFilter<"Space"> | string
+  label?: Prisma.StringNullableWithAggregatesFilter<"Space"> | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeWithAggregatesFilter<"Space"> | $Enums.LanguageCode
 }
 
@@ -342,6 +366,8 @@ export type SpaceCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -372,6 +398,8 @@ export type SpaceUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -402,6 +430,8 @@ export type SpaceUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -432,6 +462,8 @@ export type SpaceUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -462,6 +494,8 @@ export type SpaceCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
 }
 
@@ -471,6 +505,8 @@ export type SpaceUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
 }
 
@@ -480,6 +516,8 @@ export type SpaceUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
 }
 
@@ -494,6 +532,8 @@ export type SpaceCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  label?: Prisma.SortOrder
   contentLanguageCode?: Prisma.SortOrder
 }
 
@@ -507,6 +547,8 @@ export type SpaceMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  label?: Prisma.SortOrder
   contentLanguageCode?: Prisma.SortOrder
 }
 
@@ -516,6 +558,8 @@ export type SpaceMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  label?: Prisma.SortOrder
   contentLanguageCode?: Prisma.SortOrder
 }
 
@@ -827,6 +871,8 @@ export type SpaceCreateWithoutAlbumEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -856,6 +902,8 @@ export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -901,6 +949,8 @@ export type SpaceUpdateWithoutAlbumEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -930,6 +980,8 @@ export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -959,6 +1011,8 @@ export type SpaceCreateWithoutAlbumsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -988,6 +1042,8 @@ export type SpaceUncheckedCreateWithoutAlbumsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -1033,6 +1089,8 @@ export type SpaceUpdateWithoutAlbumsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -1062,6 +1120,8 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1091,6 +1151,8 @@ export type SpaceCreateWithoutAssetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -1120,6 +1182,8 @@ export type SpaceUncheckedCreateWithoutAssetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -1165,6 +1229,8 @@ export type SpaceUpdateWithoutAssetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -1194,6 +1260,8 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1223,6 +1291,8 @@ export type SpaceCreateWithoutCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -1252,6 +1322,8 @@ export type SpaceUncheckedCreateWithoutCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -1297,6 +1369,8 @@ export type SpaceUpdateWithoutCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -1326,6 +1400,8 @@ export type SpaceUncheckedUpdateWithoutCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1355,6 +1431,8 @@ export type SpaceCreateWithoutContentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -1384,6 +1462,8 @@ export type SpaceUncheckedCreateWithoutContentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -1429,6 +1509,8 @@ export type SpaceUpdateWithoutContentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -1458,6 +1540,8 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1487,6 +1571,8 @@ export type SpaceCreateWithoutDerivativesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -1516,6 +1602,8 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -1561,6 +1649,8 @@ export type SpaceUpdateWithoutDerivativesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -1590,6 +1680,8 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1619,6 +1711,8 @@ export type SpaceCreateWithoutEmailVerificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -1648,6 +1742,8 @@ export type SpaceUncheckedCreateWithoutEmailVerificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -1693,6 +1789,8 @@ export type SpaceUpdateWithoutEmailVerificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -1722,6 +1820,8 @@ export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1751,6 +1851,8 @@ export type SpaceCreateWithoutFitnessCenterInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -1780,6 +1882,8 @@ export type SpaceUncheckedCreateWithoutFitnessCenterInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -1825,6 +1929,8 @@ export type SpaceUpdateWithoutFitnessCenterInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -1854,6 +1960,8 @@ export type SpaceUncheckedUpdateWithoutFitnessCenterInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -1883,6 +1991,8 @@ export type SpaceCreateWithoutFoldersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -1912,6 +2022,8 @@ export type SpaceUncheckedCreateWithoutFoldersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -1957,6 +2069,8 @@ export type SpaceUpdateWithoutFoldersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -1986,6 +2100,8 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2015,6 +2131,8 @@ export type SpaceCreateWithoutGroupsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -2044,6 +2162,8 @@ export type SpaceUncheckedCreateWithoutGroupsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -2089,6 +2209,8 @@ export type SpaceUpdateWithoutGroupsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -2118,6 +2240,8 @@ export type SpaceUncheckedUpdateWithoutGroupsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2147,6 +2271,8 @@ export type SpaceCreateWithoutInquiriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -2176,6 +2302,8 @@ export type SpaceUncheckedCreateWithoutInquiriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -2221,6 +2349,8 @@ export type SpaceUpdateWithoutInquiriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -2250,6 +2380,8 @@ export type SpaceUncheckedUpdateWithoutInquiriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2279,6 +2411,8 @@ export type SpaceCreateWithoutPoliciesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -2308,6 +2442,8 @@ export type SpaceUncheckedCreateWithoutPoliciesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -2353,6 +2489,8 @@ export type SpaceUpdateWithoutPoliciesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -2382,6 +2520,8 @@ export type SpaceUncheckedUpdateWithoutPoliciesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2411,6 +2551,8 @@ export type SpaceCreateWithoutReservationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -2440,6 +2582,8 @@ export type SpaceUncheckedCreateWithoutReservationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -2485,6 +2629,8 @@ export type SpaceUpdateWithoutReservationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -2514,6 +2660,8 @@ export type SpaceUncheckedUpdateWithoutReservationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2543,6 +2691,8 @@ export type SpaceCreateWithoutRoutinesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -2572,6 +2722,8 @@ export type SpaceUncheckedCreateWithoutRoutinesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -2617,6 +2769,8 @@ export type SpaceUpdateWithoutRoutinesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -2646,6 +2800,8 @@ export type SpaceUncheckedUpdateWithoutRoutinesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2675,6 +2831,8 @@ export type SpaceCreateWithoutSafeWalletsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -2704,6 +2862,8 @@ export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -2749,6 +2909,8 @@ export type SpaceUpdateWithoutSafeWalletsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -2778,6 +2940,8 @@ export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2807,6 +2971,8 @@ export type SpaceCreateWithoutAssociationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
@@ -2836,6 +3002,8 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
@@ -2881,6 +3049,8 @@ export type SpaceUpdateWithoutAssociationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
@@ -2910,6 +3080,8 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
@@ -2939,6 +3111,8 @@ export type SpaceCreateWithoutClassificationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -2968,6 +3142,8 @@ export type SpaceUncheckedCreateWithoutClassificationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -3013,6 +3189,8 @@ export type SpaceUpdateWithoutClassificationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -3042,6 +3220,8 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3071,6 +3251,8 @@ export type SpaceCreateWithoutTasksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -3100,6 +3282,8 @@ export type SpaceUncheckedCreateWithoutTasksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -3145,6 +3329,8 @@ export type SpaceUpdateWithoutTasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -3174,6 +3360,8 @@ export type SpaceUncheckedUpdateWithoutTasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3203,6 +3391,8 @@ export type SpaceCreateWithoutTenantAccessRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -3232,6 +3422,8 @@ export type SpaceUncheckedCreateWithoutTenantAccessRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -3277,6 +3469,8 @@ export type SpaceUpdateWithoutTenantAccessRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -3306,6 +3500,8 @@ export type SpaceUncheckedUpdateWithoutTenantAccessRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3335,6 +3531,8 @@ export type SpaceCreateWithoutTenantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -3364,6 +3562,8 @@ export type SpaceUncheckedCreateWithoutTenantsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -3409,6 +3609,8 @@ export type SpaceUpdateWithoutTenantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -3438,6 +3640,8 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3467,6 +3671,8 @@ export type SpaceCreateWithoutTimelinesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
@@ -3496,6 +3702,8 @@ export type SpaceUncheckedCreateWithoutTimelinesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  name: string
+  label?: string | null
   contentLanguageCode?: $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
   associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
@@ -3541,6 +3749,8 @@ export type SpaceUpdateWithoutTimelinesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
@@ -3570,6 +3780,8 @@ export type SpaceUncheckedUpdateWithoutTimelinesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
   associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3792,6 +4004,8 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
+  name?: boolean
+  label?: boolean
   contentLanguageCode?: boolean
   fitnessCenter?: boolean | Prisma.Space$fitnessCenterArgs<ExtArgs>
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
@@ -3823,6 +4037,8 @@ export type SpaceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
+  name?: boolean
+  label?: boolean
   contentLanguageCode?: boolean
 }, ExtArgs["result"]["space"]>
 
@@ -3832,6 +4048,8 @@ export type SpaceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
+  name?: boolean
+  label?: boolean
   contentLanguageCode?: boolean
 }, ExtArgs["result"]["space"]>
 
@@ -3841,10 +4059,12 @@ export type SpaceSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
+  name?: boolean
+  label?: boolean
   contentLanguageCode?: boolean
 }
 
-export type SpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"spaceId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "contentLanguageCode", ExtArgs["result"]["space"]>
+export type SpaceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"spaceId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "contentLanguageCode", ExtArgs["result"]["space"]>
 export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fitnessCenter?: boolean | Prisma.Space$fitnessCenterArgs<ExtArgs>
   associations?: boolean | Prisma.Space$associationsArgs<ExtArgs>
@@ -3903,6 +4123,14 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
+    /**
+     * @displayName 공간 이름
+     */
+    name: string
+    /**
+     * @displayName 라벨
+     */
+    label: string | null
     /**
      * @displayName 콘텐츠 언어
      */
@@ -4356,6 +4584,8 @@ export interface SpaceFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Space", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Space", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Space", 'DateTime'>
+  readonly name: Prisma.FieldRef<"Space", 'String'>
+  readonly label: Prisma.FieldRef<"Space", 'String'>
   readonly contentLanguageCode: Prisma.FieldRef<"Space", 'LanguageCode'>
 }
 
@@ -4580,7 +4810,7 @@ export type SpaceCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   /**
    * The data needed to create a Space.
    */
-  data?: Prisma.XOR<Prisma.SpaceCreateInput, Prisma.SpaceUncheckedCreateInput>
+  data: Prisma.XOR<Prisma.SpaceCreateInput, Prisma.SpaceUncheckedCreateInput>
 }
 
 /**

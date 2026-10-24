@@ -2,7 +2,6 @@ import {
 	BigIntIdFieldMetadata,
 	ClassField,
 	StringFieldMetadata,
-	StringFieldOptionalMetadata,
 	UUIDFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { FitnessCenterSchema } from "@cocrepo/schema";
@@ -17,10 +16,6 @@ export class FitnessCenter extends FitnessCenterSchema {
 	@Exclude({ toPlainOnly: true })
 	declare fitnessCenterId: FitnessCenterSchema["fitnessCenterId"];
 
-	@StringFieldMetadata()
-	declare name: FitnessCenterSchema["name"];
-	@StringFieldOptionalMetadata({ nullable: true })
-	declare label: FitnessCenterSchema["label"];
 	@StringFieldMetadata()
 	declare address: FitnessCenterSchema["address"];
 	@StringFieldMetadata()

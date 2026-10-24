@@ -25,13 +25,19 @@ export async function createInquiryDomainData(
 	console.log("========================================");
 
 	const users = await prisma.user.findMany();
-	const fitnessCenters = await prisma.fitnessCenter.findMany();
+	const fitnessCenters = await prisma.fitnessCenter.findMany({
+		include: { space: true },
+	});
 
-	// Inquiry seeds reference users/fitness centers by business keys, so materialize
-	// lookup maps once before the staged inserts below.
+	// Inquiry seeds reference users/spaces by business keys, so materialize
+	// lookup maps once before the staged inserts below. 시드의 이름 키는 이제
+	// Space 이름을 기준으로 합니다.
 	const userByEmail = new Map(users.map((user) => [user.email, user]));
 	const fitnessCenterByName = new Map(
-		fitnessCenters.map((fitnessCenter) => [fitnessCenter.name, fitnessCenter]),
+		fitnessCenters.map((fitnessCenter) => [
+			fitnessCenter.space.name,
+			fitnessCenter,
+		]),
 	);
 
 	console.log("\n[1/6] Inquiry 생성 중...");

@@ -128,7 +128,7 @@ function mapReviewDetail(
 	return {
 		id: request.id.toString(),
 		status: request.status,
-		spaceName: request.space?.fitnessCenter?.name ?? request.spaceId.toString(),
+		spaceName: request.space?.name ?? request.spaceId.toString(),
 		roleName:
 			request.requestedRole?.displayName ??
 			request.requestedRole?.name ??

@@ -15,9 +15,6 @@ import type { CompanyDto } from "./companyDto";
 import type { FitnessCenterSpaceDto } from "./fitnessCenterSpaceDto";
 
 export interface FitnessCenterDto {
-	name: string;
-	/** @nullable */
-	label?: string | null;
 	address: string;
 	phone: string;
 	email: string;

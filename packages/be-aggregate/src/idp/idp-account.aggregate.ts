@@ -69,11 +69,8 @@ export class IdpAccountAggregate {
 			const fitnessCenter = (
 				space as typeof space & {
 					fitnessCenter?: {
-						name?: string | null;
-						label?: string | null;
 						address?: string | null;
 						company?: {
-							name?: string | null;
 							label?: string | null;
 							address?: string | null;
 						} | null;
@@ -83,10 +80,9 @@ export class IdpAccountAggregate {
 			const company = fitnessCenter?.company;
 			return {
 				value: formatDatabaseId(space.id),
-				label:
-					fitnessCenter?.name ?? company?.name ?? formatDatabaseId(space.id),
+				label: space.name ?? formatDatabaseId(space.id),
 				description:
-					fitnessCenter?.label ??
+					space.label ??
 					fitnessCenter?.address ??
 					company?.label ??
 					company?.address ??
@@ -225,10 +221,7 @@ export class IdpAccountAggregate {
 			const fitnessCenter = (
 				tenant.space as typeof tenant.space & {
 					fitnessCenter?: {
-						name?: string | null;
-						label?: string | null;
 						company?: {
-							name?: string | null;
 							label?: string | null;
 						} | null;
 					} | null;
@@ -238,8 +231,8 @@ export class IdpAccountAggregate {
 			return {
 				tenantId: tenant.id,
 				spaceId: tenant.spaceId,
-				spaceName: fitnessCenter?.name ?? company?.name ?? tenant.spaceId,
-				spaceLabel: fitnessCenter?.label ?? company?.label ?? null,
+				spaceName: tenant.space?.name ?? tenant.spaceId,
+				spaceLabel: tenant.space?.label ?? company?.label ?? null,
 				roleId: tenant.roleId,
 				roleName: tenant.role.name,
 				roleDisplayName: tenant.role.displayName ?? null,

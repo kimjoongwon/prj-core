@@ -113,8 +113,8 @@ describe("useAccountTenantSelection", () => {
 					{
 						data: {
 							id: "302",
+							name: "Server Fitness Center B",
 							fitnessCenter: {
-								name: "Server Fitness Center B",
 								company: { name: "Server Company B" },
 							},
 						},
@@ -129,39 +129,6 @@ describe("useAccountTenantSelection", () => {
 		expect(mocks.account.setCurrentTenant).toHaveBeenCalledWith(
 			"102",
 			"Server Fitness Center B",
-			"en_US",
-			"302",
-		);
-	});
-
-	it("Given FitnessCenter 이름이 없는 응답일 때, When mutation이 성공하면, Then Company 이름으로 현재 Tenant를 확정한다", () => {
-		renderHook(() => useAccountTenantSelection());
-		const navigationErrorSpy = vi
-			.spyOn(console, "error")
-			.mockImplementation(() => {});
-
-		try {
-			// jsdom은 navigation을 구현하지 않으므로 reload 경고만 숨깁니다.
-			act(() =>
-				mocks.mutationOptions?.onSuccess?.(
-					{
-						data: {
-							id: "302",
-							fitnessCenter: {
-								company: { name: "Server Company B" },
-							},
-						},
-					},
-					{ tenantId: "102" },
-				),
-			);
-		} finally {
-			navigationErrorSpy.mockRestore();
-		}
-
-		expect(mocks.account.setCurrentTenant).toHaveBeenCalledWith(
-			"102",
-			"Server Company B",
 			"en_US",
 			"302",
 		);

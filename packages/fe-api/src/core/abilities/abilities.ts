@@ -35,6 +35,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -231,7 +232,7 @@ export const prefetchGetAbilitiesQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetAbilitiesQueryOptions(options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -257,11 +258,19 @@ export const getGetAbilitiesSuspenseQueryOptions = <
 		signal,
 	}) => getAbilities({ signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getAbilities>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetAbilitiesSuspenseQueryResult = NonNullable<
@@ -503,7 +512,7 @@ export const prefetchGetAbilitiesInfiniteQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetAbilitiesSuspenseInfiniteQueryOptions(options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -780,7 +789,7 @@ export const prefetchGetMyAbilitiesQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetMyAbilitiesQueryOptions(options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -806,11 +815,19 @@ export const getGetMyAbilitiesSuspenseQueryOptions = <
 		signal,
 	}) => getMyAbilities({ signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getMyAbilities>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetMyAbilitiesSuspenseQueryResult = NonNullable<
@@ -1053,7 +1070,7 @@ export const prefetchGetMyAbilitiesInfiniteQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetMyAbilitiesSuspenseInfiniteQueryOptions(options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -1229,7 +1246,7 @@ export const prefetchGetAbilityByIdQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetAbilityByIdQueryOptions(id, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -1258,11 +1275,19 @@ export const getGetAbilityByIdSuspenseQueryOptions = <
 		signal,
 	}) => getAbilityById(id, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getAbilityById>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetAbilityByIdSuspenseQueryResult = NonNullable<
@@ -1523,7 +1548,7 @@ export const prefetchGetAbilityByIdInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

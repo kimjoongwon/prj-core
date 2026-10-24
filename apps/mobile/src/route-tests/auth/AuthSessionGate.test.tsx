@@ -116,13 +116,13 @@ describe("AuthSessionGate", () => {
 		const currentSpace = {
 			id: 101n,
 			tenantId: 201n,
+			name: "강남점",
 			contentLanguageCode: "ko_KR",
 			fitnessCenter: {
 				address: "서울 강남구",
 				company: {
 					logoImageFileId: "company-logo-branch",
 				},
-				name: "강남점",
 			},
 		};
 		(SecureStore.getItemAsync as jest.Mock).mockImplementation(

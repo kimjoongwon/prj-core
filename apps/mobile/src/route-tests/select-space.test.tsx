@@ -102,13 +102,13 @@ const branchSpace = {
     createdAt: "2026-05-17T00:00:00.000Z",
     email: "gangnam@example.com",
     id: "301",
-    name: "강남점",
     phone: "02-0000-0000",
     removedAt: null,
     spaceId: "101",
     updatedAt: "2026-05-17T00:00:00.000Z",
   },
   id: "101",
+  name: "강남점",
   removedAt: null,
   tenantId: "201",
   updatedAt: "2026-05-17T00:00:00.000Z",
@@ -119,10 +119,10 @@ const platformSpace = {
   fitnessCenter: {
     ...branchSpace.fitnessCenter,
     id: "302",
-    name: "플랫폼 운영본부",
     spaceId: "102",
   },
   id: "102",
+  name: "플랫폼 운영본부",
   tenantId: "202",
 };
 

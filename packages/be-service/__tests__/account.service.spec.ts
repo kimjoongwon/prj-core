@@ -54,9 +54,7 @@ describe("AccountService", () => {
 					},
 					space: {
 						spaceId: "01J00000000000000000000011",
-						fitnessCenter: {
-							name: "System Fitness Center",
-						},
+						name: "System Fitness Center",
 					},
 				},
 			],

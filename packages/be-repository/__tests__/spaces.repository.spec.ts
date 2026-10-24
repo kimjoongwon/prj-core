@@ -39,6 +39,8 @@ describe("SpacesRepository", () => {
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
+		name: "Test Fitness Center",
+		label: "Test Label",
 	};
 
 	const mockCompanyData = {
@@ -57,8 +59,6 @@ describe("SpacesRepository", () => {
 		...mockSpaceData,
 		fitnessCenter: {
 			id: "fitness-center-test-id",
-			name: "Test Fitness Center",
-			label: "Test Label",
 			address: "Seoul",
 			phone: "02-0000-0000",
 			email: "center@example.com",
@@ -74,10 +74,10 @@ describe("SpacesRepository", () => {
 	const mockSecondSpaceWithFitnessCenter = {
 		...mockSpaceData,
 		id: "space-second-id",
+		name: "Second Fitness Center",
+		label: "Second Label",
 		fitnessCenter: {
 			id: "fitness-center-second-id",
-			name: "Second Fitness Center",
-			label: "Second Label",
 			address: "Busan",
 			phone: "051-0000-0000",
 			email: "second@example.com",
@@ -98,7 +98,7 @@ describe("SpacesRepository", () => {
 	):
 		| {
 				id?: string | bigint;
-				name?: string;
+				address?: string;
 				company?: {
 					id?: string | bigint;
 					businessNo?: string;
@@ -112,7 +112,7 @@ describe("SpacesRepository", () => {
 				| (Space & {
 						fitnessCenter?: {
 							id?: string | bigint;
-							name?: string;
+							address?: string;
 							company?: {
 								id?: string | bigint;
 								businessNo?: string;
@@ -280,20 +280,17 @@ describe("SpacesRepository", () => {
 			});
 
 			// Then
+			// 이름의 원천이 Space이므로 기본 where는 FitnessCenter 존재를 요구하지 않고,
+			// 검색만 Space 이름/회사명/사업자번호를 선택적으로 참조합니다.
 			expect(mockTxHost.tx.space.findMany).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
-						fitnessCenter: {
-							is: {
-								removedAt: null,
-								company: {
-									is: {
-										removedAt: null,
-									},
-								},
-							},
-						},
 						OR: expect.arrayContaining([
+							expect.objectContaining({
+								name: expect.objectContaining({
+									contains: "123-45",
+								}),
+							}),
 							expect.objectContaining({
 								fitnessCenter: expect.objectContaining({
 									is: expect.objectContaining({
@@ -311,6 +308,8 @@ describe("SpacesRepository", () => {
 					}),
 				}),
 			);
+			const whereArg = mockTxHost.tx.space.findMany.mock.calls[0][0].where;
+			expect(whereArg).not.toHaveProperty("fitnessCenter");
 			expect(total).toBe(2);
 			expect(getFitnessCenter(spaces[0])?.space?.id).toBe(mockSpaceData.id);
 			expect(getFitnessCenter(spaces[1])?.space?.id).toBe("space-second-id");
@@ -378,7 +377,7 @@ describe("SpacesRepository", () => {
 	describe("create", () => {
 		it("새 Space를 생성해야 한다", async () => {
 			// Given
-			const createData = { id: 99n };
+			const createData = { id: 99n, name: "테스트 공간" };
 			mockTxHost.tx.space.create.mockResolvedValue({
 				...mockSpaceData,
 				...createData,
@@ -394,16 +393,16 @@ describe("SpacesRepository", () => {
 			expect(result).toBeInstanceOf(Space);
 		});
 
-		it("데이터 없이 기본 Space를 생성해야 한다", async () => {
+		it("이름을 포함한 최소 Space를 생성해야 한다", async () => {
 			// Given
 			mockTxHost.tx.space.create.mockResolvedValue(mockSpaceData);
 
 			// When
-			const result = await repository.create();
+			const result = await repository.create({ name: "테스트 공간" });
 
 			// Then
 			expect(mockTxHost.tx.space.create).toHaveBeenCalledWith({
-				data: {},
+				data: { name: "테스트 공간" },
 			});
 			expect(result).toBeInstanceOf(Space);
 		});
@@ -430,8 +429,6 @@ describe("SpacesRepository", () => {
 						...mockCompanyData,
 					},
 					fitnessCenter: {
-						name: "Test Fitness Center",
-						label: "Test Label",
 						address: "Seoul",
 						phone: "02-0000-0000",
 						email: "fitness-center@example.com",
@@ -489,7 +486,7 @@ describe("SpacesRepository", () => {
 				...mockSpaceWithFitnessCenter,
 				fitnessCenter: {
 					...mockSpaceWithFitnessCenter.fitnessCenter,
-					name: "Updated Fitness Center",
+					address: "Updated Address",
 				},
 			});
 
@@ -498,7 +495,7 @@ describe("SpacesRepository", () => {
 				mockSpaceDbId,
 				{
 					fitnessCenter: {
-						name: "Updated Fitness Center",
+						address: "Updated Address",
 					},
 				},
 			);
@@ -512,7 +509,7 @@ describe("SpacesRepository", () => {
 			expect(mockTxHost.tx.fitnessCenter.update).toHaveBeenCalledWith({
 				where: { id: "fitness-center-test-id" },
 				data: {
-					name: "Updated Fitness Center",
+					address: "Updated Address",
 				},
 			});
 			expect(mockTxHost.tx.fitnessCenter.update).not.toHaveBeenCalledWith(
@@ -520,7 +517,7 @@ describe("SpacesRepository", () => {
 					where: { id: "fitness-center-second-id" },
 				}),
 			);
-			expect(getFitnessCenter(result)?.name).toBe("Updated Fitness Center");
+			expect(getFitnessCenter(result)?.address).toBe("Updated Address");
 		});
 	});
 

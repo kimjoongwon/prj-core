@@ -72,7 +72,7 @@ function filterRows(
 				row.contentLanguageCode === contentLanguageCode) &&
 			(searchKeyword.length === 0 ||
 				[
-					row.fitnessCenter?.name,
+					row.name,
 					row.fitnessCenter?.company?.businessNo,
 					row.fitnessCenter?.company?.address,
 				]

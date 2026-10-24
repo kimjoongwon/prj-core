@@ -10,7 +10,7 @@ import {
 } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 
-export const MOBILE_PLATFORM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
+export const MOBILE_PLATFORM_SPACE_NAME = "플랫폼 운영본부";
 
 export interface MobileSpaceInfo {
   tenantId: string;
@@ -30,11 +30,10 @@ interface MobileSessionTokens {
   sessionId?: string | null;
 }
 
-const resolveFitnessCenterName = (space: SpaceDto) =>
-  space.fitnessCenter?.name ?? "";
+const resolveSpaceDisplayName = (space: SpaceDto) => space.name ?? "";
 const resolveFitnessCenterAddress = (space: SpaceDto) =>
   space.fitnessCenter?.address ??
-  space.fitnessCenter?.label ??
+  space.label ??
   space.fitnessCenter?.company?.address ??
   space.fitnessCenter?.company?.label ??
   null;
@@ -72,7 +71,7 @@ export const isSelectableMobileSpace = (space: SpaceDto) =>
   isMobileDatabaseId(space.id) &&
   isMobileDatabaseId(space.tenantId) &&
   Boolean(space.fitnessCenter) &&
-  space.fitnessCenter?.name !== MOBILE_PLATFORM_FITNESS_CENTER_NAME;
+  space.name !== MOBILE_PLATFORM_SPACE_NAME;
 
 /**
  * API Space와 FitnessCenter/company 관계를 모바일 선택 정보로 정규화합니다.
@@ -80,7 +79,8 @@ export const isSelectableMobileSpace = (space: SpaceDto) =>
 export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
   address: resolveFitnessCenterAddress(space),
   contentLanguageCode: space.contentLanguageCode ?? null,
-  fitnessCenterName: resolveFitnessCenterName(space),
+  // 모바일 상태 필드명은 유지하되 값의 원천은 Space 이름입니다.
+  fitnessCenterName: resolveSpaceDisplayName(space),
   imageFileId: space.fitnessCenter?.imageFileId ?? null,
   logoImageFileId: space.fitnessCenter?.company?.logoImageFileId ?? null,
   spaceId: toMobileDecimalId(space.id, "space.id"),
@@ -119,9 +119,7 @@ class MobileApiScope {
     this.tenantId = tenantId;
     this.spaceId = toMobileDecimalId(space.id, "space.id");
     this.fitnessCenterName =
-      resolveFitnessCenterName(space) ||
-      existingSpace?.fitnessCenterName ||
-      null;
+      resolveSpaceDisplayName(space) || existingSpace?.fitnessCenterName || null;
     this.address =
       resolveFitnessCenterAddress(space) ?? existingSpace?.address ?? null;
     this.contentLanguageCode =

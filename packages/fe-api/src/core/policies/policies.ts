@@ -35,6 +35,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -232,7 +233,7 @@ export const prefetchGetPoliciesQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetPoliciesQueryOptions(options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -258,11 +259,19 @@ export const getGetPoliciesSuspenseQueryOptions = <
 		signal,
 	}) => getPolicies({ signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getPolicies>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetPoliciesSuspenseQueryResult = NonNullable<
@@ -504,7 +513,7 @@ export const prefetchGetPoliciesInfiniteQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetPoliciesSuspenseInfiniteQueryOptions(options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -793,7 +802,7 @@ export const prefetchGetPolicyByIdQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetPolicyByIdQueryOptions(policyId, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -822,11 +831,19 @@ export const getGetPolicyByIdSuspenseQueryOptions = <
 		signal,
 	}) => getPolicyById(policyId, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getPolicyById>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetPolicyByIdSuspenseQueryResult = NonNullable<
@@ -1087,7 +1104,7 @@ export const prefetchGetPolicyByIdInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

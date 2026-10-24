@@ -76,8 +76,6 @@ type SpaceCompanyRow = {
 };
 
 type SpaceFitnessCenterRow = {
-	name: string;
-	label?: string | null;
 	address: string;
 	phone: string;
 	email: string;
@@ -86,6 +84,8 @@ type SpaceFitnessCenterRow = {
 
 type SpaceTableRow = {
 	id: bigint;
+	name: string;
+	label?: string | null;
 	contentLanguageCode: string;
 	fitnessCenter?: SpaceFitnessCenterRow | null;
 };
@@ -812,14 +812,14 @@ export function buildSpaceTableColumns<
 	return buildColumnsWithDefaultCreatedAt<TRow>([
 		createNameColumn<TRow>({
 			nameVariant: "clickable",
-			accessorKey: "fitnessCenter.name",
+			accessorKey: "name",
 			onClickName: (row) => onClickSpaceFitnessCenterName(row.id),
 		}),
 		createLabelColumn<TRow>({
-			accessorKey: "fitnessCenter.label",
+			accessorKey: "label",
 			size: 120,
 			cell: ({ row }) => (
-				<ChipCell label={row.original.fitnessCenter?.label} color="default" />
+				<ChipCell label={row.original.label} color="default" />
 			),
 		}),
 		defineColumn<TRow, TRow["contentLanguageCode"]>({

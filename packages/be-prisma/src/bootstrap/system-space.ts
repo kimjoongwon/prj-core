@@ -129,11 +129,18 @@ export async function ensureSystemBootstrap(
 		(fitnessCenter) => fitnessCenter.isSystem,
 	);
 	if (systemFitnessCenterData) {
+		// 이름/라벨의 원천이 Space이므로 시스템 공간 행에 먼저 반영합니다.
+		await prisma.space.update({
+			where: { id: systemSpace.id },
+			data: {
+				name: systemFitnessCenterData.name,
+				label: systemFitnessCenterData.label,
+			},
+		});
 		const systemFitnessCenter = await prisma.fitnessCenter.findFirst({
 			where: { space: { spaceId: SYSTEM_SPACE_ULID } },
 			include: { company: true },
 		});
-
 		if (systemFitnessCenter) {
 			await prisma.company.update({
 				where: { id: systemFitnessCenter.company.id },
@@ -149,8 +156,6 @@ export async function ensureSystemBootstrap(
 			await prisma.fitnessCenter.update({
 				where: { id: systemFitnessCenter.id },
 				data: {
-					name: systemFitnessCenterData.name,
-					label: systemFitnessCenterData.label,
 					address: systemFitnessCenterData.address,
 					phone: systemFitnessCenterData.phone,
 					email: systemFitnessCenterData.email,
@@ -169,8 +174,6 @@ export async function ensureSystemBootstrap(
 			});
 			await prisma.fitnessCenter.create({
 				data: {
-					name: systemFitnessCenterData.name,
-					label: systemFitnessCenterData.label,
 					address: systemFitnessCenterData.address,
 					phone: systemFitnessCenterData.phone,
 					email: systemFitnessCenterData.email,
@@ -215,6 +218,7 @@ export async function createRegularUsersAndFitnessCenters(
 	const createdFitnessCenters: Array<{
 		fitnessCenter: FitnessCenter;
 		spaceId: DbId;
+		spaceName: string;
 	}> = [];
 	const defaultAdminPassword = await hash("admin123!@#", 10);
 
@@ -227,13 +231,19 @@ export async function createRegularUsersAndFitnessCenters(
 
 		try {
 			const existingFitnessCenter = await prisma.fitnessCenter.findFirst({
-				where: { name: fitnessCenterData.name, removedAt: null },
+				where: {
+					removedAt: null,
+					space: { name: fitnessCenterData.name, removedAt: null },
+				},
 				include: { company: true, space: true },
 			});
 
 			if (!existingFitnessCenter) {
 				const space = await prisma.space.create({
-					data: {},
+					data: {
+						name: fitnessCenterData.name,
+						label: fitnessCenterData.label,
+					},
 				});
 
 				const adminUser = await prisma.user.upsert({
@@ -289,8 +299,6 @@ export async function createRegularUsersAndFitnessCenters(
 				});
 				const fitnessCenter = await prisma.fitnessCenter.create({
 					data: {
-						name: fitnessCenterData.name,
-						label: fitnessCenterData.label,
 						address: fitnessCenterData.address,
 						phone: fitnessCenterData.phone,
 						email: fitnessCenterData.email,
@@ -302,6 +310,7 @@ export async function createRegularUsersAndFitnessCenters(
 				createdFitnessCenters.push({
 					fitnessCenter,
 					spaceId: space.id,
+					spaceName: space.name,
 				});
 				console.log(`피트니스센터 생성 완료: ${fitnessCenterData.name}`);
 			} else {
@@ -309,6 +318,7 @@ export async function createRegularUsersAndFitnessCenters(
 				createdFitnessCenters.push({
 					fitnessCenter: existingFitnessCenter,
 					spaceId: existingFitnessCenter.space.id,
+					spaceName: existingFitnessCenter.space.name,
 				});
 			}
 		} catch (error) {
@@ -349,12 +359,13 @@ export async function createRegularUsersAndFitnessCenters(
 			const userFitnessCenters: Array<{
 				fitnessCenter: FitnessCenter;
 				spaceId: DbId;
+				spaceName: string;
 			}> = [];
 
 			for (const fitnessCenterName of userMapping.fitnessCenterNames) {
 				const fitnessCenterInfo = createdFitnessCenters.find(
 					(fitnessCenterEntry) =>
-						fitnessCenterEntry.fitnessCenter.name === fitnessCenterName,
+						fitnessCenterEntry.spaceName === fitnessCenterName,
 				);
 				if (fitnessCenterInfo) {
 					userFitnessCenters.push(fitnessCenterInfo);
@@ -469,7 +480,7 @@ export async function classifyFitnessCenterSpacesAsBranch(
 		});
 		syncedCount++;
 		console.log(
-			`  - BRANCH 할당: ${fitnessCenter.name} (spaceId=${String(
+			`  - BRANCH 할당: ${fitnessCenter.space.name} (spaceId=${String(
 				fitnessCenter.space.id,
 			).slice(-8)})`,
 		);
