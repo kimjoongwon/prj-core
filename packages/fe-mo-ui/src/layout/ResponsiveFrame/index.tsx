@@ -1,5 +1,6 @@
 import { forwardRef, type ReactNode } from "react";
 import { View, type ViewProps, type ViewStyle } from "react-native";
+import type { ViewInstance } from "react-native";
 import { tv } from "tailwind-variants";
 
 export type ResponsiveFrameSize = "fo" | "mo" | "pc";
@@ -34,7 +35,7 @@ function getResponsiveFrameWidth(
  * ResponsiveFrame 컴포넌트
  * 자식 반응형 컴포넌트가 판정할 부모 너비를 고정하는 layout wrapper입니다.
  */
-export const ResponsiveFrame = forwardRef<View, ResponsiveFrameProps>(
+export const ResponsiveFrame = forwardRef<ViewInstance, ResponsiveFrameProps>(
 	({ children, className, size = "fo", style, width, ...props }, ref) => {
 		const frameWidth = getResponsiveFrameWidth(size, width);
 

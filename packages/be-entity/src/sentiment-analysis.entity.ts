@@ -125,8 +125,12 @@ export class SentimentAnalysis extends SentimentAnalysisSchema {
 		this.sentiment = result.sentiment;
 		this.score = result.score;
 		this.confidence = result.confidence;
-		if (result.emotions) this.emotions = result.emotions;
-		if (result.keywords) this.keywords = result.keywords;
+		// Prisma.JsonValue와 자체 JsonValue의 재귀 구조가 TS 6에서 구조적으로 일치하지 않아
+		// 엔티티 표준 타입(SentimentAnalysisSchema)으로 변환해 저장한다.
+		if (result.emotions)
+			this.emotions = result.emotions as SentimentAnalysisSchema["emotions"];
+		if (result.keywords)
+			this.keywords = result.keywords as SentimentAnalysisSchema["keywords"];
 		if (result.urgency !== undefined) this.urgency = result.urgency;
 		this.analyzedAt = new Date();
 	}

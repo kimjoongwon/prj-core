@@ -1,25 +1,52 @@
 {
-  "extends": "@cocrepo/tsconfig/nestjs-package.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "./dist",
-    "paths": {
-      "@cocrepo/input": ["../be-input/src/index.ts"]
-    },
-    "rootDir": "./src",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
-  },
-  "references": [
-    { "path": "../common-constant" },
-    { "path": "../common-toolkit" },
-    { "path": "../be-context" },
-    { "path": "../be-entity" },
-    { "path": "../be-input" },
-    { "path": "../be-prisma" },
-    { "path": "../be-repository" },
-    { "path": "../be-service" },
-    { "path": "../be-vo" }
-  ],
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+	"extends": "@cocrepo/tsconfig/nestjs-package.json",
+	"compilerOptions": {
+		"outDir": "./dist",
+		"paths": {
+			"@cocrepo/input": [
+				"../be-input/src/index.ts"
+			]
+		},
+		"rootDir": "./src",
+		"tsBuildInfoFile": "./dist/.tsbuildinfo",
+		"types": [
+			"node"
+		]
+	},
+	"references": [
+		{
+			"path": "../common-constant"
+		},
+		{
+			"path": "../common-toolkit"
+		},
+		{
+			"path": "../be-context"
+		},
+		{
+			"path": "../be-entity"
+		},
+		{
+			"path": "../be-input"
+		},
+		{
+			"path": "../be-prisma"
+		},
+		{
+			"path": "../be-repository"
+		},
+		{
+			"path": "../be-service"
+		},
+		{
+			"path": "../be-vo"
+		}
+	],
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"dist"
+	]
 }

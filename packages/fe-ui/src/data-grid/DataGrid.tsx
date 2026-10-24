@@ -6,7 +6,7 @@ import type {
 	DataGridToolbarConfig,
 } from "@cocrepo/type";
 import type { SortingState } from "@tanstack/react-table";
-import { observable } from "mobx";
+import { observable, observableRef } from "mobx";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import {
@@ -103,8 +103,8 @@ export function createDataGridState<TData extends DataGridRow = DataGridRow>({
 					onClick: table?.row?.onClick,
 				},
 				{
-					editingCell: observable.ref,
-					editRequest: observable.ref,
+					editingCell: observableRef,
+					editRequest: observableRef,
 					onClick: false,
 				},
 				{ name: "DataGridTableRowState" },
@@ -113,9 +113,9 @@ export function createDataGridState<TData extends DataGridRow = DataGridRow>({
 			instance: undefined,
 		},
 		{
-			columns: observable.ref,
+			columns: observableRef,
 			selection: false,
-			selectionSource: observable.ref,
+			selectionSource: observableRef,
 			getSubRows: false,
 			row: false,
 			instance: false,
@@ -172,7 +172,7 @@ export function createDataGridState<TData extends DataGridRow = DataGridRow>({
 					showCount: actionBar?.showCount ?? true,
 					actions: actionBar?.actions,
 				},
-				{ table: false, actions: observable.ref },
+				{ table: false, actions: observableRef },
 				{ name: "DataGridActionBarState" },
 			),
 		},

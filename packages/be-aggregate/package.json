@@ -1,66 +1,66 @@
 {
-  "name": "@cocrepo/aggregate",
-  "version": "0.1.0",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "Aggregate service providers for cocrepo backend domains",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
-    "type-check:prod": "tsc --noEmit",
-    "build": "rm -rf dist && tsc --build",
-    "start:dev": "tsc --build --watch",
-    "format": "biome check --write .",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "clean": "rm -rf dist && rm -rf node_modules",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
-  },
-  "dependencies": {
-    "@cocrepo/constant": "workspace:*",
-    "@cocrepo/context": "workspace:*",
-    "@cocrepo/entity": "workspace:*",
-    "@cocrepo/input": "workspace:*",
-    "@cocrepo/prisma": "workspace:*",
-    "@cocrepo/repository": "workspace:*",
-    "@cocrepo/service": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*",
-    "@cocrepo/type": "workspace:*",
-    "@cocrepo/vo": "workspace:*"
-  },
-  "peerDependencies": {
-    "@nestjs-cls/transactional": "^3.1.1",
-    "@nestjs-cls/transactional-adapter-prisma": "^1.3.2",
-    "@nestjs/common": "^11.2.3"
-  },
-  "devDependencies": {
-    "@cocrepo/tsconfig": "workspace:*",
-    "@nestjs-cls/transactional": "^3.1.1",
-    "@nestjs-cls/transactional-adapter-prisma": "^1.3.2",
-    "@nestjs/common": "^11.2.3",
-    "@nestjs/testing": "^11.2.3",
-    "@types/jest": "^30.0.0",
-    "@types/node": "catalog:",
-    "jest": "^30.5.1",
-    "jest-mock-extended": "^4.0.0",
-    "ts-jest": "^29.4.12",
-    "typescript": "catalog:"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
-  "private": true
+	"name": "@cocrepo/aggregate",
+	"version": "0.1.0",
+	"publishConfig": {
+		"access": "public"
+	},
+	"description": "Aggregate service providers for cocrepo backend domains",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+		"type-check:prod": "tsc --noEmit",
+		"build": "rm -rf dist && tsc --build",
+		"start:dev": "tsc --build --watch",
+		"format": "biome check --write .",
+		"test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
+		"test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+		"test:cov": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+		"clean": "rm -rf dist && rm -rf node_modules",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+	},
+	"dependencies": {
+		"@cocrepo/constant": "workspace:*",
+		"@cocrepo/context": "workspace:*",
+		"@cocrepo/entity": "workspace:*",
+		"@cocrepo/input": "workspace:*",
+		"@cocrepo/prisma": "workspace:*",
+		"@cocrepo/repository": "workspace:*",
+		"@cocrepo/service": "workspace:*",
+		"@cocrepo/toolkit": "workspace:*",
+		"@cocrepo/type": "workspace:*",
+		"@cocrepo/vo": "workspace:*"
+	},
+	"peerDependencies": {
+		"@nestjs-cls/transactional": "^4.0.1",
+		"@nestjs-cls/transactional-adapter-prisma": "^2.0.1",
+		"@nestjs/common": "^12.0.0"
+	},
+	"devDependencies": {
+		"@cocrepo/tsconfig": "workspace:*",
+		"@nestjs-cls/transactional": "^4.0.1",
+		"@nestjs-cls/transactional-adapter-prisma": "^2.0.1",
+		"@nestjs/common": "^12.0.0",
+		"@nestjs/testing": "^12.0.0",
+		"@types/jest": "^30.0.0",
+		"@types/node": "catalog:",
+		"jest": "^30.5.2",
+		"jest-mock-extended": "^4.0.2",
+		"ts-jest": "^29.4.15",
+		"typescript": "catalog:"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"require": "./dist/index.js",
+			"default": "./dist/index.js"
+		}
+	},
+	"private": true
 }

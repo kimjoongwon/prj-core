@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "orval": "8.31.0",
+    "orval": "8.44.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

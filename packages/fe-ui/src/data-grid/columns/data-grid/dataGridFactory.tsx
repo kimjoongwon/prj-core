@@ -130,9 +130,12 @@ export function buildColumnsWithDefaultCreatedAt<
 >(
 	leading: TLeading,
 	trailing: TTrailing = [] as unknown as TTrailing,
+	// TanStack ColumnDef는 TValue에 대해 불변이라 열 요소 타입은 라이브러리 관용대로 any를 유지한다.
+	// biome-ignore lint/suspicious/noExplicitAny: unknown 요소와의 할당 호환(소비처 ColumnDef<TData, unknown>[] 전달)을 위해 필요
 ): [...TLeading, ColumnDef<TData, any>, ...TTrailing] {
 	return [...leading, createCreatedAtColumn<TData>(), ...trailing] as [
 		...TLeading,
+		// biome-ignore lint/suspicious/noExplicitAny: 반환 튜플 요소도 같은 이유로 any를 유지한다
 		ColumnDef<TData, any>,
 		...TTrailing,
 	];
