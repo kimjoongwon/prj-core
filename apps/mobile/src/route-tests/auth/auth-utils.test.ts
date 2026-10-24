@@ -54,11 +54,11 @@ describe("mobile auth utils", () => {
 		await expect(loadNativeAuthSession()).resolves.toBeNull();
 	});
 
-	it("Given 피트니스센터 선택이 있을 때 When SecureStore에 저장하면 Then version 2 계약으로 복원한다", async () => {
+	it("Given Space 선택이 있을 때 When SecureStore에 저장하면 Then version 3 계약으로 복원한다", async () => {
 		const selection = {
 			address: "서울 강남구",
 			contentLanguageCode: "ko_KR",
-			fitnessCenterName: "강남점",
+			spaceName: "강남점",
 			imageFileId: "fitness-center-image",
 			logoImageFileId: "company-logo",
 			spaceId: "101",
@@ -72,7 +72,7 @@ describe("mobile auth utils", () => {
 		);
 		expect(JSON.parse(persistedSelection?.[1] ?? "{}")).toMatchObject({
 			...selection,
-			version: 2,
+			version: 3,
 		});
 		await expect(loadNativeSpaceSelection()).resolves.toEqual(selection);
 
@@ -80,12 +80,39 @@ describe("mobile auth utils", () => {
 		await expect(loadNativeSpaceSelection()).resolves.toBeNull();
 	});
 
+it("Given 이름 키가 fitnessCenterName인 version 2 선택이 있을 때 When SecureStore에서 복원하면 Then 이름을 spaceName으로 옮겨 복원한다", async () => {
+		const storageKey = "plate.mobile.native.space-selection.v1";
+		mockSecureStore.set(
+			storageKey,
+			JSON.stringify({
+				version: 2,
+				tenantId: "201",
+				spaceId: "101",
+				fitnessCenterName: "강남점",
+				address: "서울 강남구",
+				contentLanguageCode: "ko_KR",
+				imageFileId: "fitness-center-image",
+				logoImageFileId: "company-logo",
+			}),
+		);
+
+		await expect(loadNativeSpaceSelection()).resolves.toEqual({
+			tenantId: "201",
+			spaceId: "101",
+			spaceName: "강남점",
+			address: "서울 강남구",
+			contentLanguageCode: "ko_KR",
+			imageFileId: "fitness-center-image",
+			logoImageFileId: "company-logo",
+		});
+	});
+
 	it("Given version 없는 예전 선택이 있을 때 When SecureStore에서 복원하면 Then 값을 폐기한다", async () => {
 		const storageKey = "plate.mobile.native.space-selection.v1";
 		mockSecureStore.set(
 			storageKey,
 			JSON.stringify({
-				fitnessCenterName: "강남점",
+				spaceName: "강남점",
 				spaceId: "101",
 				tenantId: "201",
 			}),
@@ -102,7 +129,7 @@ describe("mobile auth utils", () => {
 		mockSecureStore.set(
 			storageKey,
 			JSON.stringify({
-				fitnessCenterName: "강남점",
+				spaceName: "강남점",
 				spaceId: "101",
 				tenantId: "201",
 				version: 1,

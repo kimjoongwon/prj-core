@@ -30,15 +30,15 @@ const spaceSelectClassNames = {
 function getFallbackSpace(
 	context: PlanningContext,
 ): PlanningSpaceOption | null {
-	if (!context.tenantId && !context.spaceId && !context.fitnessCenterName) {
+	if (!context.tenantId && !context.spaceId && !context.spaceName) {
 		return null;
 	}
 
 	return {
 		tenantId: context.tenantId ?? requireDecimalId("1", "tenantId"),
 		spaceId: context.spaceId ?? requireDecimalId("1", "spaceId"),
-		fitnessCenterName:
-			context.fitnessCenterName ??
+		spaceName:
+			context.spaceName ??
 			context.spaceId ??
 			"Storybook Fitness Center",
 		tenantName: context.tenantName,
@@ -86,7 +86,7 @@ export function PlanningSessionBar({
 	const spaceSignature = spaces
 		.map(
 			(space) =>
-				`${space.tenantId}:${space.spaceId}:${space.fitnessCenterName}`,
+				`${space.tenantId}:${space.spaceId}:${space.spaceName}`,
 		)
 		.join("|");
 	const [authState, setAuthState] = useState<PlanningAuthState>(() =>
@@ -107,7 +107,7 @@ export function PlanningSessionBar({
 		: null;
 	const spaceOptions = spaces.map((space) => ({
 		value: space.tenantId,
-		label: space.fitnessCenterName,
+		label: space.spaceName,
 	}));
 	const isAuthenticated = authState === "authenticated";
 	const accountName = isAuthenticated
@@ -192,7 +192,7 @@ export function PlanningSessionBar({
 						<Select
 							aria-label="Space 선택"
 							value={spaceSelectValue}
-							placeholder={selectedSpace?.fitnessCenterName ?? "Space 확인 중"}
+							placeholder={selectedSpace?.spaceName ?? "Space 확인 중"}
 							options={spaceOptions}
 							isDisabled={spaces.length === 0}
 							classNames={spaceSelectClassNames}
@@ -239,7 +239,7 @@ export function PlanningSessionBar({
 				{selectedSpace ? (
 					<Typography className="break-words" color="muted" type="body-xs">
 						선택: {selectedSpace.tenantName ?? selectedSpace.tenantId} /{" "}
-						{selectedSpace.fitnessCenterName}
+						{selectedSpace.spaceName}
 					</Typography>
 				) : null}
 			</div>

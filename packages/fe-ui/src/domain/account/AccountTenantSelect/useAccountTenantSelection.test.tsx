@@ -19,13 +19,13 @@ const mocks = vi.hoisted(() => ({
 			{
 				tenantId: "101",
 				spaceId: "201",
-				fitnessCenterName: "Fitness Center A",
+				spaceName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
 			{
 				tenantId: "102",
 				spaceId: "202",
-				fitnessCenterName: "Fitness Center B",
+				spaceName: "Fitness Center B",
 				contentLanguageCode: "en_US",
 			},
 		],

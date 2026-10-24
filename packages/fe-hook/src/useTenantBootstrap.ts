@@ -182,7 +182,7 @@ export function useTenantBootstrap<
 				.map((space) => ({
 					tenantId: space.tenantId!,
 					spaceId: space.id!,
-					fitnessCenterName: space.name ?? "",
+					spaceName: space.name ?? "",
 					contentLanguageCode: space.contentLanguageCode ?? null,
 				})),
 		);
