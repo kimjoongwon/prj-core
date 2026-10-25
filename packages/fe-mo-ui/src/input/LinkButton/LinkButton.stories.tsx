@@ -37,7 +37,8 @@ export const InlineLinks: Story = {
 						LinkButton
 					</Typography>
 					<Typography color="muted" type="body-sm">
-						본문 안에서 약관, 정책, 상세 보기 같은 낮은 강도의 액션을 표시합니다.
+						본문 안에서 약관, 정책, 상세 보기 같은 낮은 강도의 액션을
+						표시합니다.
 					</Typography>
 				</VStack>
 				<View className="rounded-lg border border-border bg-surface p-4">
@@ -45,11 +46,7 @@ export const InlineLinks: Story = {
 						예약을 진행하면 환불 정책과 개인정보 처리방침에 동의한 것으로
 						간주됩니다.
 					</Typography>
-					<HStack
-						alignItems="center"
-						className="mt-3 flex-wrap"
-						gap="block"
-					>
+					<HStack alignItems="center" className="mt-3 flex-wrap" gap="block">
 						<LinkButton size="sm">환불 정책</LinkButton>
 						<LinkButton size="sm">개인정보 처리방침</LinkButton>
 						<LinkButton isDisabled size="sm">

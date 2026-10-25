@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { Description, FieldError, Label } from "heroui-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
@@ -16,6 +18,30 @@ const meta = {
 export default meta;
 
 type Story = StoryObj;
+
+const ExternalStateHarness = observer(() => {
+	const state = useLocalObservable(() =>
+		makeAutoObservable(
+			{ isSelected: false },
+			{},
+			{ autoBind: true, name: "ControlFieldStoryState" },
+		),
+	);
+	return (
+		<ControlField
+			isSelected={state.isSelected}
+			onSelectedChange={(isSelected) => {
+				state.isSelected = isSelected;
+			}}
+		>
+			<ControlField.Indicator variant="switch" />
+			<VStack className="flex-1" gap="dense">
+				<Label>푸시 알림</Label>
+				<Description>외부 state 연결</Description>
+			</VStack>
+		</ControlField>
+	);
+});
 
 export const Default: Story = {
 	render: () => (
@@ -86,4 +112,8 @@ export const Composition: Story = {
 			</Typography>
 		</VStack>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => <ExternalStateHarness />,
 };

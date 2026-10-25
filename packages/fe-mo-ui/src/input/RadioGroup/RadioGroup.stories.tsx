@@ -1,13 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { RadioGroup } from "./index";
 
-const state = observable({
-	channel: "sms",
-});
+const createRadioGroupStoryState = () =>
+	makeAutoObservable(
+		{ channel: "sms" },
+		{},
+		{ autoBind: true, name: "RadioGroupStoryState" },
+	);
 
 const meta = {
 	title: "input/RadioGroup",
@@ -39,10 +43,25 @@ export const Default: Story = {
 						{ text: "앱 푸시", value: "push" },
 						{ text: "이메일", value: "email" },
 					]}
-					path="channel"
-					state={state}
+					defaultValue="sms"
 				/>
 			</VStack>
 		</ScrollView>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => {
+		const state = useLocalObservable(createRadioGroupStoryState);
+		return (
+			<RadioGroup
+				options={[
+					{ text: "SMS", value: "sms" },
+					{ text: "앱 푸시", value: "push" },
+				]}
+				path="channel"
+				state={state}
+			/>
+		);
+	},
 };

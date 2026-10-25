@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { TextField as BoundTextField, createTextFieldState } from "./index";
 import { TextField } from "./TextField";
 
 const meta: Meta<typeof TextField> = {
@@ -15,6 +17,22 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const createTextFieldStoryState = () =>
+	makeAutoObservable(
+		{ email: "ops@example.com" },
+		{},
+		{ autoBind: true, name: "TextFieldStoryState" },
+	);
+
+const WithPrefixAndSuffixState = observer(
+	({ args }: { args: Story["args"] }) => {
+		const state = useLocalObservable(() => createTextFieldState(""));
+		return (
+			<TextField {...args} value={state.value} onValueChange={state.setValue} />
+		);
+	},
+);
+
 export const Default: Story = {
 	args: {
 		className: "w-80",
@@ -23,10 +41,20 @@ export const Default: Story = {
 		placeholder: "Enter your email",
 		type: "email",
 	},
-	render: (args) => {
-		const [value, setValue] = useState("");
+};
 
-		return <TextField {...args} value={value} onValueChange={setValue} />;
+export const ExternalState: Story = {
+	args: { label: "이메일", placeholder: "name@example.com" },
+	render: () => {
+		const state = useLocalObservable(createTextFieldStoryState);
+		return (
+			<BoundTextField
+				label="이메일"
+				placeholder="name@example.com"
+				state={state}
+				path="email"
+			/>
+		);
 	},
 };
 
@@ -40,11 +68,7 @@ export const WithPrefixAndSuffix: Story = {
 		type: "number",
 		variant: "secondary",
 	},
-	render: (args) => {
-		const [value, setValue] = useState("");
-
-		return <TextField {...args} value={value} onValueChange={setValue} />;
-	},
+	render: (args) => <WithPrefixAndSuffixState args={args} />,
 };
 
 export const Invalid: Story = {

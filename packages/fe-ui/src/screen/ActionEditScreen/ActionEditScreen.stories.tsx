@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { Button } from "../../input/Button/Button";
 import { ActionEditScreen } from "./ActionEditScreen";
 
@@ -9,6 +13,20 @@ const defaultState = {
 	group: "visibility",
 	order: 10,
 	errors: {},
+};
+type ActionEditStoryState = NonNullable<ComponentProps<typeof ActionEditScreen>["state"]>;
+const createActionEditScreenStoryState = (initial: ActionEditStoryState) =>
+	makeAutoObservable(
+		{ ...initial, errors: { ...initial.errors } },
+		{},
+		{ autoBind: true, name: "ActionEditScreenStoryState" },
+	);
+const renderActionEditScreen = (args: ComponentProps<typeof ActionEditScreen>) => {
+	const state = useLocalObservable(() =>
+		createActionEditScreenStoryState(args.state ?? defaultState),
+	);
+	useStorybookState(() => ({ name: state.name, displayName: state.displayName, group: state.group, errors: state.errors }), "ActionEditScreen");
+	return <ActionEditScreen {...args} state={state} />;
 };
 
 const meta = {
@@ -22,6 +40,7 @@ const meta = {
 		state: defaultState,
 		actions: <Button variant="primary">저장</Button>,
 	},
+	render: renderActionEditScreen,
 } satisfies Meta<typeof ActionEditScreen>;
 
 export default meta;

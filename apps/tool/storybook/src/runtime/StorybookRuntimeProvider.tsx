@@ -25,7 +25,10 @@ import type {
 	AbilityRule,
 	NavigatorLike,
 } from "../../../../../packages/common-type/src";
-import { setApiLocale, setApiSessionScope } from "../../../../../packages/fe-api/src/core/client";
+import {
+	setApiLocale,
+	setApiSessionScope,
+} from "../../../../../packages/fe-api/src/core/client";
 
 type StorybookRealm = "none" | "admin" | "idp";
 type StoryRender = () => ReactNode;

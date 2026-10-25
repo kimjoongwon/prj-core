@@ -2,11 +2,16 @@ import "../tailwind.css";
 import { withStorybookMswLoader } from "../src/runtime/StorybookMswRuntime";
 import { withStorybookPlanningPreview } from "../src/runtime/StorybookPlanningPreview";
 import { withStorybookRuntime } from "../src/runtime/StorybookRuntimeProvider";
+import { withStorybookStatePreview } from "../src/runtime/StorybookStatePreviewDecorator";
 
 /** @type { import('@storybook/nextjs-vite').Preview } */
 const preview = {
 	loaders: [withStorybookMswLoader],
-	decorators: [withStorybookPlanningPreview, withStorybookRuntime],
+	decorators: [
+		withStorybookStatePreview,
+		withStorybookPlanningPreview,
+		withStorybookRuntime,
+	],
 	parameters: {
 		nextjs: {
 			appDirectory: true,

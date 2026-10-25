@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { Button } from "../../input/Button/Button";
 import { PolicyEditScreen } from "./PolicyEditScreen";
 
@@ -26,6 +30,20 @@ const defaultState = {
 	description: "사용자 관리 화면을 사용할 수 있는 정책입니다.",
 	abilityIds: ["ability-user-read", "ability-user-write"],
 };
+type PolicyEditStoryState = NonNullable<ComponentProps<typeof PolicyEditScreen>["state"]>;
+const createPolicyEditScreenStoryState = (initial: PolicyEditStoryState) =>
+	makeAutoObservable(
+		{ ...initial, abilityIds: [...initial.abilityIds] },
+		{},
+		{ autoBind: true, name: "PolicyEditScreenStoryState" },
+	);
+const renderPolicyEditScreen = (args: ComponentProps<typeof PolicyEditScreen>) => {
+	const state = useLocalObservable(() =>
+		createPolicyEditScreenStoryState(args.state ?? defaultState),
+	);
+	useStorybookState(() => ({ name: state.name, displayName: state.displayName, abilityIds: state.abilityIds }), "PolicyEditScreen");
+	return <PolicyEditScreen {...args} state={state} />;
+};
 
 const meta = {
 	title: "screen/PolicyEditScreen",
@@ -39,6 +57,7 @@ const meta = {
 		abilities,
 		actions: <Button variant="primary">저장</Button>,
 	},
+	render: renderPolicyEditScreen,
 } satisfies Meta<typeof PolicyEditScreen>;
 
 export default meta;

@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
@@ -16,6 +18,45 @@ export default meta;
 
 type Story = StoryObj;
 
+const selectableCardItems = [
+	{
+		description: "리포머 클래스 8회권, 2026년 6월 30일까지",
+		eyebrow: "잔여 5회",
+		meta: ["월/수/금 사용 가능", "예약 취소 3시간 전까지"],
+		tags: ["추천", "즉시 예약"],
+		title: "리포머 8회권",
+		value: "reformer-8",
+	},
+	{
+		description: "개인 레슨 전용 시간대입니다.",
+		disabledReason: "그룹 수업에는 사용할 수 없습니다.",
+		eyebrow: "잔여 2회",
+		isDisabled: true,
+		title: "PT 1:1 세션",
+		value: "private",
+	},
+] as const;
+
+const ExternalStateHarness = observer(() => {
+	const state = useLocalObservable(() =>
+		makeAutoObservable(
+			{ selectedValue: "reformer-8" },
+			{},
+			{ autoBind: true, name: "SelectableCardListStoryState" },
+		),
+	);
+	return (
+		<SelectableCardList
+			items={selectableCardItems}
+			onSelect={(selectedValue) => {
+				state.selectedValue = selectedValue;
+			}}
+			selectedValue={state.selectedValue}
+			title="예약 선택"
+		/>
+	);
+});
+
 export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="px-4 py-5">
@@ -30,24 +71,7 @@ export const Default: Story = {
 				</VStack>
 				<SelectableCardList
 					description="예약 전에 선택한 시간과 요청 사항을 한 번 더 확인합니다."
-					items={[
-						{
-							description: "리포머 클래스 8회권, 2026년 6월 30일까지",
-							eyebrow: "잔여 5회",
-							meta: ["월/수/금 사용 가능", "예약 취소 3시간 전까지"],
-							tags: ["추천", "즉시 예약"],
-							title: "리포머 8회권",
-							value: "reformer-8",
-						},
-						{
-							description: "개인 레슨 전용 시간대입니다.",
-							disabledReason: "그룹 수업에는 사용할 수 없습니다.",
-							eyebrow: "잔여 2회",
-							isDisabled: true,
-							title: "PT 1:1 세션",
-							value: "private",
-						},
-					]}
+					items={selectableCardItems}
 					onSelect={() => undefined}
 					selectedLabel="선택됨"
 					selectedValue="reformer-8"
@@ -56,4 +80,8 @@ export const Default: Story = {
 			</VStack>
 		</ScrollView>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => <ExternalStateHarness />,
 };

@@ -1,9 +1,13 @@
+import { useInputStateInspection } from "@cocrepo/hook";
 import {
 	FieldError,
 	RadioGroup as HeroRadioGroup,
 	Label,
 	Radio,
 } from "@heroui/react";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useCallback, useEffect, useId } from "react";
 import { translateNode, useT } from "../../i18n";
 import type { RadioGroupProps } from "./RadioGroup.props";
 
@@ -27,7 +31,21 @@ import type { RadioGroupProps } from "./RadioGroup.props";
  * />
  * ```
  */
-export function RadioGroup(props: RadioGroupProps) {
+export function createRadioGroupState(initialValue = "") {
+	return makeAutoObservable(
+		{
+			value: initialValue,
+			setValue(nextValue: string) {
+				this.value = nextValue;
+			},
+		},
+		{},
+		{ autoBind: true, name: "RadioGroupState" },
+	);
+}
+export type RadioGroupState = ReturnType<typeof createRadioGroupState>;
+
+export const RadioGroup = observer(function RadioGroup(props: RadioGroupProps) {
 	const t = useT();
 	const {
 		options = [
@@ -48,14 +66,30 @@ export function RadioGroup(props: RadioGroupProps) {
 		errorMessage,
 		...rest
 	} = props;
+	const internalState = useLocalObservable(() =>
+		createRadioGroupState(rest.defaultValue as string | undefined),
+	);
+	const inputStateId = useId();
+	const inspection = useInputStateInspection();
+	const isControlled = value !== undefined;
+	const selectedValue = isControlled ? value : internalState.value;
+	const reader = useCallback(
+		() => (isControlled ? value : internalState.value),
+		[internalState, isControlled, value],
+	);
+	useEffect(
+		() => inspection?.registerInputState(inputStateId, reader),
+		[inspection, inputStateId, reader, selectedValue],
+	);
 
 	const handleChange = (value: string) => {
+		if (!isControlled) internalState.setValue(value);
 		onChange?.(value);
 		onValueChange?.(value);
 	};
 
 	return (
-		<HeroRadioGroup {...rest} value={value} onChange={handleChange}>
+		<HeroRadioGroup {...rest} value={selectedValue} onChange={handleChange}>
 			{label ? <Label>{translateNode(label, t)}</Label> : null}
 			{children ??
 				options.map((option) => (
@@ -71,6 +105,6 @@ export function RadioGroup(props: RadioGroupProps) {
 			) : null}
 		</HeroRadioGroup>
 	);
-}
+});
 
 export type { RadioGroupProps, RadioOption } from "./RadioGroup.props";

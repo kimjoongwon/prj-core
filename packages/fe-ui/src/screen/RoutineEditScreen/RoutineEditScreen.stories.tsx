@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { Button } from "../../input/Button/Button";
 import { RoutineEditScreen } from "./RoutineEditScreen";
 
@@ -43,6 +47,20 @@ const defaultState = {
 	activities,
 	errors: {},
 };
+type RoutineEditStoryState = NonNullable<ComponentProps<typeof RoutineEditScreen>["state"]>;
+const createRoutineEditScreenStoryState = (initial: RoutineEditStoryState) =>
+	makeAutoObservable(
+		{ ...initial, activities: initial.activities.map((activity) => ({ ...activity })) },
+		{},
+		{ autoBind: true, name: "RoutineEditScreenStoryState" },
+	);
+const renderRoutineEditScreen = (args: ComponentProps<typeof RoutineEditScreen>) => {
+	const state = useLocalObservable(() =>
+		createRoutineEditScreenStoryState(args.state ?? defaultState),
+	);
+	useStorybookState(() => ({ name: state.name, label: state.label, exerciseQuery: state.exerciseQuery, activities: state.activities, errors: state.errors }), "RoutineEditScreen");
+	return <RoutineEditScreen {...args} state={state} />;
+};
 
 const meta = {
 	title: "screen/RoutineEditScreen",
@@ -57,6 +75,7 @@ const meta = {
 		activities,
 		actions: <Button variant="primary">저장</Button>,
 	},
+	render: renderRoutineEditScreen,
 } satisfies Meta<typeof RoutineEditScreen>;
 
 export default meta;

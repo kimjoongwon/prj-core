@@ -1,4 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
+import { FitnessCenterFormState } from "../../form/FitnessCenterForm/FitnessCenterForm.state";
 import { FitnessCenterEditScreen } from "./FitnessCenterEditScreen";
 
 const defaultArgs = {
@@ -20,6 +25,25 @@ const defaultArgs = {
 		phone: "010-1234-5670",
 	},
 	title: "피트니스 센터 정보 수정",
+};
+type FitnessCenterEditStoryState = ComponentProps<typeof FitnessCenterEditScreen>["state"];
+const createFitnessCenterEditScreenStoryState = (initial: FitnessCenterEditStoryState) => {
+	const state = Object.assign(new FitnessCenterFormState(), initial, {
+		lastAction: "",
+	});
+	return makeAutoObservable(state, {}, { autoBind: true, name: "FitnessCenterEditScreenStoryState" });
+};
+const renderFitnessCenterEditScreen = (args: ComponentProps<typeof FitnessCenterEditScreen>) => {
+	const state = useLocalObservable(() => createFitnessCenterEditScreenStoryState(args.state));
+	useStorybookState(() => ({ name: state.name, label: state.label, email: state.email, contentLanguageCode: state.contentLanguageCode, lastAction: state.lastAction }), "FitnessCenterEditScreen");
+	return (
+		<FitnessCenterEditScreen
+			{...args}
+			state={state}
+			onClickCancelButton={() => { state.lastAction = "cancel"; }}
+			onClickSaveButton={() => { state.lastAction = "save"; }}
+		/>
+	);
 };
 
 const loadingArgs = {
@@ -52,6 +76,7 @@ const meta = {
 	},
 	tags: ["autodocs"],
 	args: defaultArgs as never,
+	render: renderFitnessCenterEditScreen,
 } satisfies Meta<typeof FitnessCenterEditScreen>;
 
 export default meta;

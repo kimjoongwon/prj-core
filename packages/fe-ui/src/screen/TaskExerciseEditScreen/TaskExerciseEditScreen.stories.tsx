@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import type { ComponentProps } from "react";
 import { AssetBrowser } from "../../domain/asset/AssetBrowser";
 import { TaskExerciseEditScreen } from "./TaskExerciseEditScreen";
+import { useStorybookState } from "../../storybook";
 
 const defaultArgs: ComponentProps<typeof TaskExerciseEditScreen> = {
 	assetBrowser: (
@@ -154,6 +158,48 @@ const loadingArgs = {
 	...defaultArgs,
 	isLoading: true,
 };
+type TaskExerciseEditStoryState = ComponentProps<typeof TaskExerciseEditScreen>["state"];
+type TaskExerciseEditScreenStoryState = NonNullable<TaskExerciseEditStoryState> & {
+	isAssetBrowserOpen: boolean;
+	openAssetBrowser: () => void;
+	closeAssetBrowser: () => void;
+	clearImageAsset: () => void;
+	clearVideoAsset: () => void;
+};
+export const createTaskExerciseEditScreenStoryState = (initial: TaskExerciseEditStoryState) => {
+	let state: TaskExerciseEditScreenStoryState;
+	state = makeAutoObservable({
+		...initial,
+		errors: { ...initial.errors },
+		isAssetBrowserOpen: false,
+		openAssetBrowser: () => { state.isAssetBrowserOpen = true; },
+		closeAssetBrowser: () => { state.isAssetBrowserOpen = false; },
+		clearImageAsset: () => { state.imageFileId = ""; },
+		clearVideoAsset: () => { state.videoFileId = ""; },
+	}, {}, { autoBind: true, name: "TaskExerciseEditScreenStoryState" }) as TaskExerciseEditScreenStoryState;
+	return state;
+};
+export const TaskExerciseEditScreenStoryHarness = observer(function TaskExerciseEditScreenStoryHarness({
+	args,
+}: { args: ComponentProps<typeof TaskExerciseEditScreen> }) {
+	const state = useLocalObservable(() => createTaskExerciseEditScreenStoryState(args.state));
+	useStorybookState(() => ({ name: state.name, imageFileId: state.imageFileId, videoFileId: state.videoFileId, isAssetBrowserOpen: state.isAssetBrowserOpen }), "TaskExerciseEditScreen");
+	return (
+		<TaskExerciseEditScreen
+			{...args}
+			state={state}
+			isAssetBrowserOpen={state.isAssetBrowserOpen}
+			onOpenImagePicker={state.openAssetBrowser}
+			onOpenVideoPicker={state.openAssetBrowser}
+			onCloseAssetBrowser={state.closeAssetBrowser}
+			onClickClearImageAssetButton={state.clearImageAsset}
+			onClickClearVideoAssetButton={state.clearVideoAsset}
+		/>
+	);
+});
+const renderTaskExerciseEditScreen = (args: ComponentProps<typeof TaskExerciseEditScreen>) => (
+	<TaskExerciseEditScreenStoryHarness args={args} />
+);
 
 const notFoundArgs = {
 	...defaultArgs,
@@ -190,6 +236,7 @@ const readOnlyArgs = {
 const meta = {
 	title: "screen/TaskExerciseEditScreen",
 	component: TaskExerciseEditScreen,
+	excludeStories: ["createTaskExerciseEditScreenStoryState", "TaskExerciseEditScreenStoryHarness"],
 	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
 	argTypes: {
 		metadata: { control: false },
@@ -199,6 +246,7 @@ const meta = {
 	},
 	tags: ["autodocs"],
 	args: defaultArgs,
+	render: renderTaskExerciseEditScreen,
 } satisfies Meta<typeof TaskExerciseEditScreen>;
 
 export default meta;

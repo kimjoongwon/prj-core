@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import {
@@ -29,9 +28,7 @@ const TextArea = observer(<T extends object>(props: TextAreaProps<T>) => {
 
 	const { state, path, ...rest } = props;
 
-	const initialValue = tools.get(state, path, "") as string;
-
-	const formField = useFormField({ value: initialValue, state, path });
+	const formField = useFormField({ defaultValue: "", state, path });
 
 	const handleChange = (value: string) => {
 		formField.setValue(value);
@@ -46,5 +43,7 @@ const TextArea = observer(<T extends object>(props: TextAreaProps<T>) => {
 	);
 });
 
-export { TextArea };
+export type { TextAreaState } from "./TextArea";
+export { createTextAreaState } from "./TextArea";
 export type { PureTextAreaProps };
+export { TextArea };

@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import type { Key } from "react-aria-components";
@@ -10,22 +9,25 @@ import {
 	type SelectProps as PureSelectProps,
 } from "./Select";
 
-export interface SelectProps<T>
-	extends MobxProps<T>,
-		Omit<PureSelectProps, "value" | "onChange" | "options"> {
-	options?: PureSelectProps["options"];
+export type SelectProps<T extends object = object> =
+	| (MobxProps<T> &
+			Omit<PureSelectProps, "value" | "onChange" | "options"> & {
+				options?: PureSelectProps["options"];
+			})
+	| PureSelectProps;
+
+function isBoundSelectProps<T extends object>(
+	props: SelectProps<T>,
+): props is MobxProps<T> &
+	Omit<PureSelectProps, "value" | "onChange" | "options"> {
+	return "state" in props && "path" in props;
 }
 
 const Select = observer(<T extends object>(props: SelectProps<T>) => {
+	if (!isBoundSelectProps(props)) return <PureSelect {...props} />;
 	const { state, path, options = [], ...rest } = props;
 
-	const _options = tools.clone(options);
-
-	const value = (_options as Array<{ value: string }>)?.find(
-		(option) => option.value === tools.get(state, path),
-	)?.value;
-
-	const formField = useFormField({ value, state, path });
+	const formField = useFormField({ defaultValue: "", state, path });
 
 	const handleChange = (value: Key | null) => {
 		formField.setValue(value == null ? "" : String(value));
@@ -41,5 +43,7 @@ const Select = observer(<T extends object>(props: SelectProps<T>) => {
 	);
 });
 
-export { Select };
+export type { SelectState } from "./Select";
+export { createSelectState } from "./Select";
 export type { PureSelectProps };
+export { Select };

@@ -20,7 +20,12 @@ export const Default: Story = {
 	render: () => (
 		<View className="w-[280px] rounded-xl border border-border bg-surface p-4">
 			<PressableFeedback className="rounded-xl bg-accent px-4 py-3">
-				<Typography align="center" className="text-accent-foreground" type="body-sm" weight="semibold">
+				<Typography
+					align="center"
+					className="text-accent-foreground"
+					type="body-sm"
+					weight="semibold"
+				>
 					눌림 피드백
 				</Typography>
 			</PressableFeedback>
@@ -39,7 +44,9 @@ export const Composition: Story = {
 				<PressableFeedback.Ripple />
 				<PressableFeedback.Scale>
 					<VStack gap="dense">
-						<Typography type="body-sm" weight="semibold">복합 피드백</Typography>
+						<Typography type="body-sm" weight="semibold">
+							복합 피드백
+						</Typography>
 						<Typography color="muted" type="body-sm">
 							Highlight, Ripple, Scale slot을 함께 조합합니다.
 						</Typography>

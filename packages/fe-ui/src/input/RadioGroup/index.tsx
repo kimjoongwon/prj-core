@@ -1,27 +1,21 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { RadioGroup as PureRadioGroup } from "./RadioGroup";
 import type { RadioGroupProps as PureRadioGroupProps } from "./RadioGroup.props";
 
-export interface RadioGroupProps<T>
-	extends MobxProps<T>,
-		Omit<PureRadioGroupProps, "value" | "onValueChange"> {}
+export type RadioGroupProps<T extends object = object> =
+	| (MobxProps<T> & Omit<PureRadioGroupProps, "value" | "onValueChange">)
+	| PureRadioGroupProps;
 
 const RadioGroup = observer(<T extends object>(props: RadioGroupProps<T>) => {
+	if (!("state" in props && "path" in props))
+		return <PureRadioGroup {...props} />;
 	const { state, path, options, ...rest } = props;
 
-	const rawValue = tools.get(state, path);
-	const value =
-		options?.find((option) => String(option.value) === String(rawValue)) !==
-		undefined
-			? String(rawValue)
-			: "";
-
-	const formField = useFormField<T, string>({ value, state, path });
+	const formField = useFormField<T, string>({ defaultValue: "", state, path });
 
 	const handleValueChange = (value: string) => {
 		formField.setValue(value);
@@ -37,5 +31,7 @@ const RadioGroup = observer(<T extends object>(props: RadioGroupProps<T>) => {
 	);
 });
 
-export { RadioGroup };
+export type { RadioGroupState } from "./RadioGroup";
+export { createRadioGroupState } from "./RadioGroup";
 export type { RadioOption } from "./RadioGroup.props";
+export { RadioGroup };

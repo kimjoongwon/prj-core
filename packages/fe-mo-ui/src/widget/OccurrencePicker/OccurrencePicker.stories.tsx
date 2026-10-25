@@ -1,7 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { ScrollView, View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { OccurrencePicker } from "./index";
+import { useStorybookState } from "../../storybook";
+
+function createOccurrencePickerStoryState() {
+	return makeAutoObservable(
+		{ selectedValue: "2026-05-23T09:30", selectOccurrence(value: string) { this.selectedValue = value; } },
+		{},
+		{ autoBind: true, name: "OccurrencePickerStoryState" },
+	);
+}
 
 const meta = {
 	title: "widget/OccurrencePicker",
@@ -16,7 +27,13 @@ export default meta;
 type Story = StoryObj;
 
 export const Recurring: Story = {
-	render: () => (
+	render: () => <OccurrencePickerStory />,
+};
+
+const OccurrencePickerStory = observer(function OccurrencePickerStory() {
+		const state = useLocalObservable(createOccurrencePickerStoryState);
+		useStorybookState(() => ({ selectedValue: state.selectedValue }));
+		return (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
 				<Typography className="font-extrabold" type="h5">
@@ -28,7 +45,7 @@ export const Recurring: Story = {
 			</View>
 			<OccurrencePicker
 				description="예약 가능한 회차 중 하나를 선택해 주세요."
-				onChange={() => undefined}
+				onChange={state.selectOccurrence}
 				options={[
 					{
 						description: "5월 23일 토요일 09:30 · Studio A",
@@ -48,13 +65,13 @@ export const Recurring: Story = {
 						value: "2026-05-23T19:00",
 					},
 				]}
-				selectedValue="2026-05-23T09:30"
+				selectedValue={state.selectedValue}
 				sessionType="RECURRING"
 				title="회차 선택"
 			/>
 		</ScrollView>
-	),
-};
+		);
+});
 
 export const OneTime: Story = {
 	render: () => (

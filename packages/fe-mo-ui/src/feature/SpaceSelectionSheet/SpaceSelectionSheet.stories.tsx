@@ -1,8 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { SpaceSelectionSheet } from "./index";
+import { useStorybookState } from "../../storybook";
+
+function createSpaceSelectionSheetStoryState() {
+	return makeAutoObservable(
+		{
+			isOpen: true,
+			selectedSpaceId: "gangnam",
+			toggleOpen() { this.isOpen = !this.isOpen; },
+			selectSpace(spaceId: string) { this.selectedSpaceId = spaceId; this.isOpen = false; },
+		},
+		{},
+		{ autoBind: true, name: "SpaceSelectionSheetStoryState" },
+	);
+}
 
 const spaces = [
 	{
@@ -35,7 +51,13 @@ export default meta;
 type Story = StoryObj;
 
 export const Open: Story = {
-	render: () => (
+	render: () => <SpaceSelectionSheetStory />,
+};
+
+const SpaceSelectionSheetStory = observer(function SpaceSelectionSheetStory() {
+		const state = useLocalObservable(createSpaceSelectionSheetStoryState);
+		useStorybookState(() => ({ isOpen: state.isOpen, selectedSpaceId: state.selectedSpaceId }));
+		return (
 		<View className="flex-1 justify-end px-4 py-5">
 			<View className="gap-2 rounded-lg border border-border bg-surface p-4">
 				<Typography className="font-extrabold" type="h5">
@@ -44,15 +66,17 @@ export const Open: Story = {
 				<Typography color="muted" type="body-sm">
 					아래에서 열린 상태의 지점 선택 시트를 확인합니다.
 				</Typography>
-				<Button variant="secondary">지점 변경</Button>
+				<Button onPress={state.toggleOpen} variant="secondary">
+					{state.isOpen ? "지점 선택 닫기" : "지점 변경"}
+				</Button>
 			</View>
 			<SpaceSelectionSheet
-				isOpen
-				onOpenChange={() => undefined}
-				onSelectSpace={() => undefined}
-				selectedSpaceId="gangnam"
+				isOpen={state.isOpen}
+				onOpenChange={(isOpen) => { state.isOpen = isOpen; }}
+				onSelectSpace={(space) => state.selectSpace(space.id)}
+				selectedSpaceId={state.selectedSpaceId}
 				spaces={spaces}
 			/>
 		</View>
-	),
-};
+		);
+});

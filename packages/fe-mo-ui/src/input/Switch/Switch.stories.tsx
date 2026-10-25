@@ -1,13 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { Switch } from "./index";
 
-const state = observable({
-	notify: true,
-});
+const createSwitchStoryState = () =>
+	makeAutoObservable(
+		{ notify: true },
+		{},
+		{ autoBind: true, name: "SwitchStoryState" },
+	);
 
 const meta = {
 	title: "input/Switch",
@@ -33,10 +37,19 @@ export const Default: Story = {
 						알림 수신 같은 즉시 반영되는 boolean 설정입니다.
 					</Typography>
 				</VStack>
-				<Switch path="notify" state={state}>
-					수업 시작 전 알림 받기
-				</Switch>
+				<Switch defaultValue={true}>수업 시작 전 알림 받기</Switch>
 			</VStack>
 		</ScrollView>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => {
+		const state = useLocalObservable(createSwitchStoryState);
+		return (
+			<Switch path="notify" state={state}>
+				수업 시작 전 알림 받기
+			</Switch>
+		);
+	},
 };

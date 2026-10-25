@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { TemplateForm } from "./TemplateForm";
 
 const formData = {
@@ -18,9 +22,22 @@ const variables = [
 		isRequired: true,
 	},
 ];
+type TemplateFormStoryState = ComponentProps<typeof TemplateForm>["state"];
+export const createTemplateFormStoryState = (initial: TemplateFormStoryState) =>
+	makeAutoObservable(
+		{ ...initial, formData: { ...initial.formData }, variables: initial.variables.map((variable) => ({ ...variable })), errors: { ...initial.errors }, variableErrors: { ...initial.variableErrors } },
+		{},
+		{ autoBind: true, name: "TemplateFormStoryState" },
+	);
+const renderTemplateForm = (args: ComponentProps<typeof TemplateForm>) => {
+	const state = useLocalObservable(() => createTemplateFormStoryState(args.state));
+	useStorybookState(() => ({ formData: state.formData, variables: state.variables, errors: state.errors }), "TemplateForm");
+	return <div className="w-[820px]"><TemplateForm {...args} state={state} /></div>;
+};
 const meta = {
 	title: "form/TemplateForm",
 	component: TemplateForm,
+	excludeStories: ["createTemplateFormStoryState"],
 	parameters: { layout: "centered" },
 	tags: ["autodocs"],
 	args: {
@@ -30,15 +47,12 @@ const meta = {
 			errors: {},
 		},
 	},
+	render: renderTemplateForm,
 } satisfies Meta<typeof TemplateForm>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const Create: Story = {
-	render: (args) => (
-		<div className="w-[820px]">
-			<TemplateForm {...args} />
-		</div>
-	),
+	render: renderTemplateForm,
 };
 export const WithErrors: Story = {
 	args: {
@@ -49,7 +63,7 @@ export const WithErrors: Story = {
 			variableErrors: { 0: { name: "변수명을 확인하세요." } },
 		},
 	},
-	render: Create.render,
+	render: renderTemplateForm,
 };
 
 export const ReadOnly: Story = {
@@ -61,5 +75,5 @@ export const ReadOnly: Story = {
 		},
 		readOnly: true,
 	},
-	render: Create.render,
+	render: renderTemplateForm,
 };

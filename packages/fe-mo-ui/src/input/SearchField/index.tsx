@@ -1,35 +1,84 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook/useFormField";
-import { tools } from "@cocrepo/toolkit";
-import type { MobxProps } from "@cocrepo/type";
-import { observer } from "mobx-react-lite";
+import type { MobxProps, Paths } from "@cocrepo/type";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import {
 	PureSearchField,
 	type PureSearchFieldProps,
 	searchFieldClassNames,
 	useSearchField,
 } from "./SearchField";
+import { useRegisterInputState } from "../input-state-inspection";
 
-export interface SearchFieldProps<
-	TState extends object = Record<string, unknown>,
-> extends MobxProps<TState>,
-		Omit<PureSearchFieldProps, "onChange" | "value"> {}
+type BoundSearchFieldProps<TState extends object> = MobxProps<TState> &
+	(Omit<PureSearchFieldProps, "onChange" | "value"> & {
+		value?: never;
+		defaultValue?: string;
+		onChange?: PureSearchFieldProps["onChange"];
+	});
+type UnboundSearchFieldProps = Omit<
+	PureSearchFieldProps,
+	"onChange" | "value"
+> & {
+	state?: never;
+	path?: never;
+	value?: string;
+	defaultValue?: string;
+	onChange?: PureSearchFieldProps["onChange"];
+};
+export type SearchFieldProps<TState extends object = Record<string, unknown>> =
+	| BoundSearchFieldProps<TState>
+	| UnboundSearchFieldProps;
+export function createSearchFieldState(value = "") {
+	const state = {
+		value,
+		setValue(nextValue: string) {
+			state.value = nextValue;
+		},
+	};
+	return makeAutoObservable(
+		state,
+		{},
+		{ autoBind: true, name: "SearchFieldState" },
+	);
+}
+export type SearchFieldState = ReturnType<typeof createSearchFieldState>;
 
 const SearchField = observer(
 	<TState extends object>(props: SearchFieldProps<TState>) => {
-		const { path, state, ...rest } = props;
-		const field = useFormField<TState, string>({
+		const {
+			defaultValue,
+			onChange,
 			path,
 			state,
-			value: (tools.get(state, path) ?? "") as string,
+			value: controlledValue,
+			...rest
+		} = props;
+		const localState = useLocalObservable(() =>
+			createSearchFieldState(defaultValue ?? ""),
+		);
+		const field = useFormField<TState, string>({
+			path: (state && path ? path : "value") as Paths<TState, 4>,
+			state: (state ?? localState) as TState,
+			defaultValue: defaultValue ?? "",
 		});
+		const isBound = state !== undefined && path !== undefined;
+		const isControlled = !isBound && controlledValue !== undefined;
+		useRegisterInputState(
+			() => (isControlled ? controlledValue : field.state.value),
+			isControlled ? controlledValue : field.state.value,
+		);
 
 		return (
 			<PureSearchField
 				{...rest}
-				onChange={field.setValue}
-				value={field.state.value}
+				onChange={(nextValue) => {
+					if (!isControlled) field.setValue(nextValue);
+					onChange?.(nextValue);
+				}}
+				value={isControlled ? controlledValue : field.state.value}
 			/>
 		);
 	},

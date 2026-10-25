@@ -1,13 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { Checkbox } from "./index";
 
-const state = observable({
-	terms: true,
-});
+const createCheckboxStoryState = () =>
+	makeAutoObservable(
+		{ terms: true },
+		{},
+		{ autoBind: true, name: "CheckboxStoryState" },
+	);
 
 const meta = {
 	title: "input/Checkbox",
@@ -33,10 +37,19 @@ export const Default: Story = {
 						약관 동의나 다중 선택처럼 참/거짓 값을 입력합니다.
 					</Typography>
 				</VStack>
-				<Checkbox path="terms" state={state}>
-					예약 취소 정책을 확인했습니다.
-				</Checkbox>
+				<Checkbox defaultValue={true}>예약 취소 정책을 확인했습니다.</Checkbox>
 			</VStack>
 		</ScrollView>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => {
+		const state = useLocalObservable(createCheckboxStoryState);
+		return (
+			<Checkbox path="terms" state={state}>
+				예약 취소 정책을 확인했습니다.
+			</Checkbox>
+		);
+	},
 };

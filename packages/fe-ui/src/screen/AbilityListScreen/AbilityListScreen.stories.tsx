@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type { ComponentProps } from "react";
 import { AbilityListScreen } from "./AbilityListScreen";
+import { useStorybookState } from "../../storybook";
 
 const abilityFixtures: NonNullable<
 	ComponentProps<typeof AbilityListScreen>["abilities"]
@@ -127,7 +130,6 @@ const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 	onClickCreateButton: () => undefined,
 	onClickResetFiltersButton: () => undefined,
 	queryStates: {
-		page: 1,
 		take: 10,
 		skip: 0,
 		search: "",
@@ -153,6 +155,137 @@ const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 	],
 	totalCount: 3,
 };
+type AbilityListStoryItem = ComponentProps<
+	typeof AbilityListScreen
+>["abilities"][number];
+type AbilityListStoryProps = ComponentProps<typeof AbilityListScreen>;
+type AbilityListStoryState = AbilityListStoryProps & {
+	allAbilities: AbilityListStoryItem[];
+	lastAction: string;
+	changeSearchTerm: (value: string) => void;
+	changeSubjectId: (value: string) => void;
+	changeActionId: (value: string) => void;
+	changeInverted: (value: string) => void;
+	resetFilters: () => void;
+	selectAbility: (abilityId: string) => void;
+	createAbility: () => void;
+	setPageQuery: AbilityListStoryProps["setQueryStates"];
+};
+export const createAbilityListScreenStoryState = (
+	initial: AbilityListStoryProps,
+) => {
+	let state: AbilityListStoryState;
+	const applyAbilityListFilters = () => {
+		const {
+			searchTerm,
+			selectedActionId,
+			selectedInverted,
+			selectedSubjectId,
+		} = state.filters;
+		const normalizedSearch = searchTerm.trim().toLowerCase();
+		const filteredAbilities = state.allAbilities.filter((ability) => {
+			const searchableText =
+				`${ability.name} ${ability.description} ${ability.subject?.name ?? ""} ${ability.action?.name ?? ""}`.toLowerCase();
+			return (
+				(!normalizedSearch || searchableText.includes(normalizedSearch)) &&
+				(!selectedSubjectId ||
+					ability.subject?.name ===
+						state.subjects.find((subject) => subject.id === selectedSubjectId)
+							?.label) &&
+				(!selectedActionId || ability.action?.id === selectedActionId) &&
+				(!selectedInverted || String(ability.inverted) === selectedInverted)
+			);
+		});
+		const take = Number(state.queryStates.take ?? 2);
+		const pageStart = Number(state.queryStates.skip ?? 0);
+		state.abilities = filteredAbilities.slice(pageStart, pageStart + take);
+		state.totalCount = filteredAbilities.length;
+		state.summary = {
+			total: filteredAbilities.length,
+			filtered: filteredAbilities.length,
+			allow: filteredAbilities.filter((ability) => !ability.inverted).length,
+			deny: filteredAbilities.filter((ability) => ability.inverted).length,
+			conditional: filteredAbilities.filter((ability) =>
+				Boolean(ability.conditions),
+			).length,
+			fieldScoped: filteredAbilities.filter(
+				(ability) => ability.fields.length > 0,
+			).length,
+		};
+	};
+	state = makeAutoObservable(
+		{
+			...initial,
+			allAbilities: [...initial.abilities],
+			abilities: [...initial.abilities],
+			filters: { ...initial.filters },
+			queryStates: {
+				...initial.queryStates,
+				take: Math.min(Number(initial.queryStates.take ?? 10), 2),
+			},
+			lastAction: "",
+			changeSearchTerm: (value: string) => {
+				state.filters.searchTerm = value;
+				state.queryStates.search = value;
+				state.queryStates.skip = 0;
+				applyAbilityListFilters();
+			},
+			changeSubjectId: (value: string) => {
+				state.filters.selectedSubjectId = value;
+				state.queryStates.subjectId = value;
+				state.queryStates.skip = 0;
+				applyAbilityListFilters();
+			},
+			changeActionId: (value: string) => {
+				state.filters.selectedActionId = value;
+				state.queryStates.actionId = value;
+				state.queryStates.skip = 0;
+				applyAbilityListFilters();
+			},
+			changeInverted: (value: string) => {
+				state.filters.selectedInverted = value;
+				state.queryStates.inverted = value;
+				state.queryStates.skip = 0;
+				applyAbilityListFilters();
+			},
+			resetFilters: () => {
+				state.filters = {
+					searchTerm: "",
+					selectedActionId: "",
+					selectedInverted: "",
+					selectedSubjectId: "",
+				};
+				state.queryStates.search = "";
+				state.queryStates.subjectId = "";
+				state.queryStates.actionId = "";
+				state.queryStates.inverted = "";
+				state.queryStates.skip = 0;
+				applyAbilityListFilters();
+			},
+			selectAbility: (abilityId: string) => {
+				state.lastAction = `select:${abilityId}`;
+			},
+			createAbility: () => {
+				state.lastAction = "create";
+			},
+			setPageQuery: async (values: Record<string, unknown | null>) => {
+				state.queryStates.take = Number(values.take ?? state.queryStates.take);
+				state.queryStates.skip = Number(values.skip ?? state.queryStates.skip);
+				applyAbilityListFilters();
+				return new URLSearchParams(
+					Object.entries(values).map(([key, value]) => [
+						key,
+						String(value ?? ""),
+					]),
+				);
+			},
+		},
+		{},
+		{ autoBind: true, name: "AbilityListScreenStoryState" },
+	) as unknown as AbilityListStoryState;
+	applyAbilityListFilters();
+	return state;
+};
 
 const filteredArgs = {
 	...defaultArgs,
@@ -164,7 +297,6 @@ const filteredArgs = {
 		selectedSubjectId: "SBJ00000000000000000000140",
 	},
 	queryStates: {
-		page: 1,
 		take: 10,
 		skip: 0,
 		search: "예약",
@@ -198,6 +330,10 @@ const emptyStateArgs = {
 const meta = {
 	title: "screen/AbilityListScreen",
 	component: AbilityListScreen,
+	excludeStories: [
+		"createAbilityListScreenStoryState",
+		"AbilityListScreenStoryHarness",
+	],
 	// Date 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
 	argTypes: {
 		abilities: { control: false },
@@ -209,7 +345,56 @@ const meta = {
 	},
 	tags: ["autodocs"],
 	args: defaultArgs,
+	render: (args) => <AbilityListScreenStoryHarness args={args} />,
 } satisfies Meta<typeof AbilityListScreen>;
+
+export const AbilityListScreenStoryHarness = observer(
+	function AbilityListScreenStoryHarness({
+		args,
+	}: {
+		args: ComponentProps<typeof AbilityListScreen>;
+	}) {
+		const state = useLocalObservable(() =>
+			createAbilityListScreenStoryState(args),
+		);
+		useStorybookState(
+			() => ({
+				filters: state.filters,
+				queryStates: state.queryStates,
+				lastAction: state.lastAction,
+			}),
+			"AbilityListScreen",
+		);
+		const {
+			changeSearchTerm,
+			changeSubjectId,
+			changeActionId,
+			changeInverted,
+			resetFilters,
+			selectAbility,
+			createAbility,
+			setPageQuery,
+			allAbilities: _allAbilities,
+			lastAction: _lastAction,
+			...screenProps
+		} = state;
+		return (
+			<AbilityListScreen
+				{...screenProps}
+				filters={state.filters}
+				abilities={state.abilities}
+				setQueryStates={setPageQuery}
+				onChangeSearchTerm={changeSearchTerm}
+				onChangeSubjectId={changeSubjectId}
+				onChangeActionId={changeActionId}
+				onChangeInverted={changeInverted}
+				onClickResetFiltersButton={resetFilters}
+				onClickAbilityRow={selectAbility}
+				onClickCreateButton={createAbility}
+			/>
+		);
+	},
+);
 
 export default meta;
 

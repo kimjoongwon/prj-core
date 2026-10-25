@@ -1,13 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { SearchField } from "./index";
 
-const state = observable({
-	query: "리포머",
-});
+const createSearchFieldStoryState = () =>
+	makeAutoObservable(
+		{ query: "리포머" },
+		{},
+		{ autoBind: true, name: "SearchFieldStoryState" },
+	);
 
 const meta = {
 	title: "input/SearchField",
@@ -26,7 +30,9 @@ export const Default: Story = {
 		<ScrollView contentContainerClassName="px-4 py-5">
 			<VStack gap="block">
 				<VStack>
-					<Typography className="font-extrabold" type="h5">SearchField</Typography>
+					<Typography className="font-extrabold" type="h5">
+						SearchField
+					</Typography>
 					<Typography color="muted" type="body-sm">
 						클래스, 코치, 스튜디오 검색에 사용하는 검색 입력입니다.
 					</Typography>
@@ -37,10 +43,23 @@ export const Default: Story = {
 						placeholder: "클래스 검색",
 					}}
 					label="검색"
-					path="query"
-					state={state}
+					defaultValue="리포머"
 				/>
 			</VStack>
 		</ScrollView>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => {
+		const state = useLocalObservable(createSearchFieldStoryState);
+		return (
+			<SearchField
+				label="검색"
+				path="query"
+				state={state}
+				inputProps={{ placeholder: "클래스 검색" }}
+			/>
+		);
+	},
 };

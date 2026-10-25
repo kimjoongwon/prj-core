@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { StringListInput as PureStringListInput } from "./StringListInput";
@@ -30,7 +29,7 @@ const StringListInput = observer(
 		const formField = useFormField<T, string[]>({
 			path,
 			state,
-			value: (tools.get(state, path) ?? []) as string[],
+			defaultValue: [],
 		});
 
 		return (
@@ -44,4 +43,6 @@ const StringListInput = observer(
 );
 
 export { StringListInput };
+export { createStringListInputState } from "./StringListInput";
 export type { PureStringListInputProps };
+export type { StringListInputState } from "./StringListInput";

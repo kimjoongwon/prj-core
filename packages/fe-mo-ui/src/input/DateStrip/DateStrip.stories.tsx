@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
@@ -33,6 +35,25 @@ const options: DateStripOption[] = [
 	},
 ];
 
+const ExternalStateHarness = observer(() => {
+	const state = useLocalObservable(() =>
+		makeAutoObservable(
+			{ selectedValue: "2026-05-13" },
+			{},
+			{ autoBind: true, name: "DateStripStoryState" },
+		),
+	);
+	return (
+		<DateStrip
+			onSelect={(selectedValue) => {
+				state.selectedValue = selectedValue;
+			}}
+			options={options}
+			selectedValue={state.selectedValue}
+		/>
+	);
+});
+
 const meta = {
 	title: "input/DateStrip",
 	component: DateStrip,
@@ -65,4 +86,8 @@ export const Default: Story = {
 			</VStack>
 		</ScrollView>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => <ExternalStateHarness />,
 };

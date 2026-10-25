@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { useFormValidationField } from "../../form/Form";
@@ -45,13 +44,10 @@ const TextField = observer(<T extends object>(props: TextFieldProps<T>) => {
 	} = props;
 	const fieldPath = String(path);
 
-	const initialValue = tools.get(state, path);
-	const stateValue = initialValue === undefined ? defaultValue : initialValue;
-	const fallbackValue = stateValue === undefined ? "" : stateValue;
 	const validation = useFormValidationField(fieldPath);
 
 	const formField = useFormField({
-		value: fallbackValue as string | number,
+		defaultValue: defaultValue as string | number | undefined,
 		state,
 		path,
 	});
@@ -92,5 +88,7 @@ const TextField = observer(<T extends object>(props: TextFieldProps<T>) => {
 	);
 });
 
-export { TextField };
+export type { TextFieldState } from "./TextField";
+export { createTextFieldState } from "./TextField";
 export type { PureTextFieldProps };
+export { TextField };

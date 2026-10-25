@@ -23,7 +23,10 @@ import {
 	forwardRef,
 	type ReactNode,
 } from "react";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { Textarea } from "../Textarea";
+import { useRegisterInputState } from "../input-state-inspection";
 
 type HeroInputProps = ComponentPropsWithoutRef<typeof HeroInput>;
 type HeroTextFieldProps = ComponentPropsWithoutRef<typeof HeroTextField>;
@@ -53,86 +56,108 @@ export interface TextFieldInputProps
 	value?: string;
 }
 
-const TextFieldInputComponent = forwardRef<
-	ComponentRef<typeof HeroInput>,
-	TextFieldInputProps
->(
-	(
-		{
-			description,
-			endContent,
-			errorMessage,
-			helperText,
-			isDisabled,
-			isInvalid,
-			isRequired,
-			label,
-			onBlur,
-			onChange,
-			startContent,
-			value = "",
-			...rest
+export function createTextFieldState(value = "") {
+	const state = {
+		value,
+		setValue(nextValue: string) {
+			state.value = nextValue;
 		},
-		ref,
-	) => {
-		const resolvedInvalid = Boolean(isInvalid || errorMessage);
-		const hasInputGroup = Boolean(startContent || endContent);
-		const hasTextField = Boolean(
-			label || description || helperText || errorMessage || isRequired,
-		);
-		const inputProps = {
-			...rest,
-			isDisabled,
-			isInvalid: resolvedInvalid,
-			onBlur: () => {
-				onBlur?.(value);
+	};
+	return makeAutoObservable(
+		state,
+		{},
+		{ autoBind: true, name: "TextFieldState" },
+	);
+}
+export type TextFieldState = ReturnType<typeof createTextFieldState>;
+
+const TextFieldInputComponent = observer(
+	forwardRef<ComponentRef<typeof HeroInput>, TextFieldInputProps>(
+		(
+			{
+				description,
+				endContent,
+				errorMessage,
+				helperText,
+				isDisabled,
+				isInvalid,
+				isRequired,
+				label,
+				onBlur,
+				onChange,
+				startContent,
+				value,
+				...rest
 			},
-			onChangeText: onChange,
 			ref,
-			value,
-		};
-		const input = hasInputGroup ? (
-			<HeroInputGroup isDisabled={isDisabled}>
-				{startContent && (
-					<HeroInputGroup.Prefix isDecorative>
-						{startContent}
-					</HeroInputGroup.Prefix>
-				)}
-				<HeroInputGroup.Input {...inputProps} />
-				{endContent && (
-					<HeroInputGroup.Suffix>{endContent}</HeroInputGroup.Suffix>
-				)}
-			</HeroInputGroup>
-		) : (
-			<HeroInput {...inputProps} />
-		);
+		) => {
+			const localState = useLocalObservable(() =>
+				createTextFieldState(value ?? ""),
+			);
+			const resolvedValue = value ?? localState.value;
+			useRegisterInputState(() => resolvedValue, resolvedValue);
+			const resolvedInvalid = Boolean(isInvalid || errorMessage);
+			const hasInputGroup = Boolean(startContent || endContent);
+			const hasTextField = Boolean(
+				label || description || helperText || errorMessage || isRequired,
+			);
+			const inputProps = {
+				...rest,
+				isDisabled,
+				isInvalid: resolvedInvalid,
+				onBlur: () => {
+					onBlur?.(resolvedValue);
+				},
+				onChangeText: (nextValue: string) => {
+					if (value === undefined) localState.setValue(nextValue);
+					onChange?.(nextValue);
+				},
+				ref,
+				value: resolvedValue,
+			};
+			const input = hasInputGroup ? (
+				<HeroInputGroup isDisabled={isDisabled}>
+					{startContent && (
+						<HeroInputGroup.Prefix isDecorative>
+							{startContent}
+						</HeroInputGroup.Prefix>
+					)}
+					<HeroInputGroup.Input {...inputProps} />
+					{endContent && (
+						<HeroInputGroup.Suffix>{endContent}</HeroInputGroup.Suffix>
+					)}
+				</HeroInputGroup>
+			) : (
+				<HeroInput {...inputProps} />
+			);
 
-		if (!hasTextField) {
-			return input;
-		}
+			if (!hasTextField) {
+				return input;
+			}
 
-		return (
-			<HeroTextField
-				isDisabled={isDisabled}
-				isInvalid={resolvedInvalid}
-				isRequired={isRequired}
-			>
-				{label && <HeroLabel>{label}</HeroLabel>}
-				{input}
-				{description && (
-					<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
-						{description}
-					</HeroDescription>
-				)}
-				{helperText && (
-					<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
-						{helperText}
-					</HeroDescription>
-				)}
-				{errorMessage && <HeroFieldError>{errorMessage}</HeroFieldError>}
-			</HeroTextField>
-		);
-	},
+			return (
+				<HeroTextField
+					isDisabled={isDisabled}
+					isInvalid={resolvedInvalid}
+					isRequired={isRequired}
+				>
+					{label && <HeroLabel>{label}</HeroLabel>}
+					{input}
+					{description && (
+						<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
+							{description}
+						</HeroDescription>
+					)}
+					{helperText && (
+						<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
+							{helperText}
+						</HeroDescription>
+					)}
+					{errorMessage && <HeroFieldError>{errorMessage}</HeroFieldError>}
+				</HeroTextField>
+			);
+		},
+	),
 );
 TextFieldInputComponent.displayName = "TextField.Input";
 

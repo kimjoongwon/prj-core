@@ -6,6 +6,7 @@ import { Dimensions, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ScopedTheme, Uniwind } from "uniwind";
+import { withMobileStatePreview } from "../src/runtime/StorybookStatePreviewDecorator";
 
 const STORYBOOK_CANVAS_WIDTH = Dimensions.get("window").width;
 const STORYBOOK_TOAST_CONTENT_CLASS_NAME = "flex-1";
@@ -102,7 +103,7 @@ const preview: Preview = {
 	initialGlobals: {
 		storybookTheme: "dark",
 	},
-	decorators: [withMobileRuntime],
+	decorators: [withMobileStatePreview, withMobileRuntime],
 	parameters: {
 		backgrounds: {
 			default: "dark",
