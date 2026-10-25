@@ -85,10 +85,9 @@ const ControlField = observer(
 );
 
 ControlField.displayName = "ControlField";
-const ControlFieldWithStatics = Object.assign(
-	ControlField,
-	PureControlField,
-) as typeof ControlField & typeof PureControlField;
+const ControlFieldWithStatics = Object.assign(ControlField, {
+	Indicator: PureControlField.Indicator,
+}) as typeof ControlField & Pick<typeof PureControlField, "Indicator">;
 export { ControlFieldWithStatics as ControlField };
 export { controlFieldClassNames, PureControlField, useControlField };
 export type { PureControlFieldProps };

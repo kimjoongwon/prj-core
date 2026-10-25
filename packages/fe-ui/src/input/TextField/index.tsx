@@ -23,10 +23,7 @@ function isBoundTextFieldProps<T>(
 	return "state" in props && "path" in props;
 }
 
-const TextField = observer(<T extends object>(props: TextFieldProps<T>) => {
-	if (!isBoundTextFieldProps(props)) {
-		return <PureTextField {...props} />;
-	}
+const BoundTextField = observer(<T extends object>(props: BoundTextFieldProps<T>) => {
 
 	const {
 		state,
@@ -87,6 +84,9 @@ const TextField = observer(<T extends object>(props: TextFieldProps<T>) => {
 		/>
 	);
 });
+
+const TextField = <T extends object>(props: TextFieldProps<T>) =>
+	isBoundTextFieldProps(props) ? <BoundTextField {...props} /> : <PureTextField {...props} />;
 
 export type { TextFieldState } from "./TextField";
 export { createTextFieldState } from "./TextField";

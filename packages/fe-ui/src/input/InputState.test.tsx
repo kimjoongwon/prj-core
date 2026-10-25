@@ -45,6 +45,29 @@ describe("input default and bound state contracts", () => {
 		expect(onValueChange).toHaveBeenCalledTimes(1);
 	});
 
+	it("switches checkbox from pure to bound mode without changing hook order", () => {
+		const state = observable({ accepted: false });
+		const view = render(<Checkbox>Accept</Checkbox>);
+		view.rerender(<Checkbox path="accepted" state={state}>Accept</Checkbox>);
+		fireEvent.click(screen.getByText("Accept"));
+		expect(state.accepted).toBe(true);
+	});
+
+	it("keeps numeric RadioGroup state selected and writes numeric options", () => {
+		const state = observable({ choice: 0 });
+		render(
+			<RadioGroup
+				aria-label="Numeric choice"
+				options={[{ value: 0, text: "Zero" }, { value: 1, text: "One" }]}
+				path="choice"
+				state={state}
+			/>,
+		);
+		expect(screen.getByLabelText("Numeric choice")).toBeInTheDocument();
+		fireEvent.click(screen.getByText("One"));
+		expect(state.choice).toBe(1);
+	});
+
 	it("preserves controlled switch value while emitting one change callback", () => {
 		const onValueChange = vi.fn();
 		const view = render(

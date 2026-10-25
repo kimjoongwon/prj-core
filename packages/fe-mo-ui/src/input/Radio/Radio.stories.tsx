@@ -4,14 +4,11 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { HStack, VStack } from "../../rhythm";
-import { PureRadio as Radio } from "./index";
+import { Radio } from "./index";
 
 const meta = {
 	title: "input/Radio",
 	component: Radio,
-	args: {
-		isSelected: true,
-	},
 	parameters: {
 		layout: "fullscreen",
 	},
@@ -31,10 +28,11 @@ const ExternalStateHarness = observer(() => {
 	);
 	return (
 		<Radio
-			isSelected={state.isSelected}
+			path="isSelected"
 			onSelectedChange={(isSelected) => {
 				state.isSelected = isSelected;
 			}}
+			state={state}
 		>
 			SMS 알림
 		</Radio>

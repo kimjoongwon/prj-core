@@ -4,7 +4,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
-import { PureSelectableCardList as SelectableCardList } from "./index";
+import { SelectableCardList } from "./index";
 
 const meta = {
 	title: "input/SelectableCardList",
@@ -48,10 +48,11 @@ const ExternalStateHarness = observer(() => {
 	return (
 		<SelectableCardList
 			items={selectableCardItems}
+			path="selectedValue"
 			onSelect={(selectedValue) => {
 				state.selectedValue = selectedValue;
 			}}
-			selectedValue={state.selectedValue}
+			state={state}
 			title="예약 선택"
 		/>
 	);
@@ -74,7 +75,7 @@ export const Default: Story = {
 					items={selectableCardItems}
 					onSelect={() => undefined}
 					selectedLabel="선택됨"
-					selectedValue="reformer-8"
+					defaultValue="reformer-8"
 					title="예약 선택"
 				/>
 			</VStack>

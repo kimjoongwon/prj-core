@@ -21,10 +21,7 @@ function isBoundTextAreaProps<T>(
 	return "state" in props && "path" in props;
 }
 
-const TextArea = observer(<T extends object>(props: TextAreaProps<T>) => {
-	if (!isBoundTextAreaProps(props)) {
-		return <PureTextArea {...props} />;
-	}
+const BoundTextArea = observer(<T extends object>(props: BoundTextAreaProps<T>) => {
 
 	const { state, path, ...rest } = props;
 
@@ -42,6 +39,9 @@ const TextArea = observer(<T extends object>(props: TextAreaProps<T>) => {
 		/>
 	);
 });
+
+const TextArea = <T extends object>(props: TextAreaProps<T>) =>
+	isBoundTextAreaProps(props) ? <BoundTextArea {...props} /> : <PureTextArea {...props} />;
 
 export type { TextAreaState } from "./TextArea";
 export { createTextAreaState } from "./TextArea";

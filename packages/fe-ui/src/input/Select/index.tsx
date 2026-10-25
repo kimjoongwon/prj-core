@@ -23,8 +23,7 @@ function isBoundSelectProps<T extends object>(
 	return "state" in props && "path" in props;
 }
 
-const Select = observer(<T extends object>(props: SelectProps<T>) => {
-	if (!isBoundSelectProps(props)) return <PureSelect {...props} />;
+const BoundSelect = observer(<T extends object>(props: MobxProps<T> & Omit<PureSelectProps, "value" | "onChange" | "options"> & { options?: PureSelectProps["options"] }) => {
 	const { state, path, options = [], ...rest } = props;
 
 	const formField = useFormField({ defaultValue: "", state, path });
@@ -42,6 +41,9 @@ const Select = observer(<T extends object>(props: SelectProps<T>) => {
 		/>
 	);
 });
+
+const Select = <T extends object>(props: SelectProps<T>) =>
+	isBoundSelectProps(props) ? <BoundSelect {...props} /> : <PureSelect {...props} />;
 
 export type { SelectState } from "./Select";
 export { createSelectState } from "./Select";

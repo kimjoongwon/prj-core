@@ -29,4 +29,14 @@ describe("TaskExerciseEditScreen story state", () => {
 		await user.click(screen.getByRole("button", { name: "Dismiss" }));
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 	});
+
+	it("clears the selected image and video assets from the rendered form", async () => {
+		const user = userEvent.setup();
+		render(<TaskExerciseEditScreenStoryHarness args={meta.args as never} />);
+		const clearButtons = screen.getAllByRole("button", { name: "해제" });
+		await user.click(clearButtons[0]);
+		await user.click(clearButtons[1]);
+		expect(screen.queryByText("샘플 original name 1")).not.toBeInTheDocument();
+		expect(screen.getAllByRole("button", { name: "에셋에서 선택" })).toHaveLength(2);
+	});
 });

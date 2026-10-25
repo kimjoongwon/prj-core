@@ -10,26 +10,28 @@ export type RadioGroupProps<T extends object = object> =
 	| (MobxProps<T> & Omit<PureRadioGroupProps, "value" | "onValueChange">)
 	| PureRadioGroupProps;
 
-const RadioGroup = observer(<T extends object>(props: RadioGroupProps<T>) => {
-	if (!("state" in props && "path" in props))
-		return <PureRadioGroup {...props} />;
+const BoundRadioGroup = observer(<T extends object>(props: MobxProps<T> & Omit<PureRadioGroupProps, "value" | "onValueChange">) => {
 	const { state, path, options, ...rest } = props;
 
-	const formField = useFormField<T, string>({ defaultValue: "", state, path });
+	const formField = useFormField<T, string | number>({ defaultValue: "", state, path });
 
 	const handleValueChange = (value: string) => {
-		formField.setValue(value);
+		const option = options?.find((candidate) => String(candidate.value) === value);
+		formField.setValue(option?.value ?? value);
 	};
 
 	return (
 		<PureRadioGroup
 			{...rest}
 			options={options}
-			value={formField.state.value}
+			value={formField.state.value == null ? "" : String(formField.state.value)}
 			onValueChange={handleValueChange}
 		/>
 	);
 });
+
+const RadioGroup = <T extends object>(props: RadioGroupProps<T>) =>
+	"state" in props && "path" in props ? <BoundRadioGroup {...props} /> : <PureRadioGroup {...props} />;
 
 export type { RadioGroupState } from "./RadioGroup";
 export { createRadioGroupState } from "./RadioGroup";

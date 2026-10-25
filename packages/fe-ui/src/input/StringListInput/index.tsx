@@ -19,12 +19,8 @@ function isBoundStringListInputProps<T>(
 	return "state" in props && "path" in props;
 }
 
-const StringListInput = observer(
-	<T extends object>(props: StringListInputProps<T>) => {
-		if (!isBoundStringListInputProps(props)) {
-			return <PureStringListInput {...props} />;
-		}
-
+const BoundStringListInput = observer(
+	<T extends object>(props: MobxProps<T> & Omit<PureStringListInputProps, "onChange" | "value">) => {
 		const { path, state, ...rest } = props;
 		const formField = useFormField<T, string[]>({
 			path,
@@ -41,6 +37,9 @@ const StringListInput = observer(
 		);
 	},
 );
+
+const StringListInput = <T extends object>(props: StringListInputProps<T>) =>
+	isBoundStringListInputProps(props) ? <BoundStringListInput {...props} /> : <PureStringListInput {...props} />;
 
 export { StringListInput };
 export { createStringListInputState } from "./StringListInput";

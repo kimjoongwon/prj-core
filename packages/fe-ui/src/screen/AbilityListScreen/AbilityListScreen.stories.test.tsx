@@ -24,4 +24,18 @@ describe("AbilityListScreen story harness", () => {
 		expect(secondPage).toHaveAttribute("aria-current", "page");
 		expect(screen.getByText("Cannot 접근 일괄 삭제")).toBeInTheDocument();
 	});
+
+	it("filters the rendered rows by selected subject and action", async () => {
+		const user = userEvent.setup();
+		render(<AbilityListScreenStoryHarness args={meta.args as never} />);
+		await user.click(screen.getByRole("button", { name: /대상 선택/ }));
+		await user.click(screen.getByRole("option", { name: "예약" }));
+		await user.click(screen.getByRole("button", { name: /행동 선택/ }));
+		await user.click(screen.getByRole("option", { name: "수정" }));
+
+		expect(screen.getByText("대상: 예약")).toBeInTheDocument();
+		expect(screen.getByText("행동: 수정")).toBeInTheDocument();
+		expect(screen.getByText("Can 수정 예약")).toBeInTheDocument();
+		expect(screen.getByText("총 1건")).toBeInTheDocument();
+	});
 });

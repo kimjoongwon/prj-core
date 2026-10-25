@@ -5,7 +5,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
-import { PureControlField as ControlField } from "./index";
+import { ControlField } from "./index";
 
 const meta = {
 	title: "input/ControlField",
@@ -13,26 +13,33 @@ const meta = {
 	parameters: {
 		layout: "centered",
 	},
+	excludeStories: /Harness$/,
 } satisfies Meta<typeof ControlField>;
 
 export default meta;
 
 type Story = StoryObj;
 
-const ExternalStateHarness = observer(() => {
+export const ControlFieldExternalStateHarness = observer(() => {
 	const state = useLocalObservable(() =>
 		makeAutoObservable(
-			{ isSelected: false },
+			{
+				isSelected: false,
+				setSelected(nextValue: boolean) {
+					this.isSelected = nextValue;
+				},
+			},
 			{},
 			{ autoBind: true, name: "ControlFieldStoryState" },
 		),
 	);
 	return (
 		<ControlField
-			isSelected={state.isSelected}
+			path="isSelected"
 			onSelectedChange={(isSelected) => {
-				state.isSelected = isSelected;
+				state.setSelected(isSelected);
 			}}
+			state={state}
 		>
 			<ControlField.Indicator variant="switch" />
 			<VStack className="flex-1" gap="dense">
@@ -43,18 +50,20 @@ const ExternalStateHarness = observer(() => {
 	);
 });
 
+export const ControlFieldDefaultHarness = () => (
+	<View className="w-[320px] rounded-xl border border-border bg-surface p-4">
+		<ControlField defaultValue>
+			<ControlField.Indicator variant="switch" />
+			<VStack className="flex-1" gap="dense">
+				<Label isRequired>푸시 알림</Label>
+				<Description>예약 변경 알림을 모바일로 받습니다.</Description>
+			</VStack>
+		</ControlField>
+	</View>
+);
+
 export const Default: Story = {
-	render: () => (
-		<View className="w-[320px] rounded-xl border border-border bg-surface p-4">
-			<ControlField isSelected onSelectedChange={() => undefined}>
-				<ControlField.Indicator variant="switch" />
-				<VStack className="flex-1" gap="dense">
-					<Label isRequired>푸시 알림</Label>
-					<Description>예약 변경 알림을 모바일로 받습니다.</Description>
-				</VStack>
-			</ControlField>
-		</View>
-	),
+	render: () => <ControlFieldDefaultHarness />,
 };
 
 export const States: Story = {
@@ -63,21 +72,21 @@ export const States: Story = {
 			className="w-[320px] rounded-xl border border-border bg-surface p-4"
 			gap="section"
 		>
-			<ControlField isSelected onSelectedChange={() => undefined}>
+			<ControlField defaultValue>
 				<ControlField.Indicator variant="checkbox" />
 				<VStack className="flex-1" gap="dense">
 					<Label>선택됨</Label>
 					<Description>현재 활성화된 선택 항목입니다.</Description>
 				</VStack>
 			</ControlField>
-			<ControlField isDisabled isSelected onSelectedChange={() => undefined}>
+			<ControlField defaultValue isDisabled>
 				<ControlField.Indicator variant="switch" />
 				<VStack className="flex-1" gap="dense">
 					<Label>비활성</Label>
 					<Description>권한이 없으면 조작할 수 없습니다.</Description>
 				</VStack>
 			</ControlField>
-			<ControlField isInvalid onSelectedChange={() => undefined}>
+			<ControlField isInvalid>
 				<ControlField.Indicator variant="radio" />
 				<VStack className="flex-1" gap="dense">
 					<Label isInvalid>오류</Label>
@@ -94,7 +103,7 @@ export const Composition: Story = {
 			className="w-[320px] rounded-xl border border-border bg-surface p-4"
 			gap="section"
 		>
-			<ControlField isSelected onSelectedChange={() => undefined}>
+			<ControlField defaultValue>
 				{({ isSelected }) => (
 					<>
 						<ControlField.Indicator variant="checkbox" />
@@ -115,5 +124,5 @@ export const Composition: Story = {
 };
 
 export const ExternalState: Story = {
-	render: () => <ExternalStateHarness />,
+	render: () => <ControlFieldExternalStateHarness />,
 };

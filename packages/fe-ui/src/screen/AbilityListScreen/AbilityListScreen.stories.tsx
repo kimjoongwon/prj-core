@@ -104,15 +104,15 @@ const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 	abilities: abilityFixtures,
 	actions: [
 		{
-			id: "ACT00000000000000000000097",
+			id: "ACT00000000000000000000001",
 			label: "조회",
 		},
 		{
-			id: "ACT00000000000000000000101",
+			id: "ACT00000000000000000000002",
 			label: "수정",
 		},
 		{
-			id: "ACT00000000000000000000105",
+			id: "ACT00000000000000000000003",
 			label: "삭제",
 		},
 	],
@@ -141,15 +141,15 @@ const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 	summary: defaultSummary,
 	subjects: [
 		{
-			id: "SBJ00000000000000000000136",
+			id: "User",
 			label: "사용자",
 		},
 		{
-			id: "SBJ00000000000000000000140",
+			id: "Reservation",
 			label: "예약",
 		},
 		{
-			id: "SBJ00000000000000000000144",
+			id: "BulkDelete",
 			label: "일괄 삭제",
 		},
 	],
@@ -189,9 +189,7 @@ export const createAbilityListScreenStoryState = (
 			return (
 				(!normalizedSearch || searchableText.includes(normalizedSearch)) &&
 				(!selectedSubjectId ||
-					ability.subject?.name ===
-						state.subjects.find((subject) => subject.id === selectedSubjectId)
-							?.label) &&
+					ability.subject?.name === selectedSubjectId) &&
 				(!selectedActionId || ability.action?.id === selectedActionId) &&
 				(!selectedInverted || String(ability.inverted) === selectedInverted)
 			);
@@ -292,16 +290,16 @@ const filteredArgs = {
 	abilities: [abilityFixtures[1]],
 	filters: {
 		searchTerm: "예약",
-		selectedActionId: "ACT00000000000000000000101",
+		selectedActionId: "ACT00000000000000000000002",
 		selectedInverted: "false",
-		selectedSubjectId: "SBJ00000000000000000000140",
+		selectedSubjectId: "Reservation",
 	},
 	queryStates: {
 		take: 10,
 		skip: 0,
 		search: "예약",
-		subjectId: "SBJ00000000000000000000140",
-		actionId: "ACT00000000000000000000101",
+		subjectId: "Reservation",
+		actionId: "ACT00000000000000000000002",
 		inverted: "false",
 	},
 	summary: {

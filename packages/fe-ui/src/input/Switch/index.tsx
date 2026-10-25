@@ -10,8 +10,7 @@ export type SwitchProps<T extends object = object> =
 	| (MobxProps<T> & Omit<PureSwitchProps, "value" | "onValueChange">)
 	| PureSwitchProps;
 
-const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
-	if (!("state" in props && "path" in props)) return <PureSwitch {...props} />;
+const BoundSwitch = observer(<T extends object>(props: MobxProps<T> & Omit<PureSwitchProps, "value" | "onValueChange">) => {
 	const { path, state, ...rest } = props;
 
 	const formField = useFormField<T, boolean>({
@@ -32,6 +31,9 @@ const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 		/>
 	);
 });
+
+const Switch = <T extends object>(props: SwitchProps<T>) =>
+	"state" in props && "path" in props ? <BoundSwitch {...props} /> : <PureSwitch {...props} />;
 
 export type { SwitchState } from "./Switch";
 export { createSwitchState } from "./Switch";

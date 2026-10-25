@@ -79,8 +79,9 @@ const Radio = observer(<TState extends object>(props: RadioProps<TState>) => {
 });
 Radio.displayName = "Radio";
 
-const RadioWithStatics = Object.assign(Radio, PureRadio) as typeof Radio &
-	typeof PureRadio;
+const RadioWithStatics = Object.assign(Radio, {
+	Indicator: PureRadio.Indicator,
+}) as typeof Radio & Pick<typeof PureRadio, "Indicator">;
 export { RadioWithStatics as Radio };
 export { PureRadio, radioClassNames, useRadio };
 export type { PureRadioProps };

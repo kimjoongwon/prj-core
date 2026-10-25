@@ -11,7 +11,7 @@ import type {
 	ValueSplitter,
 } from "@cocrepo/type";
 import { action } from "mobx";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 
 export type {
 	UseFormFieldMultiOptions,
@@ -88,7 +88,11 @@ export function useFormField<
 	const fallbackValue = options.value !== undefined
 		? options.value
 		: options.defaultValue;
-	const pathDependency = isSinglePath ? options.path : options.paths;
+	const pathDependency = isSinglePath
+		? options.path
+		: options.paths.join("\u0000");
+	const latestOptionsRef = useRef(options);
+	latestOptionsRef.current = options;
 
 	return useMemo(() => {
 		if (isSinglePath) {
@@ -118,19 +122,29 @@ export function useFormField<
 		let multiValue = fallbackValue as TValue;
 		const state = {
 			get value() {
+				const currentOptions = latestOptionsRef.current as MultiPathOptions<
+					TState,
+					TValue,
+					TPaths
+				>;
 				const values: Record<string, unknown> = {};
-				options.paths.forEach((path: string) => {
-					values[path] = tools.get(options.state, path);
+				currentOptions.paths.forEach((path: string) => {
+					values[path] = tools.get(currentOptions.state, path);
 				});
-				return options.valueAggregator
-					? options.valueAggregator(values, options.paths)
+				return currentOptions.valueAggregator
+					? currentOptions.valueAggregator(values, currentOptions.paths)
 					: multiValue;
 			},
 			set value(nextValue: TValue) {
+				const currentOptions = latestOptionsRef.current as MultiPathOptions<
+					TState,
+					TValue,
+					TPaths
+				>;
 				multiValue = nextValue;
-				const mapped = options.valueSplitter(nextValue, options.paths);
-				options.paths.forEach((path: string) => {
-					tools.set(options.state, path, mapped[path]);
+				const mapped = currentOptions.valueSplitter(nextValue, currentOptions.paths);
+				currentOptions.paths.forEach((path: string) => {
+					tools.set(currentOptions.state, path, mapped[path]);
 				});
 			},
 		};
@@ -144,5 +158,5 @@ export function useFormField<
 				},
 			),
 		};
-	}, [fallbackValue, isSinglePath, options, pathDependency]);
+	}, [fallbackValue, isSinglePath, options.state, pathDependency]);
 }

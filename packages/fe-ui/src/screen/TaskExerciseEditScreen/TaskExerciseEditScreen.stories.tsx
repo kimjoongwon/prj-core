@@ -161,33 +161,49 @@ const loadingArgs = {
 type TaskExerciseEditStoryState = ComponentProps<typeof TaskExerciseEditScreen>["state"];
 type TaskExerciseEditScreenStoryState = NonNullable<TaskExerciseEditStoryState> & {
 	isAssetBrowserOpen: boolean;
+	selectedImageAsset?: ComponentProps<typeof TaskExerciseEditScreen>["selectedImageAsset"];
+	selectedVideoAsset?: ComponentProps<typeof TaskExerciseEditScreen>["selectedVideoAsset"];
 	openAssetBrowser: () => void;
 	closeAssetBrowser: () => void;
 	clearImageAsset: () => void;
 	clearVideoAsset: () => void;
 };
-export const createTaskExerciseEditScreenStoryState = (initial: TaskExerciseEditStoryState) => {
+export const createTaskExerciseEditScreenStoryState = (
+	initial: TaskExerciseEditStoryState,
+	selectedImageAsset?: ComponentProps<typeof TaskExerciseEditScreen>["selectedImageAsset"],
+	selectedVideoAsset?: ComponentProps<typeof TaskExerciseEditScreen>["selectedVideoAsset"],
+) => {
 	let state: TaskExerciseEditScreenStoryState;
 	state = makeAutoObservable({
 		...initial,
 		errors: { ...initial.errors },
 		isAssetBrowserOpen: false,
+		selectedImageAsset,
+		selectedVideoAsset,
 		openAssetBrowser: () => { state.isAssetBrowserOpen = true; },
 		closeAssetBrowser: () => { state.isAssetBrowserOpen = false; },
-		clearImageAsset: () => { state.imageFileId = ""; },
-		clearVideoAsset: () => { state.videoFileId = ""; },
+		clearImageAsset: () => { state.imageFileId = ""; state.selectedImageAsset = undefined; },
+		clearVideoAsset: () => { state.videoFileId = ""; state.selectedVideoAsset = undefined; },
 	}, {}, { autoBind: true, name: "TaskExerciseEditScreenStoryState" }) as TaskExerciseEditScreenStoryState;
 	return state;
 };
 export const TaskExerciseEditScreenStoryHarness = observer(function TaskExerciseEditScreenStoryHarness({
 	args,
 }: { args: ComponentProps<typeof TaskExerciseEditScreen> }) {
-	const state = useLocalObservable(() => createTaskExerciseEditScreenStoryState(args.state));
-	useStorybookState(() => ({ name: state.name, imageFileId: state.imageFileId, videoFileId: state.videoFileId, isAssetBrowserOpen: state.isAssetBrowserOpen }), "TaskExerciseEditScreen");
+	const state = useLocalObservable(() =>
+		createTaskExerciseEditScreenStoryState(
+			args.state,
+			args.selectedImageAsset,
+			args.selectedVideoAsset,
+		),
+	);
+	useStorybookState(() => ({ name: state.name, imageFileId: state.imageFileId, videoFileId: state.videoFileId, selectedImageAssetId: state.selectedImageAsset?.id ?? null, selectedVideoAssetId: state.selectedVideoAsset?.id ?? null, isAssetBrowserOpen: state.isAssetBrowserOpen }), "TaskExerciseEditScreen");
 	return (
 		<TaskExerciseEditScreen
 			{...args}
 			state={state}
+			selectedImageAsset={state.selectedImageAsset}
+			selectedVideoAsset={state.selectedVideoAsset}
 			isAssetBrowserOpen={state.isAssetBrowserOpen}
 			onOpenImagePicker={state.openAssetBrowser}
 			onOpenVideoPicker={state.openAssetBrowser}

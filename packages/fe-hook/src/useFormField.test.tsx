@@ -59,7 +59,7 @@ describe("useFormField", () => {
 
 	it("supports multi-path writes without an aggregator", () => {
 		const state = makeAutoObservable({ first: "A", last: "B" });
-		const { result } = renderHook(() =>
+		const { result, rerender } = renderHook(() =>
 			useFormField({
 				state,
 				paths: ["first", "last"] as const,
@@ -69,6 +69,47 @@ describe("useFormField", () => {
 		);
 		act(() => result.current.setValue("CD"));
 		expect(result.current.state.value).toBe("CD");
+		rerender();
+		expect(result.current.state.value).toBe("CD");
+		expect(state.first).toBe("C");
+		expect(state.last).toBe("D");
+	});
+
+	it("uses the latest aggregator while preserving the multi-path value", () => {
+		const state = makeAutoObservable({ first: "C", last: "D" });
+		const { result, rerender } = renderHook(
+			({ separator }: { separator: string }) =>
+				useFormField({
+					state,
+					paths: ["first", "last"] as const,
+					valueAggregator: (values) => `${values.first}${separator}${values.last}`,
+					valueSplitter: (value: string) => ({ first: value[0], last: value[2] }),
+				}),
+			{ initialProps: { separator: "-" } },
+		);
+		expect(result.current.state.value).toBe("C-D");
+		rerender({ separator: "_" });
+		expect(result.current.state.value).toBe("C_D");
+	});
+
+	it("uses the latest splitter when writing after a rerender", () => {
+		const state = makeAutoObservable({ first: "A", last: "B" });
+		const { result, rerender } = renderHook(
+			({ prefix }: { prefix: string }) =>
+				useFormField({
+					state,
+					paths: ["first", "last"] as const,
+					valueSplitter: (value: string) => ({
+						first: `${prefix}${value[0]}`,
+						last: `${prefix}${value[1]}`,
+					}),
+				}),
+			{ initialProps: { prefix: "old-" } },
+		);
+		rerender({ prefix: "new-" });
+		act(() => result.current.setValue("XY"));
+		expect(state.first).toBe("new-X");
+		expect(state.last).toBe("new-Y");
 	});
 
 	it("uses the new state and path when either source is replaced", () => {

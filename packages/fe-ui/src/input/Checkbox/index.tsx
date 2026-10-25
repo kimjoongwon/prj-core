@@ -10,9 +10,7 @@ export type CheckboxProps<T extends object = object> =
 	| (MobxProps<T> & Omit<PureCheckboxProps, "onChange" | "isSelected">)
 	| PureCheckboxProps;
 
-const Checkbox = observer(<T extends object>(props: CheckboxProps<T>) => {
-	if (!("state" in props && "path" in props))
-		return <PureCheckbox {...props} />;
+const BoundCheckbox = observer(<T extends object>(props: MobxProps<T> & Omit<PureCheckboxProps, "onChange" | "isSelected">) => {
 	const { path, state, ...rest } = props;
 
 	const formField = useFormField<T, boolean>({
@@ -33,6 +31,9 @@ const Checkbox = observer(<T extends object>(props: CheckboxProps<T>) => {
 		/>
 	);
 });
+
+const Checkbox = <T extends object>(props: CheckboxProps<T>) =>
+	"state" in props && "path" in props ? <BoundCheckbox {...props} /> : <PureCheckbox {...props} />;
 
 export type { CheckboxState } from "./Checkbox";
 export { createCheckboxState } from "./Checkbox";
