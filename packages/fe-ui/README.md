@@ -75,6 +75,12 @@ export function Example() {
 pnpm --filter tool-storybook start:dev
 ```
 
+## 입력 상태 계약
+
+입력·선택 컴포넌트는 `state`와 `path`를 생략하면 컴포넌트가 생성한 기본 observable 상태를 사용합니다. `state`와 `path`를 전달하면 해당 외부 경로가 유일한 값 원천이 되며, 컴포넌트 내부 값으로 복제해 동기화하지 않습니다.
+
+`value`, `isSelected` 같은 controlled 값은 외부 값을 우선하고, `defaultValue`, `defaultSelected`는 내부 상태의 초기값으로만 사용합니다. `undefined`만 fallback 대상이며 `false`, `0`, 빈 문자열과 `null`은 입력 계약의 값으로 보존됩니다. `createTextFieldState` 같은 factory와 반환 state type은 각 입력 폴더에서 공개합니다.
+
 ## Notes
 
 - The package name is already `@cocrepo/ui`.

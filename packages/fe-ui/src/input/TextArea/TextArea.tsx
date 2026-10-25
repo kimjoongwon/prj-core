@@ -1,3 +1,4 @@
+import { useInputStateInspection } from "@cocrepo/hook";
 import {
 	cn,
 	Description,
@@ -6,8 +7,11 @@ import {
 	Label,
 	TextField,
 } from "@heroui/react";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type React from "react";
 import type { ComponentProps, ReactNode } from "react";
+import { useCallback, useEffect, useId } from "react";
 import { useT } from "../../i18n";
 
 export interface TextAreaProps
@@ -45,7 +49,21 @@ export interface TextAreaProps
  * TextArea 컴포넌트
  * 여러 줄 텍스트 입력 컴포넌트입니다.
  */
-export const TextArea = (props: TextAreaProps) => {
+export function createTextAreaState(initialValue = "") {
+	return makeAutoObservable(
+		{
+			value: initialValue,
+			setValue(nextValue: string) {
+				this.value = nextValue;
+			},
+		},
+		{},
+		{ autoBind: true, name: "TextAreaState" },
+	);
+}
+export type TextAreaState = ReturnType<typeof createTextAreaState>;
+
+export const TextArea = observer((props: TextAreaProps) => {
 	const t = useT();
 	const {
 		classNames,
@@ -66,9 +84,28 @@ export const TextArea = (props: TextAreaProps) => {
 		variant,
 		...rest
 	} = props;
+	const internalState = useLocalObservable(() =>
+		createTextAreaState(
+			typeof rest.defaultValue === "string" ? rest.defaultValue : "",
+		),
+	);
+	const inputStateId = useId();
+	const inspection = useInputStateInspection();
+	const isControlled = value !== undefined;
+	const selectedValue = isControlled ? value : internalState.value;
+	const reader = useCallback(
+		() => (isControlled ? value : internalState.value),
+		[internalState, isControlled, value],
+	);
+	useEffect(
+		() => inspection?.registerInputState(inputStateId, reader),
+		[inspection, inputStateId, reader, selectedValue],
+	);
 
 	const handleOnChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		onChange?.(event.target.value);
+		const nextValue = event.target.value;
+		if (!isControlled) internalState.setValue(nextValue);
+		onChange?.(nextValue);
 		onValueChange?.(event.target.value);
 	};
 
@@ -93,7 +130,7 @@ export const TextArea = (props: TextAreaProps) => {
 						? t(rest.placeholder)
 						: rest.placeholder
 				}
-				value={value}
+				value={selectedValue}
 				onChange={handleOnChange}
 				variant={
 					variant === "primary" || variant === "secondary" ? variant : undefined
@@ -111,4 +148,4 @@ export const TextArea = (props: TextAreaProps) => {
 			) : null}
 		</TextField>
 	);
-};
+});

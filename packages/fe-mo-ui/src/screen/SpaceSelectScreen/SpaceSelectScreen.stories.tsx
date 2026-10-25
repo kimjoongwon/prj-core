@@ -1,6 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type { SpaceListItemInfo } from "../../widget/SpaceListItem";
 import { SpaceSelectScreen } from "./SpaceSelectScreen";
+import { useStorybookState } from "../../storybook";
+
+function createSpaceSelectStoryState() {
+	return makeAutoObservable(
+		{ selectedSpaceId: "gangnam", selectSpace(spaceId: string) { this.selectedSpaceId = spaceId; } },
+		{},
+		{ autoBind: true, name: "SpaceSelectScreenStoryState" },
+	);
+}
 
 const spaces: SpaceListItemInfo[] = [
 	{
@@ -33,15 +44,21 @@ export default meta;
 type Story = StoryObj;
 
 export const Ready: Story = {
-	render: () => (
+	render: () => <SpaceSelectStory />,
+};
+
+const SpaceSelectStory = observer(function SpaceSelectStory() {
+		const state = useLocalObservable(createSpaceSelectStoryState);
+		useStorybookState(() => ({ selectedSpaceId: state.selectedSpaceId }));
+		return (
 		<SpaceSelectScreen
-			onSelectSpace={() => undefined}
-			selectedSpaceId="gangnam"
+			onSelectSpace={(space) => state.selectSpace(space.id)}
+			selectedSpaceId={state.selectedSpaceId}
 			spaces={spaces}
 			status="ready"
 		/>
-	),
-};
+		);
+});
 
 export const Loading: Story = {
 	render: () => <SpaceSelectScreen status="loading" />,

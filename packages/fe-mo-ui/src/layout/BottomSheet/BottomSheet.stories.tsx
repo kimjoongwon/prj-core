@@ -1,8 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { BottomSheet } from "./index";
+import { useStorybookState } from "../../storybook";
+
+function createBottomSheetStoryState() {
+	return makeAutoObservable(
+		{ isOpen: false, setOpen(isOpen: boolean) { this.isOpen = isOpen; } },
+		{},
+		{ autoBind: true, name: "BottomSheetStoryState" },
+	);
+}
 
 const meta = {
 	title: "layout/BottomSheet",
@@ -17,7 +28,13 @@ export default meta;
 type Story = StoryObj;
 
 export const Open: Story = {
-	render: () => (
+	render: () => <BottomSheetStory />,
+};
+
+const BottomSheetStory = observer(function BottomSheetStory() {
+		const state = useLocalObservable(createBottomSheetStoryState);
+		useStorybookState(() => ({ isOpen: state.isOpen }));
+		return (
 		<View className="flex-1 justify-end px-4 py-5">
 			<View className="gap-2 rounded-lg border border-border bg-surface p-4">
 				<Typography className="font-extrabold" type="h5">
@@ -26,9 +43,9 @@ export const Open: Story = {
 				<Typography color="muted" type="body-sm">
 					모바일에서 선택, 필터, 확인 작업을 화면 아래에서 띄웁니다.
 				</Typography>
-				<Button variant="secondary">시트 열기</Button>
+				<Button onPress={() => state.setOpen(true)} variant="secondary">시트 열기</Button>
 			</View>
-			<BottomSheet isOpen onOpenChange={() => undefined}>
+			<BottomSheet isOpen={state.isOpen} onOpenChange={state.setOpen}>
 				<BottomSheet.Portal>
 					<BottomSheet.Overlay className="bg-backdrop" />
 					<BottomSheet.Content
@@ -51,5 +68,5 @@ export const Open: Story = {
 				</BottomSheet.Portal>
 			</BottomSheet>
 		</View>
-	),
-};
+		);
+});

@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { Button } from "../../input/Button/Button";
 import { TimelineEditScreen } from "./TimelineEditScreen";
 
@@ -34,6 +38,20 @@ const sessions = [
 		createdAt: new Date("2026-04-02T09:00:00.000Z"),
 	},
 ];
+type TimelineEditStoryState = NonNullable<ComponentProps<typeof TimelineEditScreen>["state"]>;
+const createTimelineEditScreenStoryState = (initial: TimelineEditStoryState) =>
+	makeAutoObservable(
+		{ ...initial, errors: { ...initial.errors } },
+		{},
+		{ autoBind: true, name: "TimelineEditScreenStoryState" },
+	);
+const renderTimelineEditScreen = (args: ComponentProps<typeof TimelineEditScreen>) => {
+	const state = useLocalObservable(() =>
+		createTimelineEditScreenStoryState(args.state ?? defaultState),
+	);
+	useStorybookState(() => ({ name: state.name, description: state.description, errors: state.errors }), "TimelineEditScreen");
+	return <TimelineEditScreen {...args} state={state} />;
+};
 
 const meta = {
 	title: "screen/TimelineEditScreen",
@@ -50,6 +68,7 @@ const meta = {
 		state: defaultState,
 		actions: <Button variant="primary">저장</Button>,
 	},
+	render: renderTimelineEditScreen,
 } satisfies Meta<typeof TimelineEditScreen>;
 
 export default meta;

@@ -1,3 +1,4 @@
+import { useInputStateInspection } from "@cocrepo/hook";
 import {
 	cn,
 	Description,
@@ -7,16 +8,33 @@ import {
 	InputGroup,
 	Label,
 } from "@heroui/react";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type {
 	ChangeEventHandler,
 	ComponentProps,
 	FocusEventHandler,
 } from "react";
+import { useCallback, useEffect, useId } from "react";
 import { translateNode, useT } from "../../i18n";
 import type { TextFieldProps } from "./TextField.props";
 import { resolveTextFieldValue } from "./text-field-value.resolver";
 
-export const TextField = (props: TextFieldProps) => {
+export function createTextFieldState(initialValue: string | number = "") {
+	return makeAutoObservable(
+		{
+			value: initialValue,
+			setValue(nextValue: string | number) {
+				this.value = nextValue;
+			},
+		},
+		{},
+		{ autoBind: true, name: "TextFieldState" },
+	);
+}
+export type TextFieldState = ReturnType<typeof createTextFieldState>;
+
+export const TextField = observer((props: TextFieldProps) => {
 	const t = useT();
 	const {
 		className,
@@ -74,13 +92,29 @@ export const TextField = (props: TextFieldProps) => {
 				: typeof fieldPlaceholder === "string"
 					? t(fieldPlaceholder)
 					: ariaLabelProp;
-	const inputValue = value === undefined ? undefined : String(value);
 	const inputDefaultValue =
 		defaultValue === undefined ? undefined : String(defaultValue);
 	const textFieldProps = rest as ComponentProps<typeof HeroTextField>;
+	const internalState = useLocalObservable(() =>
+		createTextFieldState(defaultValue ?? ""),
+	);
+	const inputStateId = useId();
+	const inspection = useInputStateInspection();
+	const isControlled = value !== undefined;
+	const selectedValue = isControlled ? value : internalState.value;
+	const reader = useCallback(
+		() => (isControlled ? value : internalState.value),
+		[internalState, isControlled, value],
+	);
+	useEffect(
+		() => inspection?.registerInputState(inputStateId, reader),
+		[inspection, inputStateId, reader, selectedValue],
+	);
 
 	const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		const nextValue = event.target.value;
+		if (!isControlled)
+			internalState.setValue(resolveTextFieldValue(nextValue, fieldType));
 
 		onChange?.(resolveTextFieldValue(nextValue, fieldType));
 		onValueChange?.(nextValue);
@@ -127,10 +161,10 @@ export const TextField = (props: TextFieldProps) => {
 						{...restInputProps}
 						aria-label={ariaLabel}
 						className={cn(inputClassName, classNames?.input)}
-						defaultValue={inputDefaultValue}
+						defaultValue={isControlled ? undefined : inputDefaultValue}
 						placeholder={translatedPlaceholder}
 						type={fieldType}
-						value={inputValue}
+						value={String(selectedValue)}
 						onBlur={handleBlur}
 						onChange={handleChange}
 						onFocus={handleFocus}
@@ -146,10 +180,10 @@ export const TextField = (props: TextFieldProps) => {
 					{...restInputProps}
 					aria-label={ariaLabel}
 					className={cn(inputClassName, classNames?.input)}
-					defaultValue={inputDefaultValue}
+					defaultValue={isControlled ? undefined : inputDefaultValue}
 					placeholder={translatedPlaceholder}
 					type={fieldType}
-					value={inputValue}
+					value={String(selectedValue)}
 					variant={fieldVariant}
 					onBlur={handleBlur}
 					onChange={handleChange}
@@ -168,4 +202,4 @@ export const TextField = (props: TextFieldProps) => {
 			) : null}
 		</HeroTextField>
 	);
-};
+});

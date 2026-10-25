@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { RoleAssignmentForm } from "../../form/RoleAssignmentForm";
 import { Button } from "../../input/Button/Button";
 import { RoleEditScreen } from "./RoleEditScreen";
@@ -36,6 +40,20 @@ const roleAssignmentState = {
 		},
 	],
 };
+type RoleEditStoryState = NonNullable<ComponentProps<typeof RoleEditScreen>["state"]>;
+const createRoleEditScreenStoryState = (initial: RoleEditStoryState) =>
+	makeAutoObservable(
+		{ ...initial, errors: { ...initial.errors } },
+		{},
+		{ autoBind: true, name: "RoleEditScreenStoryState" },
+	);
+const renderRoleEditScreen = (args: ComponentProps<typeof RoleEditScreen>) => {
+	const state = useLocalObservable(() =>
+		createRoleEditScreenStoryState(args.state ?? defaultState),
+	);
+	useStorybookState(() => ({ name: state.name, displayName: state.displayName, description: state.description, errors: state.errors }), "RoleEditScreen");
+	return <RoleEditScreen {...args} state={state} />;
+};
 
 const meta = {
 	title: "screen/RoleEditScreen",
@@ -48,6 +66,7 @@ const meta = {
 		state: defaultState,
 		actions: <Button variant="primary">저장</Button>,
 	},
+	render: renderRoleEditScreen,
 } satisfies Meta<typeof RoleEditScreen>;
 
 export default meta;

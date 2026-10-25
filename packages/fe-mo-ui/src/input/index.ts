@@ -19,6 +19,8 @@ export * from "./Textarea";
 export type { TextFieldProps } from "./TextField";
 export {
 	TextField,
+	createTextFieldState,
 	textFieldClassNames,
 	useTextField,
 } from "./TextField";
+export type { TextFieldState } from "./TextField";

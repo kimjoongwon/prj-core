@@ -16,6 +16,11 @@
 			"import": "./src/useFormField.ts",
 			"default": "./src/useFormField.ts"
 		},
+		"./input-state-inspection": {
+			"types": "./src/input-state-inspection.ts",
+			"import": "./src/input-state-inspection.ts",
+			"default": "./src/input-state-inspection.ts"
+		},
 		"./package.json": "./package.json"
 	},
 	"main": "./index.ts",

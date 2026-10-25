@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { type ReactNode } from "react";
 import { DesignSystemProvider } from "../../design-system/provider";
-import { PureDateStrip as DateStrip } from "./index";
+import { DateStrip, PureDateStrip } from "./index";
 
 const renderWithDesignSystem = (children: ReactNode) =>
 	render(
@@ -30,7 +30,7 @@ describe("DateStrip", () => {
 		};
 
 		renderWithDesignSystem(
-			<DateStrip
+			<PureDateStrip
 				onSelect={onSelect}
 				options={[option]}
 				selectedValue="2026-05-12"
@@ -55,7 +55,7 @@ describe("DateStrip", () => {
 		const onSelect = jest.fn();
 
 		renderWithDesignSystem(
-			<DateStrip
+			<PureDateStrip
 				onSelect={onSelect}
 				options={[
 					{
@@ -78,5 +78,41 @@ describe("DateStrip", () => {
 				disabled: true,
 			}),
 		);
+	});
+
+	it("controlled selectedValue는 callback만 알리고 자체 값을 덮어쓰지 않아야 한다", () => {
+		const onSelect = jest.fn();
+		const options = [
+			{ dateLabel: "12", dayLabel: "Mon", value: "2026-05-12" },
+			{ dateLabel: "13", dayLabel: "Tue", value: "2026-05-13" },
+		];
+
+		renderWithDesignSystem(
+			<DateStrip onSelect={onSelect} options={options} selectedValue="2026-05-12" />,
+		);
+		fireEvent.press(screen.getByLabelText("Tue 13"));
+
+		expect(onSelect).toHaveBeenCalledTimes(1);
+		expect(onSelect).toHaveBeenCalledWith("2026-05-13", options[1]);
+		expect(screen.getByLabelText("Mon 12").props.accessibilityState).toEqual(
+			expect.objectContaining({ selected: true }),
+		);
+	});
+
+	it("bound state/path는 선택값을 외부 state에 직접 기록해야 한다", () => {
+		const state = { selectedDate: null as string | null };
+		const onSelect = jest.fn();
+		renderWithDesignSystem(
+			<DateStrip
+				onSelect={onSelect}
+				options={[{ dateLabel: "12", dayLabel: "Mon", value: "2026-05-12" }]}
+				path="selectedDate"
+				state={state}
+			/>,
+		);
+		fireEvent.press(screen.getByLabelText("Mon 12"));
+
+		expect(state.selectedDate).toBe("2026-05-12");
+		expect(onSelect).toHaveBeenCalledTimes(1);
 	});
 });

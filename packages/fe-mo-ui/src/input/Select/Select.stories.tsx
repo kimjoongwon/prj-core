@@ -1,13 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { Select } from "./index";
 
-const state = observable({
-	reservationType: "group",
-});
+const createSelectStoryState = () =>
+	makeAutoObservable(
+		{ reservationType: "group" },
+		{},
+		{ autoBind: true, name: "SelectStoryState" },
+	);
 
 const meta = {
 	title: "input/Select",
@@ -40,11 +44,27 @@ export const Default: Story = {
 						{ label: "개인 레슨", value: "private" },
 						{ label: "상담 예약", value: "consulting" },
 					]}
-					path="reservationType"
+					defaultValue="group"
 					placeholder="예약 유형 선택"
-					state={state}
 				/>
 			</VStack>
 		</ScrollView>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => {
+		const state = useLocalObservable(createSelectStoryState);
+		return (
+			<Select
+				listLabel="예약 유형"
+				options={[
+					{ label: "그룹 클래스", value: "group" },
+					{ label: "개인 레슨", value: "private" },
+				]}
+				path="reservationType"
+				state={state}
+			/>
+		);
+	},
 };

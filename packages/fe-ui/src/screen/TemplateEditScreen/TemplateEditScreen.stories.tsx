@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { Button } from "../../input/Button/Button";
 import { TemplateEditScreen } from "./TemplateEditScreen";
 
@@ -22,6 +26,20 @@ const defaultState = {
 	],
 	errors: {},
 };
+type TemplateEditStoryState = NonNullable<ComponentProps<typeof TemplateEditScreen>["state"]>;
+const createTemplateEditScreenStoryState = (initial: TemplateEditStoryState) =>
+	makeAutoObservable(
+		{ ...initial, formData: { ...initial.formData }, variables: initial.variables.map((variable) => ({ ...variable })), errors: { ...initial.errors } },
+		{},
+		{ autoBind: true, name: "TemplateEditScreenStoryState" },
+	);
+const renderTemplateEditScreen = (args: ComponentProps<typeof TemplateEditScreen>) => {
+	const state = useLocalObservable(() =>
+		createTemplateEditScreenStoryState(args.state ?? defaultState),
+	);
+	useStorybookState(() => ({ formData: state.formData, variables: state.variables, errors: state.errors }), "TemplateEditScreen");
+	return <TemplateEditScreen {...args} state={state} />;
+};
 
 const meta = {
 	title: "screen/TemplateEditScreen",
@@ -34,6 +52,7 @@ const meta = {
 		state: defaultState,
 		actions: <Button variant="primary">저장</Button>,
 	},
+	render: renderTemplateEditScreen,
 } satisfies Meta<typeof TemplateEditScreen>;
 
 export default meta;

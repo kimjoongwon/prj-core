@@ -1,23 +1,20 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { Switch as PureSwitch } from "./Switch";
 import type { SwitchProps as PureSwitchProps } from "./Switch.props";
 
-export interface SwitchProps<T>
-	extends MobxProps<T>,
-		Omit<PureSwitchProps, "value" | "onValueChange"> {}
+export type SwitchProps<T extends object = object> =
+	| (MobxProps<T> & Omit<PureSwitchProps, "value" | "onValueChange">)
+	| PureSwitchProps;
 
-const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
+const BoundSwitch = observer(<T extends object>(props: MobxProps<T> & Omit<PureSwitchProps, "value" | "onValueChange">) => {
 	const { path, state, ...rest } = props;
 
-	const initialValue = tools.get(state, path, false) as boolean;
-
 	const formField = useFormField<T, boolean>({
-		value: initialValue,
+		defaultValue: false,
 		state,
 		path,
 	});
@@ -35,4 +32,9 @@ const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 	);
 });
 
+const Switch = <T extends object>(props: SwitchProps<T>) =>
+	"state" in props && "path" in props ? <BoundSwitch {...props} /> : <PureSwitch {...props} />;
+
+export type { SwitchState } from "./Switch";
+export { createSwitchState } from "./Switch";
 export { Switch };

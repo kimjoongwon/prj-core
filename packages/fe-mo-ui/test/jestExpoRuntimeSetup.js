@@ -1,3 +1,6 @@
+// HeroUI Native uses gesture-handler v3; load its official Jest mocks before any component import.
+require("react-native-gesture-handler/jestSetup");
+
 const { TextDecoder, TextEncoder } = require("node:util");
 const { URL, URLSearchParams } = require("node:url");
 

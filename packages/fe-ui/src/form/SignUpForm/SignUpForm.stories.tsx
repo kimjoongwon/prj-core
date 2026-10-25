@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { observable } from "mobx";
-import { SignUpForm } from "./SignUpForm";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import { SignUpForm, type SignUpFormState } from "./SignUpForm";
+import { useStorybookState } from "../../storybook";
 
 const baseState = {
 	spaceId: "space-gangnam",
@@ -24,15 +26,21 @@ const spaceOptions = [
 		description: "강남 지점 운영 공간",
 	},
 ];
-const handlers = {
-	onChangeSpaceId: () => undefined,
-	onChangeEmail: () => undefined,
-	onChangePassword: () => undefined,
-	onChangeConfirmPassword: () => undefined,
-	onChangeName: () => undefined,
-	onChangePhone: () => undefined,
-	onChangeAddress: () => undefined,
-	onClickUseAnotherEmailButton: () => undefined,
+const createSignUpFormStoryState = (initial: SignUpFormState) => {
+	let state: SignUpFormState & Record<string, unknown>;
+	state = makeAutoObservable({
+		...initial,
+		fieldErrors: { ...initial.fieldErrors },
+		onChangeSpaceId: (value: string) => { state.spaceId = value; },
+		onChangeEmail: (value: string | number) => { state.email = String(value); },
+		onChangePassword: (value: string | number) => { state.password = String(value); },
+		onChangeConfirmPassword: (value: string | number) => { state.confirmPassword = String(value); },
+		onChangeName: (value: string | number) => { state.name = String(value); },
+		onChangePhone: (value: string | number) => { state.phone = String(value); },
+		onChangeAddress: (value: string) => { state.address = value; },
+		onClickUseAnotherEmailButton: () => { state.email = ""; },
+	}, {}, { autoBind: true, name: "SignUpFormStoryState" });
+	return state;
 };
 const meta = {
 	title: "form/SignUpForm",
@@ -42,13 +50,24 @@ const meta = {
 } satisfies Meta<typeof SignUpForm>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-const render: Story["render"] = (args) => (
-	<div className="w-[520px]">
-		<SignUpForm {...args} state={observable({ ...args.state })} />
-	</div>
-);
+const render: Story["render"] = (args) => {
+	const state = useLocalObservable(() => createSignUpFormStoryState(args.state));
+	useStorybookState(() => ({ spaceId: state.spaceId, email: state.email, name: state.name, fieldErrors: state.fieldErrors, isSubmitted: state.isSubmitted }), "SignUpForm");
+	return <div className="w-[520px]"><SignUpForm {...args} {...state} state={state} /></div>;
+};
 export const Default: Story = {
-	args: { state: baseState, spaceOptions, ...handlers },
+	args: {
+		state: baseState,
+		spaceOptions,
+		onChangeSpaceId: undefined as never,
+		onChangeEmail: undefined as never,
+		onChangePassword: undefined as never,
+		onChangeConfirmPassword: undefined as never,
+		onChangeName: undefined as never,
+		onChangePhone: undefined as never,
+		onChangeAddress: undefined as never,
+		onClickUseAnotherEmailButton: undefined as never,
+	},
 	render,
 };
 export const Submitted: Story = {
@@ -60,7 +79,14 @@ export const Submitted: Story = {
 			submittedSpaceName: "강남 스페이스",
 		},
 		spaceOptions,
-		...handlers,
+		onChangeSpaceId: undefined as never,
+		onChangeEmail: undefined as never,
+		onChangePassword: undefined as never,
+		onChangeConfirmPassword: undefined as never,
+		onChangeName: undefined as never,
+		onChangePhone: undefined as never,
+		onChangeAddress: undefined as never,
+		onClickUseAnotherEmailButton: undefined as never,
 	},
 	render,
 };
@@ -72,7 +98,14 @@ export const ValidationError: Story = {
 			errorMessage: "입력값을 확인해주세요.",
 		},
 		spaceOptions,
-		...handlers,
+		onChangeSpaceId: undefined as never,
+		onChangeEmail: undefined as never,
+		onChangePassword: undefined as never,
+		onChangeConfirmPassword: undefined as never,
+		onChangeName: undefined as never,
+		onChangePhone: undefined as never,
+		onChangeAddress: undefined as never,
+		onClickUseAnotherEmailButton: undefined as never,
 	},
 	render,
 };

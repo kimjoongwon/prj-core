@@ -1,7 +1,31 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type { DateStripOption } from "../../input/DateStrip";
 import type { BookingClassFeedItem } from "../../widget/BookingClassCard";
-import { ReservationHomeScreen } from "./ReservationHomeScreen";
+import {
+	ReservationHomeScreen,
+	type ReservationHomeFilterValue,
+} from "./ReservationHomeScreen";
+import { useStorybookState } from "../../storybook";
+
+function createReservationHomeStoryState() {
+	return makeAutoObservable(
+		{
+			selectedDate: "2026-05-13",
+			selectedFilter: "all" as ReservationHomeFilterValue,
+			policyItemId: null as string | null,
+			memoValue: "",
+			selectDate(value: string) { this.selectedDate = value; },
+			selectFilter(value: "all" | "bookable" | "mine" | "waitlist") { this.selectedFilter = value; },
+			openPolicy(itemId: string) { this.policyItemId = itemId; },
+			closePolicy() { this.policyItemId = null; },
+			setMemo(value: string) { this.memoValue = value; },
+		},
+		{},
+		{ autoBind: true, name: "ReservationHomeScreenStoryState" },
+	);
+}
 
 const dateOptions: DateStripOption[] = [
 	{
@@ -72,10 +96,27 @@ export default meta;
 type Story = StoryObj;
 
 export const Ready: Story = {
-	render: () => (
+	render: () => <ReservationHomeStory />,
+};
+
+const ReservationHomeStory = observer(function ReservationHomeStory() {
+	const state = useLocalObservable(createReservationHomeStoryState);
+	useStorybookState(() => ({
+		memoValue: state.memoValue,
+		policyItemId: state.policyItemId,
+		selectedDate: state.selectedDate,
+		selectedFilter: state.selectedFilter,
+	}));
+	const visibleCardItems = cardItems.filter((item) => {
+		if (state.selectedFilter === "bookable") return (item.availableCount ?? 0) > 0;
+		if (state.selectedFilter === "mine") return item.id === "home-reformer";
+		return true;
+	});
+	const selectedDateLabel = dateOptions.find((option) => option.value === state.selectedDate);
+	return (
 		<ReservationHomeScreen
 			bookingWindowDays={14}
-			cardItems={cardItems}
+			cardItems={visibleCardItems}
 			dateOptions={dateOptions}
 			feedStatus="ready"
 			filterOptions={[
@@ -84,17 +125,21 @@ export const Ready: Story = {
 				{ label: "내 예약", value: "mine" },
 				{ label: "대기 가능", value: "waitlist" },
 			]}
-			onPressBookingCta={() => undefined}
-			onPressFilter={() => undefined}
-			onSelectDate={() => undefined}
+			onPressBookingCta={(item) => state.openPolicy(item.id)}
+			onPressFilter={state.selectFilter}
+			onSelectDate={(value) => state.selectDate(value)}
 			policySheet={{
-				isOpen: false,
-				item: null,
+				isOpen: state.policyItemId !== null,
+				item: cardItems.find((item) => item.id === state.policyItemId) ?? null,
+				memoValue: state.memoValue,
+				onCancel: state.closePolicy,
+				onChangeMemo: state.setMemo,
+				onConfirm: state.closePolicy,
 			}}
 			reservedCount={1}
-			selectedDate="2026-05-13"
-			selectedDateLabel="5월 13일 수요일"
-			selectedFilter="all"
+			selectedDate={state.selectedDate}
+			selectedDateLabel={selectedDateLabel ? `${selectedDateLabel.value} · ${selectedDateLabel.dayLabel}` : "선택한 날짜"}
+			selectedFilter={state.selectedFilter}
 		/>
-	),
-};
+);
+});

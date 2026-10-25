@@ -43,6 +43,19 @@ const forcedModules = new Map(
 );
 const upstreamResolveRequest = config.resolver.resolveRequest;
 config.resolver.resolveRequest = (context, moduleName, platform) => {
+	// Resolve the package entry and every public subpath through the same
+	// workspace installation.  Letting Metro resolve subpaths independently can
+	// select a different export condition and create a second HeroUI context.
+	if (
+		moduleName === "heroui-native" ||
+		moduleName.startsWith("heroui-native/")
+	) {
+		return {
+			filePath: resolveFromStorybook(moduleName),
+			type: "sourceFile",
+		};
+	}
+
 	const forcedPath = forcedModules.get(moduleName);
 
 	if (forcedPath) {

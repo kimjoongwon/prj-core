@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { Button } from "../../input/Button/Button";
 import { AbilityEditScreen } from "./AbilityEditScreen";
 
@@ -22,6 +26,20 @@ const defaultState = {
 	inverted: false,
 	reason: "",
 };
+type AbilityEditStoryState = NonNullable<ComponentProps<typeof AbilityEditScreen>["state"]>;
+const createAbilityEditScreenStoryState = (initial: AbilityEditStoryState) =>
+	makeAutoObservable(
+		{ ...initial },
+		{},
+		{ autoBind: true, name: "AbilityEditScreenStoryState" },
+	);
+const renderAbilityEditScreen = (args: ComponentProps<typeof AbilityEditScreen>) => {
+	const state = useLocalObservable(() =>
+		createAbilityEditScreenStoryState(args.state ?? defaultState),
+	);
+	useStorybookState(() => ({ name: state.name, subjectId: state.subjectId, actionId: state.actionId, inverted: state.inverted }), "AbilityEditScreen");
+	return <AbilityEditScreen {...args} state={state} />;
+};
 
 const meta = {
 	title: "screen/AbilityEditScreen",
@@ -36,6 +54,7 @@ const meta = {
 		actions,
 		pageActions: <Button variant="primary">저장</Button>,
 	},
+	render: renderAbilityEditScreen,
 } satisfies Meta<typeof AbilityEditScreen>;
 
 export default meta;

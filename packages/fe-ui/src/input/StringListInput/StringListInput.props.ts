@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
 export interface StringListInputProps {
-	value: string[];
-	onChange: (value: string[]) => void;
+	value?: string[];
+	onChange?: (value: string[]) => void;
 	errors?: Record<number, ReactNode>;
 	isReadOnly?: boolean;
 	placeholder?: string;

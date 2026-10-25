@@ -152,6 +152,30 @@ function UserProfile({ userId }) {
 ### Forms & Validation
 - `useForm` - Complete form management
 - `useFormField` - Individual field management
+
+`useFormField` reads and writes the supplied `state`/`path` directly. The
+returned `state.value` is an adapter, not a copied local value; `defaultValue`
+or `value` is used only while the external path is `undefined` (so `false`,
+`0`, and an empty string are preserved). The existing `valueSplitter` /
+`valueAggregator` multi-path contract remains available.
+
+For Storybook-only value inspection, wrap the example with
+`InputStateInspectionProvider` and register a reader from the owning component:
+
+```tsx
+const inspection = useInputStateInspection();
+const dispose = inspection?.registerInputState(
+  "profile.name",
+  () => state.profile.name,
+);
+// dispose on unmount
+inspection?.read("profile.name");
+```
+
+The inspection registry stores readers rather than snapshots, so consumers can
+read the current controlled or observable value without creating a second
+input state. Each provider has an isolated registry; without the provider,
+inspection is disabled.
 - `useValidation` - Form validation utilities
 
 ### Data & Async

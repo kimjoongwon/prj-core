@@ -1,13 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import { observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
 import { ScrollView } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { VStack } from "../../rhythm";
 import { Slider } from "./index";
 
-const state = observable({
-	intensity: 68,
-});
+const createSliderStoryState = () =>
+	makeAutoObservable(
+		{ intensity: 68 },
+		{},
+		{ autoBind: true, name: "SliderStoryState" },
+	);
 
 const meta = {
 	title: "input/Slider",
@@ -33,14 +37,23 @@ export const Default: Story = {
 						강도, 거리, 비율처럼 연속적인 수치를 조절합니다.
 					</Typography>
 				</VStack>
-				<Slider
-					maxValue={100}
-					minValue={0}
-					path="intensity"
-					state={state}
-					step={1}
-				/>
+				<Slider maxValue={100} minValue={0} defaultValue={68} step={1} />
 			</VStack>
 		</ScrollView>
 	),
+};
+
+export const ExternalState: Story = {
+	render: () => {
+		const state = useLocalObservable(createSliderStoryState);
+		return (
+			<Slider
+				maxValue={100}
+				minValue={0}
+				path="intensity"
+				state={state}
+				step={1}
+			/>
+		);
+	},
 };

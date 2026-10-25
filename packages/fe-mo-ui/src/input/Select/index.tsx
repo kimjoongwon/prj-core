@@ -1,9 +1,9 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook/useFormField";
-import { tools } from "@cocrepo/toolkit";
-import type { MobxProps } from "@cocrepo/type";
-import { observer } from "mobx-react-lite";
+import type { MobxProps, Paths } from "@cocrepo/type";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import {
 	PureSelect,
 	type PureSelectProps,
@@ -13,26 +13,72 @@ import {
 	useSelectAnimation,
 	useSelectItem,
 } from "./Select";
+import { useRegisterInputState } from "../input-state-inspection";
 
-export interface SelectProps<TState extends object = Record<string, unknown>>
-	extends MobxProps<TState>,
-		Omit<PureSelectProps, "onChange" | "value"> {}
+type BoundSelectProps<TState extends object> = MobxProps<TState> &
+	(Omit<PureSelectProps, "onChange" | "value" | "defaultValue"> & {
+		value?: never;
+		defaultValue?: string;
+		onChange?: PureSelectProps["onChange"];
+	});
+type UnboundSelectProps = Omit<
+	PureSelectProps,
+	"onChange" | "value" | "defaultValue"
+> & {
+	state?: never;
+	path?: never;
+	value?: string;
+	defaultValue?: string;
+	onChange?: PureSelectProps["onChange"];
+};
+export type SelectProps<TState extends object = Record<string, unknown>> =
+	| BoundSelectProps<TState>
+	| UnboundSelectProps;
+export function createSelectState(value = "") {
+	const state = {
+		value,
+		setValue(nextValue: string) {
+			state.value = nextValue;
+		},
+	};
+	return makeAutoObservable(state, {}, { autoBind: true, name: "SelectState" });
+}
+export type SelectState = ReturnType<typeof createSelectState>;
 
 const Select = observer(<TState extends object>(props: SelectProps<TState>) => {
-	const { options = [], path, state, ...rest } = props;
-	const fallback = options[0]?.value ?? "";
-	const field = useFormField<TState, string>({
+	const {
+		defaultValue,
+		onChange,
+		options = [],
 		path,
 		state,
-		value: (tools.get(state, path) ?? fallback) as string,
+		value: controlledValue,
+		...rest
+	} = props;
+	const fallback = defaultValue ?? options[0]?.value ?? "";
+	const localState = useLocalObservable(() => createSelectState(fallback));
+	const field = useFormField<TState, string>({
+		path: (state && path ? path : "value") as Paths<TState, 4>,
+		state: (state ?? localState) as TState,
+		defaultValue: fallback,
 	});
+	const isBound = state !== undefined && path !== undefined;
+	const isControlled = !isBound && controlledValue !== undefined;
+	const value = isControlled ? controlledValue : field.state.value;
+	useRegisterInputState(
+		() => (isControlled ? controlledValue : field.state.value),
+		isControlled ? controlledValue : field.state.value,
+	);
 
 	return (
 		<PureSelect
 			{...rest}
-			onChange={field.setValue}
+			onChange={(nextValue) => {
+				if (!isControlled) field.setValue(nextValue);
+				onChange?.(nextValue);
+			}}
 			options={options}
-			value={field.state.value}
+			value={value}
 		/>
 	);
 });

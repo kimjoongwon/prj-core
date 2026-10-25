@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { StringListInput as PureStringListInput } from "./StringListInput";
@@ -20,17 +19,13 @@ function isBoundStringListInputProps<T>(
 	return "state" in props && "path" in props;
 }
 
-const StringListInput = observer(
-	<T extends object>(props: StringListInputProps<T>) => {
-		if (!isBoundStringListInputProps(props)) {
-			return <PureStringListInput {...props} />;
-		}
-
+const BoundStringListInput = observer(
+	<T extends object>(props: MobxProps<T> & Omit<PureStringListInputProps, "onChange" | "value">) => {
 		const { path, state, ...rest } = props;
 		const formField = useFormField<T, string[]>({
 			path,
 			state,
-			value: (tools.get(state, path) ?? []) as string[],
+			defaultValue: [],
 		});
 
 		return (
@@ -43,5 +38,10 @@ const StringListInput = observer(
 	},
 );
 
+const StringListInput = <T extends object>(props: StringListInputProps<T>) =>
+	isBoundStringListInputProps(props) ? <BoundStringListInput {...props} /> : <PureStringListInput {...props} />;
+
 export { StringListInput };
+export { createStringListInputState } from "./StringListInput";
 export type { PureStringListInputProps };
+export type { StringListInputState } from "./StringListInput";

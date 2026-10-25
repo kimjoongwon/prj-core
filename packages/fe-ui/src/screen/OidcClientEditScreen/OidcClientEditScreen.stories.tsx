@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import type { ComponentProps } from "react";
+import { useStorybookState } from "../../storybook";
 import { Button } from "../../input/Button/Button";
 import { OidcClientEditScreen } from "./OidcClientEditScreen";
 
@@ -33,6 +37,20 @@ const defaultState = {
 	errors: {},
 	redirectUriErrors: {},
 };
+type OidcClientEditStoryState = NonNullable<ComponentProps<typeof OidcClientEditScreen>["state"]>;
+const createOidcClientEditScreenStoryState = (initial: OidcClientEditStoryState) =>
+	makeAutoObservable(
+		{ ...initial, grantTypes: [...initial.grantTypes], responseTypes: [...initial.responseTypes], redirectUris: [...initial.redirectUris], errors: { ...initial.errors }, redirectUriErrors: { ...initial.redirectUriErrors } },
+		{},
+		{ autoBind: true, name: "OidcClientEditScreenStoryState" },
+	);
+const renderOidcClientEditScreen = (args: ComponentProps<typeof OidcClientEditScreen>) => {
+	const state = useLocalObservable(() =>
+		createOidcClientEditScreenStoryState(args.state ?? defaultState),
+	);
+	useStorybookState(() => ({ clientId: state.clientId, name: state.name, isPublic: state.isPublic, isFirstParty: state.isFirstParty, useCustomLoginUi: state.useCustomLoginUi, errors: state.errors }), "OidcClientEditScreen");
+	return <OidcClientEditScreen {...args} state={state} />;
+};
 
 const meta = {
 	title: "screen/OidcClientEditScreen",
@@ -45,6 +63,7 @@ const meta = {
 		state: defaultState,
 		actions: <Button variant="primary">저장</Button>,
 	},
+	render: renderOidcClientEditScreen,
 } satisfies Meta<typeof OidcClientEditScreen>;
 
 export default meta;

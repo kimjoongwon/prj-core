@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
 import { Checkbox } from "./Checkbox";
+import { Checkbox as BoundCheckbox } from "./index";
 
 const meta = {
 	title: "input/Checkbox",
@@ -30,6 +33,13 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const createCheckboxStoryState = () =>
+	makeAutoObservable(
+		{ accepted: false },
+		{},
+		{ autoBind: true, name: "CheckboxStoryState" },
+	);
 
 export const 기본: Story = {
 	args: {
@@ -78,4 +88,16 @@ export const 다양한상태: Story = {
 			<Checkbox isInvalid>오류 상태</Checkbox>
 		</div>
 	),
+};
+
+export const ExternalState: Story = {
+	args: { children: "외부 state 체크박스" },
+	render: () => {
+		const state = useLocalObservable(createCheckboxStoryState);
+		return (
+			<BoundCheckbox state={state} path="accepted">
+				외부 state 체크박스
+			</BoundCheckbox>
+		);
+	},
 };

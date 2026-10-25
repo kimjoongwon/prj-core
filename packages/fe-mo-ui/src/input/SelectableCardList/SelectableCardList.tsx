@@ -85,7 +85,11 @@ const NodeText = ({
 	if (node === undefined || node === null || node === false) {
 		return null;
 	}
-	return <Typography className={className} type="body-sm">{node}</Typography>;
+	return (
+		<Typography className={className} type="body-sm">
+			{node}
+		</Typography>
+	);
 };
 const SelectableTag = ({ tag }: { tag: ReactNode }) => (
 	<View className={classNames.tag()}>
@@ -223,7 +227,12 @@ const SelectableCard = ({
 					justifyContent="between"
 					key="header"
 				>
-					<HStack alignItems="start" className="flex-1" gap="inline" key="title">
+					<HStack
+						alignItems="start"
+						className="flex-1"
+						gap="inline"
+						key="title"
+					>
 						<SelectableTitleIcon item={item} />
 						<VStack className="flex-1" gap="dense">
 							<NodeText
