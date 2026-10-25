@@ -2,7 +2,7 @@
 # 임베딩 모델(paraphrase-multilingual-MiniLM-L12-v2, ~0.22GB)을 이미지에 미리 구워
 # 파드 기동 시 다운로드가 없게 한다(모델 경로: DOLMEN_EMBEDDING_CACHE_DIR).
 
-FROM docker.io/library/python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 AS base
+FROM docker.io/library/python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704 AS base
 
 ENV PYTHONUNBUFFERED=1 \
     UV_LINK_MODE=copy \
