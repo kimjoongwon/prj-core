@@ -72,7 +72,7 @@ export class SubjectsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Subject ID (canonical decimal BIGINT string)",
+		description: "Subject ID (ULID)",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 403, 404, 500)
@@ -93,7 +93,7 @@ export class SubjectsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Subject ID (canonical decimal BIGINT string)",
+		description: "Subject ID (ULID)",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 403, 404, 500)

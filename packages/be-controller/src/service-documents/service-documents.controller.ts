@@ -97,7 +97,7 @@ export class ServiceDocumentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "serviceDocumentId",
-		description: "서비스 문서 ID (canonical decimal BIGINT string)",
+		description: "서비스 문서 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -130,7 +130,7 @@ export class ServiceDocumentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "serviceDocumentId",
-		description: "서비스 문서 ID (canonical decimal BIGINT string)",
+		description: "서비스 문서 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
@@ -157,7 +157,7 @@ export class ServiceDocumentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "serviceDocumentId",
-		description: "서비스 문서 ID (canonical decimal BIGINT string)",
+		description: "서비스 문서 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
@@ -184,7 +184,7 @@ export class ServiceDocumentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "serviceDocumentId",
-		description: "서비스 문서 ID (canonical decimal BIGINT string)",
+		description: "서비스 문서 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)

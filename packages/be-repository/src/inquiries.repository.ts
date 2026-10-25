@@ -157,22 +157,34 @@ export class InquiriesRepository {
 	 */
 	async create(
 		data: AutoIdentityCreateInput<
-			Prisma.InquiryUncheckedCreateInput,
+			Omit<
+				Prisma.InquiryUncheckedCreateInput,
+				"spaceSeq" | "createdBySeq" | "customerSeq" | "assigneeSeq"
+			>,
 			"id"
-		>,
+		> & {
+			spaceId: string;
+			createdById?: string | null;
+			customerId?: string | null;
+			assigneeId?: string | null;
+		},
 	): Promise<Inquiry> {
 		this.logger.debug("문의 생성 중...");
+		const { spaceId, createdById, customerId, assigneeId, ...rest } = data;
 		const result = await this.txHost.tx.inquiry.create({
-			data,
+			data: {
+				...rest,
+				space: { connect: { id: spaceId } },
+				...(createdById && { createdBy: { connect: { id: createdById } } }),
+				...(customerId && { customer: { connect: { id: customerId } } }),
+				...(assigneeId && { assignee: { connect: { id: assigneeId } } }),
+			} as Prisma.InquiryCreateInput,
 			include: this.includeInquiryRelations(),
 		});
 
 		return toDomainEntity(Inquiry, result);
 	}
 
-	/**
-	 * 문의의 기본 스레드 생성
-	 */
 	async createThread(
 		data: AutoIdentityCreateInput<
 			Omit<

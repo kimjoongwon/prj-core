@@ -4,10 +4,10 @@ import type { InquiriesRepository } from "@cocrepo/repository";
  * 문의 생성 시 Aggregate가 Repository에 전달하는 내부 숫자 ID 기반 입력입니다.
  */
 type InquiryNumericIds = {
-	spaceId: bigint;
-	createdById?: bigint | null;
+	spaceId: string;
+	createdById?: string | null;
 	customerId?: string | null;
-	assigneeId?: bigint | null;
+	assigneeId?: string | null;
 };
 
 export type CreateInquiryAggregateInput = Omit<

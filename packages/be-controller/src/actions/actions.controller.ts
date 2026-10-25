@@ -83,7 +83,7 @@ export class ActionsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Action ID (canonical decimal BIGINT string)",
+		description: "Action ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(404, 500)
@@ -126,7 +126,7 @@ export class ActionsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Action ID (canonical decimal BIGINT string)",
+		description: "Action ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -161,7 +161,7 @@ export class ActionsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Action ID (canonical decimal BIGINT string)",
+		description: "Action ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(

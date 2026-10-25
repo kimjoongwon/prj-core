@@ -78,7 +78,7 @@ export class RoutinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "routineId",
-		description: "루틴 ID (canonical decimal BIGINT string)",
+		description: "루틴 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -139,7 +139,7 @@ export class RoutinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "routineId",
-		description: "루틴 ID (canonical decimal BIGINT string)",
+		description: "루틴 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -178,7 +178,7 @@ export class RoutinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "routineId",
-		description: "루틴 ID (canonical decimal BIGINT string)",
+		description: "루틴 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(

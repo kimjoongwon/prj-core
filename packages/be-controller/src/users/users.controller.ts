@@ -72,7 +72,7 @@ export class UsersController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -104,12 +104,12 @@ export class UsersController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "tenantId",
-		description: "Tenant ID (canonical decimal BIGINT string)",
+		description: "Tenant ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(

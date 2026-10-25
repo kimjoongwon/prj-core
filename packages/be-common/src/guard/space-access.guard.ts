@@ -3,7 +3,6 @@ import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import type {
 	ContextTenantSnapshot,
 	ContextUserSnapshot,
-	DatabaseId,
 } from "@cocrepo/type";
 import {
 	BadRequestException,
@@ -49,7 +48,7 @@ export class SpaceAccessGuard implements CanActivate {
 		if (!user) return true;
 
 		// CLS에서 tenantId 확인
-		const tenantId = this.cls.get<DatabaseId | undefined>(
+		const tenantId = this.cls.get<string | undefined>(
 			CONTEXT_KEYS.TENANT_ID,
 		);
 		if (!tenantId) {

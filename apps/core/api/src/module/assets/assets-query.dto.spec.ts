@@ -15,13 +15,15 @@ describe("AssetQueryDto", () => {
 	};
 
 	it("enum 필터를 contains가 아닌 정확 매칭으로 변환해야 한다", async () => {
+		const spaceId = "01JSPACE0000000000000000QA";
+		const folderId = "01JFLDR0000000000000000FLD";
 		const query = await pipe.transform(
 			{
 				take: "20",
 				skip: "0",
 				kind: "IMAGE",
 				status: "READY",
-				folderId: "201",
+				folderId,
 			},
 			metadata,
 		);
@@ -31,11 +33,11 @@ describe("AssetQueryDto", () => {
 		expect(query.take).toBe(20);
 		expect(
 			buildAssetQueryWhere(query, {
-				space: { id: 101n },
+				space: { id: spaceId },
 			}),
 		).toEqual({
-			space: { id: 101n },
-			folderId: 201n,
+			space: { id: spaceId },
+			folder: { id: folderId },
 			kind: "IMAGE",
 			status: "READY",
 			removedAt: null,

@@ -89,7 +89,7 @@ export class TasksController {
 	@ApiAuth()
 	@ApiParam({
 		name: "taskId",
-		description: "Task ID (canonical decimal BIGINT string)",
+		description: "Task ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -113,7 +113,7 @@ export class TasksController {
 	@ApiAuth()
 	@ApiParam({
 		name: "taskId",
-		description: "Task ID (canonical decimal BIGINT string)",
+		description: "Task ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -172,7 +172,7 @@ export class TasksController {
 	@ApiAuth()
 	@ApiParam({
 		name: "taskId",
-		description: "Task ID (canonical decimal BIGINT string)",
+		description: "Task ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -208,7 +208,7 @@ export class TasksController {
 	@ApiAuth()
 	@ApiParam({
 		name: "taskId",
-		description: "Task ID (canonical decimal BIGINT string)",
+		description: "Task ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)

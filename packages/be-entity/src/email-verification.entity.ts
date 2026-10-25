@@ -13,6 +13,7 @@ import { EmailVerificationStatus } from "@cocrepo/enum";
 import { EmailVerificationSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
+import { Space } from "./space.entity";
 import { User } from "./user.entity";
 
 @AbstractEntityFields()
@@ -65,4 +66,6 @@ export class EmailVerification extends EmailVerificationSchema {
 	declare verifiedUserSeq: EmailVerificationSchema["verifiedUserSeq"];
 	@ClassField(() => User, { required: false, nullable: true })
 	verifiedUser?: User | null;
+	@ClassField(() => Space, { required: false, nullable: true })
+	space?: Space | null;
 }

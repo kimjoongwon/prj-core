@@ -21,21 +21,21 @@ export function toReservationCreatedEventPayload(source: {
 	return {
 		reservationId: requirePublicUlid(
 			"reservationId",
-			source.reservation.reservationId,
+			source.reservation.id,
 		),
 		userId: requirePublicUlid("userId", source.reservation.user?.id),
 		spaceId: requirePublicUlid("spaceId", source.reservation.space?.id),
 		timelineId: requirePublicUlid(
 			"timelineId",
-			source.reservation.timeline?.timelineId,
+			source.reservation.timeline?.id,
 		),
 		sessionId: requirePublicUlid(
 			"sessionId",
-			source.reservation.session?.sessionId,
+			source.reservation.session?.id,
 		),
 		programId: requirePublicUlid(
 			"programId",
-			source.reservation.program?.programId,
+			source.reservation.program?.id,
 		),
 		occurredAt: source.occurredAt,
 	};

@@ -21,20 +21,19 @@ import {
 } from "./helpers/test-auth.helper";
 
 const USER_ULID = "01J00000000000000000001021";
-const USER_ID = 1021n;
-const COMPANY_MANAGER_SPACE_ID = 1111n;
-const PLATFORM_ADMIN_SPACE_ID = 2222n;
-const MEMBER_SPACE_ID = 3333n;
-const UNKNOWN_SPACE_ID = 5555n;
-const COMPANY_MANAGER_TENANT_ID = 2021n;
-const PLATFORM_ADMIN_TENANT_ID = 3021n;
-const MEMBER_TENANT_ID = 4021n;
-const SPACE_RESULT_ID = 6666n;
-const MEMBER_FITNESS_CENTER_ID = 7777n;
-const COMPANY_MANAGER_FITNESS_CENTER_ID = 8888n;
-const CREATED_FITNESS_CENTER_ID = 9999n;
-const SHARED_COMPANY_ID = 10000n;
-const UNKNOWN_COMPANY_ID = 11000n;
+const COMPANY_MANAGER_SPACE_ID = "01JSPACE0000000000000000CM";
+const PLATFORM_ADMIN_SPACE_ID = "01JSPACE0000000000000000PA";
+const MEMBER_SPACE_ID = "01JSPACE0000000000000000MB";
+const UNKNOWN_SPACE_ID = "01JSPACE0000000000000000XN";
+const COMPANY_MANAGER_TENANT_ID = "01JTENANT00000000000000TMC";
+const PLATFORM_ADMIN_TENANT_ID = "01JTENANT00000000000000TPA";
+const MEMBER_TENANT_ID = "01JTENANT00000000000000TMB";
+const SPACE_RESULT_ID = "01JSPACE0000000000000000RZ";
+const MEMBER_FITNESS_CENTER_ID = "01JFTNS00000000000000000MB";
+const COMPANY_MANAGER_FITNESS_CENTER_ID = "01JFTNS00000000000000000CM";
+const CREATED_FITNESS_CENTER_ID = "01JFTNS00000000000000000NW";
+const SHARED_COMPANY_ID = "01JCMPNY0000000000000000SH";
+const UNKNOWN_COMPANY_ID = "01JCMPNY0000000000000000XN";
 const COMPANY_NAME = "CoreFit";
 const COMPANY_BUSINESS_NO = "1234567890";
 const PLATFORM_ADMIN_SCOPED_SPACE_IDS = [
@@ -49,23 +48,32 @@ const PLATFORM_ADMIN_SCOPED_SPACE_IDS = [
  */
 function createTestUser() {
 	return {
-		id: USER_ID,
+		id: USER_ULID,
 		email: "fitness-centers-e2e@example.com",
 		tenants: [
 			{
 				id: COMPANY_MANAGER_TENANT_ID,
-				spaceId: COMPANY_MANAGER_SPACE_ID,
-				role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
+				space: { id: COMPANY_MANAGER_SPACE_ID },
+				role: {
+					id: "01JTASK0000000000000000RCM",
+					name: SYSTEM_ROLES.COMPANY_MANAGER,
+				},
 			},
 			{
 				id: PLATFORM_ADMIN_TENANT_ID,
-				spaceId: PLATFORM_ADMIN_SPACE_ID,
-				role: { name: SYSTEM_ROLES.PLATFORM_ADMIN },
+				space: { id: PLATFORM_ADMIN_SPACE_ID },
+				role: {
+					id: "01JTASK0000000000000000RPA",
+					name: SYSTEM_ROLES.PLATFORM_ADMIN,
+				},
 			},
 			{
 				id: MEMBER_TENANT_ID,
-				spaceId: MEMBER_SPACE_ID,
-				role: { name: SYSTEM_ROLES.MEMBER },
+				space: { id: MEMBER_SPACE_ID },
+				role: {
+					id: "01JTASK0000000000000000RMB",
+					name: SYSTEM_ROLES.MEMBER,
+				},
 			},
 		],
 	};
@@ -93,17 +101,16 @@ function createCompanyFixture() {
 /**
  * Space에 유일하게 연결되는 FitnessCenter fixture를 만듭니다.
  */
-function createFitnessCenterFixture(id: bigint, spaceId: bigint) {
+function createFitnessCenterFixture(id: string, spaceId: string) {
 	return {
 		id,
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
-		spaceId,
-		companyId: SHARED_COMPANY_ID,
+		space: { id: spaceId },
 		address: "Seoul",
 		phone: "02-1234-5678",
-		email: `${spaceId.toString()}@fitness-center.example.com`,
+		email: `${spaceId}@fitness-center.example.com`,
 		imageFileId: null,
 		company: createCompanyFixture(),
 	};
@@ -113,8 +120,8 @@ function createFitnessCenterFixture(id: bigint, spaceId: bigint) {
  * 단수 FitnessCenter relation을 포함한 Space fixture를 만듭니다.
  */
 function createSpaceFixture(
-	spaceId: bigint,
-	fitnessCenterId: bigint,
+	spaceId: string,
+	fitnessCenterId: string,
 	spaceName: string,
 ) {
 	return {
@@ -156,7 +163,7 @@ describe("FitnessCenter API (E2E)", () => {
 		updateFitnessCenterBySpaceId: jest.fn(),
 	};
 	const spacesRepositoryMock = {
-		findSpaceIdsByCategoryHierarchy: async (spaceId: bigint) => {
+		findSpaceIdsByCategoryHierarchy: async (spaceId: string) => {
 			if (spaceId === PLATFORM_ADMIN_SPACE_ID) {
 				return PLATFORM_ADMIN_SCOPED_SPACE_IDS;
 			}
@@ -214,7 +221,7 @@ describe("FitnessCenter API (E2E)", () => {
 			total: 2,
 		});
 		spaceServiceMock.getFitnessCenterBySpaceId.mockImplementation(
-			async (spaceId: bigint) => {
+			async (spaceId: string) => {
 				if (spaceId === UNKNOWN_SPACE_ID) {
 					throw new NotFoundException("시설 정보를 찾을 수 없습니다");
 				}
@@ -235,7 +242,7 @@ describe("FitnessCenter API (E2E)", () => {
 		);
 		spaceServiceMock.updateFitnessCenterBySpaceId.mockImplementation(
 			async (
-				spaceId: bigint,
+				spaceId: string,
 				input: {
 					name?: string;
 					label?: string | null;
@@ -281,7 +288,7 @@ describe("FitnessCenter API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID.toString());
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -294,15 +301,15 @@ describe("FitnessCenter API (E2E)", () => {
 	it("Company 하나의 여러 FitnessCenter를 Space별 단수 relation으로 조회해야 한다", async () => {
 		// Given
 		const expectedSpaceIds = [
-			MEMBER_SPACE_ID.toString(),
-			COMPANY_MANAGER_SPACE_ID.toString(),
+			MEMBER_SPACE_ID,
+			COMPANY_MANAGER_SPACE_ID,
 		];
 
 		// When
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", PLATFORM_ADMIN_TENANT_ID.toString());
+			.set("x-tenant-id", PLATFORM_ADMIN_TENANT_ID);
 
 		// Then
 		expect(response.status).toBe(200);
@@ -322,26 +329,28 @@ describe("FitnessCenter API (E2E)", () => {
 		}>;
 		expect(spaces.map((space) => space.id)).toEqual(expectedSpaceIds);
 		expect(
-			new Set(spaces.map((space) => space.fitnessCenter.companyId)),
-		).toEqual(new Set([SHARED_COMPANY_ID.toString()]));
+			new Set(
+				spaces.map((space) => space.fitnessCenter.companyId),
+			),
+		).toEqual(new Set([undefined]));
 		expect(new Set(spaces.map((space) => space.fitnessCenter.id)).size).toBe(2);
 		for (const space of spaces) {
 			expect(space).toHaveProperty("fitnessCenter");
 			expect(space).not.toHaveProperty("fitnessCenters");
-			expect(space.fitnessCenter.spaceId).toBe(space.id);
+			expect(space.fitnessCenter.spaceId).toBeUndefined();
 		}
 	});
 
 	it("현재 접근 가능한 space의 FitnessCenter를 조회할 수 있어야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${MEMBER_SPACE_ID.toString()}/fitness-center`)
+			.get(`/api/v1/spaces/${MEMBER_SPACE_ID}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID.toString());
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(response.body.data.spaceId).toBe(MEMBER_SPACE_ID.toString());
-		expect(response.body.data.companyId).toBe(SHARED_COMPANY_ID.toString());
+		expect(response.body.data.spaceId).toBeUndefined();
+		expect(response.body.data.companyId).toBeUndefined();
 		expect(spaceServiceMock.getFitnessCenterBySpaceId).toHaveBeenCalledWith(
 			MEMBER_SPACE_ID,
 		);
@@ -350,10 +359,10 @@ describe("FitnessCenter API (E2E)", () => {
 	it("비 PLATFORM_ADMIN tenant는 다른 space FitnessCenter 조회 시 403을 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get(
-				`/api/v1/spaces/${COMPANY_MANAGER_SPACE_ID.toString()}/fitness-center`,
+				`/api/v1/spaces/${COMPANY_MANAGER_SPACE_ID}/fitness-center`,
 			)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID.toString());
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 
 		expect(response.status).toBe(403);
 		expect(spaceServiceMock.getFitnessCenterBySpaceId).not.toHaveBeenCalled();
@@ -362,16 +371,14 @@ describe("FitnessCenter API (E2E)", () => {
 	it("PLATFORM_ADMIN tenant는 다른 space FitnessCenter도 조회할 수 있어야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get(
-				`/api/v1/spaces/${COMPANY_MANAGER_SPACE_ID.toString()}/fitness-center`,
+				`/api/v1/spaces/${COMPANY_MANAGER_SPACE_ID}/fitness-center`,
 			)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", PLATFORM_ADMIN_TENANT_ID.toString());
+			.set("x-tenant-id", PLATFORM_ADMIN_TENANT_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(response.body.data.spaceId).toBe(
-			COMPANY_MANAGER_SPACE_ID.toString(),
-		);
+		expect(response.body.data.spaceId).toBeUndefined();
 		expect(spaceServiceMock.getFitnessCenterBySpaceId).toHaveBeenCalledWith(
 			COMPANY_MANAGER_SPACE_ID,
 		);
@@ -379,9 +386,9 @@ describe("FitnessCenter API (E2E)", () => {
 
 	it("존재하지 않는 Space reference의 FitnessCenter 조회는 404를 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${UNKNOWN_SPACE_ID.toString()}/fitness-center`)
+			.get(`/api/v1/spaces/${UNKNOWN_SPACE_ID}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", PLATFORM_ADMIN_TENANT_ID.toString());
+			.set("x-tenant-id", PLATFORM_ADMIN_TENANT_ID);
 
 		expect(response.status).toBe(404);
 		expect(spaceServiceMock.getFitnessCenterBySpaceId).toHaveBeenCalledWith(
@@ -407,17 +414,17 @@ describe("FitnessCenter API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.post("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID.toString())
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID)
 			.send({
 				...expectedCreateDto,
-				companyId: UNKNOWN_COMPANY_ID.toString(),
-				spaceId: UNKNOWN_SPACE_ID.toString(),
+				companyId: UNKNOWN_COMPANY_ID,
+				spaceId: UNKNOWN_SPACE_ID,
 			});
 
 		// Then
 		expect(response.status).toBe(201);
 		expect(response.body.httpStatus).toBe(201);
-		expect(response.body.data.id).toBe(SPACE_RESULT_ID.toString());
+		expect(response.body.data.id).toBe(SPACE_RESULT_ID);
 		expect(spaceServiceMock.createSpaceWithFitnessCenter).toHaveBeenCalledTimes(
 			1,
 		);
@@ -437,12 +444,12 @@ describe("FitnessCenter API (E2E)", () => {
 
 		// When
 		const response = await request(app.getHttpServer())
-			.patch(`/api/v1/spaces/${MEMBER_SPACE_ID.toString()}/fitness-center`)
+			.patch(`/api/v1/spaces/${MEMBER_SPACE_ID}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID.toString())
+			.set("x-tenant-id", MEMBER_TENANT_ID)
 			.send({
 				...updateDto,
-				companyId: UNKNOWN_COMPANY_ID.toString(),
+				companyId: UNKNOWN_COMPANY_ID,
 				businessNo: "9999999999",
 				logoImageFileId: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
 			});
@@ -466,23 +473,23 @@ describe("FitnessCenter API (E2E)", () => {
 			label: updateDto.label,
 		});
 		expect(response.body.data.fitnessCenter).toMatchObject({
-			companyId: SHARED_COMPANY_ID.toString(),
 			company: {
-				id: SHARED_COMPANY_ID.toString(),
+				id: SHARED_COMPANY_ID,
 				name: COMPANY_NAME,
 				businessNo: COMPANY_BUSINESS_NO,
 			},
 		});
+		expect(response.body.data.fitnessCenter).not.toHaveProperty("companyId");
 		expect(response.body.data.fitnessCenter).not.toHaveProperty("name");
 	});
 
 	it("접근 불가한 space의 FitnessCenter 수정은 403을 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.patch(
-				`/api/v1/spaces/${COMPANY_MANAGER_SPACE_ID.toString()}/fitness-center`,
+				`/api/v1/spaces/${COMPANY_MANAGER_SPACE_ID}/fitness-center`,
 			)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID.toString())
+			.set("x-tenant-id", MEMBER_TENANT_ID)
 			.send({ name: "Blocked update" });
 
 		expect(response.status).toBe(403);
@@ -495,7 +502,7 @@ describe("FitnessCenter API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces/01/fitness-center")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID.toString());
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 
 		expect(response.status).toBe(400);
 		expect(spaceServiceMock.getFitnessCenterBySpaceId).not.toHaveBeenCalled();
@@ -503,13 +510,13 @@ describe("FitnessCenter API (E2E)", () => {
 
 	it("이전 ground 조회/수정 endpoint는 노출하지 않아야 한다", async () => {
 		const getResponse = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${MEMBER_SPACE_ID.toString()}/ground`)
+			.get(`/api/v1/spaces/${MEMBER_SPACE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID.toString());
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 		const patchResponse = await request(app.getHttpServer())
-			.patch(`/api/v1/spaces/${MEMBER_SPACE_ID.toString()}/ground`)
+			.patch(`/api/v1/spaces/${MEMBER_SPACE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID.toString())
+			.set("x-tenant-id", MEMBER_TENANT_ID)
 			.send({ name: "Legacy update" });
 
 		expect(getResponse.status).toBe(404);

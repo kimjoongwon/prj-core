@@ -84,7 +84,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -121,7 +121,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -168,7 +168,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({

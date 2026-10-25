@@ -13,7 +13,6 @@ import { RoleAssignmentsRepository } from "@cocrepo/repository";
 import type {
 	ContextTenantSnapshot,
 	ContextUserSnapshot,
-	DatabaseId,
 } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
@@ -101,34 +100,38 @@ export class CaslAbilityFactory {
 		);
 
 		// x-tenant-id 헤더에서 현재 tenant를 가져와서 spaceSeq 파생
-		const tenantId = this.cls.get<DatabaseId>(CONTEXT_KEYS.TENANT_ID);
+		const tenantId = this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
 		const currentTenant =
 			this.cls.get<ContextTenantSnapshot | undefined>(CONTEXT_KEYS.TENANT) ??
 			resolveCurrentTenantById(user.tenants, tenantId);
-		const spaceSeq = currentTenant
+		const spaceId = currentTenant
 			? resolveTenantSpaceId(currentTenant)
-			: this.cls.get<DatabaseId | undefined>(CONTEXT_KEYS.SPACE_ID);
+			: this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
 
-		if (!tenantId || !spaceSeq || !currentTenant?.role) {
+		if (!tenantId || !spaceId || !currentTenant?.role) {
 			this.logger.warn(
-				`사용자에게 현재 Tenant 또는 Role이 없습니다: userSeq=${user.id}, tenantId=${tenantId}, spaceSeq=${spaceSeq}`,
+				`사용자에게 현재 Tenant 또는 Role이 없습니다: userId=${user.id}, tenantId=${tenantId}, spaceId=${spaceId}`,
 			);
 			return abilityBuilder.build();
 		}
 
-		const roleSeq = currentTenant.roleSeq;
+		const roleId = currentTenant.role?.id;
+		if (!roleId) {
+			this.logger.warn(`Role에 공개 ID가 없습니다: userId=${user.id}`);
+			return abilityBuilder.build();
+		}
 		this.logger.debug(
-			`사용자 권한 생성 시작: userSeq=${user.id}, roleSeq=${roleSeq}, spaceSeq=${spaceSeq}`,
+			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
 		const roleAssignments =
 			await this.roleAssignmentsRepository.findActiveByRoleIdsInSpace(
-				[roleSeq],
-				spaceSeq,
+				[roleId],
+				spaceId,
 			);
 		const roleAbilities = this.expandRoleAssignmentAbilities(roleAssignments);
 		this.logger.debug(
-			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleSeq=${roleSeq}`,
+			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleId=${roleId}`,
 		);
 
 		const mergedAbilities = this.mergeAbilities(roleAbilities);

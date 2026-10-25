@@ -65,7 +65,7 @@ export class RolesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "역할 ID (canonical decimal BIGINT string)",
+		description: "역할 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
@@ -109,7 +109,7 @@ export class RolesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "역할 ID (canonical decimal BIGINT string)",
+		description: "역할 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -139,7 +139,7 @@ export class RolesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "역할 ID (canonical decimal BIGINT string)",
+		description: "역할 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)

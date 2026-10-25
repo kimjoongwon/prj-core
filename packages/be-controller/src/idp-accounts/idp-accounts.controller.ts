@@ -83,7 +83,7 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -103,7 +103,7 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -124,7 +124,7 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -152,7 +152,7 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -172,7 +172,7 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)

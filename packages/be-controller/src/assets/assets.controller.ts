@@ -101,7 +101,7 @@ export class AssetsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "assetId",
-		description: "에셋 ID (canonical decimal BIGINT string)",
+		description: "에셋 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
@@ -128,7 +128,7 @@ export class AssetsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "assetId",
-		description: "에셋 ID (canonical decimal BIGINT string)",
+		description: "에셋 ID (ULID)",
 		type: String,
 	})
 	@ApiProduces("*/*")
@@ -183,7 +183,7 @@ export class AssetsController {
 			properties: {
 				folderId: {
 					type: "string",
-					description: "업로드 대상 폴더 ID (canonical decimal BIGINT string)",
+					description: "업로드 대상 폴더 ID (ULID)",
 				},
 				file: {
 					type: "string",
@@ -228,7 +228,7 @@ export class AssetsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "assetId",
-		description: "에셋 ID (canonical decimal BIGINT string)",
+		description: "에셋 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -257,7 +257,7 @@ export class AssetsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "assetId",
-		description: "에셋 ID (canonical decimal BIGINT string)",
+		description: "에셋 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)

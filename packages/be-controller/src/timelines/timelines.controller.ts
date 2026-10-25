@@ -97,7 +97,7 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -143,7 +143,7 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({ type: UpdateTimelineDto, description: "수정할 타임라인 정보" })
@@ -172,7 +172,7 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 404, 500)
@@ -201,7 +201,7 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -229,12 +229,12 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "sessionId",
-		description: "세션 ID (canonical decimal BIGINT string)",
+		description: "세션 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -264,7 +264,7 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({ type: CreateSessionDto, description: "등록할 세션 정보" })
@@ -294,12 +294,12 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "sessionId",
-		description: "세션 ID (canonical decimal BIGINT string)",
+		description: "세션 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({ type: UpdateSessionDto, description: "수정할 세션 정보" })
@@ -332,12 +332,12 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "sessionId",
-		description: "세션 ID (canonical decimal BIGINT string)",
+		description: "세션 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 404, 500)
@@ -370,12 +370,12 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "sessionId",
-		description: "세션 ID (canonical decimal BIGINT string)",
+		description: "세션 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -405,17 +405,17 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "sessionId",
-		description: "세션 ID (canonical decimal BIGINT string)",
+		description: "세션 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "programId",
-		description: "프로그램 ID (canonical decimal BIGINT string)",
+		description: "프로그램 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -446,12 +446,12 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "sessionId",
-		description: "세션 ID (canonical decimal BIGINT string)",
+		description: "세션 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({ type: CreateProgramDto, description: "등록할 프로그램 정보" })
@@ -483,17 +483,17 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "sessionId",
-		description: "세션 ID (canonical decimal BIGINT string)",
+		description: "세션 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "programId",
-		description: "프로그램 ID (canonical decimal BIGINT string)",
+		description: "프로그램 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({ type: UpdateProgramDto, description: "수정할 프로그램 정보" })
@@ -527,17 +527,17 @@ export class TimelinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "timelineId",
-		description: "타임라인 ID (canonical decimal BIGINT string)",
+		description: "타임라인 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "sessionId",
-		description: "세션 ID (canonical decimal BIGINT string)",
+		description: "세션 ID (ULID)",
 		type: String,
 	})
 	@ApiParam({
 		name: "programId",
-		description: "프로그램 ID (canonical decimal BIGINT string)",
+		description: "프로그램 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)

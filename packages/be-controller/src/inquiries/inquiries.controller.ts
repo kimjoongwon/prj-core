@@ -33,11 +33,12 @@ import {
 	InquiryMessageDto,
 	InquiryMessagePaginationMetaDto,
 	InquiryPaginationMetaDto,
+	InquiryParticipantDto,
 	InquiryStatsDto,
 	QueryInquiryDto,
 	UpdateInquiryDto,
 } from "@cocrepo/dto";
-import { Inquiry, InquiryParticipant } from "@cocrepo/entity";
+import { Inquiry } from "@cocrepo/entity";
 import type { InquiryPriority, InquiryStatus } from "@cocrepo/prisma";
 import {
 	Body,
@@ -157,7 +158,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -186,7 +187,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -247,7 +248,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -279,7 +280,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -305,7 +306,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -314,7 +315,7 @@ export class InquiriesController {
 			properties: {
 				assigneeId: {
 					type: "string",
-					description: "담당자 ID (canonical decimal BIGINT string)",
+					description: "담당자 ID (ULID)",
 				},
 			},
 			required: ["assigneeId"],
@@ -348,7 +349,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -399,7 +400,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -441,7 +442,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -476,7 +477,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (canonical decimal BIGINT string)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -485,11 +486,11 @@ export class InquiriesController {
 		{ status: 404, message: "문의를 찾을 수 없습니다" },
 		500,
 	)
-	@ApiResponseEntity(InquiryParticipant, HttpStatus.OK, { isArray: true })
+	@ApiResponseEntity(InquiryParticipantDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("참여자 목록 조회 성공")
 	async getParticipants(
 		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
-	): Promise<InquiryParticipant[]> {
+	): Promise<InquiryParticipantDto[]> {
 		return this.queryBus.execute(new GetInquiryParticipantsQuery(inquiryId));
 	}
 }

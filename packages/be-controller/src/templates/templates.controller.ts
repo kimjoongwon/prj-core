@@ -80,7 +80,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (canonical decimal BIGINT string)",
+		description: "템플릿 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
@@ -126,7 +126,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (canonical decimal BIGINT string)",
+		description: "템플릿 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -155,7 +155,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (canonical decimal BIGINT string)",
+		description: "템플릿 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
@@ -179,7 +179,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (canonical decimal BIGINT string)",
+		description: "템플릿 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
@@ -204,7 +204,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (canonical decimal BIGINT string)",
+		description: "템플릿 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -233,7 +233,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (canonical decimal BIGINT string)",
+		description: "템플릿 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({

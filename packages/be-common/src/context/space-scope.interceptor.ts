@@ -44,8 +44,8 @@ export class SpaceScopeInterceptor implements NestInterceptor {
 		next: CallHandler,
 	): Promise<Observable<unknown>> {
 		const tenant = this.cls.get<ContextTenantSnapshot>(CONTEXT_KEYS.TENANT);
-		const tenantId = this.cls.get<DatabaseId>(CONTEXT_KEYS.TENANT_ID);
-		const spaceSeq = this.cls.get<DatabaseId>(CONTEXT_KEYS.SPACE_ID);
+		const tenantId = this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
+		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 		const shouldEnforceSpace =
 			!this.reflector.getAllAndOverride<boolean>(PUBLIC_ROUTE_KEY, [
 				context.getHandler(),
@@ -67,8 +67,8 @@ export class SpaceScopeInterceptor implements NestInterceptor {
 		}
 
 		const effectiveSpaceId = tenant
-			? (resolveTenantSpaceId(tenant) ?? spaceSeq)
-			: spaceSeq;
+			? (resolveTenantSpaceId(tenant) ?? spaceId)
+			: spaceId;
 		const resourceScope = this.resolveResourceScope(context);
 		const effectiveSpaceIds = effectiveSpaceId
 			? await this.spacesRepository.findSpaceIdsByCategoryHierarchy(

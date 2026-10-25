@@ -67,7 +67,7 @@ export class EmailVerificationsController {
 	})
 	@ApiParam({
 		name: "emailVerificationId",
-		description: "이메일 인증 ID (canonical decimal BIGINT string)",
+		description: "이메일 인증 ID (ULID)",
 		type: String,
 	})
 	@ApiAuth()

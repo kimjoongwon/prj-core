@@ -90,7 +90,7 @@ export class TranslationsController {
 	})
 	@ApiParam({
 		name: "translationId",
-		description: "번역 ID (canonical decimal BIGINT string)",
+		description: "번역 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -155,7 +155,7 @@ export class TranslationsController {
 	})
 	@ApiParam({
 		name: "translationId",
-		description: "번역 ID (canonical decimal BIGINT string)",
+		description: "번역 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)

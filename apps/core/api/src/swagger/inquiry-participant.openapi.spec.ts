@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { InquiriesController } from "@cocrepo/controller";
-import { DECIMAL_ID_PATTERN_SOURCE } from "@cocrepo/type";
+import { INTEGRATION_ULID_PATTERN_SOURCE } from "@cocrepo/type";
 import type { INestApplication } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
@@ -31,6 +31,8 @@ const participantPublicFields = [
 	"lastSeenAt",
 	"lastReadAt",
 	"leftAt",
+	"userName",
+	"userAvatar",
 ].sort();
 
 describe("문의 참여자 OpenAPI와 생성 SDK 계약", () => {
@@ -53,7 +55,7 @@ describe("문의 참여자 OpenAPI와 생성 SDK 계약", () => {
 		);
 		applyBigIntIdOpenApiContract(document);
 		participantSchema = document.components?.schemas
-			?.InquiryParticipant as SchemaObject;
+			?.InquiryParticipantDto as SchemaObject;
 	});
 
 	afterAll(async () => {
@@ -68,7 +70,7 @@ describe("문의 참여자 OpenAPI와 생성 SDK 계약", () => {
 			operationId: "getInquiryParticipants",
 		});
 		expect(JSON.stringify(operation?.responses["200"])).toContain(
-			'"$ref":"#/components/schemas/InquiryParticipant"',
+			'"$ref":"#/components/schemas/InquiryParticipantDto"',
 		);
 	});
 
@@ -87,6 +89,8 @@ describe("문의 참여자 OpenAPI와 생성 SDK 계약", () => {
 			"lastSeenAt",
 			"lastReadAt",
 			"leftAt",
+			"userName",
+			"userAvatar",
 		]) {
 			expect(participantSchema.properties?.[fieldName]).toMatchObject({
 				nullable: true,
@@ -103,12 +107,11 @@ describe("문의 참여자 OpenAPI와 생성 SDK 계약", () => {
 		}
 	});
 
-	it("ID를 canonical decimal 문자열로, 시각을 date-time으로 문서화한다", () => {
+	it("ID를 ULID 문자열로, 시각을 date-time으로 문서화한다", () => {
 		for (const idField of ["id", "inquiryId", "threadId", "userId"]) {
 			expect(participantSchema.properties?.[idField]).toMatchObject({
 				type: "string",
-				pattern: DECIMAL_ID_PATTERN_SOURCE,
-				"x-runtime-type": "bigint",
+				pattern: INTEGRATION_ULID_PATTERN_SOURCE,
 			});
 		}
 		for (const dateField of [
@@ -130,7 +133,7 @@ describe("문의 참여자 OpenAPI와 생성 SDK 계약", () => {
 	it("생성 SDK가 같은 15개 필드를 선언하고 임의 키를 허용하지 않는다", () => {
 		const sdkPath = resolve(
 			__dirname,
-			"../../../../../packages/fe-api/src/core/model/inquiryParticipant.ts",
+			"../../../../../packages/fe-api/src/core/model/inquiryParticipantDto.ts",
 		);
 		const sdkSource = ts.createSourceFile(
 			sdkPath,
@@ -141,13 +144,13 @@ describe("문의 참여자 OpenAPI와 생성 SDK 계약", () => {
 		const participantInterface = sdkSource.statements.find(
 			(statement) =>
 				ts.isInterfaceDeclaration(statement) &&
-				statement.name.text === "InquiryParticipant",
+				statement.name.text === "InquiryParticipantDto",
 		);
 		if (
 			!participantInterface ||
 			!ts.isInterfaceDeclaration(participantInterface)
 		) {
-			throw new Error("InquiryParticipant SDK interface가 없습니다");
+			throw new Error("InquiryParticipantDto SDK interface가 없습니다");
 		}
 		const sdkProperties = participantInterface.members.filter(
 			ts.isPropertySignature,

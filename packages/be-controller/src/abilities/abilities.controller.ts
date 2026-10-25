@@ -96,7 +96,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (canonical decimal BIGINT string)",
+		description: "Ability ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -153,7 +153,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (canonical decimal BIGINT string)",
+		description: "Ability ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -188,7 +188,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (canonical decimal BIGINT string)",
+		description: "Ability ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(

@@ -72,7 +72,7 @@ export class SpacesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "spaceId",
-		description: "Space ID (canonical decimal BIGINT string)",
+		description: "Space ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -120,7 +120,7 @@ export class SpacesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "spaceId",
-		description: "Space ID (canonical decimal BIGINT string)",
+		description: "Space ID (ULID)",
 		type: String,
 	})
 	@ApiBody({

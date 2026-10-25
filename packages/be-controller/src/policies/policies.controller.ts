@@ -72,7 +72,7 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "policyId",
-		description: "Policy ID (canonical decimal BIGINT string)",
+		description: "Policy ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
@@ -113,7 +113,7 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "policyId",
-		description: "Policy ID (canonical decimal BIGINT string)",
+		description: "Policy ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -141,7 +141,7 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "policyId",
-		description: "Policy ID (canonical decimal BIGINT string)",
+		description: "Policy ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
@@ -163,7 +163,7 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "policyId",
-		description: "Policy ID (canonical decimal BIGINT string)",
+		description: "Policy ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
