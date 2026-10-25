@@ -2,7 +2,7 @@
 # 🏗️ BASE STAGE: 기본 환경 설정
 # ============================================================================
 # Node.js 24 Alpine Linux 기반 이미지 사용 (경량화된 리눅스 배포판)
-FROM node:24.22.0-alpine3.24@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f AS base
+FROM node:24.22.1-alpine3.24@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec86c33918b53 AS base
 
 # 📦 검증된 PNPM과 Turbo 버전을 인자로 받아서 설정
 ARG PNPM_VERSION=10.34.5
@@ -83,7 +83,7 @@ RUN pnpm exec turbo build --concurrency=2 --cache-dir=/cache/turbo --filter=core
 # ============================================================================
 # 🚀 PRODUCTION STAGE: 운영 환경 컨테이너
 # ============================================================================
-FROM node:24.22.0-alpine3.24@sha256:44fce696f38ba8c987c4db89954051000bbd05ffd8d8659ba15ed4a8602e937f AS runner
+FROM node:24.22.1-alpine3.24@sha256:06d7adf3e0ef61a13f1d28682726366f97a15aa1888c934d3ecec86c33918b53 AS runner
 
 # 📂 작업 디렉토리 설정
 WORKDIR /app
