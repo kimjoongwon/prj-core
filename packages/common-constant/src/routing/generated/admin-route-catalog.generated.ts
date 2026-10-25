@@ -48,7 +48,6 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(authenticated)/(admin)/subjects/route.meta.ts",
 	"apps/admin/web/src/app/(authenticated)/(admin)/tasks/[taskId]/exercise/edit/route.meta.ts",
 	"apps/admin/web/src/app/(authenticated)/(admin)/tasks/[taskId]/exercise/route.meta.ts",
-	"apps/admin/web/src/app/(authenticated)/(admin)/tasks/new/route.meta.ts",
 	"apps/admin/web/src/app/(authenticated)/(admin)/tasks/route.meta.ts",
 	"apps/admin/web/src/app/(authenticated)/(admin)/templates/[templateId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(authenticated)/(admin)/templates/[templateId]/route.meta.ts",
@@ -487,15 +486,6 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"subject": "page:tasks:list",
 		"description": "태스크 목록을 조회합니다.",
 		"menuLeafId": "tasks-list"
-	},
-	{
-		"groupId": "tasks",
-		"groupLabel": "태스크 관리",
-		"pageId": "tasks:new",
-		"pageLabel": "태스크 등록",
-		"pathPattern": "/tasks/new",
-		"subject": "page:tasks:new",
-		"description": "새 태스크를 등록합니다."
 	},
 	{
 		"groupId": "tasks",

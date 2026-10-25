@@ -39,9 +39,6 @@ export default observer(function TasksPageRoute() {
 			totalCount={response.meta?.total ?? response.data?.length ?? 0}
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
-			onClickCreateButton={() => {
-				router.push("/tasks/new" as Route);
-			}}
 			onClickTaskName={(taskId) => {
 				router.push(`/tasks/${String(taskId)}/exercise` as Route);
 			}}

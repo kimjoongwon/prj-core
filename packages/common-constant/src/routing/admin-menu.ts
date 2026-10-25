@@ -69,7 +69,6 @@ export const ADMIN_PATHS = {
 
 	// 작업 (Task Aggregate Root, Exercise는 1:1 detail child)
 	TASKS: "/tasks",
-	TASKS_NEW: "/tasks/new",
 	TASKS_DETAIL: "/tasks/[taskId]/exercise",
 	TASKS_EDIT: "/tasks/[taskId]/exercise/edit",
 

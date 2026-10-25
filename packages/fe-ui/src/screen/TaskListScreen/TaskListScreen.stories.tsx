@@ -3,7 +3,6 @@ import type { ComponentProps } from "react";
 import { TaskListScreen } from "./TaskListScreen";
 
 const defaultArgs: ComponentProps<typeof TaskListScreen> = {
-	onClickCreateButton: () => undefined,
 	onClickTaskName: () => undefined,
 	onDeleteTask: async () => undefined,
 	queryStates: {
