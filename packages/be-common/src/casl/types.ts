@@ -6,7 +6,12 @@
  * Actions: 수행할 수 있는 행위 (CREATE, READ, UPDATE, DELETE 등)
  * Subjects: 권한의 대상 (menu:members, entity:User 등)
  */
-import type { Ability, AbilityBuilder, AbilityClass } from "@casl/ability";
+import type {
+	Ability,
+	AbilityBuilder,
+	AbilityClass,
+	ForcedSubject,
+} from "@casl/ability";
 
 // Action Config 타입들은 @cocrepo/type에서 re-export
 export type {
@@ -67,7 +72,7 @@ export type Actions =
  * - column:user:email - 테이블 컬럼 가시성
  * - all - 모든 권한 (PLATFORM_ADMIN용)
  */
-export type Subjects = string;
+export type Subjects = string | ForcedSubject<string>;
 
 /**
  * 애플리케이션 Ability 타입

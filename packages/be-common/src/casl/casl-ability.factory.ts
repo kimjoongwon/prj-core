@@ -45,6 +45,7 @@ type AbilityWithPriority = Pick<
  */
 const ALLOWED_TEMPLATE_VARIABLES = [
 	"user.id",
+	"user.seq",
 	"user.spaceSeq",
 	"user.email",
 	"user.name",
@@ -137,14 +138,21 @@ export class CaslAbilityFactory {
 		// 사용자 컨텍스트 구성 (템플릿 변수 치환용)
 		const userContext = this.buildUserContext(user, currentTenant);
 
-		// 각 Ability를 CASL 규칙으로 변환
-		for (const ability of mergedAbilities) {
-			this.applyAbilityRule(
-				ability,
-				userContext,
-				abilityBuilder.can.bind(abilityBuilder),
-				abilityBuilder.cannot.bind(abilityBuilder),
+		try {
+			// 거부 조건의 오류도 권한 확대로 이어지지 않도록 전체 구성을 중단합니다.
+			for (const ability of mergedAbilities) {
+				this.applyAbilityRule(
+					ability,
+					userContext,
+					abilityBuilder.can.bind(abilityBuilder),
+					abilityBuilder.cannot.bind(abilityBuilder),
+				);
+			}
+		} catch (error) {
+			this.logger.error(
+				`조건 파싱 중 오류 발생: ${error instanceof Error ? error.message : "알 수 없는 오류"}`,
 			);
+			return new AbilityBuilder<AppAbility>(Ability as AppAbilityClass).build();
 		}
 
 		return abilityBuilder.build();
@@ -268,6 +276,8 @@ export class CaslAbilityFactory {
 		return {
 			user: {
 				id: user.id,
+				// 공개 ULID와 구분하여 Reservation.userSeq 등 내부 FK에 사용합니다.
+				seq: currentTenant.userSeq,
 				spaceSeq: user.spaceSeq,
 				email: user.email,
 				name: user.name,
@@ -343,31 +353,30 @@ export class CaslAbilityFactory {
 	 * @param conditions - DB에 저장된 조건 (JSON)
 	 * @param userContext - 사용자 컨텍스트
 	 * @returns 파싱된 조건 객체 또는 undefined
+	 * @throws TypeError 조건 또는 템플릿이 잘못되었거나 필수 컨텍스트가 없는 경우
 	 *
 	 * @description
 	 * 보안을 위해 허용된 템플릿 변수만 치환합니다.
 	 * 예: ${user.id} → 실제 사용자 ID
+	 *     ${user.seq} → 현재 Tenant의 내부 사용자 FK (bigint)
 	 *     ${user.currentSpaceId} → 현재 Space ID
 	 */
 	parseConditions(
 		conditions: unknown,
 		userContext: Record<string, unknown>,
 	): Record<string, unknown> | undefined {
-		if (!conditions || typeof conditions !== "object") {
+		if (conditions === null || conditions === undefined) {
 			return undefined;
 		}
 
-		try {
-			return this.replaceConditionValue(conditions, userContext) as Record<
-				string,
-				unknown
-			>;
-		} catch (error) {
-			this.logger.error(
-				`조건 파싱 중 오류 발생: ${error instanceof Error ? error.message : "알 수 없는 오류"}`,
-			);
-			return undefined;
+		if (typeof conditions !== "object" || Array.isArray(conditions)) {
+			throw new TypeError("권한 조건은 객체여야 합니다");
 		}
+
+		return this.replaceConditionValue(conditions, userContext) as Record<
+			string,
+			unknown
+		>;
 	}
 
 	/**
@@ -411,7 +420,8 @@ export class CaslAbilityFactory {
 	 *
 	 * @param path 조회할 변수 경로
 	 * @param context 템플릿 변수 컨텍스트
-	 * @returns 조회한 값, 미허용 또는 누락 값이면 빈 문자열
+	 * @returns 조회한 값 (정확한 템플릿 하나이면 런타임 타입 유지)
+	 * @throws TypeError 미허용 변수, 누락 값 또는 유효하지 않은 내부 사용자 FK
 	 */
 	private resolveTemplateVariable(
 		path: string,
@@ -422,14 +432,19 @@ export class CaslAbilityFactory {
 				path as (typeof ALLOWED_TEMPLATE_VARIABLES)[number],
 			)
 		) {
-			this.logger.warn(`허용되지 않은 템플릿 변수: ${path}`);
-			return "";
+			throw new TypeError(`허용되지 않은 템플릿 변수: ${path}`);
 		}
 
 		const value = this.getValueByPath(context, path);
 		if (value === undefined || value === null) {
-			this.logger.warn(`템플릿 변수 값이 없습니다: ${path}`);
-			return "";
+			throw new TypeError(`템플릿 변수 값이 없습니다: ${path}`);
+		}
+
+		if (
+			path === "user.seq" &&
+			(typeof value !== "bigint" || value < 1n || value > 9223372036854775807n)
+		) {
+			throw new TypeError("user.seq는 양의 signed-BIGINT 사용자 FK여야 합니다");
 		}
 
 		return value;
@@ -445,19 +460,27 @@ export class CaslAbilityFactory {
 	 * @description
 	 * 보안 검증:
 	 * - 허용된 변수만 치환
-	 * - 허용되지 않은 변수는 빈 문자열로 치환
+	 * - 미허용 변수와 잘못된 템플릿은 오류로 처리
 	 */
 	private replaceTemplateVariables(
 		template: string,
 		context: Record<string, unknown>,
 	): string {
-		return template.replace(
+		const resolvedTemplate = template.replace(
 			TEMPLATE_VARIABLE_PATTERN,
 			(_match, path: string) => {
 				const value = this.resolveTemplateVariable(path, context);
 				return String(value);
 			},
 		);
+		if (
+			resolvedTemplate.includes("${") ||
+			template.includes("{{") ||
+			template.includes("}}")
+		) {
+			throw new TypeError("권한 조건의 템플릿 문법이 잘못되었습니다");
+		}
+		return resolvedTemplate;
 	}
 
 	/**

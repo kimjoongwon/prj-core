@@ -1,3 +1,4 @@
+import { subject } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { RoleAssignmentsRepository } from "@cocrepo/repository";
 import type { ContextUserSnapshot } from "@cocrepo/type";
@@ -194,7 +195,10 @@ describe("CaslAbilityFactory", () => {
 
 		expect(
 			mockRoleAssignmentsRepository.findActiveByRoleIdsInSpace,
-		).toHaveBeenCalledWith(["01JTASK0000000000000000401"], "01JSPACE000000000000000301");
+		).toHaveBeenCalledWith(
+			["01JTASK0000000000000000401"],
+			"01JSPACE000000000000000301",
+		);
 	});
 
 	it("조건의 ID 템플릿을 정밀도 손실 없이 bigint로 치환해야 한다", () => {
@@ -218,6 +222,166 @@ describe("CaslAbilityFactory", () => {
 			spaceSeq: databaseId,
 			label: `space-${databaseId}`,
 			nested: { tenantId: 201n },
+		});
+	});
+
+	describe("본인 예약 조건", () => {
+		const ownUserSeq = 9007199254740993n;
+		const currentTenant = {
+			id: "01JTENANT00000000000000201",
+			userSeq: ownUserSeq,
+			space: { id: "01JSPACE000000000000000301" },
+			role: { id: "01JTASK0000000000000000401" },
+		};
+		const user: ContextUserSnapshot = {
+			id: "01JSER00000000000000000C01",
+			tenants: [currentTenant],
+		};
+
+		beforeEach(() => {
+			mockClsService.get.mockImplementation((key) =>
+				key === CONTEXT_KEYS.TENANT_ID ? currentTenant.id : undefined,
+			);
+		});
+
+		function provideReservationPolicy(conditions: unknown, inverted = false) {
+			const assignment = {
+				priority: 1,
+				policy: {
+					entries: ["READ", "UPDATE"].map((actionName) => ({
+						ability: {
+							subject: { name: "entity:Reservation" },
+							action: { name: actionName },
+							inverted,
+							conditions,
+						},
+					})),
+				},
+			};
+			mockRoleAssignmentsRepository.findActiveByRoleIdsInSpace.mockResolvedValue(
+				[assignment] as never,
+			);
+			return assignment;
+		}
+
+		it("READ와 UPDATE는 내부 사용자 FK가 일치하는 예약만 허용해야 한다", async () => {
+			provideReservationPolicy({ userSeq: "${user.seq}" });
+
+			const ability = await factory.createForUser(user);
+
+			for (const action of ["READ", "UPDATE"] as const) {
+				expect(
+					ability.can(
+						action,
+						subject("entity:Reservation", { userSeq: ownUserSeq }),
+					),
+				).toBe(true);
+				expect(
+					ability.can(
+						action,
+						subject("entity:Reservation", { userSeq: ownUserSeq + 1n }),
+					),
+				).toBe(false);
+				expect(
+					ability.can(
+						action,
+						subject("entity:Reservation", { userSeq: user.id }),
+					),
+				).toBe(false);
+				expect(ability.can(action, subject("entity:Reservation", {}))).toBe(
+					false,
+				);
+			}
+			expect(ability.rules.map((rule) => rule.conditions)).toEqual([
+				{ userSeq: ownUserSeq },
+				{ userSeq: ownUserSeq },
+			]);
+		});
+
+		it.each([
+			undefined,
+			null,
+			"9007199254740993",
+			0n,
+			-1n,
+			9223372036854775808n,
+		])(
+			"내부 사용자 FK가 유효하지 않으면 빈 권한이어야 한다: %s",
+			async (userSeq) => {
+				provideReservationPolicy({ userSeq: "${user.seq}" });
+				const ability = await factory.createForUser({
+					...user,
+					tenants: [{ ...currentTenant, userSeq }],
+				} as ContextUserSnapshot);
+
+				expect(ability.rules).toEqual([]);
+				expect(ability.can("READ", "entity:Reservation")).toBe(false);
+			},
+		);
+
+		it.each(
+			[
+				{ userSeq: "{{ user.id }}" },
+				{ userSeq: "${user.unknown}" },
+				{ userSeq: "${user.seq" },
+				{ userSeq: "${}" },
+				{ userSeq: { $ne: "${user.email}" } },
+				"invalid-condition",
+				[],
+				false,
+			].map((conditions) => ({ conditions })),
+		)(
+			"잘못된 조건이면 이미 적용된 허용 규칙도 반환하지 않아야 한다: %j",
+			async ({ conditions }) => {
+				const assignment = provideReservationPolicy(conditions);
+				assignment.policy.entries.unshift({
+					ability: {
+						subject: { name: "all" },
+						action: { name: "READ" },
+						conditions: null,
+						inverted: false,
+					},
+				});
+
+				const ability = await factory.createForUser(user);
+
+				expect(ability.rules).toEqual([]);
+				expect(
+					ability.can(
+						"READ",
+						subject("entity:Reservation", { userSeq: ownUserSeq }),
+					),
+				).toBe(false);
+			},
+		);
+
+		it("거부 조건이 잘못된 경우에도 빈 권한을 반환해야 한다", async () => {
+			const assignment = provideReservationPolicy(
+				{ userSeq: "${user.unknown}" },
+				true,
+			);
+			assignment.policy.entries.unshift({
+				ability: {
+					subject: { name: "all" },
+					action: { name: "READ" },
+					conditions: null,
+					inverted: false,
+				},
+			});
+			const ability = await factory.createForUser(user);
+			expect(ability.rules).toEqual([]);
+			expect(
+				ability.can(
+					"READ",
+					subject("entity:Reservation", { userSeq: ownUserSeq }),
+				),
+			).toBe(false);
+		});
+
+		it("공개 사용자 ID 템플릿은 ULID 문자열을 유지해야 한다", () => {
+			expect(factory.parseConditions({ id: "${user.id}" }, { user })).toEqual({
+				id: user.id,
+			});
 		});
 	});
 });

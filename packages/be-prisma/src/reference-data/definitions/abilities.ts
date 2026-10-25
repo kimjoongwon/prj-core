@@ -283,7 +283,7 @@ export const memberAbilitySeedData: AbilitySeedData[] = [
 		actionName: "read",
 		inverted: false,
 		description: "자신의 사용자 정보 조회 권한",
-		conditions: { id: "{{ user.id }}" },
+		conditions: { id: "${user.id}" },
 	},
 	{
 		roleName: "MEMBER",
@@ -291,7 +291,7 @@ export const memberAbilitySeedData: AbilitySeedData[] = [
 		actionName: "update",
 		inverted: false,
 		description: "자신의 사용자 정보 수정 권한",
-		conditions: { id: "{{ user.id }}" },
+		conditions: { id: "${user.id}" },
 	},
 	// 자신의 예약만 생성/조회 가능
 	{
@@ -307,7 +307,7 @@ export const memberAbilitySeedData: AbilitySeedData[] = [
 		actionName: "read",
 		inverted: false,
 		description: "자신의 예약 조회 권한",
-		conditions: { userSeq: "{{ user.id }}" },
+		conditions: { userSeq: "${user.seq}" },
 	},
 	{
 		roleName: "MEMBER",
@@ -315,7 +315,7 @@ export const memberAbilitySeedData: AbilitySeedData[] = [
 		actionName: "update",
 		inverted: false,
 		description: "자신의 예약 수정 권한 (취소 등)",
-		conditions: { userSeq: "{{ user.id }}" },
+		conditions: { userSeq: "${user.seq}" },
 	},
 	// 피트니스센터 정보 조회
 	{

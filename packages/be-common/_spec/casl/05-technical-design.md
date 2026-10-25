@@ -80,6 +80,27 @@ const abilities = assignments.flatMap((assignment) =>
 
 이후 Ability의 `action.name`, `subject.name`, `fields`, `conditions`, `inverted`를 CASL rule로 변환합니다. 같은 규칙이 겹칠 때는 높은 Assignment priority를 먼저 적용합니다.
 
+### 조건 템플릿과 사용자 식별자
+
+`CaslAbilityFactory`는 `${user.id}` 형식의 허용된 변수만 치환합니다. `{{ user.id }}` 문법은 지원하지 않습니다.
+
+| 변수 | 값의 출처 | 런타임 타입 | 소비 용도 |
+|---|---|---|---|
+| `${user.id}` | `ContextUserSnapshot.id` | `string` (공개 ULID) | 공개 사용자 ID 조건 |
+| `${user.seq}` | 현재 `ContextTenantSnapshot.userSeq` | `bigint` (내부 FK) | `Reservation.userSeq` 조건 |
+
+본인 예약의 READ·UPDATE 조건은 `{ "userSeq": "${user.seq}" }`입니다. 문자열 전체가 변수 하나이면 원래 타입을 유지하므로 큰 내부 ID에도 정밀도 손실이 없습니다. 문자열의 일부로 포함한 변수는 문자열로 치환됩니다. 내부 FK 조건에는 변수 하나만 사용합니다.
+
+조건이 `null` 또는 `undefined`인 경우에만 조건 없는 규칙으로 취급합니다. 객체가 아닌 조건, 미허용 변수, 누락된 컨텍스트, 잘못된 템플릿 또는 양의 signed-BIGINT 범위를 벗어나는 `user.seq`는 오류입니다. 허용·거부 중 어느 규칙에서든 오류가 발생하면 사용자 Ability 전체를 빈 규칙으로 반환합니다. 조건 오류를 무시하여 허용하거나, 거부 규칙만 제거해 접근 범위를 넓히지 않습니다.
+
+### 객체 조건 검사 경계
+
+CASL의 문자열 subject 검사는 대상 종류에 허용 가능한 규칙이 있는지 확인합니다. 소유자 조건은 `ability.can("READ", subject("entity:Reservation", reservation))`처럼 `userSeq`가 있는 실제 객체로 검사해야 합니다. `AppAbility`는 문자열 subject와 `subject()`가 반환하는 객체를 모두 받습니다. `ManageEntityPolicy`는 문자열 subject만 전달하므로 행별 소유자 검사를 대신할 수 없습니다.
+
+현재 예약 Controller와 UseCase는 CASL 객체 검사를 호출하지 않습니다. 내 예약 조회·생성은 인증 컨텍스트의 공개 `userId`와 현재 `spaceId`를 Aggregate/Repository에 전달하여 범위를 제한합니다. 예약 객체에 CASL 조건을 적용하는 기능을 추가할 때는 UseCase owner가 조회한 객체의 내부 `userSeq`를 전달해야 합니다.
+
+공식 근거: [CASL 조건 안내](https://casl.js.org/v6/en/guide/conditions-in-depth/), [subject 판별 안내](https://casl.js.org/v6/en/guide/subject-type-detection/), [CASL Rule.matchesConditions 구현](https://github.com/stalniy/casl/blob/main/packages/casl-ability/src/Rule.ts).
+
 ## 쓰기 규칙
 
 ### Role Assignment

@@ -540,6 +540,15 @@ API rollout
 - 현재 방식은 각 migration을 재실행 가능하게 만들어 이 상황을 버팁니다.
 - 장기적으로는 공유 DB용 `db-migrator` chart 또는 application 하나로 분리하는 방법을 검토할 수 있습니다.
 
+`20261025000000-sync-identity-reference-catalog`은 이미 적용된
+`20260802001000_identity_prisma_v2_reference_baseline` 이후의 code-owned
+identity catalog의 확인된 회원 자기 데이터 권한 네 건과 이전 브랜딩 translation key만
+보정하는 forward-only migration입니다. OIDC secret/URL, Role, Subject, Action,
+tenant, policy, bootstrap 관리자, demo 데이터에는 접근하지 않습니다. User 조건은
+공개 ULID `user.id`를 `${user.id}` placeholder로, Reservation 조건은 내부 FK
+`user.seq`를 `${user.seq}` placeholder로 사용합니다.
+기존 migration 파일을 수정하거나 `db:bootstrap`으로 대체하지 않습니다.
+
 ## 17. 새 데이터가 들어왔을 때 따라 할 순서
 
 ### 1단계: 이름보다 책임을 먼저 봅니다
