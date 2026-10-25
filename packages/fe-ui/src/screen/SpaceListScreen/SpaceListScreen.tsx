@@ -58,7 +58,7 @@ export interface SpaceListScreenProps {
 	queryStates: SpaceListScreenQueryStates;
 	setQueryStates: SpaceListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickSpaceFitnessCenterName: (spaceId: bigint) => void;
+	onClickSpaceFitnessCenterName: (spaceId: string) => void;
 }
 function filterRows(
 	rows: SpaceListScreenSpace[],
@@ -72,7 +72,7 @@ function filterRows(
 				row.contentLanguageCode === contentLanguageCode) &&
 			(searchKeyword.length === 0 ||
 				[
-					row.fitnessCenter?.name,
+					row.name,
 					row.fitnessCenter?.company?.businessNo,
 					row.fitnessCenter?.company?.address,
 				]

@@ -22,17 +22,17 @@ const baseScenario = {
 		role: "SPACE_MANAGER",
 		tenantId: "101",
 		spaceId: "201",
-		fitnessCenterName: "팀핏 강남1호",
+		spaceName: "팀핏 강남1호",
 		spaces: [
 			{
 				tenantId: "101",
 				spaceId: "201",
-				fitnessCenterName: "팀핏 강남1호",
+				spaceName: "팀핏 강남1호",
 			},
 			{
 				tenantId: "102",
 				spaceId: "202",
-				fitnessCenterName: "스포라운지 홍대",
+				spaceName: "스포라운지 홍대",
 			},
 		],
 		abilities: ["read:user"],

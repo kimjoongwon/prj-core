@@ -6,5 +6,5 @@ export interface CreateSessionCommandInput {
 	startDateTime?: Date | null;
 	endDateTime?: Date | null;
 	recurringDayOfWeek?: string | null;
-	timelineId: bigint;
+	timelineId: string;
 }

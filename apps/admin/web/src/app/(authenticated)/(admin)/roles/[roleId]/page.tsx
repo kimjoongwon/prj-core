@@ -109,7 +109,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 			roleId,
 			data: {
 				assignments: roleAssignmentState.assignments.map((assignment) => ({
-					policyId: BigInt(assignment.policyId),
+					policyId: assignment.policyId,
 					isActive: assignment.isActive,
 					priority: assignment.priority,
 				})),
@@ -275,7 +275,8 @@ function mapRoleAssignment(
 	assignment: RoleAssignmentResponseDto,
 ): RoleAssignmentValue {
 	return {
-		policyId: String(assignment.policyId),
+		// RoleAssignmentResponseDto가 policyId 대신 policy 관계 객체를 노출한다.
+		policyId: assignment.policy?.id ?? "",
 		isActive: assignment.isActive,
 		priority: assignment.priority,
 	};

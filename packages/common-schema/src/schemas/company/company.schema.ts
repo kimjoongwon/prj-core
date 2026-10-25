@@ -7,7 +7,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Company의 DB 필드 타입과 공통 검증입니다. */
 export class CompanySchema extends AbstractSchema {
-	companyId!: string;
+	id!: string;
 
 	@StringValidation()
 	name!: string;

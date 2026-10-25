@@ -13,11 +13,6 @@
  */
 
 export interface SecurityPolicyDto {
-	/**
-	 * ID
-	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
-	 */
-	id: bigint;
 	/** 생성일 */
 	createdAt: Date;
 	/**
@@ -87,4 +82,9 @@ export interface SecurityPolicyDto {
 	emailDomainWhitelistEnabled: boolean;
 	/** CORS Origin 화이트리스트 활성화 */
 	corsOriginWhitelistEnabled: boolean;
+	/**
+	 * 공개 식별자 ULID
+	 * @pattern ^[0-9A-HJKMNP-TV-Z]{26}$
+	 */
+	id: string;
 }

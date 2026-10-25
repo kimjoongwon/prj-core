@@ -15,7 +15,7 @@ import { SentimentDetailDto } from "../sentiment-detail.dto";
  */
 export class SentimentResponseDto extends AbstractDto {
 	@BigIntIdField({ description: "소속 문의 ID" })
-	inquiryId!: bigint;
+	inquirySeq!: bigint;
 
 	@EnumField(() => SentimentType, { description: "전체 감정 유형" })
 	overallSentiment!: SentimentType;

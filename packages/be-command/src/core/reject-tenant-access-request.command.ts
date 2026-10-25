@@ -5,8 +5,8 @@ export class RejectTenantAccessRequestCommand
 	readonly reviewComment?: RejectTenantAccessRequestCommandInput["reviewComment"];
 
 	constructor(
-		readonly tenantAccessRequestId: bigint,
-		readonly reviewerId: bigint,
+		readonly tenantAccessRequestId: string,
+		readonly reviewerId: string,
 		input: RejectTenantAccessRequestCommandInput,
 	) {
 		Object.assign(this, input);

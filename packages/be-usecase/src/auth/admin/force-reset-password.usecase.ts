@@ -17,7 +17,7 @@ export class ForceResetPasswordUseCase {
 
 	async execute(command: ForceResetPasswordCommand): Promise<boolean> {
 		const user = await this.usersService.getByIdWithTenants(command.userId);
-		if (!user?.userId) {
+		if (!user?.id) {
 			throw new UnauthorizedException("사용자 공개 식별자를 찾을 수 없습니다");
 		}
 		const result = await this.usersService.forceResetPassword(command.userId);
@@ -25,7 +25,7 @@ export class ForceResetPasswordUseCase {
 			result.email,
 			result.temporaryPassword,
 		);
-		await this.tokenStorageService.deleteRefreshToken(user.userId);
+		await this.tokenStorageService.deleteRefreshToken(user.id);
 		return true;
 	}
 }

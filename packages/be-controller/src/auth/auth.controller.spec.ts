@@ -5,10 +5,10 @@ import {
 	VerifyTokenQuery,
 } from "@cocrepo/command";
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
-import { AuthController } from "./auth.controller";
 import { BadRequestException, RequestMethod } from "@nestjs/common";
 import { METHOD_METADATA, PATH_METADATA } from "@nestjs/common/constants";
 import type { CommandBus, QueryBus } from "@nestjs/cqrs";
+import { AuthController } from "./auth.controller";
 
 describe("AuthController", () => {
 	let controller: AuthController;

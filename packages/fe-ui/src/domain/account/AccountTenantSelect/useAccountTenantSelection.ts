@@ -13,21 +13,16 @@ export interface UseAccountTenantSelectionReturn {
 	selectTenant: (tenantId: string) => void;
 }
 
-/** Space 응답의 FitnessCenter와 Company에서 표시 이름을 결정합니다. */
-function resolveFitnessCenterName(
+/** Space 응답에서 표시 이름을 결정합니다. 이름의 원천은 Space입니다. */
+function resolveSpaceDisplayName(
 	space:
 		| {
-				fitnessCenter?: {
-					name?: string | null;
-					company?: { name?: string | null } | null;
-				} | null;
+				name?: string | null;
 		  }
 		| null
 		| undefined,
 ): string | null {
-	return (
-		space?.fitnessCenter?.name ?? space?.fitnessCenter?.company?.name ?? null
-	);
+	return space?.name ?? null;
 }
 
 /** Tenant 선택을 서버에 영구 저장하고 account 캐시를 확정합니다. */
@@ -56,8 +51,8 @@ export function useAccountTenantSelection(): UseAccountTenantSelectionReturn {
 					: selectedSpace.spaceId;
 				account.setCurrentTenant(
 					variables.tenantId,
-					resolveFitnessCenterName(currentSpace) ??
-						selectedSpace.fitnessCenterName,
+					resolveSpaceDisplayName(currentSpace) ??
+						selectedSpace.spaceName,
 					selectedSpace.contentLanguageCode ?? null,
 					currentSpaceId,
 				);
@@ -90,7 +85,7 @@ export function useAccountTenantSelection(): UseAccountTenantSelectionReturn {
 		currentTenantId: account.selectedTenantId,
 		isPending,
 		options: account.availableSpaces.map((space) => ({
-			text: space.fitnessCenterName,
+			text: space.spaceName,
 			value: space.tenantId,
 		})),
 		selectTenant,

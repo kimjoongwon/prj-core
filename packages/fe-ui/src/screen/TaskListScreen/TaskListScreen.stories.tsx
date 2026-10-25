@@ -24,7 +24,7 @@ const defaultArgs: ComponentProps<typeof TaskListScreen> = {
 				name: "스쿼트",
 				videoFileId: "video-1",
 			},
-			id: 1n,
+			id: "01J00000000000000000000001",
 		},
 		{
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
@@ -34,7 +34,7 @@ const defaultArgs: ComponentProps<typeof TaskListScreen> = {
 				duration: 30,
 				name: "플랭크",
 			},
-			id: 2n,
+			id: "01J00000000000000000000002",
 		},
 	],
 	totalCount: 12,

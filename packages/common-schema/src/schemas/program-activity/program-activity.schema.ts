@@ -11,13 +11,13 @@ import { AbstractSchema } from "../abstract.schema";
 export class ProgramActivitySchema
 	extends AbstractSchema
 {
-	programActivityId!: string;
+	id!: string;
 
 	@BigIntIdValidation()
-	programId!: bigint;
+	programSeq!: bigint;
 
 	@BigIntIdValidation()
-	taskId!: bigint;
+	taskSeq!: bigint;
 
 	@NumberValidation()
 	order!: number;

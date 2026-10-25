@@ -27,29 +27,29 @@ export type AggregateAsset = {
 }
 
 export type AssetAvgAggregateOutputType = {
-  id: number | null
-  spaceId: number | null
-  folderId: number | null
+  seq: number | null
+  spaceSeq: number | null
+  folderSeq: number | null
   sizeBytes: number | null
-  createdById: number | null
+  createdBySeq: number | null
 }
 
 export type AssetSumAggregateOutputType = {
-  id: bigint | null
-  spaceId: bigint | null
-  folderId: bigint | null
+  seq: bigint | null
+  spaceSeq: bigint | null
+  folderSeq: bigint | null
   sizeBytes: bigint | null
-  createdById: bigint | null
+  createdBySeq: bigint | null
 }
 
 export type AssetMinAggregateOutputType = {
-  assetId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  folderId: bigint | null
+  spaceSeq: bigint | null
+  folderSeq: bigint | null
   kind: $Enums.AssetKind | null
   status: $Enums.AssetStatus | null
   originalName: string | null
@@ -58,17 +58,17 @@ export type AssetMinAggregateOutputType = {
   extension: string | null
   sizeBytes: bigint | null
   checksum: string | null
-  createdById: bigint | null
+  createdBySeq: bigint | null
 }
 
 export type AssetMaxAggregateOutputType = {
-  assetId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  folderId: bigint | null
+  spaceSeq: bigint | null
+  folderSeq: bigint | null
   kind: $Enums.AssetKind | null
   status: $Enums.AssetStatus | null
   originalName: string | null
@@ -77,17 +77,17 @@ export type AssetMaxAggregateOutputType = {
   extension: string | null
   sizeBytes: bigint | null
   checksum: string | null
-  createdById: bigint | null
+  createdBySeq: bigint | null
 }
 
 export type AssetCountAggregateOutputType = {
-  assetId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceId: number
-  folderId: number
+  spaceSeq: number
+  folderSeq: number
   kind: number
   status: number
   originalName: number
@@ -97,35 +97,35 @@ export type AssetCountAggregateOutputType = {
   sizeBytes: number
   checksum: number
   metadata: number
-  createdById: number
+  createdBySeq: number
   _all: number
 }
 
 
 export type AssetAvgAggregateInputType = {
-  id?: true
-  spaceId?: true
-  folderId?: true
+  seq?: true
+  spaceSeq?: true
+  folderSeq?: true
   sizeBytes?: true
-  createdById?: true
+  createdBySeq?: true
 }
 
 export type AssetSumAggregateInputType = {
-  id?: true
-  spaceId?: true
-  folderId?: true
+  seq?: true
+  spaceSeq?: true
+  folderSeq?: true
   sizeBytes?: true
-  createdById?: true
+  createdBySeq?: true
 }
 
 export type AssetMinAggregateInputType = {
-  assetId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  folderId?: true
+  spaceSeq?: true
+  folderSeq?: true
   kind?: true
   status?: true
   originalName?: true
@@ -134,17 +134,17 @@ export type AssetMinAggregateInputType = {
   extension?: true
   sizeBytes?: true
   checksum?: true
-  createdById?: true
+  createdBySeq?: true
 }
 
 export type AssetMaxAggregateInputType = {
-  assetId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  folderId?: true
+  spaceSeq?: true
+  folderSeq?: true
   kind?: true
   status?: true
   originalName?: true
@@ -153,17 +153,17 @@ export type AssetMaxAggregateInputType = {
   extension?: true
   sizeBytes?: true
   checksum?: true
-  createdById?: true
+  createdBySeq?: true
 }
 
 export type AssetCountAggregateInputType = {
-  assetId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  folderId?: true
+  spaceSeq?: true
+  folderSeq?: true
   kind?: true
   status?: true
   originalName?: true
@@ -173,7 +173,7 @@ export type AssetCountAggregateInputType = {
   sizeBytes?: true
   checksum?: true
   metadata?: true
-  createdById?: true
+  createdBySeq?: true
   _all?: true
 }
 
@@ -264,13 +264,13 @@ export type AssetGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 export type AssetGroupByOutputType = {
-  assetId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint
-  folderId: bigint
+  spaceSeq: bigint
+  folderSeq: bigint
   kind: $Enums.AssetKind
   status: $Enums.AssetStatus
   originalName: string
@@ -280,7 +280,7 @@ export type AssetGroupByOutputType = {
   sizeBytes: bigint
   checksum: string | null
   metadata: runtime.JsonValue | null
-  createdById: bigint | null
+  createdBySeq: bigint | null
   _count: AssetCountAggregateOutputType | null
   _avg: AssetAvgAggregateOutputType | null
   _sum: AssetSumAggregateOutputType | null
@@ -307,13 +307,13 @@ export type AssetWhereInput = {
   AND?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   OR?: Prisma.AssetWhereInput[]
   NOT?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
-  assetId?: Prisma.StringFilter<"Asset"> | string
-  id?: Prisma.BigIntFilter<"Asset"> | bigint | number
+  id?: Prisma.StringFilter<"Asset"> | string
+  seq?: Prisma.BigIntFilter<"Asset"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Asset"> | bigint | number
-  folderId?: Prisma.BigIntFilter<"Asset"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"Asset"> | bigint | number
+  folderSeq?: Prisma.BigIntFilter<"Asset"> | bigint | number
   kind?: Prisma.EnumAssetKindFilter<"Asset"> | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
   originalName?: Prisma.StringFilter<"Asset"> | string
@@ -323,7 +323,7 @@ export type AssetWhereInput = {
   sizeBytes?: Prisma.BigIntFilter<"Asset"> | bigint | number
   checksum?: Prisma.StringNullableFilter<"Asset"> | string | null
   metadata?: Prisma.JsonNullableFilter<"Asset">
-  createdById?: Prisma.BigIntNullableFilter<"Asset"> | bigint | number | null
+  createdBySeq?: Prisma.BigIntNullableFilter<"Asset"> | bigint | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   folder?: Prisma.XOR<Prisma.FolderScalarRelationFilter, Prisma.FolderWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -336,13 +336,13 @@ export type AssetWhereInput = {
 }
 
 export type AssetOrderByWithRelationInput = {
-  assetId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  folderId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  folderSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
@@ -352,7 +352,7 @@ export type AssetOrderByWithRelationInput = {
   sizeBytes?: Prisma.SortOrder
   checksum?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   folder?: Prisma.FolderOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
@@ -365,8 +365,8 @@ export type AssetOrderByWithRelationInput = {
 }
 
 export type AssetWhereUniqueInput = Prisma.AtLeast<{
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   storageKey?: string
   AND?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   OR?: Prisma.AssetWhereInput[]
@@ -374,8 +374,8 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Asset"> | bigint | number
-  folderId?: Prisma.BigIntFilter<"Asset"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"Asset"> | bigint | number
+  folderSeq?: Prisma.BigIntFilter<"Asset"> | bigint | number
   kind?: Prisma.EnumAssetKindFilter<"Asset"> | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
   originalName?: Prisma.StringFilter<"Asset"> | string
@@ -384,7 +384,7 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<{
   sizeBytes?: Prisma.BigIntFilter<"Asset"> | bigint | number
   checksum?: Prisma.StringNullableFilter<"Asset"> | string | null
   metadata?: Prisma.JsonNullableFilter<"Asset">
-  createdById?: Prisma.BigIntNullableFilter<"Asset"> | bigint | number | null
+  createdBySeq?: Prisma.BigIntNullableFilter<"Asset"> | bigint | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   folder?: Prisma.XOR<Prisma.FolderScalarRelationFilter, Prisma.FolderWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -394,16 +394,16 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<{
   derivatives?: Prisma.DerivativeListRelationFilter
   albumEntries?: Prisma.AlbumEntryListRelationFilter
   coverOfAlbums?: Prisma.AlbumListRelationFilter
-}, "id" | "assetId" | "storageKey">
+}, "seq" | "id" | "storageKey">
 
 export type AssetOrderByWithAggregationInput = {
-  assetId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  folderId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  folderSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
@@ -413,7 +413,7 @@ export type AssetOrderByWithAggregationInput = {
   sizeBytes?: Prisma.SortOrder
   checksum?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AssetCountOrderByAggregateInput
   _avg?: Prisma.AssetAvgOrderByAggregateInput
   _max?: Prisma.AssetMaxOrderByAggregateInput
@@ -425,13 +425,13 @@ export type AssetScalarWhereWithAggregatesInput = {
   AND?: Prisma.AssetScalarWhereWithAggregatesInput | Prisma.AssetScalarWhereWithAggregatesInput[]
   OR?: Prisma.AssetScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AssetScalarWhereWithAggregatesInput | Prisma.AssetScalarWhereWithAggregatesInput[]
-  assetId?: Prisma.StringWithAggregatesFilter<"Asset"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"Asset"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"Asset"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"Asset"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Asset"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Asset"> | Date | string | null
-  spaceId?: Prisma.BigIntWithAggregatesFilter<"Asset"> | bigint | number
-  folderId?: Prisma.BigIntWithAggregatesFilter<"Asset"> | bigint | number
+  spaceSeq?: Prisma.BigIntWithAggregatesFilter<"Asset"> | bigint | number
+  folderSeq?: Prisma.BigIntWithAggregatesFilter<"Asset"> | bigint | number
   kind?: Prisma.EnumAssetKindWithAggregatesFilter<"Asset"> | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusWithAggregatesFilter<"Asset"> | $Enums.AssetStatus
   originalName?: Prisma.StringWithAggregatesFilter<"Asset"> | string
@@ -441,12 +441,12 @@ export type AssetScalarWhereWithAggregatesInput = {
   sizeBytes?: Prisma.BigIntWithAggregatesFilter<"Asset"> | bigint | number
   checksum?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"Asset">
-  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"Asset"> | bigint | number | null
+  createdBySeq?: Prisma.BigIntNullableWithAggregatesFilter<"Asset"> | bigint | number | null
 }
 
 export type AssetCreateInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -471,13 +471,13 @@ export type AssetCreateInput = {
 }
 
 export type AssetUncheckedCreateInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -487,7 +487,7 @@ export type AssetUncheckedCreateInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput
   document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput
@@ -497,8 +497,8 @@ export type AssetUncheckedCreateInput = {
 }
 
 export type AssetUpdateInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -523,13 +523,13 @@ export type AssetUpdateInput = {
 }
 
 export type AssetUncheckedUpdateInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -539,7 +539,7 @@ export type AssetUncheckedUpdateInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput
   document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput
@@ -549,13 +549,13 @@ export type AssetUncheckedUpdateInput = {
 }
 
 export type AssetCreateManyInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -565,12 +565,12 @@ export type AssetCreateManyInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
 }
 
 export type AssetUpdateManyMutationInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -586,13 +586,13 @@ export type AssetUpdateManyMutationInput = {
 }
 
 export type AssetUncheckedUpdateManyInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -602,7 +602,7 @@ export type AssetUncheckedUpdateManyInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type AssetScalarRelationFilter = {
@@ -616,13 +616,13 @@ export type AssetNullableScalarRelationFilter = {
 }
 
 export type AssetCountOrderByAggregateInput = {
-  assetId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  folderId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  folderSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
@@ -632,25 +632,25 @@ export type AssetCountOrderByAggregateInput = {
   sizeBytes?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type AssetAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  folderId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  folderSeq?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type AssetMaxOrderByAggregateInput = {
-  assetId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  folderId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  folderSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
@@ -659,17 +659,17 @@ export type AssetMaxOrderByAggregateInput = {
   extension?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type AssetMinOrderByAggregateInput = {
-  assetId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  folderId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  folderSeq?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   originalName?: Prisma.SortOrder
@@ -678,15 +678,15 @@ export type AssetMinOrderByAggregateInput = {
   extension?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type AssetSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  folderId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  folderSeq?: Prisma.SortOrder
   sizeBytes?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type AssetListRelationFilter = {
@@ -920,8 +920,8 @@ export type AssetUpdateOneRequiredWithoutVideoNestedInput = {
 }
 
 export type AssetCreateWithoutAlbumEntriesInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -945,13 +945,13 @@ export type AssetCreateWithoutAlbumEntriesInput = {
 }
 
 export type AssetUncheckedCreateWithoutAlbumEntriesInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -961,7 +961,7 @@ export type AssetUncheckedCreateWithoutAlbumEntriesInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput
   document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput
@@ -986,8 +986,8 @@ export type AssetUpdateToOneWithWhereWithoutAlbumEntriesInput = {
 }
 
 export type AssetUpdateWithoutAlbumEntriesInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1011,13 +1011,13 @@ export type AssetUpdateWithoutAlbumEntriesInput = {
 }
 
 export type AssetUncheckedUpdateWithoutAlbumEntriesInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1027,7 +1027,7 @@ export type AssetUncheckedUpdateWithoutAlbumEntriesInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput
   document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput
@@ -1036,8 +1036,8 @@ export type AssetUncheckedUpdateWithoutAlbumEntriesInput = {
 }
 
 export type AssetCreateWithoutCoverOfAlbumsInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1061,13 +1061,13 @@ export type AssetCreateWithoutCoverOfAlbumsInput = {
 }
 
 export type AssetUncheckedCreateWithoutCoverOfAlbumsInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1077,7 +1077,7 @@ export type AssetUncheckedCreateWithoutCoverOfAlbumsInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput
   document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput
@@ -1102,8 +1102,8 @@ export type AssetUpdateToOneWithWhereWithoutCoverOfAlbumsInput = {
 }
 
 export type AssetUpdateWithoutCoverOfAlbumsInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1127,13 +1127,13 @@ export type AssetUpdateWithoutCoverOfAlbumsInput = {
 }
 
 export type AssetUncheckedUpdateWithoutCoverOfAlbumsInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1143,7 +1143,7 @@ export type AssetUncheckedUpdateWithoutCoverOfAlbumsInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput
   document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput
@@ -1152,8 +1152,8 @@ export type AssetUncheckedUpdateWithoutCoverOfAlbumsInput = {
 }
 
 export type AssetCreateWithoutDerivativesInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1177,13 +1177,13 @@ export type AssetCreateWithoutDerivativesInput = {
 }
 
 export type AssetUncheckedCreateWithoutDerivativesInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1193,7 +1193,7 @@ export type AssetUncheckedCreateWithoutDerivativesInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput
   document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput
@@ -1218,8 +1218,8 @@ export type AssetUpdateToOneWithWhereWithoutDerivativesInput = {
 }
 
 export type AssetUpdateWithoutDerivativesInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1243,13 +1243,13 @@ export type AssetUpdateWithoutDerivativesInput = {
 }
 
 export type AssetUncheckedUpdateWithoutDerivativesInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1259,7 +1259,7 @@ export type AssetUncheckedUpdateWithoutDerivativesInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput
   document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput
@@ -1268,8 +1268,8 @@ export type AssetUncheckedUpdateWithoutDerivativesInput = {
 }
 
 export type AssetCreateWithoutDocumentInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1293,13 +1293,13 @@ export type AssetCreateWithoutDocumentInput = {
 }
 
 export type AssetUncheckedCreateWithoutDocumentInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1309,7 +1309,7 @@ export type AssetUncheckedCreateWithoutDocumentInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput
@@ -1334,8 +1334,8 @@ export type AssetUpdateToOneWithWhereWithoutDocumentInput = {
 }
 
 export type AssetUpdateWithoutDocumentInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1359,13 +1359,13 @@ export type AssetUpdateWithoutDocumentInput = {
 }
 
 export type AssetUncheckedUpdateWithoutDocumentInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1375,7 +1375,7 @@ export type AssetUncheckedUpdateWithoutDocumentInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput
@@ -1384,8 +1384,8 @@ export type AssetUncheckedUpdateWithoutDocumentInput = {
 }
 
 export type AssetCreateWithoutFolderInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1409,12 +1409,12 @@ export type AssetCreateWithoutFolderInput = {
 }
 
 export type AssetUncheckedCreateWithoutFolderInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
+  spaceSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1424,7 +1424,7 @@ export type AssetUncheckedCreateWithoutFolderInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput
   document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput
@@ -1463,13 +1463,13 @@ export type AssetScalarWhereInput = {
   AND?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[]
   OR?: Prisma.AssetScalarWhereInput[]
   NOT?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[]
-  assetId?: Prisma.StringFilter<"Asset"> | string
-  id?: Prisma.BigIntFilter<"Asset"> | bigint | number
+  id?: Prisma.StringFilter<"Asset"> | string
+  seq?: Prisma.BigIntFilter<"Asset"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"Asset"> | bigint | number
-  folderId?: Prisma.BigIntFilter<"Asset"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"Asset"> | bigint | number
+  folderSeq?: Prisma.BigIntFilter<"Asset"> | bigint | number
   kind?: Prisma.EnumAssetKindFilter<"Asset"> | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFilter<"Asset"> | $Enums.AssetStatus
   originalName?: Prisma.StringFilter<"Asset"> | string
@@ -1479,12 +1479,12 @@ export type AssetScalarWhereInput = {
   sizeBytes?: Prisma.BigIntFilter<"Asset"> | bigint | number
   checksum?: Prisma.StringNullableFilter<"Asset"> | string | null
   metadata?: Prisma.JsonNullableFilter<"Asset">
-  createdById?: Prisma.BigIntNullableFilter<"Asset"> | bigint | number | null
+  createdBySeq?: Prisma.BigIntNullableFilter<"Asset"> | bigint | number | null
 }
 
 export type AssetCreateWithoutImageInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1508,13 +1508,13 @@ export type AssetCreateWithoutImageInput = {
 }
 
 export type AssetUncheckedCreateWithoutImageInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1524,7 +1524,7 @@ export type AssetUncheckedCreateWithoutImageInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput
   document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput
@@ -1549,8 +1549,8 @@ export type AssetUpdateToOneWithWhereWithoutImageInput = {
 }
 
 export type AssetUpdateWithoutImageInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1574,13 +1574,13 @@ export type AssetUpdateWithoutImageInput = {
 }
 
 export type AssetUncheckedUpdateWithoutImageInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1590,7 +1590,7 @@ export type AssetUncheckedUpdateWithoutImageInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput
   document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput
@@ -1599,8 +1599,8 @@ export type AssetUncheckedUpdateWithoutImageInput = {
 }
 
 export type AssetCreateWithoutSpaceInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1624,12 +1624,12 @@ export type AssetCreateWithoutSpaceInput = {
 }
 
 export type AssetUncheckedCreateWithoutSpaceInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  folderId: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1639,7 +1639,7 @@ export type AssetUncheckedCreateWithoutSpaceInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput
   video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput
   document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput
@@ -1675,8 +1675,8 @@ export type AssetUpdateManyWithWhereWithoutSpaceInput = {
 }
 
 export type AssetCreateWithoutCreatedByInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1700,13 +1700,13 @@ export type AssetCreateWithoutCreatedByInput = {
 }
 
 export type AssetUncheckedCreateWithoutCreatedByInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1751,8 +1751,8 @@ export type AssetUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type AssetCreateWithoutVideoInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1776,13 +1776,13 @@ export type AssetCreateWithoutVideoInput = {
 }
 
 export type AssetUncheckedCreateWithoutVideoInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1792,7 +1792,7 @@ export type AssetUncheckedCreateWithoutVideoInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
   image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput
   document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput
   derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput
@@ -1817,8 +1817,8 @@ export type AssetUpdateToOneWithWhereWithoutVideoInput = {
 }
 
 export type AssetUpdateWithoutVideoInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1842,13 +1842,13 @@ export type AssetUpdateWithoutVideoInput = {
 }
 
 export type AssetUncheckedUpdateWithoutVideoInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1858,7 +1858,7 @@ export type AssetUncheckedUpdateWithoutVideoInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput
   document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput
@@ -1867,12 +1867,12 @@ export type AssetUncheckedUpdateWithoutVideoInput = {
 }
 
 export type AssetCreateManyFolderInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
+  spaceSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1882,12 +1882,12 @@ export type AssetCreateManyFolderInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
 }
 
 export type AssetUpdateWithoutFolderInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1911,12 +1911,12 @@ export type AssetUpdateWithoutFolderInput = {
 }
 
 export type AssetUncheckedUpdateWithoutFolderInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1926,7 +1926,7 @@ export type AssetUncheckedUpdateWithoutFolderInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput
   document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput
@@ -1936,12 +1936,12 @@ export type AssetUncheckedUpdateWithoutFolderInput = {
 }
 
 export type AssetUncheckedUpdateManyWithoutFolderInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1951,16 +1951,16 @@ export type AssetUncheckedUpdateManyWithoutFolderInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type AssetCreateManySpaceInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  folderId: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -1970,12 +1970,12 @@ export type AssetCreateManySpaceInput = {
   sizeBytes: bigint | number
   checksum?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: bigint | number | null
+  createdBySeq?: bigint | number | null
 }
 
 export type AssetUpdateWithoutSpaceInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1999,12 +1999,12 @@ export type AssetUpdateWithoutSpaceInput = {
 }
 
 export type AssetUncheckedUpdateWithoutSpaceInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2014,7 +2014,7 @@ export type AssetUncheckedUpdateWithoutSpaceInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput
   video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput
   document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput
@@ -2024,12 +2024,12 @@ export type AssetUncheckedUpdateWithoutSpaceInput = {
 }
 
 export type AssetUncheckedUpdateManyWithoutSpaceInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2039,17 +2039,17 @@ export type AssetUncheckedUpdateManyWithoutSpaceInput = {
   sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type AssetCreateManyCreatedByInput = {
-  assetId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  folderId: bigint | number
+  spaceSeq: bigint | number
+  folderSeq: bigint | number
   kind: $Enums.AssetKind
   status?: $Enums.AssetStatus
   originalName: string
@@ -2062,8 +2062,8 @@ export type AssetCreateManyCreatedByInput = {
 }
 
 export type AssetUpdateWithoutCreatedByInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2087,13 +2087,13 @@ export type AssetUpdateWithoutCreatedByInput = {
 }
 
 export type AssetUncheckedUpdateWithoutCreatedByInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2112,13 +2112,13 @@ export type AssetUncheckedUpdateWithoutCreatedByInput = {
 }
 
 export type AssetUncheckedUpdateManyWithoutCreatedByInput = {
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  folderId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind
   status?: Prisma.EnumAssetStatusFieldUpdateOperationsInput | $Enums.AssetStatus
   originalName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2180,13 +2180,13 @@ export type AssetCountOutputTypeCountCoverOfAlbumsArgs<ExtArgs extends runtime.T
 
 
 export type AssetSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  assetId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  folderId?: boolean
+  spaceSeq?: boolean
+  folderSeq?: boolean
   kind?: boolean
   status?: boolean
   originalName?: boolean
@@ -2196,7 +2196,7 @@ export type AssetSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sizeBytes?: boolean
   checksum?: boolean
   metadata?: boolean
-  createdById?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>
@@ -2210,13 +2210,13 @@ export type AssetSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }, ExtArgs["result"]["asset"]>
 
 export type AssetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  assetId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  folderId?: boolean
+  spaceSeq?: boolean
+  folderSeq?: boolean
   kind?: boolean
   status?: boolean
   originalName?: boolean
@@ -2226,20 +2226,20 @@ export type AssetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   sizeBytes?: boolean
   checksum?: boolean
   metadata?: boolean
-  createdById?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["asset"]>
 
 export type AssetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  assetId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  folderId?: boolean
+  spaceSeq?: boolean
+  folderSeq?: boolean
   kind?: boolean
   status?: boolean
   originalName?: boolean
@@ -2249,20 +2249,20 @@ export type AssetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   sizeBytes?: boolean
   checksum?: boolean
   metadata?: boolean
-  createdById?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["asset"]>
 
 export type AssetSelectScalar = {
-  assetId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  folderId?: boolean
+  spaceSeq?: boolean
+  folderSeq?: boolean
   kind?: boolean
   status?: boolean
   originalName?: boolean
@@ -2272,10 +2272,10 @@ export type AssetSelectScalar = {
   sizeBytes?: boolean
   checksum?: boolean
   metadata?: boolean
-  createdById?: boolean
+  createdBySeq?: boolean
 }
 
-export type AssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"assetId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "folderId" | "kind" | "status" | "originalName" | "storageKey" | "mimeType" | "extension" | "sizeBytes" | "checksum" | "metadata" | "createdById", ExtArgs["result"]["asset"]>
+export type AssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "folderSeq" | "kind" | "status" | "originalName" | "storageKey" | "mimeType" | "extension" | "sizeBytes" | "checksum" | "metadata" | "createdBySeq", ExtArgs["result"]["asset"]>
 export type AssetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>
@@ -2313,19 +2313,19 @@ export type $AssetPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     coverOfAlbums: Prisma.$AlbumPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    assetId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
     /**
      * @displayName 소속 Space
      */
-    spaceId: bigint
+    spaceSeq: bigint
     /**
      * @displayName 소속 폴더
      */
-    folderId: bigint
+    folderSeq: bigint
     /**
      * @displayName 에셋 타입
      */
@@ -2365,7 +2365,7 @@ export type $AssetPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     /**
      * @displayName 생성자
      */
-    createdById: bigint | null
+    createdBySeq: bigint | null
   }, ExtArgs["result"]["asset"]>
   composites: {}
 }
@@ -2449,8 +2449,8 @@ export interface AssetDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * // Get first 10 Assets
    * const assets = await prisma.asset.findMany({ take: 10 })
    *
-   * // Only select the `assetId`
-   * const assetWithAssetIdOnly = await prisma.asset.findMany({ select: { assetId: true } })
+   * // Only select the `id`
+   * const assetWithIdOnly = await prisma.asset.findMany({ select: { id: true } })
    *
    */
   findMany<T extends AssetFindManyArgs>(args?: Prisma.SelectSubset<T, AssetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -2494,9 +2494,9 @@ export interface AssetDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    *
-   * // Create many Assets and only return the `assetId`
-   * const assetWithAssetIdOnly = await prisma.asset.createManyAndReturn({
-   *   select: { assetId: true },
+   * // Create many Assets and only return the `id`
+   * const assetWithIdOnly = await prisma.asset.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -2585,9 +2585,9 @@ export interface AssetDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    *
-   * // Update zero or more Assets and only return the `assetId`
-   * const assetWithAssetIdOnly = await prisma.asset.updateManyAndReturn({
-   *   select: { assetId: true },
+   * // Update zero or more Assets and only return the `id`
+   * const assetWithIdOnly = await prisma.asset.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -2798,13 +2798,13 @@ export interface Prisma__AssetClient<T, Null = never, ExtArgs extends runtime.Ty
  * Fields of the Asset model
  */
 export interface AssetFieldRefs {
-  readonly assetId: Prisma.FieldRef<"Asset", 'String'>
-  readonly id: Prisma.FieldRef<"Asset", 'BigInt'>
+  readonly id: Prisma.FieldRef<"Asset", 'String'>
+  readonly seq: Prisma.FieldRef<"Asset", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Asset", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Asset", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Asset", 'DateTime'>
-  readonly spaceId: Prisma.FieldRef<"Asset", 'BigInt'>
-  readonly folderId: Prisma.FieldRef<"Asset", 'BigInt'>
+  readonly spaceSeq: Prisma.FieldRef<"Asset", 'BigInt'>
+  readonly folderSeq: Prisma.FieldRef<"Asset", 'BigInt'>
   readonly kind: Prisma.FieldRef<"Asset", 'AssetKind'>
   readonly status: Prisma.FieldRef<"Asset", 'AssetStatus'>
   readonly originalName: Prisma.FieldRef<"Asset", 'String'>
@@ -2814,7 +2814,7 @@ export interface AssetFieldRefs {
   readonly sizeBytes: Prisma.FieldRef<"Asset", 'BigInt'>
   readonly checksum: Prisma.FieldRef<"Asset", 'String'>
   readonly metadata: Prisma.FieldRef<"Asset", 'Json'>
-  readonly createdById: Prisma.FieldRef<"Asset", 'BigInt'>
+  readonly createdBySeq: Prisma.FieldRef<"Asset", 'BigInt'>
 }
 
 

@@ -1,3 +1,3 @@
 export class DeleteInquiryCommand {
-	constructor(readonly inquiryId: bigint) {}
+	constructor(readonly inquiryId: string) {}
 }

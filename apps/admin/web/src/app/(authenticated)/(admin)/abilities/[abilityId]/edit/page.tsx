@@ -1,12 +1,17 @@
 "use client";
 
 import {
+	type AbilityResponseDto,
 	type UpdateAbilityDto,
 	useGetAbilityById,
 	useUpdateAbility,
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
-import { useGetSubjects } from "@cocrepo/api/core/subjects";
+import {
+	type SubjectDto,
+	useGetSubjects,
+} from "@cocrepo/api/core/subjects";
+import { isIntegrationUlid } from "@cocrepo/type";
 import {
 	AbilityEditScreen,
 	type AbilityFormState,
@@ -63,8 +68,11 @@ export default observer(function AbilityEditPage() {
 		}
 		state.name = ability.name;
 		state.description = ability.description || "";
-		state.subjectId = String(ability.subjectId);
-		state.actionId = String(ability.actionId);
+		state.subjectId = resolveAbilitySubjectId(
+			ability,
+			subjectsResponse?.data ?? [],
+		);
+		state.actionId = ability.action?.id ?? "";
 		state.fields = ability.fields.join(", ");
 		state.conditions = ability.conditions
 			? JSON.stringify(ability.conditions, null, 2)
@@ -167,14 +175,12 @@ function toUpdateAbilityDto(
 	}
 
 	const subjectId = state.subjectId.trim()
-		? parsePositiveBigInt(state.subjectId)
+		? state.subjectId.trim()
 		: undefined;
-	const actionId = state.actionId.trim()
-		? parsePositiveBigInt(state.actionId)
-		: undefined;
+	const actionId = state.actionId.trim() ? state.actionId.trim() : undefined;
 	if (
-		(state.subjectId.trim() && subjectId === undefined) ||
-		(state.actionId.trim() && actionId === undefined)
+		(subjectId !== undefined && !isIntegrationUlid(subjectId)) ||
+		(actionId !== undefined && !isIntegrationUlid(actionId))
 	) {
 		onInvalidConditions();
 		return null;
@@ -191,7 +197,18 @@ function toUpdateAbilityDto(
 	};
 }
 
-function parsePositiveBigInt(value: string): bigint | undefined {
-	const trimmedValue = value.trim();
-	return /^[1-9]\d*$/.test(trimmedValue) ? BigInt(trimmedValue) : undefined;
+/**
+ * AbilityResponseDto의 subject 관계에는 공개 id가 없어
+ * Subject 목록에서 이름으로 공개 id를 찾아 선택 값을 복원한다.
+ */
+function resolveAbilitySubjectId(
+	ability: AbilityResponseDto,
+	subjects: SubjectDto[],
+): string {
+	const subjectName = ability.subject?.name;
+	return (
+		subjects.find((subject) => subject.name === subjectName)?.id ??
+		subjectName ??
+		""
+	);
 }

@@ -42,8 +42,8 @@ export interface TemplateListScreenProps {
 	queryStates: TemplateListScreenQueryStates;
 	setQueryStates: TemplateListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickTemplateCode: (templateId: bigint) => void;
-	onToggleTemplateStatusSwitch: (templateId: bigint) => Promise<void>;
+	onClickTemplateCode: (templateId: string) => void;
+	onToggleTemplateStatusSwitch: (templateId: string) => Promise<void>;
 }
 export const TemplateListScreen = observer(
 	({

@@ -1,6 +1,5 @@
 /// <reference types="vitest/globals" />
 
-import type { DecimalId } from "@cocrepo/type";
 import { describe, expect, it, vi } from "vitest";
 import type { PersistStorageAdapter } from "../persistence/persistStorage";
 import { RootStore, type RootStoreRuntimeBindings } from "../rootStore";
@@ -9,8 +8,8 @@ const EMPTY_RUNTIME_BINDINGS: RootStoreRuntimeBindings = {
 	sessionScopeBinders: [],
 	languageBinders: [],
 };
-const TENANT_A = "101" as DecimalId;
-const SPACE_A = "201" as DecimalId;
+const TENANT_A = "01JTENANT000000000000000TA";
+const SPACE_A = "01JSPACE0000000000000000SA";
 
 interface PersistStorageFixture {
 	storageAdapter: PersistStorageAdapter;
@@ -118,7 +117,7 @@ describe("RootStore", () => {
 		expect(root.isStarted).toBe(false);
 	});
 
-	it("Given version 2 account 선택이 포함된 App 문서가 있을 때 When start를 호출하면 Then session, account, language를 함께 복원한다", () => {
+	it("Given version 4 account 선택이 포함된 App 문서가 있을 때 When start를 호출하면 Then session, account, language를 함께 복원한다", () => {
 		const storage = createPersistStorage({
 			"root-test": {
 				authSession: {
@@ -129,10 +128,10 @@ describe("RootStore", () => {
 					refreshTokenExpiresAt: Date.now() + 120_000,
 				},
 				account: {
-					version: 2,
+					version: 4,
 					tenantId: TENANT_A,
 					spaceId: SPACE_A,
-					fitnessCenterName: "Fitness Center A",
+					spaceName: "Fitness Center A",
 					contentLanguageCode: "ko_KR",
 					availableSpaces: [],
 				},
@@ -151,11 +150,11 @@ describe("RootStore", () => {
 		expect(root.app.account.authSession.accessToken).toBe("access-token");
 		expect(root.app.account.currentTenantId).toBe(TENANT_A);
 		expect(root.app.account.currentSpaceId).toBe(SPACE_A);
-		expect(root.app.account.currentFitnessCenterName).toBe("Fitness Center A");
+		expect(root.app.account.currentSpaceName).toBe("Fitness Center A");
 		expect(root.app.language.languageCode).toBe("en_US");
 	});
 
-	it("Given version 2 account 선택에 decimal이 아닌 식별자가 저장돼 있을 때 When start를 호출하면 Then account 선택은 폐기하고 나머지 section은 유지한다", () => {
+	it("Given version 4 account 선택에 ULID가 아닌 식별자가 저장돼 있을 때 When start를 호출하면 Then account 선택은 폐기하고 나머지 section은 유지한다", () => {
 		const storage = createPersistStorage({
 			"root-test": {
 				authSession: {
@@ -166,16 +165,16 @@ describe("RootStore", () => {
 					refreshTokenExpiresAt: Date.now() + 120_000,
 				},
 				account: {
-					version: 2,
+					version: 4,
 					tenantId: "01J7G2V0ULIDLIKEVALUE",
 					spaceId: "space-ulid-value",
-					fitnessCenterName: "Fitness Center A",
+					spaceName: "Fitness Center A",
 					contentLanguageCode: "ko_KR",
 					availableSpaces: [
 						{
 							tenantId: TENANT_A,
 							spaceId: SPACE_A,
-							fitnessCenterName: "Fitness Center A",
+							spaceName: "Fitness Center A",
 						},
 					],
 				},
@@ -190,7 +189,7 @@ describe("RootStore", () => {
 		expect(root.isStarted).toBe(true);
 		expect(root.app.account.currentTenantId).toBeNull();
 		expect(root.app.account.currentSpaceId).toBeNull();
-		expect(root.app.account.currentFitnessCenterName).toBeNull();
+		expect(root.app.account.currentSpaceName).toBeNull();
 		expect(root.app.account.authSession.accessToken).toBe("access-token");
 		expect(root.app.language.languageCode).toBe("en_US");
 		expect(storage.write).toHaveBeenCalledWith("root-test", {
@@ -202,16 +201,16 @@ describe("RootStore", () => {
 				refreshTokenExpiresAt: expect.any(Number),
 			},
 			account: {
-				version: 2,
+				version: 4,
 				tenantId: null,
 				spaceId: null,
-				fitnessCenterName: null,
+				spaceName: null,
 				contentLanguageCode: null,
 				availableSpaces: [
 					{
 						tenantId: TENANT_A,
 						spaceId: SPACE_A,
-						fitnessCenterName: "Fitness Center A",
+						spaceName: "Fitness Center A",
 						contentLanguageCode: null,
 					},
 				],

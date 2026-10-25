@@ -38,7 +38,7 @@ export class AbilityAggregate {
 	 * @param id - Ability ID
 	 * @returns Ability 또는 null
 	 */
-	async getAbilityById(id: bigint): Promise<Ability | null> {
+	async getAbilityById(id: string): Promise<Ability | null> {
 		this.logger.debug(`ID로 Ability 조회: id=${id}`);
 
 		return this.abilitiesRepository.findById(id);
@@ -62,8 +62,8 @@ export class AbilityAggregate {
 	 * @returns 병합된 Ability 배열
 	 */
 	async getMergedAbilities(
-		roleIds: bigint[],
-		spaceId: bigint,
+		roleIds: string[],
+		spaceId: string,
 	): Promise<Ability[]> {
 		this.logger.debug(
 			`RoleAssignment 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceId=${spaceId}`,
@@ -106,7 +106,7 @@ export class AbilityAggregate {
 	 * @returns 수정된 Ability
 	 * @description Ability 정의만 수정합니다. RoleAssignment 메타데이터(isActive, priority)는 변경되지 않습니다.
 	 */
-	async updateAbility(id: bigint, input: UpdateAbilityInput): Promise<Ability> {
+	async updateAbility(id: string, input: UpdateAbilityInput): Promise<Ability> {
 		this.logger.debug(`권한 정의 수정: id=${id}`);
 
 		const data = toAbilityUpdateData(input);
@@ -121,7 +121,7 @@ export class AbilityAggregate {
 	 * @description Ability와 연결된 모든 PolicyEntry를 소프트 삭제합니다.
 	 */
 	@Transactional()
-	async deleteAbility(id: bigint): Promise<Ability> {
+	async deleteAbility(id: string): Promise<Ability> {
 		this.logger.debug(`권한 삭제: id=${id}`);
 
 		// 1. Ability 소프트 삭제

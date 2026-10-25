@@ -1,5 +1,3 @@
-import type { DecimalId } from "./database-id";
-
 export type InquiryStatus =
 	| "NEW"
 	| "IN_PROGRESS"
@@ -20,11 +18,8 @@ export type InquiryCategory =
 export type InquiryPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
 
 export interface InquiryMessage {
-	id: DecimalId;
-	threadId: DecimalId;
-	inquiryId: DecimalId;
+	id: string;
 	senderType: "USER" | "AI" | "SYSTEM";
-	senderId: DecimalId | null;
 	content: string;
 	contentType: string;
 	isEdited: boolean;
@@ -36,10 +31,10 @@ export interface InquiryMessage {
 }
 
 export interface InquiryParticipant {
-	id: DecimalId;
-	inquiryId: DecimalId;
-	threadId: DecimalId | null;
-	userId: DecimalId;
+	id: string;
+	inquiryId: string;
+	threadId: string | null;
+	userId: string;
 	role: "CUSTOMER" | "AGENT" | "SUPERVISOR";
 	isOnline: boolean;
 	isTyping: boolean;

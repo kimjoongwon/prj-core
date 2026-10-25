@@ -1,6 +1,6 @@
 export class GetTaskRoutinesQuery {
 	constructor(
-		readonly taskId: bigint,
-		readonly spaceId: bigint,
+		readonly taskId: string,
+		readonly spaceId: string,
 	) {}
 }

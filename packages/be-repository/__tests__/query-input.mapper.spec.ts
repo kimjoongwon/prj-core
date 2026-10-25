@@ -19,15 +19,15 @@ describe("QueryInput mapper", () => {
 	it("검색 문자열과 ID 필터를 Prisma where로 변환한다", () => {
 		expect(
 			buildAssetQueryWhere({
-				folderId: 1n,
-				spaceId: 2n,
+				folderId: "01JFOLDER00000000000000000A",
+				spaceId: "01JSPACE00000000000000000S",
 				kind: AssetKind.IMAGE,
 				status: AssetStatus.READY,
 				search: "photo",
 			}),
 		).toEqual({
-			folderId: 1n,
-			spaceId: 2n,
+			folder: { id: "01JFOLDER00000000000000000A" },
+			space: { id: "01JSPACE00000000000000000S" },
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: { contains: "photo", mode: "insensitive" },
@@ -63,16 +63,16 @@ describe("QueryInput mapper", () => {
 	it("*Id와 *Ids 필터를 관계 조건으로 변환한다", () => {
 		expect(
 			buildUserQueryWhere({
-				categoryId: 101n,
+				categorySeq: 101n,
 				groupIds: [201n, 202n],
 				roles: ["admin", "operator"],
 			}),
 		).toEqual({
 			removedAt: null,
-			classification: { categoryId: 101n },
+			classification: { categorySeq: 101n },
 			associations: {
 				some: {
-					groupId: { in: [201n, 202n] },
+					groupSeq: { in: [201n, 202n] },
 					removedAt: null,
 				},
 			},
@@ -113,12 +113,12 @@ describe("QueryInput mapper", () => {
 
 		expect(
 			buildTenantAccessRequestQueryWhere({
-				reviewerId: 1n,
+				reviewerId: "01JREVIEW00000000000000000R",
 				search: "club",
-				spaceId: 2n,
+				spaceId: "01JSPACE00000000000000000S",
 			}),
 		).toEqual({
-			space: { id: 2n },
+			space: { id: "01JSPACE00000000000000000S" },
 			OR: [
 				{ requester: { name: { contains: "club", mode: "insensitive" } } },
 				{ requester: { email: { contains: "club", mode: "insensitive" } } },
@@ -151,7 +151,7 @@ describe("QueryInput mapper", () => {
 	it("문의 sort 변환은 허용 필드만 사용한다", () => {
 		expect(
 			buildInquiryQueryOrderBy({
-				sort: ["-lastMessageAt", "priority", "customerId"],
+				sort: ["-lastMessageAt", "priority", "customerSeq"],
 			}),
 		).toEqual([{ lastMessageAt: "desc" }, { priority: "asc" }]);
 	});

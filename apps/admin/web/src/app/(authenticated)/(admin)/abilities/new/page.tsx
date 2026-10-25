@@ -6,6 +6,7 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
+import { isIntegrationUlid } from "@cocrepo/type";
 import {
 	AbilityEditScreen,
 	type AbilityFormState,
@@ -141,9 +142,9 @@ function toCreateAbilityDto(
 		}
 	}
 
-	const subjectId = parsePositiveBigInt(state.subjectId);
-	const actionId = parsePositiveBigInt(state.actionId);
-	if (subjectId === undefined || actionId === undefined) {
+	const subjectId = state.subjectId.trim();
+	const actionId = state.actionId.trim();
+	if (!isIntegrationUlid(subjectId) || !isIntegrationUlid(actionId)) {
 		onInvalidConditions();
 		return null;
 	}
@@ -158,9 +159,4 @@ function toCreateAbilityDto(
 		inverted: state.inverted,
 		reason: state.inverted ? state.reason.trim() || undefined : undefined,
 	};
-}
-
-function parsePositiveBigInt(value: string): bigint | undefined {
-	const trimmedValue = value.trim();
-	return /^[1-9]\d*$/.test(trimmedValue) ? BigInt(trimmedValue) : undefined;
 }

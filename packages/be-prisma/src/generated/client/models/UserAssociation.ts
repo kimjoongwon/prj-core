@@ -27,89 +27,89 @@ export type AggregateUserAssociation = {
 }
 
 export type UserAssociationAvgAggregateOutputType = {
-  id: number | null
-  userId: number | null
-  groupId: number | null
+  seq: number | null
+  userSeq: number | null
+  groupSeq: number | null
 }
 
 export type UserAssociationSumAggregateOutputType = {
-  id: bigint | null
-  userId: bigint | null
-  groupId: bigint | null
+  seq: bigint | null
+  userSeq: bigint | null
+  groupSeq: bigint | null
 }
 
 export type UserAssociationMinAggregateOutputType = {
-  userAssociationId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  userId: bigint | null
-  groupId: bigint | null
+  userSeq: bigint | null
+  groupSeq: bigint | null
 }
 
 export type UserAssociationMaxAggregateOutputType = {
-  userAssociationId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  userId: bigint | null
-  groupId: bigint | null
+  userSeq: bigint | null
+  groupSeq: bigint | null
 }
 
 export type UserAssociationCountAggregateOutputType = {
-  userAssociationId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  userId: number
-  groupId: number
+  userSeq: number
+  groupSeq: number
   _all: number
 }
 
 
 export type UserAssociationAvgAggregateInputType = {
-  id?: true
-  userId?: true
-  groupId?: true
+  seq?: true
+  userSeq?: true
+  groupSeq?: true
 }
 
 export type UserAssociationSumAggregateInputType = {
-  id?: true
-  userId?: true
-  groupId?: true
+  seq?: true
+  userSeq?: true
+  groupSeq?: true
 }
 
 export type UserAssociationMinAggregateInputType = {
-  userAssociationId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  userId?: true
-  groupId?: true
+  userSeq?: true
+  groupSeq?: true
 }
 
 export type UserAssociationMaxAggregateInputType = {
-  userAssociationId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  userId?: true
-  groupId?: true
+  userSeq?: true
+  groupSeq?: true
 }
 
 export type UserAssociationCountAggregateInputType = {
-  userAssociationId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  userId?: true
-  groupId?: true
+  userSeq?: true
+  groupSeq?: true
   _all?: true
 }
 
@@ -200,13 +200,13 @@ export type UserAssociationGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 export type UserAssociationGroupByOutputType = {
-  userAssociationId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  userId: bigint
-  groupId: bigint
+  userSeq: bigint
+  groupSeq: bigint
   _count: UserAssociationCountAggregateOutputType | null
   _avg: UserAssociationAvgAggregateOutputType | null
   _sum: UserAssociationSumAggregateOutputType | null
@@ -233,52 +233,52 @@ export type UserAssociationWhereInput = {
   AND?: Prisma.UserAssociationWhereInput | Prisma.UserAssociationWhereInput[]
   OR?: Prisma.UserAssociationWhereInput[]
   NOT?: Prisma.UserAssociationWhereInput | Prisma.UserAssociationWhereInput[]
-  userAssociationId?: Prisma.StringFilter<"UserAssociation"> | string
-  id?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
+  id?: Prisma.StringFilter<"UserAssociation"> | string
+  seq?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"UserAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
-  userId?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
-  groupId?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
+  userSeq?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
+  groupSeq?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type UserAssociationOrderByWithRelationInput = {
-  userAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
   group?: Prisma.GroupOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type UserAssociationWhereUniqueInput = Prisma.AtLeast<{
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   AND?: Prisma.UserAssociationWhereInput | Prisma.UserAssociationWhereInput[]
   OR?: Prisma.UserAssociationWhereInput[]
   NOT?: Prisma.UserAssociationWhereInput | Prisma.UserAssociationWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"UserAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
-  userId?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
-  groupId?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
+  userSeq?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
+  groupSeq?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userAssociationId">
+}, "seq" | "id">
 
 export type UserAssociationOrderByWithAggregationInput = {
-  userAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
   _count?: Prisma.UserAssociationCountOrderByAggregateInput
   _avg?: Prisma.UserAssociationAvgOrderByAggregateInput
   _max?: Prisma.UserAssociationMaxOrderByAggregateInput
@@ -290,18 +290,18 @@ export type UserAssociationScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserAssociationScalarWhereWithAggregatesInput | Prisma.UserAssociationScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserAssociationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserAssociationScalarWhereWithAggregatesInput | Prisma.UserAssociationScalarWhereWithAggregatesInput[]
-  userAssociationId?: Prisma.StringWithAggregatesFilter<"UserAssociation"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"UserAssociation"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"UserAssociation"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"UserAssociation"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserAssociation"> | Date | string | null
-  userId?: Prisma.BigIntWithAggregatesFilter<"UserAssociation"> | bigint | number
-  groupId?: Prisma.BigIntWithAggregatesFilter<"UserAssociation"> | bigint | number
+  userSeq?: Prisma.BigIntWithAggregatesFilter<"UserAssociation"> | bigint | number
+  groupSeq?: Prisma.BigIntWithAggregatesFilter<"UserAssociation"> | bigint | number
 }
 
 export type UserAssociationCreateInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -310,18 +310,18 @@ export type UserAssociationCreateInput = {
 }
 
 export type UserAssociationUncheckedCreateInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: bigint | number
-  groupId: bigint | number
+  userSeq: bigint | number
+  groupSeq: bigint | number
 }
 
 export type UserAssociationUpdateInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -330,41 +330,41 @@ export type UserAssociationUpdateInput = {
 }
 
 export type UserAssociationUncheckedUpdateInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  groupId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  groupSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type UserAssociationCreateManyInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: bigint | number
-  groupId: bigint | number
+  userSeq: bigint | number
+  groupSeq: bigint | number
 }
 
 export type UserAssociationUpdateManyMutationInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserAssociationUncheckedUpdateManyInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  groupId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  groupSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type UserAssociationListRelationFilter = {
@@ -378,45 +378,45 @@ export type UserAssociationOrderByRelationAggregateInput = {
 }
 
 export type UserAssociationCountOrderByAggregateInput = {
-  userAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type UserAssociationAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type UserAssociationMaxOrderByAggregateInput = {
-  userAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type UserAssociationMinOrderByAggregateInput = {
-  userAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type UserAssociationSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type UserAssociationCreateNestedManyWithoutGroupInput = {
@@ -504,8 +504,8 @@ export type UserAssociationUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type UserAssociationCreateWithoutGroupInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -513,12 +513,12 @@ export type UserAssociationCreateWithoutGroupInput = {
 }
 
 export type UserAssociationUncheckedCreateWithoutGroupInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: bigint | number
+  userSeq: bigint | number
 }
 
 export type UserAssociationCreateOrConnectWithoutGroupInput = {
@@ -551,18 +551,18 @@ export type UserAssociationScalarWhereInput = {
   AND?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
   OR?: Prisma.UserAssociationScalarWhereInput[]
   NOT?: Prisma.UserAssociationScalarWhereInput | Prisma.UserAssociationScalarWhereInput[]
-  userAssociationId?: Prisma.StringFilter<"UserAssociation"> | string
-  id?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
+  id?: Prisma.StringFilter<"UserAssociation"> | string
+  seq?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"UserAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"UserAssociation"> | Date | string | null
-  userId?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
-  groupId?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
+  userSeq?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
+  groupSeq?: Prisma.BigIntFilter<"UserAssociation"> | bigint | number
 }
 
 export type UserAssociationCreateWithoutUserInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -570,12 +570,12 @@ export type UserAssociationCreateWithoutUserInput = {
 }
 
 export type UserAssociationUncheckedCreateWithoutUserInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  groupId: bigint | number
+  groupSeq: bigint | number
 }
 
 export type UserAssociationCreateOrConnectWithoutUserInput = {
@@ -605,17 +605,17 @@ export type UserAssociationUpdateManyWithWhereWithoutUserInput = {
 }
 
 export type UserAssociationCreateManyGroupInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: bigint | number
+  userSeq: bigint | number
 }
 
 export type UserAssociationUpdateWithoutGroupInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -623,35 +623,35 @@ export type UserAssociationUpdateWithoutGroupInput = {
 }
 
 export type UserAssociationUncheckedUpdateWithoutGroupInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type UserAssociationUncheckedUpdateManyWithoutGroupInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type UserAssociationCreateManyUserInput = {
-  userAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  groupId: bigint | number
+  groupSeq: bigint | number
 }
 
 export type UserAssociationUpdateWithoutUserInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -659,72 +659,72 @@ export type UserAssociationUpdateWithoutUserInput = {
 }
 
 export type UserAssociationUncheckedUpdateWithoutUserInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  groupId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  groupSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type UserAssociationUncheckedUpdateManyWithoutUserInput = {
-  userAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  groupId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  groupSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 
 
 export type UserAssociationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  userAssociationId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  userId?: boolean
-  groupId?: boolean
+  userSeq?: boolean
+  groupSeq?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userAssociation"]>
 
 export type UserAssociationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  userAssociationId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  userId?: boolean
-  groupId?: boolean
+  userSeq?: boolean
+  groupSeq?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userAssociation"]>
 
 export type UserAssociationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  userAssociationId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  userId?: boolean
-  groupId?: boolean
+  userSeq?: boolean
+  groupSeq?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userAssociation"]>
 
 export type UserAssociationSelectScalar = {
-  userAssociationId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  userId?: boolean
-  groupId?: boolean
+  userSeq?: boolean
+  groupSeq?: boolean
 }
 
-export type UserAssociationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userAssociationId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "userId" | "groupId", ExtArgs["result"]["userAssociation"]>
+export type UserAssociationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "userSeq" | "groupSeq", ExtArgs["result"]["userAssociation"]>
 export type UserAssociationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -745,13 +745,13 @@ export type $UserAssociationPayload<ExtArgs extends runtime.Types.Extensions.Int
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    userAssociationId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    userId: bigint
-    groupId: bigint
+    userSeq: bigint
+    groupSeq: bigint
   }, ExtArgs["result"]["userAssociation"]>
   composites: {}
 }
@@ -835,8 +835,8 @@ export interface UserAssociationDelegate<ExtArgs extends runtime.Types.Extension
    * // Get first 10 UserAssociations
    * const userAssociations = await prisma.userAssociation.findMany({ take: 10 })
    *
-   * // Only select the `userAssociationId`
-   * const userAssociationWithUserAssociationIdOnly = await prisma.userAssociation.findMany({ select: { userAssociationId: true } })
+   * // Only select the `id`
+   * const userAssociationWithIdOnly = await prisma.userAssociation.findMany({ select: { id: true } })
    *
    */
   findMany<T extends UserAssociationFindManyArgs>(args?: Prisma.SelectSubset<T, UserAssociationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -880,9 +880,9 @@ export interface UserAssociationDelegate<ExtArgs extends runtime.Types.Extension
    *   ]
    * })
    *
-   * // Create many UserAssociations and only return the `userAssociationId`
-   * const userAssociationWithUserAssociationIdOnly = await prisma.userAssociation.createManyAndReturn({
-   *   select: { userAssociationId: true },
+   * // Create many UserAssociations and only return the `id`
+   * const userAssociationWithIdOnly = await prisma.userAssociation.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -971,9 +971,9 @@ export interface UserAssociationDelegate<ExtArgs extends runtime.Types.Extension
    *   ]
    * })
    *
-   * // Update zero or more UserAssociations and only return the `userAssociationId`
-   * const userAssociationWithUserAssociationIdOnly = await prisma.userAssociation.updateManyAndReturn({
-   *   select: { userAssociationId: true },
+   * // Update zero or more UserAssociations and only return the `id`
+   * const userAssociationWithIdOnly = await prisma.userAssociation.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1177,13 +1177,13 @@ export interface Prisma__UserAssociationClient<T, Null = never, ExtArgs extends 
  * Fields of the UserAssociation model
  */
 export interface UserAssociationFieldRefs {
-  readonly userAssociationId: Prisma.FieldRef<"UserAssociation", 'String'>
-  readonly id: Prisma.FieldRef<"UserAssociation", 'BigInt'>
+  readonly id: Prisma.FieldRef<"UserAssociation", 'String'>
+  readonly seq: Prisma.FieldRef<"UserAssociation", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"UserAssociation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserAssociation", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"UserAssociation", 'DateTime'>
-  readonly userId: Prisma.FieldRef<"UserAssociation", 'BigInt'>
-  readonly groupId: Prisma.FieldRef<"UserAssociation", 'BigInt'>
+  readonly userSeq: Prisma.FieldRef<"UserAssociation", 'BigInt'>
+  readonly groupSeq: Prisma.FieldRef<"UserAssociation", 'BigInt'>
 }
 
 

@@ -1,27 +1,15 @@
-import {
-	type DecimalId,
-	formatDatabaseId,
-	isDecimalId,
-} from "@cocrepo/type";
+import { type IntegrationUlid, isIntegrationUlid } from "@cocrepo/type";
 
-export function isWireId(value: unknown): value is DecimalId {
-	return isDecimalId(value);
+/**
+ * 와이어 식별자는 공개 ULID 문자열입니다.
+ * 구 decimal 문자열과 bigint 입력은 더 이상 와이어 계약이 아니므로 거부합니다.
+ */
+export function isWireId(value: unknown): value is IntegrationUlid {
+	return isIntegrationUlid(value);
 }
 
-export function toWireId(value: unknown): DecimalId | null {
-	if (isDecimalId(value)) {
-		return value;
-	}
-
-	if (typeof value !== "bigint") {
-		return null;
-	}
-
-	try {
-		return formatDatabaseId(value);
-	} catch {
-		return null;
-	}
+export function toWireId(value: unknown): IntegrationUlid | null {
+	return isIntegrationUlid(value) ? value : null;
 }
 
 export function isSameWireId(

@@ -10,14 +10,14 @@ import { AbstractSchema } from "../abstract.schema";
 /** Translation의 DB 필드 타입과 공통 검증입니다. */
 export class TranslationSchema
 	extends PickSchemaType(AbstractSchema, [
-		"id",
+		"seq",
 		"createdAt",
 		"updatedAt",
 	] as const)
 {
-	translationId!: string;
+	id!: string;
 
-	declare id: bigint;
+	declare seq: bigint;
 
 	@EnumValidation(() => LanguageCode)
 	languageCode!: LanguageCode;

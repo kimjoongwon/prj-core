@@ -1,3 +1,3 @@
 export class DeleteRoutineCommand {
-	constructor(readonly routineId: bigint) {}
+	constructor(readonly routineId: string) {}
 }

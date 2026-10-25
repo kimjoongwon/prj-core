@@ -66,7 +66,7 @@ export class TimelineAggregate {
 	 * - spaceId 기준으로 Space 격리 적용
 	 * - 없으면 NotFoundException 발생
 	 */
-	async findTimelineForSpace(timelineId: bigint, spaceIds?: bigint[]) {
+	async findTimelineForSpace(timelineId: string, spaceIds?: string[]) {
 		this.logger.debug(`타임라인 상세 조회: ${timelineId}`);
 
 		const timeline = await this.repository.findTimelineById(
@@ -85,8 +85,8 @@ export class TimelineAggregate {
 	 */
 	async createTimeline(
 		input: CreateTimelineInput,
-		spaceId: bigint,
-		createdById: bigint,
+		spaceId: string,
+		createdById: string,
 	) {
 		this.logger.debug(`타임라인 생성: name=${input.name}`);
 
@@ -111,9 +111,9 @@ export class TimelineAggregate {
 	 * - 이름 변경 시 중복 확인 (자기 자신 제외)
 	 */
 	async updateTimelineForSpace(
-		timelineId: bigint,
+		timelineId: string,
 		input: UpdateTimelineInput,
-		spaceId: bigint,
+		spaceId: string,
 	) {
 		this.logger.debug(`타임라인 수정: ${timelineId}`);
 
@@ -143,8 +143,8 @@ export class TimelineAggregate {
 	 * - 세션이 있으면 삭제 불가
 	 */
 	async deleteTimelineFromSpace(
-		timelineId: bigint,
-		spaceId: bigint,
+		timelineId: string,
+		spaceId: string,
 	): Promise<void> {
 		this.logger.debug(`타임라인 삭제: ${timelineId}`);
 
@@ -165,7 +165,7 @@ export class TimelineAggregate {
 	 * 타임라인 내 세션 목록 조회
 	 */
 	async findSessionsInTimeline(
-		timelineId: bigint,
+		timelineId: string,
 		params: { skip: number; take: number; search?: string | null },
 	): Promise<{
 		sessions: Array<
@@ -190,8 +190,8 @@ export class TimelineAggregate {
 	 * - 없으면 NotFoundException 발생
 	 */
 	async findSessionInTimeline(
-		timelineId: bigint,
-		sessionId: bigint,
+		timelineId: string,
+		sessionId: string,
 	): Promise<
 		Session & {
 			timeline: Pick<Timeline, "id" | "name">;
@@ -215,7 +215,7 @@ export class TimelineAggregate {
 	 * - 세션 유형별 필드 유효성 검증
 	 */
 	async createSessionInTimeline(
-		timelineId: bigint,
+		timelineId: string,
 		input: CreateSessionInput,
 	): Promise<Session & { timeline: Pick<Timeline, "id"> }> {
 		this.logger.debug(
@@ -244,8 +244,8 @@ export class TimelineAggregate {
 	 * - 유형별 필드 유효성 검증
 	 */
 	async updateSessionInTimeline(
-		timelineId: bigint,
-		sessionId: bigint,
+		timelineId: string,
+		sessionId: string,
 		input: UpdateSessionInput,
 	): Promise<Session & { timeline: Pick<Timeline, "id"> }> {
 		this.logger.debug(`세션 수정: ${sessionId}`);
@@ -325,8 +325,8 @@ export class TimelineAggregate {
 	 * - 프로그램이 있으면 삭제 불가
 	 */
 	async deleteSessionFromTimeline(
-		timelineId: bigint,
-		sessionId: bigint,
+		timelineId: string,
+		sessionId: string,
 	): Promise<void> {
 		this.logger.debug(`세션 삭제: ${sessionId}`);
 
@@ -347,7 +347,7 @@ export class TimelineAggregate {
 	 * 세션 내 프로그램 목록 조회
 	 */
 	async findProgramsInSession(
-		sessionId: bigint,
+		sessionId: string,
 		params: { skip: number; take: number },
 	) {
 		this.logger.debug(`프로그램 목록 조회: sessionId=${sessionId}`);
@@ -363,7 +363,7 @@ export class TimelineAggregate {
 	 * 세션 내 프로그램 단건 조회
 	 * - 없으면 NotFoundException 발생
 	 */
-	async findProgramInSession(sessionId: bigint, programId: bigint) {
+	async findProgramInSession(sessionId: string, programId: string) {
 		this.logger.debug(`프로그램 상세 조회: ${programId}`);
 
 		const program = await this.repository.findProgramById(sessionId, programId);
@@ -378,7 +378,7 @@ export class TimelineAggregate {
 	 * - 같은 세션 내 루틴 중복 확인
 	 */
 	@Transactional()
-	async createProgramInSession(sessionId: bigint, input: CreateProgramInput) {
+	async createProgramInSession(sessionId: string, input: CreateProgramInput) {
 		this.logger.debug(`프로그램 생성: sessionId=${sessionId}`);
 
 		const duplicateCount = await this.repository.countProgramsWithRoutine(
@@ -417,8 +417,8 @@ export class TimelineAggregate {
 	 */
 	@Transactional()
 	async updateProgramInSession(
-		sessionId: bigint,
-		programId: bigint,
+		sessionId: string,
+		programId: string,
 		input: UpdateProgramInput,
 	) {
 		this.logger.debug(`프로그램 수정: ${programId}`);
@@ -486,8 +486,8 @@ export class TimelineAggregate {
 	 */
 	@Transactional()
 	async deleteProgramFromSession(
-		sessionId: bigint,
-		programId: bigint,
+		sessionId: string,
+		programId: string,
 	): Promise<void> {
 		this.logger.debug(`프로그램 삭제: ${programId}`);
 
@@ -553,14 +553,14 @@ export class TimelineAggregate {
 		}
 	}
 
-	private getAccessibleSpaceIds(): bigint[] | undefined {
+	private getAccessibleSpaceIds(): string[] | undefined {
 		return (
 			this.spaceContext.spaceIds ??
 			(this.spaceContext.spaceId ? [this.spaceContext.spaceId] : [])
 		);
 	}
 
-	private async getRoutineExecutionSnapshot(routineId: bigint): Promise<{
+	private async getRoutineExecutionSnapshot(routineId: string): Promise<{
 		routine: {
 			name: string;
 			label: string;
@@ -595,7 +595,7 @@ export class TimelineAggregate {
 				label: routine.label,
 			},
 			activities: routineActivities.map((activity) => ({
-				taskId: activity.taskId,
+				taskId: activity.task?.id,
 				order: activity.order,
 				repetitions: activity.repetitions,
 				restTime: activity.restTime,

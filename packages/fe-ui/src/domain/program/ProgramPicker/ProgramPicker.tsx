@@ -12,7 +12,7 @@ import type { ProgramPickerState } from "./ProgramPickerState";
 import type { ProgramPickerOption } from "./types";
 
 type RoutineOptionSource = {
-	id: bigint;
+	id: string;
 	name: string;
 	label: string;
 	activities?: Array<{
@@ -28,7 +28,7 @@ const toRoutineOption = (routine: RoutineOptionSource): ProgramPickerOption => {
 	);
 
 	return {
-		id: String(routine.id),
+		id: routine.id,
 		name: routine.name,
 		subtitle: `라벨: ${routine.label || "-"} · 활동 ${
 			routine.activities?.length ?? 0
@@ -37,11 +37,11 @@ const toRoutineOption = (routine: RoutineOptionSource): ProgramPickerOption => {
 };
 
 const toInstructorOption = (instructor: {
-	id: bigint;
+	id: string;
 	name: string;
 	email?: string | null;
 }): ProgramPickerOption => ({
-	id: String(instructor.id),
+	id: instructor.id,
 	name: instructor.name,
 	subtitle: `이메일: ${instructor.email || "-"}`,
 });

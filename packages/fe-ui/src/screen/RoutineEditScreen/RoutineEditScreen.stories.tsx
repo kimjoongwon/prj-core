@@ -86,7 +86,7 @@ export const Detail: Story = {
 		state: defaultState,
 		activities,
 		readOnly: true,
-		programs: [{ id: BigInt(1), name: "월요일 프로그램" }],
+		programs: [{ id: "01J00000000000000000000001", name: "월요일 프로그램" }],
 		metadata: {
 			createdAt: new Date("2026-04-01T09:00:00.000Z"),
 			updatedAt: new Date("2026-04-03T09:00:00.000Z"),

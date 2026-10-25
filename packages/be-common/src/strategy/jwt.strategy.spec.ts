@@ -21,6 +21,8 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 	let usersService: MockProxy<UserService>;
 	let authCacheService: MockProxy<AuthCacheService>;
 	const authenticatedUserId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
+	const cachedTenantId = "01JTENANT00000000000000C01";
+	const cachedSpaceId = "01JSPACE00000000000000C01";
 	const jwtPayload = {
 		sub: authenticatedUserId,
 		iat: 1_700_000_000,
@@ -40,8 +42,8 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 
 	it("캐시 적중 시 내부 필드·날짜 문자열·bigint와 User 도메인 동작을 보존한다", async () => {
 		const cachedUserSnapshot = {
-			id: 9_007_199_254_740_993n,
-			userId: authenticatedUserId,
+			id: authenticatedUserId,
+			seq: 9_007_199_254_740_993n,
 			name: "관리자",
 			email: "Mixed.Case@Example.COM",
 			password: "$2b$10$stored.password.hash",
@@ -52,8 +54,7 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 			passwordChangedAt: "2023-11-14T20:13:20.000Z",
 			lastLoginAt: "2023-11-14T21:13:20.000Z",
 			isPermanentlyLocked: false,
-			currentTenantId: 9_007_199_254_740_994n,
-			tenants: [{ id: 9_007_199_254_740_994n, spaceId: 301n }],
+			tenants: [{ id: cachedTenantId, space: { id: cachedSpaceId } }],
 		};
 		authCacheService.get.mockResolvedValue(
 			stringifyBigIntJson(cachedUserSnapshot),
@@ -64,9 +65,9 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 		expect(authCacheService.get).toHaveBeenCalledWith(authenticatedUserId);
 		expect(authenticatedUser).toBeInstanceOf(User);
 		expect(authenticatedUser).toMatchObject(cachedUserSnapshot);
-		expect(authenticatedUser.tenants?.[0]?.id).toBe(9_007_199_254_740_994n);
-		expect(authenticatedUser.canAccessSpace(301n)).toBe(true);
-		expect(authenticatedUser.accessibleSpaceIds).toEqual([301n]);
+		expect(authenticatedUser.tenants?.[0]?.id).toBe(cachedTenantId);
+		expect(authenticatedUser.canAccessSpace(cachedSpaceId)).toBe(true);
+		expect(authenticatedUser.accessibleSpaceIds).toEqual([cachedSpaceId]);
 		expect(authenticatedUser.removedAt).toBeNull();
 		expect(usersService.findByUserIdWithTenants).not.toHaveBeenCalled();
 		expect(authCacheService.set).not.toHaveBeenCalled();
@@ -74,15 +75,17 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 
 	it("캐시 미스는 DB Entity와 Date를 반환하고 다음 적중에서 기존 JSON 형식으로 복원한다", async () => {
 		jest.spyOn(Date, "now").mockReturnValue(jwtPayload.iat * 1000);
+		const databaseTenantId = "01JTENANT00000000000000D01";
+		const databaseSpaceId = "01JSPACE00000000000000D01";
 		const databaseUser = hydrateEntity(User, {
-			id: 101n,
-			userId: authenticatedUserId,
+			id: authenticatedUserId,
+			seq: 101n,
 			email: "Existing.Case@Example.COM",
 			password: "$2b$10$database.password.hash",
 			createdAt: new Date("2023-11-14T22:13:20.000Z"),
 			passwordChangedAt: new Date("2023-11-14T22:00:00.000Z"),
 			removedAt: null,
-			tenants: [{ id: 201n, spaceId: 301n }],
+			tenants: [{ id: databaseTenantId, space: { id: databaseSpaceId } }],
 		});
 		authCacheService.get.mockResolvedValue(null);
 		usersService.findByUserIdWithTenants.mockResolvedValue(databaseUser);
@@ -110,7 +113,7 @@ describe("JwtStrategy 인증 사용자 복원", () => {
 		expect(cachedUser.passwordChangedAt).toBe(
 			databaseUser.passwordChangedAt?.toISOString(),
 		);
-		expect(cachedUser.tenants?.[0]?.id).toBe(201n);
+		expect(cachedUser.tenants?.[0]?.id).toBe(databaseTenantId);
 		expect(usersService.findByUserIdWithTenants).toHaveBeenCalledTimes(1);
 		expect(authCacheService.set).toHaveBeenCalledTimes(1);
 	});

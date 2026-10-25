@@ -1,5 +1,5 @@
 export interface CreateRoutineActivityInput {
-	taskId: bigint;
+	taskId: string;
 	order?: number;
 	repetitions?: number;
 	restTime?: number;

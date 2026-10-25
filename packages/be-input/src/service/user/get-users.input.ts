@@ -9,7 +9,7 @@ export interface GetUsersInput {
 	status?: string;
 	isActive?: boolean;
 	isRemoved?: boolean;
-	categoryId?: bigint;
+	categorySeq?: bigint;
 	groupIds?: bigint[];
 	createdFrom?: Date;
 	createdTo?: Date;

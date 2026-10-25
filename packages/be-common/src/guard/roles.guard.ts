@@ -49,7 +49,9 @@ export class RolesGuard implements CanActivate {
 		const tenant = this.cls.get<ContextTenantSnapshot | undefined>(
 			CONTEXT_KEYS.TENANT,
 		);
-		const spaceId = this.cls.get<DatabaseId | undefined>(CONTEXT_KEYS.SPACE_ID);
+		const spaceSeq = this.cls.get<DatabaseId | undefined>(
+			CONTEXT_KEYS.SPACE_ID,
+		);
 
 		if (!tenant) {
 			throw new ForbiddenException("해당 Space에 대한 테넌트가 없습니다.");
@@ -65,7 +67,7 @@ export class RolesGuard implements CanActivate {
 			throw new ForbiddenException(
 				`[RolesGuard] 접근 거부\n` +
 					`- 엔드포인트: ${endpoint}\n` +
-					`- 사용자: ${user.id} (space: ${spaceId ?? "없음"})\n` +
+					`- 사용자: ${user.id} (space: ${spaceSeq ?? "없음"})\n` +
 					`- 현재 역할: ${tenant.role.name}\n` +
 					`- 요구 조건: ${roles.join(", ")}`,
 			);

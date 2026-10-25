@@ -78,9 +78,9 @@ describe("mobile profile tab route", () => {
 			mobileSession.isAuthenticated = true;
 			mobileSession.isVerifying = false;
 			mobileApiScope.setSpaceInfo({
-				fitnessCenterName: "광화문 스튜디오",
-				spaceId: "space-1",
-				tenantId: "tenant-1",
+				spaceName: "광화문 스튜디오",
+				spaceId: "01JSPACE0000000000000000SA",
+				tenantId: "01JTENANT000000000000000TA",
 			});
 		});
 		jest.spyOn(mobileSession, "logout").mockResolvedValue(undefined);

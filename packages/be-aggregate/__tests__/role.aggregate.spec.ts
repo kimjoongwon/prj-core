@@ -45,24 +45,24 @@ describe("RoleAggregate", () => {
 	describe("getById", () => {
 		it("ID로 역할을 조회해야 한다", async () => {
 			// Given
-			const roleId = 101n;
+			const roleSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
 			mockRepository.findById.mockResolvedValue(mockRole as unknown as Role);
 
 			// When
-			const result = await service.getById(roleId);
+			const result = await service.getById(roleSeq);
 
 			// Then
-			expect(mockRepository.findById).toHaveBeenCalledWith(roleId);
+			expect(mockRepository.findById).toHaveBeenCalledWith(roleSeq);
 			expect(result).toEqual(mockRole);
 		});
 
 		it("역할이 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const roleId = 999n;
+			const roleSeq = "01JCCCCCCCCCCCCCCCCCCCCCCCC";
 			mockRepository.findById.mockResolvedValue(null);
 
 			// When
-			const result = await service.getById(roleId);
+			const result = await service.getById(roleSeq);
 
 			// Then
 			expect(result).toBeNull();
@@ -157,7 +157,7 @@ describe("RoleAggregate", () => {
 	describe("update", () => {
 		it("역할을 업데이트해야 한다", async () => {
 			// Given
-			const roleId = 101n;
+			const roleSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
 			const role = { ...mockRole };
 			const input = {
 				displayName: "수정된 역할",
@@ -170,10 +170,10 @@ describe("RoleAggregate", () => {
 			} as unknown as Role);
 
 			// When
-			await service.update(roleId, input as never);
+			await service.update(roleSeq, input as never);
 
 			// Then
-			expect(mockRepository.updateById).toHaveBeenCalledWith(roleId, input);
+			expect(mockRepository.updateById).toHaveBeenCalledWith(roleSeq, input);
 		});
 
 		it("존재하지 않는 역할이면 예외를 던져야 한다", async () => {
@@ -183,7 +183,7 @@ describe("RoleAggregate", () => {
 			// When / Then
 			await expect(
 				service.update(
-					999n,
+					"01JCCCCCCCCCCCCCCCCCCCCCCCC",
 					{ displayName: "없음", description: "없음" } as never,
 				),
 			).rejects.toBeInstanceOf(NotFoundException);
@@ -193,28 +193,28 @@ describe("RoleAggregate", () => {
 	describe("delete", () => {
 		it("역할을 삭제해야 한다", async () => {
 			// Given
-			const roleId = 101n;
+			const roleSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
 			const role = { ...mockRole };
 			mockRepository.findById.mockResolvedValue(role as unknown as Role);
 			mockRepository.countTenantsByRoleId.mockResolvedValue(0);
 			mockRepository.deleteById.mockResolvedValue(role as unknown as Role);
 
 			// When
-			await service.delete(roleId);
+			await service.delete(roleSeq);
 
 			// Then
-			expect(mockRepository.countTenantsByRoleId).toHaveBeenCalledWith(roleId);
-			expect(mockRepository.deleteById).toHaveBeenCalledWith(roleId);
+			expect(mockRepository.countTenantsByRoleId).toHaveBeenCalledWith(roleSeq);
+			expect(mockRepository.deleteById).toHaveBeenCalledWith(roleSeq);
 		});
 
 		it("연결된 사용자가 있으면 삭제를 막아야 한다", async () => {
 			// Given
-			const roleId = 101n;
+			const roleSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
 			mockRepository.findById.mockResolvedValue(mockRole as unknown as Role);
 			mockRepository.countTenantsByRoleId.mockResolvedValue(2);
 
 			// When / Then
-			await expect(service.delete(roleId)).rejects.toBeInstanceOf(
+			await expect(service.delete(roleSeq)).rejects.toBeInstanceOf(
 				BadRequestException,
 			);
 			expect(mockRepository.deleteById).not.toHaveBeenCalled();

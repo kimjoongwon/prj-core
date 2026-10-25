@@ -1,3 +1,3 @@
 export class ResendEmailVerificationCommand {
-	constructor(readonly emailVerificationId: bigint) {}
+	constructor(readonly emailVerificationId: string) {}
 }

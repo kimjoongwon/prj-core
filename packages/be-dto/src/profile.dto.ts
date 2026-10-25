@@ -12,7 +12,6 @@ export class ProfileDto extends EntityResponseType(Profile, {
 		"name",
 		"nickname",
 		"address",
-		"userId",
 		"user",
 	] as const,
 	relations: {

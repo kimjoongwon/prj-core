@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	CreateSpaceCommand,
 	GetSpaceFitnessCenterQuery,
@@ -72,7 +72,7 @@ export class SpacesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "spaceId",
-		description: "Space ID (canonical decimal BIGINT string)",
+		description: "Space ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -80,7 +80,7 @@ export class SpacesController {
 	@ResponseMessage("공간 시설 조회 성공")
 	@HttpCode(HttpStatus.OK)
 	async getSpaceFitnessCenter(
-		@Param("spaceId", ParseBigIntIdPipe) spaceId: bigint,
+		@Param("spaceId", ParseUlidPipe) spaceId: string,
 	): Promise<FitnessCenter> {
 		if (!this.spaceContext.canAccessSpace(spaceId)) {
 			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
@@ -120,7 +120,7 @@ export class SpacesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "spaceId",
-		description: "Space ID (canonical decimal BIGINT string)",
+		description: "Space ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -132,7 +132,7 @@ export class SpacesController {
 	@ResponseMessage("공간 시설 수정 성공")
 	@HttpCode(HttpStatus.OK)
 	async updateSpaceFitnessCenter(
-		@Param("spaceId", ParseBigIntIdPipe) spaceId: bigint,
+		@Param("spaceId", ParseUlidPipe) spaceId: string,
 		@Body() dto: UpdateFitnessCenterDto,
 	): Promise<Space> {
 		if (!this.spaceContext.canAccessSpace(spaceId)) {

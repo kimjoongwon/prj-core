@@ -6,7 +6,7 @@ export class GrantIdpAccountAccessCommand
 	readonly roleId!: GrantIdpAccountAccessCommandInput["roleId"];
 
 	constructor(
-		readonly userId: bigint,
+		readonly userId: string,
 		input: GrantIdpAccountAccessCommandInput,
 	) {
 		Object.assign(this, input);

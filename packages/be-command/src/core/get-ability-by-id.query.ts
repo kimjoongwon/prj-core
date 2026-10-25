@@ -1,3 +1,3 @@
 export class GetAbilityByIdQuery {
-	constructor(readonly abilityId: bigint) {}
+	constructor(readonly abilityId: string) {}
 }

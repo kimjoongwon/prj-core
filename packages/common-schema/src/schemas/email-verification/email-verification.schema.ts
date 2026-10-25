@@ -15,7 +15,7 @@ import { AbstractSchema } from "../abstract.schema";
 export class EmailVerificationSchema
 	extends AbstractSchema
 {
-	emailVerificationId!: string;
+	id!: string;
 
 	@StringValidation({ description: "이메일" })
 	email!: string;
@@ -32,7 +32,7 @@ export class EmailVerificationSchema
 	address!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceId!: bigint;
+	spaceSeq!: bigint;
 
 	passwordHash!: string;
 
@@ -63,5 +63,5 @@ export class EmailVerificationSchema
 		nullable: true,
 		description: "인증 완료 사용자 ID",
 	})
-	verifiedUserId!: bigint | null;
+	verifiedUserSeq!: bigint | null;
 }

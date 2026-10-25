@@ -27,89 +27,89 @@ export type AggregateSpaceAssociation = {
 }
 
 export type SpaceAssociationAvgAggregateOutputType = {
-  id: number | null
-  spaceId: number | null
-  groupId: number | null
+  seq: number | null
+  spaceSeq: number | null
+  groupSeq: number | null
 }
 
 export type SpaceAssociationSumAggregateOutputType = {
-  id: bigint | null
-  spaceId: bigint | null
-  groupId: bigint | null
+  seq: bigint | null
+  spaceSeq: bigint | null
+  groupSeq: bigint | null
 }
 
 export type SpaceAssociationMinAggregateOutputType = {
-  spaceAssociationId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  groupId: bigint | null
+  spaceSeq: bigint | null
+  groupSeq: bigint | null
 }
 
 export type SpaceAssociationMaxAggregateOutputType = {
-  spaceAssociationId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint | null
-  groupId: bigint | null
+  spaceSeq: bigint | null
+  groupSeq: bigint | null
 }
 
 export type SpaceAssociationCountAggregateOutputType = {
-  spaceAssociationId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceId: number
-  groupId: number
+  spaceSeq: number
+  groupSeq: number
   _all: number
 }
 
 
 export type SpaceAssociationAvgAggregateInputType = {
-  id?: true
-  spaceId?: true
-  groupId?: true
+  seq?: true
+  spaceSeq?: true
+  groupSeq?: true
 }
 
 export type SpaceAssociationSumAggregateInputType = {
-  id?: true
-  spaceId?: true
-  groupId?: true
+  seq?: true
+  spaceSeq?: true
+  groupSeq?: true
 }
 
 export type SpaceAssociationMinAggregateInputType = {
-  spaceAssociationId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  groupId?: true
+  spaceSeq?: true
+  groupSeq?: true
 }
 
 export type SpaceAssociationMaxAggregateInputType = {
-  spaceAssociationId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  groupId?: true
+  spaceSeq?: true
+  groupSeq?: true
 }
 
 export type SpaceAssociationCountAggregateInputType = {
-  spaceAssociationId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  groupId?: true
+  spaceSeq?: true
+  groupSeq?: true
   _all?: true
 }
 
@@ -200,13 +200,13 @@ export type SpaceAssociationGroupByArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 export type SpaceAssociationGroupByOutputType = {
-  spaceAssociationId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: bigint
-  groupId: bigint
+  spaceSeq: bigint
+  groupSeq: bigint
   _count: SpaceAssociationCountAggregateOutputType | null
   _avg: SpaceAssociationAvgAggregateOutputType | null
   _sum: SpaceAssociationSumAggregateOutputType | null
@@ -233,53 +233,53 @@ export type SpaceAssociationWhereInput = {
   AND?: Prisma.SpaceAssociationWhereInput | Prisma.SpaceAssociationWhereInput[]
   OR?: Prisma.SpaceAssociationWhereInput[]
   NOT?: Prisma.SpaceAssociationWhereInput | Prisma.SpaceAssociationWhereInput[]
-  spaceAssociationId?: Prisma.StringFilter<"SpaceAssociation"> | string
-  id?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
+  id?: Prisma.StringFilter<"SpaceAssociation"> | string
+  seq?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"SpaceAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"SpaceAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"SpaceAssociation"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
-  groupId?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
+  groupSeq?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
 }
 
 export type SpaceAssociationOrderByWithRelationInput = {
-  spaceAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
   group?: Prisma.GroupOrderByWithRelationInput
   space?: Prisma.SpaceOrderByWithRelationInput
 }
 
 export type SpaceAssociationWhereUniqueInput = Prisma.AtLeast<{
-  spaceAssociationId?: string
-  id?: bigint | number
-  spaceId_groupId?: Prisma.SpaceAssociationSpaceIdGroupIdCompoundUniqueInput
+  id?: string
+  seq?: bigint | number
+  spaceSeq_groupSeq?: Prisma.SpaceAssociationSpaceSeqGroupSeqCompoundUniqueInput
   AND?: Prisma.SpaceAssociationWhereInput | Prisma.SpaceAssociationWhereInput[]
   OR?: Prisma.SpaceAssociationWhereInput[]
   NOT?: Prisma.SpaceAssociationWhereInput | Prisma.SpaceAssociationWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"SpaceAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"SpaceAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"SpaceAssociation"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
-  groupId?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
+  groupSeq?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
   group?: Prisma.XOR<Prisma.GroupScalarRelationFilter, Prisma.GroupWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-}, "id" | "spaceAssociationId" | "spaceId_groupId">
+}, "seq" | "id" | "spaceSeq_groupSeq">
 
 export type SpaceAssociationOrderByWithAggregationInput = {
-  spaceAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
   _count?: Prisma.SpaceAssociationCountOrderByAggregateInput
   _avg?: Prisma.SpaceAssociationAvgOrderByAggregateInput
   _max?: Prisma.SpaceAssociationMaxOrderByAggregateInput
@@ -291,18 +291,18 @@ export type SpaceAssociationScalarWhereWithAggregatesInput = {
   AND?: Prisma.SpaceAssociationScalarWhereWithAggregatesInput | Prisma.SpaceAssociationScalarWhereWithAggregatesInput[]
   OR?: Prisma.SpaceAssociationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SpaceAssociationScalarWhereWithAggregatesInput | Prisma.SpaceAssociationScalarWhereWithAggregatesInput[]
-  spaceAssociationId?: Prisma.StringWithAggregatesFilter<"SpaceAssociation"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"SpaceAssociation"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"SpaceAssociation"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"SpaceAssociation"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SpaceAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SpaceAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SpaceAssociation"> | Date | string | null
-  spaceId?: Prisma.BigIntWithAggregatesFilter<"SpaceAssociation"> | bigint | number
-  groupId?: Prisma.BigIntWithAggregatesFilter<"SpaceAssociation"> | bigint | number
+  spaceSeq?: Prisma.BigIntWithAggregatesFilter<"SpaceAssociation"> | bigint | number
+  groupSeq?: Prisma.BigIntWithAggregatesFilter<"SpaceAssociation"> | bigint | number
 }
 
 export type SpaceAssociationCreateInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -311,18 +311,18 @@ export type SpaceAssociationCreateInput = {
 }
 
 export type SpaceAssociationUncheckedCreateInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  groupId: bigint | number
+  spaceSeq: bigint | number
+  groupSeq: bigint | number
 }
 
 export type SpaceAssociationUpdateInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -331,41 +331,41 @@ export type SpaceAssociationUpdateInput = {
 }
 
 export type SpaceAssociationUncheckedUpdateInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  groupId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  groupSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type SpaceAssociationCreateManyInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
-  groupId: bigint | number
+  spaceSeq: bigint | number
+  groupSeq: bigint | number
 }
 
 export type SpaceAssociationUpdateManyMutationInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SpaceAssociationUncheckedUpdateManyInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  groupId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  groupSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type SpaceAssociationListRelationFilter = {
@@ -378,51 +378,51 @@ export type SpaceAssociationOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type SpaceAssociationSpaceIdGroupIdCompoundUniqueInput = {
-  spaceId: bigint | number
-  groupId: bigint | number
+export type SpaceAssociationSpaceSeqGroupSeqCompoundUniqueInput = {
+  spaceSeq: bigint | number
+  groupSeq: bigint | number
 }
 
 export type SpaceAssociationCountOrderByAggregateInput = {
-  spaceAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type SpaceAssociationAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type SpaceAssociationMaxOrderByAggregateInput = {
-  spaceAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type SpaceAssociationMinOrderByAggregateInput = {
-  spaceAssociationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type SpaceAssociationSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  groupId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  groupSeq?: Prisma.SortOrder
 }
 
 export type SpaceAssociationCreateNestedManyWithoutGroupInput = {
@@ -510,8 +510,8 @@ export type SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput = {
 }
 
 export type SpaceAssociationCreateWithoutGroupInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -519,12 +519,12 @@ export type SpaceAssociationCreateWithoutGroupInput = {
 }
 
 export type SpaceAssociationUncheckedCreateWithoutGroupInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
+  spaceSeq: bigint | number
 }
 
 export type SpaceAssociationCreateOrConnectWithoutGroupInput = {
@@ -557,18 +557,18 @@ export type SpaceAssociationScalarWhereInput = {
   AND?: Prisma.SpaceAssociationScalarWhereInput | Prisma.SpaceAssociationScalarWhereInput[]
   OR?: Prisma.SpaceAssociationScalarWhereInput[]
   NOT?: Prisma.SpaceAssociationScalarWhereInput | Prisma.SpaceAssociationScalarWhereInput[]
-  spaceAssociationId?: Prisma.StringFilter<"SpaceAssociation"> | string
-  id?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
+  id?: Prisma.StringFilter<"SpaceAssociation"> | string
+  seq?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"SpaceAssociation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"SpaceAssociation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"SpaceAssociation"> | Date | string | null
-  spaceId?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
-  groupId?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
+  spaceSeq?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
+  groupSeq?: Prisma.BigIntFilter<"SpaceAssociation"> | bigint | number
 }
 
 export type SpaceAssociationCreateWithoutSpaceInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -576,12 +576,12 @@ export type SpaceAssociationCreateWithoutSpaceInput = {
 }
 
 export type SpaceAssociationUncheckedCreateWithoutSpaceInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  groupId: bigint | number
+  groupSeq: bigint | number
 }
 
 export type SpaceAssociationCreateOrConnectWithoutSpaceInput = {
@@ -611,17 +611,17 @@ export type SpaceAssociationUpdateManyWithWhereWithoutSpaceInput = {
 }
 
 export type SpaceAssociationCreateManyGroupInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: bigint | number
+  spaceSeq: bigint | number
 }
 
 export type SpaceAssociationUpdateWithoutGroupInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -629,35 +629,35 @@ export type SpaceAssociationUpdateWithoutGroupInput = {
 }
 
 export type SpaceAssociationUncheckedUpdateWithoutGroupInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type SpaceAssociationUncheckedUpdateManyWithoutGroupInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type SpaceAssociationCreateManySpaceInput = {
-  spaceAssociationId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  groupId: bigint | number
+  groupSeq: bigint | number
 }
 
 export type SpaceAssociationUpdateWithoutSpaceInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -665,72 +665,72 @@ export type SpaceAssociationUpdateWithoutSpaceInput = {
 }
 
 export type SpaceAssociationUncheckedUpdateWithoutSpaceInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  groupId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  groupSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type SpaceAssociationUncheckedUpdateManyWithoutSpaceInput = {
-  spaceAssociationId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  groupId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  groupSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 
 
 export type SpaceAssociationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  spaceAssociationId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  groupId?: boolean
+  spaceSeq?: boolean
+  groupSeq?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["spaceAssociation"]>
 
 export type SpaceAssociationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  spaceAssociationId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  groupId?: boolean
+  spaceSeq?: boolean
+  groupSeq?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["spaceAssociation"]>
 
 export type SpaceAssociationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  spaceAssociationId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  groupId?: boolean
+  spaceSeq?: boolean
+  groupSeq?: boolean
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["spaceAssociation"]>
 
 export type SpaceAssociationSelectScalar = {
-  spaceAssociationId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  groupId?: boolean
+  spaceSeq?: boolean
+  groupSeq?: boolean
 }
 
-export type SpaceAssociationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"spaceAssociationId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "groupId", ExtArgs["result"]["spaceAssociation"]>
+export type SpaceAssociationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "groupSeq", ExtArgs["result"]["spaceAssociation"]>
 export type SpaceAssociationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   group?: boolean | Prisma.GroupDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -751,13 +751,13 @@ export type $SpaceAssociationPayload<ExtArgs extends runtime.Types.Extensions.In
     space: Prisma.$SpacePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    spaceAssociationId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    spaceId: bigint
-    groupId: bigint
+    spaceSeq: bigint
+    groupSeq: bigint
   }, ExtArgs["result"]["spaceAssociation"]>
   composites: {}
 }
@@ -841,8 +841,8 @@ export interface SpaceAssociationDelegate<ExtArgs extends runtime.Types.Extensio
    * // Get first 10 SpaceAssociations
    * const spaceAssociations = await prisma.spaceAssociation.findMany({ take: 10 })
    *
-   * // Only select the `spaceAssociationId`
-   * const spaceAssociationWithSpaceAssociationIdOnly = await prisma.spaceAssociation.findMany({ select: { spaceAssociationId: true } })
+   * // Only select the `id`
+   * const spaceAssociationWithIdOnly = await prisma.spaceAssociation.findMany({ select: { id: true } })
    *
    */
   findMany<T extends SpaceAssociationFindManyArgs>(args?: Prisma.SelectSubset<T, SpaceAssociationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpaceAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -886,9 +886,9 @@ export interface SpaceAssociationDelegate<ExtArgs extends runtime.Types.Extensio
    *   ]
    * })
    *
-   * // Create many SpaceAssociations and only return the `spaceAssociationId`
-   * const spaceAssociationWithSpaceAssociationIdOnly = await prisma.spaceAssociation.createManyAndReturn({
-   *   select: { spaceAssociationId: true },
+   * // Create many SpaceAssociations and only return the `id`
+   * const spaceAssociationWithIdOnly = await prisma.spaceAssociation.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -977,9 +977,9 @@ export interface SpaceAssociationDelegate<ExtArgs extends runtime.Types.Extensio
    *   ]
    * })
    *
-   * // Update zero or more SpaceAssociations and only return the `spaceAssociationId`
-   * const spaceAssociationWithSpaceAssociationIdOnly = await prisma.spaceAssociation.updateManyAndReturn({
-   *   select: { spaceAssociationId: true },
+   * // Update zero or more SpaceAssociations and only return the `id`
+   * const spaceAssociationWithIdOnly = await prisma.spaceAssociation.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1183,13 +1183,13 @@ export interface Prisma__SpaceAssociationClient<T, Null = never, ExtArgs extends
  * Fields of the SpaceAssociation model
  */
 export interface SpaceAssociationFieldRefs {
-  readonly spaceAssociationId: Prisma.FieldRef<"SpaceAssociation", 'String'>
-  readonly id: Prisma.FieldRef<"SpaceAssociation", 'BigInt'>
+  readonly id: Prisma.FieldRef<"SpaceAssociation", 'String'>
+  readonly seq: Prisma.FieldRef<"SpaceAssociation", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"SpaceAssociation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SpaceAssociation", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"SpaceAssociation", 'DateTime'>
-  readonly spaceId: Prisma.FieldRef<"SpaceAssociation", 'BigInt'>
-  readonly groupId: Prisma.FieldRef<"SpaceAssociation", 'BigInt'>
+  readonly spaceSeq: Prisma.FieldRef<"SpaceAssociation", 'BigInt'>
+  readonly groupSeq: Prisma.FieldRef<"SpaceAssociation", 'BigInt'>
 }
 
 

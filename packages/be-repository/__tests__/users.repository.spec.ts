@@ -26,15 +26,15 @@ describe("UsersRepository", () => {
 		name: "Test User",
 		phone: "010-1234-5678",
 		password: "$2b$10$hashedPassword",
-		spaceId: "space-test-id",
+		spaceSeq: "space-test-id",
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
 		tenants: [
 			{
 				id: "tenant-test-id",
-				spaceId: "space-test-id",
-				roleId: "role-test-id",
+				spaceSeq: "space-test-id",
+				roleSeq: "role-test-id",
 				space: { id: "space-test-id", name: "Test Space" },
 				role: {
 					id: "role-test-id",
@@ -87,9 +87,9 @@ describe("UsersRepository", () => {
 		it("사용자·Tenant·현재 Space를 모두 조건으로 권한 그래프를 조회해야 한다", async () => {
 			const tenantData = {
 				id: "tenant-test-id",
-				userId: "user-test-id",
-				spaceId: "space-test-id",
-				roleId: "role-test-id",
+				userSeq: "user-test-id",
+				spaceSeq: "space-test-id",
+				roleSeq: "role-test-id",
 				main: true,
 				createdAt: new Date("2026-01-01"),
 				updatedAt: new Date("2026-01-01"),
@@ -116,9 +116,9 @@ describe("UsersRepository", () => {
 
 			expect(mockTxHost.tx.tenant.findFirst).toHaveBeenCalledWith({
 				where: {
-					tenantId: "tenant-test-id",
-					user: { userId: "user-test-id" },
-					space: { spaceId: "space-test-id" },
+					id: "tenant-test-id",
+					user: { id: "user-test-id" },
+					space: { id: "space-test-id" },
 					removedAt: null,
 				},
 				include: {
@@ -136,7 +136,7 @@ describe("UsersRepository", () => {
 								where: {
 									removedAt: null,
 									policy: {
-										space: { spaceId: "space-test-id" },
+										space: { id: "space-test-id" },
 										removedAt: null,
 									},
 								},
@@ -194,17 +194,17 @@ describe("UsersRepository", () => {
 
 			const result = await repository.findByIdAndSpaceIdsWithRelations(
 				"user-test-id",
-				[101n, 102n],
+				["01JEYYYYYYYYYYYYYYYYYYYYYYYY", "01JEXXXXXXXXXXXXXXXXXXXXXXXX"],
 			);
 
 			expect(mockTxHost.tx.user.findFirst).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: {
-						userId: "user-test-id",
+						userSeq: "user-test-id",
 						tenants: {
 							some: {
 								space: {
-									id: { in: [101n, 102n] },
+									id: { in: ["01JEYYYYYYYYYYYYYYYYYYYYYYYY", "01JEXXXXXXXXXXXXXXXXXXXXXXXX"] },
 								},
 								removedAt: null,
 							},
@@ -225,7 +225,7 @@ describe("UsersRepository", () => {
 
 			expect(mockTxHost.tx.user.findFirst).toHaveBeenCalledWith(
 				expect.objectContaining({
-					where: { userId: "user-test-id" },
+					where: { userSeq: "user-test-id" },
 				}),
 			);
 			expect(result).toBeInstanceOf(User);
@@ -235,15 +235,15 @@ describe("UsersRepository", () => {
 	describe("findByIdWithTenantsAndProfiles", () => {
 		it("ID로 사용자를 조회해야 한다", async () => {
 			// Given
-			const userId = 101n;
+			const userSeq = "01JUUUUUUUUUUUUUUUUUUUUUUUUU1";
 			mockTxHost.tx.user.findUnique.mockResolvedValue(mockUserData);
 
 			// When
-			const result = await repository.findByIdWithTenantsAndProfiles(userId);
+			const result = await repository.findByIdWithTenantsAndProfiles(userSeq);
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith({
-				where: { id: userId },
+				where: { id: userSeq },
 				include: expect.objectContaining({
 					tenants: expect.any(Object),
 					profiles: true,
@@ -256,15 +256,15 @@ describe("UsersRepository", () => {
 
 		it("사용자가 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const userId = 999n;
+			const userSeq = "01JUUUUUUUUUUUUUUUUUUUUUUUUU9";
 			mockTxHost.tx.user.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findByIdWithTenantsAndProfiles(userId);
+			const result = await repository.findByIdWithTenantsAndProfiles(userSeq);
 
 			// Then
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith({
-				where: { id: userId },
+				where: { id: userSeq },
 				include: expect.any(Object),
 			});
 			expect(result).toBeNull();
@@ -272,11 +272,11 @@ describe("UsersRepository", () => {
 
 		it("Tenant와 Profile 정보를 포함해야 한다", async () => {
 			// Given
-			const userId = 101n;
+			const userSeq = "01JUUUUUUUUUUUUUUUUUUUUUUUUU1";
 			mockTxHost.tx.user.findUnique.mockResolvedValue(mockUserData);
 
 			// When
-			const result = await repository.findByIdWithTenantsAndProfiles(userId);
+			const result = await repository.findByIdWithTenantsAndProfiles(userSeq);
 
 			// Then
 			expect(result?.tenants).toBeDefined();
@@ -284,10 +284,10 @@ describe("UsersRepository", () => {
 		});
 
 		it("Tenant의 Space에 FitnessCenter와 Company include를 사용해야 한다", async () => {
-			const userId = 101n;
+			const userSeq = "01JUUUUUUUUUUUUUUUUUUUUUUUUU1";
 			mockTxHost.tx.user.findUnique.mockResolvedValue(mockUserData);
 
-			await repository.findByIdWithTenantsAndProfiles(userId);
+			await repository.findByIdWithTenantsAndProfiles(userSeq);
 
 			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith(
 				expect.objectContaining({
@@ -382,14 +382,14 @@ describe("UsersRepository", () => {
 				orderBy: [{ createdAt: "desc" }],
 				skip: 0,
 				take: 20,
-				spaceIds: [1n],
+				spaceIds: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"],
 			});
 
 			const expectedWhere = {
 				removedAt: null,
 				tenants: {
 					some: {
-						space: { id: { in: [1n] } },
+						space: { id: { in: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"] } },
 						removedAt: null,
 					},
 				},
@@ -401,7 +401,7 @@ describe("UsersRepository", () => {
 					tenants: expect.objectContaining({
 						where: {
 							removedAt: null,
-							space: { id: { in: [1n] } },
+							space: { id: { in: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"] } },
 						},
 						include: {
 							role: true,
@@ -437,7 +437,7 @@ describe("UsersRepository", () => {
 				orderBy: [{ createdAt: "desc" }],
 				skip: 0,
 				take: 20,
-				spaceIds: [1n],
+				spaceIds: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"],
 				includedRoleNames: ["MANAGER"],
 			});
 
@@ -448,7 +448,7 @@ describe("UsersRepository", () => {
 						role: {
 							name: { in: ["MANAGER"] },
 						},
-						space: { id: { in: [1n] } },
+						space: { id: { in: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"] } },
 						removedAt: null,
 					},
 				},
@@ -478,7 +478,7 @@ describe("UsersRepository", () => {
 					skip: 10,
 					take: 5,
 				},
-				spaceIds: [1n],
+				spaceIds: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"],
 			});
 
 			expect(mockTxHost.tx.user.findMany).toHaveBeenCalledWith(
@@ -496,7 +496,7 @@ describe("UsersRepository", () => {
 						],
 						tenants: {
 							some: {
-								space: { id: { in: [1n] } },
+								space: { id: { in: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"] } },
 								removedAt: null,
 							},
 						},
@@ -539,19 +539,19 @@ describe("UsersRepository", () => {
 			});
 
 			const result = await repository.updateIdpAccountById({
-				userId: 101n,
+				userId: "01JUUUUUUUUUUUUUUUUUUUUUUUUU1",
 				data: { isActive: false },
-				spaceIds: [1n],
+				spaceIds: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"],
 			});
 
 			expect(mockTxHost.tx.user.findFirst).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: {
-						id: 101n,
+						id: "01JUUUUUUUUUUUUUUUUUUUUUUUUU1",
 						removedAt: null,
 						tenants: {
 							some: {
-								space: { id: { in: [1n] } },
+								space: { id: { in: ["01JSSSSSSSSSSSSSSSSSSSSSSSSS1"] } },
 								removedAt: null,
 							},
 						},
@@ -560,7 +560,7 @@ describe("UsersRepository", () => {
 			);
 			expect(mockTxHost.tx.user.update).toHaveBeenCalledWith(
 				expect.objectContaining({
-					where: { id: 101n },
+					where: { id: "01JUUUUUUUUUUUUUUUUUUUUUUUUU1" },
 					data: { status: { upsert: { create: { isActive: false }, update: { isActive: false } } } },
 				}),
 			);

@@ -27,9 +27,7 @@ export function resolveUsableIdTokenHint(
 
 	let payload: { iss?: unknown; aud?: unknown; exp?: unknown };
 	try {
-		payload = JSON.parse(
-			Buffer.from(parts[1], "base64url").toString("utf-8"),
-		);
+		payload = JSON.parse(Buffer.from(parts[1], "base64url").toString("utf-8"));
 	} catch {
 		return null;
 	}

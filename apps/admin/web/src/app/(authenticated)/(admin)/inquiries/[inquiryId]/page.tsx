@@ -21,7 +21,6 @@ import {
 	type FormOptionItem,
 	type InquiryMessage,
 	type InquiryParticipant,
-	requireDecimalId,
 } from "@cocrepo/type";
 import {
 	InquiryEditScreen,
@@ -62,11 +61,8 @@ const normalizeFormOptions = (
 
 const mapMessageToStore = (message: InquiryMessageDto): InquiryMessage => {
 	return {
-		id: message.id.toString(),
-		threadId: message.threadId.toString(),
-		inquiryId: message.inquiryId.toString(),
+		id: message.id,
 		senderType: message.senderType,
-		senderId: message.senderId?.toString() ?? null,
 		content: message.content,
 		contentType: message.contentType,
 		isEdited: message.isEdited,
@@ -79,10 +75,7 @@ const mapMessageToStore = (message: InquiryMessageDto): InquiryMessage => {
 };
 
 export default observer(function InquiryReadOnlyRoute() {
-	const inquiryId = requireDecimalId(
-		useParams<{ inquiryId: string }>().inquiryId,
-		"inquiryId",
-	);
+	const inquiryId = useParams<{ inquiryId: string }>().inquiryId;
 	const router = useRouter();
 	const inquiryState = useLocalObservable(() => ({
 		currentInquiryId: null as string | null,
@@ -286,15 +279,17 @@ export default observer(function InquiryReadOnlyRoute() {
 			inquiry={
 				inquiry
 					? {
-							id: inquiry.id.toString(),
+							id: inquiry.id,
 							inquiryNumber: inquiry.inquiryNumber,
 							title: inquiry.title,
 							channel: inquiry.channel,
 							status: inquiry.status,
 							priority: inquiry.priority,
 							category: inquiry.category,
-							assigneeId: inquiry.assigneeId?.toString() ?? null,
-							customerId: inquiry.customerId?.toString() ?? null,
+							// InquiryDetailDto가 assigneeId/customerId 공개 id를 더 이상
+							// 노출하지 않아 미지정 상태(null)로 전달한다.
+							assigneeId: null,
+							customerId: null,
 							createdAt: inquiry.createdAt.toISOString(),
 							firstResponseAt: inquiry.firstResponseAt?.toISOString() ?? null,
 							resolvedAt: inquiry.resolvedAt?.toISOString() ?? null,

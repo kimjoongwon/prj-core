@@ -17,9 +17,6 @@
 import type { LanguageCode } from "./languageCode";
 
 export interface UpdateFitnessCenterDto {
-	name?: string;
-	/** @nullable */
-	label?: string | null;
 	address?: string;
 	phone?: string;
 	email?: string;
@@ -28,5 +25,9 @@ export interface UpdateFitnessCenterDto {
 	 * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
 	 */
 	imageFileId?: string | null;
+	/** @nullable */
+	name?: string | null;
+	/** @nullable */
+	label?: string | null;
 	contentLanguageCode?: LanguageCode;
 }

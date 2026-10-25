@@ -11,8 +11,6 @@ export class RoleClassificationDto extends EntityResponseType(
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"roleId",
-			"categoryId",
 			"category",
 			"role",
 		] as const,

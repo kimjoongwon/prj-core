@@ -1,14 +1,18 @@
-import { StringField, StringFieldOptional } from "@cocrepo/decorator/field";
-import { Reservation } from "@cocrepo/entity";
-import { PickType } from "@nestjs/swagger";
+import { StringFieldOptional, ULIDField } from "@cocrepo/decorator/field";
 
-export class CreateReservationDto extends PickType(Reservation, [
-	"timelineId",
-	"sessionId",
-	"programId",
-	"occurrenceStartAt",
-] as const) {
-	@StringField({
+export class CreateReservationDto {
+	@ULIDField({ description: "타임라인 공개 ID (ULID)" })
+	timelineId!: string;
+
+	@ULIDField({ description: "세션 공개 ID (ULID)" })
+	sessionId!: string;
+
+	@ULIDField({ description: "프로그램 공개 ID (ULID)" })
+	programId!: string;
+
+	@ULIDField({ description: "예약 시작 시각 (ISO 8601)" })
+	occurrenceStartAt!: Date;
+	@ULIDField({
 		description: "멱등성 키",
 		minLength: 8,
 		maxLength: 120,

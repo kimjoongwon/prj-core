@@ -27,29 +27,29 @@ export type AggregateInquiryParticipant = {
 }
 
 export type InquiryParticipantAvgAggregateOutputType = {
-  id: number | null
-  inquiryId: number | null
-  threadId: number | null
-  userId: number | null
+  seq: number | null
+  inquirySeq: number | null
+  threadSeq: number | null
+  userSeq: number | null
   unreadCount: number | null
 }
 
 export type InquiryParticipantSumAggregateOutputType = {
-  id: bigint | null
-  inquiryId: bigint | null
-  threadId: bigint | null
-  userId: bigint | null
+  seq: bigint | null
+  inquirySeq: bigint | null
+  threadSeq: bigint | null
+  userSeq: bigint | null
   unreadCount: number | null
 }
 
 export type InquiryParticipantMinAggregateOutputType = {
-  inquiryParticipantId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   joinedAt: Date | null
   leftAt: Date | null
-  inquiryId: bigint | null
-  threadId: bigint | null
-  userId: bigint | null
+  inquirySeq: bigint | null
+  threadSeq: bigint | null
+  userSeq: bigint | null
   role: $Enums.InquiryParticipantRole | null
   isOnline: boolean | null
   isTyping: boolean | null
@@ -59,13 +59,13 @@ export type InquiryParticipantMinAggregateOutputType = {
 }
 
 export type InquiryParticipantMaxAggregateOutputType = {
-  inquiryParticipantId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   joinedAt: Date | null
   leftAt: Date | null
-  inquiryId: bigint | null
-  threadId: bigint | null
-  userId: bigint | null
+  inquirySeq: bigint | null
+  threadSeq: bigint | null
+  userSeq: bigint | null
   role: $Enums.InquiryParticipantRole | null
   isOnline: boolean | null
   isTyping: boolean | null
@@ -75,13 +75,13 @@ export type InquiryParticipantMaxAggregateOutputType = {
 }
 
 export type InquiryParticipantCountAggregateOutputType = {
-  inquiryParticipantId: number
   id: number
+  seq: number
   joinedAt: number
   leftAt: number
-  inquiryId: number
-  threadId: number
-  userId: number
+  inquirySeq: number
+  threadSeq: number
+  userSeq: number
   role: number
   isOnline: number
   isTyping: number
@@ -93,29 +93,29 @@ export type InquiryParticipantCountAggregateOutputType = {
 
 
 export type InquiryParticipantAvgAggregateInputType = {
-  id?: true
-  inquiryId?: true
-  threadId?: true
-  userId?: true
+  seq?: true
+  inquirySeq?: true
+  threadSeq?: true
+  userSeq?: true
   unreadCount?: true
 }
 
 export type InquiryParticipantSumAggregateInputType = {
-  id?: true
-  inquiryId?: true
-  threadId?: true
-  userId?: true
+  seq?: true
+  inquirySeq?: true
+  threadSeq?: true
+  userSeq?: true
   unreadCount?: true
 }
 
 export type InquiryParticipantMinAggregateInputType = {
-  inquiryParticipantId?: true
   id?: true
+  seq?: true
   joinedAt?: true
   leftAt?: true
-  inquiryId?: true
-  threadId?: true
-  userId?: true
+  inquirySeq?: true
+  threadSeq?: true
+  userSeq?: true
   role?: true
   isOnline?: true
   isTyping?: true
@@ -125,13 +125,13 @@ export type InquiryParticipantMinAggregateInputType = {
 }
 
 export type InquiryParticipantMaxAggregateInputType = {
-  inquiryParticipantId?: true
   id?: true
+  seq?: true
   joinedAt?: true
   leftAt?: true
-  inquiryId?: true
-  threadId?: true
-  userId?: true
+  inquirySeq?: true
+  threadSeq?: true
+  userSeq?: true
   role?: true
   isOnline?: true
   isTyping?: true
@@ -141,13 +141,13 @@ export type InquiryParticipantMaxAggregateInputType = {
 }
 
 export type InquiryParticipantCountAggregateInputType = {
-  inquiryParticipantId?: true
   id?: true
+  seq?: true
   joinedAt?: true
   leftAt?: true
-  inquiryId?: true
-  threadId?: true
-  userId?: true
+  inquirySeq?: true
+  threadSeq?: true
+  userSeq?: true
   role?: true
   isOnline?: true
   isTyping?: true
@@ -244,13 +244,13 @@ export type InquiryParticipantGroupByArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 export type InquiryParticipantGroupByOutputType = {
-  inquiryParticipantId: string
-  id: bigint
+  id: string
+  seq: bigint
   joinedAt: Date
   leftAt: Date | null
-  inquiryId: bigint
-  threadId: bigint | null
-  userId: bigint
+  inquirySeq: bigint
+  threadSeq: bigint | null
+  userSeq: bigint
   role: $Enums.InquiryParticipantRole
   isOnline: boolean
   isTyping: boolean
@@ -283,13 +283,13 @@ export type InquiryParticipantWhereInput = {
   AND?: Prisma.InquiryParticipantWhereInput | Prisma.InquiryParticipantWhereInput[]
   OR?: Prisma.InquiryParticipantWhereInput[]
   NOT?: Prisma.InquiryParticipantWhereInput | Prisma.InquiryParticipantWhereInput[]
-  inquiryParticipantId?: Prisma.StringFilter<"InquiryParticipant"> | string
-  id?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
+  id?: Prisma.StringFilter<"InquiryParticipant"> | string
+  seq?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
   joinedAt?: Prisma.DateTimeFilter<"InquiryParticipant"> | Date | string
   leftAt?: Prisma.DateTimeNullableFilter<"InquiryParticipant"> | Date | string | null
-  inquiryId?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
-  threadId?: Prisma.BigIntNullableFilter<"InquiryParticipant"> | bigint | number | null
-  userId?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
+  inquirySeq?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
+  threadSeq?: Prisma.BigIntNullableFilter<"InquiryParticipant"> | bigint | number | null
+  userSeq?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFilter<"InquiryParticipant"> | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFilter<"InquiryParticipant"> | boolean
   isTyping?: Prisma.BoolFilter<"InquiryParticipant"> | boolean
@@ -302,13 +302,13 @@ export type InquiryParticipantWhereInput = {
 }
 
 export type InquiryParticipantOrderByWithRelationInput = {
-  inquiryParticipantId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   leftAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  threadId?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  threadSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   isTyping?: Prisma.SortOrder
@@ -321,17 +321,17 @@ export type InquiryParticipantOrderByWithRelationInput = {
 }
 
 export type InquiryParticipantWhereUniqueInput = Prisma.AtLeast<{
-  inquiryParticipantId?: string
-  id?: bigint | number
-  inquiryId_threadId_userId?: Prisma.InquiryParticipantInquiryIdThreadIdUserIdCompoundUniqueInput
+  id?: string
+  seq?: bigint | number
+  inquirySeq_threadSeq_userSeq?: Prisma.InquiryParticipantInquirySeqThreadSeqUserSeqCompoundUniqueInput
   AND?: Prisma.InquiryParticipantWhereInput | Prisma.InquiryParticipantWhereInput[]
   OR?: Prisma.InquiryParticipantWhereInput[]
   NOT?: Prisma.InquiryParticipantWhereInput | Prisma.InquiryParticipantWhereInput[]
   joinedAt?: Prisma.DateTimeFilter<"InquiryParticipant"> | Date | string
   leftAt?: Prisma.DateTimeNullableFilter<"InquiryParticipant"> | Date | string | null
-  inquiryId?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
-  threadId?: Prisma.BigIntNullableFilter<"InquiryParticipant"> | bigint | number | null
-  userId?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
+  inquirySeq?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
+  threadSeq?: Prisma.BigIntNullableFilter<"InquiryParticipant"> | bigint | number | null
+  userSeq?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFilter<"InquiryParticipant"> | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFilter<"InquiryParticipant"> | boolean
   isTyping?: Prisma.BoolFilter<"InquiryParticipant"> | boolean
@@ -341,16 +341,16 @@ export type InquiryParticipantWhereUniqueInput = Prisma.AtLeast<{
   inquiry?: Prisma.XOR<Prisma.InquiryScalarRelationFilter, Prisma.InquiryWhereInput>
   thread?: Prisma.XOR<Prisma.InquiryThreadNullableScalarRelationFilter, Prisma.InquiryThreadWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "inquiryParticipantId" | "inquiryId_threadId_userId">
+}, "seq" | "id" | "inquirySeq_threadSeq_userSeq">
 
 export type InquiryParticipantOrderByWithAggregationInput = {
-  inquiryParticipantId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   leftAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  threadId?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  threadSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   isTyping?: Prisma.SortOrder
@@ -368,13 +368,13 @@ export type InquiryParticipantScalarWhereWithAggregatesInput = {
   AND?: Prisma.InquiryParticipantScalarWhereWithAggregatesInput | Prisma.InquiryParticipantScalarWhereWithAggregatesInput[]
   OR?: Prisma.InquiryParticipantScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InquiryParticipantScalarWhereWithAggregatesInput | Prisma.InquiryParticipantScalarWhereWithAggregatesInput[]
-  inquiryParticipantId?: Prisma.StringWithAggregatesFilter<"InquiryParticipant"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"InquiryParticipant"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"InquiryParticipant"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"InquiryParticipant"> | bigint | number
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"InquiryParticipant"> | Date | string
   leftAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InquiryParticipant"> | Date | string | null
-  inquiryId?: Prisma.BigIntWithAggregatesFilter<"InquiryParticipant"> | bigint | number
-  threadId?: Prisma.BigIntNullableWithAggregatesFilter<"InquiryParticipant"> | bigint | number | null
-  userId?: Prisma.BigIntWithAggregatesFilter<"InquiryParticipant"> | bigint | number
+  inquirySeq?: Prisma.BigIntWithAggregatesFilter<"InquiryParticipant"> | bigint | number
+  threadSeq?: Prisma.BigIntNullableWithAggregatesFilter<"InquiryParticipant"> | bigint | number | null
+  userSeq?: Prisma.BigIntWithAggregatesFilter<"InquiryParticipant"> | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleWithAggregatesFilter<"InquiryParticipant"> | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolWithAggregatesFilter<"InquiryParticipant"> | boolean
   isTyping?: Prisma.BoolWithAggregatesFilter<"InquiryParticipant"> | boolean
@@ -384,8 +384,8 @@ export type InquiryParticipantScalarWhereWithAggregatesInput = {
 }
 
 export type InquiryParticipantCreateInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
   role?: $Enums.InquiryParticipantRole
@@ -400,13 +400,13 @@ export type InquiryParticipantCreateInput = {
 }
 
 export type InquiryParticipantUncheckedCreateInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  inquiryId: bigint | number
-  threadId?: bigint | number | null
-  userId: bigint | number
+  inquirySeq: bigint | number
+  threadSeq?: bigint | number | null
+  userSeq: bigint | number
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -416,8 +416,8 @@ export type InquiryParticipantUncheckedCreateInput = {
 }
 
 export type InquiryParticipantUpdateInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
@@ -432,13 +432,13 @@ export type InquiryParticipantUpdateInput = {
 }
 
 export type InquiryParticipantUncheckedUpdateInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  threadId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  threadSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -448,13 +448,13 @@ export type InquiryParticipantUncheckedUpdateInput = {
 }
 
 export type InquiryParticipantCreateManyInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  inquiryId: bigint | number
-  threadId?: bigint | number | null
-  userId: bigint | number
+  inquirySeq: bigint | number
+  threadSeq?: bigint | number | null
+  userSeq: bigint | number
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -464,8 +464,8 @@ export type InquiryParticipantCreateManyInput = {
 }
 
 export type InquiryParticipantUpdateManyMutationInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
@@ -477,13 +477,13 @@ export type InquiryParticipantUpdateManyMutationInput = {
 }
 
 export type InquiryParticipantUncheckedUpdateManyInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  threadId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  threadSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -492,20 +492,20 @@ export type InquiryParticipantUncheckedUpdateManyInput = {
   unreadCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type InquiryParticipantInquiryIdThreadIdUserIdCompoundUniqueInput = {
-  inquiryId: bigint | number
-  threadId: bigint | number
-  userId: bigint | number
+export type InquiryParticipantInquirySeqThreadSeqUserSeqCompoundUniqueInput = {
+  inquirySeq: bigint | number
+  threadSeq: bigint | number
+  userSeq: bigint | number
 }
 
 export type InquiryParticipantCountOrderByAggregateInput = {
-  inquiryParticipantId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   leftAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  threadId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  threadSeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   isTyping?: Prisma.SortOrder
@@ -515,21 +515,21 @@ export type InquiryParticipantCountOrderByAggregateInput = {
 }
 
 export type InquiryParticipantAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  threadId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  threadSeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   unreadCount?: Prisma.SortOrder
 }
 
 export type InquiryParticipantMaxOrderByAggregateInput = {
-  inquiryParticipantId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   leftAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  threadId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  threadSeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   isTyping?: Prisma.SortOrder
@@ -539,13 +539,13 @@ export type InquiryParticipantMaxOrderByAggregateInput = {
 }
 
 export type InquiryParticipantMinOrderByAggregateInput = {
-  inquiryParticipantId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   leftAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  threadId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  threadSeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   isTyping?: Prisma.SortOrder
@@ -555,10 +555,10 @@ export type InquiryParticipantMinOrderByAggregateInput = {
 }
 
 export type InquiryParticipantSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  threadId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  threadSeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   unreadCount?: Prisma.SortOrder
 }
 
@@ -703,8 +703,8 @@ export type InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type InquiryParticipantCreateWithoutThreadInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
   role?: $Enums.InquiryParticipantRole
@@ -718,12 +718,12 @@ export type InquiryParticipantCreateWithoutThreadInput = {
 }
 
 export type InquiryParticipantUncheckedCreateWithoutThreadInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  inquiryId: bigint | number
-  userId: bigint | number
+  inquirySeq: bigint | number
+  userSeq: bigint | number
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -762,13 +762,13 @@ export type InquiryParticipantScalarWhereInput = {
   AND?: Prisma.InquiryParticipantScalarWhereInput | Prisma.InquiryParticipantScalarWhereInput[]
   OR?: Prisma.InquiryParticipantScalarWhereInput[]
   NOT?: Prisma.InquiryParticipantScalarWhereInput | Prisma.InquiryParticipantScalarWhereInput[]
-  inquiryParticipantId?: Prisma.StringFilter<"InquiryParticipant"> | string
-  id?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
+  id?: Prisma.StringFilter<"InquiryParticipant"> | string
+  seq?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
   joinedAt?: Prisma.DateTimeFilter<"InquiryParticipant"> | Date | string
   leftAt?: Prisma.DateTimeNullableFilter<"InquiryParticipant"> | Date | string | null
-  inquiryId?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
-  threadId?: Prisma.BigIntNullableFilter<"InquiryParticipant"> | bigint | number | null
-  userId?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
+  inquirySeq?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
+  threadSeq?: Prisma.BigIntNullableFilter<"InquiryParticipant"> | bigint | number | null
+  userSeq?: Prisma.BigIntFilter<"InquiryParticipant"> | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFilter<"InquiryParticipant"> | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFilter<"InquiryParticipant"> | boolean
   isTyping?: Prisma.BoolFilter<"InquiryParticipant"> | boolean
@@ -778,8 +778,8 @@ export type InquiryParticipantScalarWhereInput = {
 }
 
 export type InquiryParticipantCreateWithoutInquiryInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
   role?: $Enums.InquiryParticipantRole
@@ -793,12 +793,12 @@ export type InquiryParticipantCreateWithoutInquiryInput = {
 }
 
 export type InquiryParticipantUncheckedCreateWithoutInquiryInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  threadId?: bigint | number | null
-  userId: bigint | number
+  threadSeq?: bigint | number | null
+  userSeq: bigint | number
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -834,8 +834,8 @@ export type InquiryParticipantUpdateManyWithWhereWithoutInquiryInput = {
 }
 
 export type InquiryParticipantCreateWithoutUserInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
   role?: $Enums.InquiryParticipantRole
@@ -849,12 +849,12 @@ export type InquiryParticipantCreateWithoutUserInput = {
 }
 
 export type InquiryParticipantUncheckedCreateWithoutUserInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  inquiryId: bigint | number
-  threadId?: bigint | number | null
+  inquirySeq: bigint | number
+  threadSeq?: bigint | number | null
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -890,12 +890,12 @@ export type InquiryParticipantUpdateManyWithWhereWithoutUserInput = {
 }
 
 export type InquiryParticipantCreateManyThreadInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  inquiryId: bigint | number
-  userId: bigint | number
+  inquirySeq: bigint | number
+  userSeq: bigint | number
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -905,8 +905,8 @@ export type InquiryParticipantCreateManyThreadInput = {
 }
 
 export type InquiryParticipantUpdateWithoutThreadInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
@@ -920,12 +920,12 @@ export type InquiryParticipantUpdateWithoutThreadInput = {
 }
 
 export type InquiryParticipantUncheckedUpdateWithoutThreadInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -935,12 +935,12 @@ export type InquiryParticipantUncheckedUpdateWithoutThreadInput = {
 }
 
 export type InquiryParticipantUncheckedUpdateManyWithoutThreadInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -950,12 +950,12 @@ export type InquiryParticipantUncheckedUpdateManyWithoutThreadInput = {
 }
 
 export type InquiryParticipantCreateManyInquiryInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  threadId?: bigint | number | null
-  userId: bigint | number
+  threadSeq?: bigint | number | null
+  userSeq: bigint | number
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -965,8 +965,8 @@ export type InquiryParticipantCreateManyInquiryInput = {
 }
 
 export type InquiryParticipantUpdateWithoutInquiryInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
@@ -980,12 +980,12 @@ export type InquiryParticipantUpdateWithoutInquiryInput = {
 }
 
 export type InquiryParticipantUncheckedUpdateWithoutInquiryInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  threadId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  threadSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -995,12 +995,12 @@ export type InquiryParticipantUncheckedUpdateWithoutInquiryInput = {
 }
 
 export type InquiryParticipantUncheckedUpdateManyWithoutInquiryInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  threadId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  threadSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1010,12 +1010,12 @@ export type InquiryParticipantUncheckedUpdateManyWithoutInquiryInput = {
 }
 
 export type InquiryParticipantCreateManyUserInput = {
-  inquiryParticipantId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   joinedAt?: Date | string
   leftAt?: Date | string | null
-  inquiryId: bigint | number
-  threadId?: bigint | number | null
+  inquirySeq: bigint | number
+  threadSeq?: bigint | number | null
   role?: $Enums.InquiryParticipantRole
   isOnline?: boolean
   isTyping?: boolean
@@ -1025,8 +1025,8 @@ export type InquiryParticipantCreateManyUserInput = {
 }
 
 export type InquiryParticipantUpdateWithoutUserInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
@@ -1040,12 +1040,12 @@ export type InquiryParticipantUpdateWithoutUserInput = {
 }
 
 export type InquiryParticipantUncheckedUpdateWithoutUserInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  threadId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  threadSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1055,12 +1055,12 @@ export type InquiryParticipantUncheckedUpdateWithoutUserInput = {
 }
 
 export type InquiryParticipantUncheckedUpdateManyWithoutUserInput = {
-  inquiryParticipantId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  threadId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  inquirySeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  threadSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   role?: Prisma.EnumInquiryParticipantRoleFieldUpdateOperationsInput | $Enums.InquiryParticipantRole
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTyping?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1072,13 +1072,13 @@ export type InquiryParticipantUncheckedUpdateManyWithoutUserInput = {
 
 
 export type InquiryParticipantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  inquiryParticipantId?: boolean
   id?: boolean
+  seq?: boolean
   joinedAt?: boolean
   leftAt?: boolean
-  inquiryId?: boolean
-  threadId?: boolean
-  userId?: boolean
+  inquirySeq?: boolean
+  threadSeq?: boolean
+  userSeq?: boolean
   role?: boolean
   isOnline?: boolean
   isTyping?: boolean
@@ -1091,13 +1091,13 @@ export type InquiryParticipantSelect<ExtArgs extends runtime.Types.Extensions.In
 }, ExtArgs["result"]["inquiryParticipant"]>
 
 export type InquiryParticipantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  inquiryParticipantId?: boolean
   id?: boolean
+  seq?: boolean
   joinedAt?: boolean
   leftAt?: boolean
-  inquiryId?: boolean
-  threadId?: boolean
-  userId?: boolean
+  inquirySeq?: boolean
+  threadSeq?: boolean
+  userSeq?: boolean
   role?: boolean
   isOnline?: boolean
   isTyping?: boolean
@@ -1110,13 +1110,13 @@ export type InquiryParticipantSelectCreateManyAndReturn<ExtArgs extends runtime.
 }, ExtArgs["result"]["inquiryParticipant"]>
 
 export type InquiryParticipantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  inquiryParticipantId?: boolean
   id?: boolean
+  seq?: boolean
   joinedAt?: boolean
   leftAt?: boolean
-  inquiryId?: boolean
-  threadId?: boolean
-  userId?: boolean
+  inquirySeq?: boolean
+  threadSeq?: boolean
+  userSeq?: boolean
   role?: boolean
   isOnline?: boolean
   isTyping?: boolean
@@ -1129,13 +1129,13 @@ export type InquiryParticipantSelectUpdateManyAndReturn<ExtArgs extends runtime.
 }, ExtArgs["result"]["inquiryParticipant"]>
 
 export type InquiryParticipantSelectScalar = {
-  inquiryParticipantId?: boolean
   id?: boolean
+  seq?: boolean
   joinedAt?: boolean
   leftAt?: boolean
-  inquiryId?: boolean
-  threadId?: boolean
-  userId?: boolean
+  inquirySeq?: boolean
+  threadSeq?: boolean
+  userSeq?: boolean
   role?: boolean
   isOnline?: boolean
   isTyping?: boolean
@@ -1144,7 +1144,7 @@ export type InquiryParticipantSelectScalar = {
   unreadCount?: boolean
 }
 
-export type InquiryParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"inquiryParticipantId" | "id" | "joinedAt" | "leftAt" | "inquiryId" | "threadId" | "userId" | "role" | "isOnline" | "isTyping" | "lastSeenAt" | "lastReadAt" | "unreadCount", ExtArgs["result"]["inquiryParticipant"]>
+export type InquiryParticipantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "joinedAt" | "leftAt" | "inquirySeq" | "threadSeq" | "userSeq" | "role" | "isOnline" | "isTyping" | "lastSeenAt" | "lastReadAt" | "unreadCount", ExtArgs["result"]["inquiryParticipant"]>
 export type InquiryParticipantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>
   thread?: boolean | Prisma.InquiryParticipant$threadArgs<ExtArgs>
@@ -1169,8 +1169,8 @@ export type $InquiryParticipantPayload<ExtArgs extends runtime.Types.Extensions.
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    inquiryParticipantId: string
-    id: bigint
+    id: string
+    seq: bigint
     /**
      * @displayName 참여 일시
      */
@@ -1182,15 +1182,15 @@ export type $InquiryParticipantPayload<ExtArgs extends runtime.Types.Extensions.
     /**
      * @displayName 소속 문의 내부 순번
      */
-    inquiryId: bigint
+    inquirySeq: bigint
     /**
      * @displayName 소속 스레드 내부 순번
      */
-    threadId: bigint | null
+    threadSeq: bigint | null
     /**
      * @displayName 참여자 내부 순번
      */
-    userId: bigint
+    userSeq: bigint
     /**
      * @displayName 역할
      */
@@ -1298,8 +1298,8 @@ export interface InquiryParticipantDelegate<ExtArgs extends runtime.Types.Extens
    * // Get first 10 InquiryParticipants
    * const inquiryParticipants = await prisma.inquiryParticipant.findMany({ take: 10 })
    *
-   * // Only select the `inquiryParticipantId`
-   * const inquiryParticipantWithInquiryParticipantIdOnly = await prisma.inquiryParticipant.findMany({ select: { inquiryParticipantId: true } })
+   * // Only select the `id`
+   * const inquiryParticipantWithIdOnly = await prisma.inquiryParticipant.findMany({ select: { id: true } })
    *
    */
   findMany<T extends InquiryParticipantFindManyArgs>(args?: Prisma.SelectSubset<T, InquiryParticipantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1343,9 +1343,9 @@ export interface InquiryParticipantDelegate<ExtArgs extends runtime.Types.Extens
    *   ]
    * })
    *
-   * // Create many InquiryParticipants and only return the `inquiryParticipantId`
-   * const inquiryParticipantWithInquiryParticipantIdOnly = await prisma.inquiryParticipant.createManyAndReturn({
-   *   select: { inquiryParticipantId: true },
+   * // Create many InquiryParticipants and only return the `id`
+   * const inquiryParticipantWithIdOnly = await prisma.inquiryParticipant.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1434,9 +1434,9 @@ export interface InquiryParticipantDelegate<ExtArgs extends runtime.Types.Extens
    *   ]
    * })
    *
-   * // Update zero or more InquiryParticipants and only return the `inquiryParticipantId`
-   * const inquiryParticipantWithInquiryParticipantIdOnly = await prisma.inquiryParticipant.updateManyAndReturn({
-   *   select: { inquiryParticipantId: true },
+   * // Update zero or more InquiryParticipants and only return the `id`
+   * const inquiryParticipantWithIdOnly = await prisma.inquiryParticipant.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1641,13 +1641,13 @@ export interface Prisma__InquiryParticipantClient<T, Null = never, ExtArgs exten
  * Fields of the InquiryParticipant model
  */
 export interface InquiryParticipantFieldRefs {
-  readonly inquiryParticipantId: Prisma.FieldRef<"InquiryParticipant", 'String'>
-  readonly id: Prisma.FieldRef<"InquiryParticipant", 'BigInt'>
+  readonly id: Prisma.FieldRef<"InquiryParticipant", 'String'>
+  readonly seq: Prisma.FieldRef<"InquiryParticipant", 'BigInt'>
   readonly joinedAt: Prisma.FieldRef<"InquiryParticipant", 'DateTime'>
   readonly leftAt: Prisma.FieldRef<"InquiryParticipant", 'DateTime'>
-  readonly inquiryId: Prisma.FieldRef<"InquiryParticipant", 'BigInt'>
-  readonly threadId: Prisma.FieldRef<"InquiryParticipant", 'BigInt'>
-  readonly userId: Prisma.FieldRef<"InquiryParticipant", 'BigInt'>
+  readonly inquirySeq: Prisma.FieldRef<"InquiryParticipant", 'BigInt'>
+  readonly threadSeq: Prisma.FieldRef<"InquiryParticipant", 'BigInt'>
+  readonly userSeq: Prisma.FieldRef<"InquiryParticipant", 'BigInt'>
   readonly role: Prisma.FieldRef<"InquiryParticipant", 'InquiryParticipantRole'>
   readonly isOnline: Prisma.FieldRef<"InquiryParticipant", 'Boolean'>
   readonly isTyping: Prisma.FieldRef<"InquiryParticipant", 'Boolean'>

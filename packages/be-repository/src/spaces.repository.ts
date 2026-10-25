@@ -1,9 +1,5 @@
 import { Company, FitnessCenter, Space } from "@cocrepo/entity";
-import {
-	LanguageCode,
-	Prisma,
-	PrismaClient,
-} from "@cocrepo/prisma";
+import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { SpaceResourceScope } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
@@ -45,7 +41,7 @@ export class SpacesRepository {
 		}
 
 		const fitnessCenter = this.toFitnessCenterWithCompany(centerRecord);
-		fitnessCenter.spaceId = space.id;
+		fitnessCenter.spaceSeq = space.seq;
 		fitnessCenter.space = space;
 		space.fitnessCenter = fitnessCenter;
 		return space;
@@ -54,11 +50,20 @@ export class SpacesRepository {
 	/**
 	 * ID로 Space 조회
 	 */
-	async findById(id: bigint): Promise<Space | null> {
+	async findById(id: string): Promise<Space | null> {
 		this.logger.debug(`ID로 Space 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.space.findUnique({
 			where: { id },
+		});
+
+		return result ? toDomainEntity(Space, result) : null;
+	}
+
+	/** 내부 일련번호(seq)로 Space를 조회합니다. 저장소 내부 경로 전용입니다. */
+	private async findByIdSeq(seq: bigint): Promise<Space | null> {
+		const result = await this.txHost.tx.space.findUnique({
+			where: { seq },
 		});
 
 		return result ? toDomainEntity(Space, result) : null;
@@ -71,7 +76,7 @@ export class SpacesRepository {
 		this.logger.debug(`ID로 Space 조회 (FitnessCenter 포함): ${id.toString()}`);
 
 		const result = await this.txHost.tx.space.findUnique({
-			where: { spaceId: id },
+			where: { id: id },
 			include: {
 				fitnessCenter: {
 					include: {
@@ -88,7 +93,7 @@ export class SpacesRepository {
 	 * FitnessCenter를 포함한 Space 목록 조회
 	 */
 	async findManyWithFitnessCenter(params?: {
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 		skip?: number;
 		take?: number;
 		search?: string;
@@ -105,33 +110,15 @@ export class SpacesRepository {
 			...(queryParams.contentLanguageCode
 				? { contentLanguageCode: queryParams.contentLanguageCode }
 				: {}),
-			fitnessCenter: {
-				is: {
-					removedAt: null,
-					company: {
-						is: {
-							removedAt: null,
-						},
-					},
-				},
-			},
+			// 이름의 원천이 Space이므로 목록 노출에 FitnessCenter를 요구하지 않습니다.
+			// 회사명·사업자번호 검색만 상세 관계를 선택적으로 참조합니다.
 			...(queryParams.search
 				? {
 						OR: [
 							{
-								fitnessCenter: {
-									is: {
-										removedAt: null,
-										name: {
-											contains: queryParams.search,
-											mode: "insensitive",
-										},
-										company: {
-											is: {
-												removedAt: null,
-											},
-										},
-									},
+								name: {
+									contains: queryParams.search,
+									mode: "insensitive",
 								},
 							},
 							{
@@ -212,12 +199,12 @@ export class SpacesRepository {
 	 * Space에 종속된 FitnessCenter 조회
 	 */
 	async findFitnessCenterBySpaceId(
-		spaceId: bigint,
+		spaceId: string,
 	): Promise<FitnessCenter | null> {
-		this.logger.debug(`Space의 FitnessCenter 조회: ${spaceId.toString()}`);
+		this.logger.debug(`Space의 FitnessCenter 조회: ${spaceId}`);
 
 		const result = await this.txHost.tx.fitnessCenter.findFirst({
-			where: { spaceId },
+			where: { space: { id: spaceId } },
 			include: {
 				company: true,
 				space: true,
@@ -236,11 +223,11 @@ export class SpacesRepository {
 	/**
 	 * Space 생성
 	 */
-	async create(data?: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
-		this.logger.debug("Space 생성");
+	async create(data: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
+		this.logger.debug(`Space 생성: ${data.name}`);
 
 		const result = await this.txHost.tx.space.create({
-			data: data ?? {},
+			data,
 		});
 
 		return toDomainEntity(Space, result);
@@ -250,16 +237,16 @@ export class SpacesRepository {
 	 * Space에 Company와 FitnessCenter detail 생성
 	 */
 	async createFitnessCenterBySpaceId(
-		spaceId: bigint,
+		spaceSeq: bigint,
 		data: {
 			company: Prisma.CompanyUncheckedCreateInput;
 			fitnessCenter: Omit<
 				Prisma.FitnessCenterUncheckedCreateInput,
-				"id" | "fitnessCenterId" | "companyId" | "spaceId"
+				"id" | "fitnessCenterId" | "companySeq" | "spaceSeq"
 			>;
 		},
 	): Promise<Space> {
-		this.logger.debug(`Space에 FitnessCenter 생성: ${spaceId.toString()}`);
+		this.logger.debug(`Space에 FitnessCenter 생성: ${spaceSeq.toString()}`);
 
 		const company = await this.txHost.tx.company.create({
 			data: data.company,
@@ -268,12 +255,12 @@ export class SpacesRepository {
 		await this.txHost.tx.fitnessCenter.create({
 			data: {
 				...data.fitnessCenter,
-				companyId: company.id,
-				spaceId,
+				companySeq: company.seq,
+				spaceSeq,
 			},
 		});
 
-		const space = await this.findById(spaceId);
+		const space = await this.findByIdSeq(spaceSeq);
 		if (!space) {
 			throw new Error("FITNESS_CENTER_CREATE_FAILED");
 		}
@@ -285,7 +272,7 @@ export class SpacesRepository {
 	 * Space 수정
 	 */
 	async updateById(
-		id: bigint,
+		id: string,
 		data: Prisma.SpaceUncheckedUpdateInput,
 	): Promise<Space> {
 		this.logger.debug(`Space 수정: ${id.toString()}`);
@@ -301,7 +288,7 @@ export class SpacesRepository {
 	/**
 	 * Space 소프트 삭제
 	 */
-	async removeById(id: bigint): Promise<Space> {
+	async removeById(id: string): Promise<Space> {
 		this.logger.debug(`Space 소프트 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.space.update({
@@ -316,15 +303,15 @@ export class SpacesRepository {
 	 * Space의 FitnessCenter detail 수정
 	 */
 	async updateFitnessCenterBySpaceId(
-		spaceId: bigint,
+		spaceId: string,
 		data: {
 			fitnessCenter: Prisma.FitnessCenterUncheckedUpdateInput;
 		},
 	): Promise<Space> {
-		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceId.toString()}`);
+		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceId}`);
 
 		const fitnessCenter = await this.txHost.tx.fitnessCenter.findFirst({
-			where: { spaceId },
+			where: { space: { id: spaceId } },
 			select: { id: true },
 		});
 
@@ -349,11 +336,11 @@ export class SpacesRepository {
 	 * Space Category 위계 기반 Space ID 배열을 조회합니다.
 	 */
 	async findSpaceIdsByCategoryHierarchy(
-		spaceId: bigint,
+		spaceId: string,
 		scope: SpaceResourceScope = SpaceResourceScope.WITH_DESCENDANTS,
-	): Promise<bigint[]> {
+	): Promise<string[]> {
 		this.logger.debug(
-			`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId.toString()}, scope=${scope}`,
+			`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId}, scope=${scope}`,
 		);
 
 		const spaceClassification =
@@ -384,33 +371,33 @@ export class SpacesRepository {
 		});
 		const categoryRecords = categories.map((category) => ({
 			id: category.id,
-			parentId: category.parent?.id ?? null,
+			parentSeq: category.parent?.id ?? null,
 		}));
 		const categoryById = new Map(
 			categoryRecords.map((category) => [category.id, category]),
 		);
-		const childCategoryIdsByParentId = new Map<bigint, bigint[]>();
+		const childCategoryIdsByParentId = new Map<string, string[]>();
 		for (const category of categoryRecords) {
-			if (!category.parentId) {
+			if (!category.parentSeq) {
 				continue;
 			}
 
 			const childCategoryIds =
-				childCategoryIdsByParentId.get(category.parentId) ?? [];
+				childCategoryIdsByParentId.get(category.parentSeq) ?? [];
 			childCategoryIds.push(category.id);
-			childCategoryIdsByParentId.set(category.parentId, childCategoryIds);
+			childCategoryIdsByParentId.set(category.parentSeq, childCategoryIds);
 		}
 
-		const categoryIds = new Set<bigint>([spaceClassification.category.id]);
+		const categoryIds = new Set<string>([spaceClassification.category.id]);
 
 		if (
 			scope === SpaceResourceScope.WITH_ANCESTORS ||
 			scope === SpaceResourceScope.WITH_TREE
 		) {
-			let cursor = categoryById.get(spaceClassification.category.id)?.parentId;
+			let cursor = categoryById.get(spaceClassification.category.id)?.parentSeq;
 			while (cursor) {
 				categoryIds.add(cursor);
-				cursor = categoryById.get(cursor)?.parentId;
+				cursor = categoryById.get(cursor)?.parentSeq;
 			}
 		}
 
@@ -423,14 +410,14 @@ export class SpacesRepository {
 					[]),
 			];
 			while (pendingCategoryIds.length > 0) {
-				const categoryId = pendingCategoryIds.shift();
-				if (!categoryId || categoryIds.has(categoryId)) {
+				const categorySeq = pendingCategoryIds.shift();
+				if (!categorySeq || categoryIds.has(categorySeq)) {
 					continue;
 				}
 
-				categoryIds.add(categoryId);
+				categoryIds.add(categorySeq);
 				pendingCategoryIds.push(
-					...(childCategoryIdsByParentId.get(categoryId) ?? []),
+					...(childCategoryIdsByParentId.get(categorySeq) ?? []),
 				);
 			}
 		}
@@ -441,13 +428,13 @@ export class SpacesRepository {
 				category: { id: { in: [...categoryIds] } },
 				space: { removedAt: null },
 			},
-			select: { spaceId: true },
+			select: { id: true },
 		});
 
 		return [
 			...new Set([
 				spaceId,
-				...classifications.map((classification) => classification.spaceId),
+				...classifications.map((classification) => classification.id),
 			]),
 		];
 	}
@@ -455,9 +442,9 @@ export class SpacesRepository {
 	/**
 	 * 여러 ID로 Space 조회 (FitnessCenter 포함)
 	 */
-	async findByIdsWithFitnessCenter(ids: bigint[]): Promise<Space[]> {
+	async findByIdsWithFitnessCenter(ids: string[]): Promise<Space[]> {
 		this.logger.debug(
-			`여러 ID로 Space 조회 (FitnessCenter 포함): count=${ids.length}`,
+			`여러 공개 ID로 Space 조회 (FitnessCenter 포함): count=${ids.length}`,
 		);
 
 		const results = await this.txHost.tx.space.findMany({

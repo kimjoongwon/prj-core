@@ -150,8 +150,8 @@ export default observer(function AccountDetailScreenRoute() {
 				grantAccess({
 					userId,
 					data: {
-						spaceId: BigInt(state.accessGrantForm.spaceId),
-						roleId: BigInt(state.accessGrantForm.roleId),
+						spaceId: state.accessGrantForm.spaceId,
+						roleId: state.accessGrantForm.roleId,
 					},
 				});
 			}}

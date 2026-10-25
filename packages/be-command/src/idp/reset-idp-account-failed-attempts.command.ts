@@ -1,3 +1,3 @@
 export class ResetIdpAccountFailedAttemptsCommand {
-	constructor(readonly userId: bigint) {}
+	constructor(readonly userId: string) {}
 }

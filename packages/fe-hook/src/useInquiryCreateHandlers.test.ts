@@ -35,29 +35,33 @@ vi.mock("@cocrepo/api/core/inquiries", () => ({
 	useCreateInquiry: () => ({ mutateAsync }),
 }));
 
+const CUSTOMER_ID = "01JCSTMR0000000000000000CS";
+const ASSIGNEE_ID = "01JASGNEE000000000000000AS";
+const CREATED_INQUIRY_ID = "01JCREATED00000000000000CR";
+
 describe("useInquiryCreateHandlers", () => {
 	const inquiryFormData: InquiryCreateFormData = {
-		customerId: "9007199254740993",
+		customerId: CUSTOMER_ID,
 		title: "배송 문의",
 		content: "배송 상태를 확인해주세요.",
 		category: "DELIVERY",
 		channel: "WEB",
 		priority: "HIGH",
-		assigneeId: "9007199254740995",
+		assigneeId: ASSIGNEE_ID,
 	};
 
 	beforeEach(() => {
 		mutateAsync.mockReset();
 	});
 
-	it("문자열 ID를 bigint 요청 DTO로 변환하고 생성된 bigint ID로 이동한다", async () => {
+	it("문자열 ULID 식별자를 요청 DTO로 그대로 전달하고 생성된 ULID로 이동한다", async () => {
 		const state = {
 			isSubmitting: false,
 			aiSuggestion: null,
 			isAiLoading: false,
 		};
 		const router = { push: vi.fn() };
-		mutateAsync.mockResolvedValue({ data: { id: BigInt("9007199254740997") } });
+		mutateAsync.mockResolvedValue({ data: { id: CREATED_INQUIRY_ID } });
 
 		const { onSubmit } = useInquiryCreateHandlers({ state, router });
 
@@ -65,17 +69,17 @@ describe("useInquiryCreateHandlers", () => {
 
 		expect(mutateAsync).toHaveBeenCalledWith({
 			data: {
-				customerId: BigInt("9007199254740993"),
+				customerId: CUSTOMER_ID,
 				title: "배송 문의",
 				content: "배송 상태를 확인해주세요.",
 				category: "DELIVERY",
 				channel: "WEB",
 				priority: "HIGH",
-				assigneeId: BigInt("9007199254740995"),
+				assigneeId: ASSIGNEE_ID,
 			},
 		});
 		expect(router.push).toHaveBeenCalledWith(
-			ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", "9007199254740997"),
+			ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", CREATED_INQUIRY_ID),
 		);
 		expect(state.isSubmitting).toBe(false);
 	});

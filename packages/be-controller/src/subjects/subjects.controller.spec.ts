@@ -1,12 +1,11 @@
+import { JwtAuthGuard, RolesGuard } from "@cocrepo/be-common";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY, ROLES_KEY } from "@cocrepo/decorator";
-import { JwtAuthGuard } from "@cocrepo/be-common";
-import { UnauthorizedException, type ExecutionContext } from "@nestjs/common";
+import type { TokenStorageService } from "@cocrepo/service";
+import { type ExecutionContext, UnauthorizedException } from "@nestjs/common";
 import { GUARDS_METADATA } from "@nestjs/common/constants";
 import type { Reflector } from "@nestjs/core";
-import type { TokenStorageService } from "@cocrepo/service";
 import type { ClsService } from "nestjs-cls";
-import { RolesGuard } from "@cocrepo/be-common";
 import { SubjectsController } from "./subjects.controller";
 
 describe("SubjectsController", () => {
@@ -45,7 +44,9 @@ describe("SubjectsController", () => {
 
 			// Then
 			expect(Reflect.getMetadata(PUBLIC_ROUTE_KEY, handler)).toBeUndefined();
-			expect(Reflect.getMetadata(GUARDS_METADATA, handler)).toContain(RolesGuard);
+			expect(Reflect.getMetadata(GUARDS_METADATA, handler)).toContain(
+				RolesGuard,
+			);
 			expect(Reflect.getMetadata(ROLES_KEY, handler)).toEqual([
 				SYSTEM_ROLES.PLATFORM_ADMIN,
 			]);

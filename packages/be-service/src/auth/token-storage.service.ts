@@ -35,8 +35,8 @@ export class TokenStorageService {
 	 * 세션 저장 (로그인 시)
 	 */
 	async saveSession(
-		userId: string,
-		sessionId: string,
+		userSeq: string,
+		sessionSeq: string,
 		refreshToken: string,
 		metadata: {
 			userAgent: string;
@@ -49,8 +49,8 @@ export class TokenStorageService {
 		const authConfig = this.configService.get<AuthConfig>("auth");
 		const ttl = parseExpiresInToSeconds(authConfig?.refresh || "7d");
 
-		const key = `${REDIS_KEYS.SESSION}${userId}:${sessionId}`;
-		const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionId}`;
+		const key = `${REDIS_KEYS.SESSION}${userSeq}:${sessionSeq}`;
+		const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionSeq}`;
 		const now = new Date().toISOString();
 		const sessionData: SessionMetadata = {
 			refreshToken,
@@ -64,9 +64,9 @@ export class TokenStorageService {
 		};
 
 		await this.redisService.set(key, JSON.stringify(sessionData), ttl);
-		await this.redisService.set(indexKey, userId, ttl);
+		await this.redisService.set(indexKey, userSeq, ttl);
 		this.logger.debug(
-			`세션 저장: userId=${userId}, sessionId=${sessionId}, ttl=${ttl}s`,
+			`세션 저장: userSeq=${userSeq}, sessionSeq=${sessionSeq}, ttl=${ttl}s`,
 		);
 	}
 
@@ -74,15 +74,15 @@ export class TokenStorageService {
 	 * 쿠키 없이 sessionId만 가진 클라이언트가 세션을 찾을 수 있도록 조회합니다.
 	 */
 	async getSessionBySessionId(
-		sessionId: string,
+		sessionSeq: string,
 	): Promise<SessionLookupResult | null> {
-		const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionId}`;
-		const userId = await this.redisService.get(indexKey);
-		if (!userId) {
+		const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionSeq}`;
+		const userSeq = await this.redisService.get(indexKey);
+		if (!userSeq) {
 			return null;
 		}
 
-		const key = `${REDIS_KEYS.SESSION}${userId}:${sessionId}`;
+		const key = `${REDIS_KEYS.SESSION}${userSeq}:${sessionSeq}`;
 		const data = await this.redisService.get(key);
 		if (!data) {
 			await this.redisService.del(indexKey);
@@ -91,8 +91,8 @@ export class TokenStorageService {
 
 		try {
 			return {
-				userId,
-				sessionId,
+				userSeq,
+				sessionSeq,
 				session: JSON.parse(data) as SessionMetadata,
 			};
 		} catch {
@@ -105,10 +105,10 @@ export class TokenStorageService {
 	 * 세션의 Refresh Token 조회
 	 */
 	async getSessionRefreshToken(
-		userId: string,
-		sessionId: string,
+		userSeq: string,
+		sessionSeq: string,
 	): Promise<string | null> {
-		const key = `${REDIS_KEYS.SESSION}${userId}:${sessionId}`;
+		const key = `${REDIS_KEYS.SESSION}${userSeq}:${sessionSeq}`;
 		const data = await this.redisService.get(key);
 		if (!data) return null;
 
@@ -124,11 +124,11 @@ export class TokenStorageService {
 	 * 세션 활동 시간 및 Refresh Token 업데이트 (토큰 갱신 시)
 	 */
 	async updateSession(
-		userId: string,
-		sessionId: string,
+		userSeq: string,
+		sessionSeq: string,
 		refreshToken: string,
 	): Promise<void> {
-		const key = `${REDIS_KEYS.SESSION}${userId}:${sessionId}`;
+		const key = `${REDIS_KEYS.SESSION}${userSeq}:${sessionSeq}`;
 		const data = await this.redisService.get(key);
 		if (!data) return;
 
@@ -139,12 +139,12 @@ export class TokenStorageService {
 
 			const authConfig = this.configService.get<AuthConfig>("auth");
 			const ttl = parseExpiresInToSeconds(authConfig?.refresh || "7d");
-			const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionId}`;
+			const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionSeq}`;
 
 			await this.redisService.set(key, JSON.stringify(session), ttl);
-			await this.redisService.set(indexKey, userId, ttl);
+			await this.redisService.set(indexKey, userSeq, ttl);
 		} catch {
-			this.logger.warn(`세션 업데이트 실패: sessionId=${sessionId}`);
+			this.logger.warn(`세션 업데이트 실패: sessionSeq=${sessionSeq}`);
 		}
 	}
 
@@ -152,14 +152,14 @@ export class TokenStorageService {
 	 * 사용자의 모든 세션 목록 조회
 	 */
 	async getUserSessions(
-		userId: string,
+		userSeq: string,
 		currentSessionId?: string,
 	): Promise<SessionInfo[]> {
-		const pattern = `${REDIS_KEYS.SESSION}${userId}:*`;
+		const pattern = `${REDIS_KEYS.SESSION}${userSeq}:*`;
 		const keys = await this.redisService.keys(pattern);
 
 		const sessions: SessionInfo[] = [];
-		const prefix = `${REDIS_KEYS.SESSION}${userId}:`;
+		const prefix = `${REDIS_KEYS.SESSION}${userSeq}:`;
 
 		for (const key of keys) {
 			const data = await this.redisService.get(key);
@@ -167,15 +167,15 @@ export class TokenStorageService {
 
 			try {
 				const session = JSON.parse(data) as SessionMetadata;
-				const sessionId = key.slice(prefix.length);
+				const sessionSeq = key.slice(prefix.length);
 
 				sessions.push({
-					sessionId,
+					sessionSeq,
 					userAgent: session.userAgent,
 					ipAddress: session.ipAddress,
 					createdAt: session.createdAt,
 					lastActivityAt: session.lastActivityAt,
-					isCurrent: sessionId === currentSessionId,
+					isCurrent: sessionSeq === currentSessionId,
 				});
 			} catch {}
 		}
@@ -193,37 +193,39 @@ export class TokenStorageService {
 	/**
 	 * 특정 세션 삭제
 	 */
-	async deleteSession(userId: string, sessionId: string): Promise<void> {
-		const key = `${REDIS_KEYS.SESSION}${userId}:${sessionId}`;
-		const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionId}`;
+	async deleteSession(userSeq: string, sessionSeq: string): Promise<void> {
+		const key = `${REDIS_KEYS.SESSION}${userSeq}:${sessionSeq}`;
+		const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionSeq}`;
 		await this.redisService.del(key);
 		await this.redisService.del(indexKey);
-		this.logger.debug(`세션 삭제: userId=${userId}, sessionId=${sessionId}`);
+		this.logger.debug(
+			`세션 삭제: userSeq=${userSeq}, sessionSeq=${sessionSeq}`,
+		);
 	}
 
 	/**
 	 * 현재 세션을 제외한 다른 모든 세션 삭제
 	 */
 	async deleteOtherSessions(
-		userId: string,
+		userSeq: string,
 		currentSessionId: string,
 	): Promise<number> {
-		const pattern = `${REDIS_KEYS.SESSION}${userId}:*`;
+		const pattern = `${REDIS_KEYS.SESSION}${userSeq}:*`;
 		const keys = await this.redisService.keys(pattern);
 
-		const currentKey = `${REDIS_KEYS.SESSION}${userId}:${currentSessionId}`;
+		const currentKey = `${REDIS_KEYS.SESSION}${userSeq}:${currentSessionId}`;
 		const keysToDelete = keys.filter((k) => k !== currentKey);
 
 		if (keysToDelete.length === 0) return 0;
 
 		for (const key of keysToDelete) {
-			const sessionId = key.slice(`${REDIS_KEYS.SESSION}${userId}:`.length);
+			const sessionSeq = key.slice(`${REDIS_KEYS.SESSION}${userSeq}:`.length);
 			await this.redisService.del(key);
-			await this.redisService.del(`${REDIS_KEYS.SESSION_INDEX}${sessionId}`);
+			await this.redisService.del(`${REDIS_KEYS.SESSION_INDEX}${sessionSeq}`);
 		}
 
 		this.logger.debug(
-			`다른 세션 ${keysToDelete.length}개 삭제: userId=${userId}`,
+			`다른 세션 ${keysToDelete.length}개 삭제: userSeq=${userSeq}`,
 		);
 		return keysToDelete.length;
 	}
@@ -231,25 +233,25 @@ export class TokenStorageService {
 	/**
 	 * 사용자의 모든 세션 삭제 (관리자 강제 종료, 비밀번호 변경 등)
 	 */
-	async deleteAllSessions(userId: string): Promise<void> {
-		const pattern = `${REDIS_KEYS.SESSION}${userId}:*`;
+	async deleteAllSessions(userSeq: string): Promise<void> {
+		const pattern = `${REDIS_KEYS.SESSION}${userSeq}:*`;
 		const keys = await this.redisService.keys(pattern);
 		for (const key of keys) {
-			const sessionId = key.slice(`${REDIS_KEYS.SESSION}${userId}:`.length);
-			await this.redisService.del(`${REDIS_KEYS.SESSION_INDEX}${sessionId}`);
+			const sessionSeq = key.slice(`${REDIS_KEYS.SESSION}${userSeq}:`.length);
+			await this.redisService.del(`${REDIS_KEYS.SESSION_INDEX}${sessionSeq}`);
 		}
 		await this.redisService.delByPattern(pattern);
-		this.logger.debug(`모든 세션 삭제: userId=${userId}`);
+		this.logger.debug(`모든 세션 삭제: userSeq=${userSeq}`);
 	}
 
 	/**
 	 * 특정 세션의 Refresh Token 가져오기 (IDP Revocation용)
 	 */
 	async getSessionForRevocation(
-		userId: string,
-		sessionId: string,
+		userSeq: string,
+		sessionSeq: string,
 	): Promise<SessionMetadata | null> {
-		const key = `${REDIS_KEYS.SESSION}${userId}:${sessionId}`;
+		const key = `${REDIS_KEYS.SESSION}${userSeq}:${sessionSeq}`;
 		const data = await this.redisService.get(key);
 		if (!data) return null;
 
@@ -268,25 +270,25 @@ export class TokenStorageService {
 	 * Refresh Token을 Redis에 저장
 	 * @deprecated 세션 기반 saveSession 사용 권장
 	 */
-	async saveRefreshToken(userId: string, refreshToken: string): Promise<void> {
+	async saveRefreshToken(userSeq: string, refreshToken: string): Promise<void> {
 		const authConfig = this.configService.get<AuthConfig>("auth");
 		const ttl = parseExpiresInToSeconds(authConfig?.refresh || "7d");
 
-		const key = `${REDIS_KEYS.REFRESH_TOKEN}${userId}`;
+		const key = `${REDIS_KEYS.REFRESH_TOKEN}${userSeq}`;
 		const tokenData = JSON.stringify({
 			token: refreshToken,
 			createdAt: new Date().toISOString(),
 		});
 
 		await this.redisService.set(key, tokenData, ttl);
-		this.logger.debug(`Refresh token 저장: userId=${userId}, ttl=${ttl}s`);
+		this.logger.debug(`Refresh token 저장: userSeq=${userSeq}, ttl=${ttl}s`);
 	}
 
 	/**
 	 * 저장된 Refresh Token 조회
 	 */
-	async getRefreshToken(userId: string): Promise<string | null> {
-		const key = `${REDIS_KEYS.REFRESH_TOKEN}${userId}`;
+	async getRefreshToken(userSeq: string): Promise<string | null> {
+		const key = `${REDIS_KEYS.REFRESH_TOKEN}${userSeq}`;
 		const data = await this.redisService.get(key);
 
 		if (!data) return null;
@@ -303,22 +305,22 @@ export class TokenStorageService {
 	 * Refresh Token이 유효한지 검증
 	 */
 	async validateRefreshToken(
-		userId: string,
+		userSeq: string,
 		refreshToken: string,
 	): Promise<boolean> {
-		const storedToken = await this.getRefreshToken(userId);
+		const storedToken = await this.getRefreshToken(userSeq);
 		return storedToken === refreshToken;
 	}
 
 	/**
 	 * Refresh Token 삭제 + 모든 세션 삭제
 	 */
-	async deleteRefreshToken(userId: string): Promise<void> {
-		const key = `${REDIS_KEYS.REFRESH_TOKEN}${userId}`;
+	async deleteRefreshToken(userSeq: string): Promise<void> {
+		const key = `${REDIS_KEYS.REFRESH_TOKEN}${userSeq}`;
 		await this.redisService.del(key);
 		// 세션 기반도 함께 삭제
-		await this.deleteAllSessions(userId);
-		this.logger.debug(`Refresh token + 세션 삭제: userId=${userId}`);
+		await this.deleteAllSessions(userSeq);
+		this.logger.debug(`Refresh token + 세션 삭제: userSeq=${userSeq}`);
 	}
 
 	// =========================================================================
@@ -355,9 +357,9 @@ export class TokenStorageService {
 	/**
 	 * 사용자의 모든 토큰 무효화 (비밀번호 변경, 보안 이슈 등)
 	 */
-	async invalidateAllUserTokens(userId: string): Promise<void> {
-		await this.deleteRefreshToken(userId);
-		this.logger.log(`사용자 ${userId}의 모든 토큰 무효화됨`);
+	async invalidateAllUserTokens(userSeq: string): Promise<void> {
+		await this.deleteRefreshToken(userSeq);
+		this.logger.log(`사용자 ${userSeq}의 모든 토큰 무효화됨`);
 	}
 
 	// =========================================================================

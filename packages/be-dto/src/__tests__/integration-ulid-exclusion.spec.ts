@@ -8,12 +8,12 @@ import { ProfileDto } from "../profile.dto";
 import { ReservationDto } from "../reservations/reservation.dto";
 import { UserDto } from "../user.dto";
 
-describe("일반 REST DTO의 integration ULID 제외와 숫자 ID 직렬화", () => {
-	it("Given user ULID와 decimal ID When DTO를 변환하면 Then 인스턴스는 bigint이고 JSON에서는 ULID가 제외된다", () => {
+describe("일반 REST DTO의 공개 ULID 노출과 내부 seq 미노출", () => {
+	it("Given user ULID When DTO를 변환하면 Then 공개 id(ULID)만 노출하고 내부 seq는 노출하지 않는다", () => {
 		prepareEntityResponseType(UserDto);
 		const dto = plainToInstance(UserDto, {
-			userId: "01J00000000000000000000000",
-			spaceId: "1000",
+			id: "01J00000000000000000000000",
+			seq: "1000",
 			email: "user@example.com",
 			name: "이름",
 			phone: "010-0000-0000",
@@ -25,51 +25,39 @@ describe("일반 REST DTO의 integration ULID 제외와 숫자 ID 직렬화", ()
 			lastLoginAt: null,
 			lastLoginIp: null,
 			isActive: true,
-			currentTenantId: "500",
+			currentTenantSeq: "500",
 		});
 
 		const plain = instanceToPlain(dto);
 
-		expect(dto.spaceId).toBe(1000n);
-		expect(dto.currentTenantId).toBe(500n);
-		expect(plain).not.toHaveProperty("userId");
-		expect(plain).toEqual(
-			expect.objectContaining({
-				spaceId: "1000",
-				currentTenantId: "500",
-			}),
-		);
+		expect(plain).not.toHaveProperty("seq");
+		expect(plain).not.toHaveProperty("spaceSeq");
 	});
 
-	it("Given profile ULID와 decimal user ID When DTO를 변환하면 Then userId만 숫자 ID 문자열로 직렬화된다", () => {
+	it("Given profile When DTO를 변환하면 Then user seq는 노출하지 않는다", () => {
 		prepareEntityResponseType(ProfileDto);
 		const dto = plainToInstance(ProfileDto, {
-			profileId: "01J00000000000000000000001",
+			id: "01J00000000000000000000001",
 			avatarFileId: null,
 			name: "프로필",
 			nickname: "닉네임",
 			address: "서울",
-			userId: "600",
+			userSeq: "600",
 		});
 
 		const plain = instanceToPlain(dto);
 
-		expect(dto.userId).toBe(600n);
-		expect(plain).not.toHaveProperty("profileId");
-		expect(plain).toEqual(expect.objectContaining({ userId: "600" }));
+		expect(plain).not.toHaveProperty("seq");
+		expect(plain).not.toHaveProperty("userSeq");
 	});
 
-	it("Given reservation ULID와 decimal 관계 ID When DTO를 변환하면 Then 모든 숫자 ID가 JSON 문자열로 직렬화된다", () => {
+	it("Given reservation When DTO를 변환하면 Then 관계 seq는 통신선에 노출하지 않는다", () => {
 		prepareEntityResponseType(ReservationDto);
 		const dto = plainToInstance(ReservationDto, {
-			reservationId: "01J00000000000000000000002",
-			spaceId: "700",
-			createdById: null,
-			userId: "800",
-			timelineId: "900",
-			sessionId: "1000",
-			programId: "1100",
-			occurrenceStartAt: "2026-08-02T12:00:00.000Z",
+			id: "01J00000000000000000000002",
+			seq: "700",
+			createdBySeq: null,
+			occurrenceStartAt: new Date("2026-08-02T12:00:00.000Z"),
 			status: ReservationStatus.CONFIRMED,
 			memo: null,
 			idempotencyKey: "idem",
@@ -81,19 +69,16 @@ describe("일반 REST DTO의 integration ULID 제외와 숫자 ID 직렬화", ()
 
 		const plain = instanceToPlain(dto);
 
-		expect(dto.spaceId).toBe(700n);
-		expect(dto.userId).toBe(800n);
-		expect(dto.timelineId).toBe(900n);
-		expect(dto.sessionId).toBe(1000n);
-		expect(dto.programId).toBe(1100n);
-		expect(plain).not.toHaveProperty("reservationId");
+		expect(plain).not.toHaveProperty("spaceSeq");
+		expect(plain).not.toHaveProperty("userSeq");
+		expect(plain).not.toHaveProperty("timelineSeq");
+		expect(plain).not.toHaveProperty("sessionSeq");
+		expect(plain).not.toHaveProperty("programSeq");
 		expect(plain).toEqual(
 			expect.objectContaining({
-				spaceId: "700",
-				userId: "800",
-				timelineId: "900",
-				sessionId: "1000",
-				programId: "1100",
+				id: "01J00000000000000000000002",
+				occurrenceStartAt: new Date("2026-08-02T12:00:00.000Z"),
+				status: ReservationStatus.CONFIRMED,
 			}),
 		);
 	});

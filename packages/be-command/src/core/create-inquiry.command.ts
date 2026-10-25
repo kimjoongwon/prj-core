@@ -11,8 +11,8 @@ export class CreateInquiryCommand implements CreateInquiryCommandInput {
 
 	constructor(
 		input: CreateInquiryCommandInput,
-		readonly spaceId: bigint,
-		readonly actorUserId: bigint,
+		readonly spaceId: string,
+		readonly actorUserId: string,
 	) {
 		Object.assign(this, input);
 	}

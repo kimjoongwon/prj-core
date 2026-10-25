@@ -76,9 +76,7 @@ export function withStatusRelationOrderBy(
 			return entry;
 		}
 
-		const direction = (entry as Record<string, "asc" | "desc">)[
-			"lastLoginAt"
-		];
+		const direction = (entry as Record<string, "asc" | "desc">).lastLoginAt;
 		return { status: { lastLoginAt: direction } };
 	});
 }

@@ -32,7 +32,7 @@ export class ContentsRepository {
 		this.logger = new Logger("ContentsRepository");
 	}
 
-	async findById(id: bigint): Promise<ContentRecord | null> {
+	async findById(id: string): Promise<ContentRecord | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.content.findUnique({
@@ -47,7 +47,7 @@ export class ContentsRepository {
 		this.logger.debug(`게시글 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.content.findUnique({
-			where: { contentId: id },
+			where: { id },
 			include: {
 				post: true,
 				...contentInclude,
@@ -57,11 +57,11 @@ export class ContentsRepository {
 		return result ? toDomainData(result) : null;
 	}
 
-	async findBySpaceId(spaceId: bigint): Promise<ContentRecord[]> {
-		this.logger.debug(`Space별 콘텐츠 조회: ${spaceId.toString()}`);
+	async findBySpaceId(spaceSeq: bigint): Promise<ContentRecord[]> {
+		this.logger.debug(`Space별 콘텐츠 조회: ${spaceSeq.toString()}`);
 
 		const results = await this.txHost.tx.content.findMany({
-			where: { spaceId },
+			where: { spaceSeq },
 			include: contentInclude,
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -69,13 +69,15 @@ export class ContentsRepository {
 		return results.map((result) => toDomainData(result));
 	}
 
-	async findBySpaceIdWithoutRemoved(spaceId: bigint): Promise<ContentRecord[]> {
+	async findBySpaceIdWithoutRemoved(
+		spaceSeq: bigint,
+	): Promise<ContentRecord[]> {
 		this.logger.debug(
-			`삭제되지 않은 Space별 콘텐츠 조회: ${spaceId.toString()}`,
+			`삭제되지 않은 Space별 콘텐츠 조회: ${spaceSeq.toString()}`,
 		);
 
 		const results = await this.txHost.tx.content.findMany({
-			where: { spaceId, removedAt: null },
+			where: { spaceSeq, removedAt: null },
 			include: contentInclude,
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -108,12 +110,12 @@ export class ContentsRepository {
 
 	async findCommunityPostsBySpaceId(params: {
 		skip?: number;
-		spaceId: bigint;
+		spaceId: string;
 		take?: number;
 	}): Promise<{ items: CommunityPostRecord[]; totalCount: number }> {
 		const where: Prisma.ContentWhereInput = {
 			removedAt: null,
-			spaceId: params.spaceId,
+			space: { id: params.spaceId },
 			post: {
 				is: {
 					removedAt: null,
@@ -138,20 +140,20 @@ export class ContentsRepository {
 	}
 
 	async createCommunityPost(params: {
-		spaceId: bigint;
+		spaceId: string;
 		text: string;
 		title?: string | null;
-		userId: bigint;
+		userId: string;
 	}): Promise<CommunityPostRecord> {
 		this.logger.debug("커뮤니티 게시글 생성");
 
 		const result = await this.txHost.tx.content.create({
 			data: {
-				createdById: params.userId,
+				createdBy: { connect: { id: params.userId } },
 				post: {
 					create: {},
 				},
-				spaceId: params.spaceId,
+				space: { connect: { id: params.spaceId } },
 				text: params.text,
 				title: params.title ?? null,
 				type: TextTypes.Textarea,
@@ -163,10 +165,7 @@ export class ContentsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<
-			Prisma.ContentUncheckedCreateInput,
-			"contentId"
-		>,
+		data: AutoIdentityCreateInput<Prisma.ContentUncheckedCreateInput, "id">,
 	): Promise<ContentRecord> {
 		this.logger.debug("콘텐츠 생성");
 		const result = await this.txHost.tx.content.create({
@@ -178,11 +177,8 @@ export class ContentsRepository {
 	}
 
 	async updateById(
-		id: bigint,
-		data: AutoIdentityUpdateInput<
-			Prisma.ContentUncheckedUpdateInput,
-			"contentId"
-		>,
+		id: string,
+		data: AutoIdentityUpdateInput<Prisma.ContentUncheckedUpdateInput, "id">,
 	): Promise<ContentRecord> {
 		this.logger.debug(`콘텐츠 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.content.update({
@@ -194,7 +190,7 @@ export class ContentsRepository {
 		return toDomainData(result);
 	}
 
-	async removeById(id: bigint): Promise<ContentRecord> {
+	async removeById(id: string): Promise<ContentRecord> {
 		this.logger.debug(`콘텐츠 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.content.delete({

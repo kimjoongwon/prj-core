@@ -1,7 +1,7 @@
 export interface UpdateProgramCommandInput {
 	name?: string;
-	routineId?: bigint;
-	instructorId?: bigint;
+	routineId?: string;
+	instructorId?: string;
 	capacity?: number;
 	level?: string | null;
 }

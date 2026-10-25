@@ -32,6 +32,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useQuery,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
@@ -233,7 +234,7 @@ export const prefetchGetI18nCatalogQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetI18nCatalogQueryOptions(languageCode, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -263,11 +264,19 @@ export const getGetI18nCatalogSuspenseQueryOptions = <
 		signal,
 	}) => getI18nCatalog(languageCode, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getI18nCatalog>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetI18nCatalogSuspenseQueryResult = NonNullable<
@@ -531,7 +540,7 @@ export const prefetchGetI18nCatalogInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

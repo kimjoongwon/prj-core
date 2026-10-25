@@ -42,7 +42,7 @@ export class AbilitiesRepository {
 	/**
 	 * ID로 조회 (Subject, Action 포함)
 	 */
-	async findById(id: bigint): Promise<Ability | null> {
+	async findById(id: string): Promise<Ability | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.ability.findUnique({
@@ -59,7 +59,7 @@ export class AbilitiesRepository {
 	/**
 	 * ID 목록으로 Ability 목록 조회 (Subject, Action 포함)
 	 */
-	async findByIds(ids: bigint[]): Promise<Ability[]> {
+	async findByIds(ids: string[]): Promise<Ability[]> {
 		this.logger.debug(`ID 목록으로 조회: ids.length=${ids.length}`);
 
 		const results = await this.txHost.tx.ability.findMany({
@@ -80,12 +80,12 @@ export class AbilitiesRepository {
 	/**
 	 * Subject ID로 Ability 목록 조회
 	 */
-	async findBySubjectId(subjectId: bigint): Promise<Ability[]> {
-		this.logger.debug(`Subject ID로 Ability 조회: subjectId=${subjectId}`);
+	async findBySubjectId(subjectSeq: bigint): Promise<Ability[]> {
+		this.logger.debug(`Subject ID로 Ability 조회: subjectSeq=${subjectSeq}`);
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
-				subjectId,
+				subjectSeq,
 				removedAt: null,
 			},
 			include: {
@@ -103,15 +103,20 @@ export class AbilitiesRepository {
 	 */
 	async create(
 		data: AutoIdentityCreateInput<
-			Prisma.AbilityUncheckedCreateInput,
-			"abilityId"
-		>,
+			Omit<Prisma.AbilityUncheckedCreateInput, "actionSeq" | "subjectSeq">,
+			"id"
+		> & { actionId: string; subjectId: string },
 	): Promise<Ability> {
 		this.logger.debug(
-			`Ability 생성: subjectId=${data.subjectId}, actionId=${data.actionId}`,
+			`Ability 생성: actionId=${data.actionId}, subjectId=${data.subjectId}`,
 		);
+		const { actionId, subjectId, ...rest } = data;
 		const result = await this.txHost.tx.ability.create({
-			data,
+			data: {
+				...rest,
+				action: { connect: { id: actionId } },
+				subject: { connect: { id: subjectId } },
+			} as unknown as Prisma.AbilityCreateInput,
 			include: {
 				subject: true,
 				action: true,
@@ -125,16 +130,28 @@ export class AbilitiesRepository {
 	 * Ability 수정
 	 */
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
-			Prisma.AbilityUncheckedUpdateInput,
-			"abilityId"
-		>,
+			Omit<Prisma.AbilityUncheckedUpdateInput, "actionSeq" | "subjectSeq">,
+			"id"
+		> & {
+			actionId?: string;
+			subjectId?: string;
+		},
 	): Promise<Ability> {
-		this.logger.debug(`Ability 수정: id=${id.toString()}`);
+		this.logger.debug(`Ability 수정: id=${id}`);
+		const { actionId, subjectId, ...rest } = data;
 		const result = await this.txHost.tx.ability.update({
 			where: { id },
-			data,
+			data: {
+				...rest,
+				...(actionId !== undefined && {
+					action: { connect: { id: actionId } },
+				}),
+				...(subjectId !== undefined && {
+					subject: { connect: { id: subjectId } },
+				}),
+			} as Prisma.AbilityUpdateInput,
 			include: {
 				subject: true,
 				action: true,
@@ -147,7 +164,7 @@ export class AbilitiesRepository {
 	/**
 	 * Ability 소프트 삭제
 	 */
-	async removeById(id: bigint): Promise<Ability> {
+	async removeById(id: string): Promise<Ability> {
 		this.logger.debug(`Ability 소프트 삭제: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.ability.update({

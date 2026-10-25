@@ -52,7 +52,7 @@ export class TemplateService {
 	/**
 	 * ID로 템플릿 조회 (variables 포함)
 	 */
-	async getTemplateById(id: bigint): Promise<Template> {
+	async getTemplateById(id: string): Promise<Template> {
 		const template = await this.repository.findById(id);
 		if (!template) {
 			throw new NotFoundException("템플릿을 찾을 수 없습니다");
@@ -149,7 +149,7 @@ export class TemplateService {
 	 * - 유형별 필드 검증 (기존 type 사용)
 	 * - 변수가 있으면 전체 교체
 	 */
-	async update(id: bigint, input: UpdateTemplateInput): Promise<Template> {
+	async update(id: string, input: UpdateTemplateInput): Promise<Template> {
 		this.logger.debug(`템플릿 수정 시도: ${id.toString()}`);
 
 		const template = await this.repository.findByIdOrThrow(id);
@@ -188,7 +188,7 @@ export class TemplateService {
 	/**
 	 * 템플릿 소프트 삭제
 	 */
-	async remove(id: bigint): Promise<Template> {
+	async remove(id: string): Promise<Template> {
 		this.logger.debug(`템플릿 삭제 시도: ${id.toString()}`);
 
 		await this.repository.findByIdOrThrow(id);
@@ -203,7 +203,7 @@ export class TemplateService {
 	/**
 	 * 템플릿 활성/비활성 상태 토글
 	 */
-	async toggleStatus(id: bigint): Promise<Template> {
+	async toggleStatus(id: string): Promise<Template> {
 		this.logger.debug(`템플릿 상태 토글: ${id.toString()}`);
 
 		const template = await this.repository.findByIdOrThrow(id);
@@ -226,7 +226,7 @@ export class TemplateService {
 	 * - 미치환 변수 목록 포함
 	 */
 	async preview(
-		id: bigint,
+		id: string,
 		input: PreviewTemplateInput,
 	): Promise<{
 		type: TemplateType;
@@ -254,7 +254,7 @@ export class TemplateService {
 	 * - 실제 발송은 TODO (발송 서비스 미구현)
 	 */
 	async sendTest(
-		id: bigint,
+		id: string,
 		input: SendTestTemplateInput,
 	): Promise<SendTestResult> {
 		this.logger.debug(`템플릿 테스트 발송: ${id.toString()}`);

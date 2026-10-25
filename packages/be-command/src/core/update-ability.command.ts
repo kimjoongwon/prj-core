@@ -11,7 +11,7 @@ export class UpdateAbilityCommand implements UpdateAbilityCommandInput {
 	readonly description?: UpdateAbilityCommandInput["description"];
 
 	constructor(
-		readonly abilityId: bigint,
+		readonly abilityId: string,
 		input: UpdateAbilityCommandInput,
 	) {
 		Object.assign(this, input);

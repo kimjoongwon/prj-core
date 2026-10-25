@@ -1,8 +1,8 @@
 import {
-	BigIntIdFieldOptional,
 	DateFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator/field";
 import { Inquiry } from "@cocrepo/entity";
 import { DeleteFilter } from "@cocrepo/enum";
@@ -17,7 +17,7 @@ import { EntityQueryType } from "../query/entity-query-type";
  *
  * 필터 계약:
  * - category, channel, priority (enum -> 직접 매핑)
- * - assigneeId, customerId (*Id -> 정확 매칭)
+ * - assigneeSeq, customerSeq (*Id -> 정확 매칭)
  *
  * 커스텀 처리:
  * - search (제목, 고객명 OR 검색)
@@ -55,15 +55,15 @@ export class QueryInquiryDto extends EntityQueryType(Inquiry, [
 	// -------------------------------------------------------------------------
 	// 필터 - 관계자 ID
 	// -------------------------------------------------------------------------
-	@BigIntIdFieldOptional({
-		description: "담당자 ID",
+	@ULIDFieldOptional({
+		description: "담당자 ULID",
 	})
-	assigneeId?: bigint;
+	assigneeId?: string;
 
-	@BigIntIdFieldOptional({
-		description: "고객 ID",
+	@ULIDFieldOptional({
+		description: "고객 ULID",
 	})
-	customerId?: bigint;
+	customerId?: string;
 
 	// -------------------------------------------------------------------------
 	// 필터 - 날짜 범위

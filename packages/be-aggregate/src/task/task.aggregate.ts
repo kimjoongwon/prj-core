@@ -27,7 +27,7 @@ export class TaskAggregate {
 	) {}
 
 	async findTasks(params: {
-		spaceId: bigint;
+		spaceId: string;
 		spaceScope: SpaceScope;
 		skip: number;
 		take: number;
@@ -51,8 +51,8 @@ export class TaskAggregate {
 	}
 
 	async findTaskById(
-		taskId: bigint,
-		spaceId: bigint,
+		taskId: string,
+		spaceId: string,
 		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Task> {
 		const spaceIds = this.resolveReadableSpaceIds(spaceScope, spaceId);
@@ -66,8 +66,8 @@ export class TaskAggregate {
 	}
 
 	async getExerciseByTaskId(
-		taskId: bigint,
-		spaceId: bigint,
+		taskId: string,
+		spaceId: string,
 		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Exercise> {
 		const task = await this.findTaskById(taskId, spaceId, spaceScope);
@@ -79,7 +79,7 @@ export class TaskAggregate {
 		return task.exercise;
 	}
 
-	async findTaskRoutines(taskId: bigint, spaceId: bigint): Promise<Routine[]> {
+	async findTaskRoutines(taskId: string, spaceId: string): Promise<Routine[]> {
 		await this.findTaskById(taskId, spaceId, SpaceScope.INCLUDE_ANCESTORS);
 		return this.tasksRepository.findTaskRoutines(taskId);
 	}
@@ -87,8 +87,8 @@ export class TaskAggregate {
 	@Transactional()
 	async createTaskWithExercise(
 		dto: CreateTaskCommandInput,
-		spaceId: bigint,
-		createdById: bigint,
+		spaceId: string,
+		createdById: string,
 	): Promise<Task> {
 		this.logger.debug(`Task 생성: exercise=${dto.name}`);
 		const task = await this.tasksRepository.create({
@@ -107,9 +107,9 @@ export class TaskAggregate {
 	}
 
 	async updateTaskExercise(
-		taskId: bigint,
+		taskId: string,
 		dto: UpdateTaskExerciseCommandInput,
-		spaceId: bigint,
+		spaceId: string,
 	): Promise<Task> {
 		const task = await this.findTaskById(
 			taskId,
@@ -117,7 +117,7 @@ export class TaskAggregate {
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
-		if (task.spaceId !== spaceId) {
+		if (task.space?.id !== spaceId) {
 			throw new ForbiddenException(EXERCISE_ERRORS.EXERCISE_NOT_OWNED);
 		}
 
@@ -132,14 +132,14 @@ export class TaskAggregate {
 	}
 
 	@Transactional()
-	async deleteTask(taskId: bigint, spaceId: bigint): Promise<void> {
+	async deleteTask(taskId: string, spaceId: string): Promise<void> {
 		const task = await this.findTaskById(
 			taskId,
 			spaceId,
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
-		if (task.spaceId !== spaceId) {
+		if (task.space?.id !== spaceId) {
 			throw new ForbiddenException(EXERCISE_ERRORS.EXERCISE_NOT_OWNED);
 		}
 
@@ -155,8 +155,8 @@ export class TaskAggregate {
 
 	private resolveReadableSpaceIds(
 		spaceScope: SpaceScope,
-		spaceId: bigint,
-	): bigint[] | undefined {
+		spaceId: string,
+	): string[] | undefined {
 		if (this.spaceContext.spaceIds === undefined) {
 			return undefined;
 		}

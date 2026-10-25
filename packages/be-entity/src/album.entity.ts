@@ -7,7 +7,6 @@ import {
 	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { AlbumSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AlbumEntry } from "./album-entry.entity";
 import { Asset } from "./asset.entity";
@@ -17,14 +16,13 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Album extends AlbumSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
-	declare albumId: AlbumSchema["albumId"];
+	declare id: AlbumSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceId: AlbumSchema["spaceId"];
+	declare spaceSeq: AlbumSchema["spaceSeq"];
 	@StringFieldMetadata({ description: "앨범명" })
 	declare name: AlbumSchema["name"];
 	@NumberFieldMetadata({ description: "정렬 순서", int: true })
@@ -39,9 +37,9 @@ export class Album extends AlbumSchema {
 		nullable: true,
 		description: "커버 에셋 ID",
 	})
-	declare coverAssetId: AlbumSchema["coverAssetId"];
+	declare coverAssetSeq: AlbumSchema["coverAssetSeq"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdById: AlbumSchema["createdById"];
+	declare createdBySeq: AlbumSchema["createdBySeq"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)
@@ -73,6 +71,6 @@ export class Album extends AlbumSchema {
 	 * 커버 이미지가 설정되어 있는지 확인합니다
 	 */
 	hasCover(): boolean {
-		return this.coverAssetId !== null;
+		return this.coverAssetSeq !== null;
 	}
 }

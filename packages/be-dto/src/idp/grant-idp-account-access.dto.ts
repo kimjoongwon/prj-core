@@ -1,9 +1,9 @@
-import { BigIntIdField } from "@cocrepo/decorator/field";
+import { ULIDField } from "@cocrepo/decorator/field";
 
 export class GrantIdpAccountAccessDto {
-	@BigIntIdField({ description: "권한을 부여할 Space ID" })
-	spaceId!: bigint;
+	@ULIDField({ description: "권한을 부여할 Space 공개 ID (ULID)" })
+	spaceId!: string;
 
-	@BigIntIdField({ description: "부여할 Role ID" })
-	roleId!: bigint;
+	@ULIDField({ description: "부여할 Role 공개 ID (ULID)" })
+	roleId!: string;
 }

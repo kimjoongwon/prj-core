@@ -10,7 +10,6 @@ import type {
   ReservationStatus,
 } from "@cocrepo/api/core/model";
 import { observer } from "mobx-react-lite";
-import { formatDatabaseId } from "@cocrepo/type";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const RESERVATION_QUERY_PARAMS = {
@@ -75,7 +74,7 @@ const toMyReservationCardItem = (
   reservation: ReservationDto,
 ): MyReservationCardItem => ({
   dateLabel: formatReservationDate(reservation.occurrenceStartAt),
-  id: formatDatabaseId(reservation.id),
+  id: reservation.id,
   memo: reservation.memo ?? undefined,
   metaLabel: getReservationMeta(reservation),
   statusLabel: STATUS_LABELS[reservation.status],

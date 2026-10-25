@@ -15,7 +15,7 @@ const defaultState = {
 
 const programs = [
 	{
-		id: BigInt(1),
+		id: "01J00000000000000000000001",
 		href: "/timelines/timeline-1/sessions/session-1/programs/program-1" as const,
 		name: "초급 요가 프로그램",
 		routineName: "요가 루틴 A",

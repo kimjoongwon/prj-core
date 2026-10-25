@@ -63,8 +63,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"routineId",
-			"taskId",
 			"order",
 			"repetitions",
 			"restTime",
@@ -77,8 +75,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"routineId",
-			"taskId",
 			"order",
 			"repetitions",
 			"restTime",
@@ -92,7 +88,6 @@ const originalResponseContracts = [
 			"id",
 			"createdAt",
 			"email",
-			"userId",
 			"result",
 			"failureReason",
 			"ipAddress",
@@ -108,22 +103,11 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"spaceId",
-			"createdById",
 			"name",
-			"parentId",
 			"parent",
 			"children",
 		],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"spaceId",
-			"name",
-			"parentId",
-		],
+		required: ["id", "createdAt", "updatedAt", "removedAt", "name"],
 	},
 	{
 		dto: CompanyDto,
@@ -162,7 +146,6 @@ const originalResponseContracts = [
 			"removedAt",
 			"duration",
 			"count",
-			"taskId",
 			"description",
 			"imageFileId",
 			"videoFileId",
@@ -176,7 +159,6 @@ const originalResponseContracts = [
 			"removedAt",
 			"duration",
 			"count",
-			"taskId",
 			"name",
 			"task",
 		],
@@ -188,14 +170,10 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"name",
-			"label",
 			"address",
 			"phone",
 			"email",
-			"companyId",
 			"imageFileId",
-			"spaceId",
 			"company",
 			"space",
 		],
@@ -204,12 +182,9 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"name",
 			"address",
 			"phone",
 			"email",
-			"companyId",
-			"spaceId",
 		],
 	},
 	{
@@ -219,26 +194,16 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"spaceId",
 			"name",
 			"label",
 			"type",
-			"createdById",
 		],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"spaceId",
-			"name",
-			"type",
-		],
+		required: ["id", "createdAt", "updatedAt", "removedAt", "name", "type"],
 	},
 	{
 		dto: PasswordHistoryDto,
-		fields: ["id", "createdAt", "userId"],
-		required: ["id", "createdAt", "userId"],
+		fields: ["id", "createdAt"],
+		required: ["id", "createdAt"],
 	},
 	{
 		dto: ProfileDto,
@@ -251,7 +216,6 @@ const originalResponseContracts = [
 			"name",
 			"nickname",
 			"address",
-			"userId",
 			"user",
 		],
 		required: [
@@ -263,7 +227,6 @@ const originalResponseContracts = [
 			"name",
 			"nickname",
 			"address",
-			"userId",
 		],
 	},
 	{
@@ -273,8 +236,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"programId",
-			"taskId",
 			"order",
 			"repetitions",
 			"restTime",
@@ -291,8 +252,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"programId",
-			"taskId",
 			"order",
 			"repetitions",
 			"restTime",
@@ -308,9 +267,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"routineId",
-			"sessionId",
-			"instructorId",
 			"capacity",
 			"name",
 			"level",
@@ -327,9 +283,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"routineId",
-			"sessionId",
-			"instructorId",
 			"capacity",
 			"name",
 			"routine",
@@ -338,36 +291,13 @@ const originalResponseContracts = [
 	},
 	{
 		dto: RoleAssociationDto,
-		fields: ["id", "createdAt", "updatedAt", "removedAt", "roleId", "groupId"],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"roleId",
-			"groupId",
-		],
+		fields: ["id", "createdAt", "updatedAt", "removedAt"],
+		required: ["id", "createdAt", "updatedAt", "removedAt"],
 	},
 	{
 		dto: RoleClassificationDto,
-		fields: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"roleId",
-			"categoryId",
-			"category",
-			"role",
-		],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"roleId",
-			"categoryId",
-		],
+		fields: ["id", "createdAt", "updatedAt", "removedAt", "category", "role"],
+		required: ["id", "createdAt", "updatedAt", "removedAt"],
 	},
 	{
 		dto: RoleDto,
@@ -402,8 +332,6 @@ const originalResponseContracts = [
 			"removedAt",
 			"name",
 			"label",
-			"spaceId",
-			"createdById",
 			"programs",
 			"activities",
 		],
@@ -414,7 +342,6 @@ const originalResponseContracts = [
 			"removedAt",
 			"name",
 			"label",
-			"spaceId",
 			"programs",
 			"activities",
 		],
@@ -477,7 +404,6 @@ const originalResponseContracts = [
 			"startDateTime",
 			"endDateTime",
 			"recurringDayOfWeek",
-			"timelineId",
 			"name",
 			"description",
 			"programs",
@@ -489,7 +415,6 @@ const originalResponseContracts = [
 			"updatedAt",
 			"removedAt",
 			"type",
-			"timelineId",
 			"name",
 			"programs",
 			"timeline",
@@ -497,36 +422,13 @@ const originalResponseContracts = [
 	},
 	{
 		dto: SpaceAssociationDto,
-		fields: ["id", "createdAt", "updatedAt", "removedAt", "spaceId", "groupId"],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"spaceId",
-			"groupId",
-		],
+		fields: ["id", "createdAt", "updatedAt", "removedAt"],
+		required: ["id", "createdAt", "updatedAt", "removedAt"],
 	},
 	{
 		dto: SpaceClassificationDto,
-		fields: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"spaceId",
-			"categoryId",
-			"category",
-			"space",
-		],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"spaceId",
-			"categoryId",
-		],
+		fields: ["id", "createdAt", "updatedAt", "removedAt", "category", "space"],
+		required: ["id", "createdAt", "updatedAt", "removedAt"],
 	},
 	{
 		dto: SpaceDto,
@@ -536,6 +438,8 @@ const originalResponseContracts = [
 			"updatedAt",
 			"removedAt",
 			"tenantId",
+			"name",
+			"label",
 			"contentLanguageCode",
 			"spaceClassification",
 			"spaceAssociations",
@@ -546,6 +450,7 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
+			"name",
 			"contentLanguageCode",
 		],
 	},
@@ -556,8 +461,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"spaceId",
-			"createdById",
 			"exercise",
 			"activities",
 		],
@@ -566,7 +469,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"spaceId",
 			"exercise",
 			"activities",
 		],
@@ -578,22 +480,11 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"roleId",
-			"userId",
-			"spaceId",
 			"user",
 			"space",
 			"role",
 		],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"roleId",
-			"userId",
-			"spaceId",
-		],
+		required: ["id", "createdAt", "updatedAt", "removedAt"],
 	},
 	{
 		dto: TimelineDto,
@@ -602,54 +493,21 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"spaceId",
-			"createdById",
 			"name",
 			"description",
 			"sessions",
 		],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"spaceId",
-			"name",
-			"sessions",
-		],
+		required: ["id", "createdAt", "updatedAt", "removedAt", "name", "sessions"],
 	},
 	{
 		dto: UserAssociationDto,
-		fields: ["id", "createdAt", "updatedAt", "removedAt", "userId", "groupId"],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"userId",
-			"groupId",
-		],
+		fields: ["id", "createdAt", "updatedAt", "removedAt"],
+		required: ["id", "createdAt", "updatedAt", "removedAt"],
 	},
 	{
 		dto: UserClassificationDto,
-		fields: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"categoryId",
-			"userId",
-			"user",
-			"category",
-		],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"categoryId",
-			"userId",
-		],
+		fields: ["id", "createdAt", "updatedAt", "removedAt", "user", "category"],
+		required: ["id", "createdAt", "updatedAt", "removedAt"],
 	},
 	{
 		dto: UserDto,
@@ -658,7 +516,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"spaceId",
 			"email",
 			"name",
 			"phone",
@@ -669,7 +526,6 @@ const originalResponseContracts = [
 			"lastLoginAt",
 			"lastLoginIp",
 			"isActive",
-			"currentTenantId",
 			"profiles",
 			"tenants",
 			"associations",
@@ -680,7 +536,6 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"spaceId",
 			"email",
 			"name",
 			"phone",
@@ -691,7 +546,6 @@ const originalResponseContracts = [
 			"lastLoginAt",
 			"lastLoginIp",
 			"isActive",
-			"currentTenantId",
 		],
 	},
 	{
@@ -717,9 +571,8 @@ const originalResponseContracts = [
 			"description",
 			"defaultValue",
 			"isRequired",
-			"templateId",
 		],
-		required: ["id", "createdAt", "name", "isRequired", "templateId"],
+		required: ["id", "createdAt", "name", "isRequired"],
 	},
 	{
 		dto: TemplateDto,
@@ -755,26 +608,15 @@ const originalResponseContracts = [
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"actionId",
 			"inverted",
 			"reason",
-			"subjectId",
 			"name",
 			"description",
 			"action",
 			"subject",
 			"priority",
 		],
-		required: [
-			"id",
-			"createdAt",
-			"updatedAt",
-			"removedAt",
-			"actionId",
-			"inverted",
-			"subjectId",
-			"name",
-		],
+		required: ["id", "createdAt", "updatedAt", "removedAt", "inverted", "name"],
 	},
 	{
 		dto: SubjectDto,
@@ -793,17 +635,8 @@ const originalResponseContracts = [
 	},
 	{
 		dto: AbilitySummaryDto,
-		fields: [
-			"id",
-			"name",
-			"actionId",
-			"subjectId",
-			"inverted",
-			"priority",
-			"action",
-			"subject",
-		],
-		required: ["id", "name", "actionId", "subjectId", "inverted"],
+		fields: ["id", "name", "inverted", "priority", "action", "subject"],
+		required: ["id", "name", "inverted"],
 	},
 	{
 		dto: SubjectSummaryDto,
@@ -813,29 +646,23 @@ const originalResponseContracts = [
 ] as const;
 
 describe("Entity 기반 핵심 응답 계약", () => {
-	it.each(
-		originalResponseContracts,
-	)("$dto.name의 기존 공개 필드와 필수 속성을 보존한다", ({
-		dto,
-		fields,
-		required,
-	}) => {
-		const { schema } = generateSchema(dto as Type<object>);
-		expect(Object.keys(schema.properties ?? {}).sort()).toEqual(
-			[...fields].sort(),
-		);
-		expect([...(schema.required ?? [])].sort()).toEqual(
-			[...required].sort(),
-		);
-	});
+	it.each(originalResponseContracts)(
+		"$dto.name의 기존 공개 필드와 필수 속성을 보존한다",
+		({ dto, fields, required }) => {
+			const { schema } = generateSchema(dto as Type<object>);
+			expect(Object.keys(schema.properties ?? {}).sort()).toEqual(
+				[...fields].sort(),
+			);
+			expect([...(schema.required ?? [])].sort()).toEqual([...required].sort());
+		},
+	);
 	it("User → Tenant → Role의 루트·중첩 공개 필드만 변환한다", () => {
 		prepareEntityResponseType(UserDto);
 		const userResponse = plainToInstance(UserDto, {
 			id: "1",
-			spaceId: "2",
 			email: "USER@EXAMPLE.COM",
 			name: "회원",
-			userId: "internal-ulid",
+			userSeq: "internal-ulid",
 			password: "hash",
 			unknown: true,
 			profiles: [
@@ -844,7 +671,7 @@ describe("Entity 기반 핵심 응답 계약", () => {
 			classification: {
 				id: "4",
 				user: { id: "5", name: "분류 회원", password: "secret", unknown: true },
-				category: { id: "6", name: "분류", categoryId: "private" },
+				category: { id: "6", name: "분류", categorySeq: "private" },
 			},
 			tenants: [
 				{
@@ -854,7 +681,7 @@ describe("Entity 기반 핵심 응답 계약", () => {
 					role: {
 						id: "8",
 						name: "USER",
-						roleId: "private",
+						roleSeq: "private",
 						unknown: true,
 						associations: [
 							{
@@ -863,7 +690,7 @@ describe("Entity 기반 핵심 응답 계약", () => {
 								group: {
 									id: "10",
 									name: "그룹",
-									groupId: "private",
+									groupSeq: "private",
 									unknown: true,
 								},
 							},
@@ -872,7 +699,6 @@ describe("Entity 기반 핵심 응답 계약", () => {
 				},
 			],
 		});
-		expect(userResponse.spaceId).toBe(2n);
 		expect(userResponse.profiles?.[0]).toBeInstanceOf(ProfileDto);
 		expect(userResponse.classification?.user).toBeInstanceOf(UserDto);
 		expect(userResponse.classification?.category).toBeInstanceOf(CategoryDto);
@@ -880,7 +706,6 @@ describe("Entity 기반 핵심 응답 계약", () => {
 		expect(userResponse.tenants?.[0].role).toBeInstanceOf(RoleDto);
 		const publicResponse = instanceToPlain(userResponse);
 		expect(publicResponse.email).toBe("user@example.com");
-		expect(publicResponse.spaceId).toBe("2");
 		const responseJson = JSON.stringify(publicResponse);
 		for (const privateContent of [
 			"password",
@@ -896,10 +721,10 @@ describe("Entity 기반 핵심 응답 계약", () => {
 	});
 	it("Entity를 직접 받은 응답도 도메인 메서드와 비공개 필드를 복사하지 않는다", () => {
 		const persistedUser = hydrateEntity(User, {
-			id: 1n,
+			seq: 1n,
 			email: "CASE@EXAMPLE.COM",
 			password: "hash",
-			userId: "private",
+			id: "internal-ulid",
 		});
 		prepareEntityResponseType(UserDto);
 		const response = plainToInstance(UserDto, persistedUser);

@@ -10,7 +10,7 @@ const defaultState = {
 
 const sessions = [
 	{
-		id: BigInt(1),
+		id: "01J00000000000000000000001",
 		name: "오전 세션",
 		typeLabel: "일회성",
 		typeColor: "accent" as const,
@@ -22,7 +22,7 @@ const sessions = [
 		createdAt: new Date("2026-04-01T09:00:00.000Z"),
 	},
 	{
-		id: BigInt(2),
+		id: "01J00000000000000000000002",
 		name: "오후 세션",
 		typeLabel: "정기반복",
 		typeColor: "success" as const,

@@ -3,8 +3,8 @@
 // @description: 독립적으로 존재하는 핵심 사용자 도메인 객체
 /// @displayName 사용자
 model User {
-  userId                       String                @unique @default(ulid()) @map("user_id") @db.Char(26)
-  id                           BigInt                @id @default(autoincrement())
+  id                           String                @unique @default(ulid()) @map("user_id") @db.Char(26)
+  seq                          BigInt                @id @default(autoincrement()) @map("id")
   updatedAt                    DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
   createdAt                    DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   removedAt                    DateTime?             @map("removed_at") @db.Timestamptz(6)

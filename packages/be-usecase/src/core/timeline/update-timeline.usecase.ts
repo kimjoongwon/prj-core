@@ -13,7 +13,7 @@ export class UpdateTimelineUseCase {
 	) {}
 
 	execute(command: UpdateTimelineCommand): Promise<unknown> {
-		const spaceId = this.spaceContext.tenant?.spaceId;
+		const spaceId = this.spaceContext.tenant?.space?.id;
 		if (!spaceId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}

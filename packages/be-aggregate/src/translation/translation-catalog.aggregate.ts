@@ -50,7 +50,7 @@ export class TranslationCatalogAggregate {
 		);
 	}
 
-	async getTranslationById(id: bigint): Promise<Translation> {
+	async getTranslationById(id: string): Promise<Translation> {
 		const translation = await this.repository.findById(id);
 		if (!translation) {
 			throw new NotFoundException("번역을 찾을 수 없습니다");
@@ -101,7 +101,7 @@ export class TranslationCatalogAggregate {
 	}
 
 	async update(
-		id: bigint,
+		id: string,
 		dto: UpdateTranslationCommandInput,
 	): Promise<Translation> {
 		this.logger.debug(`번역 수정 시도: ${id}`);
@@ -117,7 +117,7 @@ export class TranslationCatalogAggregate {
 		});
 	}
 
-	async remove(id: bigint): Promise<void> {
+	async remove(id: string): Promise<void> {
 		this.logger.debug(`번역 삭제 시도: ${id}`);
 
 		await this.getTranslationById(id);

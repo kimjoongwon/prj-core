@@ -12,6 +12,8 @@ export class SpaceDto extends EntityResponseType(Space, {
 		"updatedAt",
 		"removedAt",
 		"tenantId",
+		"name",
+		"label",
 		"contentLanguageCode",
 		"tenants",
 		"spaceClassification",

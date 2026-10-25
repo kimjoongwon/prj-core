@@ -1,5 +1,4 @@
 import {
-	BigIntIdField,
 	BooleanField,
 	DateField,
 	NumberField,
@@ -38,19 +37,14 @@ export class UserDetailResponseDto extends EntityResponseType(User, {
 		classification: () => UserClassificationDto,
 	},
 	extraFields: [
-		"spaceId",
 		"failedLoginAttempts",
 		"lockedUntil",
 		"isPermanentlyLocked",
 		"lastLoginAt",
 		"lastLoginIp",
 		"isActive",
-		"currentTenantId",
 	],
 }) {
-	@BigIntIdField({ description: "소속 공간 ID" })
-	spaceId: bigint;
-
 	@NumberField({ description: "로그인 실패 횟수" })
 	failedLoginAttempts: number;
 
@@ -68,12 +62,6 @@ export class UserDetailResponseDto extends EntityResponseType(User, {
 
 	@BooleanField({ description: "활성 상태" })
 	isActive: boolean;
-
-	@BigIntIdField({
-		nullable: true,
-		description: "현재 선택된 Tenant membership ID",
-	})
-	currentTenantId: bigint | null;
 
 	declare profiles?: ProfileDto[];
 	declare tenants?: TenantDto[];

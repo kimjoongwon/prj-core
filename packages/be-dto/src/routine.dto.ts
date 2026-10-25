@@ -11,8 +11,6 @@ export class RoutineDto extends EntityResponseType(Routine, {
 		"removedAt",
 		"name",
 		"label",
-		"spaceId",
-		"createdById",
 		"programs",
 		"activities",
 	] as const,

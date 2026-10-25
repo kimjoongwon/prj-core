@@ -1,23 +1,24 @@
 import { SpaceAggregate } from "@cocrepo/aggregate";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
-import { PLATFORM_FITNESS_CENTER_NAME } from "./platform-fitness-center-name";
+import { PLATFORM_SPACE_NAME } from "./platform-space-name";
 import { SYSTEM_SPACE_ULID } from "./system-space-ulid";
 
 export async function getSignUpSpaceOrThrow(
 	spacesService: SpaceAggregate,
-	spaceId: bigint,
-): Promise<{ id: bigint }> {
+	spaceId: string,
+): Promise<{ id: string }> {
 	const space = await spacesService.getById(spaceId);
-	if (!space || space.removedAt || space.spaceId === SYSTEM_SPACE_ULID) {
+	if (!space || space.removedAt || space.id === SYSTEM_SPACE_ULID) {
+		throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
+	}
+
+	if (space.name === PLATFORM_SPACE_NAME) {
 		throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
 	}
 
 	try {
-		const fitnessCenter =
-			await spacesService.getFitnessCenterBySpaceId(spaceId);
-		if (fitnessCenter.name === PLATFORM_FITNESS_CENTER_NAME) {
-			throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
-		}
+		// 가입 가능한 공간은 시설이 연결된 운영 공간으로 제한합니다.
+		await spacesService.getFitnessCenterBySpaceId(spaceId);
 	} catch (error) {
 		if (error instanceof NotFoundException) {
 			throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");

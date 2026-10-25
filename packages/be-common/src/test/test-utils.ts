@@ -24,11 +24,11 @@ export interface TestUserData {
 	phone: string;
 	password: string;
 	email: string;
-	spaceId: DatabaseId;
+	spaceSeq: DatabaseId;
 	tenants?: Array<{
 		id: DatabaseId;
-		spaceId: DatabaseId;
-		roleId: DatabaseId;
+		spaceSeq: DatabaseId;
+		roleSeq: DatabaseId;
 	}>;
 	profiles?: Array<{
 		name: string;
@@ -45,12 +45,12 @@ export const createTestUser = (
 		phone: "010-1234-5678",
 		password: "$2b$10$hashedPassword",
 		email: "test@example.com",
-		spaceId: 301n,
+		spaceSeq: 301n,
 		tenants: [
 			{
 				id: 201n,
-				spaceId: 301n,
-				roleId: 401n,
+				spaceSeq: 301n,
+				roleSeq: 401n,
 			},
 		],
 		profiles: [
@@ -68,7 +68,7 @@ export const createTestUserDto = (
 ): ContextUserSnapshot => {
 	return {
 		id: 101n,
-		spaceId: 301n,
+		spaceSeq: 301n,
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",
@@ -79,8 +79,8 @@ export const createTestUserDto = (
 			{
 				id: 201n,
 				name: "Test Tenant",
-				spaceId: 301n,
-				roleId: 401n,
+				spaceSeq: 301n,
+				roleSeq: 401n,
 				space: {
 					id: 301n,
 					name: "Test Space",
@@ -103,7 +103,7 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 	const user = new User();
 	Object.assign(user, {
 		id: 101n,
-		spaceId: 301n,
+		spaceSeq: 301n,
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",
@@ -115,8 +115,8 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 			{
 				id: 201n,
 				name: "Test Tenant",
-				spaceId: 301n,
-				roleId: 401n,
+				spaceSeq: 301n,
+				roleSeq: 401n,
 				space: {
 					id: 301n,
 					name: "Test Space",
@@ -142,11 +142,11 @@ export interface TestTokens {
 }
 
 export const createTestTokens = (
-	userId: string = "user-test-id",
+	userSeq: string = "user-test-id",
 ): TestTokens => {
 	return {
-		accessToken: `test-access-token-${userId}`,
-		refreshToken: `test-refresh-token-${userId}`,
+		accessToken: `test-access-token-${userSeq}`,
+		refreshToken: `test-refresh-token-${userSeq}`,
 	};
 };
 
@@ -157,7 +157,7 @@ export const createMockJwtService = (): Partial<JwtService> => {
 			.mockImplementation((payload) => `mock-token-${JSON.stringify(payload)}`),
 		verify: jest.fn().mockImplementation((token) => {
 			if (token.includes("user-test-id")) {
-				return { userId: "user-test-id" };
+				return { userSeq: "user-test-id" };
 			}
 			throw new Error("Invalid token");
 		}),
@@ -168,7 +168,7 @@ export const createMockJwtService = (): Partial<JwtService> => {
 			),
 		verifyAsync: jest.fn().mockImplementation(async (token) => {
 			if (token.includes("user-test-id")) {
-				return { userId: "user-test-id" };
+				return { userSeq: "user-test-id" };
 			}
 			throw new Error("Invalid token");
 		}),

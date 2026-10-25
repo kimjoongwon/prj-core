@@ -32,6 +32,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -247,7 +248,7 @@ export const prefetchGetSecurityPolicyQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetSecurityPolicyQueryOptions(options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -273,11 +274,19 @@ export const getGetSecurityPolicySuspenseQueryOptions = <
 		Awaited<ReturnType<typeof getSecurityPolicy>>
 	> = ({ signal }) => getSecurityPolicy({ signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getSecurityPolicy>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetSecurityPolicySuspenseQueryResult = NonNullable<
@@ -522,7 +531,7 @@ export const prefetchGetSecurityPolicyInfiniteQuery = async <
 	const queryOptions =
 		getGetSecurityPolicySuspenseInfiniteQueryOptions(options);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

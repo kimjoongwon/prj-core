@@ -7,7 +7,6 @@ import {
 	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { SecurityPolicySchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
@@ -19,15 +18,14 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class SecurityPolicy extends SecurityPolicySchema {
 	@BigIntIdFieldMetadata({ description: "ID" })
-	declare id: bigint;
+	declare seq: bigint;
 	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 	@DateFieldOptionalMetadata({ nullable: true, description: "수정일" })
 	declare updatedAt: Date | null;
 
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
-	declare securityPolicyId: SecurityPolicySchema["securityPolicyId"];
+	declare id: SecurityPolicySchema["id"];
 
 	// ============================================================================
 	// 기본 필드

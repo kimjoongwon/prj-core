@@ -13,7 +13,6 @@ import {
 	ServiceDocumentStatus,
 } from "@cocrepo/enum";
 import { ServiceDocumentSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
@@ -24,8 +23,7 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class ServiceDocument extends ServiceDocumentSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
-	declare serviceDocumentId: ServiceDocumentSchema["serviceDocumentId"];
+	declare id: ServiceDocumentSchema["id"];
 
 	@EnumFieldMetadata(() => ServiceDocumentKind, { description: "문서 종류" })
 	declare kind: ServiceDocumentSchema["kind"];

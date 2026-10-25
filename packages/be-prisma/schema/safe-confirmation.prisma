@@ -2,14 +2,14 @@
 // @description: SafeTransaction에 종속되는 소유자 서명 데이터
 /// @displayName Safe 트랜잭션 서명
 model SafeConfirmation {
-  safeConfirmationId String          @unique @default(ulid()) @map("safe_confirmation_id") @db.Char(26)
-  id                 BigInt          @id @default(autoincrement())
+  id                 String          @unique @default(ulid()) @map("safe_confirmation_id") @db.Char(26)
+  seq                BigInt          @id @default(autoincrement()) @map("id")
   createdAt          DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  safeTransactionId  BigInt          @map("safe_transaction_id")
-  safeTransaction    SafeTransaction @relation(fields: [safeTransactionId], references: [id])
+  safeTransactionSeq BigInt          @map("safe_transaction_id")
+  safeTransaction    SafeTransaction @relation(fields: [safeTransactionSeq], references: [seq])
   owner              String // 서명자 주소
   signature          String // 서명 데이터
 
-  @@unique([safeTransactionId, owner])
+  @@unique([safeTransactionSeq, owner])
   @@map("safe_confirmations")
 }

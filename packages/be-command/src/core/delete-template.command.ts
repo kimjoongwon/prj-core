@@ -1,3 +1,3 @@
 export class DeleteTemplateCommand {
-	constructor(readonly templateId: bigint) {}
+	constructor(readonly templateId: string) {}
 }

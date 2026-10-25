@@ -15,10 +15,10 @@ export class PolicyEntriesRepository {
 		>,
 	) {}
 
-	async findActiveByPolicyId(policyId: bigint): Promise<PolicyEntry[]> {
+	async findActiveByPolicyId(policyId: string): Promise<PolicyEntry[]> {
 		const results = await this.txHost.tx.policyEntry.findMany({
 			where: {
-				policyId,
+				policy: { id: policyId },
 				removedAt: null,
 				ability: { removedAt: null },
 			},
@@ -30,11 +30,11 @@ export class PolicyEntriesRepository {
 	}
 
 	async syncByPolicyId(
-		policyId: bigint,
-		abilityIds: bigint[],
+		policyId: string,
+		abilityIds: string[],
 	): Promise<PolicyEntry[]> {
 		this.logger.debug(
-			`PolicyEntry 동기화: policyId=${policyId.toString()}, count=${abilityIds.length}`,
+			`PolicyEntry 동기화: policyId=${policyId}, count=${abilityIds.length}`,
 		);
 
 		const uniqueAbilityIds = Array.from(new Set(abilityIds));
@@ -45,8 +45,8 @@ export class PolicyEntriesRepository {
 			uniqueAbilityIds.map(async (abilityId) => {
 				const existing = await this.txHost.tx.policyEntry.findFirst({
 					where: {
-						policyId,
-						abilityId,
+						policy: { id: policyId },
+						ability: { id: abilityId },
 					},
 					select: { id: true },
 				});
@@ -61,9 +61,9 @@ export class PolicyEntriesRepository {
 
 				await this.txHost.tx.policyEntry.create({
 					data: {
-						policyId,
-						abilityId,
-					},
+						policy: { connect: { id: policyId } },
+						ability: { connect: { id: abilityId } },
+					} as Prisma.PolicyEntryCreateInput,
 				});
 			}),
 		);
@@ -71,14 +71,14 @@ export class PolicyEntriesRepository {
 		return this.findActiveByPolicyId(policyId);
 	}
 
-	async removeByAbilityId(abilityId: bigint): Promise<number> {
+	async removeByAbilityId(abilityId: string): Promise<number> {
 		this.logger.debug(
-			`Ability ID로 PolicyEntry 소프트 삭제: abilityId=${abilityId.toString()}`,
+			`Ability 공개 ID로 PolicyEntry 소프트 삭제: abilityId=${abilityId}`,
 		);
 
 		const result = await this.txHost.tx.policyEntry.updateMany({
 			where: {
-				abilityId,
+				ability: { id: abilityId },
 				removedAt: null,
 			},
 			data: {
@@ -90,14 +90,16 @@ export class PolicyEntriesRepository {
 	}
 
 	private async softRemoveMissing(
-		policyId: bigint,
-		abilityIds: bigint[],
+		policyId: string,
+		abilityIds: string[],
 	): Promise<void> {
 		await this.txHost.tx.policyEntry.updateMany({
 			where: {
-				policyId,
+				policy: { id: policyId },
 				removedAt: null,
-				...(abilityIds.length > 0 ? { abilityId: { notIn: abilityIds } } : {}),
+				...(abilityIds.length > 0
+					? { ability: { id: { notIn: abilityIds } } }
+					: {}),
 			},
 			data: {
 				removedAt: new Date(),

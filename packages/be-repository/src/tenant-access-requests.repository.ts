@@ -50,7 +50,7 @@ export class TenantAccessRequestsRepository {
 		return toDomainEntity(TenantAccessRequest, result);
 	}
 
-	async findById(id: bigint): Promise<TenantAccessRequest | null> {
+	async findById(id: string): Promise<TenantAccessRequest | null> {
 		this.logger.debug(`테넌트 접근 신청 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
@@ -61,7 +61,7 @@ export class TenantAccessRequestsRepository {
 		return result ? this.toTenantAccessRequest(result) : null;
 	}
 
-	async findByIdWithRelations(id: bigint): Promise<TenantAccessRequest | null> {
+	async findByIdWithRelations(id: string): Promise<TenantAccessRequest | null> {
 		this.logger.debug(`테넌트 접근 신청 상세 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
@@ -102,11 +102,11 @@ export class TenantAccessRequestsRepository {
 	async create(
 		data: AutoIdentityCreateInput<
 			Prisma.TenantAccessRequestUncheckedCreateInput,
-			"tenantAccessRequestId"
+			"id"
 		>,
 	): Promise<TenantAccessRequest> {
 		this.logger.debug(
-			`테넌트 접근 신청 생성: requester=${data.requesterId.toString()}, space=${data.spaceId.toString()}`,
+			`테넌트 접근 신청 생성: requester=${data.requesterSeq.toString()}, space=${data.spaceSeq.toString()}`,
 		);
 		const result = await this.txHost.tx.tenantAccessRequest.create({
 			data,
@@ -117,16 +117,26 @@ export class TenantAccessRequestsRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
-			Prisma.TenantAccessRequestUncheckedUpdateInput,
-			"tenantAccessRequestId"
-		>,
+			Omit<
+				Prisma.TenantAccessRequestUncheckedUpdateInput,
+				"reviewerSeq" | "appliedTenantSeq"
+			>,
+			"id"
+		> & {
+			reviewerId?: string;
+			appliedTenant?: { connect: { id: string } };
+		},
 	): Promise<TenantAccessRequest> {
-		this.logger.debug(`테넌트 접근 신청 수정: ${id.toString()}`);
+		this.logger.debug(`테넌트 접근 신청 수정: ${id}`);
+		const { reviewerId, ...rest } = data;
 		const result = await this.txHost.tx.tenantAccessRequest.update({
 			where: { id },
-			data,
+			data: {
+				...rest,
+				...(reviewerId && { reviewer: { connect: { id: reviewerId } } }),
+			} as Prisma.TenantAccessRequestUpdateInput,
 			include: tenantAccessRequestInclude,
 		});
 

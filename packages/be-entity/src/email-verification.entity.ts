@@ -13,13 +13,13 @@ import { EmailVerificationStatus } from "@cocrepo/enum";
 import { EmailVerificationSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
+import { Space } from "./space.entity";
 import { User } from "./user.entity";
 
 @AbstractEntityFields()
 export class EmailVerification extends EmailVerificationSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
-	declare emailVerificationId: EmailVerificationSchema["emailVerificationId"];
+	declare id: EmailVerificationSchema["id"];
 
 	@StringFieldMetadata({ description: "이메일" })
 	declare email: EmailVerificationSchema["email"];
@@ -31,7 +31,7 @@ export class EmailVerification extends EmailVerificationSchema {
 	@StringFieldMetadata({ description: "주소" })
 	declare address: EmailVerificationSchema["address"];
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceId: EmailVerificationSchema["spaceId"];
+	declare spaceSeq: EmailVerificationSchema["spaceSeq"];
 	@Exclude({ toPlainOnly: true })
 	declare passwordHash: EmailVerificationSchema["passwordHash"];
 	@Exclude({ toPlainOnly: true })
@@ -63,7 +63,9 @@ export class EmailVerification extends EmailVerificationSchema {
 		nullable: true,
 		description: "인증 완료 사용자 ID",
 	})
-	declare verifiedUserId: EmailVerificationSchema["verifiedUserId"];
+	declare verifiedUserSeq: EmailVerificationSchema["verifiedUserSeq"];
 	@ClassField(() => User, { required: false, nullable: true })
 	verifiedUser?: User | null;
+	@ClassField(() => Space, { required: false, nullable: true })
+	space?: Space | null;
 }

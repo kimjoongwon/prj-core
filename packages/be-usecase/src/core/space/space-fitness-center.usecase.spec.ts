@@ -70,12 +70,12 @@ describe("space fitness-center use cases", () => {
 			>,
 		);
 		const useCase = new GetSpaceFitnessCenterUseCase(spaces);
-		const spaceId = 101n;
+		const spaceSeq = "01JSPACE0000000000000000101";
 
 		await expect(
-			useCase.execute(new GetSpaceFitnessCenterQuery(spaceId)),
+			useCase.execute(new GetSpaceFitnessCenterQuery(spaceSeq)),
 		).resolves.toBe(fitnessCenter);
-		expect(spaces.getFitnessCenterBySpaceId).toHaveBeenCalledWith(spaceId);
+		expect(spaces.getFitnessCenterBySpaceId).toHaveBeenCalledWith(spaceSeq);
 	});
 
 	it("Given FitnessCenter 수정 command When 실행하면 Then Company 공통 필드 없이 FitnessCenter 변경만 aggregate에 위임한다", async () => {
@@ -96,8 +96,8 @@ describe("space fitness-center use cases", () => {
 				ReturnType<SpaceAggregate["updateFitnessCenterBySpaceId"]>
 			>,
 		);
-		const spaceId = 101n;
-		const command = new UpdateSpaceFitnessCenterCommand(spaceId, {
+		const spaceSeq = "01JSPACE0000000000000000101";
+		const command = new UpdateSpaceFitnessCenterCommand(spaceSeq, {
 			contentLanguageCode: "en_US",
 			name: "수정 피트니스",
 			label: "리뉴얼",
@@ -110,7 +110,7 @@ describe("space fitness-center use cases", () => {
 
 		await expect(useCase.execute(command)).resolves.toBe(updatedSpace);
 		expect(spaces.updateFitnessCenterBySpaceId).toHaveBeenCalledWith(
-			spaceId,
+			spaceSeq,
 			command,
 		);
 		expect(command).not.toHaveProperty("businessNo");

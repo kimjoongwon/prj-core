@@ -7,8 +7,8 @@ export class UpdateProgramCommand implements UpdateProgramCommandInput {
 	readonly level?: UpdateProgramCommandInput["level"];
 
 	constructor(
-		readonly sessionId: bigint,
-		readonly programId: bigint,
+		readonly sessionId: string,
+		readonly programId: string,
 		input: UpdateProgramCommandInput,
 	) {
 		Object.assign(this, input);

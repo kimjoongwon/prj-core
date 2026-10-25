@@ -35,6 +35,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -281,7 +282,7 @@ export const prefetchGetCommunityPostsQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetCommunityPostsQueryOptions(params, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -311,11 +312,19 @@ export const getGetCommunityPostsSuspenseQueryOptions = <
 		Awaited<ReturnType<typeof getCommunityPosts>>
 	> = ({ signal }) => getCommunityPosts(params, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getCommunityPosts>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetCommunityPostsSuspenseQueryResult = NonNullable<
@@ -579,7 +588,7 @@ export const prefetchGetCommunityPostsInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

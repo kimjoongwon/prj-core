@@ -34,10 +34,9 @@ describe("AccountService", () => {
 		service = module.get(AccountService);
 	});
 
-	it("roles scope claims에 fitnessCenterName을 포함한다", async () => {
+	it("roles scope claims에 spaceName을 포함한다", async () => {
 		usersRepository.findByUserIdWithTenantsAndProfiles.mockResolvedValue({
-			id: 1n,
-			userId: "user-1",
+			id: "user-1",
 			name: "Tester",
 			email: "tester@example.com",
 			phone: "010-1234-5678",
@@ -45,18 +44,14 @@ describe("AccountService", () => {
 			updatedAt: new Date("2026-01-02T00:00:00.000Z"),
 			tenants: [
 				{
-					spaceId: 11n,
-					roleId: 12n,
 					role: {
-						roleId: "01J00000000000000000000012",
+						id: "01J00000000000000000000012",
 						name: "MEMBER",
 						displayName: "회원",
 					},
 					space: {
-						spaceId: "01J00000000000000000000011",
-						fitnessCenter: {
-							name: "System Fitness Center",
-						},
+						id: "01J00000000000000000000011",
+						name: "System Fitness Center",
 					},
 				},
 			],
@@ -80,7 +75,7 @@ describe("AccountService", () => {
 			spaces: [
 				{
 					spaceId: "01J00000000000000000000011",
-					fitnessCenterName: "System Fitness Center",
+					spaceName: "System Fitness Center",
 				},
 			],
 		});

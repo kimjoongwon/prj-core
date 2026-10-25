@@ -2,15 +2,14 @@ import {
 	DateFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { EntityQueryType } from "./entity-query-type";
 import { AuthAuditLog } from "@cocrepo/entity";
+import { EntityQueryType } from "./entity-query-type";
 
 export class QueryAuthAuditLogDto extends EntityQueryType(AuthAuditLog, [
 	"result",
 ] as const) {
 	@StringFieldOptional({ description: "이메일 (부분 일치)" })
 	readonly email?: string;
-
 
 	@StringFieldOptional({ description: "IP 주소 (부분 일치)" })
 	readonly ipAddress?: string;

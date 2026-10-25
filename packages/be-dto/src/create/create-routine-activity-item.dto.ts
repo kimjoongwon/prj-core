@@ -1,14 +1,22 @@
-import { StringFieldOptional } from "@cocrepo/decorator/field";
-import { Activity } from "@cocrepo/entity";
-import { IntersectionType, PartialType, PickType } from "@nestjs/swagger";
+import {
+	NumberFieldOptional,
+	StringFieldOptional,
+	ULIDField,
+} from "@cocrepo/decorator/field";
 
-export class CreateRoutineActivityItemDto extends IntersectionType(
-	PickType(Activity, ["taskId"] as const),
-	PartialType(
-		PickType(Activity, ["order", "repetitions", "restTime"] as const),
-		{ skipNullProperties: false },
-	),
-) {
+export class CreateRoutineActivityItemDto {
+	@ULIDField({ description: "작업 공개 ID (ULID)" })
+	taskId!: string;
+
+	@NumberFieldOptional({ nullable: true })
+	order?: number | null;
+
+	@NumberFieldOptional({ nullable: true })
+	repetitions?: number | null;
+
+	@NumberFieldOptional({ nullable: true })
+	restTime?: number | null;
+
 	@StringFieldOptional()
 	notes?: string;
 }

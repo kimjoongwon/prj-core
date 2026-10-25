@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	DeleteAssetCommand,
 	GetAssetByIdQuery,
@@ -101,13 +101,13 @@ export class AssetsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "assetId",
-		description: "에셋 ID (canonical decimal BIGINT string)",
+		description: "에셋 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(AssetDto, HttpStatus.OK)
 	@ResponseMessage("에셋 상세 조회 성공")
-	async getAssetById(@Param("assetId", ParseBigIntIdPipe) assetId: bigint) {
+	async getAssetById(@Param("assetId", ParseUlidPipe) assetId: string) {
 		return this.queryBus.execute(new GetAssetByIdQuery(assetId));
 	}
 
@@ -128,13 +128,13 @@ export class AssetsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "assetId",
-		description: "에셋 ID (canonical decimal BIGINT string)",
+		description: "에셋 ID (ULID)",
 		type: String,
 	})
 	@ApiProduces("*/*")
 	@ApiErrors(400, 401, 403, 404, 500)
 	async getAssetContent(
-		@Param("assetId", ParseBigIntIdPipe) assetId: bigint,
+		@Param("assetId", ParseUlidPipe) assetId: string,
 		@Res() res: Response,
 	) {
 		const content = await this.queryBus.execute(
@@ -183,7 +183,7 @@ export class AssetsController {
 			properties: {
 				folderId: {
 					type: "string",
-					description: "업로드 대상 폴더 ID (canonical decimal BIGINT string)",
+					description: "업로드 대상 폴더 ID (ULID)",
 				},
 				file: {
 					type: "string",
@@ -228,7 +228,7 @@ export class AssetsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "assetId",
-		description: "에셋 ID (canonical decimal BIGINT string)",
+		description: "에셋 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -239,7 +239,7 @@ export class AssetsController {
 	@ApiResponseEntity(AssetDto, HttpStatus.OK)
 	@ResponseMessage("에셋 이동 성공")
 	async moveAsset(
-		@Param("assetId", ParseBigIntIdPipe) assetId: bigint,
+		@Param("assetId", ParseUlidPipe) assetId: string,
 		@Body() dto: MoveAssetDto,
 	) {
 		return this.commandBus.execute(new MoveAssetCommand(assetId, dto));
@@ -257,13 +257,13 @@ export class AssetsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "assetId",
-		description: "에셋 ID (canonical decimal BIGINT string)",
+		description: "에셋 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ResponseMessage("에셋 삭제 성공")
 	async removeAsset(
-		@Param("assetId", ParseBigIntIdPipe) assetId: bigint,
+		@Param("assetId", ParseUlidPipe) assetId: string,
 	): Promise<void> {
 		await this.commandBus.execute(new DeleteAssetCommand(assetId));
 	}

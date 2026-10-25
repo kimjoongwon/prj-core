@@ -62,8 +62,8 @@ describe("action use cases", () => {
 				ReturnType<ActionAggregate["updateAction"]>
 			>,
 		);
-		const actionId = 101n;
-		const command = new UpdateActionCommand(actionId, {
+		const actionSeq = "01JACTION00000000000000000101";
+		const command = new UpdateActionCommand(actionSeq, {
 			name: "action.update",
 			config: { method: "PATCH" },
 		});
@@ -71,7 +71,7 @@ describe("action use cases", () => {
 
 		await expect(useCase.execute(command)).resolves.toBe(updatedAction);
 		expect(actions.getActionById).not.toHaveBeenCalled();
-		expect(actions.updateAction).toHaveBeenCalledWith(actionId, {
+		expect(actions.updateAction).toHaveBeenCalledWith(actionSeq, {
 			name: "action.update",
 			config: { method: "PATCH" },
 		});
@@ -88,13 +88,13 @@ describe("action use cases", () => {
 				ReturnType<ActionAggregate["deleteAction"]>
 			>,
 		);
-		const actionId = 101n;
+		const actionSeq = "01JACTION00000000000000000101";
 		const useCase = new DeleteActionUseCase(actions);
 
 		await expect(
-			useCase.execute(new DeleteActionCommand(actionId)),
+			useCase.execute(new DeleteActionCommand(actionSeq)),
 		).resolves.toBe(deletedAction);
 		expect(actions.getActionById).not.toHaveBeenCalled();
-		expect(actions.deleteAction).toHaveBeenCalledWith(actionId);
+		expect(actions.deleteAction).toHaveBeenCalledWith(actionSeq);
 	});
 });

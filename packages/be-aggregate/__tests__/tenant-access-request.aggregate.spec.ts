@@ -21,11 +21,11 @@ describe("TenantAccessRequestAggregate", () => {
 	let tenantsRepository: jest.Mocked<TenantsRepository>;
 	let usersRepository: jest.Mocked<UsersRepository>;
 
-	const managedSpaceId = 111n;
-	const otherSpaceId = 222n;
-	const requesterId = 333n;
-	const reviewerId = 444n;
-	const requestId = 555n;
+	const managedSpaceId = "01JSPACE0000000000000000M1";
+	const otherSpaceId = "01JSPACE0000000000000000O2";
+	const requesterId = "01JDDDDDDDDDDDDDDDDDDDDDDDD";
+	const reviewerId = "01JREVIEWER000000000000000R1";
+	const requestId = "01JREQUEST00000000000000055";
 	const memberRoleId = 666n;
 	const platformAdminRoleId = 777n;
 
@@ -85,14 +85,14 @@ describe("TenantAccessRequestAggregate", () => {
 				status: "APPROVED",
 				reviewerId,
 				reviewComment: "승인합니다.",
-				appliedTenantId: 888n,
+				appliedTenant: { connect: { id: 888n } },
 			}),
 		);
 	});
 
 	it("COMPANY_MANAGER가 다른 Space 신청을 승인하면 403을 반환한다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
-			buildRequest({ spaceId: otherSpaceId }),
+			buildRequest({ space: { id: "01JSPACE0000000000000000O2" } }),
 		);
 		usersRepository.findByIdWithTenantsAndProfiles.mockResolvedValue(
 			buildReviewer({
@@ -113,7 +113,7 @@ describe("TenantAccessRequestAggregate", () => {
 	it("COMPANY_MANAGER가 PLATFORM_ADMIN 신청을 승인하면 403을 반환한다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
 			buildRequest({
-				requestedRoleId: platformAdminRoleId,
+				requestedRoleSeq: platformAdminRoleId,
 				requestedRole: {
 					id: platformAdminRoleId,
 					name: SYSTEM_ROLES.PLATFORM_ADMIN,
@@ -140,7 +140,7 @@ describe("TenantAccessRequestAggregate", () => {
 	it("COMPANY_MANAGER는 본인 Space의 PLATFORM_ADMIN 신청을 반려할 수 있다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
 			buildRequest({
-				requestedRoleId: platformAdminRoleId,
+				requestedRoleSeq: platformAdminRoleId,
 				requestedRole: {
 					id: platformAdminRoleId,
 					name: SYSTEM_ROLES.PLATFORM_ADMIN,
@@ -160,7 +160,7 @@ describe("TenantAccessRequestAggregate", () => {
 
 		await service.reject({
 			tenantAccessRequestId: requestId,
-			reviewerId,
+				reviewerId,
 			reviewComment: "PLATFORM_ADMIN은 플랫폼 관리자가 처리합니다.",
 		});
 
@@ -178,8 +178,8 @@ describe("TenantAccessRequestAggregate", () => {
 	it("PLATFORM_ADMIN은 모든 Space와 Role 신청을 승인할 수 있다", async () => {
 		repository.findByIdWithRelations.mockResolvedValue(
 			buildRequest({
-				spaceId: otherSpaceId,
-				requestedRoleId: platformAdminRoleId,
+				spaceSeq: otherSpaceId,
+				requestedRoleSeq: platformAdminRoleId,
 				requestedRole: {
 					id: platformAdminRoleId,
 					name: SYSTEM_ROLES.PLATFORM_ADMIN,
@@ -202,12 +202,12 @@ describe("TenantAccessRequestAggregate", () => {
 
 		await service.approve({
 			tenantAccessRequestId: requestId,
-			reviewerId,
+				reviewerId,
 		});
 
 		expect(tenantsRepository.upsertByUserIdAndSpaceId).toHaveBeenCalledWith({
 			userId: requesterId,
-			spaceId: otherSpaceId,
+			spaceId: "01JSPACE0000000000000000M1",
 			roleId: platformAdminRoleId,
 		});
 	});
@@ -217,16 +217,15 @@ describe("TenantAccessRequestAggregate", () => {
 	): TenantAccessRequest {
 		return {
 			id: requestId,
-			requesterId,
-			spaceId: managedSpaceId,
-			requestedRoleId: memberRoleId,
-			previousRoleId: null,
+			requester: { id: requesterId },
+			space: { id: managedSpaceId },
+			previousRoleSeq: null,
 			reason: "업무 권한이 필요합니다.",
 			status: "PENDING",
 			reviewerId: null,
 			reviewComment: null,
 			reviewedAt: null,
-			appliedTenantId: null,
+			appliedTenantSeq: null,
 			requestedRole: {
 				id: memberRoleId,
 				name: SYSTEM_ROLES.MEMBER,
@@ -240,13 +239,13 @@ describe("TenantAccessRequestAggregate", () => {
 		Awaited<ReturnType<UsersRepository["findByIdWithTenantsAndProfiles"]>>
 	>;
 
-	function buildReviewer(params: { roleName: string; spaceId: bigint }) {
+	function buildReviewer(params: { roleName: string; spaceId: string }) {
 		return {
 			id: reviewerId,
 			tenants: [
 				{
 					removedAt: null,
-					spaceId: params.spaceId,
+					space: { id: params.spaceId },
 					role: {
 						name: params.roleName,
 					},

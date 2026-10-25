@@ -1,7 +1,7 @@
 import type { LanguageCode } from "@cocrepo/prisma";
 
 export interface ListSpacesQueryInput {
-	spaceIds?: bigint[];
+	spaceIds?: string[];
 	skip?: number;
 	take?: number;
 	search?: string;

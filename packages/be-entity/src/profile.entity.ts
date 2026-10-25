@@ -5,15 +5,13 @@ import {
 	UUIDFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { ProfileSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { User } from "./user.entity";
 
 @AbstractEntityFields()
 export class Profile extends ProfileSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
-	declare profileId: ProfileSchema["profileId"];
+	declare id: ProfileSchema["id"];
 
 	@UUIDFieldMetadata({ nullable: true })
 	declare avatarFileId: ProfileSchema["avatarFileId"];
@@ -24,7 +22,7 @@ export class Profile extends ProfileSchema {
 	@StringFieldMetadata()
 	declare address: ProfileSchema["address"];
 	@BigIntIdFieldMetadata()
-	declare userId: ProfileSchema["userId"];
+	declare userSeq: ProfileSchema["userSeq"];
 	@ClassField(() => User, { required: false })
 	user?: User;
 }

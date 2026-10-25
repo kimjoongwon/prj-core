@@ -50,7 +50,7 @@ export default observer(function PolicyEditScreenRoute() {
 						policyId,
 						data: {
 							entries: state.abilityIds.map((abilityId) => ({
-								abilityId: BigInt(abilityId),
+								abilityId,
 							})),
 						},
 					},
@@ -162,7 +162,10 @@ function mapAbilityOption(ability: AbilityResponseDto): PolicyEntryOption {
 }
 
 function getPolicyEntryIds(policy?: PolicyResponseDto): string[] {
+	// PolicyEntryResponseDto가 abilityId 대신 ability 관계 객체를 노출한다.
 	return (
-		policy?.entries?.map((policyEntry) => String(policyEntry.abilityId)) ?? []
+		policy?.entries?.flatMap((policyEntry) =>
+			policyEntry.ability?.id ? [policyEntry.ability.id] : [],
+		) ?? []
 	);
 }

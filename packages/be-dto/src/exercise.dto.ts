@@ -10,7 +10,6 @@ export class ExerciseDto extends EntityResponseType(Exercise, {
 		"removedAt",
 		"duration",
 		"count",
-		"taskId",
 		"description",
 		"imageFileId",
 		"videoFileId",

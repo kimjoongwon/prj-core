@@ -68,7 +68,7 @@ export class TranslationsRepository {
 	/**
 	 * ID로 번역 조회
 	 */
-	async findById(id: bigint): Promise<Translation | null> {
+	async findById(id: string): Promise<Translation | null> {
 		this.logger.debug(`ID로 번역 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.translation.findUnique({
@@ -81,7 +81,7 @@ export class TranslationsRepository {
 	/**
 	 * ID로 번역 조회 (없으면 에러)
 	 */
-	async findByIdOrThrow(id: bigint): Promise<Translation> {
+	async findByIdOrThrow(id: string): Promise<Translation> {
 		const result = await this.findById(id);
 		if (!result) {
 			throw new Error(`Translation not found: ${id.toString()}`);
@@ -151,7 +151,7 @@ export class TranslationsRepository {
 	 * ID로 번역 수정
 	 */
 	async updateById(
-		id: bigint,
+		id: string,
 		data: Prisma.TranslationUncheckedUpdateInput,
 	): Promise<Translation> {
 		this.logger.debug(`번역 수정: ${id.toString()}`);
@@ -167,7 +167,7 @@ export class TranslationsRepository {
 	/**
 	 * ID로 번역 삭제
 	 */
-	async deleteById(id: bigint): Promise<Translation> {
+	async deleteById(id: string): Promise<Translation> {
 		this.logger.debug(`번역 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.translation.delete({

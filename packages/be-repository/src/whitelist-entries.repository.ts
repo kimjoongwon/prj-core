@@ -18,7 +18,7 @@ export class WhitelistEntriesRepository {
 		this.logger = new Logger("WhitelistEntriesRepository");
 	}
 
-	async findById(id: bigint): Promise<WhitelistEntry | null> {
+	async findById(id: string): Promise<WhitelistEntry | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.whitelistEntry.findUnique({
@@ -94,7 +94,7 @@ export class WhitelistEntriesRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: Prisma.WhitelistEntryUncheckedUpdateInput,
 	): Promise<WhitelistEntry> {
 		this.logger.debug(`ID 수정: ${id.toString()}`);
@@ -108,7 +108,7 @@ export class WhitelistEntriesRepository {
 		return toDomainEntity(WhitelistEntry, result);
 	}
 
-	async deleteById(id: bigint): Promise<WhitelistEntry> {
+	async deleteById(id: string): Promise<WhitelistEntry> {
 		this.logger.debug(`ID 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.whitelistEntry.delete({
@@ -132,7 +132,7 @@ export class WhitelistEntriesRepository {
 	}
 
 	private async normalizeUpdateData(
-		id: bigint,
+		id: string,
 		data: Prisma.WhitelistEntryUncheckedUpdateInput,
 	): Promise<Prisma.WhitelistEntryUncheckedUpdateInput> {
 		const current = await this.txHost.tx.whitelistEntry.findUnique({

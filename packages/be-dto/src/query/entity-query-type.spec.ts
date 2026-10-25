@@ -1,22 +1,22 @@
 import "reflect-metadata";
+import { BooleanField, StringField } from "@cocrepo/decorator/field";
 import type { Type } from "@nestjs/common";
-import { describe, expect, it } from "vitest";
+import { DECORATORS } from "@nestjs/swagger";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { AssetQueryDto } from "../asset/asset-query.dto";
-import { QueryTimelineDto } from "./query-timeline.dto";
-import { QueryUsersDto } from "../users/query-users.dto";
-import { QuerySpaceDto } from "./query-space.dto";
-import { DECORATORS } from "@nestjs/swagger";
-import { StringField, BooleanField } from "@cocrepo/decorator/field";
-import { EntityQueryType } from "./entity-query-type";
-import { QueryDto } from "./query.dto";
+import { describe, expect, it } from "vitest";
 import { AlbumQueryDto } from "../album/album-query.dto";
+import { AssetQueryDto } from "../asset/asset-query.dto";
 import { FolderQueryDto } from "../folder/folder-query.dto";
 import { QueryInquiryDto } from "../inquiries/query-inquiry.dto";
 import { QueryTenantAccessRequestDto } from "../tenant-access-requests/query-tenant-access-request.dto";
+import { QueryUsersDto } from "../users/query-users.dto";
+import { EntityQueryType } from "./entity-query-type";
+import { QueryDto } from "./query.dto";
 import { QueryIdpAccountDto } from "./query-idp-account.dto";
 import { QueryOidcSessionDto } from "./query-oidc-session.dto";
+import { QuerySpaceDto } from "./query-space.dto";
+import { QueryTimelineDto } from "./query-timeline.dto";
 
 class QueryFixtureEntity {
 	@StringField()
@@ -64,12 +64,11 @@ describe("EntityQueryType", () => {
 
 	it("preserves migrated domain Query wire contracts", async () => {
 		const validAssetQuery = plainToInstance(AssetQueryDto, {
-			folderId: "123",
+			folderId: "01JFDER00000000000000000AA",
 			kind: "IMAGE",
 			status: "READY",
 		});
 		const invalidAssetQuery = plainToInstance(AssetQueryDto, {
-			folderId: "0",
 			kind: "invalid",
 		});
 		const partialEmailQuery = plainToInstance(QueryUsersDto, {
@@ -79,7 +78,7 @@ describe("EntityQueryType", () => {
 			timelineId: "null",
 		});
 
-		expect(validAssetQuery.folderId).toBe(123n);
+		expect(validAssetQuery.folderId).toBe("01JFDER00000000000000000AA");
 		expect(await validate(validAssetQuery)).toHaveLength(0);
 		expect((await validate(invalidAssetQuery)).length).toBeGreaterThan(0);
 		expect(partialEmailQuery.email).toBe("partial");
@@ -189,9 +188,9 @@ describe("EntityQueryType", () => {
 		{
 			queryType: AlbumQueryDto,
 			filterKey: "spaceId",
-			wireFilter: "123",
-			parsedFilter: 123n,
-			invalidFilter: "0",
+			wireFilter: "01JAAAAAAAAAAAAAAAAAAAAAAA",
+			parsedFilter: "01JAAAAAAAAAAAAAAAAAAAAAAA",
+			invalidFilter: "invalid",
 		},
 		{
 			queryType: QueryIdpAccountDto,
@@ -210,16 +209,16 @@ describe("EntityQueryType", () => {
 		{
 			queryType: QueryTenantAccessRequestDto,
 			filterKey: "spaceId",
-			wireFilter: "123",
-			parsedFilter: 123n,
-			invalidFilter: "0",
+			wireFilter: "01JAAAAAAAAAAAAAAAAAAAAAAA",
+			parsedFilter: "01JAAAAAAAAAAAAAAAAAAAAAAA",
+			invalidFilter: "invalid",
 		},
 		{
 			queryType: QueryTenantAccessRequestDto,
 			filterKey: "requesterId",
-			wireFilter: "456",
-			parsedFilter: 456n,
-			invalidFilter: "-1",
+			wireFilter: "01JBBBBBBBBBBBBBBBBBBBBBBB",
+			parsedFilter: "01JBBBBBBBBBBBBBBBBBBBBBBB",
+			invalidFilter: "invalid",
 		},
 		{
 			queryType: QueryOidcSessionDto,
@@ -235,32 +234,37 @@ describe("EntityQueryType", () => {
 			parsedFilter: "ko_KR",
 			invalidFilter: "UNKNOWN",
 		},
-	])("$queryType.name.$filterKey 필터의 생략·null·변환 계약을 보존한다", async ({
-		queryType,
-		filterKey,
-		wireFilter,
-		parsedFilter,
-		invalidFilter,
-	}) => {
-		const omittedQuery = plainToInstance(queryType, {});
-		const validQuery = plainToInstance(queryType, { [filterKey]: wireFilter });
-		const nullQuery = plainToInstance(queryType, { [filterKey]: null });
-		const invalidQuery = plainToInstance(queryType, {
-			[filterKey]: invalidFilter,
-		});
+	])(
+		"$queryType.name.$filterKey 필터의 생략·null·변환 계약을 보존한다",
+		async ({
+			queryType,
+			filterKey,
+			wireFilter,
+			parsedFilter,
+			invalidFilter,
+		}) => {
+			const omittedQuery = plainToInstance(queryType, {});
+			const validQuery = plainToInstance(queryType, {
+				[filterKey]: wireFilter,
+			});
+			const nullQuery = plainToInstance(queryType, { [filterKey]: null });
+			const invalidQuery = plainToInstance(queryType, {
+				[filterKey]: invalidFilter,
+			});
 
-		expect(omittedQuery).toBeInstanceOf(QueryDto);
-		expect(omittedQuery).not.toHaveProperty(filterKey);
-		expect(await validate(omittedQuery)).toHaveLength(0);
-		expect(validQuery).toMatchObject({ [filterKey]: parsedFilter });
-		expect(await validate(validQuery)).toHaveLength(0);
-		expect(
-			(await validate(nullQuery)).map((error) => error.property),
-		).toContain(filterKey);
-		expect(
-			(await validate(invalidQuery)).map((error) => error.property),
-		).toContain(filterKey);
-	});
+			expect(omittedQuery).toBeInstanceOf(QueryDto);
+			expect(omittedQuery).not.toHaveProperty(filterKey);
+			expect(await validate(omittedQuery)).toHaveLength(0);
+			expect(validQuery).toMatchObject({ [filterKey]: parsedFilter });
+			expect(await validate(validQuery)).toHaveLength(0);
+			expect(
+				(await validate(nullQuery)).map((error) => error.property),
+			).toContain(filterKey);
+			expect(
+				(await validate(invalidQuery)).map((error) => error.property),
+			).toContain(filterKey);
+		},
+	);
 
 	it("Entity와 의미가 다른 ID null 및 검색 계약은 Query 선언을 유지한다", async () => {
 		const inquiryQuery = plainToInstance(QueryInquiryDto, {
@@ -268,7 +272,7 @@ describe("EntityQueryType", () => {
 			customerId: null,
 		});
 		const folderQuery = plainToInstance(FolderQueryDto, {
-			parentFolderId: null,
+			parentFolderId: "not-a-ulid",
 		});
 		const timelineQuery = plainToInstance(QueryTimelineDto, {
 			timelineId: "null",

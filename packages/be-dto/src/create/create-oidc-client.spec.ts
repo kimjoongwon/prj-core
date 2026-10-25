@@ -44,25 +44,23 @@ describe("CreateOidcClientDto의 Entity 파생 계약", () => {
 		).toMatchObject({ type: Boolean, required: false });
 	});
 
-	it.each([
-		true,
-		false,
-		"true",
-		"false",
-	])("skipConsent=%s의 기존 boolean 변환을 유지한다", async (skipConsent) => {
-		await expect(
-			validateOidcClientRequest({ ...oidcClientBody, skipConsent }),
-		).resolves.toMatchObject({
-			skipConsent: skipConsent === true || skipConsent === "true",
-		});
-	});
+	it.each([true, false, "true", "false"])(
+		"skipConsent=%s의 기존 boolean 변환을 유지한다",
+		async (skipConsent) => {
+			await expect(
+				validateOidcClientRequest({ ...oidcClientBody, skipConsent }),
+			).resolves.toMatchObject({
+				skipConsent: skipConsent === true || skipConsent === "true",
+			});
+		},
+	);
 
-	it.each([
-		null,
-		"invalid",
-	])("skipConsent=%s는 선택 입력이어도 거부한다", async (skipConsent) => {
-		await expect(
-			validateOidcClientRequest({ ...oidcClientBody, skipConsent }),
-		).rejects.toThrow();
-	});
+	it.each([null, "invalid"])(
+		"skipConsent=%s는 선택 입력이어도 거부한다",
+		async (skipConsent) => {
+			await expect(
+				validateOidcClientRequest({ ...oidcClientBody, skipConsent }),
+			).rejects.toThrow();
+		},
+	);
 });

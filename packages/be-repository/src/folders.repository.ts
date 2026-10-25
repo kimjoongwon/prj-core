@@ -21,7 +21,7 @@ export class FoldersRepository {
 		this.logger = new Logger("FoldersRepository");
 	}
 
-	async findById(id: bigint): Promise<Folder | null> {
+	async findById(id: string): Promise<Folder | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.folder.findUnique({
@@ -32,7 +32,7 @@ export class FoldersRepository {
 		return result ? toDomainEntity(Folder, result) : null;
 	}
 
-	async findByIdWithChildren(id: bigint): Promise<Folder | null> {
+	async findByIdWithChildren(id: string): Promise<Folder | null> {
 		this.logger.debug(`하위폴더 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.folder.findUnique({
@@ -65,11 +65,11 @@ export class FoldersRepository {
 		return result ? toDomainEntity(Folder, result) : null;
 	}
 
-	async findBySpaceId(spaceId: bigint): Promise<Folder[]> {
-		this.logger.debug(`Space별 폴더 조회: ${spaceId.toString()}`);
+	async findBySpaceId(spaceId: string): Promise<Folder[]> {
+		this.logger.debug(`Space별 폴더 조회: ${spaceId}`);
 
 		const result = await this.txHost.tx.folder.findMany({
-			where: { spaceId },
+			where: { space: { id: spaceId } },
 			include: { space: true, parent: true, createdBy: true },
 			orderBy: [{ path: "asc" }],
 		});
@@ -77,14 +77,12 @@ export class FoldersRepository {
 		return result.map((item) => toDomainEntity(Folder, item));
 	}
 
-	async findByParentFolderId(parentFolderId: bigint | null): Promise<Folder[]> {
-		this.logger.debug(
-			`상위 폴더 기준 조회: ${parentFolderId ? parentFolderId.toString() : "root"}`,
-		);
+	async findByParentFolderId(parentFolderId: string | null): Promise<Folder[]> {
+		this.logger.debug(`상위 폴더 기준 조회: ${parentFolderId ?? "root"}`);
 
 		const result = await this.txHost.tx.folder.findMany({
 			where: {
-				parentFolderId,
+				parent: { id: parentFolderId },
 			},
 			include: { space: true, parent: true, createdBy: true },
 			orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
@@ -118,13 +116,26 @@ export class FoldersRepository {
 
 	async create(
 		data: AutoIdentityCreateInput<
-			Prisma.FolderUncheckedCreateInput,
-			"folderId"
-		>,
+			Omit<
+				Prisma.FolderUncheckedCreateInput,
+				"spaceSeq" | "parentFolderSeq" | "createdBySeq"
+			>,
+			"id"
+		> & {
+			spaceId: string;
+			parentFolderId?: string | null;
+			createdById?: string | null;
+		},
 	): Promise<Folder> {
 		this.logger.debug(`폴더 생성: ${data.name}`);
+		const { spaceId, parentFolderId, createdById, ...rest } = data;
 		const result = await this.txHost.tx.folder.create({
-			data,
+			data: {
+				...rest,
+				space: { connect: { id: spaceId } },
+				...(parentFolderId && { parent: { connect: { id: parentFolderId } } }),
+				...(createdById && { createdBy: { connect: { id: createdById } } }),
+			} as Prisma.FolderCreateInput,
 			include: { space: true, parent: true, createdBy: true },
 		});
 
@@ -132,23 +143,29 @@ export class FoldersRepository {
 	}
 
 	async updateById(
-		id: bigint,
+		id: string,
 		data: AutoIdentityUpdateInput<
-			Prisma.FolderUncheckedUpdateInput,
-			"folderId"
-		>,
+			Omit<Prisma.FolderUncheckedUpdateInput, "parentFolderSeq">,
+			"id"
+		> & { parentFolderId?: string | null },
 	): Promise<Folder> {
-		this.logger.debug(`폴더 수정: ${id.toString()}`);
+		this.logger.debug(`폴더 수정: ${id}`);
+		const { parentFolderId, ...rest } = data;
 		const result = await this.txHost.tx.folder.update({
 			where: { id },
-			data,
+			data: {
+				...rest,
+				...(parentFolderId !== undefined && {
+					parent: { connect: { id: parentFolderId } },
+				}),
+			} as Prisma.FolderUpdateInput,
 			include: { space: true, parent: true, createdBy: true },
 		});
 
 		return toDomainEntity(Folder, result);
 	}
 
-	async removeById(id: bigint): Promise<Folder> {
+	async removeById(id: string): Promise<Folder> {
 		this.logger.debug(`폴더 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.folder.delete({

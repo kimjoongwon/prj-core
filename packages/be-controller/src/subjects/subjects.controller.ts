@@ -1,9 +1,10 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	GetSubjectByIdQuery,
 	GetSubjectFieldsQuery,
 	GetSubjectsQuery,
 } from "@cocrepo/command";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -11,7 +12,6 @@ import {
 	ResponseMessage,
 	Roles,
 } from "@cocrepo/decorator";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { SubjectDto, SubjectFieldDto } from "@cocrepo/dto";
 import {
 	Controller,
@@ -72,13 +72,13 @@ export class SubjectsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Subject ID (canonical decimal BIGINT string)",
+		description: "Subject ID (ULID)",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(SubjectFieldDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("대상 필드 목록 조회 성공")
-	async getSubjectFields(@Param("id", ParseBigIntIdPipe) id: bigint) {
+	async getSubjectFields(@Param("id", ParseUlidPipe) id: string) {
 		return this.queryBus.execute(new GetSubjectFieldsQuery(id));
 	}
 
@@ -93,13 +93,13 @@ export class SubjectsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Subject ID (canonical decimal BIGINT string)",
+		description: "Subject ID (ULID)",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	@ResponseMessage("대상 조회 성공")
-	async getSubjectById(@Param("id", ParseBigIntIdPipe) id: bigint) {
+	async getSubjectById(@Param("id", ParseUlidPipe) id: string) {
 		return this.queryBus.execute(new GetSubjectByIdQuery(id));
 	}
 }

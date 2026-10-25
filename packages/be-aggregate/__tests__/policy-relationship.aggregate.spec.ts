@@ -16,7 +16,7 @@ describe("권한 관계 Aggregate", () => {
 			policiesRepository as never,
 			roleAssignmentsRepository as never,
 			rolesRepository as never,
-			{ spaceId: "space-id" } as never,
+			{ spaceSeq: "space-id" } as never,
 		);
 
 		await expect(
@@ -24,7 +24,7 @@ describe("권한 관계 Aggregate", () => {
 				aggregate as unknown as {
 					assertPoliciesBelongToSpace(
 						policyIds: string[],
-						spaceId: string,
+						spaceSeq: string,
 					): Promise<void>;
 				}
 			).assertPoliciesBelongToSpace(
@@ -41,7 +41,7 @@ describe("권한 관계 Aggregate", () => {
 		const policiesRepository = {
 			findByIdInSpace: jest.fn().mockResolvedValue({
 				id: "policy-id",
-				spaceId: "space-id",
+				spaceSeq: "space-id",
 			}),
 		};
 		const policyEntriesRepository = {
@@ -55,7 +55,7 @@ describe("권한 관계 Aggregate", () => {
 			policyEntriesRepository as never,
 			abilitiesRepository as never,
 			{} as never,
-			{ spaceId: "space-id" } as never,
+			{ spaceSeq: "space-id" } as never,
 			{ user: { id: "user-id" } } as never,
 		);
 

@@ -27,123 +27,123 @@ export type AggregateUserStatus = {
 }
 
 export type UserStatusAvgAggregateOutputType = {
-  id: number | null
-  userId: number | null
+  seq: number | null
+  userSeq: number | null
   failedLoginAttempts: number | null
-  currentTenantId: number | null
+  currentTenantSeq: number | null
 }
 
 export type UserStatusSumAggregateOutputType = {
-  id: bigint | null
-  userId: bigint | null
+  seq: bigint | null
+  userSeq: bigint | null
   failedLoginAttempts: number | null
-  currentTenantId: bigint | null
+  currentTenantSeq: bigint | null
 }
 
 export type UserStatusMinAggregateOutputType = {
-  userStatusId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
-  userId: bigint | null
+  userSeq: bigint | null
   isActive: boolean | null
   failedLoginAttempts: number | null
   lockedUntil: Date | null
   isPermanentlyLocked: boolean | null
   lastLoginAt: Date | null
   lastLoginIp: string | null
-  currentTenantId: bigint | null
+  currentTenantSeq: bigint | null
 }
 
 export type UserStatusMaxAggregateOutputType = {
-  userStatusId: string | null
-  id: bigint | null
+  id: string | null
+  seq: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
-  userId: bigint | null
+  userSeq: bigint | null
   isActive: boolean | null
   failedLoginAttempts: number | null
   lockedUntil: Date | null
   isPermanentlyLocked: boolean | null
   lastLoginAt: Date | null
   lastLoginIp: string | null
-  currentTenantId: bigint | null
+  currentTenantSeq: bigint | null
 }
 
 export type UserStatusCountAggregateOutputType = {
-  userStatusId: number
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
-  userId: number
+  userSeq: number
   isActive: number
   failedLoginAttempts: number
   lockedUntil: number
   isPermanentlyLocked: number
   lastLoginAt: number
   lastLoginIp: number
-  currentTenantId: number
+  currentTenantSeq: number
   _all: number
 }
 
 
 export type UserStatusAvgAggregateInputType = {
-  id?: true
-  userId?: true
+  seq?: true
+  userSeq?: true
   failedLoginAttempts?: true
-  currentTenantId?: true
+  currentTenantSeq?: true
 }
 
 export type UserStatusSumAggregateInputType = {
-  id?: true
-  userId?: true
+  seq?: true
+  userSeq?: true
   failedLoginAttempts?: true
-  currentTenantId?: true
+  currentTenantSeq?: true
 }
 
 export type UserStatusMinAggregateInputType = {
-  userStatusId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
-  userId?: true
+  userSeq?: true
   isActive?: true
   failedLoginAttempts?: true
   lockedUntil?: true
   isPermanentlyLocked?: true
   lastLoginAt?: true
   lastLoginIp?: true
-  currentTenantId?: true
+  currentTenantSeq?: true
 }
 
 export type UserStatusMaxAggregateInputType = {
-  userStatusId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
-  userId?: true
+  userSeq?: true
   isActive?: true
   failedLoginAttempts?: true
   lockedUntil?: true
   isPermanentlyLocked?: true
   lastLoginAt?: true
   lastLoginIp?: true
-  currentTenantId?: true
+  currentTenantSeq?: true
 }
 
 export type UserStatusCountAggregateInputType = {
-  userStatusId?: true
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
-  userId?: true
+  userSeq?: true
   isActive?: true
   failedLoginAttempts?: true
   lockedUntil?: true
   isPermanentlyLocked?: true
   lastLoginAt?: true
   lastLoginIp?: true
-  currentTenantId?: true
+  currentTenantSeq?: true
   _all?: true
 }
 
@@ -234,18 +234,18 @@ export type UserStatusGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type UserStatusGroupByOutputType = {
-  userStatusId: string
-  id: bigint
+  id: string
+  seq: bigint
   createdAt: Date
   updatedAt: Date | null
-  userId: bigint
+  userSeq: bigint
   isActive: boolean
   failedLoginAttempts: number
   lockedUntil: Date | null
   isPermanentlyLocked: boolean
   lastLoginAt: Date | null
   lastLoginIp: string | null
-  currentTenantId: bigint | null
+  currentTenantSeq: bigint | null
   _count: UserStatusCountAggregateOutputType | null
   _avg: UserStatusAvgAggregateOutputType | null
   _sum: UserStatusSumAggregateOutputType | null
@@ -272,43 +272,43 @@ export type UserStatusWhereInput = {
   AND?: Prisma.UserStatusWhereInput | Prisma.UserStatusWhereInput[]
   OR?: Prisma.UserStatusWhereInput[]
   NOT?: Prisma.UserStatusWhereInput | Prisma.UserStatusWhereInput[]
-  userStatusId?: Prisma.StringFilter<"UserStatus"> | string
-  id?: Prisma.BigIntFilter<"UserStatus"> | bigint | number
+  id?: Prisma.StringFilter<"UserStatus"> | string
+  seq?: Prisma.BigIntFilter<"UserStatus"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"UserStatus"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserStatus"> | Date | string | null
-  userId?: Prisma.BigIntFilter<"UserStatus"> | bigint | number
+  userSeq?: Prisma.BigIntFilter<"UserStatus"> | bigint | number
   isActive?: Prisma.BoolFilter<"UserStatus"> | boolean
   failedLoginAttempts?: Prisma.IntFilter<"UserStatus"> | number
   lockedUntil?: Prisma.DateTimeNullableFilter<"UserStatus"> | Date | string | null
   isPermanentlyLocked?: Prisma.BoolFilter<"UserStatus"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"UserStatus"> | Date | string | null
   lastLoginIp?: Prisma.StringNullableFilter<"UserStatus"> | string | null
-  currentTenantId?: Prisma.BigIntNullableFilter<"UserStatus"> | bigint | number | null
+  currentTenantSeq?: Prisma.BigIntNullableFilter<"UserStatus"> | bigint | number | null
   currentTenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type UserStatusOrderByWithRelationInput = {
-  userStatusId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
   lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   isPermanentlyLocked?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginIp?: Prisma.SortOrderInput | Prisma.SortOrder
-  currentTenantId?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentTenantSeq?: Prisma.SortOrderInput | Prisma.SortOrder
   currentTenant?: Prisma.TenantOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type UserStatusWhereUniqueInput = Prisma.AtLeast<{
-  userStatusId?: string
-  id?: bigint | number
-  userId?: bigint | number
+  id?: string
+  seq?: bigint | number
+  userSeq?: bigint | number
   AND?: Prisma.UserStatusWhereInput | Prisma.UserStatusWhereInput[]
   OR?: Prisma.UserStatusWhereInput[]
   NOT?: Prisma.UserStatusWhereInput | Prisma.UserStatusWhereInput[]
@@ -320,24 +320,24 @@ export type UserStatusWhereUniqueInput = Prisma.AtLeast<{
   isPermanentlyLocked?: Prisma.BoolFilter<"UserStatus"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"UserStatus"> | Date | string | null
   lastLoginIp?: Prisma.StringNullableFilter<"UserStatus"> | string | null
-  currentTenantId?: Prisma.BigIntNullableFilter<"UserStatus"> | bigint | number | null
+  currentTenantSeq?: Prisma.BigIntNullableFilter<"UserStatus"> | bigint | number | null
   currentTenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userStatusId" | "userId">
+}, "seq" | "id" | "userSeq">
 
 export type UserStatusOrderByWithAggregationInput = {
-  userStatusId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
   lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   isPermanentlyLocked?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginIp?: Prisma.SortOrderInput | Prisma.SortOrder
-  currentTenantId?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentTenantSeq?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserStatusCountOrderByAggregateInput
   _avg?: Prisma.UserStatusAvgOrderByAggregateInput
   _max?: Prisma.UserStatusMaxOrderByAggregateInput
@@ -349,23 +349,23 @@ export type UserStatusScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserStatusScalarWhereWithAggregatesInput | Prisma.UserStatusScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserStatusScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserStatusScalarWhereWithAggregatesInput | Prisma.UserStatusScalarWhereWithAggregatesInput[]
-  userStatusId?: Prisma.StringWithAggregatesFilter<"UserStatus"> | string
-  id?: Prisma.BigIntWithAggregatesFilter<"UserStatus"> | bigint | number
+  id?: Prisma.StringWithAggregatesFilter<"UserStatus"> | string
+  seq?: Prisma.BigIntWithAggregatesFilter<"UserStatus"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserStatus"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserStatus"> | Date | string | null
-  userId?: Prisma.BigIntWithAggregatesFilter<"UserStatus"> | bigint | number
+  userSeq?: Prisma.BigIntWithAggregatesFilter<"UserStatus"> | bigint | number
   isActive?: Prisma.BoolWithAggregatesFilter<"UserStatus"> | boolean
   failedLoginAttempts?: Prisma.IntWithAggregatesFilter<"UserStatus"> | number
   lockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"UserStatus"> | Date | string | null
   isPermanentlyLocked?: Prisma.BoolWithAggregatesFilter<"UserStatus"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserStatus"> | Date | string | null
   lastLoginIp?: Prisma.StringNullableWithAggregatesFilter<"UserStatus"> | string | null
-  currentTenantId?: Prisma.BigIntNullableWithAggregatesFilter<"UserStatus"> | bigint | number | null
+  currentTenantSeq?: Prisma.BigIntNullableWithAggregatesFilter<"UserStatus"> | bigint | number | null
 }
 
 export type UserStatusCreateInput = {
-  userStatusId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   isActive?: boolean
@@ -379,23 +379,23 @@ export type UserStatusCreateInput = {
 }
 
 export type UserStatusUncheckedCreateInput = {
-  userStatusId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
-  userId: bigint | number
+  userSeq: bigint | number
   isActive?: boolean
   failedLoginAttempts?: number
   lockedUntil?: Date | string | null
   isPermanentlyLocked?: boolean
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
-  currentTenantId?: bigint | number | null
+  currentTenantSeq?: bigint | number | null
 }
 
 export type UserStatusUpdateInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -409,38 +409,38 @@ export type UserStatusUpdateInput = {
 }
 
 export type UserStatusUncheckedUpdateInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  currentTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type UserStatusCreateManyInput = {
-  userStatusId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
-  userId: bigint | number
+  userSeq: bigint | number
   isActive?: boolean
   failedLoginAttempts?: number
   lockedUntil?: Date | string | null
   isPermanentlyLocked?: boolean
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
-  currentTenantId?: bigint | number | null
+  currentTenantSeq?: bigint | number | null
 }
 
 export type UserStatusUpdateManyMutationInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -452,18 +452,18 @@ export type UserStatusUpdateManyMutationInput = {
 }
 
 export type UserStatusUncheckedUpdateManyInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  currentTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type UserStatusListRelationFilter = {
@@ -477,62 +477,62 @@ export type UserStatusOrderByRelationAggregateInput = {
 }
 
 export type UserStatusCountOrderByAggregateInput = {
-  userStatusId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
   lockedUntil?: Prisma.SortOrder
   isPermanentlyLocked?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   lastLoginIp?: Prisma.SortOrder
-  currentTenantId?: Prisma.SortOrder
+  currentTenantSeq?: Prisma.SortOrder
 }
 
 export type UserStatusAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
-  currentTenantId?: Prisma.SortOrder
+  currentTenantSeq?: Prisma.SortOrder
 }
 
 export type UserStatusMaxOrderByAggregateInput = {
-  userStatusId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
   lockedUntil?: Prisma.SortOrder
   isPermanentlyLocked?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   lastLoginIp?: Prisma.SortOrder
-  currentTenantId?: Prisma.SortOrder
+  currentTenantSeq?: Prisma.SortOrder
 }
 
 export type UserStatusMinOrderByAggregateInput = {
-  userStatusId?: Prisma.SortOrder
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
   lockedUntil?: Prisma.SortOrder
   isPermanentlyLocked?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   lastLoginIp?: Prisma.SortOrder
-  currentTenantId?: Prisma.SortOrder
+  currentTenantSeq?: Prisma.SortOrder
 }
 
 export type UserStatusSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
-  currentTenantId?: Prisma.SortOrder
+  currentTenantSeq?: Prisma.SortOrder
 }
 
 export type UserStatusNullableScalarRelationFilter = {
@@ -615,8 +615,8 @@ export type UserStatusUncheckedUpdateOneWithoutUserNestedInput = {
 }
 
 export type UserStatusCreateWithoutCurrentTenantInput = {
-  userStatusId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   isActive?: boolean
@@ -629,11 +629,11 @@ export type UserStatusCreateWithoutCurrentTenantInput = {
 }
 
 export type UserStatusUncheckedCreateWithoutCurrentTenantInput = {
-  userStatusId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
-  userId: bigint | number
+  userSeq: bigint | number
   isActive?: boolean
   failedLoginAttempts?: number
   lockedUntil?: Date | string | null
@@ -672,23 +672,23 @@ export type UserStatusScalarWhereInput = {
   AND?: Prisma.UserStatusScalarWhereInput | Prisma.UserStatusScalarWhereInput[]
   OR?: Prisma.UserStatusScalarWhereInput[]
   NOT?: Prisma.UserStatusScalarWhereInput | Prisma.UserStatusScalarWhereInput[]
-  userStatusId?: Prisma.StringFilter<"UserStatus"> | string
-  id?: Prisma.BigIntFilter<"UserStatus"> | bigint | number
+  id?: Prisma.StringFilter<"UserStatus"> | string
+  seq?: Prisma.BigIntFilter<"UserStatus"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"UserStatus"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserStatus"> | Date | string | null
-  userId?: Prisma.BigIntFilter<"UserStatus"> | bigint | number
+  userSeq?: Prisma.BigIntFilter<"UserStatus"> | bigint | number
   isActive?: Prisma.BoolFilter<"UserStatus"> | boolean
   failedLoginAttempts?: Prisma.IntFilter<"UserStatus"> | number
   lockedUntil?: Prisma.DateTimeNullableFilter<"UserStatus"> | Date | string | null
   isPermanentlyLocked?: Prisma.BoolFilter<"UserStatus"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"UserStatus"> | Date | string | null
   lastLoginIp?: Prisma.StringNullableFilter<"UserStatus"> | string | null
-  currentTenantId?: Prisma.BigIntNullableFilter<"UserStatus"> | bigint | number | null
+  currentTenantSeq?: Prisma.BigIntNullableFilter<"UserStatus"> | bigint | number | null
 }
 
 export type UserStatusCreateWithoutUserInput = {
-  userStatusId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   isActive?: boolean
@@ -701,8 +701,8 @@ export type UserStatusCreateWithoutUserInput = {
 }
 
 export type UserStatusUncheckedCreateWithoutUserInput = {
-  userStatusId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   isActive?: boolean
@@ -711,7 +711,7 @@ export type UserStatusUncheckedCreateWithoutUserInput = {
   isPermanentlyLocked?: boolean
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
-  currentTenantId?: bigint | number | null
+  currentTenantSeq?: bigint | number | null
 }
 
 export type UserStatusCreateOrConnectWithoutUserInput = {
@@ -731,8 +731,8 @@ export type UserStatusUpdateToOneWithWhereWithoutUserInput = {
 }
 
 export type UserStatusUpdateWithoutUserInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -745,8 +745,8 @@ export type UserStatusUpdateWithoutUserInput = {
 }
 
 export type UserStatusUncheckedUpdateWithoutUserInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -755,15 +755,15 @@ export type UserStatusUncheckedUpdateWithoutUserInput = {
   isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  currentTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type UserStatusCreateManyCurrentTenantInput = {
-  userStatusId?: string
-  id?: bigint | number
+  id?: string
+  seq?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
-  userId: bigint | number
+  userSeq: bigint | number
   isActive?: boolean
   failedLoginAttempts?: number
   lockedUntil?: Date | string | null
@@ -773,8 +773,8 @@ export type UserStatusCreateManyCurrentTenantInput = {
 }
 
 export type UserStatusUpdateWithoutCurrentTenantInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -787,11 +787,11 @@ export type UserStatusUpdateWithoutCurrentTenantInput = {
 }
 
 export type UserStatusUncheckedUpdateWithoutCurrentTenantInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -801,11 +801,11 @@ export type UserStatusUncheckedUpdateWithoutCurrentTenantInput = {
 }
 
 export type UserStatusUncheckedUpdateManyWithoutCurrentTenantInput = {
-  userStatusId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -817,72 +817,72 @@ export type UserStatusUncheckedUpdateManyWithoutCurrentTenantInput = {
 
 
 export type UserStatusSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  userStatusId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  userId?: boolean
+  userSeq?: boolean
   isActive?: boolean
   failedLoginAttempts?: boolean
   lockedUntil?: boolean
   isPermanentlyLocked?: boolean
   lastLoginAt?: boolean
   lastLoginIp?: boolean
-  currentTenantId?: boolean
+  currentTenantSeq?: boolean
   currentTenant?: boolean | Prisma.UserStatus$currentTenantArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userStatus"]>
 
 export type UserStatusSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  userStatusId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  userId?: boolean
+  userSeq?: boolean
   isActive?: boolean
   failedLoginAttempts?: boolean
   lockedUntil?: boolean
   isPermanentlyLocked?: boolean
   lastLoginAt?: boolean
   lastLoginIp?: boolean
-  currentTenantId?: boolean
+  currentTenantSeq?: boolean
   currentTenant?: boolean | Prisma.UserStatus$currentTenantArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userStatus"]>
 
 export type UserStatusSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  userStatusId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  userId?: boolean
+  userSeq?: boolean
   isActive?: boolean
   failedLoginAttempts?: boolean
   lockedUntil?: boolean
   isPermanentlyLocked?: boolean
   lastLoginAt?: boolean
   lastLoginIp?: boolean
-  currentTenantId?: boolean
+  currentTenantSeq?: boolean
   currentTenant?: boolean | Prisma.UserStatus$currentTenantArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userStatus"]>
 
 export type UserStatusSelectScalar = {
-  userStatusId?: boolean
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  userId?: boolean
+  userSeq?: boolean
   isActive?: boolean
   failedLoginAttempts?: boolean
   lockedUntil?: boolean
   isPermanentlyLocked?: boolean
   lastLoginAt?: boolean
   lastLoginIp?: boolean
-  currentTenantId?: boolean
+  currentTenantSeq?: boolean
 }
 
-export type UserStatusOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userStatusId" | "id" | "createdAt" | "updatedAt" | "userId" | "isActive" | "failedLoginAttempts" | "lockedUntil" | "isPermanentlyLocked" | "lastLoginAt" | "lastLoginIp" | "currentTenantId", ExtArgs["result"]["userStatus"]>
+export type UserStatusOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "userSeq" | "isActive" | "failedLoginAttempts" | "lockedUntil" | "isPermanentlyLocked" | "lastLoginAt" | "lastLoginIp" | "currentTenantSeq", ExtArgs["result"]["userStatus"]>
 export type UserStatusInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   currentTenant?: boolean | Prisma.UserStatus$currentTenantArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -903,14 +903,14 @@ export type $UserStatusPayload<ExtArgs extends runtime.Types.Extensions.Internal
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    userStatusId: string
-    id: bigint
+    id: string
+    seq: bigint
     createdAt: Date
     updatedAt: Date | null
     /**
      * @displayName 소속 사용자 내부 순번
      */
-    userId: bigint
+    userSeq: bigint
     /**
      * @displayName 활성 상태
      */
@@ -938,7 +938,7 @@ export type $UserStatusPayload<ExtArgs extends runtime.Types.Extensions.Internal
     /**
      * @displayName 현재 테넌트 ID
      */
-    currentTenantId: bigint | null
+    currentTenantSeq: bigint | null
   }, ExtArgs["result"]["userStatus"]>
   composites: {}
 }
@@ -1022,8 +1022,8 @@ export interface UserStatusDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Get first 10 UserStatuses
    * const userStatuses = await prisma.userStatus.findMany({ take: 10 })
    *
-   * // Only select the `userStatusId`
-   * const userStatusWithUserStatusIdOnly = await prisma.userStatus.findMany({ select: { userStatusId: true } })
+   * // Only select the `id`
+   * const userStatusWithIdOnly = await prisma.userStatus.findMany({ select: { id: true } })
    *
    */
   findMany<T extends UserStatusFindManyArgs>(args?: Prisma.SelectSubset<T, UserStatusFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserStatusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1067,9 +1067,9 @@ export interface UserStatusDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    *
-   * // Create many UserStatuses and only return the `userStatusId`
-   * const userStatusWithUserStatusIdOnly = await prisma.userStatus.createManyAndReturn({
-   *   select: { userStatusId: true },
+   * // Create many UserStatuses and only return the `id`
+   * const userStatusWithIdOnly = await prisma.userStatus.createManyAndReturn({
+   *   select: { id: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1158,9 +1158,9 @@ export interface UserStatusDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    *
-   * // Update zero or more UserStatuses and only return the `userStatusId`
-   * const userStatusWithUserStatusIdOnly = await prisma.userStatus.updateManyAndReturn({
-   *   select: { userStatusId: true },
+   * // Update zero or more UserStatuses and only return the `id`
+   * const userStatusWithIdOnly = await prisma.userStatus.updateManyAndReturn({
+   *   select: { id: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1364,18 +1364,18 @@ export interface Prisma__UserStatusClient<T, Null = never, ExtArgs extends runti
  * Fields of the UserStatus model
  */
 export interface UserStatusFieldRefs {
-  readonly userStatusId: Prisma.FieldRef<"UserStatus", 'String'>
-  readonly id: Prisma.FieldRef<"UserStatus", 'BigInt'>
+  readonly id: Prisma.FieldRef<"UserStatus", 'String'>
+  readonly seq: Prisma.FieldRef<"UserStatus", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"UserStatus", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserStatus", 'DateTime'>
-  readonly userId: Prisma.FieldRef<"UserStatus", 'BigInt'>
+  readonly userSeq: Prisma.FieldRef<"UserStatus", 'BigInt'>
   readonly isActive: Prisma.FieldRef<"UserStatus", 'Boolean'>
   readonly failedLoginAttempts: Prisma.FieldRef<"UserStatus", 'Int'>
   readonly lockedUntil: Prisma.FieldRef<"UserStatus", 'DateTime'>
   readonly isPermanentlyLocked: Prisma.FieldRef<"UserStatus", 'Boolean'>
   readonly lastLoginAt: Prisma.FieldRef<"UserStatus", 'DateTime'>
   readonly lastLoginIp: Prisma.FieldRef<"UserStatus", 'String'>
-  readonly currentTenantId: Prisma.FieldRef<"UserStatus", 'BigInt'>
+  readonly currentTenantSeq: Prisma.FieldRef<"UserStatus", 'BigInt'>
 }
 
 

@@ -9,7 +9,6 @@ import {
 	useGetPrograms,
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
-import { useGetUsers } from "@cocrepo/api/core/users";
 import {
 	Button,
 	HStack,
@@ -102,18 +101,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		{ take: 20, skip: 0 },
 	);
 	const programs = programsResponse?.data ?? [];
-	const { data: usersResponse } = useGetUsers({
-		take: 100,
-		skip: 0,
-		status: "active",
-	});
-	const users = usersResponse?.data ?? [];
-	const instructorNameById = new Map(
-		users.map((user) => [user.id.toString(), user.name]),
-	);
+	// ProgramDto가 강사 공개 id(instructorId)를 더 이상 노출하지 않아
+	// 강사 이름 조회와 강사 기준 연결 확인은 루틴 연결로만 대체한다.
 	const isConnectionResolved = (program: ProgramDto) =>
-		Boolean(program.routine?.id) &&
-		instructorNameById.has(program.instructorId.toString());
+		Boolean(program.routine?.id);
 	const totalPrograms = programs.length;
 	const resolvedPrograms = programs.filter((program) =>
 		isConnectionResolved(program),
@@ -151,14 +142,14 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route,
 		);
 	};
-	const onClickEditProgramButton = (programId: bigint) => {
+	const onClickEditProgramButton = (programId: string) => {
 		router.push(
 			`/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}/edit` as Route,
 		);
 	};
-	const onClickDeleteProgramButton = (programId: bigint) => {
+	const onClickDeleteProgramButton = (programId: string) => {
 		deleteProgram(
-			{ timelineId, sessionId, programId: programId.toString() },
+			{ timelineId, sessionId, programId },
 			{
 				onSuccess: () => {
 					toast.success("삭제 성공", {
@@ -178,8 +169,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		);
 	};
 
-	const getInstructorName = (instructorId: bigint) =>
-		instructorNameById.get(instructorId.toString()) ?? "확인 필요";
 	const getProgramPreviewText = (program: ProgramDto) =>
 		program.previewExerciseNames && program.previewExerciseNames.length > 0
 			? program.previewExerciseNames.join(", ")
@@ -220,13 +209,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			}
 			programs={programs.map((program) => ({
 				id: program.id,
-				href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id.toString()}` as Route,
+				href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
 				name: program.name,
 				routineName:
 					program.routineNameSnapshot ?? program.routine?.name ?? "-",
 				activityCountLabel: `${program.activityCount ?? 0}개`,
 				previewText: getProgramPreviewText(program),
-				instructorName: getInstructorName(program.instructorId),
+				instructorName: "-",
 				isConnectionResolved: isConnectionResolved(program),
 				capacityLabel: `${program.capacity}명`,
 				levelLabel: program.level ?? "-",

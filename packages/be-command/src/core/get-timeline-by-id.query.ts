@@ -1,3 +1,3 @@
 export class GetTimelineByIdQuery {
-	constructor(readonly timelineId: bigint) {}
+	constructor(readonly timelineId: string) {}
 }

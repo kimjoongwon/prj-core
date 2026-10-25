@@ -44,9 +44,9 @@ export class ReservationAggregate {
 			date: string;
 			startsAt: Date;
 			endsAt: Date;
-			timelineId: bigint;
-			sessionId: bigint;
-			programId: bigint;
+			timelineId: string;
+			sessionId: string;
+			programId: string;
 			timelineName: string;
 			sessionName: string;
 			programName: string;
@@ -91,7 +91,7 @@ export class ReservationAggregate {
 				programIds,
 			}),
 			this.repository.findCoachNames(
-				programs.map((program) => program.instructorId),
+				programs.map((program) => program.instructor?.id ?? ""),
 			),
 		]);
 
@@ -113,7 +113,8 @@ export class ReservationAggregate {
 							),
 						) ?? [],
 					userId: input.userId,
-					coachName: coachNames.get(occurrence.program.instructorId) ?? null,
+					coachName:
+						coachNames.get(occurrence.program.instructor?.id ?? "") ?? null,
 				}),
 			);
 
@@ -124,8 +125,8 @@ export class ReservationAggregate {
 	}
 
 	async getMine(params: {
-		spaceId: bigint;
-		userId: bigint;
+		spaceId: string;
+		userId: string;
 		from?: Date;
 		to?: Date;
 		status?: ReservationStatus;
@@ -137,8 +138,8 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async create(params: {
-		spaceId: bigint;
-		userId: bigint;
+		spaceId: string;
+		userId: string;
 		input: CreateReservationInput;
 	}): Promise<Reservation> {
 		const createResult = await this.createWithResult(params);
@@ -147,8 +148,8 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async createWithResult(params: {
-		spaceId: bigint;
-		userId: bigint;
+		spaceId: string;
+		userId: string;
 		input: CreateReservationInput;
 	}) {
 		this.logger.debug(
@@ -208,7 +209,7 @@ export class ReservationAggregate {
 
 		const reservation = await this.repository.create({
 			spaceId: params.spaceId,
-			createdById: params.userId,
+			createdBy: { connect: { id: params.userId } },
 			userId: params.userId,
 			timelineId: params.input.timelineId,
 			sessionId: params.input.sessionId,
@@ -233,9 +234,9 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async cancel(params: {
-		spaceId: bigint;
-		userId: bigint;
-		reservationId: bigint;
+		spaceId: string;
+		userId: string;
+		reservationId: string;
 		cancelReason?: string | null;
 		now?: Date;
 	}): Promise<Reservation> {
@@ -266,7 +267,7 @@ export class ReservationAggregate {
 
 		if (wasConfirmed) {
 			await this.promoteWaitlistIfPossible({
-				programId: reservation.programId,
+				programId: reservation.program?.id,
 				occurrenceStartAt: reservation.occurrenceStartAt,
 				now,
 			});
@@ -276,8 +277,8 @@ export class ReservationAggregate {
 	}
 
 	private async assertUserCanBookSpace(
-		userId: bigint,
-		spaceId: bigint,
+		userId: string,
+		spaceId: string,
 	): Promise<void> {
 		const tenant = await this.tenantsRepository.findActiveByUserIdAndSpaceId(
 			userId,
@@ -289,7 +290,7 @@ export class ReservationAggregate {
 	}
 
 	private async promoteWaitlistIfPossible(params: {
-		programId: bigint;
+		programId: string;
 		occurrenceStartAt: Date;
 		now: Date;
 	}): Promise<void> {
@@ -298,7 +299,7 @@ export class ReservationAggregate {
 			return;
 		}
 
-		const nextWaitlistedSpaceId = nextWaitlisted.spaceId;
+		const nextWaitlistedSpaceId = nextWaitlisted.space?.id;
 		if (!nextWaitlistedSpaceId) {
 			throw new BadRequestException(RESERVATION_ERRORS.INVALID_DATA);
 		}
@@ -452,7 +453,7 @@ export class ReservationAggregate {
 		const groups = new Map<string, Reservation[]>();
 		for (const reservation of reservations) {
 			const key = this.buildOccurrenceKey(
-				reservation.programId,
+				reservation.program?.id,
 				reservation.occurrenceStartAt,
 			);
 			const group = groups.get(key) ?? [];
@@ -467,7 +468,7 @@ export class ReservationAggregate {
 		startsAt: Date;
 		endsAt: Date;
 		reservations: Reservation[];
-		userId: bigint;
+		userId: string;
 		coachName: string | null;
 	}) {
 		const confirmedCount = params.reservations.filter(
@@ -479,11 +480,11 @@ export class ReservationAggregate {
 		const myReservation =
 			params.reservations.find(
 				(reservation) =>
-					reservation.userId === params.userId &&
+					reservation.user?.id === params.userId &&
 					ACTIVE_RESERVATION_STATUSES.includes(reservation.status),
 			) ??
 			params.reservations.find(
-				(reservation) => reservation.userId === params.userId,
+				(reservation) => reservation.user?.id === params.userId,
 			);
 		const availableSeatCount = Math.max(
 			params.program.capacity - confirmedCount,
@@ -577,7 +578,10 @@ export class ReservationAggregate {
 		);
 	}
 
-	private buildOccurrenceKey(programId: bigint, startsAt: Date): string {
-		return `${programId}:${startsAt.toISOString()}`;
+	private buildOccurrenceKey(
+		programId?: string | null,
+		startsAt?: Date,
+	): string {
+		return `${programId ?? ""}:${startsAt?.toISOString() ?? ""}`;
 	}
 }

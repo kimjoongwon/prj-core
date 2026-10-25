@@ -8,7 +8,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { TenantAccessRequestStatus } from "@cocrepo/enum";
 import { TenantAccessRequestSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Role } from "./role.entity";
 import { Space } from "./space.entity";
@@ -16,22 +15,21 @@ import { Tenant } from "./tenant.entity";
 import { User } from "./user.entity";
 @AbstractEntityFields()
 export class TenantAccessRequest extends TenantAccessRequestSchema {
-	@Exclude({ toPlainOnly: true })
-	declare tenantAccessRequestId: TenantAccessRequestSchema["tenantAccessRequestId"];
+	declare id: TenantAccessRequestSchema["id"];
 	@BigIntIdFieldMetadata({ description: "신청자 ID" })
-	declare requesterId: TenantAccessRequestSchema["requesterId"];
+	declare requesterSeq: TenantAccessRequestSchema["requesterSeq"];
 
 	@BigIntIdFieldMetadata({ description: "신청 대상 Space ID" })
-	declare spaceId: TenantAccessRequestSchema["spaceId"];
+	declare spaceSeq: TenantAccessRequestSchema["spaceSeq"];
 
 	@BigIntIdFieldMetadata({ description: "희망 Role ID" })
-	declare requestedRoleId: TenantAccessRequestSchema["requestedRoleId"];
+	declare requestedRoleSeq: TenantAccessRequestSchema["requestedRoleSeq"];
 
 	@BigIntIdFieldOptionalMetadata({
 		description: "신청 시점 기존 Role ID",
 		nullable: true,
 	})
-	declare previousRoleId: TenantAccessRequestSchema["previousRoleId"];
+	declare previousRoleSeq: TenantAccessRequestSchema["previousRoleSeq"];
 
 	@StringFieldOptionalMetadata({
 		description: "신청 사유",
@@ -48,7 +46,7 @@ export class TenantAccessRequest extends TenantAccessRequestSchema {
 		description: "검토자 ID",
 		nullable: true,
 	})
-	declare reviewerId: TenantAccessRequestSchema["reviewerId"];
+	declare reviewerSeq: TenantAccessRequestSchema["reviewerSeq"];
 
 	@StringFieldOptionalMetadata({
 		description: "검토 코멘트",
@@ -66,7 +64,7 @@ export class TenantAccessRequest extends TenantAccessRequestSchema {
 		description: "승인 적용 Tenant ID",
 		nullable: true,
 	})
-	declare appliedTenantId: TenantAccessRequestSchema["appliedTenantId"];
+	declare appliedTenantSeq: TenantAccessRequestSchema["appliedTenantSeq"];
 
 	@ClassField(() => User, { required: false })
 	requester?: User;

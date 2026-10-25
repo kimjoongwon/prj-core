@@ -19,7 +19,7 @@ export default observer(function ActionsPageRoute() {
 	const onClickCreateButton = () => {
 		router.push("/actions/new" as Route);
 	};
-	const onClickActionRow = (actionId: bigint) => {
+	const onClickActionRow = (actionId: string) => {
 		router.push(`/actions/${String(actionId)}` as Route);
 	};
 

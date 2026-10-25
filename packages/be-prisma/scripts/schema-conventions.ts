@@ -73,28 +73,6 @@ export function toKebabCase(name: string): string {
 		.toLowerCase();
 }
 
-/**
- * schema 파일명으로부터 공개 ULID 필드명을 계산합니다.
- *
- * @param kebabName 확장자를 제외한 kebab-case 파일명
- * @returns lowerCamelCase 공개 식별자 필드명
- */
-export function toPublicIdentifierFieldName(kebabName: string): string {
-	const parts = kebabName.split("-").filter((part) => part.length > 0);
-
-	return `${parts
-		.map((part, index) =>
-			index === 0 ? part : `${part[0]?.toUpperCase() ?? ""}${part.slice(1)}`,
-		)
-		.join("")}Id`;
-}
-
-/**
- * lowerCamelCase 필드명을 snake_case DB 컬럼명으로 바꿉니다.
- *
- * @param fieldName Prisma 필드명
- * @returns snake_case DB 컬럼명
- */
 export function toSnakeCaseFieldName(fieldName: string): string {
 	return fieldName.replace(/([a-z0-9])([A-Z])/g, "$1_$2").toLowerCase();
 }
@@ -650,7 +628,7 @@ function validateModelFile(options: ValidateModelFileOptions): void {
 }
 
 /**
- * 공개 ULID와 내부 BigInt PK/FK 계약을 검사합니다.
+ * 공개 ULID(id)와 내부 BigInt PK(seq)/FK 계약을 검사합니다.
  *
  * @param filePath 검사 중인 schema 상대 경로
  * @param modelName Prisma model 이름
@@ -663,61 +641,48 @@ function validateModelIdentityContract(
 	text: string,
 	errors: string[],
 ): void {
-	const legacySequenceToken = ["s", "e", "q"].join("");
-	const legacyRelationSuffix = `${legacySequenceToken[0]?.toUpperCase()}${legacySequenceToken.slice(1)}`;
 	const baseName =
 		filePath
 			.split("/")
 			.at(-1)
 			?.replace(/\.prisma$/, "") ?? "";
-	const publicIdentifierName = toPublicIdentifierFieldName(baseName);
 	const publicIdentifierMap = `${baseName.replace(/-/g, "_")}_id`;
 	const idField = text.match(/^[ \t]*id[ \t]+([^\n]+)$/m)?.[1] ?? "";
-	const publicIdentifierField =
-		text.match(
-			new RegExp(`^[ \t]*${publicIdentifierName}[ \t]+([^\\n]+)$`, "m"),
-		)?.[1] ?? "";
+	const seqField = text.match(/^[ \t]*seq[ \t]+([^\n]+)$/m)?.[1] ?? "";
 
 	if (
-		!idField.startsWith("BigInt") ||
-		!idField.includes("@id") ||
-		!idField.includes("@default(autoincrement())")
+		!idField.startsWith("String") ||
+		!idField.includes("@unique") ||
+		!idField.includes("@default(ulid())") ||
+		!idField.includes(`@map("${publicIdentifierMap}")`) ||
+		!idField.includes("@db.Char(26)") ||
+		idField.includes("@id")
 	) {
 		errors.push(
-			`[${filePath}] ${modelName}.id must be BigInt @id @default(autoincrement())`,
-		);
-	}
-
-	if (new RegExp(`^[ \\t]*${legacySequenceToken}[ \\t]+`, "m").test(text)) {
-		errors.push(
-			`[${filePath}] ${modelName} legacy sequence primary key is not allowed`,
+			`[${filePath}] ${modelName}.id must be String @unique @default(ulid()) @map("${publicIdentifierMap}") @db.Char(26) and must not be the primary key`,
 		);
 	}
 
 	if (
-		!publicIdentifierField.startsWith("String") ||
-		!publicIdentifierField.includes("@unique") ||
-		!publicIdentifierField.includes("@default(ulid())") ||
-		!publicIdentifierField.includes(`@map("${publicIdentifierMap}")`) ||
-		!publicIdentifierField.includes("@db.Char(26)") ||
-		publicIdentifierField.includes("@id")
+		!seqField.startsWith("BigInt") ||
+		!seqField.includes("@id") ||
+		!seqField.includes("@default(autoincrement())") ||
+		!seqField.includes('@map("id")')
 	) {
 		errors.push(
-			`[${filePath}] ${modelName}.${publicIdentifierName} must be String @unique @default(ulid()) @map("${publicIdentifierMap}") @db.Char(26) and must not be the primary key`,
+			`[${filePath}] ${modelName}.seq must be BigInt @id @default(autoincrement()) @map("id")`,
 		);
 	}
 
-	const legacySequenceFieldNames = Array.from(
+	// 공개 ULID를 id가 아닌 <model>Id 필드로 선언한 구 형태를 금지합니다.
+	const legacyPublicIdFields = Array.from(
 		text.matchAll(
-			new RegExp(
-				`^[ \\t]*([A-Za-z][A-Za-z0-9_]*${legacyRelationSuffix})[ \\t]+`,
-				"gm",
-			),
+			/^[ \t]*([A-Za-z][A-Za-z0-9_]*Id)[ \t]+String[ \t]+[^\n]*@default\(ulid\(\)\)/gm,
 		),
 	).map((match) => match[1]);
-	if (legacySequenceFieldNames.length > 0) {
+	if (legacyPublicIdFields.length > 0) {
 		errors.push(
-			`[${filePath}] ${modelName} fields must not use the legacy sequence naming contract: ${legacySequenceFieldNames.join(", ")}`,
+			`[${filePath}] ${modelName} public ULID must be named id, found legacy fields: ${legacyPublicIdFields.join(", ")}`,
 		);
 	}
 
@@ -730,16 +695,16 @@ function validateModelIdentityContract(
 			.split(",")
 			.map((reference) => reference.trim());
 
-		if (fields.some((field) => !field.endsWith("Id"))) {
+		if (fields.some((field) => !field.endsWith("Seq"))) {
 			errors.push(
-				`[${filePath}] ${modelName} relation fields must use the <relation>Id naming contract: ${fields.join(", ")}`,
+				`[${filePath}] ${modelName} relation fields must use the <relation>Seq naming contract: ${fields.join(", ")}`,
 			);
 		}
 		for (const field of fields) {
 			const fieldDefinition =
-				text.match(new RegExp(`^[ \t]*${field}[ \t]+([^\\n]+)$`, "m"))?.[1] ??
+				text.match(new RegExp(`^[ \t]*${field}[ \t]+([^\n]+)$`, "m"))?.[1] ??
 				"";
-			const expectedMap = `${toSnakeCaseFieldName(field)}`;
+			const expectedMap = `${toSnakeCaseFieldName(field.replace(/Seq$/, ""))}_id`;
 
 			if (!fieldDefinition.startsWith("BigInt")) {
 				errors.push(
@@ -752,9 +717,9 @@ function validateModelIdentityContract(
 				);
 			}
 		}
-		if (references.some((reference) => reference !== "id")) {
+		if (references.some((reference) => reference !== "seq")) {
 			errors.push(
-				`[${filePath}] ${modelName} relations must reference the internal id key: ${references.join(", ")}`,
+				`[${filePath}] ${modelName} relations must reference the internal seq key: ${references.join(", ")}`,
 			);
 		}
 

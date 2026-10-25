@@ -1,12 +1,12 @@
-import { describe, expect, it } from "vitest";
 import { DECORATORS } from "@nestjs/swagger";
+import { describe, expect, it } from "vitest";
+import { hydrateEntity } from "../src/hydrate-entity";
 import { Policy } from "../src/policy.entity";
 import { PolicyEntry } from "../src/policy-entry.entity";
 import { Role } from "../src/role.entity";
 import { RoleAssignment } from "../src/role-assignment.entity";
 import { Translation } from "../src/translation.entity";
 import { User } from "../src/user.entity";
-import { hydrateEntity } from "../src/hydrate-entity";
 
 describe("Entity Schema 상속과 내부 복원", () => {
 	it("모델 Entity가 대응 Schema를 상속하고 도메인 메서드를 유지합니다", () => {
@@ -14,25 +14,30 @@ describe("Entity Schema 상속과 내부 복원", () => {
 		const user = new User();
 		expect(role).toBeInstanceOf(Role);
 		expect(user).toBeInstanceOf(User);
-		user.tenants = [{ id: 7n, spaceId: 3n }];
-		expect(user.canAccessSpace(3n)).toBe(true);
+		user.tenants = [
+			{
+				id: "01JTENANT00000000000000TA",
+				space: { id: "01JSPACE0000000000000000SA" },
+			},
+		];
+		expect(user.canAccessSpace("01JSPACE0000000000000000SA")).toBe(true);
 	});
 
 	it("DB 값의 bigint, Date, 비밀번호, ULID를 변환 없이 복원합니다", () => {
 		const createdAt = new Date("2026-01-02T03:04:05.000Z");
 		const user = hydrateEntity(User, {
-			id: 11n,
-			userId: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+			seq: 11n,
+			id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
 			email: "MixedCase@example.com",
 			password: "stored-hash",
 			createdAt,
 		});
 		expect(user).toBeInstanceOf(User);
-		expect(user.id).toBe(11n);
+		expect(user.seq).toBe(11n);
+		expect(user.id).toBe("01ARZ3NDEKTSV4RRFFQ69G5FAV");
 		expect(user.createdAt).toBe(createdAt);
 		expect(user.email).toBe("MixedCase@example.com");
 		expect(user.password).toBe("stored-hash");
-		expect(user.userId).toBe("01ARZ3NDEKTSV4RRFFQ69G5FAV");
 	});
 
 	it("권한 그래프의 명시적 중첩 관계를 Entity 인스턴스로 복원합니다", () => {

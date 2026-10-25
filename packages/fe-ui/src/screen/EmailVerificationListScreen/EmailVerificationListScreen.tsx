@@ -62,7 +62,7 @@ export interface EmailVerificationListScreenProps {
 	totalCount: number;
 	queryStates: EmailVerificationListScreenQueryStates;
 	setQueryStates: EmailVerificationListScreenSetQueryStates;
-	onClickResendEmailVerificationButton: (emailVerificationId: bigint) => void;
+	onClickResendEmailVerificationButton: (emailVerificationId: string) => void;
 }
 
 /**

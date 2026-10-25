@@ -6,14 +6,13 @@ const abilityFixtures: NonNullable<
 	ComponentProps<typeof AbilityListScreen>["abilities"]
 > = [
 	{
-		actionId: 1n,
 		action: {
 			description: null,
 			group: null,
 			config: null,
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			displayName: "조회",
-			id: 1n,
+			id: "ACT00000000000000000000001",
 			name: "read",
 			order: 1,
 			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
@@ -23,10 +22,9 @@ const abilityFixtures: NonNullable<
 		createdAt: new Date("2026-04-14T09:00:00.000Z"),
 		description: "이용자 기본 정보를 확인합니다.",
 		fields: [],
-		id: 21n,
+		id: "ABT00000000000000000000021",
 		inverted: false,
 		name: "Can 조회 사용자",
-		subjectId: 11n,
 		subject: {
 			displayName: "사용자",
 			fieldCount: 12,
@@ -35,14 +33,13 @@ const abilityFixtures: NonNullable<
 		updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 	},
 	{
-		actionId: 2n,
 		action: {
 			description: null,
 			group: null,
 			config: null,
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			displayName: "수정",
-			id: 2n,
+			id: "ACT00000000000000000000002",
 			name: "update",
 			order: 2,
 			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
@@ -52,10 +49,9 @@ const abilityFixtures: NonNullable<
 		createdAt: new Date("2026-04-14T09:00:00.000Z"),
 		description: "현재 공간의 예약만 수정합니다.",
 		fields: ["name", "startedAt"],
-		id: 22n,
+		id: "ABT00000000000000000000022",
 		inverted: false,
 		name: "Can 수정 예약",
-		subjectId: 12n,
 		subject: {
 			displayName: "예약",
 			fieldCount: 8,
@@ -64,14 +60,13 @@ const abilityFixtures: NonNullable<
 		updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 	},
 	{
-		actionId: 3n,
 		action: {
 			description: null,
 			group: null,
 			config: null,
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			displayName: "삭제",
-			id: 3n,
+			id: "ACT00000000000000000000003",
 			name: "delete",
 			order: 3,
 			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
@@ -80,11 +75,10 @@ const abilityFixtures: NonNullable<
 		createdAt: new Date("2026-04-14T09:00:00.000Z"),
 		description: "일괄 삭제는 제한합니다.",
 		fields: [],
-		id: 23n,
+		id: "ABT00000000000000000000023",
 		inverted: true,
 		name: "Cannot 접근 일괄 삭제",
 		reason: "운영 안정성을 위해 제한",
-		subjectId: 13n,
 		subject: {
 			displayName: "일괄 삭제",
 			fieldCount: 0,
@@ -107,15 +101,15 @@ const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 	abilities: abilityFixtures,
 	actions: [
 		{
-			id: 97n,
+			id: "ACT00000000000000000000097",
 			label: "조회",
 		},
 		{
-			id: 101n,
+			id: "ACT00000000000000000000101",
 			label: "수정",
 		},
 		{
-			id: 105n,
+			id: "ACT00000000000000000000105",
 			label: "삭제",
 		},
 	],
@@ -145,15 +139,15 @@ const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 	summary: defaultSummary,
 	subjects: [
 		{
-			id: 136n,
+			id: "SBJ00000000000000000000136",
 			label: "사용자",
 		},
 		{
-			id: 140n,
+			id: "SBJ00000000000000000000140",
 			label: "예약",
 		},
 		{
-			id: 144n,
+			id: "SBJ00000000000000000000144",
 			label: "일괄 삭제",
 		},
 	],
@@ -165,17 +159,17 @@ const filteredArgs = {
 	abilities: [abilityFixtures[1]],
 	filters: {
 		searchTerm: "예약",
-		selectedActionId: "2",
+		selectedActionId: "ACT00000000000000000000101",
 		selectedInverted: "false",
-		selectedSubjectId: "12",
+		selectedSubjectId: "SBJ00000000000000000000140",
 	},
 	queryStates: {
 		page: 1,
 		take: 10,
 		skip: 0,
 		search: "예약",
-		subjectId: "12",
-		actionId: "2",
+		subjectId: "SBJ00000000000000000000140",
+		actionId: "ACT00000000000000000000101",
 		inverted: "false",
 	},
 	summary: {
@@ -204,7 +198,7 @@ const emptyStateArgs = {
 const meta = {
 	title: "screen/AbilityListScreen",
 	component: AbilityListScreen,
-	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
+	// Date 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
 	argTypes: {
 		abilities: { control: false },
 		subjects: { control: false },

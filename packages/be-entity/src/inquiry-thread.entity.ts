@@ -8,7 +8,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { ThreadStatus } from "@cocrepo/enum";
 import { InquiryThreadSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Inquiry } from "./inquiry.entity";
 import { InquiryMessage } from "./inquiry-message.entity";
@@ -24,18 +23,17 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class InquiryThread extends InquiryThreadSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
-	declare inquiryThreadId: InquiryThreadSchema["inquiryThreadId"];
+	declare id: InquiryThreadSchema["id"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
-	declare inquiryId: InquiryThreadSchema["inquiryId"];
+	declare inquirySeq: InquiryThreadSchema["inquirySeq"];
 	@EnumFieldMetadata(() => ThreadStatus, { description: "스레드 상태" })
 	declare status: InquiryThreadSchema["status"];
 	@BigIntIdFieldMetadata({ description: "생성자 ID" })
-	declare createdById: InquiryThreadSchema["createdById"];
+	declare createdBySeq: InquiryThreadSchema["createdBySeq"];
 	@NumberFieldMetadata({ description: "메시지 수" })
 	declare messageCount: InquiryThreadSchema["messageCount"];
 

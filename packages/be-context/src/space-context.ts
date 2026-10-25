@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { ContextTenantSnapshot, DatabaseId } from "@cocrepo/type";
+import type { ContextTenantSnapshot } from "@cocrepo/type";
 import { Injectable } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 
@@ -21,14 +21,14 @@ import { ClsService } from "nestjs-cls";
 export class SpaceContext {
 	constructor(private readonly cls: ClsService) {}
 
-	/** 현재 요청의 Tenant ID (x-tenant-id 헤더) */
-	get tenantId(): DatabaseId | undefined {
-		return this.cls.get<DatabaseId>(CONTEXT_KEYS.TENANT_ID);
+	/** 현재 요청의 Tenant 공개 ID (x-tenant-id 헤더, ULID) */
+	get tenantId(): string | undefined {
+		return this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
 	}
 
-	/** 현재 요청 Tenant에서 파생된 Space ID */
-	get spaceId(): DatabaseId | undefined {
-		return this.cls.get<DatabaseId>(CONTEXT_KEYS.SPACE_ID);
+	/** 현재 요청 Tenant에서 파생된 Space 공개 ID (ULID) */
+	get spaceId(): string | undefined {
+		return this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 	}
 
 	/** 현재 ContextTenantSnapshot */
@@ -46,35 +46,33 @@ export class SpaceContext {
 	 * - undefined: 필터 미적용이 명시적으로 허용된 내부 경로
 	 * - [id1, id2, ...]: 현재 선택 Tenant의 Space category scope
 	 */
-	get spaceIds(): DatabaseId[] | undefined {
-		return this.cls.get<DatabaseId[] | undefined>(
-			CONTEXT_KEYS.EFFECTIVE_SPACE_IDS,
-		);
+	get spaceIds(): string[] | undefined {
+		return this.cls.get<string[] | undefined>(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS);
 	}
 
 	/**
-	 * Prisma Where 절용 Space 소유 리소스 필터
+	 * Prisma Where 절용 Space 소유 리소스 필터 (공간 공개 ULID 기준)
 	 * undefined면 전체, * 필터 없음)
-	 * { spaceId: { in: [...] } } 형태
+	 * { space: { id: { in: [...] } } } 형태
 	 */
-	get spaceFilter(): { spaceId: { in: DatabaseId[] } } | undefined {
+	get spaceFilter(): { space: { id: { in: string[] } } } | undefined {
 		const ids = this.spaceIds;
-		return ids ? { spaceId: { in: ids } } : undefined;
+		return ids ? { space: { id: { in: ids } } } : undefined;
 	}
 
 	/**
-	 * Prisma Where 절용 현재 Space 필터
+	 * Prisma Where 절용 현재 Space 필터 (공간 공개 ULID 기준)
 	 * 생성/수정처럼 현재 선택 Space 하나에 묶어야 할 때 사용합니다.
 	 */
-	get currentSpaceFilter(): { spaceId: DatabaseId } | undefined {
+	get currentSpaceFilter(): { space: { id: string } } | undefined {
 		const spaceId = this.spaceId;
-		return spaceId ? { spaceId } : undefined;
+		return spaceId ? { space: { id: spaceId } } : undefined;
 	}
 
 	/**
-	 * 특정 Space 접근 권한
+	 * 특정 Space 접근 권한 (공개 ULID 기준)
 	 */
-	canAccessSpace(spaceId: DatabaseId): boolean {
+	canAccessSpace(spaceId: string): boolean {
 		const ids = this.spaceIds;
 		return ids === undefined ? true : ids.includes(spaceId);
 	}

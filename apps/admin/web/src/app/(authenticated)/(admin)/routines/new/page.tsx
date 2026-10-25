@@ -11,6 +11,7 @@ import {
 } from "@cocrepo/api/core/routines";
 import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
 import { useApp } from "@cocrepo/store";
+import { isIntegrationUlid } from "@cocrepo/type";
 import {
 	Button,
 	HStack,
@@ -113,8 +114,8 @@ const AdminRoutinesNewRoute = observer(() => {
 	const submitRoutine = () => {
 		const routineActivities: CreateRoutineActivityItemDto[] = [];
 		for (const [index, activity] of state.activities.entries()) {
-			const taskId = parsePositiveBigInt(activity.taskId);
-			if (taskId === undefined) {
+			const taskId = activity.taskId.trim();
+			if (!isIntegrationUlid(taskId)) {
 				state.errors.activities = "유효한 운동을 선택해주세요.";
 				return;
 			}
@@ -210,11 +211,6 @@ function mapRoutineTaskCandidate(
 		videoAssetUrl: videoAssetUrl ?? undefined,
 		isSchedulable: Boolean(task.exercise.videoFileId),
 	};
-}
-
-function parsePositiveBigInt(value: string): bigint | undefined {
-	const trimmedValue = value.trim();
-	return /^[1-9]\d*$/.test(trimmedValue) ? BigInt(trimmedValue) : undefined;
 }
 
 function mapRoutineActivityFormItem(

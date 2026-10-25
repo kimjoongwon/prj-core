@@ -29,10 +29,10 @@ export default observer(function TenantAccessRequestReviewDetailScreenRoute() {
 		initializedRequestId: "",
 		reviewComment: "",
 		setFromRequest(request: TenantAccessRequestDto) {
-			if (this.initializedRequestId === request.id.toString()) {
+			if (this.initializedRequestId === request.id) {
 				return;
 			}
-			this.initializedRequestId = request.id.toString();
+			this.initializedRequestId = request.id;
 			this.reviewComment = request.reviewComment ?? "";
 		},
 		setReviewComment(reviewComment: string) {
@@ -125,17 +125,19 @@ function invalidateTenantAccessRequestQueries(
 function mapReviewDetail(
 	request: TenantAccessRequestDto,
 ): TenantAccessRequestReviewDetail {
+	// TenantAccessRequestDto가 spaceId/requestedRoleId/requesterId 대신
+	// space/requestedRole/requester 관계 객체를 노출한다.
 	return {
-		id: request.id.toString(),
+		id: request.id,
 		status: request.status,
-		spaceName: request.space?.fitnessCenter?.name ?? request.spaceId.toString(),
+		spaceName: request.space?.name ?? "-",
 		roleName:
 			request.requestedRole?.displayName ??
 			request.requestedRole?.name ??
-			request.requestedRoleId.toString(),
+			"-",
 		previousRoleName:
 			request.previousRole?.displayName ?? request.previousRole?.name ?? null,
-		requesterName: request.requester?.name ?? request.requesterId.toString(),
+		requesterName: request.requester?.name ?? "-",
 		requesterEmail: request.requester?.email ?? "",
 		reason: request.reason,
 		reviewerName: request.reviewer?.name ?? null,

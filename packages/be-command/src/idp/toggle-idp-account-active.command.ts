@@ -1,3 +1,3 @@
 export class ToggleIdpAccountActiveCommand {
-	constructor(readonly userId: bigint) {}
+	constructor(readonly userId: string) {}
 }

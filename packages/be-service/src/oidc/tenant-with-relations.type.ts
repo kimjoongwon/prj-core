@@ -1,15 +1,13 @@
 export interface TenantWithRelations {
-	spaceId: bigint;
-	roleId: bigint;
+	spaceSeq: bigint;
+	roleSeq: bigint;
 	role?: {
-		roleId: string;
+		id: string;
 		name: string;
 		displayName: string | null;
 	};
 	space?: {
-		spaceId: string;
-		fitnessCenter?: {
-			name: string;
-		} | null;
-	};
+		id: string;
+		name?: string | null;
+	} | null;
 }

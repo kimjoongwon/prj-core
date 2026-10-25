@@ -1,6 +1,5 @@
 import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
 import type { ListInquiriesQueryInput } from "@cocrepo/input";
-import type { CreateUpdateFormBootstrap } from "@cocrepo/type";
 import {
 	InquiryCategory,
 	InquiryChannel,
@@ -17,6 +16,7 @@ import {
 	buildInquiryQueryWhere,
 	InquiriesRepository,
 } from "@cocrepo/repository";
+import type { CreateUpdateFormBootstrap } from "@cocrepo/type";
 import {
 	BadRequestException,
 	Injectable,
@@ -48,7 +48,7 @@ export class InquiryAggregate {
 	/**
 	 * ID로 문의 조회
 	 */
-	async findById(id: bigint): Promise<Inquiry> {
+	async findById(id: string): Promise<Inquiry> {
 		const inquiry = await this.repository.findById(id);
 		if (!inquiry) {
 			throw new NotFoundException("문의를 찾을 수 없습니다");
@@ -59,7 +59,7 @@ export class InquiryAggregate {
 	/**
 	 * ID로 상세 조회 (스레드, 메시지, 참여자 포함)
 	 */
-	async findByIdWithDetails(id: bigint, spaceIds?: bigint[]): Promise<Inquiry> {
+	async findByIdWithDetails(id: string, spaceIds?: string[]): Promise<Inquiry> {
 		const inquiry =
 			await this.repository.findByIdWithThreadsAndMessagesAndParticipants(
 				id,
@@ -122,8 +122,8 @@ export class InquiryAggregate {
 	}
 
 	async getUpdateFormBootstrap(
-		inquiryId: bigint,
-		spaceIds?: bigint[],
+		inquiryId: string,
+		spaceIds?: string[],
 	): Promise<
 		CreateUpdateFormBootstrap<{
 			title: string;
@@ -164,7 +164,7 @@ export class InquiryAggregate {
 	@Transactional()
 	async create(
 		data: CreateInquiryAggregateInput,
-		actorUserId: bigint,
+		actorUserId: string,
 		initialContent?: string | null,
 	): Promise<Inquiry> {
 		this.logger.debug("문의 생성 중...");
@@ -201,7 +201,7 @@ export class InquiryAggregate {
 	 * 문의 수정
 	 */
 	async update(
-		id: bigint,
+		id: string,
 		data: UpdateInquiryAggregateInput,
 	): Promise<Inquiry> {
 		this.logger.debug(`문의 수정: ${id}`);
@@ -215,7 +215,7 @@ export class InquiryAggregate {
 	/**
 	 * 소프트 삭제
 	 */
-	async softDelete(id: bigint): Promise<Inquiry> {
+	async softDelete(id: string): Promise<Inquiry> {
 		this.logger.debug(`문의 소프트 삭제: ${id}`);
 
 		// 존재 확인
@@ -229,7 +229,7 @@ export class InquiryAggregate {
 	// ============================================================================
 
 	async listMessages(params: {
-		inquiryId: bigint;
+		inquiryId: string;
 		skip?: number;
 		take?: number;
 	}): Promise<{ items: InquiryMessage[]; totalCount: number }> {
@@ -238,9 +238,9 @@ export class InquiryAggregate {
 	}
 
 	async sendMessage(params: {
-		inquiryId: bigint;
-		actorUserId: bigint;
-		threadId?: bigint;
+		inquiryId: string;
+		actorUserId: string;
+		threadId?: string;
 		content: string;
 		contentType?: MessageContentType;
 		senderType?: SenderType;
@@ -257,7 +257,7 @@ export class InquiryAggregate {
 			? await this.repository.findThreadById(params.threadId)
 			: await this.repository.findDefaultThreadByInquiryId(params.inquiryId);
 
-		if (!thread || thread.inquiryId !== params.inquiryId) {
+		if (!thread || thread.inquiry?.id !== params.inquiryId) {
 			throw new NotFoundException("문의 스레드를 찾을 수 없습니다");
 		}
 
@@ -293,14 +293,14 @@ export class InquiryAggregate {
 			),
 		]);
 
-		if (inquiry.customerId !== params.actorUserId) {
+		if (inquiry.customer?.id !== params.actorUserId) {
 			await this.repository.recordFirstResponseById(params.inquiryId);
 		}
 
 		return message;
 	}
 
-	async getParticipants(inquiryId: bigint): Promise<InquiryParticipant[]> {
+	async getParticipants(inquiryId: string): Promise<InquiryParticipant[]> {
 		await this.findById(inquiryId);
 		return this.repository.findParticipantsByInquiryId(inquiryId);
 	}
@@ -313,7 +313,7 @@ export class InquiryAggregate {
 	 * 담당자 배정
 	 * - NEW 상태면 OPEN으로 변경
 	 */
-	async assignTo(id: bigint, assigneeId: bigint): Promise<Inquiry> {
+	async assignTo(id: string, assigneeId: string): Promise<Inquiry> {
 		this.logger.debug(`담당자 배정: ${id} -> ${assigneeId}`);
 
 		const inquiry = await this.findById(id);
@@ -335,7 +335,7 @@ export class InquiryAggregate {
 	/**
 	 * 상태 변경 (상태 머신 검증)
 	 */
-	async updateStatus(id: bigint, newStatus: InquiryStatus): Promise<Inquiry> {
+	async updateStatus(id: string, newStatus: InquiryStatus): Promise<Inquiry> {
 		this.logger.debug(`상태 변경: ${id} -> ${newStatus}`);
 
 		const inquiry = await this.findById(id);
@@ -355,7 +355,7 @@ export class InquiryAggregate {
 	 * 우선순위 변경
 	 */
 	async updatePriority(
-		id: bigint,
+		id: string,
 		priority: InquiryPriority,
 	): Promise<Inquiry> {
 		this.logger.debug(`우선순위 변경: ${id} -> ${priority}`);
@@ -373,7 +373,7 @@ export class InquiryAggregate {
 	/**
 	 * 상태별/카테고리별 통계
 	 */
-	async getStats(spaceIds?: bigint[]): Promise<{
+	async getStats(spaceIds?: string[]): Promise<{
 		byStatus: Array<{ status: InquiryStatus; count: number }>;
 		byCategory: Array<{ category: InquiryCategory; count: number }>;
 		overdue: {
@@ -401,7 +401,7 @@ export class InquiryAggregate {
 
 	private applySpaceScope(
 		where: Prisma.InquiryWhereInput,
-		spaceIds?: bigint[],
+		spaceIds?: string[],
 	): Prisma.InquiryWhereInput {
 		if (spaceIds === undefined) {
 			return where;
@@ -433,7 +433,7 @@ export class InquiryAggregate {
 	 * 감정 분석
 	 * 실제 구현은 별도 AI 서비스 또는 UseCase에서 처리
 	 */
-	async analyzeSentiment(inquiryId: bigint) {
+	async analyzeSentiment(inquiryId: string) {
 		this.logger.debug(`감정 분석 요청: ${inquiryId}`);
 
 		// 존재 확인
@@ -447,7 +447,7 @@ export class InquiryAggregate {
 	 * 감정 분석 결과 업데이트 (AI 서비스에서 호출)
 	 */
 	async updateSentiment(
-		id: bigint,
+		id: string,
 		sentiment: SentimentType,
 		sentimentScore: number,
 	): Promise<Inquiry> {
@@ -462,7 +462,7 @@ export class InquiryAggregate {
 	/**
 	 * 읽지 않은 메시지 수 초기화
 	 */
-	async resetUnreadCount(id: bigint): Promise<Inquiry> {
+	async resetUnreadCount(id: string): Promise<Inquiry> {
 		this.logger.debug(`읽지 않은 메시지 수 초기화: ${id}`);
 		return this.repository.resetUnreadCountById(id);
 	}
@@ -470,7 +470,7 @@ export class InquiryAggregate {
 	/**
 	 * 읽지 않은 메시지 수 증가
 	 */
-	async incrementUnreadCount(id: bigint): Promise<Inquiry> {
+	async incrementUnreadCount(id: string): Promise<Inquiry> {
 		this.logger.debug(`읽지 않은 메시지 수 증가: ${id}`);
 		return this.repository.incrementUnreadCountById(id);
 	}
@@ -482,7 +482,7 @@ export class InquiryAggregate {
 	/**
 	 * 첫 응답 시간 기록
 	 */
-	async recordFirstResponse(id: bigint): Promise<Inquiry> {
+	async recordFirstResponse(id: string): Promise<Inquiry> {
 		this.logger.debug(`첫 응답 기록: ${id}`);
 		return this.repository.recordFirstResponseById(id);
 	}

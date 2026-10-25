@@ -1,6 +1,6 @@
 export interface UpdateAbilityInput {
-	actionId?: bigint;
-	subjectId?: bigint;
+	actionId?: string;
+	subjectId?: string;
 	fields?: string[];
 	conditions?: unknown;
 	inverted?: boolean;

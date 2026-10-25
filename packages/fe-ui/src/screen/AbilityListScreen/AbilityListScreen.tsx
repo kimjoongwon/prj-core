@@ -29,7 +29,7 @@ import { TextField } from "../../input/TextField/TextField";
 import { Section } from "../../layout";
 import { HStack, VStack } from "../../rhythm";
 export interface AbilityListScreenOption {
-	id: bigint;
+	id: string;
 	label: string;
 }
 export interface AbilityListScreenFilters {
@@ -69,7 +69,7 @@ export interface AbilityListScreenProps {
 	onChangeActionId: (value: string) => void;
 	onChangeInverted: (value: string) => void;
 	onClickResetFiltersButton: () => void;
-	onClickAbilityRow: (abilityId: bigint) => void;
+	onClickAbilityRow: (abilityId: string) => void;
 	onClickCreateButton: () => void;
 }
 const abilityListTableColumns =
@@ -138,7 +138,7 @@ function MetricCard({
 	);
 }
 function getOptionLabel(options: AbilityListScreenOption[], optionId: string) {
-	return options.find((option) => String(option.id) === optionId)?.label ?? "";
+	return options.find((option) => option.id === optionId)?.label ?? "";
 }
 function getRuleTypeLabel(value: string) {
 	if (value === "false") {
@@ -189,10 +189,8 @@ export const AbilityListScreen = observer(
 				}),
 			[abilities, totalCount, queryStates, setQueryStates, onClickAbilityRow],
 		);
-		const subjectOptionIds = new Set(
-			subjects.map((subject) => String(subject.id)),
-		);
-		const actionOptionIds = new Set(actions.map((action) => String(action.id)));
+		const subjectOptionIds = new Set(subjects.map((subject) => subject.id));
+		const actionOptionIds = new Set(actions.map((action) => action.id));
 		const selectedSubjectLabel = getOptionLabel(
 			subjects,
 			filters.selectedSubjectId,

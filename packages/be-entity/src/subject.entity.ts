@@ -5,7 +5,6 @@ import {
 	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { SubjectSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { Ability } from "./ability.entity";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
@@ -16,7 +15,7 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class Subject extends SubjectSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) declare subjectId: SubjectSchema["subjectId"];
+	declare id: SubjectSchema["id"];
 
 	@StringFieldMetadata() declare name: SubjectSchema["name"];
 	@StringFieldOptionalMetadata({ nullable: true })

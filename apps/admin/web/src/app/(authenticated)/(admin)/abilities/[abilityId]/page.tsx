@@ -23,12 +23,15 @@ export default observer(function AbilityDetailRoute() {
 	const router = useRouter();
 	const { data: response, isLoading } = useGetAbilityById(abilityId);
 	const ability = response?.data;
+	// AbilityResponseDto의 subject 관계에는 공개 id가 없어 name을 식별자로 쓴다.
+	const subjectOptionId = ability?.subject?.name ?? "";
+	const actionOptionId = ability?.action?.id ?? "";
 	const state: AbilityFormState | undefined = ability
 		? {
 				name: ability.name,
 				description: ability.description || "",
-				subjectId: String(ability.subjectId),
-				actionId: String(ability.actionId),
+				subjectId: subjectOptionId,
+				actionId: actionOptionId,
 				fields: ability.fields.join(", "),
 				conditions: ability.conditions
 					? JSON.stringify(ability.conditions, null, 2)
@@ -40,7 +43,7 @@ export default observer(function AbilityDetailRoute() {
 	const subjects: AbilityFormOption[] = ability
 		? [
 				{
-					id: String(ability.subjectId),
+					id: subjectOptionId,
 					label: ability.subject?.displayName || ability.subject?.name || "-",
 				},
 			]
@@ -48,7 +51,7 @@ export default observer(function AbilityDetailRoute() {
 	const actions: AbilityFormOption[] = ability
 		? [
 				{
-					id: String(ability.actionId),
+					id: actionOptionId,
 					label: ability.action?.displayName || ability.action?.name || "-",
 				},
 			]

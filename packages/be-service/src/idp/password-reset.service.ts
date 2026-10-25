@@ -105,7 +105,7 @@ export class PasswordResetService {
 		// 사용자 조회 (없으면 조용히 종료)
 		const user =
 			await this.directUserRepository.findByEmailForAuth(normalizedEmail);
-		if (!user || !user.isActive) {
+		if (!user?.isActive) {
 			this.logger.debug(
 				`재설정 요청 무시 (사용자 미존재 또는 비활성): ${normalizedEmail}`,
 			);
@@ -293,13 +293,13 @@ export class PasswordResetService {
 
 	private async saveResetToken(
 		hashedToken: string,
-		data: { userId: bigint; email: string },
+		data: { userId: string; email: string },
 	): Promise<void> {
 		const key = `${RESET_TOKEN_PREFIX}${hashedToken}`;
 		await this.redisService.set(
 			key,
 			JSON.stringify({
-				userId: data.userId.toString(),
+				userId: data.userId,
 				email: data.email,
 			}),
 			TOKEN_TTL_SECONDS,
@@ -308,17 +308,17 @@ export class PasswordResetService {
 
 	private async getResetToken(
 		hashedToken: string,
-	): Promise<{ userId: bigint; email: string } | null> {
+	): Promise<{ userId: string; email: string } | null> {
 		const key = `${RESET_TOKEN_PREFIX}${hashedToken}`;
 		const data = await this.redisService.get(key);
 		if (!data) return null;
 		try {
 			const parsed = JSON.parse(data) as {
-				userId: string | number;
+				userId: string;
 				email: string;
 			};
 			return {
-				userId: BigInt(parsed.userId),
+				userId: parsed.userId,
 				email: parsed.email,
 			};
 		} catch {

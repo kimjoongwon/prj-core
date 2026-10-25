@@ -19,7 +19,7 @@ export class RoutinesRepository {
 	 * Space 계층 공유를 지원하는 루틴 목록을 조회합니다.
 	 */
 	async findManyRoutines(params: {
-		spaceIds?: bigint[];
+		spaceIds?: string[];
 		skip: number;
 		take: number;
 		search?: string;
@@ -64,8 +64,8 @@ export class RoutinesRepository {
 	 * 내부 숫자 ID로 루틴 하나를 조회합니다.
 	 */
 	async findRoutineById(
-		routineId: bigint,
-		spaceIds?: bigint[],
+		routineId: string,
+		spaceIds?: string[],
 	): Promise<Routine | null> {
 		this.logger.debug(`루틴 단건 조회: ${routineId}`);
 
@@ -73,7 +73,7 @@ export class RoutinesRepository {
 			where: {
 				id: routineId,
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			},
 			include: this.includeRoutineDetails(),
 		});
@@ -87,10 +87,10 @@ export class RoutinesRepository {
 	async createRoutine(data: {
 		name: string;
 		label: string;
-		spaceId: bigint;
-		createdById?: bigint;
+		spaceId: string;
+		createdById?: string;
 		activities?: {
-			taskId: bigint;
+			taskId: string;
 			order: number;
 			repetitions: number;
 			restTime: number;
@@ -103,12 +103,14 @@ export class RoutinesRepository {
 			data: {
 				name: data.name,
 				label: data.label,
-				spaceId: data.spaceId,
-				...(data.createdById ? { createdById: data.createdById } : {}),
+				space: { connect: { id: data.spaceId } },
+				...(data.createdById
+					? { createdBy: { connect: { id: data.createdById } } }
+					: {}),
 				activities: data.activities
 					? {
 							create: data.activities.map((activity) => ({
-								taskId: activity.taskId,
+								task: { connect: { id: activity.taskId } },
 								order: activity.order,
 								repetitions: activity.repetitions,
 								restTime: activity.restTime,
@@ -127,12 +129,12 @@ export class RoutinesRepository {
 	 * 루틴 기본 정보와 활동 목록을 갱신합니다.
 	 */
 	async updateRoutine(
-		routineId: bigint,
+		routineId: string,
 		data: {
 			name?: string;
 			label?: string;
 			activities?: {
-				taskId: bigint;
+				taskId: string;
 				order: number;
 				repetitions: number;
 				restTime: number;
@@ -153,7 +155,7 @@ export class RoutinesRepository {
 						: {
 								deleteMany: {},
 								create: data.activities.map((activity) => ({
-									taskId: activity.taskId,
+									task: { connect: { id: activity.taskId } },
 									order: activity.order,
 									repetitions: activity.repetitions,
 									restTime: activity.restTime,
@@ -170,7 +172,7 @@ export class RoutinesRepository {
 	/**
 	 * 루틴과 종속 활동을 소프트 삭제합니다.
 	 */
-	async softDeleteRoutine(routineId: bigint): Promise<void> {
+	async softDeleteRoutine(routineId: string): Promise<void> {
 		this.logger.debug(`루틴 소프트 삭제: ${routineId}`);
 
 		const removedAt = new Date();
@@ -180,7 +182,7 @@ export class RoutinesRepository {
 		});
 		await this.txHost.tx.activity.updateMany({
 			where: {
-				routineId,
+				routine: { id: routineId },
 				removedAt: null,
 			},
 			data: { removedAt },
@@ -190,12 +192,12 @@ export class RoutinesRepository {
 	/**
 	 * 특정 루틴을 사용하는 Program 수를 반환합니다.
 	 */
-	async countProgramsUsingRoutine(routineId: bigint): Promise<number> {
+	async countProgramsUsingRoutine(routineId: string): Promise<number> {
 		this.logger.debug(`루틴 사용 Program 수 조회: ${routineId}`);
 
 		return this.txHost.tx.program.count({
 			where: {
-				routineId,
+				routine: { id: routineId },
 				removedAt: null,
 			},
 		});

@@ -8,7 +8,6 @@ import {
 	ULIDFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { UserStatusSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Tenant } from "./tenant.entity";
 import { User } from "./user.entity";
@@ -17,12 +16,11 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class UserStatus extends UserStatusSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
-	declare userStatusId: UserStatusSchema["userStatusId"];
+	declare id: UserStatusSchema["id"];
 
 	@BigIntIdFieldMetadata({ description: "소속 사용자 내부 순번" })
-	declare userId: UserStatusSchema["userId"];
+	declare userSeq: UserStatusSchema["userSeq"];
 
 	// ============================================================================
 	// 필수 필드
@@ -47,7 +45,7 @@ export class UserStatus extends UserStatusSchema {
 		nullable: true,
 		description: "현재 선택된 Tenant membership ID",
 	})
-	declare currentTenantId: UserStatusSchema["currentTenantId"];
+	declare currentTenantSeq: UserStatusSchema["currentTenantSeq"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

@@ -44,28 +44,27 @@ import {
 	signOidcTestToken,
 } from "./helpers/test-auth.helper";
 
-const USER_ULID = "01J00000000000000000001001";
-const USER_ID = 1001n;
-const TENANT_A_ID = 2001n;
-const TENANT_B_ID = 3001n;
-const SPACE_A_ID = 1111n;
-const SPACE_B_ID = 2222n;
+const USER_ULID = "01JMEMBER00000000000000E2E";
+const TENANT_A_ID = "01JTENANT000000000000000TA";
+const TENANT_B_ID = "01JTENANT000000000000000TB";
+const SPACE_A_ID = "01JSPACE0000000000000000SA";
+const SPACE_B_ID = "01JSPACE0000000000000000SB";
 const ROOT_SCOPED_SPACE_IDS = [SPACE_B_ID, SPACE_A_ID];
 const BRANCH_SCOPED_SPACE_IDS = [SPACE_A_ID];
-const UNKNOWN_TENANT_ID = 4444n;
-const FITNESS_CENTER_ID = 5555n;
-const COMPANY_ID = 6666n;
+const UNKNOWN_TENANT_ID = "01JTENANT000000000000000XN";
+const FITNESS_CENTER_ID = "01JFTNS00000000000000000FC";
+const COMPANY_ID = "01JCMPNY0000000000000000C0";
 
 function createTestUser() {
 	return {
-		id: USER_ID,
+		id: USER_ULID,
 		email: "scope-e2e@example.com",
 		tenants: [
 			{
 				id: TENANT_A_ID,
-				spaceId: SPACE_A_ID,
 				role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 				space: {
+					id: SPACE_A_ID,
 					classification: {
 						category: {
 							name: SpaceCategoryName.BRANCH.name,
@@ -75,9 +74,9 @@ function createTestUser() {
 			},
 			{
 				id: TENANT_B_ID,
-				spaceId: SPACE_B_ID,
 				role: { name: SYSTEM_ROLES.PLATFORM_ADMIN },
 				space: {
+					id: SPACE_B_ID,
 					classification: {
 						category: {
 							name: SpaceCategoryName.ROOT.name,
@@ -205,7 +204,7 @@ describe("Space Scope API (E2E)", () => {
 
 	const spacesRepositoryMock = {
 		findSpaceIdsByCategoryHierarchy: async (
-			spaceId: bigint,
+			spaceId: string,
 			scope: SpaceResourceScope = SpaceResourceScope.WITH_DESCENDANTS,
 		) => {
 			spacesRepoCalls.push({
@@ -232,14 +231,11 @@ describe("Space Scope API (E2E)", () => {
 			});
 			return [[], 0];
 		},
-		findFitnessCenterBySpaceId: async (spaceId: bigint) => {
+		findFitnessCenterBySpaceId: async (spaceId: string) => {
 			spacesRepoCalls.push({ type: "findFitnessCenterBySpaceId", spaceId });
 			return {
 				id: FITNESS_CENTER_ID,
-				spaceId,
-				companyId: COMPANY_ID,
-				name: `FitnessCenter ${spaceId.toString()}`,
-				label: null,
+				space: { id: spaceId },
 				address: "Seoul",
 				phone: "02-1234-5678",
 				email: "scope-fitness-center@example.com",
@@ -409,12 +405,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID.toString());
+			.set("x-tenant-id", TENANT_A_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID.toString(),
-			spaceIds: BRANCH_SCOPED_SPACE_IDS.map(String),
+			spaceId: SPACE_A_ID,
+			spaceIds: BRANCH_SCOPED_SPACE_IDS,
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -428,12 +424,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID.toString());
+			.set("x-tenant-id", TENANT_B_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_B_ID.toString(),
-			spaceIds: ROOT_SCOPED_SPACE_IDS.map(String),
+			spaceId: SPACE_B_ID,
+			spaceIds: ROOT_SCOPED_SPACE_IDS,
 			tenantRole: SYSTEM_ROLES.PLATFORM_ADMIN,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -447,12 +443,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context/ancestors")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID.toString());
+			.set("x-tenant-id", TENANT_A_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID.toString(),
-			spaceIds: [SPACE_A_ID.toString(), SPACE_B_ID.toString()],
+			spaceId: SPACE_A_ID,
+			spaceIds: [SPACE_A_ID, SPACE_B_ID],
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -466,12 +462,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context/tree")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID.toString());
+			.set("x-tenant-id", TENANT_A_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID.toString(),
-			spaceIds: [SPACE_A_ID.toString(), SPACE_B_ID.toString()],
+			spaceId: SPACE_A_ID,
+			spaceIds: [SPACE_A_ID, SPACE_B_ID],
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -485,7 +481,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID.toString());
+			.set("x-tenant-id", TENANT_A_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
@@ -510,7 +506,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID.toString());
+			.set("x-tenant-id", TENANT_B_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
@@ -536,7 +532,7 @@ describe("Space Scope API (E2E)", () => {
 			.get("/api/v1/test-space-scope/tasks")
 			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID.toString());
+			.set("x-tenant-id", TENANT_A_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(tasksRepoCalls[0]).toMatchObject({
@@ -550,7 +546,7 @@ describe("Space Scope API (E2E)", () => {
 			.get("/api/v1/test-space-scope/tasks")
 			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID.toString());
+			.set("x-tenant-id", TENANT_B_ID);
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(tasksRepoCalls[0]).toMatchObject({
@@ -563,7 +559,7 @@ describe("Space Scope API (E2E)", () => {
 		const limitedResponse = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID.toString());
+			.set("x-tenant-id", TENANT_A_ID);
 
 		expect(limitedResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -581,7 +577,7 @@ describe("Space Scope API (E2E)", () => {
 		const fullResponse = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID.toString());
+			.set("x-tenant-id", TENANT_B_ID);
 
 		expect(fullResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -597,9 +593,9 @@ describe("Space Scope API (E2E)", () => {
 
 	it("비 PLATFORM_ADMIN 사용자는 다른 space의 FitnessCenter 상세에 접근할 수 없고 PLATFORM_ADMIN은 접근 가능하다", async () => {
 		const forbiddenResponse = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${SPACE_B_ID.toString()}/fitness-center`)
+			.get(`/api/v1/spaces/${SPACE_B_ID}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID.toString());
+			.set("x-tenant-id", TENANT_A_ID);
 
 		expect(forbiddenResponse.status).toBe(HttpStatus.FORBIDDEN);
 		expect(
@@ -611,9 +607,9 @@ describe("Space Scope API (E2E)", () => {
 		spacesRepoCalls.length = 0;
 
 		const allowedResponse = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${SPACE_A_ID.toString()}/fitness-center`)
+			.get(`/api/v1/spaces/${SPACE_A_ID}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID.toString());
+			.set("x-tenant-id", TENANT_B_ID);
 
 		expect(allowedResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -631,7 +627,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", UNKNOWN_TENANT_ID.toString());
+			.set("x-tenant-id", UNKNOWN_TENANT_ID);
 
 		expect(response.status).toBe(HttpStatus.FORBIDDEN);
 	});

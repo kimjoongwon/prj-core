@@ -59,8 +59,8 @@ export interface TaskListScreenProps {
 	queryStates: TaskListScreenQueryStates;
 	setQueryStates: TaskListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickTaskName: (taskId: bigint) => void;
-	onDeleteTask: (taskId: bigint) => Promise<void>;
+	onClickTaskName: (taskId: string) => void;
+	onDeleteTask: (taskId: string) => Promise<void>;
 }
 export const TaskListScreen = observer(
 	({

@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	ApproveTenantAccessRequestCommand,
 	GetTenantAccessRequestForReviewQuery,
@@ -84,7 +84,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -96,8 +96,8 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 상세 조회 성공")
 	getRequest(
-		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
-		tenantAccessRequestId: bigint,
+		@Param("tenantAccessRequestId", ParseUlidPipe)
+		tenantAccessRequestId: string,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();
 		const userId = this.authContext.user?.id;
@@ -121,7 +121,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -142,8 +142,8 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 승인 성공")
 	approve(
-		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
-		tenantAccessRequestId: bigint,
+		@Param("tenantAccessRequestId", ParseUlidPipe)
+		tenantAccessRequestId: string,
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();
@@ -168,7 +168,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -184,8 +184,8 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 반려 성공")
 	reject(
-		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
-		tenantAccessRequestId: bigint,
+		@Param("tenantAccessRequestId", ParseUlidPipe)
+		tenantAccessRequestId: string,
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
 		this.authContext.assertAuthenticated();

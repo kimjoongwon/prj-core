@@ -10,7 +10,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Ability의 DB 필드 타입과 공통 검증입니다. */
 export class AbilitySchema extends AbstractSchema {
-	abilityId!: string;
+	id!: string;
 
 	@StringValidation()
 	name!: string;
@@ -31,8 +31,8 @@ export class AbilitySchema extends AbstractSchema {
 	reason!: string | null;
 
 	@BigIntIdValidation()
-	subjectId!: bigint;
+	subjectSeq!: bigint;
 
 	@BigIntIdValidation()
-	actionId!: bigint;
+	actionSeq!: bigint;
 }

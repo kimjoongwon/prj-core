@@ -213,16 +213,22 @@ describe("OidcConfigurationService", () => {
 		const buildInteractionUrl = configuration.interactions?.url;
 
 		expect(
-			await buildInteractionUrl?.({} as never, {
-				uid: "interaction-1",
-				prompt: { name: "login" },
-			} as never),
+			await buildInteractionUrl?.(
+				{} as never,
+				{
+					uid: "interaction-1",
+					prompt: { name: "login" },
+				} as never,
+			),
 		).toBe("http://localhost:3000/admin/auth/login/interaction-1");
 		expect(
-			await buildInteractionUrl?.({} as never, {
-				uid: "interaction-2",
-				prompt: { name: "consent" },
-			} as never),
+			await buildInteractionUrl?.(
+				{} as never,
+				{
+					uid: "interaction-2",
+					prompt: { name: "consent" },
+				} as never,
+			),
 		).toBe("http://localhost:3000/admin/auth/consent/interaction-2");
 	});
 

@@ -19,7 +19,7 @@ export interface TenantAccessRequestReviewListScreenProps {
 	totalCount: number;
 	pendingCount: number;
 	isLoading: boolean;
-	onClickRequestRow: (tenantAccessRequestId: bigint) => void;
+	onClickRequestRow: (tenantAccessRequestId: string) => void;
 }
 function formatDateTime(value: Date | null) {
 	if (value === null || Number.isNaN(value.getTime())) {
@@ -35,27 +35,13 @@ function formatDateTime(value: Date | null) {
 	});
 }
 function getSpaceName(request: TenantAccessRequestDto) {
-	const space = request.space as
-		| (TenantAccessRequestDto["space"] & {
-				fitnessCenter?: {
-					name?: string | null;
-					company?: {
-						name?: string | null;
-					} | null;
-				} | null;
-		  })
-		| undefined;
-	return (
-		space?.fitnessCenter?.name ??
-		space?.fitnessCenter?.company?.name ??
-		request.spaceId
-	);
+	return request.space?.name ?? "-";
 }
 function getRoleName(request: TenantAccessRequestDto) {
 	return (
 		request.requestedRole?.displayName ??
 		request.requestedRole?.name ??
-		request.requestedRoleId
+		"-"
 	);
 }
 type TenantAccessRequestStatus = TenantAccessRequestDto["status"];
@@ -91,8 +77,8 @@ function RequestSummaryCell({
 	requesterName,
 	requesterEmail,
 }: {
-	spaceName: string | bigint;
-	roleName: string | bigint;
+	spaceName: string;
+	roleName: string;
 	requesterName?: string;
 	requesterEmail?: string;
 }) {

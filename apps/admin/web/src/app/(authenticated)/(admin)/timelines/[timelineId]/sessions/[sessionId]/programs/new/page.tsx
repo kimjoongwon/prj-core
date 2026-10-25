@@ -6,6 +6,7 @@ import {
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
 import { useApp } from "@cocrepo/store";
+import { isIntegrationUlid } from "@cocrepo/type";
 import {
 	Button,
 	HStack,
@@ -27,11 +28,11 @@ const buildRoutinePreview = (routine?: RoutineDto) =>
 	[...(routine?.activities ?? [])]
 		.sort((left, right) => left.order - right.order)
 		.map((activity) => ({
-			id: String(activity.id),
+			id: activity.id,
 			order: activity.order,
 			exerciseName:
 				activity.task?.exercise?.name ??
-				`Task ${String(activity.taskId).slice(-6)}`,
+				`Task ${activity.task.id.slice(-6)}`,
 			repetitions: activity.repetitions,
 			restTime: activity.restTime,
 			notes: activity.notes,
@@ -65,7 +66,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		const { mutate: createProgram, isPending } = useCreateProgram();
 
 		const selectedRoutine = routines.find(
-			(routine) => String(routine.id) === state.routineId,
+			(routine) => routine.id === state.routineId,
 		);
 		const routinePreview = buildRoutinePreview(selectedRoutine);
 		const hasUnschedulableRoutine = routinePreview.some(
@@ -88,13 +89,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 			}
 			if (
 				state.routineId.trim() &&
-				!/^[1-9]\d*$/.test(state.routineId.trim())
+				!isIntegrationUlid(state.routineId.trim())
 			) {
 				errors.routineId = "유효한 루틴을 선택해주세요.";
 			}
 			if (
 				state.instructorId.trim() &&
-				!/^[1-9]\d*$/.test(state.instructorId.trim())
+				!isIntegrationUlid(state.instructorId.trim())
 			) {
 				errors.instructorId = "유효한 강사를 선택해주세요.";
 			}
@@ -120,13 +121,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 				{
 					timelineId,
 					sessionId,
-					data: {
-						name: state.name.trim(),
-						routineId: parsePositiveBigInt(state.routineId),
-						instructorId: parsePositiveBigInt(state.instructorId),
-						capacity: Number(state.capacity),
-						level: state.level || undefined,
-					},
+				data: {
+					name: state.name.trim(),
+					routineId: state.routineId.trim(),
+					instructorId: state.instructorId.trim(),
+					capacity: Number(state.capacity),
+					level: state.level || undefined,
+				},
 				},
 				{
 					onSuccess: () => {
@@ -193,11 +194,3 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 );
 
 export default AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute;
-
-function parsePositiveBigInt(value: string): bigint {
-	const trimmedValue = value.trim();
-	if (!/^[1-9]\d*$/.test(trimmedValue)) {
-		throw new Error("ID must be a positive decimal integer");
-	}
-	return BigInt(trimmedValue);
-}

@@ -21,7 +21,7 @@ type IdpAccountAccessGrantPersistenceRecord = Prisma.TenantGetPayload<{
 
 export type IdpAccountAccessGrantRecord =
 	DomainData<IdpAccountAccessGrantPersistenceRecord> & {
-		userId: bigint;
-		spaceId: bigint;
-		roleId: bigint;
+		userSeq: bigint;
+		spaceSeq: bigint;
+		roleSeq: bigint;
 	};

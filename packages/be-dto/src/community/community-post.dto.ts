@@ -1,14 +1,14 @@
 import {
-	BigIntIdField,
 	BooleanField,
 	DateField,
 	StringField,
 	StringFieldOptional,
+	ULIDField,
 } from "@cocrepo/decorator/field";
 
 export class CommunityPostDto {
-	@BigIntIdField({ description: "커뮤니티 게시글 ID" })
-	id!: bigint;
+	@ULIDField({ description: "커뮤니티 게시글 ULID" })
+	id!: string;
 
 	@StringFieldOptional({
 		description: "게시글 제목",

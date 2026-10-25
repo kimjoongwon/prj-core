@@ -124,7 +124,7 @@ describe("transformToDto Entity 응답 경계", () => {
 		class WrappedUserEntity {
 			@StringField() name!: string;
 			password!: string;
-			userId!: string;
+			userSeq!: string;
 		}
 		class WrappedUserDto extends EntityResponseType(WrappedUserEntity, {
 			pick: ["name"],
@@ -140,7 +140,7 @@ describe("transformToDto Entity 응답 경계", () => {
 			user: {
 				name: "관리자",
 				password: "hash",
-				userId: "ULID",
+				userSeq: "ULID",
 				relations: [],
 			},
 		});
@@ -149,7 +149,7 @@ describe("transformToDto Entity 응답 경계", () => {
 		expect(response).not.toHaveProperty("password");
 		expect(response).toHaveProperty("user", expect.any(WrappedUserDto));
 		expect(response).not.toHaveProperty("user.password");
-		expect(response).not.toHaveProperty("user.userId");
+		expect(response).not.toHaveProperty("user.userSeq");
 	});
 
 	it("Entity 응답 graph가 없는 일반 DTO의 기존 변환 동작은 유지한다", () => {

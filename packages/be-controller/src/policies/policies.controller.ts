@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreatePolicyCommand,
 	DeletePolicyCommand,
@@ -72,13 +72,13 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "policyId",
-		description: "Policy ID (canonical decimal BIGINT string)",
+		description: "Policy ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
 	@ResponseMessage("정책 조회 성공")
-	async getPolicyById(@Param("policyId", ParseBigIntIdPipe) policyId: bigint) {
+	async getPolicyById(@Param("policyId", ParseUlidPipe) policyId: string) {
 		return this.queryBus.execute(new GetPolicyByIdQuery(policyId));
 	}
 
@@ -113,7 +113,7 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "policyId",
-		description: "Policy ID (canonical decimal BIGINT string)",
+		description: "Policy ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -124,7 +124,7 @@ export class PoliciesController {
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
 	@ResponseMessage("정책 수정 성공")
 	async updatePolicy(
-		@Param("policyId", ParseBigIntIdPipe) policyId: bigint,
+		@Param("policyId", ParseUlidPipe) policyId: string,
 		@Body() dto: UpdatePolicyDto,
 	) {
 		return this.commandBus.execute(new UpdatePolicyCommand(policyId, dto));
@@ -141,13 +141,13 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "policyId",
-		description: "Policy ID (canonical decimal BIGINT string)",
+		description: "Policy ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(PolicyResponseDto, HttpStatus.OK)
 	@ResponseMessage("정책 삭제 성공")
-	async deletePolicy(@Param("policyId", ParseBigIntIdPipe) policyId: bigint) {
+	async deletePolicy(@Param("policyId", ParseUlidPipe) policyId: string) {
 		return this.commandBus.execute(new DeletePolicyCommand(policyId));
 	}
 
@@ -163,7 +163,7 @@ export class PoliciesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "policyId",
-		description: "Policy ID (canonical decimal BIGINT string)",
+		description: "Policy ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -176,7 +176,7 @@ export class PoliciesController {
 	})
 	@ResponseMessage("정책 권한 동기화 성공")
 	async syncPolicyEntries(
-		@Param("policyId", ParseBigIntIdPipe) policyId: bigint,
+		@Param("policyId", ParseUlidPipe) policyId: string,
 		@Body() dto: SyncPolicyEntriesDto,
 	) {
 		return this.commandBus.execute(

@@ -1,7 +1,7 @@
 "use client";
 
 import type { RoutineDto } from "@cocrepo/api/core/routines";
-import type { ExerciseDto, TaskDto } from "@cocrepo/api/core/tasks";
+import type { ExerciseDto } from "@cocrepo/api/core/tasks";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
@@ -26,11 +26,12 @@ export type TaskExerciseEditScreenRoutine = Pick<
 >;
 export type TaskExerciseEditScreenMetadata = Pick<
 	ExerciseDto,
-	"taskId" | "createdAt" | "updatedAt"
-> &
-	Pick<TaskDto, "spaceId"> & {
-		routines?: TaskExerciseEditScreenRoutine[];
-	};
+	"createdAt" | "updatedAt"
+> & {
+	taskId: string;
+	spaceId?: string | null;
+	routines?: TaskExerciseEditScreenRoutine[];
+};
 export interface TaskExerciseEditScreenProps {
 	title?: ReactNode;
 	description?: ReactNode;

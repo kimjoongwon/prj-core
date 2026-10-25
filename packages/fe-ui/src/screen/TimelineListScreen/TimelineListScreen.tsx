@@ -40,7 +40,7 @@ export interface TimelineListScreenProps {
 	queryStates: TimelineListScreenQueryStates;
 	setQueryStates: TimelineListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onDeleteTimeline: (timelineId: bigint) => Promise<void>;
+	onDeleteTimeline: (timelineId: string) => Promise<void>;
 }
 export const TimelineListScreen = observer(
 	({

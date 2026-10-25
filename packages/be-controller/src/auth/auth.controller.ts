@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	ConfirmEmailVerificationCommand,
 	ForceResetPasswordCommand,
@@ -46,7 +46,6 @@ import {
 	TokenRefreshResponseDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
-import { formatDatabaseId } from "@cocrepo/type";
 import {
 	BadRequestException,
 	Body,
@@ -219,10 +218,7 @@ export class AuthController {
 		@Body() signUpDto: SignUpPayloadDto,
 		@Headers(REQUEST_HEADER_KEYS.TENANT_ID) requestedSpaceId?: string,
 	) {
-		if (
-			requestedSpaceId &&
-			requestedSpaceId !== formatDatabaseId(signUpDto.spaceId)
-		) {
+		if (requestedSpaceId && requestedSpaceId !== signUpDto.spaceId) {
 			throw new BadRequestException("SIGN_UP_SPACE_HEADER_MISMATCH");
 		}
 
@@ -399,7 +395,7 @@ export class AuthController {
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("계정 잠금이 해제되었습니다.")
-	async unlockAccount(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
+	async unlockAccount(@Param("userId", ParseUlidPipe) userId: string) {
 		return this.commandBus.execute(new UnlockAccountCommand(userId));
 	}
 
@@ -418,7 +414,7 @@ export class AuthController {
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("임시 비밀번호가 이메일로 발송되었습니다.")
-	async forceResetPassword(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
+	async forceResetPassword(@Param("userId", ParseUlidPipe) userId: string) {
 		return this.commandBus.execute(new ForceResetPasswordCommand(userId));
 	}
 
@@ -437,9 +433,7 @@ export class AuthController {
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("사용자의 모든 세션이 무효화되었습니다.")
-	async invalidateUserSessions(
-		@Param("userId", ParseBigIntIdPipe) userId: bigint,
-	) {
+	async invalidateUserSessions(@Param("userId", ParseUlidPipe) userId: string) {
 		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
 	}
 }

@@ -32,6 +32,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -240,7 +241,7 @@ export const prefetchGetInteractionQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetInteractionQueryOptions(uid, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -269,11 +270,19 @@ export const getGetInteractionSuspenseQueryOptions = <
 		signal,
 	}) => getInteraction(uid, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getInteraction>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetInteractionSuspenseQueryResult = NonNullable<
@@ -534,7 +543,7 @@ export const prefetchGetInteractionInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

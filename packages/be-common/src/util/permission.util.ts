@@ -1,6 +1,6 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpaceCategoryName } from "@cocrepo/enum";
-import type { ContextTenantSnapshot, DatabaseId } from "@cocrepo/type";
+import type { ContextTenantSnapshot } from "@cocrepo/type";
 
 type TenantWithSpaceCategory = ContextTenantSnapshot & {
 	space?: {
@@ -36,8 +36,9 @@ function resolveTenantSpaceCategoryName(
 
 export function resolveTenantSpaceId(
 	tenant: ContextTenantSnapshot,
-): DatabaseId | undefined {
-	return tenant.space?.id ?? tenant.spaceId ?? undefined;
+): string | undefined {
+	// 공간 정체성은 ULID id로만 다룹니다. 내부 seq는 저장소 아래에서만 사용합니다.
+	return tenant.space?.id ?? undefined;
 }
 
 /**
@@ -52,7 +53,7 @@ export function isRootSpaceCategory(tenant: ContextTenantSnapshot): boolean {
  */
 export function resolveCurrentTenantById(
 	tenants: ContextTenantSnapshot[] | null | undefined,
-	tenantId?: DatabaseId,
+	tenantId?: string,
 ): ContextTenantSnapshot | undefined {
 	if (!tenants?.length) {
 		return undefined;

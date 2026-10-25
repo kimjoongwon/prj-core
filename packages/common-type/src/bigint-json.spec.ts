@@ -5,12 +5,12 @@ describe("bigint JSON", () => {
 	it("Given 중첩 bigint 값 When 직렬화 후 역직렬화하면 Then bigint 타입과 값이 보존된다", () => {
 		const serialized = stringifyBigIntJson({
 			id: 1n,
-			relations: [{ userId: 9223372036854775807n }],
+			relations: [{ userSeq: 9223372036854775807n }],
 		});
 
 		expect(parseBigIntJson(serialized)).toEqual({
 			id: 1n,
-			relations: [{ userId: 9223372036854775807n }],
+			relations: [{ userSeq: 9223372036854775807n }],
 		});
 	});
 

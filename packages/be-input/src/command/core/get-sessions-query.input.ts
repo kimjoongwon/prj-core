@@ -1,5 +1,5 @@
 export interface GetSessionsQueryInput {
-	timelineId?: bigint | null;
+	timelineId?: string | null;
 	search?: string | null;
 	skip?: number;
 	take?: number;

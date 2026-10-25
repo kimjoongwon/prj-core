@@ -23,8 +23,9 @@ const toFitnessCenterFormStateDto = (
 		return null;
 	}
 	return {
-		name: fitnessCenter.name,
-		label: fitnessCenter.label,
+		// 이름/라벨은 Space가 소유하므로 시설 응답에 포함된 Space 요약에서 가져옵니다.
+		name: fitnessCenter.space?.name ?? "",
+		label: fitnessCenter.space?.label ?? null,
 		address: fitnessCenter.address,
 		phone: fitnessCenter.phone,
 		email: fitnessCenter.email,
@@ -92,8 +93,8 @@ const AdminSpacesSpaceIdFitnessCenterEditRoute = observer(() => {
 		<FitnessCenterEditScreen
 			title="피트니스센터 정보 수정"
 			description={
-				fitnessCenter?.name
-					? `${fitnessCenter.name} 피트니스센터를 수정합니다.`
+				fitnessCenter?.space?.name
+					? `${fitnessCenter.space.name} 피트니스센터를 수정합니다.`
 					: "피트니스센터를 수정합니다."
 			}
 			state={state}

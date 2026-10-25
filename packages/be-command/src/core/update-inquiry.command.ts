@@ -9,7 +9,7 @@ export class UpdateInquiryCommand implements UpdateInquiryCommandInput {
 	readonly isRealtimeChat?: UpdateInquiryCommandInput["isRealtimeChat"];
 
 	constructor(
-		readonly inquiryId: bigint,
+		readonly inquiryId: string,
 		input: UpdateInquiryCommandInput,
 	) {
 		Object.assign(this, input);

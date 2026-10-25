@@ -4,6 +4,8 @@ import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { RolesRepository } from "../src/roles.repository";
 
+const ROLE_ID = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
+
 describe("RolesRepository", () => {
 	let repository: RolesRepository;
 	let mockTxHost: {
@@ -59,15 +61,14 @@ describe("RolesRepository", () => {
 	describe("findById", () => {
 		it("ID로 역할을 조회해야 한다", async () => {
 			// Given
-			const roleId = 1n;
 			mockTxHost.tx.role.findUnique.mockResolvedValue(mockRoleData);
 
 			// When
-			const result = await repository.findById(roleId);
+			const result = await repository.findById(ROLE_ID);
 
 			// Then
 			expect(mockTxHost.tx.role.findUnique).toHaveBeenCalledWith({
-				where: { id: roleId },
+				where: { id: ROLE_ID },
 			});
 			expect(result).toBeInstanceOf(Role);
 			expect(result?.id).toBe(mockRoleData.id);
@@ -76,15 +77,14 @@ describe("RolesRepository", () => {
 
 		it("역할이 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const roleId = 999n;
 			mockTxHost.tx.role.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findById(roleId);
+			const result = await repository.findById(ROLE_ID);
 
 			// Then
 			expect(mockTxHost.tx.role.findUnique).toHaveBeenCalledWith({
-				where: { id: roleId },
+				where: { id: ROLE_ID },
 			});
 			expect(result).toBeNull();
 		});
@@ -181,7 +181,6 @@ describe("RolesRepository", () => {
 	describe("updateById", () => {
 		it("역할을 수정해야 한다", async () => {
 			// Given
-			const roleId = 1n;
 			const updateData = { name: SYSTEM_ROLES.COMPANY_MANAGER };
 			mockTxHost.tx.role.update.mockResolvedValue({
 				...mockRoleData,
@@ -189,11 +188,11 @@ describe("RolesRepository", () => {
 			});
 
 			// When
-			const result = await repository.updateById(roleId, updateData);
+			const result = await repository.updateById(ROLE_ID, updateData);
 
 			// Then
 			expect(mockTxHost.tx.role.update).toHaveBeenCalledWith({
-				where: { id: roleId },
+				where: { id: ROLE_ID },
 				data: updateData,
 			});
 			expect(result).toBeInstanceOf(Role);

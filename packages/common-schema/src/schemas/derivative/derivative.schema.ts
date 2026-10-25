@@ -13,16 +13,16 @@ import { AbstractSchema } from "../abstract.schema";
 export class DerivativeSchema
 	extends AbstractSchema
 {
-	derivativeId!: string;
+	id!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceId!: bigint;
+	spaceSeq!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: bigint | null;
+	createdBySeq!: bigint | null;
 
 	@BigIntIdValidation({ description: "원본 에셋 ID" })
-	assetId!: bigint;
+	assetSeq!: bigint;
 
 	@EnumValidation(() => DerivativeKind, {
 		description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",

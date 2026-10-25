@@ -32,6 +32,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -264,7 +265,7 @@ export const prefetchGetOidcClientsQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcClientsQueryOptions(params, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -293,11 +294,19 @@ export const getGetOidcClientsSuspenseQueryOptions = <
 		signal,
 	}) => getOidcClients(params, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getOidcClients>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetOidcClientsSuspenseQueryResult = NonNullable<
@@ -558,7 +567,7 @@ export const prefetchGetOidcClientsInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -854,7 +863,7 @@ export const prefetchGetOidcClientQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcClientQueryOptions(oidcClientId, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -884,11 +893,19 @@ export const getGetOidcClientSuspenseQueryOptions = <
 		signal,
 	}) => getOidcClient(oidcClientId, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getOidcClient>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetOidcClientSuspenseQueryResult = NonNullable<
@@ -1152,7 +1169,7 @@ export const prefetchGetOidcClientInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

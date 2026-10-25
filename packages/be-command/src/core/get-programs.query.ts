@@ -5,7 +5,7 @@ export class GetProgramsQuery implements GetProgramsQueryInput {
 	readonly take?: GetProgramsQueryInput["take"];
 
 	constructor(
-		readonly sessionId: bigint,
+		readonly sessionId: string,
 		input: GetProgramsQueryInput,
 	) {
 		Object.assign(this, input);

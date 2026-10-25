@@ -15,7 +15,7 @@ import { QueryDto } from "../query/query.dto";
  * page/limit 필드를 직접 선언하지 않습니다 — Prisma와 동일한 skip/take를 사용합니다.
  *
  * 필터 계약: name, email, phone, createdFrom/createdTo
- * 커스텀 처리: nickname(릴레이션), roles(릴레이션), status(특수), categoryId(릴레이션), groupIds(릴레이션)
+ * 커스텀 처리: nickname(릴레이션), roles(릴레이션), status(특수), categorySeq(릴레이션), groupIds(릴레이션)
  */
 export class QueryUsersDto extends QueryDto {
 	@StringFieldOptional({
@@ -53,7 +53,7 @@ export class QueryUsersDto extends QueryDto {
 	@BigIntIdFieldOptional({
 		description: "분류 카테고리 ID",
 	})
-	categoryId?: bigint;
+	categorySeq?: bigint;
 
 	@BigIntIdFieldOptional({
 		each: true,

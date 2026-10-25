@@ -11,8 +11,6 @@ export class UserClassificationDto extends EntityResponseType(
 			"createdAt",
 			"updatedAt",
 			"removedAt",
-			"categoryId",
-			"userId",
 			"user",
 			"category",
 		] as const,

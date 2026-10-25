@@ -1,8 +1,8 @@
 export interface GetReservationBookingFeedQueryInput {
 	dateFrom?: Date;
 	dateTo?: Date;
-	timelineId?: bigint;
-	programId?: bigint;
+	timelineId?: string;
+	programId?: string;
 	search?: string;
 	skip?: number;
 	take?: number;

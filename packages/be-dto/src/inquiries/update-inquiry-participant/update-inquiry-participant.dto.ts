@@ -12,5 +12,5 @@ export class UpdateInquiryParticipantDto extends PartialType(
 	@BigIntIdFieldOptional({
 		description: "타이핑 중인 스레드 ID",
 	})
-	threadId?: bigint;
+	threadSeq?: bigint;
 }

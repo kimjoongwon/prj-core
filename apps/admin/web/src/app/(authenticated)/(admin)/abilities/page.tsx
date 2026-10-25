@@ -5,7 +5,10 @@ import {
 	useGetAbilitiesSuspense,
 } from "@cocrepo/api/core/abilities";
 import { useGetActionsSuspense } from "@cocrepo/api/core/actions";
-import { useGetSubjectsSuspense } from "@cocrepo/api/core/subjects";
+import {
+	type SubjectDto,
+	useGetSubjectsSuspense,
+} from "@cocrepo/api/core/subjects";
 import { AbilityListScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -41,6 +44,7 @@ function hasConditions(ability: AbilityResponseDto) {
 
 function filterAbilities(
 	abilities: AbilityResponseDto[],
+	subjects: SubjectDto[],
 	filters: {
 		search: string;
 		subjectId: string;
@@ -49,17 +53,24 @@ function filterAbilities(
 	},
 ) {
 	const searchTerm = getTextValue(filters.search);
+	// AbilityResponseDto의 subject 관계에는 공개 id가 없어 name으로 매칭한다.
+	const selectedSubjectName = filters.subjectId
+		? subjects.find((subject) => subject.id === filters.subjectId)?.name
+		: undefined;
 
 	return abilities.filter((ability) => {
 		if (searchTerm && !getAbilitySearchText(ability).includes(searchTerm)) {
 			return false;
 		}
 
-		if (filters.subjectId && String(ability.subjectId) !== filters.subjectId) {
+		if (
+			filters.subjectId &&
+			ability.subject?.name !== selectedSubjectName
+		) {
 			return false;
 		}
 
-		if (filters.actionId && String(ability.actionId) !== filters.actionId) {
+		if (filters.actionId && ability.action?.id !== filters.actionId) {
 			return false;
 		}
 
@@ -105,7 +116,8 @@ export default observer(function AbilitiesPage() {
 	const { data: actionsResponse } = useGetActionsSuspense();
 
 	const abilities = abilitiesResponse.data ?? [];
-	const filteredAbilities = filterAbilities(abilities, {
+	const subjects = subjectsResponse.data ?? [];
+	const filteredAbilities = filterAbilities(abilities, subjects, {
 		search: queryStates.search,
 		subjectId: queryStates.subjectId,
 		actionId: queryStates.actionId,
@@ -117,11 +129,11 @@ export default observer(function AbilitiesPage() {
 	);
 	const summary = buildAbilitySummary(abilities, filteredAbilities);
 
-	const subjects = (subjectsResponse.data ?? []).map((subject) => ({
+	const subjectOptions = subjects.map((subject) => ({
 		id: subject.id,
 		label: subject.displayName || subject.name,
 	}));
-	const actions = (actionsResponse.data ?? []).map((action) => ({
+	const actionOptions = (actionsResponse.data ?? []).map((action) => ({
 		id: action.id,
 		label: action.displayName || action.name,
 	}));
@@ -131,8 +143,8 @@ export default observer(function AbilitiesPage() {
 			abilities={paginatedAbilities}
 			totalCount={filteredAbilities.length}
 			summary={summary}
-			subjects={subjects}
-			actions={actions}
+			subjects={subjectOptions}
+			actions={actionOptions}
 			filters={{
 				searchTerm: queryStates.search,
 				selectedSubjectId: queryStates.subjectId,

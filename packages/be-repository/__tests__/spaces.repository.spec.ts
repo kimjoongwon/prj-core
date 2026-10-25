@@ -39,10 +39,12 @@ describe("SpacesRepository", () => {
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
+		name: "Test Fitness Center",
+		label: "Test Label",
 	};
 
 	const mockCompanyData = {
-		id: 10n,
+		seq: 10n,
 		name: "Test Company",
 		label: "Test Label",
 		address: "Seoul",
@@ -57,32 +59,29 @@ describe("SpacesRepository", () => {
 		...mockSpaceData,
 		fitnessCenter: {
 			id: "fitness-center-test-id",
-			name: "Test Fitness Center",
-			label: "Test Label",
 			address: "Seoul",
 			phone: "02-0000-0000",
 			email: "center@example.com",
-			companyId: mockCompanyData.id,
-			spaceId: mockSpaceData.id,
+			companySeq: mockCompanyData.seq,
+			space: mockSpaceData,
 			imageFileId: null,
 			removedAt: null,
 			company: mockCompanyData,
-			space: mockSpaceData,
 		},
 	};
 
 	const mockSecondSpaceWithFitnessCenter = {
 		...mockSpaceData,
 		id: "space-second-id",
+		name: "Second Fitness Center",
+		label: "Second Label",
 		fitnessCenter: {
 			id: "fitness-center-second-id",
-			name: "Second Fitness Center",
-			label: "Second Label",
 			address: "Busan",
 			phone: "051-0000-0000",
 			email: "second@example.com",
-			companyId: mockCompanyData.id,
-			spaceId: "space-second-id",
+			companySeq: mockCompanyData.seq,
+			spaceSeq: "space-second-id",
 			imageFileId: "image-2",
 			removedAt: null,
 			company: mockCompanyData,
@@ -90,17 +89,18 @@ describe("SpacesRepository", () => {
 		},
 	};
 
+
 	const mockSpaceDbId = 1n;
-	const mockSecondSpaceDbId = 2n;
 
 	const getFitnessCenter = (
 		space: Space | null | undefined,
 	):
 		| {
 				id?: string | bigint;
-				name?: string;
+				address?: string;
 				company?: {
-					id?: string | bigint;
+					id?: string;
+					seq?: string | bigint;
 					businessNo?: string;
 					fitnessCenters?: Array<{ id?: string | bigint }>;
 				};
@@ -111,10 +111,12 @@ describe("SpacesRepository", () => {
 			space as
 				| (Space & {
 						fitnessCenter?: {
-							id?: string | bigint;
-							name?: string;
+							id?: string;
+							seq?: string | bigint;
+							address?: string;
 							company?: {
-								id?: string | bigint;
+								id?: string;
+								seq?: string | bigint;
 								businessNo?: string;
 								fitnessCenters?: Array<{ id?: string | bigint }>;
 							};
@@ -175,15 +177,14 @@ describe("SpacesRepository", () => {
 	describe("findById", () => {
 		it("ID로 Space를 조회해야 한다", async () => {
 			// Given
-			const spaceId = mockSpaceDbId;
 			mockTxHost.tx.space.findUnique.mockResolvedValue(mockSpaceData);
 
 			// When
-			const result = await repository.findById(spaceId);
+			const result = await repository.findById("01JAAAAAAAAAAAAAAAAAAAAAAAA");
 
 			// Then
 			expect(mockTxHost.tx.space.findUnique).toHaveBeenCalledWith({
-				where: { id: spaceId },
+				where: { id: "01JAAAAAAAAAAAAAAAAAAAAAAAA" },
 			});
 			expect(result).toBeInstanceOf(Space);
 			expect(result?.id).toBe(mockSpaceData.id);
@@ -194,7 +195,7 @@ describe("SpacesRepository", () => {
 			mockTxHost.tx.space.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findById(999n);
+			const result = await repository.findById("01JCCCCCCCCCCCCCCCCCCCCCCCC");
 
 			// Then
 			expect(result).toBeNull();
@@ -215,7 +216,7 @@ describe("SpacesRepository", () => {
 
 			// Then
 			expect(mockTxHost.tx.space.findUnique).toHaveBeenCalledWith({
-				where: { spaceId: mockSpaceData.id },
+				where: { id: mockSpaceData.id },
 				include: {
 					fitnessCenter: {
 						include: {
@@ -276,24 +277,21 @@ describe("SpacesRepository", () => {
 			// When
 			const [spaces, total] = await repository.findManyWithFitnessCenter({
 				search: "123-45",
-				spaceIds: [mockSpaceDbId, mockSecondSpaceDbId],
+				spaceIds: [mockSpaceData.id, "space-second-id"],
 			});
 
 			// Then
+			// 이름의 원천이 Space이므로 기본 where는 FitnessCenter 존재를 요구하지 않고,
+			// 검색만 Space 이름/회사명/사업자번호를 선택적으로 참조합니다.
 			expect(mockTxHost.tx.space.findMany).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
-						fitnessCenter: {
-							is: {
-								removedAt: null,
-								company: {
-									is: {
-										removedAt: null,
-									},
-								},
-							},
-						},
 						OR: expect.arrayContaining([
+							expect.objectContaining({
+								name: expect.objectContaining({
+									contains: "123-45",
+								}),
+							}),
 							expect.objectContaining({
 								fitnessCenter: expect.objectContaining({
 									is: expect.objectContaining({
@@ -311,6 +309,8 @@ describe("SpacesRepository", () => {
 					}),
 				}),
 			);
+			const whereArg = mockTxHost.tx.space.findMany.mock.calls[0][0].where;
+			expect(whereArg).not.toHaveProperty("fitnessCenter");
 			expect(total).toBe(2);
 			expect(getFitnessCenter(spaces[0])?.space?.id).toBe(mockSpaceData.id);
 			expect(getFitnessCenter(spaces[1])?.space?.id).toBe("space-second-id");
@@ -358,27 +358,27 @@ describe("SpacesRepository", () => {
 			);
 
 			// When
-			const result = await repository.findFitnessCenterBySpaceId(mockSpaceDbId);
+			const result = await repository.findFitnessCenterBySpaceId(mockSpaceData.id);
 
 			// Then
 			expect(mockTxHost.tx.fitnessCenter.findFirst).toHaveBeenCalledWith({
-				where: { spaceId: mockSpaceDbId },
+				where: { space: { id: mockSpaceData.id } },
 				include: {
 					company: true,
 					space: true,
 				},
 			});
-			expect(result?.spaceId).toBe(mockSpaceData.id);
+			expect(result?.space?.id).toBe(mockSpaceData.id);
 			expect(
-				(result as { company?: { id?: string | bigint } } | null)?.company?.id,
-			).toBe(mockCompanyData.id);
+				(result as { company?: { seq?: string | bigint } } | null)?.company?.seq,
+			).toBe(mockCompanyData.seq);
 		});
 	});
 
 	describe("create", () => {
 		it("새 Space를 생성해야 한다", async () => {
 			// Given
-			const createData = { id: 99n };
+			const createData = { seq: 99n, name: "테스트 공간" };
 			mockTxHost.tx.space.create.mockResolvedValue({
 				...mockSpaceData,
 				...createData,
@@ -394,16 +394,16 @@ describe("SpacesRepository", () => {
 			expect(result).toBeInstanceOf(Space);
 		});
 
-		it("데이터 없이 기본 Space를 생성해야 한다", async () => {
+		it("이름을 포함한 최소 Space를 생성해야 한다", async () => {
 			// Given
 			mockTxHost.tx.space.create.mockResolvedValue(mockSpaceData);
 
 			// When
-			const result = await repository.create();
+			const result = await repository.create({ name: "테스트 공간" });
 
 			// Then
 			expect(mockTxHost.tx.space.create).toHaveBeenCalledWith({
-				data: {},
+				data: { name: "테스트 공간" },
 			});
 			expect(result).toBeInstanceOf(Space);
 		});
@@ -413,7 +413,7 @@ describe("SpacesRepository", () => {
 		it("Company는 Space 없이 만들고 FitnessCenter에 공개 ID 관계를 연결해야 한다", async () => {
 			// Given
 			mockTxHost.tx.company.create.mockResolvedValue({
-				id: mockCompanyData.id,
+				seq: mockCompanyData.seq,
 			});
 			mockTxHost.tx.fitnessCenter.create.mockResolvedValue({
 				id: "fitness-center-test-id",
@@ -430,8 +430,6 @@ describe("SpacesRepository", () => {
 						...mockCompanyData,
 					},
 					fitnessCenter: {
-						name: "Test Fitness Center",
-						label: "Test Label",
 						address: "Seoul",
 						phone: "02-0000-0000",
 						email: "fitness-center@example.com",
@@ -442,16 +440,16 @@ describe("SpacesRepository", () => {
 			// Then
 			expect(mockTxHost.tx.company.create).toHaveBeenCalledWith({
 				data: expect.not.objectContaining({
-					spaceId: expect.anything(),
+					spaceSeq: expect.anything(),
 				}),
 			});
 			expect(mockTxHost.tx.fitnessCenter.create).toHaveBeenCalledWith({
 				data: expect.objectContaining({
-					companyId: mockCompanyData.id,
-					spaceId: mockSpaceDbId,
+					companySeq: mockCompanyData.seq,
+					spaceSeq: mockSpaceDbId,
 				}),
 			});
-			expect(getFitnessCenter(result)?.company?.id).toBe(mockCompanyData.id);
+			expect(getFitnessCenter(result)?.company?.seq).toBe(mockCompanyData.seq);
 		});
 	});
 
@@ -465,11 +463,11 @@ describe("SpacesRepository", () => {
 			});
 
 			// When
-			const result = await repository.updateById(mockSpaceDbId, updateData);
+			const result = await repository.updateById(mockSpaceData.id, updateData);
 
 			// Then
 			expect(mockTxHost.tx.space.update).toHaveBeenCalledWith({
-				where: { id: mockSpaceDbId },
+				where: { id: mockSpaceData.id },
 				data: updateData,
 			});
 			expect(result?.updatedAt).toEqual(updateData.updatedAt);
@@ -489,30 +487,30 @@ describe("SpacesRepository", () => {
 				...mockSpaceWithFitnessCenter,
 				fitnessCenter: {
 					...mockSpaceWithFitnessCenter.fitnessCenter,
-					name: "Updated Fitness Center",
+					address: "Updated Address",
 				},
 			});
 
 			// When
 			const result = await repository.updateFitnessCenterBySpaceId(
-				mockSpaceDbId,
+				mockSpaceData.id,
 				{
 					fitnessCenter: {
-						name: "Updated Fitness Center",
+						address: "Updated Address",
 					},
 				},
 			);
 
 			// Then
 			expect(mockTxHost.tx.fitnessCenter.findFirst).toHaveBeenCalledWith({
-				where: { spaceId: mockSpaceDbId },
+				where: { space: { id: mockSpaceData.id } },
 				select: { id: true },
 			});
 			expect(mockTxHost.tx.company.update).not.toHaveBeenCalled();
 			expect(mockTxHost.tx.fitnessCenter.update).toHaveBeenCalledWith({
 				where: { id: "fitness-center-test-id" },
 				data: {
-					name: "Updated Fitness Center",
+					address: "Updated Address",
 				},
 			});
 			expect(mockTxHost.tx.fitnessCenter.update).not.toHaveBeenCalledWith(
@@ -520,7 +518,7 @@ describe("SpacesRepository", () => {
 					where: { id: "fitness-center-second-id" },
 				}),
 			);
-			expect(getFitnessCenter(result)?.name).toBe("Updated Fitness Center");
+			expect(getFitnessCenter(result)?.address).toBe("Updated Address");
 		});
 	});
 
@@ -533,11 +531,11 @@ describe("SpacesRepository", () => {
 			});
 
 			// When
-			const result = await repository.removeById(mockSpaceDbId);
+			const result = await repository.removeById(mockSpaceData.id);
 
 			// Then
 			expect(mockTxHost.tx.space.update).toHaveBeenCalledWith({
-				where: { id: mockSpaceDbId },
+				where: { id: mockSpaceData.id },
 				data: { removedAt: expect.any(Date) },
 			});
 			expect(result).toBeInstanceOf(Space);
@@ -554,14 +552,14 @@ describe("SpacesRepository", () => {
 
 			// When
 			const result = await repository.findByIdsWithFitnessCenter([
-				mockSpaceDbId,
-				mockSecondSpaceDbId,
+				mockSpaceData.id,
+				"space-second-id",
 			]);
 
 			// Then
 			expect(mockTxHost.tx.space.findMany).toHaveBeenCalledWith({
 				where: {
-					id: { in: [mockSpaceDbId, mockSecondSpaceDbId] },
+					id: { in: [mockSpaceData.id, "space-second-id"] },
 					removedAt: null,
 				},
 				include: {
@@ -590,19 +588,19 @@ describe("SpacesRepository", () => {
 				{ id: "category-leaf", parent: { id: "category-branch" } },
 			]);
 			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
-				{ spaceId: 100n },
-				{ spaceId: 101n },
-				{ spaceId: 102n },
-				{ spaceId: 101n },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH100" },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH101" },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH102" },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH101" },
 			]);
 
 			// When
-			const result = await repository.findSpaceIdsByCategoryHierarchy(100n);
+			const result = await repository.findSpaceIdsByCategoryHierarchy("01JHHHHHHHHHHHHHHHHHHHHHHHH100");
 
 			// Then
 			expect(mockTxHost.tx.spaceClassification.findFirst).toHaveBeenCalledWith({
 				where: {
-					space: { id: 100n, removedAt: null },
+					space: { id: "01JHHHHHHHHHHHHHHHHHHHHHHHH100", removedAt: null },
 					removedAt: null,
 					category: {
 						removedAt: null,
@@ -630,9 +628,13 @@ describe("SpacesRepository", () => {
 					},
 					space: { removedAt: null },
 				},
-				select: { spaceId: true },
+				select: { id: true },
 			});
-			expect(result).toEqual([100n, 101n, 102n]);
+			expect(result).toEqual([
+			"01JHHHHHHHHHHHHHHHHHHHHHHHH100",
+			"01JHHHHHHHHHHHHHHHHHHHHHHHH101",
+			"01JHHHHHHHHHHHHHHHHHHHHHHHH102",
+		]);
 		});
 
 		it("BRANCH space의 기본 하위 scope는 자기 자신만 반환해야 한다", async () => {
@@ -645,11 +647,11 @@ describe("SpacesRepository", () => {
 				{ id: "category-branch", parent: { id: "category-root" } },
 			]);
 			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
-				{ spaceId: 101n },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH101" },
 			]);
 
 			// When
-			const result = await repository.findSpaceIdsByCategoryHierarchy(101n);
+			const result = await repository.findSpaceIdsByCategoryHierarchy("01JHHHHHHHHHHHHHHHHHHHHHHHH101");
 
 			// Then
 			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith(
@@ -659,7 +661,7 @@ describe("SpacesRepository", () => {
 					}),
 				}),
 			);
-			expect(result).toEqual([101n]);
+			expect(result).toEqual(["01JHHHHHHHHHHHHHHHHHHHHHHHH101"]);
 		});
 
 		it("ancestor scope는 현재 space와 상위 category space를 반환해야 한다", async () => {
@@ -672,13 +674,13 @@ describe("SpacesRepository", () => {
 				{ id: "category-branch", parent: { id: "category-root" } },
 			]);
 			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
-				{ spaceId: 100n },
-				{ spaceId: 101n },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH100" },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH101" },
 			]);
 
 			// When
 			const result = await repository.findSpaceIdsByCategoryHierarchy(
-				101n,
+				"01JHHHHHHHHHHHHHHHHHHHHHHHH101",
 				SpaceResourceScope.WITH_ANCESTORS,
 			);
 
@@ -692,7 +694,10 @@ describe("SpacesRepository", () => {
 					}),
 				}),
 			);
-			expect(result).toEqual([101n, 100n]);
+			expect(result).toEqual([
+			"01JHHHHHHHHHHHHHHHHHHHHHHHH101",
+			"01JHHHHHHHHHHHHHHHHHHHHHHHH100",
+		]);
 		});
 
 		it("tree scope는 현재, 상위, 하위 category space를 중복 없이 반환해야 한다", async () => {
@@ -706,15 +711,15 @@ describe("SpacesRepository", () => {
 				{ id: "category-leaf", parent: { id: "category-branch" } },
 			]);
 			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
-				{ spaceId: 100n },
-				{ spaceId: 101n },
-				{ spaceId: 102n },
-				{ spaceId: 100n },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH100" },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH101" },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH102" },
+				{ id: "01JHHHHHHHHHHHHHHHHHHHHHHHH100" },
 			]);
 
 			// When
 			const result = await repository.findSpaceIdsByCategoryHierarchy(
-				101n,
+				"01JHHHHHHHHHHHHHHHHHHHHHHHH101",
 				SpaceResourceScope.WITH_TREE,
 			);
 
@@ -730,7 +735,11 @@ describe("SpacesRepository", () => {
 					}),
 				}),
 			);
-			expect(result).toEqual([101n, 100n, 102n]);
+			expect(result).toEqual([
+			"01JHHHHHHHHHHHHHHHHHHHHHHHH101",
+			"01JHHHHHHHHHHHHHHHHHHHHHHHH100",
+			"01JHHHHHHHHHHHHHHHHHHHHHHHH102",
+		]);
 		});
 
 		it("SpaceClassification이 없으면 현재 space만 반환해야 한다", async () => {
@@ -738,10 +747,10 @@ describe("SpacesRepository", () => {
 			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findSpaceIdsByCategoryHierarchy(101n);
+			const result = await repository.findSpaceIdsByCategoryHierarchy("01JHHHHHHHHHHHHHHHHHHHHHHHH101");
 
 			// Then
-			expect(result).toEqual([101n]);
+			expect(result).toEqual(["01JHHHHHHHHHHHHHHHHHHHHHHHH101"]);
 			expect(mockTxHost.tx.category.findMany).not.toHaveBeenCalled();
 			expect(mockTxHost.tx.spaceClassification.findMany).not.toHaveBeenCalled();
 		});

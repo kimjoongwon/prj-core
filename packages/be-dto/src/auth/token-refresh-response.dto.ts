@@ -27,7 +27,6 @@ export class TokenRefreshResponseDto {
 	@StringFieldOptional()
 	sessionId?: string | null;
 
-
 	@ApiProperty({
 		description: "새로 발급된 JWT Refresh Token",
 		example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",

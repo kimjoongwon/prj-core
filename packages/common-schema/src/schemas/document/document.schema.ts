@@ -2,7 +2,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Document의 DB 필드 타입과 공통 검증입니다. */
 export class DocumentSchema extends AbstractSchema {
-	documentId!: string;
+	id!: string;
 
 	pageCount!: number | null;
 
@@ -16,5 +16,5 @@ export class DocumentSchema extends AbstractSchema {
 
 	keywords!: string | null;
 
-	assetId!: bigint;
+	assetSeq!: bigint;
 }

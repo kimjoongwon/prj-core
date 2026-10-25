@@ -8,7 +8,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Action의 DB 필드 타입과 공통 검증입니다. */
 export class ActionSchema extends AbstractSchema {
-	actionId!: string;
+	id!: string;
 
 	@StringValidation()
 	name!: string;

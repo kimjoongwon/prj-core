@@ -1,3 +1,3 @@
 export class GetSubjectByIdQuery {
-	constructor(readonly subjectId: bigint) {}
+	constructor(readonly subjectId: string) {}
 }

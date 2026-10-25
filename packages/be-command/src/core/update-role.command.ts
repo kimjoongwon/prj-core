@@ -4,7 +4,7 @@ export class UpdateRoleCommand implements UpdateRoleCommandInput {
 	readonly description?: UpdateRoleCommandInput["description"];
 
 	constructor(
-		readonly roleId: bigint,
+		readonly roleId: string,
 		input: UpdateRoleCommandInput,
 	) {
 		Object.assign(this, input);

@@ -307,7 +307,7 @@ export const memberAbilitySeedData: AbilitySeedData[] = [
 		actionName: "read",
 		inverted: false,
 		description: "자신의 예약 조회 권한",
-		conditions: { userId: "{{ user.id }}" },
+		conditions: { userSeq: "{{ user.id }}" },
 	},
 	{
 		roleName: "MEMBER",
@@ -315,7 +315,7 @@ export const memberAbilitySeedData: AbilitySeedData[] = [
 		actionName: "update",
 		inverted: false,
 		description: "자신의 예약 수정 권한 (취소 등)",
-		conditions: { userId: "{{ user.id }}" },
+		conditions: { userSeq: "{{ user.id }}" },
 	},
 	// 피트니스센터 정보 조회
 	{

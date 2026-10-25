@@ -152,15 +152,15 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 	const onClickCreateSessionButton = () => {
 		router.push(`/timelines/${timelineId}/sessions/new` as Route);
 	};
-	const onClickSessionNameButton = (sessionId: bigint) => {
+	const onClickSessionNameButton = (sessionId: string) => {
 		router.push(`/timelines/${timelineId}/sessions/${sessionId}` as Route);
 	};
-	const onClickCreateProgramButton = (sessionId: bigint) => {
+	const onClickCreateProgramButton = (sessionId: string) => {
 		router.push(
 			`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route,
 		);
 	};
-	const onClickDeleteSessionButton = (sessionId: bigint) => {
+	const onClickDeleteSessionButton = (sessionId: string) => {
 		deleteSession(
 			{ timelineId, sessionId: sessionId.toString() },
 			{

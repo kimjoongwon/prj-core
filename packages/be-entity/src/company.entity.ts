@@ -5,15 +5,13 @@ import {
 	UUIDFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { CompanySchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { FitnessCenter } from "./fitness-center.entity";
 
 @AbstractEntityFields()
 export class Company extends CompanySchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
-	declare companyId: CompanySchema["companyId"];
+	declare id: CompanySchema["id"];
 
 	@StringFieldMetadata()
 	declare name: CompanySchema["name"];

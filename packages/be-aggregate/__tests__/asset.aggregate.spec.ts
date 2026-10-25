@@ -11,11 +11,11 @@ import { Test, type TestingModule } from "@nestjs/testing";
 import { AssetAggregate } from "../src/asset/asset.aggregate";
 
 const tenantId = 100n;
-const spaceId = 101n;
-const parentSpaceId = 102n;
-const folderId = 201n;
-const assetId = 301n;
-const userId = 401n;
+const spaceId = "01JSPACE0000000000000000P1";
+const parentSpaceId = "01JBBBBBBBBBBBBBBBBBBBBBBBB";
+const folderId = "01JFOLDER0000000000000000F1";
+const assetSeq = "01JASSET0000000000000000A1";
+const userId = "01JUSER0000000000000000U4";
 
 describe("AssetAggregate", () => {
 	let service: AssetAggregate;
@@ -65,7 +65,7 @@ describe("AssetAggregate", () => {
 		service = module.get<AssetAggregate>(AssetAggregate);
 	});
 
-	it("PLATFORM_ADMIN 목록 조회는 spaceId 필터 없이 전체 에셋을 요청해야 한다", async () => {
+	it("PLATFORM_ADMIN 목록 조회는 spaceSeq 필터 없이 전체 에셋을 요청해야 한다", async () => {
 		mockAssetsRepository.findMany.mockResolvedValue({
 			assets: [],
 			totalCount: 0,
@@ -74,11 +74,11 @@ describe("AssetAggregate", () => {
 		await service.getAssets(createAssetQuery());
 
 		const findManyInput = mockAssetsRepository.findMany.mock.calls[0][0];
-		expect(findManyInput.where).not.toHaveProperty("spaceId");
+		expect(findManyInput.where).not.toHaveProperty("spaceSeq");
 	});
 
 	it("일반 권한 목록 조회는 접근 가능한 spaceIds로 에셋을 제한해야 한다", async () => {
-		(mockSpaceContext as unknown as { spaceIds: bigint[] }).spaceIds = [
+		(mockSpaceContext as unknown as { spaceIds: string[] }).spaceIds = [
 			spaceId,
 			parentSpaceId,
 		];
@@ -110,7 +110,7 @@ describe("AssetAggregate", () => {
 
 		mockFoldersRepository.findById.mockResolvedValue({
 			id: folderId,
-			spaceId,
+			space: { id: spaceId },
 			removedAt: null,
 		} as never);
 		mockObjectStorageService.putObject.mockResolvedValue({
@@ -120,12 +120,12 @@ describe("AssetAggregate", () => {
 		mockAssetsRepository.create.mockImplementation(
 			async (data) =>
 				({
-					id: assetId,
+					id: assetSeq,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					removedAt: null,
-					spaceId: data.spaceId,
-					folderId: data.folderId,
+					space: { id: data.spaceId },
+					folder: { id: data.folderId },
 					kind: data.kind,
 					status: data.status,
 					originalName: data.originalName,
@@ -135,9 +135,6 @@ describe("AssetAggregate", () => {
 					extension: data.extension as string | null,
 					checksum: data.checksum as string | null,
 					metadata: data.metadata ?? null,
-					createdById:
-						data.createdById == null ? null : BigInt(data.createdById),
-					space: { id: spaceId },
 				}) as never,
 		);
 
@@ -155,7 +152,9 @@ describe("AssetAggregate", () => {
 				},
 			}),
 		);
-		expect(putObjectInput.key).toMatch(/^spaces\/101\/assets\/image\/.+\.png$/);
+		expect(putObjectInput.key).toMatch(
+			/^spaces\/01JSPACE0000000000000000P1\/assets\/image\/.+\.png$/,
+		);
 		expect(mockAssetsRepository.create).toHaveBeenCalledWith(
 			expect.objectContaining({
 				spaceId,
@@ -195,7 +194,7 @@ describe("AssetAggregate", () => {
 			await writeFile(temporaryFilePath, uploadedFileContent);
 			mockFoldersRepository.findById.mockResolvedValue({
 				id: folderId,
-				spaceId,
+				space: { id: spaceId },
 				removedAt: null,
 			} as never);
 			mockObjectStorageService.putObject.mockImplementation(async (input) => {
@@ -211,12 +210,12 @@ describe("AssetAggregate", () => {
 			mockAssetsRepository.create.mockImplementation(
 				async (data) =>
 					({
-						id: assetId,
+						id: assetSeq,
 						createdAt: new Date(),
 						updatedAt: new Date(),
 						removedAt: null,
-						spaceId: data.spaceId,
-						folderId: data.folderId,
+						space: { id: data.spaceId },
+						folder: { id: data.folderId },
 						kind: data.kind,
 						status: data.status,
 						originalName: data.originalName,
@@ -226,9 +225,6 @@ describe("AssetAggregate", () => {
 						extension: data.extension as string | null,
 						checksum: data.checksum as string | null,
 						metadata: data.metadata ?? null,
-						createdById:
-							data.createdById == null ? null : BigInt(data.createdById),
-						space: { id: spaceId },
 					}) as never,
 			);
 
@@ -265,7 +261,7 @@ describe("AssetAggregate", () => {
 
 		mockFoldersRepository.findById.mockResolvedValue({
 			id: folderId,
-			spaceId,
+			space: { id: spaceId },
 			removedAt: null,
 		} as never);
 		mockObjectStorageService.putObject.mockResolvedValue({
@@ -275,12 +271,12 @@ describe("AssetAggregate", () => {
 		mockAssetsRepository.create.mockImplementation(
 			async (data) =>
 				({
-					id: assetId,
+					id: assetSeq,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					removedAt: null,
-					spaceId: data.spaceId,
-					folderId: data.folderId,
+					space: { id: data.spaceId },
+					folder: { id: data.folderId },
 					kind: data.kind,
 					status: data.status,
 					originalName: data.originalName,
@@ -290,8 +286,6 @@ describe("AssetAggregate", () => {
 					extension: data.extension as string | null,
 					checksum: data.checksum as string | null,
 					metadata: data.metadata ?? null,
-					createdById:
-						data.createdById == null ? null : BigInt(data.createdById),
 				}) as never,
 		);
 
@@ -320,14 +314,14 @@ describe("AssetAggregate", () => {
 
 	it("삭제 시 object storage 삭제 후 DB 삭제를 수행해야 한다", async () => {
 		mockAssetsRepository.findByIdWithRelations.mockResolvedValue({
-			id: assetId,
+			id: assetSeq,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
 			tenantId,
-			tenant: { id: tenantId, spaceId },
-			spaceId,
-			folderId,
+			tenant: { id: tenantId, space: { id: spaceId } },
+			space: { id: spaceId },
+			folder: { id: folderId },
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: "photo.png",
@@ -337,17 +331,17 @@ describe("AssetAggregate", () => {
 			extension: "png",
 			checksum: "checksum",
 			metadata: null,
-			createdById: userId,
+			createdBy: { connect: { id: userId } },
 		} as never);
 		mockObjectStorageService.deleteObject.mockResolvedValue(undefined);
 		mockAssetsRepository.deleteById.mockResolvedValue({} as never);
 
-		await service.deleteAsset(assetId);
+		await service.deleteAsset("01JASSET0000000000000000A1");
 
 		expect(mockObjectStorageService.deleteObject).toHaveBeenCalledWith(
 			"spaces/space-123/assets/image/file.png",
 		);
-		expect(mockAssetsRepository.deleteById).toHaveBeenCalledWith(assetId);
+		expect(mockAssetsRepository.deleteById).toHaveBeenCalledWith("01JASSET0000000000000000A1");
 		expect(
 			mockObjectStorageService.deleteObject.mock.invocationCallOrder[0],
 		).toBeLessThan(mockAssetsRepository.deleteById.mock.invocationCallOrder[0]);
@@ -355,14 +349,14 @@ describe("AssetAggregate", () => {
 
 	it("상세 원본 조회 시 현재 space의 object content를 반환해야 한다", async () => {
 		mockAssetsRepository.findByIdWithRelations.mockResolvedValue({
-			id: assetId,
+			id: assetSeq,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
 			tenantId,
-			tenant: { id: tenantId, spaceId },
-			spaceId,
-			folderId,
+			tenant: { id: tenantId, space: { id: spaceId } },
+			space: { id: spaceId },
+			folder: { id: folderId },
 			kind: AssetKind.DOCUMENT,
 			status: AssetStatus.READY,
 			originalName: "guide.pdf",
@@ -372,7 +366,7 @@ describe("AssetAggregate", () => {
 			extension: "pdf",
 			checksum: "checksum",
 			metadata: null,
-			createdById: userId,
+			createdBy: { connect: { id: userId } },
 		} as never);
 		mockObjectStorageService.getObject.mockResolvedValue({
 			body: Buffer.from("pdf-body"),
@@ -382,7 +376,7 @@ describe("AssetAggregate", () => {
 			lastModified: new Date("2026-04-05T06:00:00.000Z"),
 		});
 
-		const result = await service.getAssetContent(assetId);
+		const result = await service.getAssetContent(assetSeq);
 
 		expect(mockObjectStorageService.getObject).toHaveBeenCalledWith(
 			"spaces/space-123/assets/document/file.pdf",
@@ -399,14 +393,14 @@ describe("AssetAggregate", () => {
 
 	it("object storage 삭제가 실패하면 DB 삭제를 중단해야 한다", async () => {
 		mockAssetsRepository.findByIdWithRelations.mockResolvedValue({
-			id: assetId,
+			id: assetSeq,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
 			tenantId,
-			tenant: { id: tenantId, spaceId },
-			spaceId,
-			folderId,
+			tenant: { id: tenantId, space: { id: spaceId } },
+			space: { id: spaceId },
+			folder: { id: folderId },
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: "photo.png",
@@ -416,13 +410,13 @@ describe("AssetAggregate", () => {
 			extension: "png",
 			checksum: "checksum",
 			metadata: null,
-			createdById: userId,
+			createdBy: { connect: { id: userId } },
 		} as never);
 		mockObjectStorageService.deleteObject.mockRejectedValue(
 			new Error("storage delete failed"),
 		);
 
-		await expect(service.deleteAsset(assetId)).rejects.toThrow(
+		await expect(service.deleteAsset(assetSeq)).rejects.toThrow(
 			"storage delete failed",
 		);
 		expect(mockAssetsRepository.deleteById).not.toHaveBeenCalled();

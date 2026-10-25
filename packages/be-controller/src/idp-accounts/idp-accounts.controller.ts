@@ -1,4 +1,4 @@
-import { ParseBigIntIdPipe } from "@cocrepo/be-common";
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	GetIdpAccountAccessGrantFormQuery,
 	GetIdpAccountQuery,
@@ -83,13 +83,13 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
 	@ResponseMessage("계정 상세 조회 성공")
-	async getAccount(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
+	async getAccount(@Param("userId", ParseUlidPipe) userId: string) {
 		return this.queryBus.execute(new GetIdpAccountQuery(userId));
 	}
 
@@ -103,13 +103,13 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountAccessGrantFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("계정 접근 권한 부여 폼 조회 성공")
-	async getAccessGrantForm(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
+	async getAccessGrantForm(@Param("userId", ParseUlidPipe) userId: string) {
 		return this.queryBus.execute(new GetIdpAccountAccessGrantFormQuery(userId));
 	}
 
@@ -124,7 +124,7 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -135,7 +135,7 @@ export class IdpAccountsController {
 	@ApiResponseEntity(IdpAccountDetailDto, HttpStatus.OK)
 	@ResponseMessage("계정 접근 권한 부여 성공")
 	async grantAccess(
-		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+		@Param("userId", ParseUlidPipe) userId: string,
 		@Body() dto: GrantIdpAccountAccessDto,
 	) {
 		return this.commandBus.execute(
@@ -152,13 +152,13 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(IdpAccountDto, HttpStatus.OK)
 	@ResponseMessage("계정 상태 변경 성공")
-	async toggleActive(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
+	async toggleActive(@Param("userId", ParseUlidPipe) userId: string) {
 		return this.commandBus.execute(new ToggleIdpAccountActiveCommand(userId));
 	}
 
@@ -172,13 +172,13 @@ export class IdpAccountsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (canonical decimal BIGINT string)",
+		description: "사용자 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ResponseMessage("실패 횟수 초기화 성공")
 	async resetFailedAttempts(
-		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+		@Param("userId", ParseUlidPipe) userId: string,
 	): Promise<void> {
 		await this.commandBus.execute(
 			new ResetIdpAccountFailedAttemptsCommand(userId),

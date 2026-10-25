@@ -11,7 +11,7 @@ import { toDomainEntity } from "../src/to-domain-entity";
 class ExampleEntity {
 	id!: bigint;
 	name?: string;
-	spaceId!: bigint | null;
+	spaceSeq!: bigint | null;
 	space!: { id: bigint; name: string };
 	children?: Array<{ id: bigint; name: string }>;
 }
@@ -22,7 +22,7 @@ describe("toDomainEntity", () => {
 		const persistenceRow = {
 			id: 10n,
 			name: "본사 공지",
-			spaceId: 20n,
+			spaceSeq: 20n,
 			space: {
 				id: 20n,
 				name: "본사",
@@ -37,7 +37,7 @@ describe("toDomainEntity", () => {
 		expect(result).toEqual({
 			id: 10n,
 			name: "본사 공지",
-			spaceId: 20n,
+			spaceSeq: 20n,
 			space: {
 				id: 20n,
 				name: "본사",
@@ -71,7 +71,7 @@ describe("toDomainEntity", () => {
 		// Given
 		const persistenceRow = {
 			id: 10n,
-			spaceId: null,
+			spaceSeq: null,
 			space: null,
 		};
 
@@ -79,15 +79,15 @@ describe("toDomainEntity", () => {
 		const result = toDomainEntity(ExampleEntity, persistenceRow);
 
 		// Then
-		expect(result.spaceId).toBeNull();
+		expect(result.spaceSeq).toBeNull();
 		expect(result.space).toBeNull();
 	});
 
 	it("Prisma scalar를 변형하지 않고 User/UserStatus 관계를 복원한다", () => {
 		const lockedUntil = new Date("2030-01-01T00:00:00.000Z");
 		const persistenceRow = {
-			id: 101n,
-			userId: "01J00000000000000000000000",
+			seq: 101n,
+			id: "01J00000000000000000000000",
 			name: "관리자",
 			email: "ADMIN@EXAMPLE.COM",
 			phone: "010-0000-0000",
@@ -97,57 +97,57 @@ describe("toDomainEntity", () => {
 			updatedAt: null,
 			removedAt: null,
 			status: {
-				userStatusId: "01J0000000000000000000000S",
-				id: 901n,
-				userId: 101n,
+				id: "01J0000000000000000000000S",
+				seq: 901n,
+				userSeq: 101n,
 				failedLoginAttempts: 0,
 				lockedUntil,
 				isPermanentlyLocked: false,
 				lastLoginAt: null,
 				lastLoginIp: null,
 				isActive: true,
-				currentTenantId: 202n,
+				currentTenantSeq: 202n,
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
 				updatedAt: null,
 			},
-			tenants: [{ id: 303n, spaceId: 404n }],
+			tenants: [{ id: "01JTENANT0000000000000000T", seq: 303n, spaceSeq: 404n, space: { id: "01J00000000000000000000404" } }],
 		};
 
 		const result = toDomainEntity(User, persistenceRow);
 
 		expect(result).toBeInstanceOf(User);
 		expect(result.email).toBe("ADMIN@EXAMPLE.COM");
-		expect(result.userId).toBe(persistenceRow.userId);
+		expect(result.id).toBe(persistenceRow.id);
 		expect(result.password).toBe(persistenceRow.password);
-		expect(result.id).toBe(101n);
+		expect(result.seq).toBe(101n);
 		expect(result.status).toBeInstanceOf(UserStatus);
-		expect(result.status?.currentTenantId).toBe(202n);
+		expect(result.status?.currentTenantSeq).toBe(202n);
 		expect(result.status?.lockedUntil).toBe(lockedUntil);
 		expect(result.status?.isActive).toBe(true);
-		expect(result.canAccessSpace(404n)).toBe(true);
+		expect(result.canAccessSpace("01J00000000000000000000404")).toBe(true);
 	});
 
 	it("Policy graph의 기존 nested Entity prototype과 순환·공유 참조를 보존한다", () => {
 		const sharedAbility = {
 			id: 701n,
-			abilityId: "01J00000000000000000000001",
+			abilitySeq: "01J00000000000000000000001",
 			name: "READ_USER",
 			description: null,
 			fields: [],
 			conditions: null,
 			inverted: false,
 			reason: null,
-			subjectId: 702n,
-			actionId: 703n,
+			subjectSeq: 702n,
+			actionSeq: 703n,
 			createdAt: new Date("2026-01-01T00:00:00.000Z"),
 			updatedAt: null,
 			removedAt: null,
 		};
 		const policyRow: Record<string, unknown> = {
 			id: 601n,
-			policyId: "01J00000000000000000000002",
-			spaceId: 602n,
-			createdById: null,
+			policySeq: "01J00000000000000000000002",
+			spaceSeq: 602n,
+			createdBySeq: null,
 			name: "기본 정책",
 			displayName: null,
 			description: null,
@@ -158,15 +158,15 @@ describe("toDomainEntity", () => {
 				{
 					id: 801n,
 					policyEntryId: "01J00000000000000000000003",
-					policyId: 601n,
-					abilityId: 701n,
+					policySeq: 601n,
+					abilitySeq: 701n,
 					ability: sharedAbility,
 				},
 				{
 					id: 802n,
 					policyEntryId: "01J00000000000000000000004",
-					policyId: 601n,
-					abilityId: 701n,
+					policySeq: 601n,
+					abilitySeq: 701n,
 					ability: sharedAbility,
 				},
 			],
@@ -174,8 +174,8 @@ describe("toDomainEntity", () => {
 		const assignmentRow = {
 			id: 901n,
 			roleAssignmentId: "01J00000000000000000000005",
-			roleId: 902n,
-			policyId: 601n,
+			roleSeq: 902n,
+			policySeq: 601n,
 			isActive: true,
 			priority: 0,
 			createdAt: new Date("2026-01-01T00:00:00.000Z"),

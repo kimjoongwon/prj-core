@@ -1,19 +1,17 @@
 import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
 import { SpaceAssociationSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Group } from "./group.entity";
 
 @AbstractEntityFields()
 export class SpaceAssociation extends SpaceAssociationSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true })
-	declare spaceAssociationId: SpaceAssociationSchema["spaceAssociationId"];
+	declare id: SpaceAssociationSchema["id"];
 
 	@BigIntIdFieldMetadata()
-	declare spaceId: SpaceAssociationSchema["spaceId"];
+	declare spaceSeq: SpaceAssociationSchema["spaceSeq"];
 	@BigIntIdFieldMetadata()
-	declare groupId: SpaceAssociationSchema["groupId"];
+	declare groupSeq: SpaceAssociationSchema["groupSeq"];
 
 	@ClassField(() => Group, { required: false, swagger: false })
 	group?: Group;

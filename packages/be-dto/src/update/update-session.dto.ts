@@ -16,7 +16,6 @@ export class UpdateSessionDto extends PartialType(
 		"startDateTime",
 		"endDateTime",
 		"recurringDayOfWeek",
-		"timelineId",
 		"name",
 		"description",
 	] as const),
