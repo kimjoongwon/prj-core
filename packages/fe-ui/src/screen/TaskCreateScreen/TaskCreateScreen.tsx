@@ -280,9 +280,7 @@ export const TaskCreateScreen = observer(
 											onValueChange={onChangeDurationMinInput}
 											min={0}
 											endContent={
-												<Typography type="body-sm" color="muted">
-													{t("분")}
-												</Typography>
+												<span className="text-sm text-muted">{t("분")}</span>
 											}
 											className="max-w-32"
 										/>
@@ -294,9 +292,7 @@ export const TaskCreateScreen = observer(
 											min={0}
 											max={59}
 											endContent={
-												<Typography type="body-sm" color="muted">
-													{t("초")}
-												</Typography>
+												<span className="text-sm text-muted">{t("초")}</span>
 											}
 											className="max-w-32"
 										/>
@@ -321,9 +317,7 @@ export const TaskCreateScreen = observer(
 									isInvalid={Boolean(errors.count)}
 									errorMessage={errors.count ? t(errors.count) : undefined}
 									endContent={
-										<Typography type="body-sm" color="muted">
-											{t("회")}
-										</Typography>
+										<span className="text-sm text-muted">{t("회")}</span>
 									}
 								/>
 								<TextArea
