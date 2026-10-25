@@ -1,9 +1,6 @@
-import {
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
-
-import { EntityQueryType } from "./entity-query-type";
+import { StringFieldOptional } from "@cocrepo/decorator/field";
 import { Template } from "@cocrepo/entity";
+import { EntityQueryType } from "./entity-query-type";
 
 /**
  * Template 목록 조회용 Query DTO
@@ -17,5 +14,4 @@ export class QueryTemplateDto extends EntityQueryType(Template, [
 ] as const) {
 	@StringFieldOptional({ description: "코드 또는 이름 통합 검색" })
 	readonly search?: string;
-
 }

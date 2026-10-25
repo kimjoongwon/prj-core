@@ -22,7 +22,8 @@ export class TenantAccessRequestDto extends EntityResponseType(
 			"space",
 			"requestedRole",
 			"previousRole",
-			"appliedTenant"] as const,
+			"appliedTenant",
+		] as const,
 		relations: {
 			requester: () => UserDto,
 			reviewer: () => UserDto,

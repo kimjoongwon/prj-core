@@ -15,7 +15,7 @@ import {
 	SessionTypesLabel,
 } from "@cocrepo/enum";
 import { SessionSchema } from "@cocrepo/schema";
-import { Exclude, Transform } from "class-transformer";
+import { Transform } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Program } from "./program.entity";
 import { Timeline } from "./timeline.entity";

@@ -1,6 +1,5 @@
 /// <reference types="vitest/globals" />
 
-import type { DecimalId } from "@cocrepo/type";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type AccountSpaceInfo, AccountStore } from "../account/accountStore";
 import { AuthSession } from "../account/authSession";
@@ -11,10 +10,10 @@ import {
 
 const STORAGE_KEY = "tenant-test";
 const NOW = new Date("2026-05-31T00:00:00.000Z").getTime();
-const TENANT_A = "101" as DecimalId;
-const TENANT_B = "102" as DecimalId;
-const SPACE_A = "201" as DecimalId;
-const SPACE_B = "202" as DecimalId;
+const TENANT_A = "01JTENANT000000000000000TA";
+const TENANT_B = "01JTENANT000000000000000TB";
+const SPACE_A = "01JSPACE0000000000000000SA";
+const SPACE_B = "01JSPACE0000000000000000SB";
 
 function createStorageMock() {
 	const store = new Map<string, string>();
@@ -107,7 +106,7 @@ describe("AccountStore", () => {
 		expect(account.isSelectionResolved).toBe(false);
 	});
 
-	it("Given version 3 account 선택이 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then Space 이름 선택과 Space 목록을 복원한다", () => {
+	it("Given version 4 account 선택이 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then Space 이름 선택과 Space 목록을 복원한다", () => {
 		const availableSpaces: AccountSpaceInfo[] = [
 			{
 				tenantId: TENANT_A,
@@ -120,7 +119,7 @@ describe("AccountStore", () => {
 			STORAGE_KEY,
 			JSON.stringify({
 				account: {
-					version: 3,
+					version: 4,
 					tenantId: TENANT_A,
 					spaceId: SPACE_A,
 					spaceName: "Fitness Center A",
@@ -272,7 +271,40 @@ describe("AccountStore", () => {
 		expect(storage.dump().has(STORAGE_KEY)).toBe(false);
 	});
 
-	it("Given version 2 account 선택에 ULID 같은 잘못된 식별자가 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then 현재 선택은 폐기하고 유효한 Space 목록만 남긴다", () => {
+	it("Given decimal 식별자를 담은 구 version 3 account 선택이 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then 문서 전체를 폐기하고 기본 상태를 유지한다", () => {
+		storage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({
+				account: {
+					version: 3,
+					tenantId: "101",
+					spaceId: "201",
+					spaceName: "Fitness Center A",
+					contentLanguageCode: "ko_KR",
+					availableSpaces: [
+						{
+							tenantId: "101",
+							spaceId: "201",
+							spaceName: "Fitness Center A",
+						},
+					],
+				},
+			}),
+		);
+
+		account.hydrateFromStorage();
+
+		expect(account.currentTenantId).toBeNull();
+		expect(account.selectedTenantId).toBeNull();
+		expect(account.currentSpaceId).toBeNull();
+		expect(account.currentSpaceName).toBeNull();
+		expect(account.availableSpaces).toEqual([]);
+		expect(account.isHydrated).toBe(true);
+		expect(storage.removeItem).toHaveBeenCalledWith(STORAGE_KEY);
+		expect(storage.dump().has(STORAGE_KEY)).toBe(false);
+	});
+
+	it("Given version 4 account 선택에 ULID가 아닌 잘못된 식별자가 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then 현재 선택은 폐기하고 유효한 Space 목록만 남긴다", () => {
 		const validAvailableSpace: AccountSpaceInfo = {
 			tenantId: TENANT_A,
 			spaceId: SPACE_A,
@@ -283,7 +315,7 @@ describe("AccountStore", () => {
 			STORAGE_KEY,
 			JSON.stringify({
 				account: {
-					version: 3,
+					version: 4,
 					tenantId: "01J7G2V0ULIDLIKEVALUE",
 					spaceId: "space-ulid-value",
 					spaceName: "Fitness Center A",
@@ -314,7 +346,7 @@ describe("AccountStore", () => {
 		expect(storage.dump().get(STORAGE_KEY)).not.toContain("ULIDLIKEVALUE");
 	});
 
-	it("Given 현재 tenant 선택이 있을 때 When storage에 저장하면 Then version 3 형식으로 Space 이름 선택을 기록한다", () => {
+	it("Given 현재 tenant 선택이 있을 때 When storage에 저장하면 Then version 4 형식으로 Space 이름 선택을 기록한다", () => {
 		account.setAvailableSpaces([
 			{
 				tenantId: TENANT_A,
@@ -329,7 +361,7 @@ describe("AccountStore", () => {
 		).account;
 
 		expect(persisted).toMatchObject({
-			version: 3,
+			version: 4,
 			tenantId: TENANT_A,
 			spaceId: SPACE_A,
 			spaceName: "Fitness Center A",

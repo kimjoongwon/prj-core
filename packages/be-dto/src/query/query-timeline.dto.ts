@@ -1,4 +1,7 @@
-import { EnumFieldOptional, StringFieldOptional } from "@cocrepo/decorator/field";
+import {
+	EnumFieldOptional,
+	StringFieldOptional,
+} from "@cocrepo/decorator/field";
 import { LanguageCode } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
 import { QueryDto } from "./query.dto";

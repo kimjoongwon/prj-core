@@ -32,7 +32,7 @@ vi.mock("@cocrepo/ui", async (importOriginal) => {
 
 const initialAccounts: IdpAccountDto[] = [
 	{
-		id: 1n,
+		id: "ACC00000000000000000000001",
 		name: "기존 계정",
 		email: "initial@example.com",
 		createdAt: new Date("2026-10-01T00:00:00.000Z"),
@@ -45,7 +45,7 @@ const initialAccounts: IdpAccountDto[] = [
 const refreshedAccounts: IdpAccountDto[] = [
 	{
 		...initialAccounts[0],
-		id: 2n,
+		id: "ACC00000000000000000000002",
 		name: "새 응답 계정",
 		email: "refreshed@example.com",
 	},

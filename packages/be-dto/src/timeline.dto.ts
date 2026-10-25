@@ -10,7 +10,8 @@ export class TimelineDto extends EntityResponseType(Timeline, {
 		"removedAt",
 		"name",
 		"description",
-		"sessions"] as const,
+		"sessions",
+	] as const,
 	relations: {
 		sessions: () => SessionDto,
 	},

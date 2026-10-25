@@ -1,7 +1,6 @@
 import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
 import { RoleAssignmentSchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Policy } from "./policy.entity";
 import type { Role } from "./role.entity";

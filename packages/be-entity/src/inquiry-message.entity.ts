@@ -10,7 +10,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { MessageContentType, SenderType } from "@cocrepo/enum";
 import { InquiryMessageSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AIAgentLog } from "./ai-agent-log.entity";
 import { Inquiry } from "./inquiry.entity";

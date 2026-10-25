@@ -12,7 +12,8 @@ export class TenantDto extends EntityResponseType(Tenant, {
 		"removedAt",
 		"user",
 		"space",
-		"role"] as const,
+		"role",
+	] as const,
 	relations: {
 		user: () => UserDto,
 		space: () => SpaceDto,

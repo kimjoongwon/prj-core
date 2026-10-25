@@ -1,6 +1,5 @@
 import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
 import { SpaceClassificationSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Category } from "./category.entity";
 import { Space } from "./space.entity";

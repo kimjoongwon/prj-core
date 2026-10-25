@@ -5,7 +5,6 @@ import {
 	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { CategorySchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Space } from "./space.entity";
 import { User } from "./user.entity";

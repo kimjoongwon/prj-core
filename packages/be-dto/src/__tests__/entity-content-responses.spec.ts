@@ -58,11 +58,7 @@ describe("Entity 기반 콘텐츠 응답의 공개 필드 계약", () => {
 			metadata: assetInput.metadata,
 			publicUrl: assetInput.publicUrl,
 		});
-		for (const privateField of [
-			"password",
-			"unexpected",
-			"createdBy",
-		])
+		for (const privateField of ["password", "unexpected", "createdBy"])
 			expect(response).not.toHaveProperty(privateField);
 		expect("isReady" in response).toBe(false);
 		expect(() => JSON.stringify(serialized)).not.toThrow();
@@ -82,7 +78,9 @@ describe("Entity 기반 콘텐츠 응답의 공개 필드 계약", () => {
 		expect(folder.children?.[0]).not.toHaveProperty("folderSeq");
 		expect(folder.children?.[0]).not.toHaveProperty("unexpected");
 		expect(folder).not.toHaveProperty("folderSeq");
-		expect(hydrateEntity(Folder, { parentFolderSeq: null }).isRoot()).toBe(true);
+		expect(hydrateEntity(Folder, { parentFolderSeq: null }).isRoot()).toBe(
+			true,
+		);
 
 		prepareEntityResponseType(AssetDetailWrapperResponseDto);
 		const wrapper = plainToInstance(AssetDetailWrapperResponseDto, {

@@ -145,7 +145,9 @@ export class AbilitiesRepository {
 			where: { id },
 			data: {
 				...rest,
-				...(actionId !== undefined && { action: { connect: { id: actionId } } }),
+				...(actionId !== undefined && {
+					action: { connect: { id: actionId } },
+				}),
 				...(subjectId !== undefined && {
 					subject: { connect: { id: subjectId } },
 				}),

@@ -9,5 +9,6 @@ export class GroupDto extends EntityResponseType(Group, {
 		"removedAt",
 		"name",
 		"label",
-		"type"] as const,
+		"type",
+	] as const,
 }) {}

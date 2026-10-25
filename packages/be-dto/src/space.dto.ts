@@ -18,7 +18,8 @@ export class SpaceDto extends EntityResponseType(Space, {
 		"tenants",
 		"spaceClassification",
 		"spaceAssociations",
-		"fitnessCenter"] as const,
+		"fitnessCenter",
+	] as const,
 	relations: {
 		tenants: () => TenantDto,
 		spaceClassification: () => SpaceClassificationDto,

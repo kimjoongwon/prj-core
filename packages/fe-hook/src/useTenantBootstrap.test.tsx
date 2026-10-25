@@ -20,6 +20,11 @@ import { isWireId, toWireId } from "./wire-id";
 const asId = (value: string): NonNullable<AccountBootstrapSpaceLike["id"]> =>
 	value as NonNullable<AccountBootstrapSpaceLike["id"]>;
 
+const TENANT_A = "01JTENANT000000000000000TA";
+const TENANT_B = "01JTENANT000000000000000TB";
+const SPACE_A = "01JSPACE0000000000000000SA";
+const SPACE_B = "01JSPACE0000000000000000SB";
+
 function createStorageMock() {
 	const store = new Map<string, string>();
 
@@ -88,15 +93,15 @@ describe("useTenantBootstrap", () => {
 		const account = createAccountStore("tenant-bootstrap-test");
 		const spaces: AccountBootstrapSpaceLike[] = [
 			{
-				id: asId("100"),
-				tenantId: asId("1"),
+				id: asId(SPACE_A),
+				tenantId: asId(TENANT_A),
 				name: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 				fitnessCenter: {},
 			},
 			{
-				id: asId("101"),
-				tenantId: asId("2"),
+				id: asId(SPACE_B),
+				tenantId: asId(TENANT_B),
 				name: "Fitness Center B",
 				contentLanguageCode: "en_US",
 				fitnessCenter: {},
@@ -118,21 +123,21 @@ describe("useTenantBootstrap", () => {
 
 		expect(account.availableSpaces).toEqual([
 			{
-				tenantId: "1",
-				spaceId: "100",
+				tenantId: TENANT_A,
+				spaceId: SPACE_A,
 				spaceName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
 			{
-				tenantId: "2",
-				spaceId: "101",
+				tenantId: TENANT_B,
+				spaceId: SPACE_B,
 				spaceName: "Fitness Center B",
 				contentLanguageCode: "en_US",
 			},
 		]);
-		expect(String(account.currentTenantId)).toBe("2");
-		expect(String(account.selectedTenantId)).toBe("2");
-		expect(String(account.currentSpaceId)).toBe("101");
+		expect(account.currentTenantId).toBe(TENANT_B);
+		expect(account.selectedTenantId).toBe(TENANT_B);
+		expect(account.currentSpaceId).toBe(SPACE_B);
 		expect(screen.getByLabelText("account-bootstrap-ready").textContent).toBe(
 			"true",
 		);
@@ -140,7 +145,12 @@ describe("useTenantBootstrap", () => {
 
 	it("Given current-space가 비어 있을 때, When bootstrap이 실행되면, Then current tenant가 초기화되고 selection은 resolved로 설정된다", async () => {
 		const account = createAccountStore("tenant-bootstrap-empty-test");
-		account.setCurrentTenant(asId("1"), "Fitness Center A", null, asId("100"));
+		account.setCurrentTenant(
+			asId(TENANT_A),
+			"Fitness Center A",
+			null,
+			asId(SPACE_A),
+		);
 
 		render(
 			<AccountBootstrapProbe
@@ -162,33 +172,31 @@ describe("useTenantBootstrap", () => {
 });
 
 describe("isWireId", () => {
-	const maxId = String(DATABASE_ID_MAX);
+	const maxDecimalId = String(DATABASE_ID_MAX);
 
-	const validCases = ["1", maxId];
-	const invalidCases = [
-		"0",
-		"-1",
-		"01",
-		"1.2",
-		"1e3",
-		"01ARZ3NDEKTSV4RRFFQ69G5FAV",
-	];
+	const validCases = [SPACE_A, "01ARZ3NDEKTSV4RRFFQ69G5FAV"];
+	const invalidCases = ["0", "-1", "01", "1.2", "1e3", "1", maxDecimalId];
 
-	it.each(
-		validCases,
-	)("Given `%s`, When isWireId를 검사하면, Then true가 반환된다", (value) => {
-		expect(isWireId(value)).toBe(true);
-	});
+	it.each(validCases)(
+		"Given `%s`, When isWireId를 검사하면, Then true가 반환된다",
+		(value) => {
+			expect(isWireId(value)).toBe(true);
+		},
+	);
 
-	it.each(
-		invalidCases,
-	)("Given `%s`, When isWireId를 검사하면, Then false가 반환된다", (value) => {
-		expect(isWireId(value)).toBe(false);
-	});
+	it.each(invalidCases)(
+		"Given `%s`, When isWireId를 검사하면, Then false가 반환된다",
+		(value) => {
+			expect(isWireId(value)).toBe(false);
+		},
+	);
 
-	it("생성 SDK가 복원한 bigint ID를 wire 문자열로 정규화한다", () => {
-		expect(toWireId(BigInt("42"))).toBe("42");
-		expect(toWireId(DATABASE_ID_MAX)).toBe(String(DATABASE_ID_MAX));
+	it("ULID 문자열만 wire 식별자로 정규화하고 구 decimal·bigint 입력은 거부한다", () => {
+		expect(toWireId(SPACE_A)).toBe(SPACE_A);
+		expect(toWireId("1")).toBeNull();
+		expect(toWireId(maxDecimalId)).toBeNull();
+		expect(toWireId(BigInt("42"))).toBeNull();
+		expect(toWireId(DATABASE_ID_MAX)).toBeNull();
 		expect(toWireId(BigInt("0"))).toBeNull();
 		expect(
 			normalizeAccountBootstrapSpaces([
@@ -201,8 +209,8 @@ describe("isWireId", () => {
 			]),
 		).toEqual([
 			{
-				id: "101",
-				tenantId: "2",
+				id: undefined,
+				tenantId: undefined,
 				name: "Fitness Center B",
 				label: undefined,
 				contentLanguageCode: undefined,

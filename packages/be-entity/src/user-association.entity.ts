@@ -1,6 +1,5 @@
 import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
 import { UserAssociationSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Group } from "./group.entity";
 import { User } from "./user.entity";

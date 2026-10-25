@@ -174,13 +174,13 @@ const readOnlyArgs = {
 		routines: [
 			{
 				createdAt: new Date("2026-04-14T09:00:00.000Z"),
-				id: 1n,
+				id: "01J00000000000000000000001",
 				label: "입문",
 				name: "기초 루틴",
 			},
 		],
-		taskId: 1n,
-		spaceId: 1n,
+		taskId: "01J00000000000000000000001",
+		spaceId: "01J00000000000000000000001",
 		updatedAt: new Date("2026-04-15T09:00:00.000Z"),
 	},
 	readOnly: true,

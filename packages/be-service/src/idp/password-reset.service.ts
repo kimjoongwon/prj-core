@@ -105,7 +105,7 @@ export class PasswordResetService {
 		// 사용자 조회 (없으면 조용히 종료)
 		const user =
 			await this.directUserRepository.findByEmailForAuth(normalizedEmail);
-		if (!user || !user.isActive) {
+		if (!user?.isActive) {
 			this.logger.debug(
 				`재설정 요청 무시 (사용자 미존재 또는 비활성): ${normalizedEmail}`,
 			);

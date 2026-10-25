@@ -9,7 +9,7 @@ const defaultArgs: ComponentProps<typeof AccountListScreen> = {
 			name: "운영 계정",
 			email: "member1@example.com",
 			failedLoginAttempts: 1,
-			id: 1n,
+			id: "ACC00000000000000000000001",
 			isActive: false,
 			isPermanentlyLocked: false,
 			lastLoginAt: new Date("2026-04-14T09:00:00.000Z"),
@@ -20,7 +20,7 @@ const defaultArgs: ComponentProps<typeof AccountListScreen> = {
 			name: "운영 계정",
 			email: "member1@example.com",
 			failedLoginAttempts: 1,
-			id: 1n,
+			id: "ACC00000000000000000000001",
 			isActive: false,
 			isPermanentlyLocked: false,
 			lastLoginAt: new Date("2026-04-14T09:00:00.000Z"),
@@ -42,7 +42,7 @@ const emptyStateArgs = {
 const meta = {
 	title: "screen/AccountListScreen",
 	component: AccountListScreen,
-	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
+	// Date 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
 	argTypes: {
 		accounts: { control: false },
 	},

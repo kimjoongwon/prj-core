@@ -84,7 +84,9 @@ export function applyRuntimeManagedOidcClientConfig<
 			envConfig.postLogoutRedirectUriEnv,
 			envConfig.baseUrlEnv,
 			envConfig.loginUrlPath,
-		) ?? client.loginUrl ?? undefined;
+		) ??
+		client.loginUrl ??
+		undefined;
 	const defaultReturnTo = resolveRuntimeUrl(
 		envConfig.defaultReturnToEnv,
 		envConfig.baseUrlEnv,

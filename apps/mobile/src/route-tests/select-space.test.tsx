@@ -101,16 +101,16 @@ const branchSpace = {
     },
     createdAt: "2026-05-17T00:00:00.000Z",
     email: "gangnam@example.com",
-    id: "301",
+    id: "01JFCENTER00000000000000FA",
     phone: "02-0000-0000",
     removedAt: null,
-    spaceId: "101",
+    spaceId: "01JSPACE0000000000000000SA",
     updatedAt: "2026-05-17T00:00:00.000Z",
   },
-  id: "101",
+  id: "01JSPACE0000000000000000SA",
   name: "강남점",
   removedAt: null,
-  tenantId: "201",
+  tenantId: "01JTENANT000000000000000TA",
   updatedAt: "2026-05-17T00:00:00.000Z",
 };
 
@@ -118,12 +118,12 @@ const platformSpace = {
   ...branchSpace,
   fitnessCenter: {
     ...branchSpace.fitnessCenter,
-    id: "302",
-    spaceId: "102",
+    id: "01JFCENTER00000000000000FB",
+    spaceId: "01JSPACE0000000000000000SB",
   },
-  id: "102",
+  id: "01JSPACE0000000000000000SB",
   name: "플랫폼 운영본부",
-  tenantId: "202",
+  tenantId: "01JTENANT000000000000000TB",
 };
 
 describe("mobile select space route", () => {
@@ -153,13 +153,15 @@ describe("mobile select space route", () => {
     expect(screen.getByText("강남점:서울 강남구 샘플로")).toBeTruthy();
     expect(screen.queryByText(/플랫폼 운영본부/)).toBeNull();
 
-    fireEvent.press(screen.getByLabelText("space-201"));
+    fireEvent.press(screen.getByLabelText("space-01JTENANT000000000000000TA"));
 
     await waitFor(() => {
-      expect(mockMutateAsync).toHaveBeenCalledWith({ tenantId: "201" });
+      expect(mockMutateAsync).toHaveBeenCalledWith({
+        tenantId: "01JTENANT000000000000000TA",
+      });
     });
-    expect(mobileApiScope.tenantId).toBe("201");
-    expect(mobileApiScope.spaceId).toBe("101");
+    expect(mobileApiScope.tenantId).toBe("01JTENANT000000000000000TA");
+    expect(mobileApiScope.spaceId).toBe("01JSPACE0000000000000000SA");
     expect(mobileApiScope.spaceName).toBe("강남점");
     const persistedSelectionCall = (
       SecureStore.setItemAsync as jest.Mock
@@ -167,7 +169,7 @@ describe("mobile select space route", () => {
     expect(JSON.parse(persistedSelectionCall?.[1] ?? "{}")).toMatchObject({
       spaceName: "강남점",
       logoImageFileId: "company-logo-branch",
-      version: 3,
+      version: 4,
     });
     expect(mockInvalidateQueries).toHaveBeenCalled();
     expect(mockReplace).toHaveBeenCalledWith("/");

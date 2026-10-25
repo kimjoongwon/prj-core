@@ -18,7 +18,7 @@ const defaultArgs: ComponentProps<typeof TemplateListScreen> = {
 			content: "서비스 이용을 안내합니다.",
 			code: "code-1",
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
-			id: 1n,
+			id: "01J00000000000000000000001",
 			isActive: false,
 		},
 		{
@@ -29,7 +29,7 @@ const defaultArgs: ComponentProps<typeof TemplateListScreen> = {
 			content: "서비스 이용을 안내합니다.",
 			code: "code-1",
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
-			id: 1n,
+			id: "01J00000000000000000000001",
 			isActive: false,
 		},
 	],

@@ -12,7 +12,8 @@ export class UserClassificationDto extends EntityResponseType(
 			"updatedAt",
 			"removedAt",
 			"user",
-			"category"] as const,
+			"category",
+		] as const,
 		relations: {
 			user: () => UserDto,
 			category: () => CategoryDto,

@@ -9,7 +9,8 @@ export class CategoryDto extends EntityResponseType(Category, {
 		"removedAt",
 		"name",
 		"parent",
-		"children"] as const,
+		"children",
+	] as const,
 	relations: {
 		parent: () => CategoryDto,
 		children: () => CategoryDto,

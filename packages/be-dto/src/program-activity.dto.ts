@@ -16,5 +16,6 @@ export class ProgramActivityDto extends EntityResponseType(ProgramActivity, {
 		"exerciseDuration",
 		"exerciseCount",
 		"imageFileId",
-		"videoFileId"] as const,
+		"videoFileId",
+	] as const,
 }) {}

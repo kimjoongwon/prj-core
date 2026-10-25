@@ -1,20 +1,20 @@
 import type { GetInquiryParticipantsQueryResult } from "@cocrepo/api/core/inquiries";
-import type { DecimalId, InquiryParticipant } from "@cocrepo/type";
+import type { InquiryParticipant } from "@cocrepo/type";
 
 type InquiryParticipantResponse = NonNullable<
 	GetInquiryParticipantsQueryResult["data"]
 >[number];
 
-/** SDK의 bigint·Date 응답을 문의 화면과 WebSocket 상태가 공유하는 표현으로 변환합니다. */
+/** SDK의 ULID 문자열·Date 응답을 문의 화면과 WebSocket 상태가 공유하는 표현으로 변환합니다. */
 export function toInquiryParticipantState(
 	participant: InquiryParticipantResponse,
-	inquiryId: DecimalId,
+	inquiryId: string,
 ): InquiryParticipant {
 	return {
-		id: participant.id.toString(),
+		id: participant.id,
 		inquiryId,
-		threadId: participant.threadId?.toString() ?? null,
-		userId: participant.userId.toString(),
+		threadId: participant.threadId ?? null,
+		userId: participant.userId,
 		role:
 			participant.role === "CUSTOMER"
 				? "CUSTOMER"

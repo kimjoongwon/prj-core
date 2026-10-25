@@ -72,8 +72,8 @@ export interface TimelineSessionEditScreenProps {
 	resolvedPrograms?: number;
 	unresolvedPrograms?: number;
 	onClickCreateProgramButton?: () => void;
-	onClickEditProgramButton?: (programId: bigint) => void;
-	onClickDeleteProgramButton?: (programId: bigint) => void;
+	onClickEditProgramButton?: (programId: string) => void;
+	onClickDeleteProgramButton?: (programId: string) => void;
 }
 
 /**

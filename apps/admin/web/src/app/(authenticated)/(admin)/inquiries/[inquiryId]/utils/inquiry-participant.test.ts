@@ -3,11 +3,14 @@ import { describe, expect, it } from "vitest";
 import { toInquiryParticipantState } from "./inquiry-participant";
 
 const joinedAt = new Date("2026-09-05T01:00:00.000Z");
+const participantInquiryId = "01JTENANT000000000000000TA";
 const participantResponse = {
-	id: BigInt("9007199254740993"),
-	inquiryId: BigInt("101"),
-	threadId: BigInt("9007199254740994"),
-	userId: BigInt("9007199254740995"),
+	id: "01JPART00000000000000000PX",
+	inquiryId: participantInquiryId,
+	threadId: "01JTHREAD000000000000000AB",
+	userId: "01JACCT00000000000000000CD",
+	userName: "문의 참여자",
+	userAvatar: null,
 	role: "CUSTOMER",
 	isOnline: true,
 	isTyping: false,
@@ -22,12 +25,14 @@ const participantResponse = {
 } satisfies NonNullable<GetInquiryParticipantsQueryResult["data"]>[number];
 
 describe("문의 참여자 응답 변환", () => {
-	it("SDK bigint ID의 정밀도와 Date를 화면 상태에 보존한다", () => {
-		expect(toInquiryParticipantState(participantResponse, "101")).toEqual({
-			id: "9007199254740993",
-			inquiryId: "101",
-			threadId: "9007199254740994",
-			userId: "9007199254740995",
+	it("SDK ULID 문자열 ID와 Date를 화면 상태에 그대로 보존한다", () => {
+		expect(
+			toInquiryParticipantState(participantResponse, participantInquiryId),
+		).toEqual({
+			id: "01JPART00000000000000000PX",
+			inquiryId: participantInquiryId,
+			threadId: "01JTHREAD000000000000000AB",
+			userId: "01JACCT00000000000000000CD",
 			role: "CUSTOMER",
 			isOnline: true,
 			isTyping: false,
@@ -37,7 +42,7 @@ describe("문의 참여자 응답 변환", () => {
 			lastReadAt: "2026-09-05T01:02:00.000Z",
 			leftAt: "2026-09-05T01:03:00.000Z",
 		});
-		expect(participantResponse.id).toBe(BigInt("9007199254740993"));
+		expect(participantResponse.id).toBe("01JPART00000000000000000PX");
 		expect(participantResponse.joinedAt).toBe(joinedAt);
 	});
 
@@ -52,7 +57,7 @@ describe("문의 참여자 응답 변환", () => {
 					lastReadAt: null,
 					leftAt: null,
 				},
-				"101",
+				participantInquiryId,
 			);
 
 			expect(participantState.threadId).toBeNull();
@@ -69,7 +74,10 @@ describe("문의 참여자 응답 변환", () => {
 		["VIEWER", "AGENT"],
 	] as const)("%s 역할의 기존 화면 표현 %s를 유지한다", (role, expectedRole) => {
 		expect(
-			toInquiryParticipantState({ ...participantResponse, role }, "101").role,
+			toInquiryParticipantState(
+				{ ...participantResponse, role },
+				participantInquiryId,
+			).role,
 		).toBe(expectedRole);
 	});
 });

@@ -8,7 +8,6 @@ import {
 	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { AbilitySchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Action } from "./action.entity";
 import { PolicyEntry } from "./policy-entry.entity";

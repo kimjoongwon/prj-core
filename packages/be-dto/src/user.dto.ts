@@ -28,7 +28,8 @@ export class UserDto extends EntityResponseType(User, {
 		"profiles",
 		"tenants",
 		"associations",
-		"classification"] as const,
+		"classification",
+	] as const,
 	relations: {
 		profiles: () => ProfileDto,
 		tenants: () => TenantDto,
@@ -44,7 +45,6 @@ export class UserDto extends EntityResponseType(User, {
 		"isActive",
 	],
 }) {
-
 	@NumberField({ description: "로그인 실패 횟수" })
 	failedLoginAttempts: number;
 
@@ -62,7 +62,6 @@ export class UserDto extends EntityResponseType(User, {
 
 	@BooleanField({ description: "활성 상태" })
 	isActive: boolean;
-
 
 	declare profiles?: ProfileDto[];
 	declare tenants?: TenantDto[];

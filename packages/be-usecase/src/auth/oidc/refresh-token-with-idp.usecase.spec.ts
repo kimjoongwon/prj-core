@@ -102,9 +102,7 @@ describe("RefreshTokenWithIdpUseCase", () => {
 			"admin-web.0123456789abcdef0123456789abcdef",
 			"rotated-refresh-token",
 		);
-		expect(result.sessionId).toBe(
-			"admin-web.0123456789abcdef0123456789abcdef",
-		);
+		expect(result.sessionId).toBe("admin-web.0123456789abcdef0123456789abcdef");
 		expect(result.refreshToken).toBe("rotated-refresh-token");
 		expect(res.cookie).toHaveBeenCalledWith(
 			"loggedIn",

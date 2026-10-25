@@ -229,12 +229,12 @@ export class IdpAccountAggregate {
 			const company = fitnessCenter?.company;
 			return {
 				tenantId: tenant.id,
-				spaceId: tenant.spaceSeq,
-				spaceName: tenant.space?.name ?? tenant.spaceSeq,
+				spaceId: tenant.space?.id ?? null,
+				spaceName: tenant.space?.name ?? null,
 				spaceLabel: tenant.space?.label ?? company?.label ?? null,
-				roleId: tenant.roleSeq,
-				roleName: tenant.role.name,
-				roleDisplayName: tenant.role.displayName ?? null,
+				roleId: tenant.role?.id ?? null,
+				roleName: tenant.role?.name ?? null,
+				roleDisplayName: tenant.role?.displayName ?? null,
 				grantedAt: tenant.createdAt,
 				updatedAt: tenant.updatedAt ?? null,
 			};

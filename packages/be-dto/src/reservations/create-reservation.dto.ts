@@ -1,5 +1,4 @@
-import {
-	ULIDField, StringField, StringFieldOptional } from "@cocrepo/decorator/field";
+import { StringFieldOptional, ULIDField } from "@cocrepo/decorator/field";
 
 export class CreateReservationDto {
 	@ULIDField({ description: "타임라인 공개 ID (ULID)" })

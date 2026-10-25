@@ -38,9 +38,9 @@ export interface ContextSpaceSnapshot {
 export interface ContextTenantSnapshot {
 	/** 테넌트 공개 ID (ULID) */
 	id: string;
-	roleSeq: DatabaseId;
+	roleSeq?: DatabaseId;
 	userSeq?: DatabaseId;
-	spaceSeq: DatabaseId;
+	spaceSeq?: DatabaseId;
 	removedAt?: Date | null;
 	role?: ContextRoleSnapshot | null;
 	space?: ContextSpaceSnapshot | null;

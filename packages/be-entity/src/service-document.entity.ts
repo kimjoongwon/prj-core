@@ -13,7 +13,6 @@ import {
 	ServiceDocumentStatus,
 } from "@cocrepo/enum";
 import { ServiceDocumentSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**

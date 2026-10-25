@@ -1,8 +1,8 @@
 import {
-	BigIntIdFieldOptional,
 	DateFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator/field";
 import { Inquiry } from "@cocrepo/entity";
 import { DeleteFilter } from "@cocrepo/enum";
@@ -55,15 +55,15 @@ export class QueryInquiryDto extends EntityQueryType(Inquiry, [
 	// -------------------------------------------------------------------------
 	// 필터 - 관계자 ID
 	// -------------------------------------------------------------------------
-	@BigIntIdFieldOptional({
-		description: "담당자 ID",
+	@ULIDFieldOptional({
+		description: "담당자 ULID",
 	})
-	assigneeSeq?: bigint;
+	assigneeId?: string;
 
-	@BigIntIdFieldOptional({
-		description: "고객 ID",
+	@ULIDFieldOptional({
+		description: "고객 ULID",
 	})
-	customerSeq?: bigint;
+	customerId?: string;
 
 	// -------------------------------------------------------------------------
 	// 필터 - 날짜 범위

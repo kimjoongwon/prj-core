@@ -89,8 +89,8 @@ describe("SpacesRepository", () => {
 		},
 	};
 
+
 	const mockSpaceDbId = 1n;
-	const mockSecondSpaceDbId = 2n;
 
 	const getFitnessCenter = (
 		space: Space | null | undefined,
@@ -177,7 +177,6 @@ describe("SpacesRepository", () => {
 	describe("findById", () => {
 		it("ID로 Space를 조회해야 한다", async () => {
 			// Given
-			const spaceSeq = mockSpaceDbId;
 			mockTxHost.tx.space.findUnique.mockResolvedValue(mockSpaceData);
 
 			// When

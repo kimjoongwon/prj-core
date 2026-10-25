@@ -8,7 +8,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { ThreadStatus } from "@cocrepo/enum";
 import { InquiryThreadSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Inquiry } from "./inquiry.entity";
 import { InquiryMessage } from "./inquiry-message.entity";

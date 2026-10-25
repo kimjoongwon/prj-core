@@ -390,7 +390,7 @@ const HomeTabRoute = observer(() => {
       data: {
         idempotencyKey,
         memo: nextMemo.trim() || undefined,
-        occurrenceStartAt: selectedFeedItem.startsAt,
+        occurrenceStartAt: selectedFeedItem.startsAt.toISOString(),
         programId: selectedFeedItem.programId,
         sessionId: selectedFeedItem.sessionId,
         timelineId: selectedFeedItem.timelineId,

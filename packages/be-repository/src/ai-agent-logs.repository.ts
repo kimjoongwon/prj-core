@@ -76,10 +76,7 @@ export class AIAgentLogsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<
-			Prisma.AIAgentLogUncheckedCreateInput,
-			"id"
-		>,
+		data: AutoIdentityCreateInput<Prisma.AIAgentLogUncheckedCreateInput, "id">,
 	): Promise<AIAgentLog> {
 		this.logger.debug(`로그 생성: ${data.inquirySeq.toString()}`);
 		const result = await this.txHost.tx.aIAgentLog.create({

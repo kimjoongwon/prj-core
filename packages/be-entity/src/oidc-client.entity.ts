@@ -5,7 +5,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { OidcClientSchema } from "@cocrepo/schema";
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Exclude } from "class-transformer";
 import { IsObject, IsOptional } from "class-validator";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 

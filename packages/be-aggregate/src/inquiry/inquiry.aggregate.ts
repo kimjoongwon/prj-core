@@ -1,6 +1,5 @@
 import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
 import type { ListInquiriesQueryInput } from "@cocrepo/input";
-import type { CreateUpdateFormBootstrap } from "@cocrepo/type";
 import {
 	InquiryCategory,
 	InquiryChannel,
@@ -17,6 +16,7 @@ import {
 	buildInquiryQueryWhere,
 	InquiriesRepository,
 } from "@cocrepo/repository";
+import type { CreateUpdateFormBootstrap } from "@cocrepo/type";
 import {
 	BadRequestException,
 	Injectable,

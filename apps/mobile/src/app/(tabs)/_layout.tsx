@@ -22,10 +22,7 @@ import {
 	type PressableProps,
 } from "react-native";
 import { mobileSession } from "@/auth/mobile-session";
-import {
-	mobileApiScope,
-	toMobileDecimalId,
-} from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 import {
 	toSelectableMobileSpaceInfos,
 	toSpaceListItemInfos,
@@ -69,8 +66,7 @@ const findSpaceByItem = (
 ) =>
 	spaces.find(
 		(space) =>
-			space.tenantId != null &&
-			toMobileDecimalId(space.tenantId, "space.tenantId") === item.id,
+			space.tenantId != null && space.tenantId === item.id,
 	);
 
 const getHeaderSubtitle = () =>

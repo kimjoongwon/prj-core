@@ -1,6 +1,6 @@
 import { DateFieldOptional } from "@cocrepo/decorator/field";
-import { EntityQueryType } from "../query/entity-query-type";
 import { Reservation } from "@cocrepo/entity";
+import { EntityQueryType } from "../query/entity-query-type";
 
 export class QueryMyReservationsDto extends EntityQueryType(Reservation, [
 	"status",
@@ -10,5 +10,4 @@ export class QueryMyReservationsDto extends EntityQueryType(Reservation, [
 
 	@DateFieldOptional({ description: "조회 종료 시각" })
 	to?: Date;
-
 }

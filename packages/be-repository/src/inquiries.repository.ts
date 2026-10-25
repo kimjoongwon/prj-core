@@ -410,10 +410,7 @@ export class InquiriesRepository {
 	 */
 	async updateById(
 		id: string,
-		data: AutoIdentityUpdateInput<
-			Prisma.InquiryUncheckedUpdateInput,
-			"id"
-		>,
+		data: AutoIdentityUpdateInput<Prisma.InquiryUncheckedUpdateInput, "id">,
 	): Promise<Inquiry> {
 		this.logger.debug(`업데이트 중: ${id.toString()}`);
 		const result = await this.txHost.tx.inquiry.update({
@@ -447,10 +444,7 @@ export class InquiriesRepository {
 	/**
 	 * 담당자 배정
 	 */
-	async updateAssigneeById(
-		id: string,
-		assigneeId: string,
-	): Promise<Inquiry> {
+	async updateAssigneeById(id: string, assigneeId: string): Promise<Inquiry> {
 		this.logger.debug(`담당자 배정: ${id} -> ${assigneeId}`);
 
 		const result = await this.txHost.tx.inquiry.update({

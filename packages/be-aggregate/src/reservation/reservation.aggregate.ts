@@ -114,7 +114,7 @@ export class ReservationAggregate {
 						) ?? [],
 					userId: input.userId,
 					coachName:
-					coachNames.get(occurrence.program.instructor?.id ?? "") ?? null,
+						coachNames.get(occurrence.program.instructor?.id ?? "") ?? null,
 				}),
 			);
 
@@ -578,7 +578,10 @@ export class ReservationAggregate {
 		);
 	}
 
-	private buildOccurrenceKey(programId?: string | null, startsAt?: Date): string {
+	private buildOccurrenceKey(
+		programId?: string | null,
+		startsAt?: Date,
+	): string {
 		return `${programId ?? ""}:${startsAt?.toISOString() ?? ""}`;
 	}
 }

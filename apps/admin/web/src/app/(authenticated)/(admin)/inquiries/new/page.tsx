@@ -173,7 +173,7 @@ export default observer(function InquiriesNewPageRoute() {
 
 		const response = await getUsers({ name: keyword, take: 10 });
 		state.searchResults = (response?.data ?? []).map((user) => ({
-			id: String(user.id),
+			id: user.id,
 			name: user.name,
 			email: user.email,
 			phone: user.phone,
@@ -191,7 +191,7 @@ export default observer(function InquiriesNewPageRoute() {
 		try {
 			const result = await createInquiryMutation.mutateAsync({
 				data: {
-					customerId: BigInt(state.customerId),
+					customerId: state.customerId,
 					title: state.title.trim(),
 					content: state.content.trim(),
 					category: state.category,
@@ -203,10 +203,7 @@ export default observer(function InquiriesNewPageRoute() {
 			const inquiryId = result?.data?.id;
 			if (inquiryId) {
 				router.push(
-					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
-						"[inquiryId]",
-						String(inquiryId),
-					) as Route,
+					ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", inquiryId) as Route,
 				);
 				return;
 			}

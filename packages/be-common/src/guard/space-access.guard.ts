@@ -1,9 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
-import type {
-	ContextTenantSnapshot,
-	ContextUserSnapshot,
-} from "@cocrepo/type";
+import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import {
 	BadRequestException,
 	type CanActivate,
@@ -48,9 +45,7 @@ export class SpaceAccessGuard implements CanActivate {
 		if (!user) return true;
 
 		// CLS에서 tenantId 확인
-		const tenantId = this.cls.get<string | undefined>(
-			CONTEXT_KEYS.TENANT_ID,
-		);
+		const tenantId = this.cls.get<string | undefined>(CONTEXT_KEYS.TENANT_ID);
 		if (!tenantId) {
 			throw new BadRequestException(
 				"x-tenant-id 헤더가 필요합니다. Tenant를 선택해주세요.",

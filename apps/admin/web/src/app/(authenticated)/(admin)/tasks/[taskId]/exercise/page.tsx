@@ -78,8 +78,7 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 			metadata={
 				exercise
 					? {
-							taskId: exercise.taskId,
-							spaceId: exercise.task.spaceId,
+							taskId: exercise.task.id,
 							createdAt: exercise.createdAt,
 							updatedAt: exercise.updatedAt,
 							routines,

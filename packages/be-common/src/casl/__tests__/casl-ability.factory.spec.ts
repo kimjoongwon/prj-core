@@ -39,22 +39,20 @@ describe("CaslAbilityFactory", () => {
 
 	it("Role Policy로부터 권한을 생성해야 한다", async () => {
 		const user = {
-			id: 101n,
-			spaceSeq: 301n,
+			id: "01JSER00000000000000000C01",
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
-					id: 201n,
-					spaceSeq: 301n,
-					roleSeq: 401n,
-					role: { id: 401n },
+					id: "01JTENANT00000000000000201",
+					space: { id: "01JSPACE000000000000000301" },
+					role: { id: "01JTASK0000000000000000401" },
 				},
 			],
 		} as unknown as ContextUserSnapshot;
 
 		mockClsService.get.mockImplementation((key) =>
-			key === CONTEXT_KEYS.TENANT_ID ? 201n : undefined,
+			key === CONTEXT_KEYS.TENANT_ID ? "01JTENANT00000000000000201" : undefined,
 		);
 		mockRoleAssignmentsRepository.findActiveByRoleIdsInSpace.mockResolvedValue([
 			{
@@ -168,28 +166,25 @@ describe("CaslAbilityFactory", () => {
 
 	it("같은 spaceId에 중복 tenant가 있어도 첫 tenant의 roleId로 조회해야 한다", async () => {
 		const user = {
-			id: 101n,
-			spaceSeq: 301n,
+			id: "01JSER00000000000000000C01",
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
-					id: 201n,
-					spaceSeq: 301n,
-					roleSeq: 401n,
-					role: { id: 401n, name: "PLATFORM_ADMIN" },
+					id: "01JTENANT00000000000000201",
+					space: { id: "01JSPACE000000000000000301" },
+					role: { id: "01JTASK0000000000000000401", name: "PLATFORM_ADMIN" },
 				},
 				{
-					id: 202n,
-					spaceSeq: 301n,
-					roleSeq: 402n,
-					role: { id: 402n, name: "COMPANY_MANAGER" },
+					id: "01JTENANT00000000000000202",
+					space: { id: "01JSPACE000000000000000301" },
+					role: { id: "01JTASK0000000000000000402", name: "COMPANY_MANAGER" },
 				},
 			],
 		} as unknown as ContextUserSnapshot;
 
 		mockClsService.get.mockImplementation((key) =>
-			key === CONTEXT_KEYS.TENANT_ID ? 201n : undefined,
+			key === CONTEXT_KEYS.TENANT_ID ? "01JTENANT00000000000000201" : undefined,
 		);
 		mockRoleAssignmentsRepository.findActiveByRoleIdsInSpace.mockResolvedValue(
 			[] as never,
@@ -199,7 +194,7 @@ describe("CaslAbilityFactory", () => {
 
 		expect(
 			mockRoleAssignmentsRepository.findActiveByRoleIdsInSpace,
-		).toHaveBeenCalledWith([401n], 301n);
+		).toHaveBeenCalledWith(["01JTASK0000000000000000401"], "01JSPACE000000000000000301");
 	});
 
 	it("조건의 ID 템플릿을 정밀도 손실 없이 bigint로 치환해야 한다", () => {

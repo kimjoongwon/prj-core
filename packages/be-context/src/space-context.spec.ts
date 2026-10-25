@@ -6,8 +6,7 @@ describe("SpaceContext", () => {
 	it("Given ULID scope When 필터를 조회하면 Then ULID 문자열 계약을 반환한다", () => {
 		const cls = {
 			get: jest.fn((key: string) => {
-				if (key === CONTEXT_KEYS.TENANT_ID)
-					return "01JTENANT00000000000000000";
+				if (key === CONTEXT_KEYS.TENANT_ID) return "01JTENANT00000000000000000";
 				if (key === CONTEXT_KEYS.SPACE_ID) return "01JSPACE00000000000000000F";
 				if (key === CONTEXT_KEYS.EFFECTIVE_SPACE_IDS)
 					return ["01JSPACE00000000000000000F", "01JSPACE00000000000000SAAA"];
@@ -23,7 +22,11 @@ describe("SpaceContext", () => {
 			"01JSPACE00000000000000000S",
 		]);
 		expect(context.spaceFilter).toEqual({
-			space: { id: { in: ["01JSPACE00000000000000000F", "01JSPACE00000000000000000S"] } },
+			space: {
+				id: {
+					in: ["01JSPACE00000000000000000F", "01JSPACE00000000000000000S"],
+				},
+			},
 		});
 		expect(context.currentSpaceFilter).toEqual({
 			space: { id: "01JSPACE00000000000000000F" },

@@ -252,7 +252,9 @@ export class AssetAggregate {
 
 	private canReadSpace(spaceId?: string | null): boolean {
 		const spaceIds = this.spaceContext.spaceIds;
-		return spaceIds === undefined || (spaceId != null && spaceIds.includes(spaceId));
+		return (
+			spaceIds === undefined || (spaceId != null && spaceIds.includes(spaceId))
+		);
 	}
 
 	private serializeAsset(asset: Asset) {

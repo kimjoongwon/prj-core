@@ -83,7 +83,7 @@ type SpaceFitnessCenterRow = {
 };
 
 type SpaceTableRow = {
-	id: bigint;
+	id: string;
 	name: string;
 	label?: string | null;
 	contentLanguageCode: string;
@@ -200,7 +200,7 @@ export const actionRemovedAtColumn = createRemovedAtStatusColumn<ActionDto>({
 /** Action 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildActionTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		name: string;
 		displayName?: string | null;
 		group?: string | null;
@@ -267,7 +267,7 @@ export const actionTableColumns = buildActionTableColumns<ActionDto>();
 
 export function buildUserListTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		name: string;
 		email?: string | null;
 		phone?: string | null;
@@ -507,7 +507,7 @@ export const adminRoleActionsColumn = createActionsColumn<RoleDto>({
 /** 역할 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildAdminRoleTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		name: string;
 		displayName?: string | null;
 		description?: string | null;
@@ -637,8 +637,8 @@ export function buildTaskTableColumns<
 	onClickTaskName,
 	onClickDeleteButton,
 }: {
-	onClickTaskName: (taskId: bigint) => void;
-	onClickDeleteButton: (taskId: bigint) => void;
+	onClickTaskName: (taskId: string) => void;
+	onClickDeleteButton: (taskId: string) => void;
 }) {
 	/** Task 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
@@ -702,7 +702,7 @@ export function buildTimelineTableColumns<
 >({
 	onClickDeleteButton,
 }: {
-	onClickDeleteButton: (timelineId: bigint) => void;
+	onClickDeleteButton: (timelineId: string) => void;
 }) {
 	/** Timeline 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
@@ -748,7 +748,7 @@ export function buildTimelineTableColumns<
 
 export function buildTemplateTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		code: string;
 		name: string;
 		isActive: boolean;
@@ -758,8 +758,8 @@ export function buildTemplateTableColumns<
 	onClickTemplateCode,
 	onToggleTemplateStatusSwitch,
 }: {
-	onClickTemplateCode: (templateId: bigint) => void;
-	onToggleTemplateStatusSwitch: (templateId: bigint) => Promise<void>;
+	onClickTemplateCode: (templateId: string) => void;
+	onToggleTemplateStatusSwitch: (templateId: string) => Promise<void>;
 }) {
 	/** Template 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumns<TRow>(
@@ -799,7 +799,7 @@ export function buildSpaceTableColumns<
 >({
 	onClickSpaceFitnessCenterName,
 }: {
-	onClickSpaceFitnessCenterName: (spaceId: bigint) => void;
+	onClickSpaceFitnessCenterName: (spaceId: string) => void;
 }) {
 	const contentLanguageLabels: Record<string, string> = {
 		ko_KR: "한국어",
@@ -852,7 +852,7 @@ export function buildSpaceTableColumns<
 
 export function buildRoutineTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		name: string;
 		label?: string | null;
 		createdAt: Date | null;
@@ -861,8 +861,8 @@ export function buildRoutineTableColumns<
 	onClickRoutineName,
 	onClickDeleteButton,
 }: {
-	onClickRoutineName: (routineId: bigint) => void;
-	onClickDeleteButton: (routineId: bigint) => void;
+	onClickRoutineName: (routineId: string) => void;
+	onClickDeleteButton: (routineId: string) => void;
 }) {
 	/** Routine 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
@@ -1033,8 +1033,8 @@ export function buildInquiryTableColumns<
 			enableHiding: false,
 			cell: ({ row }) => (
 				<ProfileAvatarCell
-					name={row.original.customerId ?? "고객"}
-					subtitle={row.original.customerId ?? "-"}
+					name="고객"
+					subtitle={row.original.inquiryNumber}
 				/>
 			),
 		}),
@@ -1097,9 +1097,7 @@ export function buildInquiryTableColumns<
 		}),
 		createPresetColumn<TRow>("assigneeName", {
 			size: 150,
-			cell: ({ row }) => (
-				<DefaultCell value={row.original.assigneeId} placeholder="미배정" />
-			),
+			cell: () => <DefaultCell value={null} placeholder="미배정" />,
 		}),
 		createPresetColumn<TRow>("sentiment", {
 			size: 100,
@@ -1477,7 +1475,7 @@ export const oidcClientActionsColumn = createActionsColumn<OidcClientDto>({
 /** OIDC Client 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildOidcClientTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		clientId: string;
 		name: string;
 		tokenEndpointAuthMethod: string;
@@ -1580,7 +1578,7 @@ export const oidcClientTableColumns =
 
 export function buildIdpAccountTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		name: string;
 		email: string;
 		isActive: boolean;
@@ -1674,7 +1672,7 @@ export const idpAccountTableColumns =
 
 export function buildEmailVerificationTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		email: string;
 		name: string;
 		status: string;
@@ -1866,7 +1864,7 @@ export function buildAuthAuditLogTableColumns<
 
 export function buildOidcSessionTableColumns<
 	TRow extends {
-		id: bigint;
+		id: string;
 		key: string;
 		modelType: string;
 		accountId?: string;

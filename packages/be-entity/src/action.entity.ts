@@ -11,7 +11,6 @@ import type {
 	ActionMaskingConfig,
 	ActionTransformConfig,
 } from "@cocrepo/type";
-import { Exclude } from "class-transformer";
 import { Ability } from "./ability.entity";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 

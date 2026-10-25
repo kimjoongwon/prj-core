@@ -35,9 +35,7 @@ export class PoliciesRepository {
 	}
 
 	async findByIdInSpace(id: string, spaceId: string): Promise<Policy | null> {
-		this.logger.debug(
-			`Policy 조회: id=${id}, spaceId=${spaceId}`,
-		);
+		this.logger.debug(`Policy 조회: id=${id}, spaceId=${spaceId}`);
 
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
@@ -91,7 +89,9 @@ export class PoliciesRepository {
 			"id"
 		> & { spaceId: string; createdById?: string | null },
 	): Promise<Policy> {
-		this.logger.debug(`Policy 생성: spaceId=${data.spaceId}, name=${data.name}`);
+		this.logger.debug(
+			`Policy 생성: spaceId=${data.spaceId}, name=${data.name}`,
+		);
 		const { spaceId, createdById, ...rest } = data;
 		const result = await this.txHost.tx.policy.create({
 			data: {
@@ -107,10 +107,7 @@ export class PoliciesRepository {
 
 	async updateById(
 		id: string,
-		data: AutoIdentityUpdateInput<
-			Prisma.PolicyUncheckedUpdateInput,
-			"id"
-		>,
+		data: AutoIdentityUpdateInput<Prisma.PolicyUncheckedUpdateInput, "id">,
 	): Promise<Policy> {
 		this.logger.debug(`Policy 수정: id=${id.toString()}`);
 		const result = await this.txHost.tx.policy.update({

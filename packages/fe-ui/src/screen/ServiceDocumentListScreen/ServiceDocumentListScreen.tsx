@@ -77,10 +77,10 @@ export interface ServiceDocumentListScreenProps {
 	onClickNewButton: () => void;
 	onClickCancelFormButton: () => void;
 	onClickSubmitButton: () => Promise<void>;
-	onClickEditButton: (serviceDocumentId: bigint) => void;
-	onClickPublishButton: (serviceDocumentId: bigint) => Promise<void>;
-	onClickArchiveButton: (serviceDocumentId: bigint) => Promise<void>;
-	onClickDeleteButton: (serviceDocumentId: bigint) => Promise<void>;
+	onClickEditButton: (serviceDocumentId: string) => void;
+	onClickPublishButton: (serviceDocumentId: string) => Promise<void>;
+	onClickArchiveButton: (serviceDocumentId: string) => Promise<void>;
+	onClickDeleteButton: (serviceDocumentId: string) => Promise<void>;
 }
 const KIND_OPTIONS: Array<{
 	value: ServiceDocumentKindValue;

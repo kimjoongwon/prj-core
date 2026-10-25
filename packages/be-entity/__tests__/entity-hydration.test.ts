@@ -1,12 +1,12 @@
-import { describe, expect, it } from "vitest";
 import { DECORATORS } from "@nestjs/swagger";
+import { describe, expect, it } from "vitest";
+import { hydrateEntity } from "../src/hydrate-entity";
 import { Policy } from "../src/policy.entity";
 import { PolicyEntry } from "../src/policy-entry.entity";
 import { Role } from "../src/role.entity";
 import { RoleAssignment } from "../src/role-assignment.entity";
 import { Translation } from "../src/translation.entity";
 import { User } from "../src/user.entity";
-import { hydrateEntity } from "../src/hydrate-entity";
 
 describe("Entity Schema 상속과 내부 복원", () => {
 	it("모델 Entity가 대응 Schema를 상속하고 도메인 메서드를 유지합니다", () => {

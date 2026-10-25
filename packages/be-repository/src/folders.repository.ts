@@ -78,9 +78,7 @@ export class FoldersRepository {
 	}
 
 	async findByParentFolderId(parentFolderId: string | null): Promise<Folder[]> {
-		this.logger.debug(
-			`상위 폴더 기준 조회: ${parentFolderId ?? "root"}`,
-		);
+		this.logger.debug(`상위 폴더 기준 조회: ${parentFolderId ?? "root"}`);
 
 		const result = await this.txHost.tx.folder.findMany({
 			where: {
@@ -118,7 +116,10 @@ export class FoldersRepository {
 
 	async create(
 		data: AutoIdentityCreateInput<
-			Omit<Prisma.FolderUncheckedCreateInput, "spaceSeq" | "parentFolderSeq" | "createdBySeq">,
+			Omit<
+				Prisma.FolderUncheckedCreateInput,
+				"spaceSeq" | "parentFolderSeq" | "createdBySeq"
+			>,
 			"id"
 		> & {
 			spaceId: string;

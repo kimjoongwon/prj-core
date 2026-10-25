@@ -9,7 +9,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { WhitelistType } from "@cocrepo/enum";
 import { WhitelistEntrySchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**

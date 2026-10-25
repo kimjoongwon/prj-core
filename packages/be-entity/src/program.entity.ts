@@ -6,7 +6,6 @@ import {
 	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { ProgramSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { ProgramActivity } from "./program-activity.entity";
 import { Routine } from "./routine.entity";
@@ -19,7 +18,8 @@ export class Program extends ProgramSchema {
 
 	@BigIntIdFieldMetadata() declare routineSeq: ProgramSchema["routineSeq"];
 	@BigIntIdFieldMetadata() declare sessionSeq: ProgramSchema["sessionSeq"];
-	@BigIntIdFieldMetadata() declare instructorSeq: ProgramSchema["instructorSeq"];
+	@BigIntIdFieldMetadata()
+	declare instructorSeq: ProgramSchema["instructorSeq"];
 	@NumberFieldMetadata() declare capacity: ProgramSchema["capacity"];
 	@StringFieldMetadata() declare name: ProgramSchema["name"];
 	@StringFieldOptionalMetadata({ nullable: true })

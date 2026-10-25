@@ -4,6 +4,7 @@ import {
 	GetSubjectFieldsQuery,
 	GetSubjectsQuery,
 } from "@cocrepo/command";
+import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
 	ApiAuth,
 	ApiErrors,
@@ -11,7 +12,6 @@ import {
 	ResponseMessage,
 	Roles,
 } from "@cocrepo/decorator";
-import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { SubjectDto, SubjectFieldDto } from "@cocrepo/dto";
 import {
 	Controller,

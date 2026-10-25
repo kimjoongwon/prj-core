@@ -10,5 +10,6 @@ export class AuthAuditLogDto extends EntityResponseType(AuthAuditLog, {
 		"failureReason",
 		"ipAddress",
 		"userAgent",
-		"clientId"] as const,
+		"clientId",
+	] as const,
 }) {}

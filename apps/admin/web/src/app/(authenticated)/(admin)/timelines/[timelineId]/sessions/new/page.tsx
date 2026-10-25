@@ -5,7 +5,6 @@ import {
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
 import { useApp } from "@cocrepo/store";
-import { requireDecimalId } from "@cocrepo/type";
 import {
 	Button,
 	HStack,
@@ -106,7 +105,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 				data: {
 					name: state.name.trim(),
 					type: state.type,
-					timelineId: BigInt(requireDecimalId(timelineId, "timelineId")),
+					timelineId,
 					description: state.description.trim() || undefined,
 					startDateTime: startDateTime ?? undefined,
 					endDateTime: state.endDateTime
@@ -119,7 +118,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 			{
 				onSuccess: (response) => {
 					toast.success("등록 성공", { description: "세션이 등록되었습니다." });
-					const newId = response.data?.id?.toString();
+					const newId = response.data?.id;
 					router.push(
 						(newId
 							? `/timelines/${timelineId}/sessions/${newId}`

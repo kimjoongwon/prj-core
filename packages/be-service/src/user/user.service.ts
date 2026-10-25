@@ -155,10 +155,7 @@ export class UserService {
 	 * @param spaceId 현재 선택된 Space 공개 ULID
 	 * @returns 접근 범위 안의 사용자 상세
 	 */
-	async getUserDetailForSpace(
-		userId: string,
-		spaceId: string,
-	): Promise<User> {
+	async getUserDetailForSpace(userId: string, _spaceId: string): Promise<User> {
 		const scopedSpaceIds = this.spaceCtx.spaceIds;
 		this.logger.debug(
 			`Space 내 사용자 상세 조회: userId=${userId}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,

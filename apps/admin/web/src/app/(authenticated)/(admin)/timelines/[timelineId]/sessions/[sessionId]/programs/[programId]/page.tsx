@@ -81,7 +81,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 		const routinePreview: TimelineSessionProgramRoutinePreviewItem[] = (
 			program?.executionPlan ?? []
 		).map((activity) => ({
-			id: String(activity.id),
+			id: activity.id,
 			order: activity.order,
 			exerciseName: activity.exerciseName,
 			repetitions: activity.repetitions,
@@ -92,11 +92,12 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 		const programState: TimelineSessionProgramFormState | undefined = program
 			? {
 					name: program.name,
-					routineId: String(program.routineId),
+					routineId: program.routine.id,
 					routineName:
 						program.routineNameSnapshot ?? program.routine?.name ?? "",
-					instructorId: String(program.instructorId),
-					instructorName: String(program.instructorId),
+					// ProgramDto가 강사 공개 id를 더 이상 노출하지 않아 비워 둔다.
+					instructorId: "",
+					instructorName: "",
 					capacity: String(program.capacity ?? ""),
 					level: program.level ?? "",
 					errors: {},
@@ -112,12 +113,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 				routinePreview={routinePreview}
 				metadata={{
 					routineHref: program?.routine?.id
-						? (`/routines/${String(program.routine.id)}` as Route)
+						? (`/routines/${program.routine.id}` as Route)
 						: undefined,
-					instructorLabel:
-						program?.instructorId === undefined
-							? null
-							: String(program.instructorId),
+					instructorLabel: null,
 					activityCountLabel: `${
 						program?.activityCount ?? program?.executionPlan?.length ?? 0
 					}개`,

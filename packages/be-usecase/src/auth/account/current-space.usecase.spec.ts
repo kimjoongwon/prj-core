@@ -22,9 +22,7 @@ const currentSpace = {
 	},
 };
 
-function createDependencies(
-	currentTenantId: string | null = activeTenant.id,
-) {
+function createDependencies(currentTenantId: string | null = activeTenant.id) {
 	const user = {
 		id: "01JUSER00000000000000000301",
 		currentTenantId,
@@ -91,7 +89,9 @@ describe("current-space use cases", () => {
 		const useCase = new SetCurrentSpaceUseCase(cls, spaces, users);
 
 		await expect(
-			useCase.execute(new SetCurrentSpaceCommand({ tenantId: "01JTENANT000000000000000099" })),
+			useCase.execute(
+				new SetCurrentSpaceCommand({ tenantId: "01JTENANT000000000000000099" }),
+			),
 		).rejects.toBeInstanceOf(ForbiddenException);
 		expect(users.setCurrentTenant).not.toHaveBeenCalled();
 	});

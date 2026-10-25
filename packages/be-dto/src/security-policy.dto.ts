@@ -22,5 +22,6 @@ export class SecurityPolicyDto extends EntityResponseType(SecurityPolicy, {
 		"sessionTtlSec",
 		"ipWhitelistEnabled",
 		"emailDomainWhitelistEnabled",
-		"corsOriginWhitelistEnabled"] as const,
+		"corsOriginWhitelistEnabled",
+	] as const,
 }) {}

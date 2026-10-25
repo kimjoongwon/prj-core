@@ -1,5 +1,5 @@
-import { Ability } from "@cocrepo/entity";
-import { ApiProperty, PartialType, PickType } from "@nestjs/swagger";
+import { ULIDFieldOptional } from "@cocrepo/decorator/field";
+import { ApiProperty } from "@nestjs/swagger";
 import {
 	IsArray,
 	IsBoolean,
@@ -14,9 +14,13 @@ import {
  * @description
  * DDD 원칙에 따라 actionId로 Action을 참조합니다.
  */
-export class UpdateAbilityDto extends PartialType(
-	PickType(Ability, ["actionSeq", "subjectSeq"] as const),
-) {
+export class UpdateAbilityDto {
+	@ULIDFieldOptional({ description: "대상 동작 공개 ID (ULID)" })
+	actionId?: string;
+
+	@ULIDFieldOptional({ description: "대상 주체 공개 ID (ULID)" })
+	subjectId?: string;
+
 	@ApiProperty({
 		description: "대상 필드 목록 (빈 배열이면 전체 필드)",
 		example: ["email", "name"],

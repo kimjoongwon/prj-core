@@ -6,8 +6,8 @@ import {
 	useGetProgramById,
 	useUpdateProgram,
 } from "@cocrepo/api/core/timelines";
-import { useGetUserById } from "@cocrepo/api/core/users";
 import { useApp } from "@cocrepo/store";
+import { isIntegrationUlid } from "@cocrepo/type";
 import {
 	Button,
 	HStack,
@@ -32,11 +32,11 @@ const buildRoutinePreview = (routine?: RoutineDto) =>
 	[...(routine?.activities ?? [])]
 		.sort((left, right) => left.order - right.order)
 		.map((activity) => ({
-			id: String(activity.id),
+			id: activity.id,
 			order: activity.order,
 			exerciseName:
 				activity.task?.exercise?.name ??
-				`Task ${String(activity.taskId).slice(-6)}`,
+				`Task ${activity.task.id.slice(-6)}`,
 			repetitions: activity.repetitions,
 			restTime: activity.restTime,
 			notes: activity.notes,
@@ -75,47 +75,35 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			skip: 0,
 			spaceScope: "INCLUDE_ANCESTORS",
 		});
-		const { data: currentInstructorResponse } = useGetUserById(
-			program?.instructorId === undefined ? "" : String(program.instructorId),
-			{ query: { enabled: !!program?.instructorId } },
-		);
 
 		let routines = routinesResponse?.data ?? [];
 		if (
 			program?.routine &&
-			!routines.some((item) => String(item.id) === String(program.routine.id))
+			!routines.some((item) => item.id === program.routine.id)
 		) {
 			routines = [program.routine, ...routines];
 		}
 
-		const currentInstructor = currentInstructorResponse?.data;
-
 		useEffect(() => {
 			if (program && !state.isInitialized) {
 				state.name = program.name;
-				state.routineId = String(program.routineId);
-				state.instructorId = String(program.instructorId);
+				state.routineId = program.routine.id;
+				// ProgramDto가 강사 공개 id를 더 이상 노출하지 않아
+				// 기존 강사를 복원할 수 없고 저장 시 재선택을 유도한다.
+				state.instructorId = "";
+				state.instructorName = "";
 				state.routineName =
 					program.routineNameSnapshot ?? program.routine?.name ?? "";
-				state.instructorName =
-					currentInstructor?.name ?? String(program.instructorId);
 				state.capacity = String(program.capacity);
 				state.level = program.level ?? "";
 				state.isInitialized = true;
 			}
-			if (
-				state.isInitialized &&
-				currentInstructor &&
-				state.instructorId === String(currentInstructor.id)
-			) {
-				state.instructorName = currentInstructor.name;
-			}
-		}, [currentInstructor, program, state]);
+		}, [program, state]);
 
 		const { mutate: updateProgram, isPending } = useUpdateProgram();
 
 		const selectedRoutine = routines.find(
-			(routine) => String(routine.id) === state.routineId,
+			(routine) => routine.id === state.routineId,
 		);
 		const routinePreview = buildRoutinePreview(selectedRoutine);
 		const hasUnschedulableRoutine = routinePreview.some(
@@ -124,8 +112,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		const hasChanged =
 			state.isInitialized &&
 			(state.name !== (program?.name ?? "") ||
-				state.routineId !== (program?.routineId ?? "") ||
-				state.instructorId !== (program?.instructorId ?? "") ||
+				state.routineId !== (program?.routine?.id ?? "") ||
+				state.instructorId !== "" ||
 				state.capacity !== String(program?.capacity ?? "") ||
 				state.level !== (program?.level ?? ""));
 
@@ -145,13 +133,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			}
 			if (
 				state.routineId.trim() &&
-				!/^[1-9]\d*$/.test(state.routineId.trim())
+				!isIntegrationUlid(state.routineId.trim())
 			) {
 				errors.routineId = "유효한 루틴을 선택해주세요.";
 			}
 			if (
 				state.instructorId.trim() &&
-				!/^[1-9]\d*$/.test(state.instructorId.trim())
+				!isIntegrationUlid(state.instructorId.trim())
 			) {
 				errors.instructorId = "유효한 강사를 선택해주세요.";
 			}
@@ -177,13 +165,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 					timelineId,
 					sessionId,
 					programId,
-					data: {
-						name: state.name.trim(),
-						routineId: parsePositiveBigInt(state.routineId),
-						instructorId: parsePositiveBigInt(state.instructorId),
-						capacity: Number(state.capacity),
-						level: state.level || undefined,
-					},
+				data: {
+					name: state.name.trim(),
+					routineId: state.routineId.trim(),
+					instructorId: state.instructorId.trim(),
+					capacity: Number(state.capacity),
+					level: state.level || undefined,
+				},
 				},
 				{
 					onSuccess: () => {
@@ -258,11 +246,3 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 	});
 
 export default AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute;
-
-function parsePositiveBigInt(value: string): bigint {
-	const trimmedValue = value.trim();
-	if (!/^[1-9]\d*$/.test(trimmedValue)) {
-		throw new Error("ID must be a positive decimal integer");
-	}
-	return BigInt(trimmedValue);
-}

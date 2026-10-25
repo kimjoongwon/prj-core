@@ -69,7 +69,9 @@ export class ContentsRepository {
 		return results.map((result) => toDomainData(result));
 	}
 
-	async findBySpaceIdWithoutRemoved(spaceSeq: bigint): Promise<ContentRecord[]> {
+	async findBySpaceIdWithoutRemoved(
+		spaceSeq: bigint,
+	): Promise<ContentRecord[]> {
 		this.logger.debug(
 			`삭제되지 않은 Space별 콘텐츠 조회: ${spaceSeq.toString()}`,
 		);
@@ -163,10 +165,7 @@ export class ContentsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<
-			Prisma.ContentUncheckedCreateInput,
-			"id"
-		>,
+		data: AutoIdentityCreateInput<Prisma.ContentUncheckedCreateInput, "id">,
 	): Promise<ContentRecord> {
 		this.logger.debug("콘텐츠 생성");
 		const result = await this.txHost.tx.content.create({
@@ -179,10 +178,7 @@ export class ContentsRepository {
 
 	async updateById(
 		id: string,
-		data: AutoIdentityUpdateInput<
-			Prisma.ContentUncheckedUpdateInput,
-			"id"
-		>,
+		data: AutoIdentityUpdateInput<Prisma.ContentUncheckedUpdateInput, "id">,
 	): Promise<ContentRecord> {
 		this.logger.debug(`콘텐츠 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.content.update({

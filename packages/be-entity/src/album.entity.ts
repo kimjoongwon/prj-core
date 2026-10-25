@@ -7,7 +7,6 @@ import {
 	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { AlbumSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AlbumEntry } from "./album-entry.entity";
 import { Asset } from "./asset.entity";

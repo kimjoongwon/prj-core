@@ -5,7 +5,6 @@ import {
 	ULIDFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { RoleSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { RoleAssignment } from "./role-assignment.entity";
 import { RoleAssociation } from "./role-association.entity";

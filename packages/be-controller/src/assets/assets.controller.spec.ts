@@ -54,9 +54,9 @@ const createTemporaryAssetUploadFile = async (
 describe("AssetsController", () => {
 	afterEach(async () => {
 		await Promise.all(
-			createdTemporaryAssetFilePaths.splice(0).map((temporaryFilePath) =>
-				rm(temporaryFilePath, { force: true }),
-			),
+			createdTemporaryAssetFilePaths
+				.splice(0)
+				.map((temporaryFilePath) => rm(temporaryFilePath, { force: true })),
 		);
 	});
 
@@ -127,7 +127,10 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto, disguisedPdfFile),
+			controller.uploadAsset(
+				{ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto,
+				disguisedPdfFile,
+			),
 		).rejects.toThrow(BadRequestException);
 		expect(commandBus.execute).not.toHaveBeenCalled();
 		await expect(rm(disguisedPdfFile.path, { force: false })).rejects.toThrow();
@@ -160,7 +163,10 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto, pngFile),
+			controller.uploadAsset(
+				{ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto,
+				pngFile,
+			),
 		).resolves.toEqual({ id: "asset-1" });
 		await expect(rm(pngFile.path, { force: false })).rejects.toThrow();
 	});
@@ -180,7 +186,10 @@ describe("AssetsController", () => {
 		);
 
 		await expect(
-			controller.uploadAsset({ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto, pngFile),
+			controller.uploadAsset(
+				{ folderId: "01JBBBBBBBBBBBBBBBBBBBBBBBB" } as UploadAssetDto,
+				pngFile,
+			),
 		).rejects.toThrow("storage failed");
 		await expect(rm(pngFile.path, { force: false })).rejects.toThrow();
 	});

@@ -12,7 +12,8 @@ export class AbilityResponseDto extends EntityResponseType(Ability, {
 		"inverted",
 		"name",
 		"createdAt",
-		"updatedAt"] as const,
+		"updatedAt",
+	] as const,
 	relations: {
 		action: () => ActionResponseDto,
 		subject: () => SubjectResponseDto,

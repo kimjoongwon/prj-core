@@ -1,5 +1,4 @@
-import {
-	ULIDField, StringField } from "@cocrepo/decorator/field";
+import { ULIDField } from "@cocrepo/decorator/field";
 import { Session } from "@cocrepo/entity";
 import { PickType } from "@nestjs/swagger";
 

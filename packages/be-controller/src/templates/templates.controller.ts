@@ -86,9 +86,7 @@ export class TemplatesController {
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("템플릿 조회 성공")
-	async getTemplate(
-		@Param("templateId", ParseUlidPipe) templateId: string,
-	) {
+	async getTemplate(@Param("templateId", ParseUlidPipe) templateId: string) {
 		return this.queryBus.execute(new GetTemplateByIdQuery(templateId));
 	}
 

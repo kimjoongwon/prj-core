@@ -14,7 +14,8 @@ export class ActivityDto extends EntityResponseType(Activity, {
 		"restTime",
 		"notes",
 		"routine",
-		"task"] as const,
+		"task",
+	] as const,
 	relations: {
 		routine: () => RoutineDto,
 		task: () => TaskDto,

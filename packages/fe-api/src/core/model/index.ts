@@ -173,7 +173,6 @@ export * from "./inquiryFormUiPathsDto";
 export * from "./inquiryMessageDto";
 export * from "./inquiryMessagePaginationMetaDto";
 export * from "./inquiryPaginationMetaDto";
-export * from "./inquiryParticipant";
 export * from "./inquiryParticipantDto";
 export * from "./inquiryParticipantRole";
 export * from "./inquiryPriority";

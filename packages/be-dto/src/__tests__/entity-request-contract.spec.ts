@@ -45,24 +45,24 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 		});
 	});
 
-	it.each([
-		CreateRoleDto,
-		UpdateRoleDto,
-	])("%s는 assignments와 알 수 없는 필드를 거부한다", async (requestType) => {
-		const roleBody = requestType === CreateRoleDto ? { name: "MANAGER" } : {};
-		await expect(
-			validateRequest(requestType, { ...roleBody, assignments: [] }),
-		).rejects.toThrow();
-		await expect(
-			validateRequest(requestType, { ...roleBody, unexpected: true }),
-		).rejects.toThrow();
-		await expect(
-			validateRequest(requestType, {
-				...roleBody,
-				roleSeq: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
-			}),
-		).rejects.toThrow();
-	});
+	it.each([CreateRoleDto, UpdateRoleDto])(
+		"%s는 assignments와 알 수 없는 필드를 거부한다",
+		async (requestType) => {
+			const roleBody = requestType === CreateRoleDto ? { name: "MANAGER" } : {};
+			await expect(
+				validateRequest(requestType, { ...roleBody, assignments: [] }),
+			).rejects.toThrow();
+			await expect(
+				validateRequest(requestType, { ...roleBody, unexpected: true }),
+			).rejects.toThrow();
+			await expect(
+				validateRequest(requestType, {
+					...roleBody,
+					roleSeq: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+				}),
+			).rejects.toThrow();
+		},
+	);
 
 	it("Role 수정은 빈 요청과 null을 허용하고 name을 거부한다", async () => {
 		await expect(validateRequest(UpdateRoleDto, {})).resolves.toBeInstanceOf(
@@ -76,26 +76,28 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 		).rejects.toThrow();
 	});
 
-	it("Folder는 공통 ID 변환과 입력 전용 파일명 제약을 함께 유지한다", async () => {
+	it("Folder는 상위 ULID 참조와 입력 전용 파일명 제약을 함께 유지한다", async () => {
 		await expect(
 			validateRequest(CreateFolderDto, {
 				name: "images",
-				parentFolderSeq: "42",
+				parentFolderId: "01JFDR00000000000000000P01",
 			}),
-		).resolves.toMatchObject({ parentFolderSeq: 42n });
+		).resolves.toMatchObject({
+			parentFolderId: "01JFDR00000000000000000P01",
+		});
 		await expect(
 			validateRequest(CreateFolderDto, { name: "invalid/name" }),
 		).rejects.toThrow();
 		await expect(
 			validateRequest(CreateFolderDto, {
 				name: "images",
-				parentFolderSeq: "invalid",
+				parentFolderId: "invalid",
 			}),
 		).rejects.toThrow();
 		await expect(
 			validateRequest(CreateFolderDto, {
 				name: "images",
-				parentFolderSeq: null,
+				parentFolderId: null,
 			}),
 		).resolves.toBeInstanceOf(CreateFolderDto);
 		await expect(

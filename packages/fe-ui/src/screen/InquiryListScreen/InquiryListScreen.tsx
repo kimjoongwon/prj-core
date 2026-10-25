@@ -62,7 +62,7 @@ export interface InquiryListScreenProps {
 	queryStates: InquiryListScreenQueryStates;
 	setQueryStates: InquiryListScreenSetQueryStates;
 	onClickNewInquiry: () => void;
-	onClickInquiryRow: (inquiryId: bigint) => void;
+	onClickInquiryRow: (inquiryId: string) => void;
 	onClickStatusFilter: (status: string | undefined) => void;
 }
 const metricCardColorStyles = {

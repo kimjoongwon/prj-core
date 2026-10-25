@@ -198,7 +198,9 @@ export class TokenStorageService {
 		const indexKey = `${REDIS_KEYS.SESSION_INDEX}${sessionSeq}`;
 		await this.redisService.del(key);
 		await this.redisService.del(indexKey);
-		this.logger.debug(`세션 삭제: userSeq=${userSeq}, sessionSeq=${sessionSeq}`);
+		this.logger.debug(
+			`세션 삭제: userSeq=${userSeq}, sessionSeq=${sessionSeq}`,
+		);
 	}
 
 	/**

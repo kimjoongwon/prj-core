@@ -17,7 +17,8 @@ export class SessionDto extends EntityResponseType(Session, {
 		"name",
 		"description",
 		"programs",
-		"timeline"] as const,
+		"timeline",
+	] as const,
 	relations: {
 		programs: () => ProgramDto,
 		timeline: () => TimelineDto,

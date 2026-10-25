@@ -50,9 +50,9 @@ export interface TimelineEditScreenProps {
 	connectedSessions?: number;
 	unconnectedSessions?: number;
 	onClickCreateSessionButton?: () => void;
-	onClickSessionNameButton?: (sessionId: bigint) => void;
-	onClickCreateProgramButton?: (sessionId: bigint) => void;
-	onClickDeleteSessionButton?: (sessionId: bigint) => void;
+	onClickSessionNameButton?: (sessionId: string) => void;
+	onClickCreateProgramButton?: (sessionId: string) => void;
+	onClickDeleteSessionButton?: (sessionId: string) => void;
 }
 
 /**

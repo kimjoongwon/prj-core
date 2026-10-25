@@ -102,13 +102,13 @@ export function useInquiryCreateHandlers({
 		try {
 			const response = await createInquiryMutation.mutateAsync({
 				data: {
-					customerId: BigInt(data.customerId),
+					customerId: data.customerId,
 					title: data.title,
 					content: data.content,
 					category: requireInquiryCategory(data.category),
 					channel: requireInquiryChannel(data.channel),
 					priority: requireInquiryPriority(data.priority),
-					assigneeId: data.assigneeId ? BigInt(data.assigneeId) : undefined,
+					assigneeId: data.assigneeId || undefined,
 				},
 			});
 			const createdInquiryId = response?.data?.id;

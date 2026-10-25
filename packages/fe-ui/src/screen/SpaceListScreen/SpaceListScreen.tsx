@@ -58,7 +58,7 @@ export interface SpaceListScreenProps {
 	queryStates: SpaceListScreenQueryStates;
 	setQueryStates: SpaceListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickSpaceFitnessCenterName: (spaceId: bigint) => void;
+	onClickSpaceFitnessCenterName: (spaceId: string) => void;
 }
 function filterRows(
 	rows: SpaceListScreenSpace[],

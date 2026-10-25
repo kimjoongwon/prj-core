@@ -1,9 +1,5 @@
 import { Company, FitnessCenter, Space } from "@cocrepo/entity";
-import {
-	LanguageCode,
-	Prisma,
-	PrismaClient,
-} from "@cocrepo/prisma";
+import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { SpaceResourceScope } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";

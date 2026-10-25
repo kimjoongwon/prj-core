@@ -1,9 +1,4 @@
-import {
-	ULIDField,
-	EmailField,
-	PhoneField,
-	StringField,
-} from "@cocrepo/decorator/field";
+import { EmailField, PhoneField, ULIDField } from "@cocrepo/decorator/field";
 import { PasswordField } from "@cocrepo/decorator/field/password";
 
 /**

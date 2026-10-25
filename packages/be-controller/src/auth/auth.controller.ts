@@ -433,9 +433,7 @@ export class AuthController {
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("사용자의 모든 세션이 무효화되었습니다.")
-	async invalidateUserSessions(
-		@Param("userId", ParseUlidPipe) userId: string,
-	) {
+	async invalidateUserSessions(@Param("userId", ParseUlidPipe) userId: string) {
 		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
 	}
 }

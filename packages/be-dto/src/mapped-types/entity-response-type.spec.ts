@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { ClassField, StringField } from "@cocrepo/decorator/field";
-import { DECORATORS } from "@nestjs/swagger";
-import { generateSchema } from "@nestjs/swagger";
+import { DECORATORS, generateSchema } from "@nestjs/swagger";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
 import { describe, expect, it, vi } from "vitest";

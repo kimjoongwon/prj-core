@@ -6,8 +6,8 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import {
-	IDP_ACCOUNT_SELECT,
 	flattenIdpAccountRecord,
+	IDP_ACCOUNT_SELECT,
 	type IdpAccountRecord,
 } from "./idp-account.select";
 import {
@@ -574,9 +574,7 @@ export class UsersRepository {
 			},
 		} as never);
 
-		return result
-			? toDomainEntity(User, flattenUserStatus(result))
-			: null;
+		return result ? toDomainEntity(User, flattenUserStatus(result)) : null;
 	}
 
 	/**
@@ -705,7 +703,10 @@ export class UsersRepository {
 			where: { seq: userSeq },
 			data: {
 				status: {
-					upsert: { create: { currentTenantSeq }, update: { currentTenantSeq } },
+					upsert: {
+						create: { currentTenantSeq },
+						update: { currentTenantSeq },
+					},
 				},
 			},
 		});

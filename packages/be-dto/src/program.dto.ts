@@ -21,7 +21,8 @@ export class ProgramDto extends EntityResponseType(Program, {
 		"routineNameSnapshot",
 		"routineLabelSnapshot",
 		"routine",
-		"session"] as const,
+		"session",
+	] as const,
 	relations: {
 		routine: () => RoutineDto,
 		session: () => SessionDto,

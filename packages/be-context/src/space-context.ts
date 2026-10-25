@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { ContextTenantSnapshot, DatabaseId } from "@cocrepo/type";
+import type { ContextTenantSnapshot } from "@cocrepo/type";
 import { Injectable } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 
@@ -47,9 +47,7 @@ export class SpaceContext {
 	 * - [id1, id2, ...]: 현재 선택 Tenant의 Space category scope
 	 */
 	get spaceIds(): string[] | undefined {
-		return this.cls.get<string[] | undefined>(
-			CONTEXT_KEYS.EFFECTIVE_SPACE_IDS,
-		);
+		return this.cls.get<string[] | undefined>(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS);
 	}
 
 	/**

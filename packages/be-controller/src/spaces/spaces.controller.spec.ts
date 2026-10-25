@@ -72,10 +72,14 @@ describe("SpacesController", () => {
 		queryBus.execute.mockResolvedValue({ id: "fitness-center-id" });
 
 		// When
-		const result = await controller.getSpaceFitnessCenter("01JSPACE0000000000000000S1");
+		const result = await controller.getSpaceFitnessCenter(
+			"01JSPACE0000000000000000S1",
+		);
 
 		// Then
-		expect(spaceContext.canAccessSpace).toHaveBeenCalledWith("01JSPACE0000000000000000S1");
+		expect(spaceContext.canAccessSpace).toHaveBeenCalledWith(
+			"01JSPACE0000000000000000S1",
+		);
 		expect(queryBus.execute).toHaveBeenCalledWith(
 			expect.any(GetSpaceFitnessCenterQuery),
 		);
@@ -90,9 +94,9 @@ describe("SpacesController", () => {
 		spaceContext.canAccessSpace.mockReturnValue(false);
 
 		// When & Then
-		await expect(controller.getSpaceFitnessCenter("01JSPACE0000000000000000S9")).rejects.toThrow(
-			ForbiddenException,
-		);
+		await expect(
+			controller.getSpaceFitnessCenter("01JSPACE0000000000000000S9"),
+		).rejects.toThrow(ForbiddenException);
 		expect(queryBus.execute).not.toHaveBeenCalled();
 	});
 
@@ -140,10 +144,15 @@ describe("SpacesController", () => {
 		commandBus.execute.mockResolvedValue({ id: "space-updated" });
 
 		// When
-		const result = await controller.updateSpaceFitnessCenter("01JSPACE0000000000000000S1", dto);
+		const result = await controller.updateSpaceFitnessCenter(
+			"01JSPACE0000000000000000S1",
+			dto,
+		);
 
 		// Then
-		expect(spaceContext.canAccessSpace).toHaveBeenCalledWith("01JSPACE0000000000000000S1");
+		expect(spaceContext.canAccessSpace).toHaveBeenCalledWith(
+			"01JSPACE0000000000000000S1",
+		);
 		expect(commandBus.execute).toHaveBeenCalledWith(
 			expect.any(UpdateSpaceFitnessCenterCommand),
 		);

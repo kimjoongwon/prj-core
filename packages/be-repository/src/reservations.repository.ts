@@ -361,10 +361,7 @@ export class ReservationsRepository {
 
 	async updateById(
 		id: string,
-		data: AutoIdentityUpdateInput<
-			Prisma.ReservationUncheckedUpdateInput,
-			"id"
-		>,
+		data: AutoIdentityUpdateInput<Prisma.ReservationUncheckedUpdateInput, "id">,
 	): Promise<Reservation> {
 		const result = await this.txHost.tx.reservation.update({
 			where: { id },

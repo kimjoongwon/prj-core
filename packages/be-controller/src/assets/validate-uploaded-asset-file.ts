@@ -3,8 +3,8 @@ import { BadRequestException } from "@nestjs/common";
 import {
 	ASSET_UPLOAD_LIMITS,
 	type AssetUploadMimeType,
-	isAssetUploadTemporaryFilePath,
 	isAllowedAssetUploadMimeType,
+	isAssetUploadTemporaryFilePath,
 } from "./asset-upload.options";
 
 const PNG_FILE_SIGNATURE = Buffer.from([
@@ -19,7 +19,8 @@ const WEBP_FILE_SIGNATURE = Buffer.from("WEBP", "ascii");
 const MP4_FILE_TYPE_BOX = Buffer.from("ftyp", "ascii");
 
 const bufferStartsWithSignature = (buffer: Buffer, signature: Buffer) =>
-	buffer.length >= signature.length && buffer.subarray(0, signature.length).equals(signature);
+	buffer.length >= signature.length &&
+	buffer.subarray(0, signature.length).equals(signature);
 
 const detectUploadedAssetMimeType = (
 	fileBuffer: Buffer,
@@ -98,7 +99,9 @@ export async function validateUploadedAssetFile(
 		file.size > ASSET_UPLOAD_LIMITS.fileSize ||
 		actualFileSize > ASSET_UPLOAD_LIMITS.fileSize
 	) {
-		throw new BadRequestException("업로드 파일 크기가 허용 한도를 초과했습니다.");
+		throw new BadRequestException(
+			"업로드 파일 크기가 허용 한도를 초과했습니다.",
+		);
 	}
 
 	const detectedMimeType = detectUploadedAssetMimeType(fileBuffer);

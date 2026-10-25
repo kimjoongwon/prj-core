@@ -143,11 +143,7 @@ describe("접근·인증 Entity 응답", () => {
 		expect(response.accessToken).toBe("access");
 		expect(response.refreshToken).toBe("refresh");
 		expect(response.user.id).toBe("01J00000000000000000000000");
-		for (const privateKey of [
-			"password",
-			"unknown",
-			"passwordHistory",
-		])
+		for (const privateKey of ["password", "unknown", "passwordHistory"])
 			expect(response.user).not.toHaveProperty(privateKey);
 		const detail = serializeAccessResponse(UserDetailResponseDto, {
 			id: "01J00000000000000000000009",

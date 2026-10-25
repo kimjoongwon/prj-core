@@ -1,11 +1,7 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import { SpacesRepository } from "@cocrepo/repository";
-import {
-	type ContextTenantSnapshot,
-	type DatabaseId,
-	SpaceResourceScope,
-} from "@cocrepo/type";
+import { type ContextTenantSnapshot, SpaceResourceScope } from "@cocrepo/type";
 import {
 	BadRequestException,
 	type CallHandler,

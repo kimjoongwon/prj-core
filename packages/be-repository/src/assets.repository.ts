@@ -102,9 +102,16 @@ export class AssetsRepository {
 
 	async create(
 		data: AutoIdentityCreateInput<
-			Omit<Prisma.AssetUncheckedCreateInput, "spaceSeq" | "folderSeq" | "createdBySeq">,
+			Omit<
+				Prisma.AssetUncheckedCreateInput,
+				"spaceSeq" | "folderSeq" | "createdBySeq"
+			>,
 			"id"
-		> & { spaceId: string; folderId?: string | null; createdById?: string | null },
+		> & {
+			spaceId: string;
+			folderId?: string | null;
+			createdById?: string | null;
+		},
 	): Promise<Asset> {
 		this.logger.debug(`에셋 생성: ${data.storageKey}`);
 		const { spaceId, folderId, createdById, ...rest } = data;
@@ -134,7 +141,9 @@ export class AssetsRepository {
 			where: { id },
 			data: {
 				...rest,
-				...(folderId !== undefined && { folder: { connect: { id: folderId } } }),
+				...(folderId !== undefined && {
+					folder: { connect: { id: folderId } },
+				}),
 			} as Prisma.AssetUpdateInput,
 			include: { space: true, folder: true, createdBy: true },
 		});

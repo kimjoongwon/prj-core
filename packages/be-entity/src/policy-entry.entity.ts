@@ -1,7 +1,6 @@
 import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
 import { PolicyEntrySchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
-import { Exclude } from "class-transformer";
 import { Ability } from "./ability.entity";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Policy } from "./policy.entity";

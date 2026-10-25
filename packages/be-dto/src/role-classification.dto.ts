@@ -12,7 +12,8 @@ export class RoleClassificationDto extends EntityResponseType(
 			"updatedAt",
 			"removedAt",
 			"category",
-			"role"] as const,
+			"role",
+		] as const,
 		relations: {
 			category: () => CategoryDto,
 			role: () => RoleDto,

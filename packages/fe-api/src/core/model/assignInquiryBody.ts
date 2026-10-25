@@ -16,6 +16,6 @@
  */
 
 export type AssignInquiryBody = {
-	/** 담당자 ID (canonical decimal BIGINT string) */
+	/** 담당자 ID (ULID) */
 	assigneeId: string;
 };

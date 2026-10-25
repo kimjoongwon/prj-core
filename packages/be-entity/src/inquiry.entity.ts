@@ -17,7 +17,6 @@ import {
 	SentimentType,
 } from "@cocrepo/enum";
 import { InquirySchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AIAgentLog } from "./ai-agent-log.entity";
 import { InquiryMessage } from "./inquiry-message.entity";

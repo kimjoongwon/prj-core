@@ -2,7 +2,6 @@ import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { parseAcceptLanguage } from "@cocrepo/toolkit";
 import {
 	type ContextUserSnapshot,
-	type DatabaseId,
 	INTEGRATION_ULID_PATTERN,
 } from "@cocrepo/type";
 import {

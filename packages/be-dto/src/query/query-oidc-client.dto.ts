@@ -1,17 +1,13 @@
-import {
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
-import { Transform } from "class-transformer";
-
-import { EntityQueryType } from "./entity-query-type";
+import { StringFieldOptional } from "@cocrepo/decorator/field";
 import { OidcClient } from "@cocrepo/entity";
+import { Transform } from "class-transformer";
+import { EntityQueryType } from "./entity-query-type";
 
 export class QueryOidcClientDto extends EntityQueryType(OidcClient, [
 	"isActive",
 ] as const) {
 	@StringFieldOptional({ description: "Client ID 또는 이름 통합 검색" })
 	readonly search?: string;
-
 
 	@StringFieldOptional({
 		each: true,

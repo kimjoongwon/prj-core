@@ -7,7 +7,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { TemplateType } from "@cocrepo/enum";
 import { TemplateSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { TemplateVariable } from "./template-variable.entity";
 

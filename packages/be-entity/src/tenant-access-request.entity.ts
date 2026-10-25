@@ -8,7 +8,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { TenantAccessRequestStatus } from "@cocrepo/enum";
 import { TenantAccessRequestSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Role } from "./role.entity";
 import { Space } from "./space.entity";

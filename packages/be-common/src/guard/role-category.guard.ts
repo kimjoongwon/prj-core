@@ -51,7 +51,9 @@ export class RoleCategoryGuard implements CanActivate {
 		const tenant = this.cls.get<ContextTenantSnapshot | undefined>(
 			CONTEXT_KEYS.TENANT,
 		);
-		const spaceSeq = this.cls.get<DatabaseId | undefined>(CONTEXT_KEYS.SPACE_ID);
+		const spaceSeq = this.cls.get<DatabaseId | undefined>(
+			CONTEXT_KEYS.SPACE_ID,
+		);
 
 		if (!tenant) {
 			throw new ForbiddenException("해당 Space에 대한 테넌트가 없습니다.");

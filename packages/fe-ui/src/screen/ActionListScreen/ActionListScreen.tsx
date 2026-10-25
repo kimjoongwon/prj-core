@@ -72,7 +72,7 @@ export interface ActionListScreenProps {
 	queryStates: ActionListScreenQueryStates;
 	setQueryStates: ActionListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickActionRow: (actionId: bigint) => void;
+	onClickActionRow: (actionId: string) => void;
 }
 function getActionGroupFilterKey(group: string) {
 	return group || ACTION_GROUP_FILTER_ALL_KEY;

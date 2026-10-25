@@ -14,7 +14,8 @@ export class ExerciseDto extends EntityResponseType(Exercise, {
 		"imageFileId",
 		"videoFileId",
 		"name",
-		"task"] as const,
+		"task",
+	] as const,
 	relations: {
 		task: () => TaskDto,
 	},

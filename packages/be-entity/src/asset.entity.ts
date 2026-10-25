@@ -9,7 +9,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { AssetKind, AssetStatus } from "@cocrepo/enum";
 import { AssetSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Album } from "./album.entity";
 import { AlbumEntry } from "./album-entry.entity";

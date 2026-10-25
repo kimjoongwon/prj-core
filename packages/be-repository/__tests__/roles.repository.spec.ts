@@ -61,7 +61,6 @@ describe("RolesRepository", () => {
 	describe("findById", () => {
 		it("ID로 역할을 조회해야 한다", async () => {
 			// Given
-			const roleSeq = 1n;
 			mockTxHost.tx.role.findUnique.mockResolvedValue(mockRoleData);
 
 			// When
@@ -78,7 +77,6 @@ describe("RolesRepository", () => {
 
 		it("역할이 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const roleSeq = 999n;
 			mockTxHost.tx.role.findUnique.mockResolvedValue(null);
 
 			// When
@@ -183,7 +181,6 @@ describe("RolesRepository", () => {
 	describe("updateById", () => {
 		it("역할을 수정해야 한다", async () => {
 			// Given
-			const roleSeq = 1n;
 			const updateData = { name: SYSTEM_ROLES.COMPANY_MANAGER };
 			mockTxHost.tx.role.update.mockResolvedValue({
 				...mockRoleData,

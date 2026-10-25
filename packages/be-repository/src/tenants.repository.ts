@@ -95,9 +95,7 @@ export class TenantsRepository {
 		userId: string,
 		spaceId: string,
 	): Promise<Tenant | null> {
-		this.logger.debug(
-			`활성 사용자+Space 테넌트 조회: ${userId}/${spaceId}`,
-		);
+		this.logger.debug(`활성 사용자+Space 테넌트 조회: ${userId}/${spaceId}`);
 
 		const result = await this.txHost.tx.tenant.findFirst({
 			where: {
@@ -153,10 +151,7 @@ export class TenantsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<
-			Prisma.TenantUncheckedCreateInput,
-			"id"
-		>,
+		data: AutoIdentityCreateInput<Prisma.TenantUncheckedCreateInput, "id">,
 	): Promise<Tenant> {
 		this.logger.debug(
 			`테넌트 생성: user=${data.userSeq.toString()}, space=${data.spaceSeq.toString()}`,
@@ -171,10 +166,7 @@ export class TenantsRepository {
 
 	async updateById(
 		id: string,
-		data: AutoIdentityUpdateInput<
-			Prisma.TenantUncheckedUpdateInput,
-			"id"
-		>,
+		data: AutoIdentityUpdateInput<Prisma.TenantUncheckedUpdateInput, "id">,
 	): Promise<Tenant> {
 		this.logger.debug(`테넌트 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.tenant.update({

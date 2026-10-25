@@ -7,7 +7,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { AttachmentFileType } from "@cocrepo/enum";
 import { InquiryAttachmentSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { InquiryMessage } from "./inquiry-message.entity";
 

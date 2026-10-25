@@ -52,10 +52,10 @@ export default observer(function PolicyCreateRoute() {
 				}
 				syncPolicyEntries(
 					{
-						policyId: String(createdPolicy.id),
+						policyId: createdPolicy.id,
 						data: {
 							entries: state.abilityIds.map((abilityId) => ({
-								abilityId: BigInt(abilityId),
+								abilityId,
 							})),
 						},
 					},

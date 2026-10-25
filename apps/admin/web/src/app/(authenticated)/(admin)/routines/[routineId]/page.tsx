@@ -67,9 +67,9 @@ const AdminRoutinesDetailRoute = observer(() => {
 	]
 		.sort((left, right) => left.order - right.order)
 		.map((activity) => ({
-			taskId: String(activity.taskId),
+			taskId: activity.task.id,
 			exerciseName:
-				activity.task?.exercise?.name ?? String(activity.taskId).slice(-6),
+				activity.task?.exercise?.name ?? activity.task.id.slice(-6),
 			isSchedulable: Boolean(activity.task?.exercise?.videoFileId),
 			imageFileId: activity.task?.exercise?.imageFileId ?? undefined,
 			videoFileId: activity.task?.exercise?.videoFileId ?? undefined,

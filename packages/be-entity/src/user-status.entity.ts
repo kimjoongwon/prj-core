@@ -8,7 +8,6 @@ import {
 	ULIDFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { UserStatusSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Tenant } from "./tenant.entity";
 import { User } from "./user.entity";

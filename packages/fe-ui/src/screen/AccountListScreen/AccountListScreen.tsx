@@ -40,7 +40,7 @@ export interface AccountListScreenProps {
 	totalCount: number;
 	queryStates: AccountListScreenQueryStates;
 	setQueryStates: AccountListScreenSetQueryStates;
-	onClickUnlockAccountButton: (userId: bigint) => void;
+	onClickUnlockAccountButton: (userId: string) => void;
 }
 
 /**

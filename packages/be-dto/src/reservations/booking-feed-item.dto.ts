@@ -1,11 +1,11 @@
 import {
-	BigIntIdField,
 	DateField,
 	EnumField,
 	EnumFieldOptional,
 	NumberField,
 	StringField,
 	StringFieldOptional,
+	ULIDField,
 } from "@cocrepo/decorator/field";
 import { ReservationStatus } from "@cocrepo/prisma";
 
@@ -24,14 +24,14 @@ export class BookingFeedItemDto {
 	@DateField({ description: "종료 시각" })
 	endsAt!: Date;
 
-	@BigIntIdField({ description: "타임라인 ID" })
-	timelineSeq!: bigint;
+	@ULIDField({ description: "타임라인 ULID" })
+	timelineId!: string;
 
-	@BigIntIdField({ description: "세션 ID" })
-	sessionSeq!: bigint;
+	@ULIDField({ description: "세션 ULID" })
+	sessionId!: string;
 
-	@BigIntIdField({ description: "프로그램 ID" })
-	programSeq!: bigint;
+	@ULIDField({ description: "프로그램 ULID" })
+	programId!: string;
 
 	@StringField({ description: "타임라인 이름" })
 	timelineName!: string;

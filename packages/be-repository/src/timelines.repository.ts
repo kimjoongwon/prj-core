@@ -271,10 +271,7 @@ export class TimelinesRepository {
 	 */
 	async updateSession(
 		sessionId: string,
-		data: AutoIdentityUpdateInput<
-			Prisma.SessionUncheckedUpdateInput,
-			"id"
-		>,
+		data: AutoIdentityUpdateInput<Prisma.SessionUncheckedUpdateInput, "id">,
 	) {
 		this.logger.debug(`세션 수정: ${sessionId}`);
 		const session = await this.txHost.tx.session.update({

@@ -10,7 +10,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { ReservationStatus } from "@cocrepo/enum";
 import { ReservationSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Program } from "./program.entity";
 import { Session } from "./session.entity";

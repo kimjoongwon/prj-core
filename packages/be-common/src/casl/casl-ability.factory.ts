@@ -10,10 +10,7 @@ import { Ability, AbilityBuilder } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import type { Ability as DomainAbility, RoleAssignment } from "@cocrepo/entity";
 import { RoleAssignmentsRepository } from "@cocrepo/repository";
-import type {
-	ContextTenantSnapshot,
-	ContextUserSnapshot,
-} from "@cocrepo/type";
+import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import {
@@ -308,7 +305,9 @@ export class CaslAbilityFactory {
 		) => void,
 	): void {
 		if (!ability.subject) {
-			this.logger.warn(`Ability에 Subject가 없습니다: abilitySeq=${ability.id}`);
+			this.logger.warn(
+				`Ability에 Subject가 없습니다: abilitySeq=${ability.id}`,
+			);
 			return;
 		}
 

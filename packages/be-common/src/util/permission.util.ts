@@ -1,6 +1,6 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpaceCategoryName } from "@cocrepo/enum";
-import type { ContextTenantSnapshot, DatabaseId } from "@cocrepo/type";
+import type { ContextTenantSnapshot } from "@cocrepo/type";
 
 type TenantWithSpaceCategory = ContextTenantSnapshot & {
 	space?: {

@@ -8,7 +8,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { AuthAuditResult } from "@cocrepo/enum";
 import { AuthAuditLogSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**

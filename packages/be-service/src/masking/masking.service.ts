@@ -80,7 +80,7 @@ export class MaskingService {
 		}
 
 		// 마스킹 설정이 아니면 원본 반환
-		if (!config || config.type !== "masking") {
+		if (config?.type !== "masking") {
 			return value;
 		}
 

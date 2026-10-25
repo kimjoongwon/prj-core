@@ -8,7 +8,6 @@ import {
 import { SentimentType } from "@cocrepo/enum";
 import { type Prisma } from "@cocrepo/prisma";
 import { SentimentAnalysisSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";

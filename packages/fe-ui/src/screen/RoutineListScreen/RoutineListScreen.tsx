@@ -58,8 +58,8 @@ export interface RoutineListScreenProps {
 	queryStates: RoutineListScreenQueryStates;
 	setQueryStates: RoutineListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickRoutineName: (routineId: bigint) => void;
-	onDeleteRoutine: (routineId: bigint) => Promise<void>;
+	onClickRoutineName: (routineId: string) => void;
+	onDeleteRoutine: (routineId: string) => Promise<void>;
 }
 export const RoutineListScreen = observer(
 	({

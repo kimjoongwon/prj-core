@@ -8,7 +8,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { InquiryParticipantRole } from "@cocrepo/enum";
 import { InquiryParticipantSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";

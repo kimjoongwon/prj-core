@@ -5,7 +5,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { PolicySchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { PolicyEntry } from "./policy-entry.entity";
 import { RoleAssignment } from "./role-assignment.entity";

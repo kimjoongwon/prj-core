@@ -13,7 +13,6 @@ import type { CommunityPostDto } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { formatDatabaseId } from "@cocrepo/type";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const COMMUNITY_QUERY_PARAMS = {
@@ -64,7 +63,7 @@ const toCommunityPostCardItem = (
 ): CommunityPostCardItem => ({
 	authorName: post.authorName,
 	createdAtLabel: formatCommunityCreatedAtLabel(post.createdAt),
-	id: formatDatabaseId(post.id),
+	id: post.id,
 	isMine: post.isMine,
 	isPinned: post.isPinned,
 	text: post.text,

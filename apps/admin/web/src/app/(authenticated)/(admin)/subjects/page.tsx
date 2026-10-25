@@ -18,7 +18,7 @@ export default observer(function SubjectsPageRoute() {
 	const { data: response } = useGetSubjectsSuspense({
 		group: queryStates.group || undefined,
 	});
-	const onClickSubjectRow = (subjectId: bigint) => {
+	const onClickSubjectRow = (subjectId: string) => {
 		router.push(`/subjects/${String(subjectId)}` as Route);
 	};
 

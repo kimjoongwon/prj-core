@@ -13,7 +13,6 @@ import {
 	usePublishServiceDocument,
 	useUpdateServiceDocument,
 } from "@cocrepo/api/core/service-documents";
-import { requireDecimalId } from "@cocrepo/type";
 import {
 	type ServiceDocumentFormDraft,
 	type ServiceDocumentFormMode,
@@ -112,13 +111,13 @@ export default observer(function TermsPageRoute() {
 		setDraft(EMPTY_DRAFT);
 	};
 
-	const onClickEditButton = (serviceDocumentId: bigint) => {
+	const onClickEditButton = (serviceDocumentId: string) => {
 		const document = response?.data?.find(
 			(item: ServiceDocumentDto) => item.id === serviceDocumentId,
 		);
 		if (!document) return;
 		setFormMode("edit");
-		setEditingDocumentId(serviceDocumentId.toString());
+		setEditingDocumentId(serviceDocumentId);
 		setDraft(toDraft(document));
 	};
 
@@ -133,10 +132,7 @@ export default observer(function TermsPageRoute() {
 		try {
 			if (formMode === "edit" && editingDocumentId) {
 				await updateMutation.mutateAsync({
-					serviceDocumentId: requireDecimalId(
-						editingDocumentId,
-						"serviceDocumentId",
-					),
+					serviceDocumentId: editingDocumentId,
 					data: toUpdatePayload(draft),
 				});
 				toast.success("문서 수정 완료", {
@@ -159,14 +155,9 @@ export default observer(function TermsPageRoute() {
 		}
 	};
 
-	const onClickPublishButton = async (serviceDocumentId: bigint) => {
+	const onClickPublishButton = async (serviceDocumentId: string) => {
 		try {
-			await publishMutation.mutateAsync({
-				serviceDocumentId: requireDecimalId(
-					serviceDocumentId.toString(),
-					"serviceDocumentId",
-				),
-			});
+			await publishMutation.mutateAsync({ serviceDocumentId });
 			await invalidateServiceDocuments(queryClient);
 			toast.success("게시 완료", {
 				description: "선택한 서비스 문서가 게시되었습니다.",
@@ -179,14 +170,9 @@ export default observer(function TermsPageRoute() {
 		}
 	};
 
-	const onClickArchiveButton = async (serviceDocumentId: bigint) => {
+	const onClickArchiveButton = async (serviceDocumentId: string) => {
 		try {
-			await archiveMutation.mutateAsync({
-				serviceDocumentId: requireDecimalId(
-					serviceDocumentId.toString(),
-					"serviceDocumentId",
-				),
-			});
+			await archiveMutation.mutateAsync({ serviceDocumentId });
 			await invalidateServiceDocuments(queryClient);
 			toast.success("보관 완료", {
 				description: "선택한 서비스 문서가 보관되었습니다.",
@@ -199,14 +185,9 @@ export default observer(function TermsPageRoute() {
 		}
 	};
 
-	const onClickDeleteButton = async (serviceDocumentId: bigint) => {
+	const onClickDeleteButton = async (serviceDocumentId: string) => {
 		try {
-			await deleteMutation.mutateAsync({
-				serviceDocumentId: requireDecimalId(
-					serviceDocumentId.toString(),
-					"serviceDocumentId",
-				),
-			});
+			await deleteMutation.mutateAsync({ serviceDocumentId });
 			await invalidateServiceDocuments(queryClient);
 			toast.success("삭제 완료", {
 				description: "선택한 서비스 문서가 삭제되었습니다.",

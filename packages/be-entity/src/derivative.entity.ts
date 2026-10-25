@@ -9,7 +9,6 @@ import {
 } from "@cocrepo/decorator/field";
 import { DerivativeKind } from "@cocrepo/enum";
 import { DerivativeSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Asset } from "./asset.entity";
 import type { Space } from "./space.entity";

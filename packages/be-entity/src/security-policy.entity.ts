@@ -7,7 +7,6 @@ import {
 	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { SecurityPolicySchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**

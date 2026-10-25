@@ -5,7 +5,6 @@ import {
 	UUIDFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { ProfileSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { User } from "./user.entity";
 

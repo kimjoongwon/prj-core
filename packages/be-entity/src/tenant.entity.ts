@@ -4,7 +4,6 @@ import {
 	ClassField,
 } from "@cocrepo/decorator/field";
 import { TenantSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Role } from "./role.entity";
 import { Space } from "./space.entity";

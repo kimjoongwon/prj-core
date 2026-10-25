@@ -5,7 +5,6 @@ import {
 	UUIDFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { FitnessCenterSchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Company } from "./company.entity";
 import { Space } from "./space.entity";

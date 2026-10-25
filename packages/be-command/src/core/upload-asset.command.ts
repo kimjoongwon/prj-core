@@ -1,6 +1,6 @@
 import type {
-	UploadedAssetFileInput,
 	UploadAssetCommandInput,
+	UploadedAssetFileInput,
 } from "@cocrepo/input";
 export class UploadAssetCommand implements UploadAssetCommandInput {
 	readonly folderId!: UploadAssetCommandInput["folderId"];

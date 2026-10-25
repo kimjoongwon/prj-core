@@ -107,10 +107,7 @@ export class SafeWalletsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<
-			Prisma.SafeWalletUncheckedCreateInput,
-			"id"
-		>,
+		data: AutoIdentityCreateInput<Prisma.SafeWalletUncheckedCreateInput, "id">,
 	): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 생성: ${data.address}`);
 		const result = await this.txHost.tx.safeWallet.create({
@@ -123,10 +120,7 @@ export class SafeWalletsRepository {
 
 	async updateById(
 		id: string,
-		data: AutoIdentityUpdateInput<
-			Prisma.SafeWalletUncheckedUpdateInput,
-			"id"
-		>,
+		data: AutoIdentityUpdateInput<Prisma.SafeWalletUncheckedUpdateInput, "id">,
 	): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.safeWallet.update({

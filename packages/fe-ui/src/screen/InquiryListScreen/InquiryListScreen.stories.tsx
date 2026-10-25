@@ -6,9 +6,7 @@ const defaultArgs: ComponentProps<typeof InquiryListScreen> = {
 	activeStatus: "샘플 active status 1",
 	inquiries: [
 		{
-			assigneeId: 1n,
 			removedAt: null,
-			spaceId: 1n,
 			inquiryNumber: "INQ-20260414-001",
 			source: "ONLINE",
 			isSlaResponseBreached: false,
@@ -23,8 +21,7 @@ const defaultArgs: ComponentProps<typeof InquiryListScreen> = {
 			category: "GENERAL",
 			channel: "WEB",
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
-			customerId: 1n,
-			id: 1n,
+			id: "ENQ00000000000000000000001",
 			priority: "LOW",
 			sentiment: "POSITIVE",
 			status: "NEW",
@@ -33,9 +30,7 @@ const defaultArgs: ComponentProps<typeof InquiryListScreen> = {
 			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 		},
 		{
-			assigneeId: 1n,
 			removedAt: null,
-			spaceId: 1n,
 			inquiryNumber: "INQ-20260414-001",
 			source: "ONLINE",
 			isSlaResponseBreached: false,
@@ -50,8 +45,7 @@ const defaultArgs: ComponentProps<typeof InquiryListScreen> = {
 			category: "GENERAL",
 			channel: "WEB",
 			createdAt: new Date("2026-04-14T09:00:00.000Z"),
-			customerId: 1n,
-			id: 1n,
+			id: "ENQ00000000000000000000002",
 			priority: "LOW",
 			sentiment: "POSITIVE",
 			status: "NEW",
@@ -92,7 +86,7 @@ const emptyStateArgs = {
 const meta = {
 	title: "screen/InquiryListScreen",
 	component: InquiryListScreen,
-	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
+	// Date 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
 	argTypes: {
 		inquiries: { control: false },
 	},

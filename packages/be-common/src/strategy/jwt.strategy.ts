@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { hydrateEntity, User as UserEntity } from "@cocrepo/entity";
 import type { User } from "@cocrepo/entity";
+import { hydrateEntity, User as UserEntity } from "@cocrepo/entity";
 import { AuthCacheService, UserService } from "@cocrepo/service";
 import {
 	parseBigIntJson,
@@ -109,10 +109,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		if (cached) {
 			this.logger.debug(`JWT 검증 - 캐시 히트: ${userSeq}`);
 			// 내부 캐시는 API 필드 변환 없이 원본 값과 User 동작을 복원합니다.
-			return hydrateEntity(
-				UserEntity,
-				parseBigIntJson<Partial<User>>(cached),
-			);
+			return hydrateEntity(UserEntity, parseBigIntJson<Partial<User>>(cached));
 		}
 
 		// 2. 캐시 미스 → DB 조회

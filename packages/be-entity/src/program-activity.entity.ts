@@ -7,7 +7,6 @@ import {
 	UUIDFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { ProgramActivitySchema } from "@cocrepo/schema";
-import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Program } from "./program.entity";
 

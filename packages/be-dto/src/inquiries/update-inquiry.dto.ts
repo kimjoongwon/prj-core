@@ -1,6 +1,6 @@
 import {
-	BigIntIdFieldOptional,
 	StringFieldOptional,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator/field";
 import { Inquiry } from "@cocrepo/entity";
 import { PartialType, PickType } from "@nestjs/swagger";
@@ -24,8 +24,8 @@ export class UpdateInquiryDto extends PartialType(
 	})
 	title?: string;
 
-	@BigIntIdFieldOptional({
-		description: "담당자 ID",
+	@ULIDFieldOptional({
+		description: "담당자 ULID",
 	})
-	assigneeSeq?: bigint;
+	assigneeId?: string;
 }
