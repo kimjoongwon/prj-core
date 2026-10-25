@@ -13,13 +13,10 @@ import {
 	Section,
 	SectionSurface,
 	type TaskTableRow,
-	useT,
 	VStack,
 } from "@cocrepo/ui";
-import { Plus } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
-import { Button } from "../../input/Button/Button";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -58,7 +55,6 @@ export interface TaskListScreenProps {
 	totalCount: number;
 	queryStates: TaskListScreenQueryStates;
 	setQueryStates: TaskListScreenSetQueryStates;
-	onClickCreateButton: () => void;
 	onClickTaskName: (taskId: string) => void;
 	onDeleteTask: (taskId: string) => Promise<void>;
 }
@@ -68,11 +64,9 @@ export const TaskListScreen = observer(
 		totalCount,
 		queryStates,
 		setQueryStates,
-		onClickCreateButton,
 		onClickTaskName,
 		onDeleteTask,
 	}: TaskListScreenProps) => {
-		const t = useT();
 		const gridState = useMemo(
 			() =>
 				createDataGridState<TaskTableRow>({
@@ -104,15 +98,6 @@ export const TaskListScreen = observer(
 				<Screen.Header
 					title="태스크 목록"
 					description="시스템에 등록된 태스크와 운동 detail을 관리합니다."
-					actions={
-						<Button
-							variant="primary"
-							startContent={<Plus className="h-4 w-4" />}
-							onPress={onClickCreateButton}
-						>
-							{t("태스크 등록")}
-						</Button>
-					}
 				/>
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">

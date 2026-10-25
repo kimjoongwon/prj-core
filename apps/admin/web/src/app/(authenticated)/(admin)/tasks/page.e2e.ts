@@ -36,17 +36,6 @@ test.describe("태스크 목록 페이지", () => {
 			).toBeVisible();
 		});
 
-		test("태스크 등록 버튼이 표시되어야 한다", async ({ page }) => {
-			// Given: 태스크 목록 페이지 진입
-			await page.goto("./tasks");
-			await page.waitForLoadState("networkidle");
-
-			// Then: 태스크 등록 버튼 확인
-			await expect(
-				page.getByRole("button", { name: "태스크 등록" }),
-			).toBeVisible();
-		});
-
 		test("검색 입력 필드가 표시되어야 한다", async ({ page }) => {
 			// Given: 태스크 목록 페이지 진입
 			await page.goto("./tasks");

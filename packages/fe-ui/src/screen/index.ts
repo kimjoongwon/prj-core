@@ -244,8 +244,6 @@ export {
 	adminSubjectsPageQueryInputs,
 	SubjectListScreen,
 } from "./SubjectListScreen/SubjectListScreen";
-export type { TaskCreateScreenProps } from "./TaskCreateScreen/TaskCreateScreen";
-export { TaskCreateScreen } from "./TaskCreateScreen/TaskCreateScreen";
 export type {
 	TaskExerciseEditScreenMetadata,
 	TaskExerciseEditScreenProps,
