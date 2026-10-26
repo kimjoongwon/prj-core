@@ -67,29 +67,10 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 도메인 | 경로 | 설명 | 구현 상태 |
 |--------|------|------|-----------|
 | 대시보드 | `/dashboard` | 주요 지표 대시보드 | 폴더 존재 |
-| 시설 (Spaces) | `/spaces` | 피트니스센터 CRUD 관리. Space를 구체화하는 운영 시설 (이름, 주소, 사업자번호 등) | 기획 중 |
-| 회원 (Users) | `/users` | 회원 CRUD 관리 | 목록 구현 완료, 상세/등록/수정 TODO |
-| 이메일 인증 | `/email-verifications` | 회원가입 전 이메일 인증 요청 목록 조회와 재발송 관리. User 생성 전 데이터이므로 PLATFORM_ADMIN 전역 scope로 운영 | 구현 중 |
-| 역할 (Roles) | `/roles` | 역할 정의 및 관리 | 구현 중 |
-| 권한 정의 (Abilities) | `/abilities` | 권한(Ability) CRUD 관리 | 구현 중 |
-| 액션 (Actions) | `/actions` | 액션 CRUD 관리 | 구현 중 |
-| 대상 (Subjects) | `/subjects` | 대상 조회 관리 | 구현 중 |
-| 템플릿 (Templates) | `/templates` | 메시지 템플릿 관리 | 구현 완료 |
-| 약관 관리 | `/terms` | 서비스 이용약관, 개인정보처리방침, 마케팅/위치/제3자 제공 동의 문서를 버전별로 관리 | 구현 중 |
-| 루틴 (Routines) | `/routines` | 운동 루틴(커리큘럼) CRUD 관리 | 기획 완료, 구현 TODO |
-| 운동 종목 (Tasks) | `/tasks` | 운동 종목 CRUD 관리. Task와 1:1 연결 | 기획 완료, 구현 TODO |
-| 에셋 (Assets) | `/assets` | 업로드된 에셋(Image/Video/Document) 목록 조회/검색/필터링, 미리보기/다운로드, 삭제 및 일괄 삭제 관리 | 기획 완료, 구현 TODO |
-| 폴더 (Folders) | `/assets` (에셋 목록 내) | 계층적 폴더 구조 관리 (에셋 목록 페이지 내에서 트리 탐색) | 기획 완료, 구현 TODO |
-| 앨범 (Albums) | `/albums` | 앨범 CRUD 관리. 사용자 정의 에셋 컬렉션 | 기획 완료, 구현 TODO |
-| 타임라인 (Timelines) | `/timelines` | 학기/시즌 타임라인 관리 | 기획 중 |
-| 세션 (Sessions) | `/timelines/[timelineId]/sessions` | 세션 일정 관리 (타임라인 하위) | 기획 중 |
-| 프로그램 (Programs) | `/timelines/[timelineId]/sessions/[sessionId]/programs` | 수업 프로그램 관리 (세션 하위) - 강사·루틴·정원 연결 | 기획 중 |
-| 문의 (Inquiries) | `/inquiries` | 옴니채널 고객 문의 관리 (웹, 이메일, 채팅, SMS). AI 기반 자동 해결/응답 초안/감정 분석 지원 | 기획 완료 |
-| 문의 상세 | `/inquiries/[inquiryId]` | 문의 스레드 뷰, 메시지 작성, AI 응답 초안, 지식베이스 연동 | 기획 완료 |
-| 문의 등록 | `/inquiries/new` | 새 문의 수동 접수 (전화/현장 문의 등) | 기획 완료 |
-| 지식베이스 | `/knowledge-base` | FAQ, 가이드 문서 관리. AI 자동 해결 시 참조 | 기획 완료 |
-| SLA 설정 | `/inquiries/sla` | SLA 정책 관리 (응답/해결 시간, 우선순위별 정책) | 기획 완료 |
-| 채널 설정 | `/inquiries/channels` | 문의 채널 설정 (웹 폼, 이메일, 채팅 위젯, SMS) | 기획 완료 |
+| 회원 (Users) | `/users`, `/users/[userId]` | 회원 목록과 회원 상세 관리 | 구현 완료 |
+| 역할 (Roles) | `/roles`, `/roles/new`, `/roles/[roleId]`, `/roles/[roleId]/edit` | 역할 정의 및 관리 | 구현 완료 |
+
+현재 Admin 라우트는 위 7개 화면(`/dashboard` 1개, 회원 2개, 역할 4개)만 제공합니다. 원본 모델·스키마와 업무 기획 맥락을 보존하며, 지정한 관리 API와 전용 실행 코드는 제거하고 인증·공통 API는 유지합니다.
 
 ## Asset 도메인 맥락
 
@@ -149,9 +130,8 @@ Company (사업자: businessNo, contact)
 
 - Company는 1:N FitnessCenter를 가집니다.
 - FitnessCenter는 Space와 1:1로 연결됩니다.
-- Space는 단일 FitnessCenter를 가질 수 있으며 (1:0..1), Space 생성 시 FitnessCenter가 함께 생성됩니다 (서버에서 처리).
-- 현재 Admin의 `/spaces/[spaceId]/fitness-center` 단수 화면은 Space에 연결된 FitnessCenter를 조회/수정합니다.
-- PLATFORM_ADMIN 역할만 시설 등록/수정이 가능합니다 (플랫폼 관리자 전용)
+- Space는 단일 FitnessCenter를 가질 수 있습니다 (1:0..1). 아래 내용은 관리 화면과 쓰기 API가 삭제된 뒤에도 유지되는 Space와 FitnessCenter 모델의 관계 설명입니다.
+- FitnessCenter 관리 쓰기 API는 제거되었으며, 회원가입 과정의 공간 검증·조회 API는 유지됩니다.
 - `businessNo`(회사 사업자등록번호)는 Company의 식별자가 아니며 중복을 허용합니다
 
 ## Program 도메인 맥락

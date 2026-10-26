@@ -25,6 +25,7 @@ import {
 import {
 	DataGridTable,
 	type DataGridTableConfig,
+	type DataGridTableDisplayConfig,
 	type DataGridTableState,
 } from "./DataGridTable/DataGridTable";
 import type { DataGridTableRowState } from "./DataGridTableRow/DataGridTableRow";
@@ -72,6 +73,21 @@ export interface DataGridState<TData extends DataGridRow = DataGridRow> {
 	actionBar: DataGridActionBarState<TData>;
 }
 
+/** DataGrid compound 영역의 표시 여부입니다. 미지정 영역은 기존처럼 표시합니다. */
+export interface DataGridShowConfig {
+	toolbar?: boolean;
+	groupPanel?: boolean;
+	pagination?: boolean;
+	actionBar?: boolean;
+}
+
+export interface DataGridProps<TData extends DataGridRow = DataGridRow> {
+	state: DataGridState<TData>;
+	/** state.table을 변경하지 않는 Table 표시 입력입니다. 미지정 필드는 state.table을 사용합니다. */
+	table?: DataGridTableDisplayConfig<TData>;
+	show?: DataGridShowConfig;
+}
+
 /** 전체 상태를 조립하는 위치에서 각 데이터 객체를 observable로 초기화합니다. */
 export function createDataGridState<TData extends DataGridRow = DataGridRow>({
 	query: initialQuery,
@@ -109,8 +125,6 @@ export function createDataGridState<TData extends DataGridRow = DataGridRow>({
 				},
 				{ name: "DataGridTableRowState" },
 			),
-			// TanStack 인스턴스는 라이브러리에서 관리하므로 observable 변환에서 제외합니다.
-			instance: undefined,
 		},
 		{
 			columns: observableRef,
@@ -118,7 +132,6 @@ export function createDataGridState<TData extends DataGridRow = DataGridRow>({
 			selectionSource: observableRef,
 			getSubRows: false,
 			row: false,
-			instance: false,
 		},
 		{ name: "DataGridTableState" },
 	);
@@ -192,16 +205,24 @@ export function createDataGridState<TData extends DataGridRow = DataGridRow>({
 /** DataGridState의 데이터와 영역 설정을 렌더링합니다. */
 export function DataGrid<TData extends DataGridRow>({
 	state,
-}: {
-	state: DataGridState<TData>;
-}) {
+	table,
+	show,
+}: DataGridProps<TData>) {
 	return (
 		<DataGridContainer>
-			<DataGridToolbar state={state.toolbar} />
-			<DataGridGroupPanel state={state.groupPanel} />
-			<DataGridTable state={state} />
-			<DataGridPagination state={state.pagination} />
-			<DataGridActionBar state={state.actionBar} />
+			{(show?.toolbar ?? true) ? (
+				<DataGridToolbar state={state.toolbar} />
+			) : null}
+			{(show?.groupPanel ?? true) ? (
+				<DataGridGroupPanel state={state.groupPanel} />
+			) : null}
+			<DataGridTable state={state} table={table} />
+			{(show?.pagination ?? true) ? (
+				<DataGridPagination state={state.pagination} />
+			) : null}
+			{(show?.actionBar ?? true) ? (
+				<DataGridActionBar state={state.actionBar} />
+			) : null}
 		</DataGridContainer>
 	);
 }

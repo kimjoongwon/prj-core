@@ -15,7 +15,6 @@ export type StorybookSerializableState =
 export interface StorybookStatePreviewProps {
 	children: ReactNode;
 	readState?: () => StorybookSerializableState;
-	source: string;
 }
 
 function formatState(value: unknown): string {
@@ -29,8 +28,7 @@ function formatState(value: unknown): string {
 export const StorybookStatePreview = observer(function StorybookStatePreview({
 	children,
 	readState,
-	source,
-}: PropsWithChildren<Omit<StorybookStatePreviewProps, "children">>) {
+}: PropsWithChildren<StorybookStatePreviewProps>) {
 	const inspection = useInputStateInspection();
 	const inputStates = inspection
 		? inspection.entries().map((id) => ({ id, value: inspection.read(id) }))
@@ -68,14 +66,6 @@ export const StorybookStatePreview = observer(function StorybookStatePreview({
 								))}
 							</div>
 						)}
-						<details>
-							<summary className="cursor-pointer text-sm font-semibold">
-								사용 코드
-							</summary>
-							<pre className="mt-2 overflow-auto rounded-lg bg-surface p-3 text-xs">
-								{source}
-							</pre>
-						</details>
 					</div>
 				</details>
 			</section>

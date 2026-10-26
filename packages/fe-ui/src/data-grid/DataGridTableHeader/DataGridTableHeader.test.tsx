@@ -1,4 +1,5 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import { runInAction } from "mobx";
 import { describe, expect, it, vi } from "vitest";
 import { createDataGridState, DataGrid } from "../DataGrid";
 
@@ -9,12 +10,18 @@ const originalEmployee: Employee = {
 	department: "플랫폼",
 };
 
-const renderEmployeeDataGrid = () => {
+const renderEmployeeDataGrid = (options?: {
+	selectionMode?: "multiple";
+	selectedRowKeys?: string[];
+}) => {
 	const querySetter = vi.fn(async () => new URLSearchParams());
 	const state = createDataGridState<Employee>({
 		setQueryStates: querySetter,
 		table: {
 			rows: [originalEmployee],
+			selection: options?.selectionMode
+				? { mode: options.selectionMode }
+				: undefined,
 			columns: [
 				{
 					header: "인적 정보",
@@ -30,6 +37,11 @@ const renderEmployeeDataGrid = () => {
 			],
 		},
 	});
+	if (options?.selectedRowKeys) {
+		runInAction(() => {
+			state.table.selectedRowKeys = new Set(options.selectedRowKeys);
+		});
+	}
 	render(<DataGrid state={state} />);
 	return { querySetter, state };
 };
@@ -73,5 +85,33 @@ describe("DataGridTableHeader 접근성 이름", () => {
 		expect(
 			headerCells.filter((cell) => cell.hasAttribute("aria-label")),
 		).toHaveLength(3);
+	});
+
+	it("상태에 TanStack 인스턴스 없이 전달받은 table로 선택과 너비 변경을 처리한다", () => {
+		const { state } = renderEmployeeDataGrid({
+			selectionMode: "multiple",
+			selectedRowKeys: [originalEmployee.id],
+		});
+		expect("instance" in state.table).toBe(false);
+		expect(screen.getAllByRole("checkbox")[0]).toBeChecked();
+
+		const resizer = screen.getByTestId("data-grid-column-resizer-name");
+		const headerCell = resizer.closest("th");
+		expect(headerCell).not.toBeNull();
+		vi.spyOn(headerCell!, "getBoundingClientRect").mockReturnValue({
+			width: 100,
+		} as DOMRect);
+		fireEvent(
+			resizer,
+			new MouseEvent("pointerdown", { bubbles: true, clientX: 100 }),
+		);
+		fireEvent(window, new MouseEvent("pointermove", { clientX: 240 }));
+		fireEvent(window, new MouseEvent("pointerup"));
+
+		const table = screen.getByRole("table", { name: "데이터 테이블" });
+		expect(table.querySelectorAll("col")[1]).toHaveStyle({ width: "240px" });
+		fireEvent.doubleClick(resizer);
+
+		expect(table.querySelectorAll("col")[1]).toHaveStyle({ width: "150px" });
 	});
 });

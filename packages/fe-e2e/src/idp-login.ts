@@ -1,3 +1,4 @@
+import { parseIntegrationUlid } from "@cocrepo/type";
 import type { AdminPersistSpaceSelection } from "./admin-persist";
 import {
 	type E2EPageLike,
@@ -154,7 +155,11 @@ async function waitForConsoleSpaceSelection(
 		}, CONSOLE_PERSIST_KEY);
 
 		if (selection) {
-			return selection;
+			const tenantId = parseIntegrationUlid(selection.tenantId);
+			const spaceId = parseIntegrationUlid(selection.spaceId);
+			if (tenantId && spaceId) {
+				return { ...selection, tenantId, spaceId };
+			}
 		}
 
 		await page.waitForTimeout(500);

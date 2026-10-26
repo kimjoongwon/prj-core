@@ -1,4 +1,4 @@
-import { type DecimalId, isDecimalId } from "@cocrepo/type";
+import { type IntegrationUlid, isIntegrationUlid } from "@cocrepo/type";
 import { describe, expect, it } from "vitest";
 import {
 	mergeAdminPersistAccountSelection,
@@ -7,18 +7,18 @@ import {
 	readAdminPersistSpaceSelection,
 } from "./admin-persist";
 
-function decimalIdFixture(value: string): DecimalId {
-	if (!isDecimalId(value)) {
-		throw new Error(`Invalid decimal ID fixture: ${value}`);
+function ulidFixture(value: string): IntegrationUlid {
+	if (!isIntegrationUlid(value)) {
+		throw new Error(`Invalid ULID fixture: ${value}`);
 	}
 
 	return value;
 }
 
-const oldTenantId = decimalIdFixture("101");
-const oldSpaceId = decimalIdFixture("201");
-const newTenantId = decimalIdFixture("102");
-const newSpaceId = decimalIdFixture("202");
+const oldTenantId = ulidFixture("01J00000000000000000000001");
+const oldSpaceId = ulidFixture("01J00000000000000000000002");
+const newTenantId = ulidFixture("01J00000000000000000000003");
+const newSpaceId = ulidFixture("01J00000000000000000000004");
 
 const sessionDocument = {
 	authSession: {
@@ -49,10 +49,10 @@ describe("admin persist contract", () => {
 		).toBe("access-token");
 	});
 
-	it("Given 기존 version 2 선택이 있을 때 When FitnessCenter를 선택하면 Then account 계약을 갱신한다", () => {
+	it("Given 기존 version 4 선택이 있을 때 When FitnessCenter를 선택하면 Then account 계약을 갱신한다", () => {
 		const raw = JSON.stringify({
 			account: {
-				version: 2,
+				version: 4,
 				tenantId: oldTenantId,
 				spaceId: oldSpaceId,
 				spaceName: "Old Fitness Center",
@@ -77,7 +77,7 @@ describe("admin persist contract", () => {
 		});
 
 		expect(document.account).toEqual({
-			version: 2,
+			version: 4,
 			tenantId: newTenantId,
 			spaceId: newSpaceId,
 			spaceName: "New Fitness Center",
@@ -100,9 +100,10 @@ describe("admin persist contract", () => {
 		expect(document.authSession).toEqual(sessionDocument.authSession);
 	});
 
-	it("Given 이전 account section일 때 When 선택을 갱신하면 Then 호환 alias 없이 version 2로 교체한다", () => {
+	it("Given 이전 account section일 때 When 선택을 갱신하면 Then 호환 alias 없이 version 4로 교체한다", () => {
 		const raw = JSON.stringify({
 			account: {
+				version: 2,
 				tenantId: oldTenantId,
 				spaceId: oldSpaceId,
 				legacyName: "Legacy Name",
@@ -117,7 +118,7 @@ describe("admin persist contract", () => {
 		});
 
 		expect(document.account).toEqual({
-			version: 2,
+			version: 4,
 			tenantId: newTenantId,
 			spaceId: newSpaceId,
 			spaceName: "Current Fitness Center",
@@ -132,20 +133,20 @@ describe("admin persist contract", () => {
 		});
 	});
 
-	it("Given 비정상 decimal ID fixture가 있을 때 When persist를 읽으면 Then 공용 validator 기준으로 선택값에서 제외한다", () => {
-		const invalidDecimalIdFixture = "01";
-		expect(isDecimalId(invalidDecimalIdFixture)).toBe(false);
+	it("Given 비정상 ULID fixture가 있을 때 When persist를 읽으면 Then 공용 validator 기준으로 선택값에서 제외한다", () => {
+		const invalidUlidFixture = "01";
+		expect(isIntegrationUlid(invalidUlidFixture)).toBe(false);
 
 		const raw = JSON.stringify({
 			account: {
-				version: 2,
-				tenantId: invalidDecimalIdFixture,
+				version: 4,
+				tenantId: invalidUlidFixture,
 				spaceId: newSpaceId,
 				spaceName: "Invalid Fitness Center",
 				contentLanguageCode: "ko_KR",
 				availableSpaces: [
 					{
-						tenantId: invalidDecimalIdFixture,
+						tenantId: invalidUlidFixture,
 						spaceId: newSpaceId,
 						spaceName: "Invalid Fitness Center",
 					},

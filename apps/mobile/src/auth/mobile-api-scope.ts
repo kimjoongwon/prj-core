@@ -2,7 +2,7 @@ import {
   installCoreSessionRecovery,
   setApiSessionScope,
 } from "@cocrepo/api/core/client";
-import type { SpaceDto } from "@cocrepo/api/core/model";
+import type { SpaceDto } from "@cocrepo/api/idp/model";
 import { type IntegrationUlid, isIntegrationUlid } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 

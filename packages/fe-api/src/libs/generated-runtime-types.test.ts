@@ -1,9 +1,9 @@
 import { describe, expect, expectTypeOf, it, vi } from "vitest";
+import type { CreateReservationDto } from "../core/model/createReservationDto";
+import type { ReservationDto } from "../core/model/reservationDto";
+import type { UserDto } from "../core/model/userDto";
 import { getCurrentSpace, setCurrentSpace } from "../idp/auth/auth";
 import type { setCurrentSpace as setLegacyCurrentSpace } from "../idp/auth/current-space";
-import type { CreateSessionDto } from "../core/model/createSessionDto";
-import type { InquiryParticipantDto } from "../core/model/inquiryParticipantDto";
-import type { UserDto } from "../core/model/userDto";
 
 const jsonResponse = (body: unknown, status = 200) =>
 	new Response(JSON.stringify(body), {
@@ -17,15 +17,13 @@ describe("생성 SDK의 ULID·Date 런타임 계약", () => {
 		expectTypeOf<UserDto["createdAt"]>().toEqualTypeOf<Date>();
 		expectTypeOf<UserDto["updatedAt"]>().toEqualTypeOf<Date | null>();
 		expectTypeOf<UserDto["failedLoginAttempts"]>().toEqualTypeOf<number>();
-		expectTypeOf<InquiryParticipantDto["id"]>().toEqualTypeOf<string>();
-		expectTypeOf<InquiryParticipantDto["threadId"]>().toEqualTypeOf<
+		expectTypeOf<ReservationDto["id"]>().toEqualTypeOf<string>();
+		expectTypeOf<CreateReservationDto["memo"]>().toEqualTypeOf<
 			string | null | undefined
 		>();
-		expectTypeOf<InquiryParticipantDto["joinedAt"]>().toEqualTypeOf<Date>();
-		expectTypeOf<CreateSessionDto["timelineId"]>().toEqualTypeOf<string>();
-		expectTypeOf<CreateSessionDto["startDateTime"]>().toEqualTypeOf<
-			Date | null | undefined
-		>();
+		expectTypeOf<ReservationDto["occurrenceStartAt"]>().toEqualTypeOf<Date>();
+		expectTypeOf<CreateReservationDto["timelineId"]>().toEqualTypeOf<string>();
+		expectTypeOf<ReservationDto["confirmedAt"]>().toEqualTypeOf<Date | null>();
 		expectTypeOf<
 			Parameters<typeof setCurrentSpace>[0]["tenantId"]
 		>().toEqualTypeOf<string>();

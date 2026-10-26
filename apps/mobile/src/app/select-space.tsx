@@ -1,7 +1,7 @@
 import { SpaceSelectScreen, type SpaceListItemInfo } from "@cocrepo/mo-ui";
 import { ApiClientError } from "@cocrepo/api/core/client";
 import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
-import type { SpaceDto } from "@cocrepo/api/core/model";
+import type { SpaceDto } from "@cocrepo/api/idp/model";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Href } from "expo-router";
 import { useLocalSearchParams, useRouter } from "expo-router";

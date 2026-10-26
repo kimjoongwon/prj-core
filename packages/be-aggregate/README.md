@@ -14,29 +14,18 @@ Aggregate root entity classes remain in `@cocrepo/entity`.
 ## Current Aggregates
 
 - `AbilityAggregate`
-- `ActionAggregate`
 - `AssetAggregate`
 - `AuthAuditLogAggregate`
 - `ContentAggregate`
 - `EmailVerificationAggregate`
 - `FolderAggregate`
-- `IdpAccountAggregate`
-- `IdpDashboardAggregate`
 - `OidcClientAggregate`
-- `OidcSessionAggregate`
-- `InquiryAggregate`
 - `PolicyAggregate`
 - `RoleAssignmentAggregate`
 - `ReservationAggregate`
 - `RoleAggregate`
-- `RoutineAggregate`
 - `SecurityPolicyAggregate`
-- `ServiceDocumentAggregate`
 - `SpaceAggregate`
-- `SubjectAggregate`
-- `TaskAggregate`
-- `TenantAccessRequestAggregate`
-- `TimelineAggregate`
 - `TranslationCatalogAggregate`
 
 `UserService`, `TemplateService`, `EmailService`, token, Redis, Prisma, object

@@ -10,7 +10,6 @@ import {
 	getCoreRowModel,
 	getExpandedRowModel,
 	getGroupedRowModel,
-	type Table,
 	type TableOptions,
 	useReactTable,
 } from "@tanstack/react-table";
@@ -36,6 +35,19 @@ export interface DataGridTableConfig<TData extends DataGridRow = DataGridRow> {
 	};
 }
 
+/** state를 바꾸지 않고 렌더링에만 적용하는 Table 입력입니다. 지정하지 않은 값은 state.table 설정을 사용합니다. */
+export interface DataGridTableDisplayConfig<
+	TData extends DataGridRow = DataGridRow,
+> {
+	rows?: TData[];
+	columns?: TableOptions<TData>["columns"];
+	getSubRows?: TableOptions<TData>["getSubRows"];
+	getRowsWithChanges?: (
+		state: DataGridState<TData>,
+		sourceRows: TData[],
+	) => TData[];
+}
+
 /** TanStack 설정과 행 선택·펼침 데이터입니다. */
 export interface DataGridTableState<TData extends DataGridRow = DataGridRow>
 	extends DataGridTableConfig<TData> {
@@ -43,17 +55,28 @@ export interface DataGridTableState<TData extends DataGridRow = DataGridRow>
 	row: DataGridTableRowState<TData>;
 	expandedRowIds: ExpandedState;
 	selectedRowKeys: Set<string>;
-	instance?: Table<TData>;
 }
 
 /** TanStack Table과 DataGrid의 table 영역을 렌더링합니다. */
 export const DataGridTable = observer(
-	<TData extends DataGridRow>({ state }: { state: DataGridState<TData> }) => {
+	<TData extends DataGridRow>({
+		state,
+		table: displayTable,
+	}: {
+		state: DataGridState<TData>;
+		table?: DataGridTableDisplayConfig<TData>;
+	}) => {
 		const selectionGroupName = useId();
 		const handlers = useHandlers(state);
+		const sourceRows = displayTable?.rows ?? state.table.rows;
+		const columns = displayTable?.columns ?? state.table.columns;
+		const getSubRows = displayTable?.getSubRows ?? state.table.getSubRows;
 		const table = useReactTable({
-			data: handlers.rowsWithChanges,
-			columns: state.table.columns,
+			data: handlers.getRowsWithChanges(
+				sourceRows,
+				displayTable?.getRowsWithChanges,
+			),
+			columns,
 			state: {
 				expanded: state.table.expandedRowIds,
 				grouping: handlers.grouping,
@@ -66,7 +89,7 @@ export const DataGridTable = observer(
 			),
 			enableMultiRowSelection: state.table.selection?.mode !== "single",
 			getRowId: handlers.getRowId,
-			getSubRows: state.table.getSubRows,
+			getSubRows,
 			getCoreRowModel: getCoreRowModel(),
 			getExpandedRowModel: getExpandedRowModel(),
 			getGroupedRowModel: getGroupedRowModel(),
@@ -78,7 +101,7 @@ export const DataGridTable = observer(
 			onSortingChange: handlers.changeSorting,
 			onPaginationChange: handlers.changeTablePagination,
 		});
-		state.table.instance = table;
+
 		return (
 			<DataGridTableContainer table={{ state: state.table, instance: table }}>
 				<DataGridTableHeader state={state.table} table={table} />

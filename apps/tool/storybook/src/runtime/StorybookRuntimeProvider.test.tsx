@@ -143,7 +143,7 @@ describe("StorybookRuntimeProvider", () => {
 		window.history.replaceState(
 			{},
 			"",
-			"/iframe.html?id=screen-spacelistscreen--default&viewMode=story",
+			"/iframe.html?id=screen-rolelistscreen--default&viewMode=story",
 		);
 
 		const { withStorybookRuntime } = await loadProvider();
@@ -158,8 +158,8 @@ describe("StorybookRuntimeProvider", () => {
 					</>
 				),
 				{
-					id: "screen-spacelistscreen--default",
-					title: "screen/SpaceListScreen",
+					id: "screen-rolelistscreen--default",
+					title: "screen/RoleListScreen",
 					parameters: {
 						storybookRuntime: {
 							realm: "admin",

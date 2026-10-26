@@ -45,40 +45,22 @@ describe("admin permission derived seeds", () => {
 		expect(pageAccessGrants).toEqual(expect.arrayContaining(pageSubjects));
 	});
 
-	it("includes menu grants for newly added admin menus like assets", () => {
-		expect(
-			adminPlatformAdminAbilitySeedData.some(
-				(ability) =>
-					ability.subject === "menu:assets" && ability.actionName === "manage",
-			),
-		).toBe(true);
-		expect(
-			adminPlatformAdminAbilitySeedData.some(
-				(ability) =>
-					ability.subject === "menu:assets:list" &&
-					ability.actionName === "manage",
-			),
-		).toBe(true);
-		expect(
-			adminPlatformAdminAbilitySeedData.some(
-				(ability) =>
-					ability.subject === "page:assets:list" &&
-					ability.actionName === "access",
-			),
-		).toBe(true);
-		expect(
-			adminPlatformAdminAbilitySeedData.some(
-				(ability) =>
-					ability.subject === "page:assets:detail" &&
-					ability.actionName === "access",
-			),
-		).toBe(true);
-		expect(
-			adminCompanyManagerMenuAccessAbilitySeedData.some(
-				(ability) =>
-					ability.subject === "menu:assets" && ability.actionName === "access",
-			),
-		).toBe(true);
+	it("includes current dashboard, users, and roles menu grants", () => {
+		for (const subject of ["menu:dashboard", "menu:users", "menu:roles"]) {
+			expect(
+				adminPlatformAdminAbilitySeedData.some(
+					(ability) => ability.subject === subject && ability.actionName === "manage",
+				),
+			).toBe(true);
+			expect(
+				adminCompanyManagerMenuAccessAbilitySeedData.some(
+					(ability) => ability.subject === subject && ability.actionName === "access",
+				),
+			).toBe(true);
+		}
+		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("menu:assets");
+		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("page:assets:list");
+		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("page:assets:detail");
 	});
 
 	it("keeps PLATFORM_ADMIN as a true super role with manage all", () => {
@@ -114,12 +96,18 @@ describe("admin permission derived seeds", () => {
 
 		expect(seededSubjectNames).toEqual(
 			expect.arrayContaining([
-				"menu:assets",
-				"menu:assets:list",
-				"page:assets:list",
-				"page:assets:detail",
+				"menu:dashboard",
+				"menu:users",
+				"menu:roles",
+				"page:dashboard",
+				"page:users:list",
+				"page:roles:list",
 			]),
 		);
+		expect(seededSubjectNames).not.toContain("menu:assets");
+		expect(seededSubjectNames).not.toContain("menu:assets:list");
+		expect(seededSubjectNames).not.toContain("page:assets:list");
+		expect(seededSubjectNames).not.toContain("page:assets:detail");
 		expect(seededSubjectNames).not.toContain("menu:schedules");
 		expect(seededSubjectNames).not.toContain("menu:files");
 		for (const subjectName of legacyRolePageSubjectNames) {

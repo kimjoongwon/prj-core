@@ -1,11 +1,7 @@
 import { AbilityAggregate } from "@cocrepo/aggregate";
 import { AbilitiesController } from "@cocrepo/controller";
-import {
-	AbilitiesRepository,
-	PolicyEntriesRepository,
-	RoleAssignmentsRepository,
-} from "@cocrepo/repository";
-import { AbilityCommandHandlers, AbilityQueryHandlers } from "@cocrepo/usecase";
+import { RoleAssignmentsRepository } from "@cocrepo/repository";
+import { AbilityQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 
@@ -14,10 +10,7 @@ import { CqrsModule } from "@nestjs/cqrs";
 	controllers: [AbilitiesController],
 	providers: [
 		AbilityAggregate,
-		AbilitiesRepository,
-		PolicyEntriesRepository,
 		RoleAssignmentsRepository,
-		...AbilityCommandHandlers,
 		...AbilityQueryHandlers,
 	],
 })

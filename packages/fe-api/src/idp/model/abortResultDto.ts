@@ -4,7 +4,7 @@
  * OIDC Identity Provider
  * OpenID Connect Identity Provider API
  *
- * OIDC 인증 및 IDP 관리 API를 제공합니다.
+ * OIDC 인증 API를 제공합니다.
  *
  * **인증 방법:**
  * 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
