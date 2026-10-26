@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { getColumnSettingItems, getGroupableColumnItems } from "./columnConfig";
+import {
+	buildAdminRoleTableColumns,
+	buildUserListTableColumns,
+} from "./data-grid/columns";
 import { buildColumns, defineColumn } from "./data-grid/dataGridFactory";
 
 type ProductRow = {
@@ -50,5 +54,43 @@ describe("열 설정", () => {
 			{ id: "stock", label: "Stock" },
 			{ id: "status", label: "Status" },
 		]);
+	});
+
+	it("남은 역할과 사용자 목록 factory는 현재 관리 화면의 컬럼을 만든다", () => {
+		const roleColumns = buildAdminRoleTableColumns<{
+			id: string;
+			name: string;
+			displayName: string | null;
+			description: string | null;
+			createdAt: Date | null;
+			removedAt: Date | null;
+		}>();
+		const userColumns = buildUserListTableColumns<{
+			id: string;
+			name: string;
+			email: string | null;
+			phone: string | null;
+			removedAt: Date | null;
+			createdAt: Date;
+			tenants: [];
+		}>();
+
+		expect(
+			roleColumns.map((column) =>
+				"accessorKey" in column ? column.accessorKey : undefined,
+			),
+		).toEqual([
+			"name",
+			"displayName",
+			"description",
+			"removedAt",
+			"createdAt",
+			"actions",
+		]);
+		expect(
+			userColumns.map((column) =>
+				"accessorKey" in column ? column.accessorKey : undefined,
+			),
+		).toEqual(["name", "email", "phone", "role", "status", "createdAt"]);
 	});
 });

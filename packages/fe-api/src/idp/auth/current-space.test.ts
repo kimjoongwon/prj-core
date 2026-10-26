@@ -33,13 +33,13 @@ describe("현재 Space API의 공용 클라이언트 연결", () => {
 		setApiSessionScope({
 			accessToken: "test-access-token",
 			refreshToken: "test-refresh-token",
-			tenantId: "11",
+			tenantId: "01J00000000000000000000002",
 		});
 		setApiLocale({ languageCode: "ko_KR" });
 
 		await expect(getCurrentSpace()).resolves.toEqual({ data: null });
 		await getGeneratedCurrentSpace();
-		await setCurrentSpace({ tenantId: "9223372036854775807" });
+		await setCurrentSpace({ tenantId: "01J00000000000000000000003" });
 
 		expect(capturedRequests).toHaveLength(3);
 		for (const { url, init } of capturedRequests) {
@@ -48,7 +48,7 @@ describe("현재 Space API의 공용 클라이언트 연결", () => {
 			const headers = new Headers(init.headers);
 			expect(headers.get("Authorization")).toBe("Bearer test-access-token");
 			expect(headers.get("x-refresh-token")).toBe("test-refresh-token");
-			expect(headers.get("x-tenant-id")).toBe("11");
+			expect(headers.get("x-tenant-id")).toBe("01J00000000000000000000002");
 			expect(headers.get("x-language")).toBe("ko_KR");
 		}
 		expect(capturedRequests.map(({ init }) => init.method)).toEqual([
@@ -57,8 +57,17 @@ describe("현재 Space API의 공용 클라이언트 연결", () => {
 			"POST",
 		]);
 		expect(JSON.parse(String(capturedRequests[2]?.init.body))).toEqual({
-			tenantId: "9223372036854775807",
+			tenantId: "01J00000000000000000000003",
 		});
+	});
+
+	it("현재 공간 선택은 이전 decimal ID를 요청 전에 거부한다", async () => {
+		const { setCurrentSpace } = await import("./current-space");
+		const fetchMock = vi.fn<typeof fetch>();
+		vi.stubGlobal("fetch", fetchMock);
+
+		expect(() => setCurrentSpace({ tenantId: "201" })).toThrow("ULID");
+		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
 	it("브라우저에서는 같은 origin의 상대 경로와 쿠키 인증을 사용한다", async () => {

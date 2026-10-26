@@ -18,7 +18,8 @@ describe("withStorybookStatePreview", () => {
 		await waitFor(() =>
 			expect(
 				screen.getAllByText(/ops@example.com/).length,
-			).toBeGreaterThanOrEqual(2),
+			).toBeGreaterThanOrEqual(1),
 		);
+		expect(screen.queryByText("사용 코드")).toBeNull();
 	});
 });

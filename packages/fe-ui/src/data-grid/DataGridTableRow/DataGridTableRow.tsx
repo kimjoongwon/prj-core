@@ -14,7 +14,6 @@ import { EditorCell } from "../cell/EditorCell";
 import { HierarchyCell } from "../cell/HierarchyCell";
 import { SelectionCell } from "../cell/SelectionCell";
 import type { DataGridRow, Key } from "../DataGrid";
-import type { DataGridTableState } from "../DataGridTable/DataGridTable";
 import { useHandlers } from "./useHandlers";
 
 export type EditDirection = "next" | "previous";
@@ -81,7 +80,6 @@ const CLICKABLE_ROW_CLASS_NAME =
 const DEFAULT_ROW_HOVER_CLASS_NAME = "hover:bg-surface-hover";
 
 interface DataGridTableRowProps<T extends { id: Key }> {
-	tableState: DataGridTableState<T>;
 	state: DataGridTableRowState<T>;
 	row: Row<T>;
 	selectionMode: Exclude<SelectionConfig["mode"], "none"> | undefined;
@@ -100,7 +98,6 @@ interface DataGridTableRowProps<T extends { id: Key }> {
 
 /** TanStack Row를 DataGrid의 선택·편집 가능한 행으로 렌더링합니다. */
 export const DataGridTableRow = <T extends { id: Key }>({
-	tableState,
 	state,
 	row,
 	selectionMode,
@@ -111,8 +108,8 @@ export const DataGridTableRow = <T extends { id: Key }>({
 	const handlers = useHandlers(state);
 
 	useEffect(() => {
-		return handlers.observeEditRequests(tableState, row);
-	}, [tableState, row.id, handlers.observeEditRequests]);
+		return handlers.observeEditRequests(row);
+	}, [row, handlers.observeEditRequests]);
 
 	return (
 		<Observer>

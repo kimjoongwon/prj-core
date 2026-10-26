@@ -51,7 +51,6 @@ export class UsersService {
 ## 포함된 Repository
 
 - `UsersRepository`, `SpacesRepository`, `RolesRepository`
-- `TasksRepository`, `RoutinesRepository`, `TimelinesRepository`
 - `AssetsRepository`, `FoldersRepository`, `AlbumsRepository`
 - `PoliciesRepository`, `RoleAssignmentsRepository`, `TemplatesRepository`
 

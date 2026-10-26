@@ -1,6 +1,6 @@
-import { type DecimalId, isDecimalId } from "@cocrepo/type";
+import { type IntegrationUlid, isIntegrationUlid } from "@cocrepo/type";
 
-const ADMIN_ACCOUNT_PERSIST_VERSION = 2 as const;
+const ADMIN_ACCOUNT_PERSIST_VERSION = 4 as const;
 
 /** Admin 저장 문서의 native 인증 session 계약입니다. */
 export interface AdminNativeAuthSession {
@@ -13,8 +13,8 @@ export interface AdminNativeAuthSession {
 
 /** Admin account section에 저장하는 Space/FitnessCenter 선택 계약입니다. */
 export interface AdminPersistSpaceSelection {
-	tenantId: DecimalId;
-	spaceId: DecimalId;
+	tenantId: IntegrationUlid;
+	spaceId: IntegrationUlid;
 	spaceName: string;
 	contentLanguageCode?: string | null;
 }
@@ -22,8 +22,8 @@ export interface AdminPersistSpaceSelection {
 /** Admin account section의 현재 persist 계약입니다. */
 export interface AdminPersistAccount {
 	version: typeof ADMIN_ACCOUNT_PERSIST_VERSION;
-	tenantId: DecimalId | null;
-	spaceId: DecimalId | null;
+	tenantId: IntegrationUlid | null;
+	spaceId: IntegrationUlid | null;
 	spaceName: string | null;
 	contentLanguageCode: string | null;
 	availableSpaces: AdminPersistSpaceSelection[];
@@ -73,15 +73,15 @@ export function parseAdminPersistStorageDocument(
  *
  * @param raw 기존 localStorage JSON
  * @param selection 선택한 tenant/space/FitnessCenter
- * @returns account version 2 계약으로 정규화된 저장 문서
+	 * @returns account version 4 계약으로 정규화된 저장 문서
  */
 export function mergeAdminPersistAccountSelection(
 	raw: string | null,
 	selection: AdminPersistSpaceSelection,
 ): AdminPersistStorageDocument {
-	if (!isDecimalId(selection.tenantId) || !isDecimalId(selection.spaceId)) {
+	if (!isIntegrationUlid(selection.tenantId) || !isIntegrationUlid(selection.spaceId)) {
 		throw new Error(
-			"Admin persist selection requires canonical decimal tenant/space IDs.",
+			"Admin persist selection requires canonical ULID tenant/space IDs.",
 		);
 	}
 
@@ -111,7 +111,7 @@ export function mergeAdminPersistAccountSelection(
  * Admin 저장 문서에서 현재 tenant/space 선택값을 읽습니다.
  *
  * @param raw localStorage JSON
- * @returns canonical decimal ID를 가진 선택값, 없으면 undefined
+	 * @returns canonical ULID를 가진 선택값, 없으면 undefined
  */
 export function readAdminPersistSpaceSelection(
 	raw: string | null,
@@ -154,8 +154,8 @@ function normalizeAdminPersistAccount(
 
 	return {
 		version: ADMIN_ACCOUNT_PERSIST_VERSION,
-		tenantId: isDecimalId(value.tenantId) ? value.tenantId : null,
-		spaceId: isDecimalId(value.spaceId) ? value.spaceId : null,
+		tenantId: isIntegrationUlid(value.tenantId) ? value.tenantId : null,
+		spaceId: isIntegrationUlid(value.spaceId) ? value.spaceId : null,
 		spaceName:
 			typeof value.spaceName === "string"
 				? value.spaceName
@@ -175,8 +175,8 @@ function normalizeAdminPersistSpaces(
 		? value.filter(
 				(space): space is AdminPersistSpaceSelection =>
 					isRecord(space) &&
-					isDecimalId(space.tenantId) &&
-					isDecimalId(space.spaceId) &&
+					isIntegrationUlid(space.tenantId) &&
+					isIntegrationUlid(space.spaceId) &&
 					typeof space.spaceName === "string" &&
 					(space.contentLanguageCode === undefined ||
 						space.contentLanguageCode === null ||

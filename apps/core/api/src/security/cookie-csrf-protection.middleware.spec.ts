@@ -24,7 +24,7 @@ const createRequest = (overrides: {
 	const headers = overrides.headers ?? {};
 	return {
 		method: overrides.method ?? "POST",
-		path: overrides.path ?? "/api/v1/actions",
+		path: overrides.path ?? "/api/v1/users",
 		cookies: overrides.cookies ?? {},
 		header: (name: string) => headers[name.toLowerCase()],
 	} as unknown as Request;

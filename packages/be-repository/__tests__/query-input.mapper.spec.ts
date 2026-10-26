@@ -1,62 +1,14 @@
-import { AssetKind, AssetStatus } from "@cocrepo/prisma";
 import {
-	buildAssetQueryOrderBy,
-	buildAssetQueryWhere,
-	buildEmailVerificationQueryOrderBy,
-	buildEmailVerificationQueryWhere,
 	buildFolderQueryOrderBy,
 	buildFolderQueryWhere,
-	buildInquiryQueryOrderBy,
-	buildInquiryQueryWhere,
-	buildOidcClientQueryOrderBy,
-	buildOidcClientQueryWhere,
-	buildTenantAccessRequestQueryWhere,
 	buildUserQueryOrderBy,
 	buildUserQueryWhere,
 } from "../src";
 
 describe("QueryInput mapper", () => {
-	it("검색 문자열과 ID 필터를 Prisma where로 변환한다", () => {
-		expect(
-			buildAssetQueryWhere({
-				folderId: "01JFOLDER00000000000000000A",
-				spaceId: "01JSPACE00000000000000000S",
-				kind: AssetKind.IMAGE,
-				status: AssetStatus.READY,
-				search: "photo",
-			}),
-		).toEqual({
-			folder: { id: "01JFOLDER00000000000000000A" },
-			space: { id: "01JSPACE00000000000000000S" },
-			kind: AssetKind.IMAGE,
-			status: AssetStatus.READY,
-			originalName: { contains: "photo", mode: "insensitive" },
-			removedAt: null,
-		});
-	});
-
 	it("boolean 필터와 삭제 상태 필터를 보존한다", () => {
-		expect(buildOidcClientQueryWhere({ isActive: false })).toEqual({
-			isActive: false,
-		});
 		expect(buildFolderQueryWhere({ statusFilter: "deleted" })).toEqual({
 			removedAt: { not: null },
-		});
-	});
-
-	it("날짜 범위를 createdAt Prisma 조건으로 변환한다", () => {
-		const startDate = new Date("2026-01-01T00:00:00.000Z");
-		const endDate = new Date("2026-01-31T23:59:59.000Z");
-
-		expect(
-			buildEmailVerificationQueryWhere({
-				email: "user@example.com",
-				startDate,
-				endDate,
-			}),
-		).toEqual({
-			email: { contains: "user@example.com", mode: "insensitive" },
-			createdAt: { gte: startDate, lte: endDate },
 		});
 	});
 
@@ -91,82 +43,5 @@ describe("QueryInput mapper", () => {
 			}),
 		).toEqual([{ name: "asc" }, { email: "desc" }]);
 		expect(buildFolderQueryOrderBy({ sort: [] })).toEqual([{ path: "asc" }]);
-		expect(buildAssetQueryOrderBy({ sort: ["-sizeBytes"] })).toEqual([
-			{ sizeBytes: "desc" },
-		]);
-	});
-
-	it("문의와 테넌트 접근 신청 검색 조건을 관계 OR 조건으로 변환한다", () => {
-		expect(
-			buildInquiryQueryWhere({
-				search: "kim",
-				status: "deleted",
-			}),
-		).toEqual({
-			removedAt: { not: null },
-			OR: [
-				{ title: { contains: "kim", mode: "insensitive" } },
-				{ customer: { name: { contains: "kim", mode: "insensitive" } } },
-				{ customer: { email: { contains: "kim", mode: "insensitive" } } },
-			],
-		});
-
-		expect(
-			buildTenantAccessRequestQueryWhere({
-				reviewerId: "01JREVIEW00000000000000000R",
-				search: "club",
-				spaceId: "01JSPACE00000000000000000S",
-			}),
-		).toEqual({
-			space: { id: "01JSPACE00000000000000000S" },
-			OR: [
-				{ requester: { name: { contains: "club", mode: "insensitive" } } },
-				{ requester: { email: { contains: "club", mode: "insensitive" } } },
-				{
-					space: {
-						fitnessCenter: {
-							is: {
-								company: {
-									is: { name: { contains: "club", mode: "insensitive" } },
-								},
-							},
-						},
-					},
-				},
-				{
-					space: {
-						fitnessCenter: {
-							is: {
-								company: {
-									is: { label: { contains: "club", mode: "insensitive" } },
-								},
-							},
-						},
-					},
-				},
-			],
-		});
-	});
-
-	it("문의 sort 변환은 허용 필드만 사용한다", () => {
-		expect(
-			buildInquiryQueryOrderBy({
-				sort: ["-lastMessageAt", "priority", "customerSeq"],
-			}),
-		).toEqual([{ lastMessageAt: "desc" }, { priority: "asc" }]);
-	});
-
-	it("OIDC client와 이메일 인증 sort 변환은 허용 필드만 사용한다", () => {
-		expect(
-			buildOidcClientQueryOrderBy({
-				sort: ["clientId", "-name", "unsupported"],
-			}),
-		).toEqual([{ clientId: "asc" }, { name: "desc" }]);
-
-		expect(
-			buildEmailVerificationQueryOrderBy({
-				sort: ["email", "-status", "unsupported"],
-			}),
-		).toEqual([{ email: "asc" }, { status: "desc" }]);
 	});
 });

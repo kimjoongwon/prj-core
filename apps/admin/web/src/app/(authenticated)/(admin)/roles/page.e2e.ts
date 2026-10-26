@@ -1,3 +1,4 @@
+import { isIntegrationUlid } from "@cocrepo/type";
 import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
@@ -95,7 +96,7 @@ test.describe("역할 목록 페이지", () => {
 			};
 			const roleId = createResponseBody.data?.id;
 			expect(roleId).toBeTruthy();
-			expect(roleId).toMatch(/^[1-9]\d*$/);
+			expect(isIntegrationUlid(roleId)).toBe(true);
 
 			// When: 역할 목록 페이지로 이동
 			await gotoRoleListPage(page);

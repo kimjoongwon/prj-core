@@ -1,66 +1,16 @@
-import { ABILITY_ERRORS } from "@cocrepo/constant";
 import { Ability, RoleAssignment } from "@cocrepo/entity";
-import type { CreateAbilityInput, UpdateAbilityInput } from "@cocrepo/input";
-import {
-	AbilitiesRepository,
-	PolicyEntriesRepository,
-	RoleAssignmentsRepository,
-} from "@cocrepo/repository";
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
-import { Transactional } from "@nestjs-cls/transactional";
-import {
-	toAbilityCreateData,
-	toAbilityUpdateData,
-} from "./ability-persistence.mapper";
+import { RoleAssignmentsRepository } from "@cocrepo/repository";
+import { Injectable, Logger } from "@nestjs/common";
 import type { AbilityWithAssignment } from "./ability-with-assignment";
 
-/**
- * Ability 서비스 (CASL ABAC 기반)
- *
- * 재사용 가능한 권한 정의(Ability)와 Policy 기반 할당을 관리합니다.
- *
- * ✅ Ability: 권한 정의만 관리 (subject + action + fields + conditions)
- * ✅ Policy: 여러 Ability를 묶고 RoleAssignment가 우선순위를 관리
- */
 @Injectable()
 export class AbilityAggregate {
 	private readonly logger = new Logger(AbilityAggregate.name);
 
 	constructor(
-		private readonly abilitiesRepository: AbilitiesRepository,
-		private readonly policyEntriesRepository: PolicyEntriesRepository,
 		private readonly roleAssignmentsRepository: RoleAssignmentsRepository,
 	) {}
 
-	/**
-	 * ID로 Ability 조회
-	 *
-	 * @param id - Ability ID
-	 * @returns Ability 또는 null
-	 */
-	async getAbilityById(id: string): Promise<Ability | null> {
-		this.logger.debug(`ID로 Ability 조회: id=${id}`);
-
-		return this.abilitiesRepository.findById(id);
-	}
-
-	/**
-	 * 전체 Ability 목록 조회
-	 * Subject, Action 정보를 포함하여 반환합니다.
-	 */
-	async getAllAbilities(): Promise<Ability[]> {
-		this.logger.debug("전체 Ability 목록 조회");
-		return this.abilitiesRepository.findAll();
-	}
-
-	/**
-	 * Role 권한 병합 조회
-	 * 현재 Tenant의 Policy만 펼쳐서 Ability를 계산합니다.
-	 *
-	 * @param roleIds - Role ID 배열
-	 * @param spaceId - 현재 Space ID
-	 * @returns 병합된 Ability 배열
-	 */
 	async getMergedAbilities(
 		roleIds: string[],
 		spaceId: string,
@@ -78,70 +28,6 @@ export class AbilityAggregate {
 		return this.mergeAbilities(
 			this.expandRoleAssignmentAbilities(roleAssignments),
 		);
-	}
-
-	/**
-	 * 권한 정의 생성
-	 *
-	 * @param input - Ability 생성 데이터 (재사용 가능한 권한 정의)
-	 * @returns 생성된 Ability
-	 * @description 권한 정의만 생성합니다. Role에 할당하려면 Policy에 포함한 뒤 RoleAssignment를 할당하세요.
-	 */
-	async createAbility(input: CreateAbilityInput): Promise<Ability> {
-		this.logger.debug(
-			`권한 정의 생성: name=${input.name}, subjectId=${input.subjectId}, actionId=${input.actionId}`,
-		);
-
-		this.validateAbilityData(input);
-
-		const data = toAbilityCreateData(input);
-		return this.abilitiesRepository.create(data);
-	}
-
-	/**
-	 * 권한 정의 수정
-	 *
-	 * @param id - Ability ID
-	 * @param input - 수정 데이터
-	 * @returns 수정된 Ability
-	 * @description Ability 정의만 수정합니다. RoleAssignment 메타데이터(isActive, priority)는 변경되지 않습니다.
-	 */
-	async updateAbility(id: string, input: UpdateAbilityInput): Promise<Ability> {
-		this.logger.debug(`권한 정의 수정: id=${id}`);
-
-		const data = toAbilityUpdateData(input);
-		return this.abilitiesRepository.updateById(id, data);
-	}
-
-	/**
-	 * 권한 삭제 (소프트 삭제)
-	 *
-	 * @param id - Ability ID
-	 * @returns 삭제된 Ability
-	 * @description Ability와 연결된 모든 PolicyEntry를 소프트 삭제합니다.
-	 */
-	@Transactional()
-	async deleteAbility(id: string): Promise<Ability> {
-		this.logger.debug(`권한 삭제: id=${id}`);
-
-		// 1. Ability 소프트 삭제
-		const ability = await this.abilitiesRepository.removeById(id);
-
-		await this.policyEntriesRepository.removeByAbilityId(id);
-
-		this.logger.debug(`권한 및 연결된 PolicyEntry 삭제 완료: id=${id}`);
-
-		return ability;
-	}
-
-	/**
-	 * Ability 데이터 유효성 검증
-	 */
-	private validateAbilityData(data: CreateAbilityInput): void {
-		// actionId, subjectId, name 필수
-		if (!data.actionId || !data.subjectId || !data.name) {
-			throw new BadRequestException(ABILITY_ERRORS.INVALID_DATA);
-		}
 	}
 
 	private expandRoleAssignmentAbilities(

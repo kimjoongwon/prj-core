@@ -69,7 +69,7 @@ async function bootstrap() {
 		.setVersion("1.0.0")
 		.setDescription(
 			"OpenID Connect Identity Provider API\n\n" +
-				"OIDC 인증 및 IDP 관리 API를 제공합니다.\n\n" +
+				"OIDC 인증 API를 제공합니다.\n\n" +
 				"**인증 방법:**\n" +
 				"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
 				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송",

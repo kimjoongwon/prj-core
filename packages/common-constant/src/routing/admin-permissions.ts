@@ -18,31 +18,10 @@ export interface AdminCrudBundle {
 
 const CRUD_ACTIONS = ["create", "read", "update", "delete", "manage"] as const;
 
-const ADMIN_GLOBAL_PLATFORM_ADMIN_PAGE_PREFIXES = [
-	"abilities:",
-	"actions:",
-	"email-verifications:",
-	"subjects:",
-	"templates:",
-	"terms:",
-] as const;
-
-export function resolveAdminPageScopeKind(pageId: string): ScreenScopeKind {
-	if (
-		ADMIN_GLOBAL_PLATFORM_ADMIN_PAGE_PREFIXES.some((prefix) =>
-			pageId.startsWith(prefix),
-		)
-	) {
-		return "global-full-access-only";
-	}
-
-	return "space";
-}
-
 export const ADMIN_PAGE_ACCESS_ITEMS: AdminPageAccessItem[] =
 	GENERATED_ADMIN_PAGE_ACCESS_ITEMS.map((item) => ({
 		...item,
-		scopeKind: resolveAdminPageScopeKind(item.pageId),
+		scopeKind: "space",
 	}));
 
 export const ADMIN_PAGE_ACCESS_SUBJECTS = ADMIN_PAGE_ACCESS_ITEMS.map(

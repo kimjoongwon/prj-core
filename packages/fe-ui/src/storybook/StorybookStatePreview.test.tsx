@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { observable } from "mobx";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { StorybookStatePreview } from "./StorybookStatePreview";
@@ -18,38 +18,28 @@ afterEach(() => {
 });
 
 describe("StorybookStatePreview", () => {
-	it("renders the live state before collapsed source code", () => {
+	it("renders the live state without a source code panel", () => {
 		const state = observable({ value: "first@example.com" });
 
 		render(
-			<StorybookStatePreview
-				readState={() => ({ value: state.value })}
-				source={'<TextField state={state} path="value" />'}
-			>
+			<StorybookStatePreview readState={() => ({ value: state.value })}>
 				<div>story content</div>
 			</StorybookStatePreview>,
 		);
 
 		expect(screen.getByText("story content")).toBeTruthy();
 		expect(screen.getAllByText(/first@example.com/)).toHaveLength(2);
-		expect(screen.getByText("사용 코드")).toBeTruthy();
-		expect(
-			(screen.getByText("사용 코드").parentElement as HTMLDetailsElement).open,
-		).toBe(false);
+		expect(screen.queryByText("사용 코드")).toBeNull();
 
 		act(() => {
 			state.value = "updated@example.com";
 		});
 		expect(screen.getByText(/updated@example.com/)).toBeTruthy();
-		fireEvent.click(screen.getByText("사용 코드"));
-		expect(
-			(screen.getByText("사용 코드").parentElement as HTMLDetailsElement).open,
-		).toBe(true);
 	});
 
 	it("shows the no-state contract without fabricating state", () => {
 		render(
-			<StorybookStatePreview source="<Badge>Ready</Badge>">
+			<StorybookStatePreview>
 				<div>read-only story</div>
 			</StorybookStatePreview>,
 		);
