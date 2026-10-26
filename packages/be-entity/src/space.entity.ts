@@ -1,12 +1,13 @@
 import {
+	BigIntIdFieldOptional,
 	ClassField,
 	EnumFieldMetadata,
 	StringFieldMetadata,
 	StringFieldOptionalMetadata,
-	ULIDFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { LanguageCode } from "@cocrepo/enum";
 import { SpaceSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { FitnessCenter } from "./fitness-center.entity";
 import type { Policy } from "./policy.entity";
@@ -17,7 +18,8 @@ import { Tenant } from "./tenant.entity";
 @AbstractEntityFields()
 export class Space extends SpaceSchema {
 	/** 공개 식별자 ULID */
-	declare id: SpaceSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare spaceId: SpaceSchema["spaceId"];
 
 	@StringFieldMetadata({
 		description: "Space의 표시 이름. 공간 선택·목록·검색의 원천입니다.",
@@ -33,11 +35,11 @@ export class Space extends SpaceSchema {
 		default: LanguageCode.ko_KR,
 	})
 	declare contentLanguageCode: SpaceSchema["contentLanguageCode"];
-	@ULIDFieldOptionalMetadata({
-		description: "이 Space 접근에 사용할 Tenant ULID",
+	@BigIntIdFieldOptional({
+		description: "이 Space 접근에 사용할 Tenant ID",
 		nullable: true,
 	})
-	tenantId?: string | null;
+	tenantId?: bigint | null;
 	@ClassField(() => Tenant, {
 		required: false,
 		swagger: false,

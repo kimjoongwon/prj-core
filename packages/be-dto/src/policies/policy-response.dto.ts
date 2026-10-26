@@ -5,6 +5,8 @@ import { PolicyEntryResponseDto } from "./policy-entry-response.dto";
 export class PolicyResponseDto extends EntityResponseType(Policy, {
 	pick: [
 		"id",
+		"spaceId",
+		"createdById",
 		"name",
 		"displayName",
 		"description",

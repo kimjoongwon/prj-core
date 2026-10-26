@@ -7,6 +7,8 @@ export class ProgramActivityDto extends EntityResponseType(ProgramActivity, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
+		"programId",
+		"taskId",
 		"order",
 		"repetitions",
 		"restTime",

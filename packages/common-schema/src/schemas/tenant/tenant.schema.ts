@@ -3,14 +3,14 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Tenant의 DB 필드 타입과 공통 검증입니다. */
 export class TenantSchema extends AbstractSchema {
-	id!: string;
+	tenantId!: string;
 
 	@BigIntIdValidation()
-	userSeq!: bigint;
+	userId!: bigint;
 
 	@BigIntIdValidation()
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidation()
-	roleSeq!: bigint;
+	roleId!: bigint;
 }

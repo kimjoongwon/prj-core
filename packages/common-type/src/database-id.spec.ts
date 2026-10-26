@@ -32,9 +32,9 @@ describe("database-id", () => {
 	});
 
 	it("Given 외부 문자열 When 필수 decimal ID로 좁히면 Then 유효값만 반환한다", () => {
-		expect(requireDecimalId("1", "userSeq")).toBe("1");
-		expect(() => requireDecimalId("01", "userSeq")).toThrow(
-			"userSeq must be a canonical positive signed-BIGINT decimal string",
+		expect(requireDecimalId("1", "userId")).toBe("1");
+		expect(() => requireDecimalId("01", "userId")).toThrow(
+			"userId must be a canonical positive signed-BIGINT decimal string",
 		);
 	});
 

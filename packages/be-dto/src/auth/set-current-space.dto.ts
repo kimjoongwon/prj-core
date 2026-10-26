@@ -1,11 +1,11 @@
-import { ULIDField } from "@cocrepo/decorator/field";
+import { BigIntIdField } from "@cocrepo/decorator/field";
 import { Expose } from "class-transformer";
 
 export class SetCurrentSpaceDto {
-	@ULIDField({
-		description: "현재 선택할 Tenant 공개 ID (ULID)",
-		example: "01JTENANT00000000000000000K",
+	@BigIntIdField({
+		description: "현재 선택할 Tenant ID",
+		example: "1",
 	})
 	@Expose()
-	tenantId: string;
+	tenantId: bigint;
 }

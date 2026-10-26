@@ -17,6 +17,7 @@ import {
 	SentimentType,
 } from "@cocrepo/enum";
 import { InquirySchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AIAgentLog } from "./ai-agent-log.entity";
 import { InquiryMessage } from "./inquiry-message.entity";
@@ -36,15 +37,15 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Inquiry extends InquirySchema {
 	/** 공개 식별자 ULID */
-	declare id: InquirySchema["id"];
+	@Exclude({ toPlainOnly: true }) declare inquiryId: InquirySchema["inquiryId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceSeq: InquirySchema["spaceSeq"];
+	declare spaceId: InquirySchema["spaceId"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdBySeq: InquirySchema["createdBySeq"];
+	declare createdById: InquirySchema["createdById"];
 	@StringFieldMetadata({ description: "문의 번호" })
 	declare inquiryNumber: InquirySchema["inquiryNumber"];
 	@StringFieldMetadata({ description: "문의 제목" })
@@ -76,9 +77,9 @@ export class Inquiry extends InquirySchema {
 	// Nullable 필드
 	// ============================================================================
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "고객 ID" })
-	declare customerSeq: InquirySchema["customerSeq"];
+	declare customerId: InquirySchema["customerId"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "담당자 ID" })
-	declare assigneeSeq: InquirySchema["assigneeSeq"];
+	declare assigneeId: InquirySchema["assigneeId"];
 	@DateFieldMetadata({ nullable: true, description: "첫 응답 일시" })
 	declare firstResponseAt: InquirySchema["firstResponseAt"];
 	@DateFieldMetadata({ nullable: true, description: "해결 일시" })
@@ -182,7 +183,7 @@ export class Inquiry extends InquirySchema {
 	 * 담당자 배정 여부 확인
 	 */
 	isAssigned(): boolean {
-		return this.assigneeSeq !== null;
+		return this.assigneeId !== null;
 	}
 
 	/**
@@ -217,7 +218,7 @@ export class Inquiry extends InquirySchema {
 	 * 담당자 배정
 	 */
 	assignTo(userId: bigint): void {
-		this.assigneeSeq = userId;
+		this.assigneeId = userId;
 		if (this.isNew()) {
 			this.status = "OPEN";
 		}

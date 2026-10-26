@@ -1,21 +1,23 @@
 import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
 import { RoleAssignmentSchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Policy } from "./policy.entity";
 import type { Role } from "./role.entity";
 /** Role에 Space별 Policy를 할당합니다. */
 @AbstractEntityFields()
 export class RoleAssignment extends RoleAssignmentSchema {
-	declare id: RoleAssignmentSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare roleAssignmentId: RoleAssignmentSchema["roleAssignmentId"];
 	@BigIntIdFieldMetadata({ description: "Role assignment ID" })
-	declare seq: bigint;
+	declare id: bigint;
 
 	@BigIntIdFieldMetadata({ description: "Role ID" })
-	declare roleSeq: RoleAssignmentSchema["roleSeq"];
+	declare roleId: RoleAssignmentSchema["roleId"];
 
 	@BigIntIdFieldMetadata({ description: "Policy ID" })
-	declare policySeq: RoleAssignmentSchema["policySeq"];
+	declare policyId: RoleAssignmentSchema["policyId"];
 
 	@ApiProperty({
 		type: Boolean,

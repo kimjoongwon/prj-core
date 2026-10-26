@@ -10,6 +10,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { ReservationStatus } from "@cocrepo/enum";
 import { ReservationSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Program } from "./program.entity";
 import { Session } from "./session.entity";
@@ -20,20 +21,21 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Reservation extends ReservationSchema {
 	/** 공개 식별자 ULID */
-	declare id: ReservationSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare reservationId: ReservationSchema["reservationId"];
 
 	@BigIntIdFieldMetadata({ description: "Space ID" })
-	declare spaceSeq: ReservationSchema["spaceSeq"];
+	declare spaceId: ReservationSchema["spaceId"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdBySeq: ReservationSchema["createdBySeq"];
+	declare createdById: ReservationSchema["createdById"];
 	@BigIntIdFieldMetadata({ description: "예약 사용자 ID" })
-	declare userSeq: ReservationSchema["userSeq"];
+	declare userId: ReservationSchema["userId"];
 	@BigIntIdFieldMetadata({ description: "타임라인 ID" })
-	declare timelineSeq: ReservationSchema["timelineSeq"];
+	declare timelineId: ReservationSchema["timelineId"];
 	@BigIntIdFieldMetadata({ description: "세션 ID" })
-	declare sessionSeq: ReservationSchema["sessionSeq"];
+	declare sessionId: ReservationSchema["sessionId"];
 	@BigIntIdFieldMetadata({ description: "프로그램 ID" })
-	declare programSeq: ReservationSchema["programSeq"];
+	declare programId: ReservationSchema["programId"];
 	@DateFieldMetadata({ description: "예약 발생 회차 시작 시각" })
 	declare occurrenceStartAt: ReservationSchema["occurrenceStartAt"];
 	@EnumFieldMetadata(() => ReservationStatus, { description: "예약 상태" })

@@ -1,6 +1,7 @@
 import { createPrivateKey, createPublicKey } from "node:crypto";
 import { CONTEXT_KEYS, PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import type { PrismaService } from "@cocrepo/service";
+import { formatDatabaseId } from "@cocrepo/type";
 import {
 	type INestApplication,
 	Inject,
@@ -127,7 +128,7 @@ export class TestJwtStrategy extends PassportStrategy(Strategy) {
 
 	async validate(payload: { sub: string }) {
 		const user = await this.prisma.user.findFirst({
-			where: { id: payload.sub, removedAt: null },
+			where: { userId: payload.sub, removedAt: null },
 			include: {
 				tenants: {
 					// 운영 JwtStrategy가 로드하는 권한 그래프와 동일하게 role까지 포함합니다.
@@ -236,7 +237,7 @@ export async function getTestAuth(
 	const tenant = user.tenants.find((candidate) => {
 		if (
 			options.spaceId &&
-			candidate.space.id !== options.spaceId
+			formatDatabaseId(candidate.space.id) !== options.spaceId
 		) {
 			return false;
 		}
@@ -259,12 +260,12 @@ export async function getTestAuth(
 	}
 
 	// OIDC 발급자 서명(RS256) 토큰 생성 (TestJwtStrategy가 검증 가능)
-	const token = signOidcTestToken({ sub: user.id }, issuer);
+	const token = signOidcTestToken({ sub: user.userId }, issuer);
 
 	return {
 		jwtToken: token,
-		tenantId: tenant.id,
-		spaceId: tenant.space.id,
-		userId: user.id,
+		tenantId: formatDatabaseId(tenant.id),
+		spaceId: formatDatabaseId(tenant.space.id),
+		userId: formatDatabaseId(user.id),
 	};
 }

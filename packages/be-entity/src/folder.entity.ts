@@ -6,6 +6,7 @@ import {
 	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { FolderSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Asset } from "./asset.entity";
 import type { Space } from "./space.entity";
@@ -14,18 +15,19 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Folder extends FolderSchema {
 	/** 공개 식별자 ULID */
-	declare id: FolderSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare folderId: FolderSchema["folderId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceSeq: FolderSchema["spaceSeq"];
+	declare spaceId: FolderSchema["spaceId"];
 	@BigIntIdFieldOptionalMetadata({
 		nullable: true,
 		description: "부모 폴더 ID (루트면 null)",
 	})
-	declare parentFolderSeq: FolderSchema["parentFolderSeq"];
+	declare parentFolderId: FolderSchema["parentFolderId"];
 	@StringFieldMetadata({ description: "폴더명" })
 	declare name: FolderSchema["name"];
 	@StringFieldMetadata({ description: "전체 경로 (예: /images/2024)" })
@@ -33,7 +35,7 @@ export class Folder extends FolderSchema {
 	@NumberFieldMetadata({ description: "정렬 순서", int: true })
 	declare sortOrder: FolderSchema["sortOrder"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdBySeq: FolderSchema["createdBySeq"];
+	declare createdById: FolderSchema["createdById"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)
@@ -60,7 +62,7 @@ export class Folder extends FolderSchema {
 	 * 루트 폴더인지 확인합니다
 	 */
 	isRoot(): boolean {
-		return this.parentFolderSeq === null;
+		return this.parentFolderId === null;
 	}
 
 	/**
@@ -75,8 +77,8 @@ export class Folder extends FolderSchema {
 	 * 특정 폴더의 하위 폴더인지 확인합니다
 	 */
 	isDescendantOf(folderId: bigint): boolean {
-		if (!this.parentFolderSeq) return false;
-		if (this.parentFolderSeq === folderId) return true;
+		if (!this.parentFolderId) return false;
+		if (this.parentFolderId === folderId) return true;
 		// parent가 로드되어 있으면 재귀적으로 확인
 		if (this.parent) {
 			return this.parent.isDescendantOf(folderId);

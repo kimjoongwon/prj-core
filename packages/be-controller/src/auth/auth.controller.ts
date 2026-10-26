@@ -49,6 +49,7 @@ import {
 	Res,
 } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
+import { formatDatabaseId } from "@cocrepo/type";
 import {
 	ApiBody,
 	ApiCookieAuth,
@@ -206,7 +207,10 @@ export class AuthController {
 		@Body() signUpDto: SignUpPayloadDto,
 		@Headers(REQUEST_HEADER_KEYS.TENANT_ID) requestedSpaceId?: string,
 	) {
-		if (requestedSpaceId && requestedSpaceId !== signUpDto.spaceId) {
+		if (
+			requestedSpaceId &&
+			requestedSpaceId !== formatDatabaseId(signUpDto.spaceId)
+		) {
 			throw new BadRequestException("SIGN_UP_SPACE_HEADER_MISMATCH");
 		}
 

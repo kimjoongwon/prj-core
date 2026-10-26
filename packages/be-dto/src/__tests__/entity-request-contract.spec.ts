@@ -45,24 +45,24 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 		});
 	});
 
-	it.each([CreateRoleDto, UpdateRoleDto])(
-		"%s는 assignments와 알 수 없는 필드를 거부한다",
-		async (requestType) => {
-			const roleBody = requestType === CreateRoleDto ? { name: "MANAGER" } : {};
-			await expect(
-				validateRequest(requestType, { ...roleBody, assignments: [] }),
-			).rejects.toThrow();
-			await expect(
-				validateRequest(requestType, { ...roleBody, unexpected: true }),
-			).rejects.toThrow();
-			await expect(
-				validateRequest(requestType, {
-					...roleBody,
-					roleSeq: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
-				}),
-			).rejects.toThrow();
-		},
-	);
+	it.each([
+		CreateRoleDto,
+		UpdateRoleDto,
+	])("%s는 assignments와 알 수 없는 필드를 거부한다", async (requestType) => {
+		const roleBody = requestType === CreateRoleDto ? { name: "MANAGER" } : {};
+		await expect(
+			validateRequest(requestType, { ...roleBody, assignments: [] }),
+		).rejects.toThrow();
+		await expect(
+			validateRequest(requestType, { ...roleBody, unexpected: true }),
+		).rejects.toThrow();
+		await expect(
+			validateRequest(requestType, {
+				...roleBody,
+				roleId: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+			}),
+		).rejects.toThrow();
+	});
 
 	it("Role 수정은 빈 요청과 null을 허용하고 name을 거부한다", async () => {
 		await expect(validateRequest(UpdateRoleDto, {})).resolves.toBeInstanceOf(
@@ -76,15 +76,13 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 		).rejects.toThrow();
 	});
 
-	it("Folder는 상위 ULID 참조와 입력 전용 파일명 제약을 함께 유지한다", async () => {
+	it("Folder는 공통 ID 변환과 입력 전용 파일명 제약을 함께 유지한다", async () => {
 		await expect(
 			validateRequest(CreateFolderDto, {
 				name: "images",
-				parentFolderId: "01JFDR00000000000000000P01",
+				parentFolderId: "42",
 			}),
-		).resolves.toMatchObject({
-			parentFolderId: "01JFDR00000000000000000P01",
-		});
+		).resolves.toMatchObject({ parentFolderId: 42n });
 		await expect(
 			validateRequest(CreateFolderDto, { name: "invalid/name" }),
 		).rejects.toThrow();
@@ -134,20 +132,17 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 	it("Ability의 엄격한 boolean과 JSON 입력은 DTO 전용 계약을 유지한다", async () => {
 		await expect(
 			validateRequest(CreateAbilityDto, {
-				actionId: "01JCCCCCCCCCCCCCCCCCCCCCCC",
-				subjectId: "01JDDDDDDDDDDDDDDDDDDDDDDD",
+				actionId: "1",
+				subjectId: "2",
 				name: "read",
 				inverted: false,
 				conditions: { ownerId: "1" },
 			}),
-		).resolves.toMatchObject({
-			actionId: "01JCCCCCCCCCCCCCCCCCCCCCCC",
-			subjectId: "01JDDDDDDDDDDDDDDDDDDDDDDD",
-		});
+		).resolves.toMatchObject({ actionId: 1n, subjectId: 2n });
 		await expect(
 			validateRequest(CreateAbilityDto, {
-				actionId: "01JCCCCCCCCCCCCCCCCCCCCCCC",
-				subjectId: "01JDDDDDDDDDDDDDDDDDDDDDDD",
+				actionId: "1",
+				subjectId: "2",
 				name: "read",
 				inverted: "false",
 			}),
@@ -156,8 +151,8 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 
 	it("파일 크기는 DB bigint와 구분하여 기존 숫자 입력으로 변환한다", async () => {
 		const assetBody = {
-			spaceSeq: "1",
-			folderSeq: "2",
+			spaceId: "1",
+			folderId: "2",
 			kind: "IMAGE",
 			status: "READY",
 			originalName: "image.png",

@@ -8,20 +8,22 @@ import {
 	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { TemplateVariableSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Template } from "./template.entity";
 
 @AbstractEntityFields()
 export class TemplateVariable extends TemplateVariableSchema {
 	@BigIntIdFieldMetadata({ description: "ID" })
-	declare seq: bigint;
+	declare id: bigint;
 	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 	@DateFieldOptionalMetadata({ nullable: true, description: "수정일" })
 	declare updatedAt: Date | null;
 
 	/** 공개 식별자 ULID */
-	declare id: TemplateVariableSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare templateVariableId: TemplateVariableSchema["templateVariableId"];
 
 	// ============================================================================
 	// 필수 필드
@@ -31,7 +33,7 @@ export class TemplateVariable extends TemplateVariableSchema {
 	@BooleanFieldMetadata({ description: "필수 여부" })
 	declare isRequired: TemplateVariableSchema["isRequired"];
 	@BigIntIdFieldMetadata({ description: "템플릿 ID" })
-	declare templateSeq: TemplateVariableSchema["templateSeq"];
+	declare templateId: TemplateVariableSchema["templateId"];
 
 	// ============================================================================
 	// Nullable 필드

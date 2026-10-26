@@ -13,24 +13,24 @@ import { AbstractSchema } from "../abstract.schema";
 /** SentimentAnalysis의 DB 필드 타입과 공통 검증입니다. */
 export class SentimentAnalysisSchema
 	extends PickSchemaType(AbstractSchema, [
-		"seq",
+		"id",
 		"createdAt",
 		"updatedAt",
 	] as const)
 {
-	id!: string;
+	sentimentAnalysisId!: string;
 
-	declare seq: bigint;
+	declare id: bigint;
 
 	declare createdAt: Date;
 
 	declare updatedAt: Date | null;
 
 	@BigIntIdValidation({ description: "소속 문의 ID" })
-	inquirySeq!: bigint;
+	inquiryId!: bigint;
 
 	@BigIntIdValidationOptional({ description: "분석 대상 메시지 ID" })
-	messageSeq!: bigint | null;
+	messageId!: bigint | null;
 
 	@EnumValidation(() => SentimentType, { description: "감정 유형" })
 	sentiment!: SentimentType;

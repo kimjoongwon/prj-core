@@ -22,12 +22,9 @@ import { UserStatus } from "./user-status.entity";
  * Prisma include로 가져온 관계 데이터를 위한 확장 타입
  */
 type TenantWithSpace = {
-	/** 테넌트 공개 ID (ULID) */
-	id: string;
-	spaceSeq?: bigint | null;
+	id: bigint;
+	spaceId?: bigint | null;
 	space?: {
-		/** 공간 공개 ID (ULID) */
-		id?: string | null;
 		spaceClassification?: {
 			category?: {
 				name: string;
@@ -37,12 +34,9 @@ type TenantWithSpace = {
 };
 
 type UserTenantSnapshotLike = {
-	/** 테넌트 공개 ID (ULID) */
-	id: string;
-	spaceSeq?: bigint | null;
+	id: bigint;
+	spaceId?: bigint | null;
 	space?: {
-		/** 공간 공개 ID (ULID) */
-		id?: string | null;
 		spaceClassification?: {
 			category?: {
 				name?: string | null;
@@ -54,8 +48,9 @@ type UserTenantSnapshotLike = {
 @AbstractEntityFields()
 export class User extends UserSchema {
 	/** 공개 식별자 ULID */
+	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
-	declare id: UserSchema["id"];
+	declare userId: UserSchema["userId"];
 
 	// ============================================================================
 	// 필수 필드
@@ -126,7 +121,7 @@ export class User extends UserSchema {
 	/**
 	 * DTO로부터 Entity 생성 (팩토리)
 	 */
-	static fromDto<T extends { id: string; tenants?: UserTenantSnapshotLike[] }>(
+	static fromDto<T extends { id: bigint; tenants?: UserTenantSnapshotLike[] }>(
 		dto: T,
 	): User {
 		const user = new User();
@@ -151,20 +146,20 @@ export class User extends UserSchema {
 	 * - 슈퍼매니저: undefined (전체 조회)
 	 * - 일반: tenants의 spaceIds
 	 */
-	get accessibleSpaceIds(): string[] | undefined {
+	get accessibleSpaceIds(): bigint[] | undefined {
 		if (this.isSuperManager()) return undefined;
 		return (
 			this.tenants
-				?.map((t) => t.space?.id)
-				.filter((spaceId): spaceId is string => spaceId != null) ?? []
+				?.map((t) => t.spaceId)
+				.filter((spaceId): spaceId is bigint => spaceId != null) ?? []
 		);
 	}
 
 	/**
 	 * 특정 Space에 접근 권한이 있는지 확인
 	 */
-	canAccessSpace(spaceId: string): boolean {
+	canAccessSpace(spaceId: bigint): boolean {
 		if (this.isSuperManager()) return true;
-		return this.tenants?.some((t) => t.space?.id === spaceId) ?? false;
+		return this.tenants?.some((t) => t.spaceId === spaceId) ?? false;
 	}
 }

@@ -1,11 +1,10 @@
-import { isIntegrationUlid } from "@cocrepo/type";
+import { type DecimalId, isDecimalId } from "@cocrepo/type";
 import { makeAutoObservable, reaction } from "mobx";
 import type { PersistStorage } from "../persistence/persistStorage";
 import type { AuthSession } from "./authSession";
 
 const ACCOUNT_PERSIST_SECTION = "account";
-const ACCOUNT_TENANT_SELECTION_PERSIST_VERSION = 4 as const;
-// version 3 이하는 식별자가 decimal 문자열이던 저장 형태입니다(ULID 검증으로 무효 판정).
+const ACCOUNT_TENANT_SELECTION_PERSIST_VERSION = 3 as const;
 // version 2는 이름 키가 fitnessCenterName이던 시절의 저장 형태입니다.
 const LEGACY_ACCOUNT_TENANT_SELECTION_PERSIST_VERSION = 2 as const;
 
@@ -18,16 +17,16 @@ export interface AccountStoreDependencies {
 }
 
 export interface AccountSpaceInfo {
-	tenantId: string;
-	spaceId: string;
+	tenantId: DecimalId;
+	spaceId: DecimalId;
 	spaceName: string;
 	contentLanguageCode?: string | null;
 }
 
 interface PersistedAccountTenantSelection {
 	version: typeof ACCOUNT_TENANT_SELECTION_PERSIST_VERSION;
-	tenantId: string | null;
-	spaceId: string | null;
+	tenantId: DecimalId | null;
+	spaceId: DecimalId | null;
 	spaceName: string | null;
 	contentLanguageCode: string | null;
 	availableSpaces: AccountSpaceInfo[];
@@ -44,9 +43,9 @@ type PersistedAccountTenantSelectionRecord = PersistedAccountTenantSelection & {
 export class AccountStore {
 	readonly authSession: AuthSession;
 	private readonly persistStorage: PersistStorage;
-	currentTenantId: string | null = null;
-	selectedTenantId: string | null = null;
-	currentSpaceId: string | null = null;
+	currentTenantId: DecimalId | null = null;
+	selectedTenantId: DecimalId | null = null;
+	currentSpaceId: DecimalId | null = null;
 	currentSpaceName: string | null = null;
 	contentLanguageCode: string | null = null;
 	availableSpaces: AccountSpaceInfo[] = [];
@@ -97,10 +96,10 @@ export class AccountStore {
 	 * 현재 tenant와 선택한 Space/FitnessCenter 정보를 동기화합니다.
 	 */
 	setCurrentTenant(
-		tenantId: string,
+		tenantId: DecimalId,
 		spaceName: string,
 		contentLanguageCode?: string | null,
-		spaceId?: string | null,
+		spaceId?: DecimalId | null,
 	): void {
 		this.currentTenantId = tenantId;
 		this.selectedTenantId = tenantId;
@@ -118,7 +117,7 @@ export class AccountStore {
 	/**
 	 * Space 선택 draft용 tenant를 갱신합니다.
 	 */
-	selectTenant(tenantId: string | null): void {
+	selectTenant(tenantId: DecimalId | null): void {
 		this.selectedTenantId = tenantId;
 	}
 
@@ -268,24 +267,24 @@ function isEmptyPersistedAccountTenantSelection(
 
 function normalizePersistedTenantId(data: {
 	tenantId: unknown;
-}): string | null {
-	return normalizeStoredSpaceIdentifier(data.tenantId);
+}): DecimalId | null {
+	return normalizeDecimalId(data.tenantId);
 }
 
 function normalizePersistedSpaceId(data: {
 	tenantId: unknown;
 	spaceId: unknown;
-}): string | null {
+}): DecimalId | null {
 	const tenantId = normalizePersistedTenantId(data);
 	if (tenantId === null) {
 		return null;
 	}
 
-	return normalizeStoredSpaceIdentifier(data.spaceId);
+	return normalizeDecimalId(data.spaceId);
 }
 
-function normalizeStoredSpaceIdentifier(value: unknown): string | null {
-	return isIntegrationUlid(value) ? value : null;
+function normalizeDecimalId(value: unknown): DecimalId | null {
+	return isDecimalId(value) ? value : null;
 }
 
 function normalizeAccountSpaces(spaces: Iterable<unknown>): AccountSpaceInfo[] {
@@ -296,8 +295,8 @@ function normalizeAccountSpaces(spaces: Iterable<unknown>): AccountSpaceInfo[] {
 			continue;
 		}
 
-		const tenantId = normalizeStoredSpaceIdentifier(space.tenantId);
-		const spaceId = normalizeStoredSpaceIdentifier(space.spaceId);
+		const tenantId = normalizeDecimalId(space.tenantId);
+		const spaceId = normalizeDecimalId(space.spaceId);
 		const spaceName = readPersistedSpaceName(space);
 		if (tenantId === null || spaceId === null || spaceName === null) {
 			continue;

@@ -7,6 +7,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { AttachmentFileType } from "@cocrepo/enum";
 import { InquiryAttachmentSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
@@ -19,13 +20,14 @@ import type { InquiryMessage } from "./inquiry-message.entity";
 @AbstractEntityFields()
 export class InquiryAttachment extends InquiryAttachmentSchema {
 	/** 공개 식별자 ULID */
-	declare id: InquiryAttachmentSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare inquiryAttachmentId: InquiryAttachmentSchema["inquiryAttachmentId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 메시지 ID" })
-	declare messageSeq: InquiryAttachmentSchema["messageSeq"];
+	declare messageId: InquiryAttachmentSchema["messageId"];
 	@StringFieldMetadata({ description: "원본 파일명" })
 	declare fileName: InquiryAttachmentSchema["fileName"];
 	@NumberFieldMetadata({ description: "파일 크기" })

@@ -8,7 +8,7 @@ export class UpdateActionCommand implements UpdateActionCommandInput {
 	readonly config?: UpdateActionCommandInput["config"];
 
 	constructor(
-		readonly actionId: string,
+		readonly actionId: bigint,
 		input: UpdateActionCommandInput,
 	) {
 		Object.assign(this, input);

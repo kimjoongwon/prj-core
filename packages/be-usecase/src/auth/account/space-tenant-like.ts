@@ -1,13 +1,6 @@
 export type SpaceTenantLike = {
-	/** 테넌트 공개 ID (ULID) */
-	id: string;
-	spaceSeq?: bigint | null;
-	space?: {
-		id?: string | null;
-		spaceClassification?: {
-			category?: { name?: string | null } | null;
-		} | null;
-	} | null;
+	id: bigint;
+	spaceId: bigint;
 	removedAt?: Date | string | null;
 	role?: {
 		name?: string | null;

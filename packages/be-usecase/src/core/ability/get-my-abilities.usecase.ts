@@ -30,8 +30,8 @@ export class GetMyAbilitiesUseCase {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const roleIds = tenant.role?.id ? [tenant.role?.id] : [];
-		const spaceId = tenant.space?.id;
+		const roleIds = tenant.roleId ? [tenant.roleId] : [];
+		const spaceId = tenant.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}

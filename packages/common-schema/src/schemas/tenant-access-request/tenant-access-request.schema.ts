@@ -12,22 +12,22 @@ import { AbstractSchema } from "../abstract.schema";
 export class TenantAccessRequestSchema
 	extends AbstractSchema
 {
-	id!: string;
+	tenantAccessRequestId!: string;
 
 	@BigIntIdValidation({ description: "신청자 ID" })
-	requesterSeq!: bigint;
+	requesterId!: bigint;
 
 	@BigIntIdValidation({ description: "신청 대상 Space ID" })
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidation({ description: "희망 Role ID" })
-	requestedRoleSeq!: bigint;
+	requestedRoleId!: bigint;
 
 	@BigIntIdValidationOptional({
 		description: "신청 시점 기존 Role ID",
 		nullable: true,
 	})
-	previousRoleSeq!: bigint | null;
+	previousRoleId!: bigint | null;
 
 	@StringValidationOptional({ description: "신청 사유", nullable: true })
 	reason!: string | null;
@@ -36,7 +36,7 @@ export class TenantAccessRequestSchema
 	status!: TenantAccessRequestStatus;
 
 	@BigIntIdValidationOptional({ description: "검토자 ID", nullable: true })
-	reviewerSeq!: bigint | null;
+	reviewerId!: bigint | null;
 
 	@StringValidationOptional({ description: "검토 코멘트", nullable: true })
 	reviewComment!: string | null;
@@ -48,5 +48,5 @@ export class TenantAccessRequestSchema
 		description: "승인 적용 Tenant ID",
 		nullable: true,
 	})
-	appliedTenantSeq!: bigint | null;
+	appliedTenantId!: bigint | null;
 }

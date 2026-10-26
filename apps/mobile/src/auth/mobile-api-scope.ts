@@ -2,8 +2,12 @@ import {
   installCoreSessionRecovery,
   setApiSessionScope,
 } from "@cocrepo/api/core/client";
-import type { SpaceDto } from "@cocrepo/api/idp/model";
-import { type IntegrationUlid, isIntegrationUlid } from "@cocrepo/type";
+import type { SpaceDto } from "@cocrepo/api/core/model";
+import {
+  formatDatabaseId,
+  isDecimalId,
+  requireDecimalId,
+} from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 
 export const MOBILE_PLATFORM_SPACE_NAME = "플랫폼 운영본부";
@@ -34,23 +38,38 @@ const resolveFitnessCenterAddress = (space: SpaceDto) =>
   space.fitnessCenter?.company?.label ??
   null;
 
-/** API 와이어의 ULID 식별자를 그대로 모바일 상태에 저장하기 위한 가드입니다. */
-const requireSpaceUlid = (
+/** SDK 런타임의 bigint ID를 모바일 상태의 canonical decimal string으로 바꿉니다. */
+export const toMobileDecimalId = (
   value: unknown,
   fieldName: string,
-): IntegrationUlid => {
-  if (!isIntegrationUlid(value)) {
-    throw new Error(`space_ulid_required:${fieldName}`);
+): string =>
+  typeof value === "bigint"
+    ? formatDatabaseId(value)
+    : requireDecimalId(value, fieldName);
+
+const isMobileDatabaseId = (value: unknown) => {
+  if (isDecimalId(value)) {
+    return true;
   }
-  return value;
+
+  if (typeof value !== "bigint") {
+    return false;
+  }
+
+  try {
+    formatDatabaseId(value);
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 /**
  * 모바일 사용자가 직접 선택할 수 있는 FitnessCenter Space인지 확인합니다.
  */
 export const isSelectableMobileSpace = (space: SpaceDto) =>
-  isIntegrationUlid(space.id) &&
-  isIntegrationUlid(space.tenantId) &&
+  isMobileDatabaseId(space.id) &&
+  isMobileDatabaseId(space.tenantId) &&
   Boolean(space.fitnessCenter) &&
   space.name !== MOBILE_PLATFORM_SPACE_NAME;
 
@@ -64,8 +83,8 @@ export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
   spaceName: resolveSpaceDisplayName(space),
   imageFileId: space.fitnessCenter?.imageFileId ?? null,
   logoImageFileId: space.fitnessCenter?.company?.logoImageFileId ?? null,
-  spaceId: requireSpaceUlid(space.id, "space.id"),
-  tenantId: requireSpaceUlid(space.tenantId, "space.tenantId"),
+  spaceId: toMobileDecimalId(space.id, "space.id"),
+  tenantId: toMobileDecimalId(space.tenantId, "space.tenantId"),
 });
 
 class MobileApiScope {
@@ -93,12 +112,12 @@ class MobileApiScope {
   }
 
   setSpace(space: SpaceDto) {
-    const tenantId = requireSpaceUlid(space.tenantId, "space.tenantId");
+    const tenantId = toMobileDecimalId(space.tenantId, "space.tenantId");
     const existingSpace = this.spaces.find(
       (item) => item.tenantId === tenantId,
     );
     this.tenantId = tenantId;
-    this.spaceId = requireSpaceUlid(space.id, "space.id");
+    this.spaceId = toMobileDecimalId(space.id, "space.id");
     this.spaceName =
       resolveSpaceDisplayName(space) || existingSpace?.spaceName || null;
     this.address =

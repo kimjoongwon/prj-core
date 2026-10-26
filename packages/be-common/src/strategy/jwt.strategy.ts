@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { User } from "@cocrepo/entity";
 import { hydrateEntity, User as UserEntity } from "@cocrepo/entity";
+import type { User } from "@cocrepo/entity";
 import { AuthCacheService, UserService } from "@cocrepo/service";
 import {
 	parseBigIntJson,
@@ -102,22 +102,25 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		iat: number;
 		exp: number;
 	}): Promise<User> {
-		const userSeq = payload.sub;
+		const userId = payload.sub;
 
 		// 1. Redis 캐시 조회 (실패 시 null → DB fallback)
-		const cached = await this.authCacheService.get(userSeq);
+		const cached = await this.authCacheService.get(userId);
 		if (cached) {
-			this.logger.debug(`JWT 검증 - 캐시 히트: ${userSeq}`);
+			this.logger.debug(`JWT 검증 - 캐시 히트: ${userId}`);
 			// 내부 캐시는 API 필드 변환 없이 원본 값과 User 동작을 복원합니다.
-			return hydrateEntity(UserEntity, parseBigIntJson<Partial<User>>(cached));
+			return hydrateEntity(
+				UserEntity,
+				parseBigIntJson<Partial<User>>(cached),
+			);
 		}
 
 		// 2. 캐시 미스 → DB 조회
-		this.logger.debug(`JWT 검증 - DB 조회: ${userSeq}`);
-		const user = await this.usersService.findByUserIdWithTenants(userSeq);
+		this.logger.debug(`JWT 검증 - DB 조회: ${userId}`);
+		const user = await this.usersService.findByUserIdWithTenants(userId);
 
 		if (!user) {
-			this.logger.warn(`사용자를 찾을 수 없음: ${userSeq}`);
+			this.logger.warn(`사용자를 찾을 수 없음: ${userId}`);
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
 		}
 
@@ -125,7 +128,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		const nowSeconds = Math.floor(Date.now() / 1000);
 		const remainingSeconds = payload.exp - nowSeconds;
 		await this.authCacheService.set(
-			userSeq,
+			userId,
 			stringifyBigIntJson(user),
 			remainingSeconds,
 		);

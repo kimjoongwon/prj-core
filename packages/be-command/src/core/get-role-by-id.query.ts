@@ -1,3 +1,3 @@
 export class GetRoleByIdQuery {
-	constructor(readonly roleId: string) {}
+	constructor(readonly roleId: bigint) {}
 }

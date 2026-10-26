@@ -1,4 +1,4 @@
-import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
 import { GetAssetContentQuery } from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { ApiAuth, ApiErrors, Roles } from "@cocrepo/decorator";
@@ -43,7 +43,7 @@ export class AssetsController {
 	@ApiProduces("*/*")
 	@ApiErrors(400, 401, 403, 404, 500)
 	async getAssetContent(
-		@Param("assetId", ParseUlidPipe) assetId: string,
+		@Param("assetId", ParseBigIntIdPipe) assetId: bigint,
 		@Res() res: Response,
 	) {
 		const content = await this.queryBus.execute(

@@ -29,7 +29,7 @@ export class UpdateUserMemberDto extends PartialType(
 	@BigIntIdFieldOptional({
 		description: "분류 카테고리 ID",
 	})
-	categorySeq?: bigint;
+	categoryId?: bigint;
 
 	@BigIntIdFieldOptional({
 		each: true,

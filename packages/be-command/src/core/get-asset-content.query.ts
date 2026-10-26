@@ -1,3 +1,3 @@
 export class GetAssetContentQuery {
-	constructor(readonly assetId: string) {}
+	constructor(readonly assetId: bigint) {}
 }

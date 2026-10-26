@@ -1,3 +1,3 @@
 export class GetRoleAssignmentsQuery {
-	constructor(readonly roleId: string) {}
+	constructor(readonly roleId: bigint) {}
 }

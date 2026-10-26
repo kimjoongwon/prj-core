@@ -12,7 +12,7 @@ import { AbstractSchema } from "../abstract.schema";
 /** Group의 DB 필드 타입과 공통 검증입니다. */
 export class GroupSchema extends AbstractSchema {
 	@ULIDValidation()
-	id!: string;
+	groupId!: string;
 
 	@StringValidation()
 	name!: string;
@@ -24,8 +24,8 @@ export class GroupSchema extends AbstractSchema {
 	label!: string | null;
 
 	@BigIntIdValidation()
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true })
-	createdBySeq!: bigint | null;
+	createdById!: bigint | null;
 }

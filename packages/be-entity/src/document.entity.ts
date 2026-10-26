@@ -5,12 +5,12 @@ import type { Asset } from "./asset.entity";
 @AbstractEntityFields()
 export class Document extends DocumentSchema {
 	/** 공개 식별자 ULID */
-	declare id: DocumentSchema["id"];
+	declare documentId: DocumentSchema["documentId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	declare assetSeq: DocumentSchema["assetSeq"];
+	declare assetId: DocumentSchema["assetId"];
 
 	// ============================================================================
 	// Nullable 필드

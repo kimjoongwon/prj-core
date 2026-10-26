@@ -10,6 +10,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { MessageContentType, SenderType } from "@cocrepo/enum";
 import { InquiryMessageSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AIAgentLog } from "./ai-agent-log.entity";
 import { Inquiry } from "./inquiry.entity";
@@ -27,15 +28,16 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class InquiryMessage extends InquiryMessageSchema {
 	/** 공개 식별자 ULID */
-	declare id: InquiryMessageSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare inquiryMessageId: InquiryMessageSchema["inquiryMessageId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 스레드 ID" })
-	declare threadSeq: InquiryMessageSchema["threadSeq"];
+	declare threadId: InquiryMessageSchema["threadId"];
 	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
-	declare inquirySeq: InquiryMessageSchema["inquirySeq"];
+	declare inquiryId: InquiryMessageSchema["inquiryId"];
 	@EnumFieldMetadata(() => SenderType, { description: "발신자 유형" })
 	declare senderType: InquiryMessageSchema["senderType"];
 	@StringFieldMetadata({ description: "메시지 내용" })
@@ -51,7 +53,7 @@ export class InquiryMessage extends InquiryMessageSchema {
 	// Nullable 필드
 	// ============================================================================
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "발신자 ID" })
-	declare senderSeq: InquiryMessageSchema["senderSeq"];
+	declare senderId: InquiryMessageSchema["senderId"];
 	@UUIDFieldOptionalMetadata({
 		nullable: true,
 		description: "클라이언트 메시지 ID",

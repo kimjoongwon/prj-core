@@ -1,5 +1,5 @@
 export interface SessionInfo {
-	sessionSeq: string;
+	sessionId: string;
 	userAgent: string;
 	ipAddress: string;
 	createdAt: string;

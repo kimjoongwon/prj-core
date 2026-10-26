@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { ClassField, StringField } from "@cocrepo/decorator/field";
-import { DECORATORS, generateSchema } from "@nestjs/swagger";
+import { DECORATORS } from "@nestjs/swagger";
+import { generateSchema } from "@nestjs/swagger";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
 import { describe, expect, it, vi } from "vitest";
@@ -19,7 +20,7 @@ class RoleEntity {
 	@StringField()
 	name!: string;
 	password!: string;
-	roleSeq!: string;
+	roleId!: string;
 	@ClassField(() => AssignmentEntity, {
 		each: true,
 		isArray: true,
@@ -51,7 +52,7 @@ describe("EntityResponseType", () => {
 		const response = plainToInstance(RoleResponse, {
 			name: "ADMIN",
 			password: "secret",
-			roleSeq: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+			roleId: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
 			unknown: true,
 			displayLabel: "관리자",
 			assignments: [{ name: "read", password: "nested", unknown: true }],

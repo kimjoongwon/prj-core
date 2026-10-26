@@ -9,6 +9,6 @@ export interface UpdateInquiryCommandInput {
 	category?: InquiryCategory;
 	status?: InquiryStatus;
 	priority?: InquiryPriority;
-	assigneeId?: string;
+	assigneeId?: bigint;
 	isRealtimeChat?: boolean;
 }

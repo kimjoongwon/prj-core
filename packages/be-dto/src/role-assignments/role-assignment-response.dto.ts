@@ -7,6 +7,8 @@ export class RoleAssignmentResponseDto extends EntityResponseType(
 	{
 		pick: [
 			"id",
+			"roleId",
+			"policyId",
 			"isActive",
 			"priority",
 			"createdAt",

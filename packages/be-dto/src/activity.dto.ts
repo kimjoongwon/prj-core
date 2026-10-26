@@ -9,6 +9,8 @@ export class ActivityDto extends EntityResponseType(Activity, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
+		"routineId",
+		"taskId",
 		"order",
 		"repetitions",
 		"restTime",

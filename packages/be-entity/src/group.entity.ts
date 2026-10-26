@@ -9,6 +9,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { GroupTypes } from "@cocrepo/enum";
 import { GroupSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Space } from "./space.entity";
 import { User } from "./user.entity";
@@ -16,8 +17,9 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Group extends GroupSchema {
 	/** 공개 식별자 ULID */
+	@Exclude({ toPlainOnly: true })
 	@ULIDFieldMetadata()
-	declare id: GroupSchema["id"];
+	declare groupId: GroupSchema["groupId"];
 
 	@StringFieldMetadata()
 	declare name: GroupSchema["name"];
@@ -26,9 +28,9 @@ export class Group extends GroupSchema {
 	@EnumFieldMetadata(() => GroupTypes, { required: true })
 	declare type: GroupSchema["type"];
 	@BigIntIdFieldMetadata()
-	declare spaceSeq: GroupSchema["spaceSeq"];
+	declare spaceId: GroupSchema["spaceId"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true })
-	declare createdBySeq: GroupSchema["createdBySeq"];
+	declare createdById: GroupSchema["createdById"];
 	@ClassField(() => Space, { required: false })
 	space?: Space;
 	@ClassField(() => User, { required: false })

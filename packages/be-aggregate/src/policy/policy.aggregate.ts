@@ -16,7 +16,7 @@ export class PolicyAggregate {
 		return this.policiesRepository.findManyBySpaceId(spaceId);
 	}
 
-	private requireSpaceId(): string {
+	private requireSpaceId(): bigint {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);

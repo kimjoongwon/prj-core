@@ -15,5 +15,5 @@ export class SetTypingDto {
 	@BigIntIdFieldOptional({
 		description: "타이핑 중인 스레드 ID",
 	})
-	threadSeq?: bigint;
+	threadId?: bigint;
 }

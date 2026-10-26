@@ -35,7 +35,7 @@ describe("RoleGroupGuard", () => {
 		tenants: [
 			{
 				id: 201n,
-				spaceSeq: 301n,
+				spaceId: 301n,
 				role: {
 					name: "MEMBER",
 					associations: [
@@ -53,7 +53,7 @@ describe("RoleGroupGuard", () => {
 
 	const createMockTenant = (overrides: Record<string, unknown> = {}) => ({
 		id: 201n,
-		spaceSeq: 301n,
+		spaceId: 301n,
 		role: {
 			name: "MEMBER",
 			associations: [
@@ -190,7 +190,7 @@ describe("RoleGroupGuard", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["일반"]);
 				const user = createMockUser({
-					tenants: [{ id: 201n, spaceSeq: 301n, role: null }],
+					tenants: [{ id: 201n, spaceId: 301n, role: null }],
 				});
 				const tenant = createMockTenant({ role: null });
 				mockClsService.get.mockImplementation((key: string) => {
@@ -216,7 +216,7 @@ describe("RoleGroupGuard", () => {
 					tenants: [
 						{
 							id: 201n,
-							spaceSeq: 301n,
+							spaceId: 301n,
 							role: {
 								name: "MEMBER",
 								associations: [{ group: { name: "일반" } }],
@@ -224,7 +224,7 @@ describe("RoleGroupGuard", () => {
 						},
 						{
 							id: 202n,
-							spaceSeq: 302n,
+							spaceId: 302n,
 							role: {
 								name: "COMPANY_MANAGER",
 								associations: [{ group: { name: "관리자" } }],
@@ -234,7 +234,7 @@ describe("RoleGroupGuard", () => {
 				});
 				const tenant = createMockTenant({
 					id: 202n,
-					spaceSeq: 302n,
+					spaceId: 302n,
 					role: {
 						name: "COMPANY_MANAGER",
 						associations: [{ group: { name: "관리자" } }],

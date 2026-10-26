@@ -5,6 +5,7 @@ import {
 	UUIDFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { FitnessCenterSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Company } from "./company.entity";
 import { Space } from "./space.entity";
@@ -12,7 +13,8 @@ import { Space } from "./space.entity";
 @AbstractEntityFields()
 export class FitnessCenter extends FitnessCenterSchema {
 	/** 공개 식별자 ULID */
-	declare id: FitnessCenterSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare fitnessCenterId: FitnessCenterSchema["fitnessCenterId"];
 
 	@StringFieldMetadata()
 	declare address: FitnessCenterSchema["address"];
@@ -21,9 +23,9 @@ export class FitnessCenter extends FitnessCenterSchema {
 	@StringFieldMetadata()
 	declare email: FitnessCenterSchema["email"];
 	@BigIntIdFieldMetadata()
-	declare companySeq: FitnessCenterSchema["companySeq"];
+	declare companyId: FitnessCenterSchema["companyId"];
 	@BigIntIdFieldMetadata()
-	declare spaceSeq: FitnessCenterSchema["spaceSeq"];
+	declare spaceId: FitnessCenterSchema["spaceId"];
 	@UUIDFieldOptionalMetadata({ nullable: true })
 	declare imageFileId: FitnessCenterSchema["imageFileId"];
 

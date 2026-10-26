@@ -9,6 +9,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { AssetKind, AssetStatus } from "@cocrepo/enum";
 import { AssetSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Album } from "./album.entity";
 import { AlbumEntry } from "./album-entry.entity";
@@ -23,15 +24,16 @@ import { Video } from "./video.entity";
 @AbstractEntityFields()
 export class Asset extends AssetSchema {
 	/** 공개 식별자 ULID */
-	declare id: AssetSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare assetId: AssetSchema["assetId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceSeq: AssetSchema["spaceSeq"];
+	declare spaceId: AssetSchema["spaceId"];
 	@BigIntIdFieldMetadata({ description: "소속 폴더 ID" })
-	declare folderSeq: AssetSchema["folderSeq"];
+	declare folderId: AssetSchema["folderId"];
 	@EnumFieldMetadata(() => AssetKind, {
 		description: "에셋 종류 (IMAGE, VIDEO, DOCUMENT)",
 	})
@@ -66,7 +68,7 @@ export class Asset extends AssetSchema {
 	})
 	declare metadata: AssetSchema["metadata"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdBySeq: AssetSchema["createdBySeq"];
+	declare createdById: AssetSchema["createdById"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

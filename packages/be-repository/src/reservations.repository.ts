@@ -20,7 +20,6 @@ const reservationInclude = {
 
 const bookingProgramInclude = {
 	routine: { select: { id: true } },
-	instructor: { select: { id: true } },
 	session: {
 		include: {
 			timeline: {
@@ -57,14 +56,14 @@ export class ReservationsRepository {
 	) {}
 
 	async findByUserAndIdempotencyKey(
-		userId: string,
+		userId: bigint,
 		idempotencyKey: string,
 	): Promise<Reservation | null> {
 		this.logger.debug(`예약 멱등성 조회: user=${userId}`);
 
 		const result = await this.txHost.tx.reservation.findFirst({
 			where: {
-				user: { id: userId },
+				userId,
 				idempotencyKey,
 			},
 			include: reservationInclude,
@@ -74,15 +73,15 @@ export class ReservationsRepository {
 	}
 
 	async findByIdForUser(params: {
-		reservationId: string;
-		userId: string;
-		spaceId: string;
+		reservationId: bigint;
+		userId: bigint;
+		spaceId: bigint;
 	}): Promise<Reservation | null> {
 		const result = await this.txHost.tx.reservation.findFirst({
 			where: {
 				id: params.reservationId,
-				user: { id: params.userId },
-				space: { id: params.spaceId },
+				userId: params.userId,
+				spaceId: params.spaceId,
 				removedAt: null,
 			},
 			include: reservationInclude,
@@ -92,14 +91,14 @@ export class ReservationsRepository {
 	}
 
 	async findActiveDuplicate(params: {
-		userId: string;
-		programId: string;
+		userId: bigint;
+		programId: bigint;
 		occurrenceStartAt: Date;
 	}): Promise<Reservation | null> {
 		const result = await this.txHost.tx.reservation.findFirst({
 			where: {
-				user: { id: params.userId },
-				program: { id: params.programId },
+				userId: params.userId,
+				programId: params.programId,
 				occurrenceStartAt: params.occurrenceStartAt,
 				status: {
 					in: [ReservationStatus.CONFIRMED, ReservationStatus.WAITLISTED],
@@ -113,10 +112,10 @@ export class ReservationsRepository {
 	}
 
 	async findBookingProgram(params: {
-		spaceId: string;
-		timelineId: string;
-		sessionId: string;
-		programId: string;
+		spaceId: bigint;
+		timelineId: bigint;
+		sessionId: bigint;
+		programId: bigint;
 	}): Promise<BookingProgramRecord | null> {
 		const result = await this.txHost.tx.program.findFirst({
 			where: {
@@ -125,7 +124,7 @@ export class ReservationsRepository {
 					id: params.sessionId,
 					timeline: {
 						id: params.timelineId,
-						space: { id: params.spaceId },
+						spaceId: params.spaceId,
 						removedAt: null,
 					},
 					removedAt: null,
@@ -138,11 +137,11 @@ export class ReservationsRepository {
 	}
 
 	async findBookingPrograms(params: {
-		spaceId: string;
+		spaceId: bigint;
 		from: Date;
 		to: Date;
-		timelineId?: string;
-		programId?: string;
+		timelineId?: bigint;
+		programId?: bigint;
 		search?: string;
 		skip?: number;
 		take?: number;
@@ -174,7 +173,7 @@ export class ReservationsRepository {
 					removedAt: null,
 					timeline: {
 						...(params.timelineId ? { id: params.timelineId } : {}),
-						space: { id: params.spaceId },
+						spaceId: params.spaceId,
 						removedAt: null,
 					},
 					OR: [
@@ -199,7 +198,7 @@ export class ReservationsRepository {
 		return toDomainData(results);
 	}
 
-	async findCoachNames(instructorIds: string[]): Promise<Map<string, string>> {
+	async findCoachNames(instructorIds: bigint[]): Promise<Map<bigint, string>> {
 		if (instructorIds.length === 0) {
 			return new Map();
 		}
@@ -213,11 +212,11 @@ export class ReservationsRepository {
 	}
 
 	async findReservationsForFeed(params: {
-		spaceId: string;
-		userId: string;
+		spaceId: bigint;
+		userId: bigint;
 		from: Date;
 		to: Date;
-		programIds: string[];
+		programIds: bigint[];
 	}): Promise<Reservation[]> {
 		if (params.programIds.length === 0) {
 			return [];
@@ -225,8 +224,8 @@ export class ReservationsRepository {
 
 		const result = await this.txHost.tx.reservation.findMany({
 			where: {
-				space: { id: params.spaceId },
-				program: { id: { in: params.programIds } },
+				spaceId: params.spaceId,
+				programId: { in: params.programIds },
 				occurrenceStartAt: {
 					gte: params.from,
 					lte: params.to,
@@ -241,8 +240,8 @@ export class ReservationsRepository {
 	}
 
 	async findMine(params: {
-		spaceId: string;
-		userId: string;
+		spaceId: bigint;
+		userId: bigint;
 		from?: Date;
 		to?: Date;
 		status?: ReservationStatus;
@@ -250,8 +249,8 @@ export class ReservationsRepository {
 		take?: number;
 	}): Promise<{ items: Reservation[]; totalCount: number }> {
 		const where: Prisma.ReservationWhereInput = {
-			space: { id: params.spaceId },
-			user: { id: params.userId },
+			spaceId: params.spaceId,
+			userId: params.userId,
 			removedAt: null,
 			...(params.status ? { status: params.status } : {}),
 			...(params.from || params.to
@@ -282,13 +281,13 @@ export class ReservationsRepository {
 	}
 
 	async countByProgramOccurrence(params: {
-		programId: string;
+		programId: bigint;
 		occurrenceStartAt: Date;
 		status: ReservationStatus;
 	}): Promise<number> {
 		return this.txHost.tx.reservation.count({
 			where: {
-				program: { id: params.programId },
+				programId: params.programId,
 				occurrenceStartAt: params.occurrenceStartAt,
 				status: params.status,
 				removedAt: null,
@@ -297,12 +296,12 @@ export class ReservationsRepository {
 	}
 
 	async getMaxWaitlistPosition(params: {
-		programId: string;
+		programId: bigint;
 		occurrenceStartAt: Date;
 	}): Promise<number> {
 		const aggregate = await this.txHost.tx.reservation.aggregate({
 			where: {
-				program: { id: params.programId },
+				programId: params.programId,
 				occurrenceStartAt: params.occurrenceStartAt,
 				status: ReservationStatus.WAITLISTED,
 				removedAt: null,
@@ -315,44 +314,12 @@ export class ReservationsRepository {
 
 	async create(
 		data: AutoIdentityCreateInput<
-			Omit<
-				Prisma.ReservationUncheckedCreateInput,
-				| "spaceSeq"
-				| "userSeq"
-				| "createdBySeq"
-				| "timelineSeq"
-				| "sessionSeq"
-				| "programSeq"
-			>,
-			"id"
-		> & {
-			spaceId: string;
-			userId: string;
-			createdBy: { connect: { id: string } };
-			timelineId: string;
-			sessionId: string;
-			programId: string;
-		},
+			Prisma.ReservationUncheckedCreateInput,
+			"reservationId"
+		>,
 	): Promise<Reservation> {
-		const {
-			spaceId,
-			userId,
-			createdBy,
-			timelineId,
-			sessionId,
-			programId,
-			...rest
-		} = data;
 		const result = await this.txHost.tx.reservation.create({
-			data: {
-				...rest,
-				space: { connect: { id: spaceId } },
-				user: { connect: { id: userId } },
-				createdBy,
-				timeline: { connect: { id: timelineId } },
-				session: { connect: { id: sessionId } },
-				program: { connect: { id: programId } },
-			} as Prisma.ReservationCreateInput,
+			data,
 			include: reservationInclude,
 		});
 
@@ -360,8 +327,11 @@ export class ReservationsRepository {
 	}
 
 	async updateById(
-		id: string,
-		data: AutoIdentityUpdateInput<Prisma.ReservationUncheckedUpdateInput, "id">,
+		id: bigint,
+		data: AutoIdentityUpdateInput<
+			Prisma.ReservationUncheckedUpdateInput,
+			"reservationId"
+		>,
 	): Promise<Reservation> {
 		const result = await this.txHost.tx.reservation.update({
 			where: { id },
@@ -390,12 +360,12 @@ export class ReservationsRepository {
 	}
 
 	async findNextWaitlisted(params: {
-		programId: string;
+		programId: bigint;
 		occurrenceStartAt: Date;
 	}): Promise<Reservation | null> {
 		const result = await this.txHost.tx.reservation.findFirst({
 			where: {
-				program: { id: params.programId },
+				programId: params.programId,
 				occurrenceStartAt: params.occurrenceStartAt,
 				status: ReservationStatus.WAITLISTED,
 				removedAt: null,

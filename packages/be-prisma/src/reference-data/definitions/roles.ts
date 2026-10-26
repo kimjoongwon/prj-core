@@ -10,7 +10,7 @@ import { RoleCategoryName, RoleGroupName } from "@cocrepo/constant";
 // Role 타입 카테고리 시드 데이터 (RoleCategoryName enum 활용)
 export interface CategorySeedData {
 	roleCategoryEnum: RoleCategoryName;
-	parentSeq?: string;
+	parentId?: string;
 }
 
 // 카테고리 enum은 UI 분류와 권한 정책 양쪽에서 공통으로 쓰이는 고정 키입니다.

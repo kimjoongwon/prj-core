@@ -1,4 +1,4 @@
-import type { NavItemConfig, NavigatorLike } from "@cocrepo/type";
+import type { DecimalId, NavItemConfig, NavigatorLike } from "@cocrepo/type";
 import { makeAutoObservable, runInAction } from "mobx";
 import { AccessControlStore } from "./accessControl/accessControlStore";
 import { AccountStore } from "./account/accountStore";
@@ -29,7 +29,7 @@ export interface AppSessionScope {
 	refreshToken?: string | null;
 	refreshTokenExpiresAt?: number | null;
 	sessionId?: string | null;
-	tenantId?: string | null;
+	tenantId?: DecimalId | null;
 }
 
 /**

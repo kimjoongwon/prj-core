@@ -16,7 +16,7 @@ export class AssetAggregate {
 		private readonly spaceContext: SpaceContext,
 	) {}
 
-	async getAssetContent(assetId: string) {
+	async getAssetContent(assetId: bigint) {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		const object = await this.objectStorageService.getObject(asset.storageKey);
 
@@ -30,7 +30,7 @@ export class AssetAggregate {
 		};
 	}
 
-	private getCurrentSpaceId(): string {
+	private getCurrentSpaceId(): bigint {
 		const spaceId = this.spaceContext.spaceId;
 
 		if (!spaceId) {
@@ -42,7 +42,7 @@ export class AssetAggregate {
 		return spaceId;
 	}
 
-	private async getCurrentSpaceAsset(assetId: string): Promise<Asset> {
+	private async getCurrentSpaceAsset(assetId: bigint): Promise<Asset> {
 		const asset = await this.assetsRepository.findByIdWithRelations(assetId);
 		this.getCurrentSpaceId();
 
@@ -53,7 +53,7 @@ export class AssetAggregate {
 		return asset;
 	}
 
-	private canReadSpace(spaceId?: string | null): boolean {
+	private canReadSpace(spaceId?: bigint | null): boolean {
 		const spaceIds = this.spaceContext.spaceIds;
 		return (
 			spaceIds === undefined || (spaceId != null && spaceIds.includes(spaceId))

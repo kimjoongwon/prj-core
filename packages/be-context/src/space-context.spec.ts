@@ -3,36 +3,24 @@ import type { ClsService } from "nestjs-cls";
 import { SpaceContext } from "./space-context";
 
 describe("SpaceContext", () => {
-	it("Given ULID scope When 필터를 조회하면 Then ULID 문자열 계약을 반환한다", () => {
+	it("Given bigint scope When 필터를 조회하면 Then bigint 및 bigint[]를 반환한다", () => {
 		const cls = {
 			get: jest.fn((key: string) => {
-				if (key === CONTEXT_KEYS.TENANT_ID) return "01JTENANT00000000000000000";
-				if (key === CONTEXT_KEYS.SPACE_ID) return "01JSPACE00000000000000000F";
-				if (key === CONTEXT_KEYS.EFFECTIVE_SPACE_IDS)
-					return ["01JSPACE00000000000000000F", "01JSPACE00000000000000SAAA"];
+				if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+				if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
+				if (key === CONTEXT_KEYS.EFFECTIVE_SPACE_IDS) return [301n, 302n];
 				return undefined;
 			}),
 		};
 		const context = new SpaceContext(cls as unknown as ClsService);
 
-		expect(context.tenantId).toBe("01JTENANT00000000000000000");
-		expect(context.spaceId).toBe("01JSPACE00000000000000000F");
-		expect(context.spaceIds).toEqual([
-			"01JSPACE00000000000000000F",
-			"01JSPACE00000000000000000S",
-		]);
-		expect(context.spaceFilter).toEqual({
-			space: {
-				id: {
-					in: ["01JSPACE00000000000000000F", "01JSPACE00000000000000000S"],
-				},
-			},
-		});
-		expect(context.currentSpaceFilter).toEqual({
-			space: { id: "01JSPACE00000000000000000F" },
-		});
-		expect(context.canAccessSpace("01JSPACE00000000000000000S")).toBe(true);
-		expect(context.canAccessSpace("01JSPACE00000000000000000X")).toBe(false);
+		expect(context.tenantId).toBe(201n);
+		expect(context.spaceId).toBe(301n);
+		expect(context.spaceIds).toEqual([301n, 302n]);
+		expect(context.spaceFilter).toEqual({ spaceId: { in: [301n, 302n] } });
+		expect(context.currentSpaceFilter).toEqual({ spaceId: 301n });
+		expect(context.canAccessSpace(302n)).toBe(true);
+		expect(context.canAccessSpace(999n)).toBe(false);
 	});
 
 	it("Given scope 미적용 When 접근을 확인하면 Then 전체 접근을 허용한다", () => {
@@ -42,6 +30,6 @@ describe("SpaceContext", () => {
 		const context = new SpaceContext(cls as unknown as ClsService);
 
 		expect(context.spaceFilter).toBeUndefined();
-		expect(context.canAccessSpace("01JSPACE00000000000000000X")).toBe(true);
+		expect(context.canAccessSpace(999n)).toBe(true);
 	});
 });

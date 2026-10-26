@@ -8,7 +8,6 @@ import {
 	useSignUp,
 } from "@cocrepo/api/idp/auth";
 import { REQUEST_HEADER_KEYS } from "@cocrepo/constant";
-import { isIntegrationUlid } from "@cocrepo/type";
 import {
 	type SignUpFormField,
 	SignUpScreen,
@@ -21,6 +20,14 @@ import { useEffect } from "react";
 interface SignUpErrorResponse {
 	error?: string;
 	message?: string | string[];
+}
+
+function parsePositiveBigInt(value: string): bigint {
+	const trimmedValue = value.trim();
+	if (!/^[1-9]\d*$/.test(trimmedValue)) {
+		throw new Error("Space ID must be a positive decimal integer");
+	}
+	return BigInt(trimmedValue);
 }
 
 class SignUpRoutePageState {
@@ -116,7 +123,7 @@ class SignUpRoutePageState {
 				phone: this.signUpForm.phone,
 				address: this.signUpForm.address,
 				password: this.signUpForm.password,
-				spaceId: this.signUpForm.spaceId,
+				spaceId: parsePositiveBigInt(this.signUpForm.spaceId),
 			});
 			runInAction(() => {
 				this.signUpForm.isSubmitted = true;
@@ -183,7 +190,7 @@ class SignUpRoutePageState {
 			errors.confirmPassword = "비밀번호가 일치하지 않습니다";
 		}
 
-		if (!isIntegrationUlid(this.signUpForm.spaceId.trim())) {
+		if (!/^[1-9]\d*$/.test(this.signUpForm.spaceId.trim())) {
 			errors.spaceId = "유효한 Space를 선택해주세요";
 		}
 
@@ -223,11 +230,11 @@ class SignUpRoutePageState {
 }
 
 const createSpaceOption = (space: SpaceDto): SignUpSpaceOption => {
-	const label = space.name ?? space.id;
+	const label = space.name ?? String(space.id);
 	const description = space.fitnessCenter?.address ?? space.label ?? undefined;
 
 	return {
-		value: space.id,
+		value: String(space.id),
 		label,
 		description,
 	};

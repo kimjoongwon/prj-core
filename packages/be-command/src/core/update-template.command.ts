@@ -7,7 +7,7 @@ export class UpdateTemplateCommand implements UpdateTemplateCommandInput {
 	readonly variables?: UpdateTemplateCommandInput["variables"];
 
 	constructor(
-		readonly templateId: string,
+		readonly templateId: bigint,
 		input: UpdateTemplateCommandInput,
 	) {
 		Object.assign(this, input);

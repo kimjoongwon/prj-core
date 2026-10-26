@@ -1,3 +1,3 @@
 export class DeleteTimelineCommand {
-	constructor(readonly timelineId: string) {}
+	constructor(readonly timelineId: bigint) {}
 }

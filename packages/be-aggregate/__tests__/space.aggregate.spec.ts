@@ -64,7 +64,7 @@ describe("SpaceAggregate", () => {
 	describe("getById", () => {
 		it("ID로 Space를 조회해야 한다", async () => {
 			// Given
-			const spaceSeq = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
+			const spaceSeq = 1n;
 			mockRepository.findById.mockResolvedValue(mockSpace as unknown as Space);
 
 			// When
@@ -77,7 +77,7 @@ describe("SpaceAggregate", () => {
 
 		it("Space가 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const spaceSeq = "01JCCCCCCCCCCCCCCCCCCCCCCCC";
+			const spaceSeq = 2n;
 			mockRepository.findById.mockResolvedValue(null);
 
 			// When
@@ -96,11 +96,11 @@ describe("SpaceAggregate", () => {
 			);
 
 			// When
-			const result = await service.getFitnessCenterBySpaceId("01JAAAAAAAAAAAAAAAAAAAAAAAA");
+			const result = await service.getFitnessCenterBySpaceId(1n);
 
 			// Then
 			expect(mockRepository.findFitnessCenterBySpaceId).toHaveBeenCalledWith(
-				"01JAAAAAAAAAAAAAAAAAAAAAAAA",
+				1n,
 			);
 			expect(result).toEqual(mockFitnessCenter);
 		});
@@ -110,7 +110,7 @@ describe("SpaceAggregate", () => {
 			mockRepository.findFitnessCenterBySpaceId.mockResolvedValue(null);
 
 			// When / Then
-			await expect(service.getFitnessCenterBySpaceId("01JAAAAAAAAAAAAAAAAAAAAAAAA")).rejects.toThrow(
+			await expect(service.getFitnessCenterBySpaceId(1n)).rejects.toThrow(
 				NotFoundException,
 			);
 		});
@@ -123,11 +123,11 @@ describe("SpaceAggregate", () => {
 			mockRepository.findByIdsWithFitnessCenter.mockResolvedValue(spaces);
 
 			// When
-			const result = await service.findByIdsWithFitnessCenter(["01JAAAAAAAAAAAAAAAAAAAAAAAA"]);
+			const result = await service.findByIdsWithFitnessCenter([1n]);
 
 			// Then
 			expect(mockRepository.findByIdsWithFitnessCenter).toHaveBeenCalledWith([
-				"01JAAAAAAAAAAAAAAAAAAAAAAAA",
+				1n,
 			]);
 			expect(result).toEqual(spaces);
 		});

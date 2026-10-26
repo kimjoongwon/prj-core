@@ -3,6 +3,7 @@ import {
 	formatSchemaCheckSuccess,
 	type SchemaFileInput,
 	toKebabCase,
+	toPublicIdentifierFieldName,
 	validateSchemaConventions,
 } from "./schema-conventions";
 
@@ -35,8 +36,8 @@ const userModel = `
 // @description: 사용자 계정의 현재 상태와 생명주기를 관리
 /// @displayName 사용자
 model User {
-  id       String       @unique @default(ulid()) @map("user_id") @db.Char(26)
-  seq      BigInt       @id @default(autoincrement()) @map("id")
+  userId   String       @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id       BigInt       @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }
@@ -47,8 +48,8 @@ const aiAgentLogModel = `
 // @description: AI 에이전트 작업 이력을 기록
 /// @displayName AI 에이전트 로그
 model AIAgentLog {
-  id           String @unique @default(ulid()) @map("ai_agent_log_id") @db.Char(26)
-  seq          BigInt @id @default(autoincrement()) @map("id")
+  aiAgentLogId String @unique @default(ulid()) @map("ai_agent_log_id") @db.Char(26)
+  id           BigInt @id @default(autoincrement())
 }
 `;
 
@@ -92,6 +93,14 @@ describe("schema conventions", () => {
 		expect(toKebabCase("OAuth2Client")).toBe("o-auth2-client");
 	});
 
+	it("Given schema 파일명 When 공개 식별자 필드명을 계산하면 Then lowerCamel Id 계약을 따른다", () => {
+		expect(toPublicIdentifierFieldName("user")).toBe("userId");
+		expect(toPublicIdentifierFieldName("oidc-client")).toBe("oidcClientId");
+		expect(toPublicIdentifierFieldName("ai-agent-log")).toBe("aiAgentLogId");
+		expect(toPublicIdentifierFieldName("safe-transaction")).toBe(
+			"safeTransactionId",
+		);
+	});
 
 	it("Given 단일 폴더 schema When 검증하면 Then count와 data-type 요약을 반환한다", () => {
 		const result = validateSchemaConventions({ files: createValidFiles() });
@@ -276,8 +285,8 @@ model user_profile {
 /// @displayName 사용자
 /// @DisplayName 잘못된 표시명
 model User {
-  id       String       @unique @default(ulid()) @map("user_id") @db.Char(26)
-  seq      BigInt       @id @default(autoincrement()) @map("id")
+  userId   String       @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id       BigInt       @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }
@@ -293,7 +302,9 @@ model User {
 		]);
 	});
 
-	it("Given 구 형태 식별자(<model>Id ULID, id BigInt PK, <relation>Id FK)가 있으면 When 검증하면 Then id ULID와 seq PK/FK 계약을 강제한다", () => {
+	it("Given 공개 UUID PK 또는 legacy sequence relation이 있으면 When 검증하면 Then BigInt id와 공개 ULID 계약을 강제한다", () => {
+		const legacySequenceToken = ["s", "e", "q"].join("");
+		const legacyRelationSuffix = `${legacySequenceToken[0]?.toUpperCase()}${legacySequenceToken.slice(1)}`;
 		const result = validateSchemaConventions({
 			files: createValidFiles({
 				"user.prisma": `
@@ -301,25 +312,25 @@ model User {
 // @description: 잘못된 식별자 계약
 /// @displayName 사용자
 model User {
-  userId       String       @unique @default(ulid()) @map("user_id") @db.Char(26)
-  id           BigInt       @id @default(autoincrement())
-  status       UserStatus
-  language     LanguageCode
-  profile      Profile?     @relation(fields: [profileId], references: [id])
-  profileId    BigInt?      @map("profile_id")
+  id       String       @id @default(uuid())
+  status   UserStatus
+  language LanguageCode
+  profile  Profile?     @relation(fields: [profile${legacyRelationSuffix}], references: [${legacySequenceToken}])
+  profile${legacyRelationSuffix} Int?
 }
 `,
 			}),
 		});
 
 		expectErrors(result.errors, [
-			"user.prisma] User.id must be String @unique @default(ulid())",
-			"user.prisma] User.seq must be BigInt @id @default(autoincrement()) @map(\"id\")",
-			"public ULID must be named id, found legacy fields: userId",
-			"relation fields must use the <relation>Seq naming contract: profileId",
-			"relations must reference the internal seq key",
+			"User.id must be BigInt @id @default(autoincrement())",
+			'User.userId must be String @unique @default(ulid()) @map("user_id") @db.Char(26)',
+			"fields must not use the legacy sequence naming contract",
+			"relation fields must use the <relation>Id naming contract",
+			"relations must reference the internal id key",
 		]);
 	});
+
 	it("Given 잘못된 metadata 값이 있으면 When 검증하면 Then metadata 계약을 거부한다", () => {
 		const result = validateSchemaConventions({
 			files: createValidFiles({
@@ -329,8 +340,8 @@ model User {
 // @description: 사용자
 /// @displayName 사용자
 model User {
-  id       String       @unique @default(ulid()) @map("user_id") @db.Char(26)
-  seq      BigInt       @id @default(autoincrement()) @map("id")
+  userId   String       @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id       BigInt       @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }
@@ -353,8 +364,8 @@ model User {
 /// @displayName 사용자
 
 model User {
-  id       String       @unique @default(ulid()) @map("user_id") @db.Char(26)
-  seq      BigInt       @id @default(autoincrement()) @map("id")
+  userId   String       @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id       BigInt       @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }

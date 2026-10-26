@@ -6,7 +6,7 @@ import { ActivityDto } from "../activity.dto";
 import { ExerciseDto } from "../exercise.dto";
 
 export class UpdateTaskDto extends PartialType(
-	PickType(Task, ["spaceSeq", "createdBySeq"] as const),
+	PickType(Task, ["spaceId", "createdById"] as const),
 ) {
 	// 중첩 요청은 기존 공개 DTO 계약을 유지합니다.
 	@IsOptional()

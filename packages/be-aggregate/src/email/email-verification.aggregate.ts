@@ -49,7 +49,7 @@ export class EmailVerificationAggregate {
 					status: "PENDING",
 					expiresAt,
 					verifiedAt: null,
-					verifiedUser: { disconnect: true },
+					verifiedUserId: null,
 					lastSentAt,
 					sendCount: { increment: 1 },
 					lastSendStatus: null,
@@ -93,16 +93,16 @@ export class EmailVerificationAggregate {
 		return verification;
 	}
 
-	async markVerified(id: string, userId: string) {
+	async markVerified(id: bigint, userId: bigint) {
 		return this.repository.updateById(id, {
 			status: "VERIFIED",
 			verifiedAt: new Date(),
-			verifiedUser: { connect: { id: userId } },
+			verifiedUserId: userId,
 		});
 	}
 
 	private async sendAndRecord(
-		verificationId: string,
+		verificationId: bigint,
 		email: string,
 		rawToken: string,
 	): Promise<void> {

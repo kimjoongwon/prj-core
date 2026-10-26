@@ -3,5 +3,5 @@ import { QueryDto } from "./query.dto";
 
 export class QuerySessionDto extends QueryDto {
 	@BigIntIdFieldOptional({ nullable: true, default: null })
-	timelineSeq?: bigint | null;
+	timelineId?: bigint | null;
 }

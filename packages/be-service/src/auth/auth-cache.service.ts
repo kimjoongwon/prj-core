@@ -19,9 +19,9 @@ export class AuthCacheService {
 	 * 캐시된 사용자 데이터 조회
 	 * Redis 장애 시 null 반환 (DB fallback 유도)
 	 */
-	async get(userSeq: string): Promise<string | null> {
+	async get(userId: string): Promise<string | null> {
 		try {
-			return await this.redisService.get(`${AUTH_USER_CACHE_PREFIX}${userSeq}`);
+			return await this.redisService.get(`${AUTH_USER_CACHE_PREFIX}${userId}`);
 		} catch (error) {
 			this.logger.warn(
 				`인증 캐시 조회 실패: ${error instanceof Error ? error.message : String(error)}`,
@@ -35,7 +35,7 @@ export class AuthCacheService {
 	 * TTL = min(JWT 남은 시간, 5분). Redis 장애 시 무시 (fire-and-forget)
 	 */
 	async set(
-		userSeq: string,
+		userId: string,
 		data: string,
 		jwtRemainingSeconds: number,
 	): Promise<void> {
@@ -45,7 +45,7 @@ export class AuthCacheService {
 		);
 		try {
 			await this.redisService.set(
-				`${AUTH_USER_CACHE_PREFIX}${userSeq}`,
+				`${AUTH_USER_CACHE_PREFIX}${userId}`,
 				data,
 				ttl,
 			);
@@ -60,10 +60,10 @@ export class AuthCacheService {
 	 * 사용자 캐시 무효화
 	 * Redis 장애 시 무시 (TTL 만료로 자연 정리)
 	 */
-	async invalidate(userSeq: string): Promise<void> {
+	async invalidate(userId: string): Promise<void> {
 		try {
-			await this.redisService.del(`${AUTH_USER_CACHE_PREFIX}${userSeq}`);
-			this.logger.debug(`인증 캐시 무효화: userSeq=${userSeq}`);
+			await this.redisService.del(`${AUTH_USER_CACHE_PREFIX}${userId}`);
+			this.logger.debug(`인증 캐시 무효화: userId=${userId}`);
 		} catch (error) {
 			this.logger.warn(
 				`인증 캐시 무효화 실패: ${error instanceof Error ? error.message : String(error)}`,

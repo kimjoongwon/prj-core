@@ -2,6 +2,6 @@ import { UserAssociation } from "@cocrepo/entity";
 import { PickType } from "@nestjs/swagger";
 
 export class CreateUserAssociationDto extends PickType(UserAssociation, [
-	"userSeq",
-	"groupSeq",
+	"userId",
+	"groupId",
 ] as const) {}

@@ -11,6 +11,8 @@ export class SpaceClassificationDto extends EntityResponseType(
 			"createdAt",
 			"updatedAt",
 			"removedAt",
+			"spaceId",
+			"categoryId",
 			"category",
 			"space",
 		] as const,

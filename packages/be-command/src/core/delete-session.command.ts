@@ -1,6 +1,6 @@
 export class DeleteSessionCommand {
 	constructor(
-		readonly timelineId: string,
-		readonly sessionId: string,
+		readonly timelineId: bigint,
+		readonly sessionId: bigint,
 	) {}
 }

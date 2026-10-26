@@ -9,6 +9,8 @@ export class TaskDto extends EntityResponseType(Task, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
+		"spaceId",
+		"createdById",
 		"exercise",
 		"activities",
 	] as const,

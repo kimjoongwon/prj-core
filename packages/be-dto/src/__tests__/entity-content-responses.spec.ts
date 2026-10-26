@@ -20,10 +20,10 @@ const publicDates = {
 
 const assetInput = {
 	...publicDates,
-	id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
-	seq: 1n,
-	spaceSeq: 2n,
-	folderSeq: 3n,
+	id: 1n,
+	assetId: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+	spaceId: 2n,
+	folderId: 3n,
 	kind: "IMAGE",
 	status: "READY",
 	originalName: "cover.png",
@@ -33,7 +33,7 @@ const assetInput = {
 	extension: "png",
 	checksum: null,
 	metadata: { dimensions: { width: 300 }, custom: true },
-	createdBySeq: null,
+	createdById: null,
 	publicUrl: "https://example.com/cover.png",
 	password: "secret",
 	unexpected: "private",
@@ -53,12 +53,17 @@ describe("Entity 기반 콘텐츠 응답의 공개 필드 계약", () => {
 		expect(response.sizeBytes).toBe(4096);
 		expect(response.publicUrl).toBe(assetInput.publicUrl);
 		expect(serialized).toMatchObject({
-			id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+			id: "1",
 			sizeBytes: 4096,
 			metadata: assetInput.metadata,
 			publicUrl: assetInput.publicUrl,
 		});
-		for (const privateField of ["password", "unexpected", "createdBy"])
+		for (const privateField of [
+			"assetId",
+			"password",
+			"unexpected",
+			"createdBy",
+		])
 			expect(response).not.toHaveProperty(privateField);
 		expect("isReady" in response).toBe(false);
 		expect(() => JSON.stringify(serialized)).not.toThrow();
@@ -68,19 +73,17 @@ describe("Entity 기반 콘텐츠 응답의 공개 필드 계약", () => {
 		prepareEntityResponseType(FolderDto);
 		const folder = plainToInstance(FolderDto, {
 			id: "3",
-			folderSeq: "root-ulid",
+			folderId: "root-ulid",
 			name: "images",
 			children: [
-				{ id: "4", name: "nested", folderSeq: "child-ulid", unexpected: true },
+				{ id: "4", name: "nested", folderId: "child-ulid", unexpected: true },
 			],
 		});
 		expect(folder.children?.[0]).toBeInstanceOf(FolderDto);
-		expect(folder.children?.[0]).not.toHaveProperty("folderSeq");
+		expect(folder.children?.[0]).not.toHaveProperty("folderId");
 		expect(folder.children?.[0]).not.toHaveProperty("unexpected");
-		expect(folder).not.toHaveProperty("folderSeq");
-		expect(hydrateEntity(Folder, { parentFolderSeq: null }).isRoot()).toBe(
-			true,
-		);
+		expect(folder).not.toHaveProperty("folderId");
+		expect(hydrateEntity(Folder, { parentFolderId: null }).isRoot()).toBe(true);
 
 		prepareEntityResponseType(AssetDetailWrapperResponseDto);
 		const wrapper = plainToInstance(AssetDetailWrapperResponseDto, {
@@ -107,7 +110,7 @@ describe("Entity 기반 콘텐츠 응답의 공개 필드 계약", () => {
 		prepareEntityResponseType(AlbumDetailResponseDto);
 		const response = plainToInstance(AlbumDetailResponseDto, {
 			id: "6",
-			albumSeq: "secret-ulid",
+			albumId: "secret-ulid",
 			coverAsset: assetInput,
 			entries: [
 				{
@@ -122,14 +125,14 @@ describe("Entity 기반 콘텐츠 응답의 공개 필드 계약", () => {
 		expect(response.entries?.[0].asset).toBeInstanceOf(AssetDto);
 		expect(response.entries?.[0]).not.toHaveProperty("albumEntryId");
 		expect(response.entries?.[0].asset).not.toHaveProperty("password");
-		expect(response).not.toHaveProperty("albumSeq");
+		expect(response).not.toHaveProperty("albumId");
 	});
 
 	it("문의 상세의 별도 감정 분석과 스레드·참여자 관계를 유지한다", () => {
 		prepareEntityResponseType(InquiryDetailDto);
 		const response = plainToInstance(InquiryDetailDto, {
 			id: "10",
-			inquirySeq: "secret-ulid",
+			inquiryId: "secret-ulid",
 			aiAgentLogs: [{ prompt: "private" }],
 			sentiment: {
 				id: "11",

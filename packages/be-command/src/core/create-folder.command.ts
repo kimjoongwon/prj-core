@@ -5,7 +5,7 @@ export class CreateFolderCommand implements CreateFolderCommandInput {
 
 	constructor(
 		input: CreateFolderCommandInput,
-		readonly createdById: string,
+		readonly createdById: bigint,
 	) {
 		Object.assign(this, input);
 	}

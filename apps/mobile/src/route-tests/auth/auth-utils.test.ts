@@ -54,15 +54,15 @@ describe("mobile auth utils", () => {
 		await expect(loadNativeAuthSession()).resolves.toBeNull();
 	});
 
-	it("Given Space 선택이 있을 때 When SecureStore에 저장하면 Then version 4 계약으로 복원한다", async () => {
+	it("Given Space 선택이 있을 때 When SecureStore에 저장하면 Then version 3 계약으로 복원한다", async () => {
 		const selection = {
 			address: "서울 강남구",
 			contentLanguageCode: "ko_KR",
 			spaceName: "강남점",
 			imageFileId: "fitness-center-image",
 			logoImageFileId: "company-logo",
-			spaceId: "01JSPACE0000000000000000SA",
-			tenantId: "01JTENANT000000000000000TA",
+			spaceId: "101",
+			tenantId: "201",
 		};
 
 		await saveNativeSpaceSelection(selection);
@@ -72,7 +72,7 @@ describe("mobile auth utils", () => {
 		);
 		expect(JSON.parse(persistedSelection?.[1] ?? "{}")).toMatchObject({
 			...selection,
-			version: 4,
+			version: 3,
 		});
 		await expect(loadNativeSpaceSelection()).resolves.toEqual(selection);
 
@@ -80,15 +80,15 @@ describe("mobile auth utils", () => {
 		await expect(loadNativeSpaceSelection()).resolves.toBeNull();
 	});
 
-	it("Given 구 decimal id를 저장한 version 3 선택이 있을 때 When SecureStore에서 복원하면 Then 값을 폐기한다", async () => {
+it("Given 이름 키가 fitnessCenterName인 version 2 선택이 있을 때 When SecureStore에서 복원하면 Then 이름을 spaceName으로 옮겨 복원한다", async () => {
 		const storageKey = "plate.mobile.native.space-selection.v1";
 		mockSecureStore.set(
 			storageKey,
 			JSON.stringify({
-				version: 3,
+				version: 2,
 				tenantId: "201",
 				spaceId: "101",
-				spaceName: "강남점",
+				fitnessCenterName: "강남점",
 				address: "서울 강남구",
 				contentLanguageCode: "ko_KR",
 				imageFileId: "fitness-center-image",
@@ -96,10 +96,15 @@ describe("mobile auth utils", () => {
 			}),
 		);
 
-		await expect(loadNativeSpaceSelection()).resolves.toBeNull();
-
-		expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith(storageKey);
-		expect(mockSecureStore.has(storageKey)).toBe(false);
+		await expect(loadNativeSpaceSelection()).resolves.toEqual({
+			tenantId: "201",
+			spaceId: "101",
+			spaceName: "강남점",
+			address: "서울 강남구",
+			contentLanguageCode: "ko_KR",
+			imageFileId: "fitness-center-image",
+			logoImageFileId: "company-logo",
+		});
 	});
 
 	it("Given version 없는 예전 선택이 있을 때 When SecureStore에서 복원하면 Then 값을 폐기한다", async () => {
@@ -108,8 +113,8 @@ describe("mobile auth utils", () => {
 			storageKey,
 			JSON.stringify({
 				spaceName: "강남점",
-				spaceId: "01JSPACE0000000000000000SA",
-				tenantId: "01JTENANT000000000000000TA",
+				spaceId: "101",
+				tenantId: "201",
 			}),
 		);
 
@@ -125,9 +130,9 @@ describe("mobile auth utils", () => {
 			storageKey,
 			JSON.stringify({
 				spaceName: "강남점",
-				spaceId: "01JSPACE0000000000000000SA",
-				tenantId: "01JTENANT000000000000000TA",
-				version: 2,
+				spaceId: "101",
+				tenantId: "201",
+				version: 1,
 			}),
 		);
 

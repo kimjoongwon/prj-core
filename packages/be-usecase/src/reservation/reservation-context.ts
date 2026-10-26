@@ -9,8 +9,8 @@ export class ReservationUseCaseContext {
 		private readonly spaceContext: SpaceContext,
 	) {}
 
-	requireContext(): { spaceId: string; userId: string } {
-		const spaceId = this.spaceContext.tenant?.space?.id;
+	requireContext(): { spaceId: bigint; userId: bigint } {
+		const spaceId = this.spaceContext.tenant?.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(RESERVATION_ERRORS.SPACE_NOT_SELECTED);
 		}

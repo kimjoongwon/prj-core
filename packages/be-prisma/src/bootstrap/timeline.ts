@@ -179,10 +179,10 @@ export async function createTimelineSessionExerciseDomainData(
 	const timelinesById = new Map<
 		string,
 		{
-			seq: DbId;
-			id: string;
+			id: DbId;
+			timelineId: string;
 			fitnessCenterName: string;
-			createdBySeq: DbId | null;
+			createdById: DbId | null;
 		}
 	>();
 	let timelineCreated = 0;
@@ -200,32 +200,33 @@ export async function createTimelineSessionExerciseDomainData(
 		}
 
 		const createdBy = userByCreatedByEmail.get(timelineData.createdByEmail);
-		const spaceSeq = fitnessCenter.spaceSeq;
+		const spaceId = fitnessCenter.spaceId;
 		const existingTimeline = await prisma.timeline.findUnique({
-			where: { id: timelineData.timelineId },
+			where: { timelineId: timelineData.id },
 		});
 
 		const timeline = await prisma.timeline.upsert({
-			where: { id: timelineData.timelineId },
+			where: { timelineId: timelineData.id },
 			update: {
 				name: timelineData.name,
 				description: timelineData.description,
-				spaceSeq,
-				createdBySeq: createdBy?.seq ?? null,
+				spaceId,
+				createdById: createdBy?.id ?? null,
 			},
 			create: {
-				id: timelineData.timelineId,
+				timelineId: timelineData.id,
 				name: timelineData.name,
 				description: timelineData.description,
-				spaceSeq,
-				createdBySeq: createdBy?.seq,
+				spaceId,
+				createdById: createdBy?.id,
 			},
 		});
 
-		timelinesById.set(timelineData.timelineId, { seq: timeline.seq,
-			id: timelineData.timelineId,
+		timelinesById.set(timelineData.id, {
+			id: timeline.id,
+			timelineId: timelineData.id,
 			fitnessCenterName: timelineData.fitnessCenterName,
-			createdBySeq: createdBy?.seq ?? null,
+			createdById: createdBy?.id ?? null,
 		});
 
 		if (existingTimeline) {
@@ -235,7 +236,7 @@ export async function createTimelineSessionExerciseDomainData(
 		}
 	}
 
-	const tasksByFitnessCenter = new Map<string, Array<{ seq: DbId }>>();
+	const tasksByFitnessCenter = new Map<string, Array<{ id: DbId }>>();
 	let taskCreated = 0;
 	let exerciseCreated = 0;
 
@@ -248,13 +249,13 @@ export async function createTimelineSessionExerciseDomainData(
 		const timelineCreatedByEmail = timelineSeedData.find(
 			(item) => item.fitnessCenterName === fitnessCenterName,
 		)?.createdByEmail;
-		const createdBySeq = timelineCreatedByEmail
-			? (userByCreatedByEmail.get(timelineCreatedByEmail)?.seq ??
-				fallbackUser.seq)
-			: fallbackUser.seq;
-		const spaceSeq = fitnessCenter.spaceSeq;
+		const createdById = timelineCreatedByEmail
+			? (userByCreatedByEmail.get(timelineCreatedByEmail)?.id ??
+				fallbackUser.id)
+			: fallbackUser.id;
+		const spaceId = fitnessCenter.spaceId;
 
-		const selectedTasks: Array<{ seq: DbId }> = [];
+		const selectedTasks: Array<{ id: DbId }> = [];
 
 		for (const exerciseCatalog of exerciseCatalogSeedData) {
 			const shouldInclude =
@@ -274,18 +275,18 @@ export async function createTimelineSessionExerciseDomainData(
 			);
 
 			const existingTask = await prisma.task.findUnique({
-				where: { id: taskId },
+				where: { taskId },
 			});
 			const task = await prisma.task.upsert({
-				where: { id: taskId },
+				where: { taskId },
 				update: {
-					spaceSeq,
-					createdBySeq,
+					spaceId,
+					createdById,
 				},
 				create: {
-					id: taskId,
-					spaceSeq,
-					createdBySeq,
+					taskId,
+					spaceId,
+					createdById,
 				},
 			});
 
@@ -318,24 +319,24 @@ export async function createTimelineSessionExerciseDomainData(
 			const exerciseDescription = `${exerciseCatalog.description} | 카테고리:${exerciseCatalog.category} | 난이도:${exerciseCatalog.difficulty} | 목표RPE:${targetRpe} | 권장휴식:${recommendedRestSec}초 | 예상소모:${estimatedCalories}kcal`;
 
 			const existingExercise = await prisma.exercise.findUnique({
-				where: { id: exerciseId },
+				where: { exerciseId },
 			});
 			await prisma.exercise.upsert({
-				where: { id: exerciseId },
+				where: { exerciseId },
 				update: {
 					name: exerciseCatalog.name,
 					description: exerciseDescription,
 					duration,
 					count,
-					taskSeq: task.seq,
+					taskId: task.id,
 				},
 				create: {
-					id: exerciseId,
+					exerciseId,
 					name: exerciseCatalog.name,
 					description: exerciseDescription,
 					duration,
 					count,
-					taskSeq: task.seq,
+					taskId: task.id,
 				},
 			});
 
@@ -343,7 +344,7 @@ export async function createTimelineSessionExerciseDomainData(
 				exerciseCreated++;
 			}
 
-			selectedTasks.push({ seq: task.seq });
+			selectedTasks.push({ id: task.id });
 		}
 
 		tasksByFitnessCenter.set(fitnessCenterName, selectedTasks);
@@ -351,7 +352,7 @@ export async function createTimelineSessionExerciseDomainData(
 
 	const routinesByFitnessCenter = new Map<
 		string,
-		Array<{ seq: DbId; level: string }>
+		Array<{ id: DbId; level: string }>
 	>();
 	let routineCreated = 0;
 	let activityCreated = 0;
@@ -366,14 +367,14 @@ export async function createTimelineSessionExerciseDomainData(
 		const createdByEmail = timelineSeedData.find(
 			(item) => item.fitnessCenterName === fitnessCenterName,
 		)?.createdByEmail;
-		const createdBySeq = createdByEmail
-			? (userByCreatedByEmail.get(createdByEmail)?.seq ?? fallbackUser.seq)
-			: fallbackUser.seq;
-		const spaceSeq = fitnessCenter.spaceSeq;
+		const createdById = createdByEmail
+			? (userByCreatedByEmail.get(createdByEmail)?.id ?? fallbackUser.id)
+			: fallbackUser.id;
+		const spaceId = fitnessCenter.spaceId;
 
 		const routineCount = Math.min(4, Math.max(2, Math.floor(tasks.length / 4)));
 		const fitnessCenterRoutines: Array<{
-			seq: DbId;
+			id: DbId;
 			level: string;
 		}> = [];
 
@@ -384,21 +385,21 @@ export async function createTimelineSessionExerciseDomainData(
 				`routine:${fitnessCenterName}:${template.code}:${idx}`,
 			);
 			const existingRoutine = await prisma.routine.findUnique({
-				where: { id: routineId },
+				where: { routineId },
 			});
 
 			const routine = await prisma.routine.upsert({
-				where: { id: routineId },
+				where: { routineId },
 				update: {
-					spaceSeq,
-					createdBySeq,
+					spaceId,
+					createdById,
 					name: `${template.name} 루틴 ${idx + 1}`,
 					label: `${fitnessCenterName} ${template.level}`,
 				},
 				create: {
-					id: routineId,
-					spaceSeq,
-					createdBySeq,
+					routineId,
+					spaceId,
+					createdById,
 					name: `${template.name} 루틴 ${idx + 1}`,
 					label: `${fitnessCenterName} ${template.level}`,
 				},
@@ -410,16 +411,16 @@ export async function createTimelineSessionExerciseDomainData(
 
 			for (let order = 1; order <= 4; order++) {
 				const task = tasks[(idx * 3 + order) % tasks.length];
-				const activityId = stableUlid(`activity:${routineId}:${task.seq}`);
+				const activityId = stableUlid(`activity:${routineId}:${task.id}`);
 				const existingActivity = await prisma.activity.findUnique({
-					where: { id: activityId },
+					where: { activityId },
 				});
 
 				await prisma.activity.upsert({
-					where: { id: activityId },
+					where: { activityId },
 					update: {
-						routineSeq: routine.seq,
-						taskSeq: task.seq,
+						routineId: routine.id,
+						taskId: task.id,
 						order,
 						repetitions:
 							template.focus === "strength"
@@ -441,9 +442,9 @@ export async function createTimelineSessionExerciseDomainData(
 								: `${template.workRestScheme}`,
 					},
 					create: {
-						id: activityId,
-						routineSeq: routine.seq,
-						taskSeq: task.seq,
+						activityId,
+						routineId: routine.id,
+						taskId: task.id,
 						order,
 						repetitions:
 							template.focus === "strength"
@@ -472,7 +473,7 @@ export async function createTimelineSessionExerciseDomainData(
 			}
 
 			fitnessCenterRoutines.push({
-				seq: routine.seq,
+				id: routine.id,
 				level: template.level,
 			});
 		}
@@ -496,7 +497,7 @@ export async function createTimelineSessionExerciseDomainData(
 	// Final phase: generate actual scheduled sessions, then connect one routine
 	// to each session as a program when routine data exists for that fitnessCenter.
 	for (const timelineMeta of timelineSeedData) {
-		const timeline = timelinesById.get(timelineMeta.timelineId);
+		const timeline = timelinesById.get(timelineMeta.id);
 		if (!timeline) continue;
 
 		const loadProfile = loadProfileByEmail.get(timelineMeta.createdByEmail);
@@ -533,16 +534,16 @@ export async function createTimelineSessionExerciseDomainData(
 						? 2
 						: 4;
 			const templateNoise = hashToInt(
-				`${timelineMeta.timelineId}:${index}:template-noise`,
+				`${timelineMeta.id}:${index}:template-noise`,
 				3,
 			);
 			const templateIndex =
 				(index + seasonTemplateShift + templateNoise) %
 				sessionTemplateSeedData.length;
 			const template = sessionTemplateSeedData[templateIndex];
-			const sessionId = stableUlid(`session:${timelineMeta.timelineId}:${index}`);
+			const sessionId = stableUlid(`session:${timelineMeta.id}:${index}`);
 			const startDateTime = dateByRecencyBand(
-				`session:${timelineMeta.timelineId}:${index}`,
+				`session:${timelineMeta.id}:${index}`,
 				timelineMeta.seasonTag,
 			);
 			const durationMinutes = Math.min(
@@ -580,13 +581,13 @@ export async function createTimelineSessionExerciseDomainData(
 			}
 
 			const existingSession = await prisma.session.findUnique({
-				where: { id: sessionId },
+				where: { sessionId },
 			});
 
 			const session = await prisma.session.upsert({
-				where: { id: sessionId },
+				where: { sessionId },
 				update: {
-					timelineSeq: timeline.seq,
+					timelineId: timeline.id,
 					type: sessionType,
 					name: `${template.name} ${index + 1}`,
 					description: `${timelineMeta.fitnessCenterName} ${template.focus} 세션 | ${template.phaseWeek} | 목표 RPE ${template.targetRpe} | 권장 휴식 ${template.recommendedRestSec}초`,
@@ -596,8 +597,8 @@ export async function createTimelineSessionExerciseDomainData(
 					recurringDayOfWeek: recurringDay,
 				},
 				create: {
-					id: sessionId,
-					timelineSeq: timeline.seq,
+					sessionId,
+					timelineId: timeline.id,
 					type: sessionType,
 					name: `${template.name} ${index + 1}`,
 					description: `${timelineMeta.fitnessCenterName} ${template.focus} 세션 | ${template.phaseWeek} | 목표 RPE ${template.targetRpe} | 권장 휴식 ${template.recommendedRestSec}초`,
@@ -625,27 +626,27 @@ export async function createTimelineSessionExerciseDomainData(
 						hashToInt(`${sessionId}:routine`, fitnessCenterRoutines.length)
 					];
 				const programId = stableUlid(
-					`program:${sessionId}:${pickedRoutine.seq}`,
+					`program:${sessionId}:${pickedRoutine.id}`,
 				);
 				const existingProgram = await prisma.program.findUnique({
-					where: { id: programId },
+					where: { programId },
 				});
 
 				await prisma.program.upsert({
-					where: { id: programId },
+					where: { programId },
 					update: {
-						routineSeq: pickedRoutine.seq,
-						sessionSeq: session.seq,
-						instructorSeq: timeline.createdBySeq ?? fallbackUser.seq,
+						routineId: pickedRoutine.id,
+						sessionId: session.id,
+						instructorId: timeline.createdById ?? fallbackUser.id,
 						capacity: programCapacity,
 						name: `${template.name} ${template.phaseWeek} 프로그램`,
 						level: pickedRoutine.level,
 					},
 					create: {
-						id: programId,
-						routineSeq: pickedRoutine.seq,
-						sessionSeq: session.seq,
-						instructorSeq: timeline.createdBySeq ?? fallbackUser.seq,
+						programId,
+						routineId: pickedRoutine.id,
+						sessionId: session.id,
+						instructorId: timeline.createdById ?? fallbackUser.id,
 						capacity: programCapacity,
 						name: `${template.name} ${template.phaseWeek} 프로그램`,
 						level: pickedRoutine.level,

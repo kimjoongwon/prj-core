@@ -8,13 +8,13 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Timeline의 DB 필드 타입과 공통 검증입니다. */
 export class TimelineSchema extends AbstractSchema {
-	id!: string;
+	timelineId!: string;
 
 	@BigIntIdValidation()
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true })
-	createdBySeq!: bigint | null;
+	createdById!: bigint | null;
 
 	@StringValidation()
 	name!: string;

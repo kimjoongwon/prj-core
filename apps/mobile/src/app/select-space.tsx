@@ -12,7 +12,10 @@ import {
   resolveAuthenticatedRoutePath,
 } from "@/auth/auth-config";
 import { mobileSession } from "@/auth/mobile-session";
-import { mobileApiScope } from "@/auth/mobile-api-scope";
+import {
+  mobileApiScope,
+  toMobileDecimalId,
+} from "@/auth/mobile-api-scope";
 import {
   toSelectableMobileSpaceInfos,
   toSpaceListItemInfos,
@@ -32,7 +35,8 @@ const findSpaceByItem = (
 ) =>
   spaces.find(
     (space) =>
-      space.tenantId != null && space.tenantId === item.id,
+      space.tenantId != null &&
+      toMobileDecimalId(space.tenantId, "space.tenantId") === item.id,
   );
 
 const getSelectionErrorDescription = (error: unknown) => {

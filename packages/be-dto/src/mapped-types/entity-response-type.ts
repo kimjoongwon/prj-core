@@ -2,7 +2,6 @@ import {
 	CLASS_FIELD_OPTIONS_METADATA,
 	type ClassFieldOptionsMetadata,
 } from "@cocrepo/decorator/field";
-import type { BaseEntityFields } from "@cocrepo/type";
 import type { Type as Constructor } from "@nestjs/common";
 import {
 	ApiProperty,
@@ -10,6 +9,7 @@ import {
 	PickType,
 } from "@nestjs/swagger";
 import { Exclude, Expose, Type } from "class-transformer";
+import type { BaseEntityFields } from "@cocrepo/type";
 import {
 	ENTITY_RESPONSE_TYPE_METADATA,
 	type EntityResponseMetadata,

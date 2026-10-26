@@ -8,16 +8,16 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Folder의 DB 필드 타입과 공통 검증입니다. */
 export class FolderSchema extends AbstractSchema {
-	id!: string;
+	folderId!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({
 		nullable: true,
 		description: "부모 폴더 ID (루트면 null)",
 	})
-	parentFolderSeq!: bigint | null;
+	parentFolderId!: bigint | null;
 
 	@StringValidation({ description: "폴더명" })
 	name!: string;
@@ -29,5 +29,5 @@ export class FolderSchema extends AbstractSchema {
 	sortOrder!: number;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdBySeq!: bigint | null;
+	createdById!: bigint | null;
 }

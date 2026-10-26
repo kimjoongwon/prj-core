@@ -27,121 +27,121 @@ export type AggregateFolder = {
 }
 
 export type FolderAvgAggregateOutputType = {
-  seq: number | null
-  spaceSeq: number | null
-  parentFolderSeq: number | null
+  id: number | null
+  spaceId: number | null
+  parentFolderId: number | null
   sortOrder: number | null
-  createdBySeq: number | null
+  createdById: number | null
 }
 
 export type FolderSumAggregateOutputType = {
-  seq: bigint | null
-  spaceSeq: bigint | null
-  parentFolderSeq: bigint | null
+  id: bigint | null
+  spaceId: bigint | null
+  parentFolderId: bigint | null
   sortOrder: number | null
-  createdBySeq: bigint | null
+  createdById: bigint | null
 }
 
 export type FolderMinAggregateOutputType = {
-  id: string | null
-  seq: bigint | null
+  folderId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: bigint | null
-  parentFolderSeq: bigint | null
+  spaceId: bigint | null
+  parentFolderId: bigint | null
   name: string | null
   path: string | null
   sortOrder: number | null
-  createdBySeq: bigint | null
+  createdById: bigint | null
 }
 
 export type FolderMaxAggregateOutputType = {
-  id: string | null
-  seq: bigint | null
+  folderId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: bigint | null
-  parentFolderSeq: bigint | null
+  spaceId: bigint | null
+  parentFolderId: bigint | null
   name: string | null
   path: string | null
   sortOrder: number | null
-  createdBySeq: bigint | null
+  createdById: bigint | null
 }
 
 export type FolderCountAggregateOutputType = {
+  folderId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceSeq: number
-  parentFolderSeq: number
+  spaceId: number
+  parentFolderId: number
   name: number
   path: number
   sortOrder: number
-  createdBySeq: number
+  createdById: number
   _all: number
 }
 
 
 export type FolderAvgAggregateInputType = {
-  seq?: true
-  spaceSeq?: true
-  parentFolderSeq?: true
+  id?: true
+  spaceId?: true
+  parentFolderId?: true
   sortOrder?: true
-  createdBySeq?: true
+  createdById?: true
 }
 
 export type FolderSumAggregateInputType = {
-  seq?: true
-  spaceSeq?: true
-  parentFolderSeq?: true
+  id?: true
+  spaceId?: true
+  parentFolderId?: true
   sortOrder?: true
-  createdBySeq?: true
+  createdById?: true
 }
 
 export type FolderMinAggregateInputType = {
+  folderId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  parentFolderSeq?: true
+  spaceId?: true
+  parentFolderId?: true
   name?: true
   path?: true
   sortOrder?: true
-  createdBySeq?: true
+  createdById?: true
 }
 
 export type FolderMaxAggregateInputType = {
+  folderId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  parentFolderSeq?: true
+  spaceId?: true
+  parentFolderId?: true
   name?: true
   path?: true
   sortOrder?: true
-  createdBySeq?: true
+  createdById?: true
 }
 
 export type FolderCountAggregateInputType = {
+  folderId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  parentFolderSeq?: true
+  spaceId?: true
+  parentFolderId?: true
   name?: true
   path?: true
   sortOrder?: true
-  createdBySeq?: true
+  createdById?: true
   _all?: true
 }
 
@@ -232,17 +232,17 @@ export type FolderGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 export type FolderGroupByOutputType = {
-  id: string
-  seq: bigint
+  folderId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: bigint
-  parentFolderSeq: bigint | null
+  spaceId: bigint
+  parentFolderId: bigint | null
   name: string
   path: string
   sortOrder: number
-  createdBySeq: bigint | null
+  createdById: bigint | null
   _count: FolderCountAggregateOutputType | null
   _avg: FolderAvgAggregateOutputType | null
   _sum: FolderSumAggregateOutputType | null
@@ -269,17 +269,17 @@ export type FolderWhereInput = {
   AND?: Prisma.FolderWhereInput | Prisma.FolderWhereInput[]
   OR?: Prisma.FolderWhereInput[]
   NOT?: Prisma.FolderWhereInput | Prisma.FolderWhereInput[]
-  id?: Prisma.StringFilter<"Folder"> | string
-  seq?: Prisma.BigIntFilter<"Folder"> | bigint | number
+  folderId?: Prisma.StringFilter<"Folder"> | string
+  id?: Prisma.BigIntFilter<"Folder"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Folder"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Folder"> | Date | string | null
-  spaceSeq?: Prisma.BigIntFilter<"Folder"> | bigint | number
-  parentFolderSeq?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
+  spaceId?: Prisma.BigIntFilter<"Folder"> | bigint | number
+  parentFolderId?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
   name?: Prisma.StringFilter<"Folder"> | string
   path?: Prisma.StringFilter<"Folder"> | string
   sortOrder?: Prisma.IntFilter<"Folder"> | number
-  createdBySeq?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
+  createdById?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   parent?: Prisma.XOR<Prisma.FolderNullableScalarRelationFilter, Prisma.FolderWhereInput> | null
   children?: Prisma.FolderListRelationFilter
@@ -288,17 +288,17 @@ export type FolderWhereInput = {
 }
 
 export type FolderOrderByWithRelationInput = {
+  folderId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  parentFolderSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  parentFolderId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   path?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   parent?: Prisma.FolderOrderByWithRelationInput
   children?: Prisma.FolderOrderByRelationAggregateInput
@@ -307,8 +307,8 @@ export type FolderOrderByWithRelationInput = {
 }
 
 export type FolderWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   path?: string
   AND?: Prisma.FolderWhereInput | Prisma.FolderWhereInput[]
   OR?: Prisma.FolderWhereInput[]
@@ -316,30 +316,30 @@ export type FolderWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Folder"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Folder"> | Date | string | null
-  spaceSeq?: Prisma.BigIntFilter<"Folder"> | bigint | number
-  parentFolderSeq?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
+  spaceId?: Prisma.BigIntFilter<"Folder"> | bigint | number
+  parentFolderId?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
   name?: Prisma.StringFilter<"Folder"> | string
   sortOrder?: Prisma.IntFilter<"Folder"> | number
-  createdBySeq?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
+  createdById?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   parent?: Prisma.XOR<Prisma.FolderNullableScalarRelationFilter, Prisma.FolderWhereInput> | null
   children?: Prisma.FolderListRelationFilter
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   assets?: Prisma.AssetListRelationFilter
-}, "seq" | "id" | "path">
+}, "id" | "folderId" | "path">
 
 export type FolderOrderByWithAggregationInput = {
+  folderId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  parentFolderSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  parentFolderId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   path?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.FolderCountOrderByAggregateInput
   _avg?: Prisma.FolderAvgOrderByAggregateInput
   _max?: Prisma.FolderMaxOrderByAggregateInput
@@ -351,22 +351,22 @@ export type FolderScalarWhereWithAggregatesInput = {
   AND?: Prisma.FolderScalarWhereWithAggregatesInput | Prisma.FolderScalarWhereWithAggregatesInput[]
   OR?: Prisma.FolderScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FolderScalarWhereWithAggregatesInput | Prisma.FolderScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Folder"> | string
-  seq?: Prisma.BigIntWithAggregatesFilter<"Folder"> | bigint | number
+  folderId?: Prisma.StringWithAggregatesFilter<"Folder"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"Folder"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Folder"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Folder"> | Date | string | null
-  spaceSeq?: Prisma.BigIntWithAggregatesFilter<"Folder"> | bigint | number
-  parentFolderSeq?: Prisma.BigIntNullableWithAggregatesFilter<"Folder"> | bigint | number | null
+  spaceId?: Prisma.BigIntWithAggregatesFilter<"Folder"> | bigint | number
+  parentFolderId?: Prisma.BigIntNullableWithAggregatesFilter<"Folder"> | bigint | number | null
   name?: Prisma.StringWithAggregatesFilter<"Folder"> | string
   path?: Prisma.StringWithAggregatesFilter<"Folder"> | string
   sortOrder?: Prisma.IntWithAggregatesFilter<"Folder"> | number
-  createdBySeq?: Prisma.BigIntNullableWithAggregatesFilter<"Folder"> | bigint | number | null
+  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"Folder"> | bigint | number | null
 }
 
 export type FolderCreateInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -381,24 +381,24 @@ export type FolderCreateInput = {
 }
 
 export type FolderUncheckedCreateInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
-  parentFolderSeq?: bigint | number | null
+  spaceId: bigint | number
+  parentFolderId?: bigint | number | null
   name: string
   path: string
   sortOrder?: number
-  createdBySeq?: bigint | number | null
+  createdById?: bigint | number | null
   children?: Prisma.FolderUncheckedCreateNestedManyWithoutParentInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -413,38 +413,38 @@ export type FolderUpdateInput = {
 }
 
 export type FolderUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  parentFolderSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  parentFolderId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   children?: Prisma.FolderUncheckedUpdateManyWithoutParentNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderCreateManyInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
-  parentFolderSeq?: bigint | number | null
+  spaceId: bigint | number
+  parentFolderId?: bigint | number | null
   name: string
   path: string
   sortOrder?: number
-  createdBySeq?: bigint | number | null
+  createdById?: bigint | number | null
 }
 
 export type FolderUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -454,17 +454,17 @@ export type FolderUpdateManyMutationInput = {
 }
 
 export type FolderUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  parentFolderSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  parentFolderId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type FolderScalarRelationFilter = {
@@ -488,61 +488,61 @@ export type FolderOrderByRelationAggregateInput = {
 }
 
 export type FolderCountOrderByAggregateInput = {
+  folderId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  parentFolderSeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  parentFolderId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   path?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type FolderAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  parentFolderSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  parentFolderId?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type FolderMaxOrderByAggregateInput = {
+  folderId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  parentFolderSeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  parentFolderId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   path?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type FolderMinOrderByAggregateInput = {
+  folderId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  parentFolderSeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  parentFolderId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   path?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type FolderSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  parentFolderSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  parentFolderId?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type FolderCreateNestedOneWithoutAssetsInput = {
@@ -702,8 +702,8 @@ export type FolderUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type FolderCreateWithoutAssetsInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -717,17 +717,17 @@ export type FolderCreateWithoutAssetsInput = {
 }
 
 export type FolderUncheckedCreateWithoutAssetsInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
-  parentFolderSeq?: bigint | number | null
+  spaceId: bigint | number
+  parentFolderId?: bigint | number | null
   name: string
   path: string
   sortOrder?: number
-  createdBySeq?: bigint | number | null
+  createdById?: bigint | number | null
   children?: Prisma.FolderUncheckedCreateNestedManyWithoutParentInput
 }
 
@@ -748,8 +748,8 @@ export type FolderUpdateToOneWithWhereWithoutAssetsInput = {
 }
 
 export type FolderUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -763,23 +763,23 @@ export type FolderUpdateWithoutAssetsInput = {
 }
 
 export type FolderUncheckedUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  parentFolderSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  parentFolderId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   children?: Prisma.FolderUncheckedUpdateManyWithoutParentNestedInput
 }
 
 export type FolderCreateWithoutChildrenInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -793,17 +793,17 @@ export type FolderCreateWithoutChildrenInput = {
 }
 
 export type FolderUncheckedCreateWithoutChildrenInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
-  parentFolderSeq?: bigint | number | null
+  spaceId: bigint | number
+  parentFolderId?: bigint | number | null
   name: string
   path: string
   sortOrder?: number
-  createdBySeq?: bigint | number | null
+  createdById?: bigint | number | null
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutFolderInput
 }
 
@@ -813,8 +813,8 @@ export type FolderCreateOrConnectWithoutChildrenInput = {
 }
 
 export type FolderCreateWithoutParentInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -828,16 +828,16 @@ export type FolderCreateWithoutParentInput = {
 }
 
 export type FolderUncheckedCreateWithoutParentInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
+  spaceId: bigint | number
   name: string
   path: string
   sortOrder?: number
-  createdBySeq?: bigint | number | null
+  createdById?: bigint | number | null
   children?: Prisma.FolderUncheckedCreateNestedManyWithoutParentInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutFolderInput
 }
@@ -864,8 +864,8 @@ export type FolderUpdateToOneWithWhereWithoutChildrenInput = {
 }
 
 export type FolderUpdateWithoutChildrenInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -879,17 +879,17 @@ export type FolderUpdateWithoutChildrenInput = {
 }
 
 export type FolderUncheckedUpdateWithoutChildrenInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  parentFolderSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  parentFolderId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   assets?: Prisma.AssetUncheckedUpdateManyWithoutFolderNestedInput
 }
 
@@ -913,22 +913,22 @@ export type FolderScalarWhereInput = {
   AND?: Prisma.FolderScalarWhereInput | Prisma.FolderScalarWhereInput[]
   OR?: Prisma.FolderScalarWhereInput[]
   NOT?: Prisma.FolderScalarWhereInput | Prisma.FolderScalarWhereInput[]
-  id?: Prisma.StringFilter<"Folder"> | string
-  seq?: Prisma.BigIntFilter<"Folder"> | bigint | number
+  folderId?: Prisma.StringFilter<"Folder"> | string
+  id?: Prisma.BigIntFilter<"Folder"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Folder"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Folder"> | Date | string | null
-  spaceSeq?: Prisma.BigIntFilter<"Folder"> | bigint | number
-  parentFolderSeq?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
+  spaceId?: Prisma.BigIntFilter<"Folder"> | bigint | number
+  parentFolderId?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
   name?: Prisma.StringFilter<"Folder"> | string
   path?: Prisma.StringFilter<"Folder"> | string
   sortOrder?: Prisma.IntFilter<"Folder"> | number
-  createdBySeq?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
+  createdById?: Prisma.BigIntNullableFilter<"Folder"> | bigint | number | null
 }
 
 export type FolderCreateWithoutSpaceInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -942,16 +942,16 @@ export type FolderCreateWithoutSpaceInput = {
 }
 
 export type FolderUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  parentFolderSeq?: bigint | number | null
+  parentFolderId?: bigint | number | null
   name: string
   path: string
   sortOrder?: number
-  createdBySeq?: bigint | number | null
+  createdById?: bigint | number | null
   children?: Prisma.FolderUncheckedCreateNestedManyWithoutParentInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutFolderInput
 }
@@ -983,8 +983,8 @@ export type FolderUpdateManyWithWhereWithoutSpaceInput = {
 }
 
 export type FolderCreateWithoutCreatedByInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -998,13 +998,13 @@ export type FolderCreateWithoutCreatedByInput = {
 }
 
 export type FolderUncheckedCreateWithoutCreatedByInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
-  parentFolderSeq?: bigint | number | null
+  spaceId: bigint | number
+  parentFolderId?: bigint | number | null
   name: string
   path: string
   sortOrder?: number
@@ -1039,21 +1039,21 @@ export type FolderUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type FolderCreateManyParentInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
+  spaceId: bigint | number
   name: string
   path: string
   sortOrder?: number
-  createdBySeq?: bigint | number | null
+  createdById?: bigint | number | null
 }
 
 export type FolderUpdateWithoutParentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1067,49 +1067,49 @@ export type FolderUpdateWithoutParentInput = {
 }
 
 export type FolderUncheckedUpdateWithoutParentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   children?: Prisma.FolderUncheckedUpdateManyWithoutParentNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateManyWithoutParentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type FolderCreateManySpaceInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  parentFolderSeq?: bigint | number | null
+  parentFolderId?: bigint | number | null
   name: string
   path: string
   sortOrder?: number
-  createdBySeq?: bigint | number | null
+  createdById?: bigint | number | null
 }
 
 export type FolderUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1123,49 +1123,49 @@ export type FolderUpdateWithoutSpaceInput = {
 }
 
 export type FolderUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  parentFolderSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  parentFolderId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   children?: Prisma.FolderUncheckedUpdateManyWithoutParentNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  parentFolderSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  parentFolderId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type FolderCreateManyCreatedByInput = {
-  id?: string
-  seq?: bigint | number
+  folderId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
-  parentFolderSeq?: bigint | number | null
+  spaceId: bigint | number
+  parentFolderId?: bigint | number | null
   name: string
   path: string
   sortOrder?: number
 }
 
 export type FolderUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1179,13 +1179,13 @@ export type FolderUpdateWithoutCreatedByInput = {
 }
 
 export type FolderUncheckedUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  parentFolderSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  parentFolderId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1194,13 +1194,13 @@ export type FolderUncheckedUpdateWithoutCreatedByInput = {
 }
 
 export type FolderUncheckedUpdateManyWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  folderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  parentFolderSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  parentFolderId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1247,17 +1247,17 @@ export type FolderCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.E
 
 
 export type FolderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  folderId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  parentFolderSeq?: boolean
+  spaceId?: boolean
+  parentFolderId?: boolean
   name?: boolean
   path?: boolean
   sortOrder?: boolean
-  createdBySeq?: boolean
+  createdById?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   parent?: boolean | Prisma.Folder$parentArgs<ExtArgs>
   children?: boolean | Prisma.Folder$childrenArgs<ExtArgs>
@@ -1267,54 +1267,54 @@ export type FolderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 }, ExtArgs["result"]["folder"]>
 
 export type FolderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  folderId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  parentFolderSeq?: boolean
+  spaceId?: boolean
+  parentFolderId?: boolean
   name?: boolean
   path?: boolean
   sortOrder?: boolean
-  createdBySeq?: boolean
+  createdById?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   parent?: boolean | Prisma.Folder$parentArgs<ExtArgs>
   createdBy?: boolean | Prisma.Folder$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["folder"]>
 
 export type FolderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  folderId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  parentFolderSeq?: boolean
+  spaceId?: boolean
+  parentFolderId?: boolean
   name?: boolean
   path?: boolean
   sortOrder?: boolean
-  createdBySeq?: boolean
+  createdById?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   parent?: boolean | Prisma.Folder$parentArgs<ExtArgs>
   createdBy?: boolean | Prisma.Folder$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["folder"]>
 
 export type FolderSelectScalar = {
+  folderId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  parentFolderSeq?: boolean
+  spaceId?: boolean
+  parentFolderId?: boolean
   name?: boolean
   path?: boolean
   sortOrder?: boolean
-  createdBySeq?: boolean
+  createdById?: boolean
 }
 
-export type FolderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "parentFolderSeq" | "name" | "path" | "sortOrder" | "createdBySeq", ExtArgs["result"]["folder"]>
+export type FolderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"folderId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "parentFolderId" | "name" | "path" | "sortOrder" | "createdById", ExtArgs["result"]["folder"]>
 export type FolderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   parent?: boolean | Prisma.Folder$parentArgs<ExtArgs>
@@ -1344,19 +1344,19 @@ export type $FolderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     assets: Prisma.$AssetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: bigint
+    folderId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
     /**
      * @displayName 소속 Space
      */
-    spaceSeq: bigint
+    spaceId: bigint
     /**
      * @displayName 상위 폴더 내부 순번
      */
-    parentFolderSeq: bigint | null
+    parentFolderId: bigint | null
     /**
      * @displayName 폴더명
      */
@@ -1372,7 +1372,7 @@ export type $FolderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     /**
      * @displayName 생성자
      */
-    createdBySeq: bigint | null
+    createdById: bigint | null
   }, ExtArgs["result"]["folder"]>
   composites: {}
 }
@@ -1456,8 +1456,8 @@ export interface FolderDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    * // Get first 10 Folders
    * const folders = await prisma.folder.findMany({ take: 10 })
    *
-   * // Only select the `id`
-   * const folderWithIdOnly = await prisma.folder.findMany({ select: { id: true } })
+   * // Only select the `folderId`
+   * const folderWithFolderIdOnly = await prisma.folder.findMany({ select: { folderId: true } })
    *
    */
   findMany<T extends FolderFindManyArgs>(args?: Prisma.SelectSubset<T, FolderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1501,9 +1501,9 @@ export interface FolderDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    *   ]
    * })
    *
-   * // Create many Folders and only return the `id`
-   * const folderWithIdOnly = await prisma.folder.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Folders and only return the `folderId`
+   * const folderWithFolderIdOnly = await prisma.folder.createManyAndReturn({
+   *   select: { folderId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1592,9 +1592,9 @@ export interface FolderDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    *   ]
    * })
    *
-   * // Update zero or more Folders and only return the `id`
-   * const folderWithIdOnly = await prisma.folder.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Folders and only return the `folderId`
+   * const folderWithFolderIdOnly = await prisma.folder.updateManyAndReturn({
+   *   select: { folderId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1801,17 +1801,17 @@ export interface Prisma__FolderClient<T, Null = never, ExtArgs extends runtime.T
  * Fields of the Folder model
  */
 export interface FolderFieldRefs {
-  readonly id: Prisma.FieldRef<"Folder", 'String'>
-  readonly seq: Prisma.FieldRef<"Folder", 'BigInt'>
+  readonly folderId: Prisma.FieldRef<"Folder", 'String'>
+  readonly id: Prisma.FieldRef<"Folder", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Folder", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Folder", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Folder", 'DateTime'>
-  readonly spaceSeq: Prisma.FieldRef<"Folder", 'BigInt'>
-  readonly parentFolderSeq: Prisma.FieldRef<"Folder", 'BigInt'>
+  readonly spaceId: Prisma.FieldRef<"Folder", 'BigInt'>
+  readonly parentFolderId: Prisma.FieldRef<"Folder", 'BigInt'>
   readonly name: Prisma.FieldRef<"Folder", 'String'>
   readonly path: Prisma.FieldRef<"Folder", 'String'>
   readonly sortOrder: Prisma.FieldRef<"Folder", 'Int'>
-  readonly createdBySeq: Prisma.FieldRef<"Folder", 'BigInt'>
+  readonly createdById: Prisma.FieldRef<"Folder", 'BigInt'>
 }
 
 

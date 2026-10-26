@@ -2,7 +2,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Image의 DB 필드 타입과 공통 검증입니다. */
 export class ImageSchema extends AbstractSchema {
-	id!: string;
+	imageId!: string;
 
 	width!: number;
 
@@ -14,5 +14,5 @@ export class ImageSchema extends AbstractSchema {
 
 	hasAlpha!: boolean;
 
-	assetSeq!: bigint;
+	assetId!: bigint;
 }

@@ -39,20 +39,22 @@ describe("CaslAbilityFactory", () => {
 
 	it("Role Policy로부터 권한을 생성해야 한다", async () => {
 		const user = {
-			id: "01JSER00000000000000000C01",
+			id: 101n,
+			spaceId: 301n,
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
-					id: "01JTENANT00000000000000201",
-					space: { id: "01JSPACE000000000000000301" },
-					role: { id: "01JTASK0000000000000000401" },
+					id: 201n,
+					spaceId: 301n,
+					roleId: 401n,
+					role: { id: 401n },
 				},
 			],
 		} as unknown as ContextUserSnapshot;
 
 		mockClsService.get.mockImplementation((key) =>
-			key === CONTEXT_KEYS.TENANT_ID ? "01JTENANT00000000000000201" : undefined,
+			key === CONTEXT_KEYS.TENANT_ID ? 201n : undefined,
 		);
 		mockRoleAssignmentsRepository.findActiveByRoleIdsInSpace.mockResolvedValue([
 			{
@@ -80,14 +82,14 @@ describe("CaslAbilityFactory", () => {
 	it("같은 권한 조합에서는 RoleAssignment priority가 높은 정책이 우선해야 한다", async () => {
 		const user = {
 			id: 101n,
-			spaceSeq: 301n,
+			spaceId: 301n,
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
 					id: 201n,
-					spaceSeq: 301n,
-					roleSeq: 401n,
+					spaceId: 301n,
+					roleId: 401n,
 					role: { id: 401n },
 				},
 			],
@@ -140,14 +142,14 @@ describe("CaslAbilityFactory", () => {
 	it("현재 space 컨텍스트가 없으면 빈 권한을 생성해야 한다", async () => {
 		const user = {
 			id: 101n,
-			spaceSeq: 301n,
+			spaceId: 301n,
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
 					id: 201n,
-					spaceSeq: 301n,
-					roleSeq: 401n,
+					spaceId: 301n,
+					roleId: 401n,
 					role: { id: 401n },
 				},
 			],
@@ -166,25 +168,28 @@ describe("CaslAbilityFactory", () => {
 
 	it("같은 spaceId에 중복 tenant가 있어도 첫 tenant의 roleId로 조회해야 한다", async () => {
 		const user = {
-			id: "01JSER00000000000000000C01",
+			id: 101n,
+			spaceId: 301n,
 			email: "u1@test.com",
 			name: "u1",
 			tenants: [
 				{
-					id: "01JTENANT00000000000000201",
-					space: { id: "01JSPACE000000000000000301" },
-					role: { id: "01JTASK0000000000000000401", name: "PLATFORM_ADMIN" },
+					id: 201n,
+					spaceId: 301n,
+					roleId: 401n,
+					role: { id: 401n, name: "PLATFORM_ADMIN" },
 				},
 				{
-					id: "01JTENANT00000000000000202",
-					space: { id: "01JSPACE000000000000000301" },
-					role: { id: "01JTASK0000000000000000402", name: "COMPANY_MANAGER" },
+					id: 202n,
+					spaceId: 301n,
+					roleId: 402n,
+					role: { id: 402n, name: "COMPANY_MANAGER" },
 				},
 			],
 		} as unknown as ContextUserSnapshot;
 
 		mockClsService.get.mockImplementation((key) =>
-			key === CONTEXT_KEYS.TENANT_ID ? "01JTENANT00000000000000201" : undefined,
+			key === CONTEXT_KEYS.TENANT_ID ? 201n : undefined,
 		);
 		mockRoleAssignmentsRepository.findActiveByRoleIdsInSpace.mockResolvedValue(
 			[] as never,
@@ -194,7 +199,7 @@ describe("CaslAbilityFactory", () => {
 
 		expect(
 			mockRoleAssignmentsRepository.findActiveByRoleIdsInSpace,
-		).toHaveBeenCalledWith(["01JTASK0000000000000000401"], "01JSPACE000000000000000301");
+		).toHaveBeenCalledWith([401n], 301n);
 	});
 
 	it("조건의 ID 템플릿을 정밀도 손실 없이 bigint로 치환해야 한다", () => {
@@ -202,20 +207,20 @@ describe("CaslAbilityFactory", () => {
 
 		const conditions = factory.parseConditions(
 			{
-				spaceSeq: "${user.currentSpaceId}",
+				spaceId: "${user.currentSpaceId}",
 				label: "space-${user.currentSpaceId}",
-				nested: { tenantId: "${user.currentTenantSeq}" },
+				nested: { tenantId: "${user.currentTenantId}" },
 			},
 			{
 				user: {
 					currentSpaceId: databaseId,
-					currentTenantSeq: 201n,
+					currentTenantId: 201n,
 				},
 			},
 		);
 
 		expect(conditions).toEqual({
-			spaceSeq: databaseId,
+			spaceId: databaseId,
 			label: `space-${databaseId}`,
 			nested: { tenantId: 201n },
 		});

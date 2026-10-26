@@ -7,13 +7,15 @@ import {
 } from "@cocrepo/decorator/field";
 import { TemplateType } from "@cocrepo/enum";
 import { TemplateSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { TemplateVariable } from "./template-variable.entity";
 
 @AbstractEntityFields()
 export class Template extends TemplateSchema {
 	/** 공개 식별자 ULID */
-	declare id: TemplateSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare templateId: TemplateSchema["templateId"];
 
 	// ============================================================================
 	// 필수 필드

@@ -1,4 +1,9 @@
-import { EmailField, PhoneField, ULIDField } from "@cocrepo/decorator/field";
+import {
+	BigIntIdField,
+	EmailField,
+	PhoneField,
+	StringField,
+} from "@cocrepo/decorator/field";
 import { PasswordField } from "@cocrepo/decorator/field/password";
 
 /**
@@ -7,7 +12,7 @@ import { PasswordField } from "@cocrepo/decorator/field/password";
  * 공유 SignUpSchema의 wire 검증과 같은 규칙을 사용하며 숫자 ID는 bigint로 변환합니다.
  */
 export class SignUpPayloadDto {
-	@ULIDField({
+	@StringField({
 		minLength: 2,
 		maxLength: 50,
 		example: "홍길동",
@@ -15,11 +20,11 @@ export class SignUpPayloadDto {
 	})
 	nickname: string;
 
-	@ULIDField({
-		example: "01J00000000000000000000001",
-		description: "가입할 공간 공개 ID (ULID)",
+	@BigIntIdField({
+		example: "1",
+		description: "스페이스 ID",
 	})
-	spaceId: string;
+	spaceId: bigint;
 
 	@EmailField({
 		example: "user@example.com",
@@ -27,7 +32,7 @@ export class SignUpPayloadDto {
 	})
 	email: string;
 
-	@ULIDField({
+	@StringField({
 		minLength: 2,
 		maxLength: 50,
 		example: "홍길동",
@@ -41,7 +46,7 @@ export class SignUpPayloadDto {
 	})
 	phone: string;
 
-	@ULIDField({
+	@StringField({
 		minLength: 2,
 		maxLength: 255,
 		example: "서울특별시 강남구 샘플로 123",

@@ -12,15 +12,15 @@ import { AbstractSchema } from "../abstract.schema";
 /** SecurityPolicy의 DB 필드 타입과 공통 검증입니다. */
 export class SecurityPolicySchema
 	extends PickSchemaType(AbstractSchema, [
-		"seq",
+		"id",
 		"createdAt",
 		"updatedAt",
 	] as const)
 {
-	id!: string;
+	securityPolicyId!: string;
 
 	@BigIntIdValidation({ description: "ID" })
-	declare seq: bigint;
+	declare id: bigint;
 
 	@DateValidation({ description: "생성일" })
 	declare createdAt: Date;

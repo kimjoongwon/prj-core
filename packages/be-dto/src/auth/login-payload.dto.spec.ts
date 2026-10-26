@@ -1,8 +1,8 @@
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { describe, expect, it } from "vitest";
-import { OidcLoginPayloadDto } from "../oidc/oidc-login-payload.dto";
 import { LoginPayloadDto } from "./login-payload.dto";
+import { OidcLoginPayloadDto } from "../oidc/oidc-login-payload.dto";
 
 describe("login payload DTO", () => {
 	it("백엔드 경계에서 이메일 정규화를 유지한다", () => {

@@ -5,11 +5,11 @@ import { AbstractSchema } from "../abstract.schema";
 export class UserAssociationSchema
 	extends AbstractSchema
 {
-	id!: string;
+	userAssociationId!: string;
 
 	@BigIntIdValidation()
-	userSeq!: bigint;
+	userId!: bigint;
 
 	@BigIntIdValidation()
-	groupSeq!: bigint;
+	groupId!: bigint;
 }

@@ -60,11 +60,11 @@ export class FolderAggregate {
 
 	async createFolder(
 		input: CreateFolderInput,
-		createdById: string,
+		createdById: bigint,
 	): Promise<Folder> {
 		const spaceId = this.getRequiredSpaceId();
 		const folder = new Folder();
-		const parentFolderId = input.parentFolderId ?? null;
+		folder.parentFolderId = input.parentFolderId ?? null;
 		folder.name = input.name.trim();
 
 		if (!folder.name) {
@@ -72,11 +72,13 @@ export class FolderAggregate {
 		}
 
 		let parentFolder: Folder | null = null;
-		if (parentFolderId) {
-			parentFolder = await this.foldersRepository.findById(parentFolderId);
+		if (folder.parentFolderId) {
+			parentFolder = await this.foldersRepository.findById(
+				folder.parentFolderId,
+			);
 			if (
 				!parentFolder ||
-				parentFolder.space?.id !== spaceId ||
+				parentFolder.spaceId !== spaceId ||
 				parentFolder.removedAt
 			) {
 				throw new NotFoundException("상위 폴더를 찾을 수 없습니다");
@@ -91,10 +93,10 @@ export class FolderAggregate {
 			throw new ConflictException(`이미 존재하는 폴더 경로입니다: ${path}`);
 		}
 
-		const siblingFolders = parentFolderId
-			? await this.foldersRepository.findByParentFolderId(parentFolderId)
+		const siblingFolders = folder.parentFolderId
+			? await this.foldersRepository.findByParentFolderId(folder.parentFolderId)
 			: (await this.foldersRepository.findBySpaceId(spaceId)).filter(
-					(currentFolder) => currentFolder.parentFolderSeq === null,
+					(currentFolder) => currentFolder.parentFolderId === null,
 				);
 		const nextSortOrder =
 			siblingFolders.length > 0
@@ -104,12 +106,12 @@ export class FolderAggregate {
 				: 0;
 
 		this.logger.debug(
-			`폴더 생성: space=${spaceId}, parent=${parentFolderId ?? "root"}, name=${folder.name}`,
+			`폴더 생성: space=${spaceId}, parent=${folder.parentFolderId ?? "root"}, name=${folder.name}`,
 		);
 
 		return this.foldersRepository.create({
 			spaceId,
-			parentFolderId: parentFolderId,
+			parentFolderId: folder.parentFolderId,
 			name: folder.name,
 			path,
 			sortOrder: nextSortOrder,
@@ -118,7 +120,7 @@ export class FolderAggregate {
 	}
 
 	async updateFolder(
-		folderId: string,
+		folderId: bigint,
 		input: UpdateFolderInput,
 	): Promise<Folder> {
 		const spaceId = this.getRequiredSpaceId();
@@ -137,10 +139,10 @@ export class FolderAggregate {
 			throw new BadRequestException("폴더명을 입력해주세요");
 		}
 
-		const nextParentFolderId: string | null =
+		const nextParentFolderId =
 			input.parentFolderId !== undefined
 				? (input.parentFolderId ?? null)
-				: currentFolder.parent?.id;
+				: currentFolder.parentFolderId;
 
 		if (nextParentFolderId === currentFolder.id) {
 			throw new BadRequestException(
@@ -194,11 +196,11 @@ export class FolderAggregate {
 		}
 
 		const nextSortOrder =
-			nextParentFolderId !== currentFolder.parent?.id
+			nextParentFolderId !== currentFolder.parentFolderId
 				? this.getNextSortOrder(
 						allFolders.filter(
 							(folder) =>
-								folder.parent?.id === nextParentFolderId &&
+								folder.parentFolderId === nextParentFolderId &&
 								folder.id !== currentFolder.id,
 						),
 					)
@@ -224,11 +226,11 @@ export class FolderAggregate {
 		return updatedFolder;
 	}
 
-	async deleteFolder(folderId: string): Promise<void> {
+	async deleteFolder(folderId: bigint): Promise<void> {
 		const folder = await this.foldersRepository.findByIdWithChildren(folderId);
 		const spaceId = this.getRequiredSpaceId();
 
-		if (!folder || folder.space?.id !== spaceId || folder.removedAt) {
+		if (!folder || folder.spaceId !== spaceId || folder.removedAt) {
 			throw new NotFoundException("폴더를 찾을 수 없습니다");
 		}
 
@@ -243,7 +245,7 @@ export class FolderAggregate {
 		await this.foldersRepository.removeById(folderId);
 	}
 
-	private getRequiredSpaceId(): string {
+	private getRequiredSpaceId(): bigint {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new BadRequestException(
@@ -256,7 +258,7 @@ export class FolderAggregate {
 
 	private applySpaceScope(
 		where: Prisma.FolderWhereInput,
-		spaceIds?: string[],
+		spaceIds?: bigint[],
 	): Prisma.FolderWhereInput {
 		if (spaceIds === undefined) {
 			return where;

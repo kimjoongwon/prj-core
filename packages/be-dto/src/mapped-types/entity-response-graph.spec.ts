@@ -23,16 +23,16 @@ describe("실제 Entity 응답 DTO 순환 그래프", () => {
 		prepareEntityResponseType(FolderDto);
 		const category = plainToInstance(CategoryDto, {
 			name: "root",
-			children: [{ name: "child", categorySeq: "internal", unknown: true }],
+			children: [{ name: "child", categoryId: "internal", unknown: true }],
 		});
 		const folder = plainToInstance(FolderDto, {
 			name: "root",
-			children: [{ name: "child", folderSeq: "internal", unknown: true }],
+			children: [{ name: "child", folderId: "internal", unknown: true }],
 		});
 		expect(category.children?.[0]).toBeInstanceOf(CategoryDto);
 		expect(folder.children?.[0]).toBeInstanceOf(FolderDto);
 		expect(instanceToPlain(category)).not.toHaveProperty("children.0.unknown");
-		expect(instanceToPlain(folder)).not.toHaveProperty("children.0.folderSeq");
+		expect(instanceToPlain(folder)).not.toHaveProperty("children.0.folderId");
 	});
 
 	it("User·Tenant·Profile 실제 상호 참조의 공개 타입과 변환 인스턴스를 유지한다", () => {
@@ -46,7 +46,7 @@ describe("실제 Entity 응답 DTO 순환 그래프", () => {
 		const user = plainToInstance(UserDto, {
 			name: "회원",
 			password: "hash",
-			userSeq: "internal",
+			userId: "internal",
 			tenants: [
 				{
 					id: 1n,

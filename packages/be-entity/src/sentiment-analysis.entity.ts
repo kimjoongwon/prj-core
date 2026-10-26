@@ -8,6 +8,7 @@ import {
 import { SentimentType } from "@cocrepo/enum";
 import { type Prisma } from "@cocrepo/prisma";
 import { SentimentAnalysisSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
@@ -21,13 +22,14 @@ import type { InquiryMessage } from "./inquiry-message.entity";
 @AbstractEntityFields()
 export class SentimentAnalysis extends SentimentAnalysisSchema {
 	/** 공개 식별자 ULID */
-	declare id: SentimentAnalysisSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare sentimentAnalysisId: SentimentAnalysisSchema["sentimentAnalysisId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
-	declare inquirySeq: SentimentAnalysisSchema["inquirySeq"];
+	declare inquiryId: SentimentAnalysisSchema["inquiryId"];
 	@EnumFieldMetadata(() => SentimentType, { description: "감정 유형" })
 	declare sentiment: SentimentAnalysisSchema["sentiment"];
 	@NumberFieldMetadata({ description: "감정 점수 (-1.0 ~ 1.0)" })
@@ -41,7 +43,7 @@ export class SentimentAnalysis extends SentimentAnalysisSchema {
 	// Nullable 필드
 	// ============================================================================
 	@BigIntIdFieldOptionalMetadata({ description: "분석 대상 메시지 ID" })
-	declare messageSeq: SentimentAnalysisSchema["messageSeq"];
+	declare messageId: SentimentAnalysisSchema["messageId"];
 	declare emotions: SentimentAnalysisSchema["emotions"];
 	declare keywords: SentimentAnalysisSchema["keywords"];
 	@NumberFieldMetadata({

@@ -14,7 +14,7 @@ export class GetSignUpSpacesUseCase {
 		return spaceList.spaces
 			.filter(
 				(space) =>
-					space.id !== SYSTEM_SPACE_ULID &&
+					space.spaceId !== SYSTEM_SPACE_ULID &&
 					// 가입 가능한 공간은 살아있는 시설(FitnessCenter)이 연결된 운영 공간으로 제한합니다.
 					space.fitnessCenter != null &&
 					space.name !== PLATFORM_SPACE_NAME,

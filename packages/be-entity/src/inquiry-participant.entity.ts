@@ -8,6 +8,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { InquiryParticipantRole } from "@cocrepo/enum";
 import { InquiryParticipantSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
@@ -22,15 +23,16 @@ import type { User } from "./user.entity";
 @AbstractEntityFields()
 export class InquiryParticipant extends InquiryParticipantSchema {
 	/** 공개 식별자 ULID */
-	declare id: InquiryParticipantSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare inquiryParticipantId: InquiryParticipantSchema["inquiryParticipantId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
-	declare inquirySeq: InquiryParticipantSchema["inquirySeq"];
+	declare inquiryId: InquiryParticipantSchema["inquiryId"];
 	@BigIntIdFieldMetadata({ description: "참여자 ID" })
-	declare userSeq: InquiryParticipantSchema["userSeq"];
+	declare userId: InquiryParticipantSchema["userId"];
 	@EnumFieldMetadata(() => InquiryParticipantRole, {
 		description: "참여자 역할",
 	})
@@ -51,7 +53,7 @@ export class InquiryParticipant extends InquiryParticipantSchema {
 		nullable: true,
 		description: "소속 스레드 ID",
 	})
-	declare threadSeq: InquiryParticipantSchema["threadSeq"];
+	declare threadId: InquiryParticipantSchema["threadId"];
 	@DateFieldMetadata({ nullable: true, description: "마지막 접속 시간" })
 	declare lastSeenAt: InquiryParticipantSchema["lastSeenAt"];
 	@DateFieldMetadata({ nullable: true, description: "마지막 읽은 시간" })

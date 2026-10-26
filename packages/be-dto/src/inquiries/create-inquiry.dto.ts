@@ -1,7 +1,7 @@
 import {
+	BigIntIdFieldOptional,
 	StringField,
 	StringFieldOptional,
-	ULIDFieldOptional,
 } from "@cocrepo/decorator/field";
 import { Inquiry } from "@cocrepo/entity";
 import { IntersectionType, PartialType, PickType } from "@nestjs/swagger";
@@ -22,15 +22,15 @@ export class CreateInquiryDto extends IntersectionType(
 	})
 	title: string;
 
-	@ULIDFieldOptional({
-		description: "고객 ULID",
+	@BigIntIdFieldOptional({
+		description: "고객 ID",
 	})
-	customerId?: string;
+	customerId?: bigint;
 
-	@ULIDFieldOptional({
-		description: "담당자 ULID",
+	@BigIntIdFieldOptional({
+		description: "담당자 ID",
 	})
-	assigneeId?: string;
+	assigneeId?: bigint;
 
 	@StringFieldOptional({
 		description: "문의 내용 (첫 메시지)",

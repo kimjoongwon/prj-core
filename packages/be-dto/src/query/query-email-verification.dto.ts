@@ -2,9 +2,9 @@ import {
 	DateFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { EmailVerification } from "@cocrepo/entity";
 import { Transform } from "class-transformer";
 import { EntityQueryType } from "./entity-query-type";
+import { EmailVerification } from "@cocrepo/entity";
 
 export class QueryEmailVerificationDto extends EntityQueryType(
 	EmailVerification,

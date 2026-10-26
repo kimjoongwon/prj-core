@@ -46,7 +46,7 @@ export class AuthAuditLogAggregate {
 	 * @param limit - 조회 개수 (기본값: 10)
 	 * @returns 최근 감사 로그 배열
 	 */
-	async getRecentLogsByUserId(userId: string, limit = 10) {
+	async getRecentLogsByUserId(userId: bigint, limit = 10) {
 		this.logger.debug(
 			`사용자별 최근 감사 로그 조회: userId=${userId}, limit=${limit}`,
 		);

@@ -1,3 +1,3 @@
 export class ArchiveServiceDocumentCommand {
-	constructor(readonly serviceDocumentId: string) {}
+	constructor(readonly serviceDocumentId: bigint) {}
 }

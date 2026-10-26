@@ -55,7 +55,7 @@ async function ensureSystemSpaceGroups(prisma: PrismaClient): Promise<void> {
 	// These group rows are system-space local structure, so they are created only
 	// after the system tenant exists.
 	const firstTenant = await prisma.tenant.findFirst({
-		where: { space: { id: SYSTEM_SPACE_ULID } },
+		where: { space: { spaceId: SYSTEM_SPACE_ULID } },
 	});
 
 	if (!firstTenant) {
@@ -69,15 +69,15 @@ async function ensureSystemSpaceGroups(prisma: PrismaClient): Promise<void> {
 		const existingGroup = await prisma.group.findFirst({
 			where: {
 				name: groupName,
-				space: { id: SYSTEM_SPACE_ULID },
+				space: { spaceId: SYSTEM_SPACE_ULID },
 			},
 		});
 
 		if (!existingGroup) {
 			await prisma.group.create({
 				data: {
-					spaceSeq: firstTenant.spaceSeq,
-					createdBySeq: firstTenant.userSeq,
+					spaceId: firstTenant.spaceId,
+					createdById: firstTenant.userId,
 					name: groupName,
 					type: "Space",
 				},
@@ -110,12 +110,12 @@ export async function ensureSystemBootstrap(
 		"COMPANY_MANAGER",
 	);
 	const systemSpace = await prisma.space.findUniqueOrThrow({
-		where: { id: SYSTEM_SPACE_ULID },
+		where: { spaceId: SYSTEM_SPACE_ULID },
 	});
 
 	const superAdminUsers = await ensureSystemAdminUsers(
 		prisma,
-		platformAdminRole.seq,
+		platformAdminRole.id,
 	);
 	const [superAdminUser] = superAdminUsers;
 	if (!superAdminUser) {
@@ -131,19 +131,19 @@ export async function ensureSystemBootstrap(
 	if (systemFitnessCenterData) {
 		// 이름/라벨의 원천이 Space이므로 시스템 공간 행에 먼저 반영합니다.
 		await prisma.space.update({
-			where: { seq: systemSpace.seq },
+			where: { id: systemSpace.id },
 			data: {
 				name: systemFitnessCenterData.name,
 				label: systemFitnessCenterData.label,
 			},
 		});
 		const systemFitnessCenter = await prisma.fitnessCenter.findFirst({
-			where: { space: { id: SYSTEM_SPACE_ULID } },
+			where: { space: { spaceId: SYSTEM_SPACE_ULID } },
 			include: { company: true },
 		});
 		if (systemFitnessCenter) {
 			await prisma.company.update({
-				where: { seq: systemFitnessCenter.company.seq },
+				where: { id: systemFitnessCenter.company.id },
 				data: {
 					name: systemFitnessCenterData.name,
 					label: systemFitnessCenterData.label,
@@ -154,7 +154,7 @@ export async function ensureSystemBootstrap(
 				},
 			});
 			await prisma.fitnessCenter.update({
-				where: { seq: systemFitnessCenter.seq },
+				where: { id: systemFitnessCenter.id },
 				data: {
 					address: systemFitnessCenterData.address,
 					phone: systemFitnessCenterData.phone,
@@ -177,8 +177,8 @@ export async function ensureSystemBootstrap(
 					address: systemFitnessCenterData.address,
 					phone: systemFitnessCenterData.phone,
 					email: systemFitnessCenterData.email,
-					companySeq: systemCompany.seq,
-					spaceSeq: systemSpace.seq,
+					companyId: systemCompany.id,
+					spaceId: systemSpace.id,
 				},
 			});
 		}
@@ -217,7 +217,7 @@ export async function createRegularUsersAndFitnessCenters(
 
 	const createdFitnessCenters: Array<{
 		fitnessCenter: FitnessCenter;
-		spaceSeq: DbId;
+		spaceId: DbId;
 		spaceName: string;
 	}> = [];
 	const defaultAdminPassword = await hash("admin123!@#", 10);
@@ -271,18 +271,18 @@ export async function createRegularUsersAndFitnessCenters(
 
 				const existingTenant = await prisma.tenant.findFirst({
 					where: {
-						userSeq: adminUser.seq,
-						spaceSeq: space.seq,
-						roleSeq: companyManagerRole.seq,
+						userId: adminUser.id,
+						spaceId: space.id,
+						roleId: companyManagerRole.id,
 					},
 				});
 
 				if (!existingTenant) {
 					await prisma.tenant.create({
 						data: {
-							userSeq: adminUser.seq,
-							spaceSeq: space.seq,
-							roleSeq: companyManagerRole.seq,
+							userId: adminUser.id,
+							spaceId: space.id,
+							roleId: companyManagerRole.id,
 						},
 					});
 				}
@@ -302,14 +302,14 @@ export async function createRegularUsersAndFitnessCenters(
 						address: fitnessCenterData.address,
 						phone: fitnessCenterData.phone,
 						email: fitnessCenterData.email,
-						companySeq: company.seq,
-						spaceSeq: space.seq,
+						companyId: company.id,
+						spaceId: space.id,
 					},
 				});
 
 				createdFitnessCenters.push({
 					fitnessCenter,
-					spaceSeq: space.seq,
+					spaceId: space.id,
 					spaceName: space.name,
 				});
 				console.log(`피트니스센터 생성 완료: ${fitnessCenterData.name}`);
@@ -317,7 +317,7 @@ export async function createRegularUsersAndFitnessCenters(
 				console.log(`피트니스센터 이미 존재: ${fitnessCenterData.name}`);
 				createdFitnessCenters.push({
 					fitnessCenter: existingFitnessCenter,
-					spaceSeq: existingFitnessCenter.space.seq,
+					spaceId: existingFitnessCenter.space.id,
 					spaceName: existingFitnessCenter.space.name,
 				});
 			}
@@ -358,7 +358,7 @@ export async function createRegularUsersAndFitnessCenters(
 			const hashedPassword = await hash(userData.password, 10);
 			const userFitnessCenters: Array<{
 				fitnessCenter: FitnessCenter;
-				spaceSeq: DbId;
+				spaceId: DbId;
 				spaceName: string;
 			}> = [];
 
@@ -405,18 +405,18 @@ export async function createRegularUsersAndFitnessCenters(
 			for (const fitnessCenterInfo of userFitnessCenters) {
 				const existingUserTenant = await prisma.tenant.findFirst({
 					where: {
-						user: { seq: user.seq },
-						space: { seq: fitnessCenterInfo.spaceSeq },
-						role: { seq: assignedRole.seq },
+						user: { id: user.id },
+						space: { id: fitnessCenterInfo.spaceId },
+						role: { id: assignedRole.id },
 					},
 				});
 
 				if (!existingUserTenant) {
 					await prisma.tenant.create({
 						data: {
-							user: { connect: { seq: user.seq } },
-							space: { connect: { seq: fitnessCenterInfo.spaceSeq } },
-							role: { connect: { seq: assignedRole.seq } },
+							user: { connect: { id: user.id } },
+							space: { connect: { id: fitnessCenterInfo.spaceId } },
+							role: { connect: { id: assignedRole.id } },
 						},
 					});
 				}
@@ -464,24 +464,24 @@ export async function classifyFitnessCenterSpacesAsBranch(
 	// Every non-system fitness center space should classify as BRANCH, while the system
 	// space keeps the ROOT classification established by reference data.
 	for (const fitnessCenter of fitnessCenters) {
-		if (fitnessCenter.space.id === systemSpaceUlid) {
+		if (fitnessCenter.space.spaceId === systemSpaceUlid) {
 			continue;
 		}
 
 		await prisma.spaceClassification.upsert({
-			where: { spaceSeq: fitnessCenter.spaceSeq },
+			where: { spaceId: fitnessCenter.spaceId },
 			create: {
-				spaceSeq: fitnessCenter.spaceSeq,
-				categorySeq: branchCategory.seq,
+				spaceId: fitnessCenter.spaceId,
+				categoryId: branchCategory.id,
 			},
 			update: {
-				categorySeq: branchCategory.seq,
+				categoryId: branchCategory.id,
 			},
 		});
 		syncedCount++;
 		console.log(
-			`  - BRANCH 할당: ${fitnessCenter.space.name} (spaceSeq=${String(
-				fitnessCenter.space.seq,
+			`  - BRANCH 할당: ${fitnessCenter.space.name} (spaceId=${String(
+				fitnessCenter.space.id,
 			).slice(-8)})`,
 		);
 	}
@@ -519,7 +519,7 @@ export async function createHierarchicalTenants(
 
 	const rootTenants = await prisma.tenant.findMany({
 		where: {
-			space: { id: systemSpaceUlid },
+			space: { spaceId: systemSpaceUlid },
 			removedAt: null,
 			user: {
 				email: {
@@ -556,22 +556,22 @@ export async function createHierarchicalTenants(
 		for (const branchSpace of branchSpaces) {
 			const existingTenants = await prisma.tenant.findMany({
 				where: {
-					userSeq: rootTenant.userSeq,
-					spaceSeq: branchSpace.seq,
+					userId: rootTenant.userId,
+					spaceId: branchSpace.id,
 					removedAt: null,
 				},
 				select: {
-					seq: true,
-					roleSeq: true,
+					id: true,
+					roleId: true,
 				},
 			});
 
 			if (existingTenants.length === 0) {
 				await prisma.tenant.create({
 					data: {
-						userSeq: rootTenant.userSeq,
-						spaceSeq: branchSpace.seq,
-						roleSeq: companyManagerRole.seq,
+						userId: rootTenant.userId,
+						spaceId: branchSpace.id,
+						roleId: companyManagerRole.id,
 					},
 				});
 				createdCount++;
@@ -579,17 +579,17 @@ export async function createHierarchicalTenants(
 			}
 
 			const needsRoleUpdate = existingTenants.some(
-				(tenant) => tenant.roleSeq !== companyManagerRole.seq,
+				(tenant) => tenant.roleId !== companyManagerRole.id,
 			);
 			if (needsRoleUpdate) {
 				await prisma.tenant.updateMany({
 					where: {
-						seq: {
-							in: existingTenants.map((tenant) => tenant.seq),
+						id: {
+							in: existingTenants.map((tenant) => tenant.id),
 						},
 					},
 					data: {
-						roleSeq: companyManagerRole.seq,
+						roleId: companyManagerRole.id,
 					},
 				});
 				createdCount++;

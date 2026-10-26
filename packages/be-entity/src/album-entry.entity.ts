@@ -6,6 +6,7 @@ import {
 	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { AlbumEntrySchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Album } from "./album.entity";
 import { Asset } from "./asset.entity";
@@ -15,17 +16,18 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class AlbumEntry extends AlbumEntrySchema {
 	/** 공개 식별자 ULID */
-	declare id: AlbumEntrySchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare albumEntryId: AlbumEntrySchema["albumEntryId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceSeq: AlbumEntrySchema["spaceSeq"];
+	declare spaceId: AlbumEntrySchema["spaceId"];
 	@BigIntIdFieldMetadata({ description: "앨범 ID" })
-	declare albumSeq: AlbumEntrySchema["albumSeq"];
+	declare albumId: AlbumEntrySchema["albumId"];
 	@BigIntIdFieldMetadata({ description: "에셋 ID" })
-	declare assetSeq: AlbumEntrySchema["assetSeq"];
+	declare assetId: AlbumEntrySchema["assetId"];
 	@NumberFieldMetadata({ description: "표시 순서", int: true })
 	declare position: AlbumEntrySchema["position"];
 
@@ -35,7 +37,7 @@ export class AlbumEntry extends AlbumEntrySchema {
 	@StringFieldOptionalMetadata({ nullable: true, description: "캡션" })
 	declare caption: AlbumEntrySchema["caption"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdBySeq: AlbumEntrySchema["createdBySeq"];
+	declare createdById: AlbumEntrySchema["createdById"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

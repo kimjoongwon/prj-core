@@ -15,7 +15,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Session의 DB 필드 타입과 공통 검증입니다. */
 export class SessionSchema extends AbstractSchema {
-	id!: string;
+	sessionId!: string;
 
 	@EnumValidation(() => SessionTypes)
 	type!: SessionTypes;
@@ -33,7 +33,7 @@ export class SessionSchema extends AbstractSchema {
 	recurringDayOfWeek!: RecurringDayOfWeek | null;
 
 	@BigIntIdValidation()
-	timelineSeq!: bigint;
+	timelineId!: bigint;
 
 	@StringValidation()
 	name!: string;

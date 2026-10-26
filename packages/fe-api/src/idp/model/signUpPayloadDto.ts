@@ -4,7 +4,7 @@
  * OIDC Identity Provider
  * OpenID Connect Identity Provider API
  *
- * OIDC 인증 API를 제공합니다.
+ * OIDC 인증 및 IDP 관리 API를 제공합니다.
  *
  * **인증 방법:**
  * 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
@@ -17,21 +17,19 @@ export interface SignUpPayloadDto {
 	 * 닉네임 (2-50자)
 	 * @minLength 2
 	 * @maxLength 50
-	 * @pattern ^[0-9A-HJKMNP-TV-Z]{26}$
 	 */
 	nickname: string;
 	/**
-	 * 가입할 공간 공개 ID (ULID)
-	 * @pattern ^[0-9A-HJKMNP-TV-Z]{26}$
+	 * 스페이스 ID
+	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	spaceId: string;
+	spaceId: bigint;
 	/** 이메일 */
 	email: string;
 	/**
 	 * 이름 (2-50자)
 	 * @minLength 2
 	 * @maxLength 50
-	 * @pattern ^[0-9A-HJKMNP-TV-Z]{26}$
 	 */
 	name: string;
 	/** 전화번호 */
@@ -40,7 +38,6 @@ export interface SignUpPayloadDto {
 	 * 주소 (2-255자)
 	 * @minLength 2
 	 * @maxLength 255
-	 * @pattern ^[0-9A-HJKMNP-TV-Z]{26}$
 	 */
 	address: string;
 	/**

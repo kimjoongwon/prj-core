@@ -9,7 +9,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Exercise의 DB 필드 타입과 공통 검증입니다. */
 export class ExerciseSchema extends AbstractSchema {
-	id!: string;
+	exerciseId!: string;
 
 	@NumberValidation()
 	duration!: number;
@@ -18,7 +18,7 @@ export class ExerciseSchema extends AbstractSchema {
 	count!: number;
 
 	@BigIntIdValidation()
-	taskSeq!: bigint;
+	taskId!: bigint;
 
 	@StringValidationOptional({ nullable: true })
 	description!: string | null;
