@@ -15,16 +15,16 @@ describe("QueryInput mapper", () => {
 	it("*Id와 *Ids 필터를 관계 조건으로 변환한다", () => {
 		expect(
 			buildUserQueryWhere({
-				categorySeq: 101n,
+				categoryId: 101n,
 				groupIds: [201n, 202n],
 				roles: ["admin", "operator"],
 			}),
 		).toEqual({
 			removedAt: null,
-			classification: { categorySeq: 101n },
+			classification: { categoryId: 101n },
 			associations: {
 				some: {
-					groupSeq: { in: [201n, 202n] },
+					groupId: { in: [201n, 202n] },
 					removedAt: null,
 				},
 			},

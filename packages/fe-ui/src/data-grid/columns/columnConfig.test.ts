@@ -58,7 +58,7 @@ describe("열 설정", () => {
 
 	it("남은 역할과 사용자 목록 factory는 현재 관리 화면의 컬럼을 만든다", () => {
 		const roleColumns = buildAdminRoleTableColumns<{
-			id: string;
+			id: bigint;
 			name: string;
 			displayName: string | null;
 			description: string | null;
@@ -66,7 +66,7 @@ describe("열 설정", () => {
 			removedAt: Date | null;
 		}>();
 		const userColumns = buildUserListTableColumns<{
-			id: string;
+			id: bigint;
 			name: string;
 			email: string | null;
 			phone: string | null;

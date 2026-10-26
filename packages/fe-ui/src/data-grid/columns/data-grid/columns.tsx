@@ -50,10 +50,9 @@ function getRoleColor(roleName?: string) {
 	}
 }
 
-/** 사용자 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildUserListTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		name: string;
 		email?: string | null;
 		phone?: string | null;
@@ -62,6 +61,7 @@ export function buildUserListTableColumns<
 		tenants?: TenantWithRole[] | null;
 	},
 >() {
+	/** 사용자 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumns<TRow>(
 		createNameColumn<TRow>({
 			cell: ({ row }) => (
@@ -70,7 +70,9 @@ export function buildUserListTableColumns<
 				</LinkCell>
 			),
 		}),
-		createEmailColumn<TRow>({ size: 240 }),
+		createEmailColumn<TRow>({
+			size: 240,
+		}),
 		createPhoneColumn<TRow>({
 			size: 150,
 			cell: ({ row }) => (
@@ -139,7 +141,7 @@ export const adminRoleActionsColumn = createActionsColumn<RoleDto>({
 /** 역할 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildAdminRoleTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		name: string;
 		displayName?: string | null;
 		description?: string | null;
@@ -159,7 +161,9 @@ export function buildAdminRoleTableColumns<
 			}),
 			createDisplayNameColumn<TRow>(),
 			createDescriptionColumn<TRow>(),
-			createRemovedAtStatusColumn<TRow>({ size: 100 }),
+			createRemovedAtStatusColumn<TRow>({
+				size: 100,
+			}),
 		],
 		[
 			createActionsColumn<TRow>({
