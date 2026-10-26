@@ -22,8 +22,7 @@ describe("SpaceAggregate", () => {
 	let mockRepository: DeepMockProxy<SpacesRepository>;
 
 	const mockSpace = {
-		id: "01JSPACE0000000000000000101",
-		seq: 101n,
+		id: 101n,
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
