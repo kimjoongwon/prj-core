@@ -8,7 +8,7 @@ Shared UI library for the Cocrepo monorepo.
 
 Entry points are organized under `src/`:
 
-- `input`: `Button`, `CloseButton`, `Input`, `TextField`, `TextArea`, `StringListInput`, `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `Tabs`, `Pagination`, `Link` 같은 입력/액션/선택/navigation leaf control
+- `input`: `Button`, `CloseButton`, `Input`, `TextField`, `TextArea`, `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `Tabs`, `Pagination`, `Link` 같은 입력/액션/선택/navigation leaf control
 - `data-display`: `Avatar`, `Card`, `Chip`, `Table`, `Text`, `Typography` 같은 데이터 표시 primitive
 - `feedback`: `Alert`, `EmptyState`, `Skeleton`, `Spinner`, `Toast` 같은 상태와 피드백 표시
 - `overlay`: `Modal`, `Drawer`, `Popover`, `Tooltip`, `AlertDialog` 같은 modal layer UI
@@ -52,7 +52,7 @@ export function Example() {
 
 ## Common Exports
 
-- Input: `Button`, `CloseButton`, `Input`, `TextField`, `TextArea`, `StringListInput`, `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `Tabs`, `Pagination`, `Link`
+- Input: `Button`, `CloseButton`, `Input`, `TextField`, `TextArea`, `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `Tabs`, `Pagination`, `Link`
 - Data display: `Avatar`, `Card`, `Chip`, `Table`, `Text`
 - Feedback: `EmptyState`, `Message`, `NotFound`, `Skeleton`, `Spinner`
 - Overlay: `Modal`, `Drawer`, `Popover`, `Tooltip`, `AlertDialog`
