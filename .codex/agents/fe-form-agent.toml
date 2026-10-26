@@ -55,7 +55,7 @@ developer_instructions = '''
 ### 입력과 공개 계약
 
 - input을 재사용합니다. 짧은 문자열·이메일·전화·비밀번호는 `TextField`, 긴 문자열은 `TextArea`, Boolean은 `Checkbox`/`Switch`, enum·선택은 `Select`/`RadioGroup`을 우선합니다.
-- 문자열 목록은 `StringListInput`, HTML은 `HtmlEditor`를 우선합니다. `/// @displayName`이 있으면 기본 label로 사용합니다.
+- HTML은 `HtmlEditor`를 우선합니다. `/// @displayName`이 있으면 기본 label로 사용합니다.
 - input은 기존 공개 input을 재사용합니다. Form·state/props 타입은 `packages/fe-ui/src/form/index.ts`에서 export하고 소비 import를 확인합니다.
 - 웹은 `node_modules/@heroui/react/package.json` exports, `node_modules/@heroui/react/dist/components/**` source와 `@cocrepo/ui` export를 확인하고 UI는 기존 leaf 조합으로 구현합니다.
 

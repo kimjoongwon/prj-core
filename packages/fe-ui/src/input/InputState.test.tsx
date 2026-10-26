@@ -9,7 +9,6 @@ import { Form } from "../form/Form";
 import { Checkbox } from "./Checkbox";
 import { RadioGroup } from "./RadioGroup";
 import { Select } from "./Select";
-import { StringListInput } from "./StringListInput";
 import { Switch } from "./Switch";
 import { TextField } from "./TextField";
 
@@ -156,16 +155,6 @@ describe("input default and bound state contracts", () => {
 		);
 		expect(screen.getByRole("button")).toHaveTextContent("Zero");
 		secondView.unmount();
-	});
-
-	it("supports default list add, edit, and remove without an external value", () => {
-		render(<StringListInput placeholder="URL" addLabel="Add" removeLabel="Remove" />);
-		fireEvent.click(screen.getByText("Add"));
-		const input = screen.getByPlaceholderText("URL");
-		fireEvent.change(input, { target: { value: "https://example.com" } });
-		expect(input).toHaveValue("https://example.com");
-		fireEvent.click(screen.getByLabelText("Remove"));
-		expect(screen.queryByPlaceholderText("URL")).not.toBeInTheDocument();
 	});
 
 	it("runs bound validation at onChange and onBlur timings", async () => {
