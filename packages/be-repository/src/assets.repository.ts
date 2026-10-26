@@ -1,12 +1,8 @@
 import { Asset } from "@cocrepo/entity";
-import { Prisma, PrismaClient } from "@cocrepo/prisma";
+import { PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import type {
-	AutoIdentityCreateInput,
-	AutoIdentityUpdateInput,
-} from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -19,17 +15,6 @@ export class AssetsRepository {
 		>,
 	) {
 		this.logger = new Logger("AssetsRepository");
-	}
-
-	async findById(id: bigint): Promise<Asset | null> {
-		this.logger.debug(`ID로 조회: ${id.toString()}`);
-
-		const result = await this.txHost.tx.asset.findUnique({
-			where: { id },
-			include: { space: true, folder: true, createdBy: true },
-		});
-
-		return result ? toDomainEntity(Asset, result) : null;
 	}
 
 	async findByIdWithRelations(id: bigint): Promise<Asset | null> {
@@ -48,92 +33,5 @@ export class AssetsRepository {
 		});
 
 		return result ? toDomainEntity(Asset, result) : null;
-	}
-
-	async findByStorageKey(storageKey: string): Promise<Asset | null> {
-		this.logger.debug(`스토리지 키 조회: ${storageKey}`);
-
-		const result = await this.txHost.tx.asset.findUnique({
-			where: { storageKey },
-			include: { space: true, folder: true, createdBy: true },
-		});
-
-		return result ? toDomainEntity(Asset, result) : null;
-	}
-
-	async findByFolderId(folderId: bigint): Promise<Asset[]> {
-		this.logger.debug(`폴더별 에셋 조회: ${folderId.toString()}`);
-
-		const result = await this.txHost.tx.asset.findMany({
-			where: { folderId },
-			include: { space: true, folder: true, createdBy: true },
-			orderBy: [{ createdAt: "desc" }],
-		});
-
-		return result.map((item) => toDomainEntity(Asset, item));
-	}
-
-	async findMany(params: {
-		where?: Prisma.AssetWhereInput;
-		orderBy?: Prisma.AssetOrderByWithRelationInput[];
-		skip?: number;
-		take?: number;
-	}): Promise<{ assets: Asset[]; totalCount: number }> {
-		const [assets, totalCount] = await Promise.all([
-			this.txHost.tx.asset.findMany({
-				where: params.where,
-				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
-				skip: params.skip,
-				take: params.take,
-				include: {
-					folder: true,
-					space: true,
-					createdBy: true,
-				},
-			}),
-			this.txHost.tx.asset.count({ where: params.where }),
-		]);
-
-		return {
-			assets: assets.map((item) => toDomainEntity(Asset, item)),
-			totalCount,
-		};
-	}
-
-	async create(
-		data: AutoIdentityCreateInput<Prisma.AssetUncheckedCreateInput, "assetId">,
-	): Promise<Asset> {
-		this.logger.debug(`에셋 생성: ${data.storageKey}`);
-		const result = await this.txHost.tx.asset.create({
-			data,
-			include: { space: true, folder: true, createdBy: true },
-		});
-
-		return toDomainEntity(Asset, result);
-	}
-
-	async updateById(
-		id: bigint,
-		data: AutoIdentityUpdateInput<Prisma.AssetUncheckedUpdateInput, "assetId">,
-	): Promise<Asset> {
-		this.logger.debug(`에셋 수정: ${id.toString()}`);
-		const result = await this.txHost.tx.asset.update({
-			where: { id },
-			data,
-			include: { space: true, folder: true, createdBy: true },
-		});
-
-		return toDomainEntity(Asset, result);
-	}
-
-	async deleteById(id: bigint): Promise<Asset> {
-		this.logger.debug(`에셋 삭제: ${id.toString()}`);
-
-		const result = await this.txHost.tx.asset.delete({
-			where: { id },
-			include: { space: true, folder: true, createdBy: true },
-		});
-
-		return toDomainEntity(Asset, result);
 	}
 }
