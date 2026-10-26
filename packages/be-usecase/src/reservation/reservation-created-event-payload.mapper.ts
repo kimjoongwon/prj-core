@@ -19,15 +19,24 @@ export function toReservationCreatedEventPayload(source: {
 	occurredAt: Date;
 }): ReservationCreatedPayload {
 	return {
-		reservationId: requirePublicUlid("reservationId", source.reservation.id),
-		userId: requirePublicUlid("userId", source.reservation.user?.id),
-		spaceId: requirePublicUlid("spaceId", source.reservation.space?.id),
+		reservationId: requirePublicUlid(
+			"reservationId",
+			source.reservation.reservationId,
+		),
+		userId: requirePublicUlid("userId", source.reservation.user?.userId),
+		spaceId: requirePublicUlid("spaceId", source.reservation.space?.spaceId),
 		timelineId: requirePublicUlid(
 			"timelineId",
-			source.reservation.timeline?.id,
+			source.reservation.timeline?.timelineId,
 		),
-		sessionId: requirePublicUlid("sessionId", source.reservation.session?.id),
-		programId: requirePublicUlid("programId", source.reservation.program?.id),
+		sessionId: requirePublicUlid(
+			"sessionId",
+			source.reservation.session?.sessionId,
+		),
+		programId: requirePublicUlid(
+			"programId",
+			source.reservation.program?.programId,
+		),
 		occurredAt: source.occurredAt,
 	};
 }

@@ -28,12 +28,12 @@ export class UserService {
 	/**
 	 * 공개 사용자 식별자로 사용자 조회 (Tenant 정보 포함)
 	 */
-	findByUserIdWithTenants(userSeq: string): Promise<User | null> {
-		return this.repository.findByUserIdWithTenantsAndProfiles(userSeq);
+	findByUserIdWithTenants(userId: string): Promise<User | null> {
+		return this.repository.findByUserIdWithTenantsAndProfiles(userId);
 	}
 
 	/** 내부 숫자 ID로 사용자와 Tenant/Profile 권한 그래프를 조회합니다. */
-	getByIdWithTenants(userId: string): Promise<User | null> {
+	getByIdWithTenants(userId: bigint): Promise<User | null> {
 		return this.repository.findByIdWithTenantsAndProfiles(userId);
 	}
 
@@ -41,19 +41,22 @@ export class UserService {
 	 * 현재 Space에서 사용자에게 속한 Tenant 상세와 권한 그래프를 조회합니다.
 	 */
 	async getTenantDetailForUser(
-		userId: string,
-		tenantId: string,
-		_spaceId: string,
+		userId: bigint,
+		tenantId: bigint,
+		_spaceId: bigint,
 	): Promise<Tenant> {
-		const tenantSnapshot = await this.tenantsRepository.findById(tenantId);
-		if (!tenantSnapshot?.id || !tenantSnapshot.space?.id) {
+		const [user, tenantSnapshot] = await Promise.all([
+			this.repository.findById(userId),
+			this.tenantsRepository.findById(tenantId),
+		]);
+		if (!user || !tenantSnapshot?.tenantId || !tenantSnapshot.space?.spaceId) {
 			throw new NotFoundException("사용자의 테넌트를 찾을 수 없습니다");
 		}
 
 		const tenant = await this.repository.findTenantDetailForUserInSpace(
-			userId,
-			tenantSnapshot.id,
-			tenantSnapshot.space.id,
+			user.userId,
+			tenantSnapshot.tenantId,
+			tenantSnapshot.space.spaceId,
 		);
 		if (!tenant) {
 			throw new NotFoundException("사용자의 테넌트를 찾을 수 없습니다");
@@ -62,14 +65,14 @@ export class UserService {
 	}
 
 	/** 현재 Tenant를 영구 저장하고 인증 사용자 캐시를 무효화합니다. */
-	async setCurrentTenant(userId: string, tenantId: string): Promise<void> {
+	async setCurrentTenant(userId: bigint, tenantId: bigint): Promise<void> {
 		const user = await this.repository.findById(userId);
 		if (!user) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		await this.repository.updateCurrentTenantIdByPublicIds(userId, tenantId);
-		await this.authCacheService.invalidate(user.id);
+		await this.repository.updateCurrentTenantId(userId, tenantId);
+		await this.authCacheService.invalidate(user.userId);
 	}
 
 	/**
@@ -123,7 +126,7 @@ export class UserService {
 
 	private applySpaceScope(
 		where: Prisma.UserWhereInput,
-		scopedSpaceIds?: string[],
+		scopedSpaceIds?: bigint[],
 	): Prisma.UserWhereInput {
 		if (scopedSpaceIds === undefined) {
 			return where;
@@ -151,18 +154,26 @@ export class UserService {
 	 * 현재 요청의 유효 Space 범위에 접근 권한이 있는 사용자만 조회 가능합니다.
 	 * PLATFORM_ADMIN처럼 유효 범위가 undefined면 Space 제한 없이 조회합니다.
 	 *
-	 * @param userSeq 조회할 사용자 ULID
-	 * @param spaceId 현재 선택된 Space 공개 ULID
+	 * @param userId 조회할 사용자 ULID
+	 * @param spaceId 현재 선택된 Space ULID
 	 * @returns 접근 범위 안의 사용자 상세
 	 */
-	async getUserDetailForSpace(userId: string, _spaceId: string): Promise<User> {
+	async getUserDetailForSpace(
+		userId: bigint,
+		spaceId: bigint,
+	): Promise<User> {
 		const scopedSpaceIds = this.spaceCtx.spaceIds;
 		this.logger.debug(
-			`Space 내 사용자 상세 조회: userId=${userId}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,
+			`Space 내 사용자 상세 조회: userId=${userId.toString()}, selectedSpaceId=${spaceId.toString()}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,
 		);
 
+		const targetUser = await this.repository.findById(userId);
+		if (!targetUser?.userId) {
+			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
 		const user = await this.repository.findByIdAndSpaceIdsWithRelations(
-			userId,
+			targetUser.userId,
 			scopedSpaceIds,
 		);
 
@@ -176,16 +187,16 @@ export class UserService {
 	/**
 	 * 계정 잠금 해제 (관리자 전용)
 	 */
-	async unlockAccount(userId: string): Promise<void> {
-		this.logger.debug(`계정 잠금 해제: userId=${userId}`);
+	async unlockAccount(userId: bigint): Promise<void> {
+		this.logger.debug(`계정 잠금 해제: userId=${userId.toString()}`);
 
 		const user = await this.repository.findById(userId);
 		if (!user) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		await this.repository.unlockAccount(user.id);
-		await this.authCacheService.invalidate(user.id);
+		await this.repository.unlockAccount(user.userId);
+		await this.authCacheService.invalidate(user.userId);
 	}
 
 	/**
@@ -195,9 +206,9 @@ export class UserService {
 	 * @returns 생성된 임시 비밀번호 (관리자 확인용)
 	 */
 	async forceResetPassword(
-		userId: string,
+		userId: bigint,
 	): Promise<{ temporaryPassword: string; email: string }> {
-		this.logger.debug(`비밀번호 강제 재설정: userId=${userId}`);
+		this.logger.debug(`비밀번호 강제 재설정: userId=${userId.toString()}`);
 
 		const user = await this.repository.findById(userId);
 		if (!user) {
@@ -210,13 +221,13 @@ export class UserService {
 		// 비밀번호 변경
 		const plainPassword = PlainPassword.create(temporaryPassword);
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
-		await this.repository.updatePassword(user.id, hashedPassword.value);
+		await this.repository.updatePassword(user.userId, hashedPassword.value);
 
 		// 잠금도 해제
-		await this.repository.unlockAccount(user.id);
+		await this.repository.unlockAccount(user.userId);
 
 		// 캐시 무효화
-		await this.authCacheService.invalidate(user.id);
+		await this.authCacheService.invalidate(user.userId);
 
 		return { temporaryPassword, email: user.email };
 	}
@@ -224,15 +235,15 @@ export class UserService {
 	/**
 	 * 사용자 보안 정보 조회 (관리자 전용)
 	 */
-	async getSecurityInfo(userId: string) {
-		this.logger.debug(`사용자 보안 정보 조회: userId=${userId}`);
+	async getSecurityInfo(userId: bigint) {
+		this.logger.debug(`사용자 보안 정보 조회: userId=${userId.toString()}`);
 
 		const user = await this.repository.findById(userId);
 		if (!user) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		const info = await this.repository.findSecurityInfoById(user.id);
+		const info = await this.repository.findSecurityInfoById(user.userId);
 		if (!info) {
 			throw new NotFoundException(USER_ERRORS.USER_NOT_FOUND);
 		}
@@ -279,8 +290,8 @@ export class UserService {
 		phone: string;
 		address: string;
 		password: string;
-		spaceId: string;
-		roleId: string;
+		spaceId: bigint;
+		roleId: bigint;
 		nickname?: string;
 	}): Promise<User> {
 		const email = Email.create(params.email);

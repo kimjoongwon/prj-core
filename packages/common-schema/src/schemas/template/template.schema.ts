@@ -9,7 +9,7 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Template의 DB 필드 타입과 공통 검증입니다. */
 export class TemplateSchema extends AbstractSchema {
-	id!: string;
+	templateId!: string;
 
 	@StringValidation({ description: "고유 코드" })
 	code!: string;

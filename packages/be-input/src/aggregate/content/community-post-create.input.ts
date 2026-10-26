@@ -1,6 +1,6 @@
 export interface CommunityPostCreateInput {
 	title?: string;
 	text: string;
-	spaceId: string;
-	userId: string;
+	spaceId: bigint;
+	userId: bigint;
 }

@@ -2,16 +2,16 @@ import {
 	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { Asset } from "@cocrepo/entity";
 import { DeleteFilter } from "@cocrepo/enum";
 import { Transform } from "class-transformer";
 import { EntityQueryType } from "../query/entity-query-type";
+import { Asset } from "@cocrepo/entity";
 
 /**
  * 에셋 목록 조회용 Query DTO
  *
  * 필터 계약:
- * - folderId, spaceId -> 공개 ULID 정확 매칭
+ * - folderId, tenantId -> 정확 매칭 (*Id)
  * - kind, status -> 직접 매핑 (enum)
  *
  * 커스텀 처리:
@@ -19,15 +19,11 @@ import { EntityQueryType } from "../query/entity-query-type";
  * - statusFilter -> removedAt 필터
  */
 export class AssetQueryDto extends EntityQueryType(Asset, [
+	"folderId",
+	"spaceId",
 	"kind",
 	"status",
 ] as const) {
-	@StringFieldOptional({ description: "폴더 공개 ID (ULID) 정확 매칭" })
-	folderId?: string;
-
-	@StringFieldOptional({ description: "공간 공개 ID (ULID) 정확 매칭" })
-	spaceId?: string;
-
 	@StringFieldOptional({ description: "파일명 검색 (부분 일치)" })
 	search?: string;
 

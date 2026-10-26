@@ -4,7 +4,16 @@ import { EntityResponseType } from "./mapped-types";
 import { UserDto } from "./user.dto";
 
 export class UserAssociationDto extends EntityResponseType(UserAssociation, {
-	pick: ["id", "createdAt", "updatedAt", "removedAt", "group", "user"] as const,
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"userId",
+		"groupId",
+		"group",
+		"user",
+	] as const,
 	relations: {
 		group: () => GroupDto,
 		user: () => UserDto,

@@ -4,7 +4,7 @@
  * OIDC Identity Provider
  * OpenID Connect Identity Provider API
  *
- * OIDC 인증 API를 제공합니다.
+ * OIDC 인증 및 IDP 관리 API를 제공합니다.
  *
  * **인증 방법:**
  * 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
@@ -17,29 +17,19 @@ import type { SpaceAssociationDto } from "./spaceAssociationDto";
 import type { SpaceClassificationDto } from "./spaceClassificationDto";
 
 export interface SpaceDto {
-	/** Space의 표시 이름. 공간 선택·목록·검색의 원천입니다. */
-	name: string;
-	/**
-	 * Space 표시 이름 아래에 함께 보여주는 보조 라벨입니다.
-	 * @nullable
-	 */
-	label?: string | null;
 	/** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
 	contentLanguageCode: LanguageCode;
 	/**
-	 * 이 Space 접근에 사용할 Tenant ULID
+	 * 이 Space 접근에 사용할 Tenant ID
 	 * @nullable
-	 * @pattern ^[0-9A-HJKMNP-TV-Z]{26}$
+	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	tenantId?: string | null;
+	tenantId?: bigint | null;
 	spaceClassification?: SpaceClassificationDto;
 	spaceAssociations?: SpaceAssociationDto[];
 	fitnessCenter?: FitnessCenterDto;
-	/**
-	 * 공개 식별자 ULID
-	 * @pattern ^[0-9A-HJKMNP-TV-Z]{26}$
-	 */
-	id: string;
+	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+	id: bigint;
 	createdAt: Date;
 	/** @nullable */
 	updatedAt: Date | null;

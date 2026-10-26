@@ -9,6 +9,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { DerivativeKind } from "@cocrepo/enum";
 import { DerivativeSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Asset } from "./asset.entity";
 import type { Space } from "./space.entity";
@@ -17,17 +18,18 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Derivative extends DerivativeSchema {
 	/** 공개 식별자 ULID */
-	declare id: DerivativeSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare derivativeId: DerivativeSchema["derivativeId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
-	declare spaceSeq: DerivativeSchema["spaceSeq"];
+	declare spaceId: DerivativeSchema["spaceId"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdBySeq: DerivativeSchema["createdBySeq"];
+	declare createdById: DerivativeSchema["createdById"];
 	@BigIntIdFieldMetadata({ description: "원본 에셋 ID" })
-	declare assetSeq: DerivativeSchema["assetSeq"];
+	declare assetId: DerivativeSchema["assetId"];
 	@EnumFieldMetadata(() => DerivativeKind, {
 		description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",
 	})

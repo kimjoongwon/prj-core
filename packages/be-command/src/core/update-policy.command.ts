@@ -5,7 +5,7 @@ export class UpdatePolicyCommand implements UpdatePolicyCommandInput {
 	readonly description?: UpdatePolicyCommandInput["description"];
 
 	constructor(
-		readonly policyId: string,
+		readonly policyId: bigint,
 		input: UpdatePolicyCommandInput,
 	) {
 		Object.assign(this, input);

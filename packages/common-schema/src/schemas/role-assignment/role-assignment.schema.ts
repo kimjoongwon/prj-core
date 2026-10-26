@@ -5,13 +5,13 @@ import { AbstractSchema } from "../abstract.schema";
 export class RoleAssignmentSchema
 	extends AbstractSchema
 {
-	id!: string;
+	roleAssignmentId!: string;
 
 	@BigIntIdValidation({ description: "Role ID" })
-	roleSeq!: bigint;
+	roleId!: bigint;
 
 	@BigIntIdValidation({ description: "Policy ID" })
-	policySeq!: bigint;
+	policyId!: bigint;
 
 	isActive!: boolean;
 

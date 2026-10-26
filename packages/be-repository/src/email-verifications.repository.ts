@@ -19,6 +19,15 @@ export class EmailVerificationsRepository {
 		>,
 	) {}
 
+	async findById(id: bigint): Promise<EmailVerification | null> {
+		const result = await this.txHost.tx.emailVerification.findUnique({
+			where: { id },
+			include: { space: true, verifiedUser: true },
+		});
+
+		return result ? toDomainEntity(EmailVerification, result) : null;
+	}
+
 	async findLatestByEmail(email: string): Promise<EmailVerification | null> {
 		this.logger.debug(`이메일 인증 최신 요청 조회: ${email}`);
 
@@ -43,35 +52,54 @@ export class EmailVerificationsRepository {
 		return result ? toDomainEntity(EmailVerification, result) : null;
 	}
 
+	async findMany(params: {
+		where: Prisma.EmailVerificationWhereInput;
+		orderBy: Prisma.EmailVerificationOrderByWithRelationInput[];
+		skip: number;
+		take: number;
+	}): Promise<{ items: EmailVerification[]; totalCount: number }> {
+		this.logger.debug("이메일 인증 목록 조회");
+
+		const [items, totalCount] = await Promise.all([
+			this.txHost.tx.emailVerification.findMany({
+				where: params.where,
+				orderBy: params.orderBy,
+				skip: params.skip,
+				take: params.take,
+				include: { space: true, verifiedUser: true },
+			}),
+			this.txHost.tx.emailVerification.count({ where: params.where }),
+		]);
+
+		return {
+			items: items.map((item) => toDomainEntity(EmailVerification, item)),
+			totalCount,
+		};
+	}
+
 	async create(
 		data: AutoIdentityCreateInput<
-			Omit<Prisma.EmailVerificationUncheckedCreateInput, "spaceSeq">,
-			"id"
-		> & { spaceId: string },
+			Prisma.EmailVerificationUncheckedCreateInput,
+			"emailVerificationId"
+		>,
 	): Promise<EmailVerification> {
-		const { spaceId, ...rest } = data;
 		const result = await this.txHost.tx.emailVerification.create({
-			data: {
-				...rest,
-				space: { connect: { id: spaceId } },
-			} as Prisma.EmailVerificationCreateInput,
+			data,
 			include: { space: true, verifiedUser: true },
 		});
 		return toDomainEntity(EmailVerification, result);
 	}
 
 	async updateById(
-		id: string,
+		id: bigint,
 		data: AutoIdentityUpdateInput<
-			Omit<Prisma.EmailVerificationUncheckedUpdateInput, "verifiedUserSeq">,
-			"id"
-		> & {
-			verifiedUser?: { connect: { id: string } } | { disconnect: true };
-		},
+			Prisma.EmailVerificationUncheckedUpdateInput,
+			"emailVerificationId"
+		>,
 	): Promise<EmailVerification> {
 		const result = await this.txHost.tx.emailVerification.update({
 			where: { id },
-			data: data as Prisma.EmailVerificationUpdateInput,
+			data,
 			include: { space: true, verifiedUser: true },
 		});
 

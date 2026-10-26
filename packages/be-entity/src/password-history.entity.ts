@@ -9,18 +9,19 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class PasswordHistory extends PasswordHistorySchema {
 	@BigIntIdFieldMetadata({ description: "ID" })
-	declare seq: bigint;
+	declare id: bigint;
 	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 
 	/** 공개 식별자 ULID */
-	declare id: PasswordHistorySchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare passwordHistoryId: PasswordHistorySchema["passwordHistoryId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	@BigIntIdFieldMetadata({ description: "사용자 ID" })
-	declare userSeq: PasswordHistorySchema["userSeq"];
+	declare userId: PasswordHistorySchema["userId"];
 	@Exclude({ toPlainOnly: true })
 	declare passwordHash: PasswordHistorySchema["passwordHash"];
 }

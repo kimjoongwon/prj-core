@@ -114,15 +114,15 @@ describe("AuthSessionGate", () => {
 
 	it("세션 검증 시 현재 Space를 Core API 요청 scope에 연결한다", async () => {
 		const currentSpace = {
-			id: "01JSPACE0000000000000000SA",
-			tenantId: "01JTENANT000000000000000TA",
-			name: "강남점",
+			id: 101n,
+			tenantId: 201n,
 			contentLanguageCode: "ko_KR",
 			fitnessCenter: {
 				address: "서울 강남구",
 				company: {
 					logoImageFileId: "company-logo-branch",
 				},
+				name: "강남점",
 			},
 		};
 		(SecureStore.getItemAsync as jest.Mock).mockImplementation(
@@ -131,10 +131,10 @@ describe("AuthSessionGate", () => {
 					? JSON.stringify({
 							address: "서울 강남구",
 							contentLanguageCode: "ko_KR",
-							spaceName: "강남점",
-							spaceId: "01JSPACE0000000000000000SA",
-							tenantId: "01JTENANT000000000000000TA",
-							version: 4,
+							fitnessCenterName: "강남점",
+							spaceId: "101",
+							tenantId: "201",
+							version: 2,
 						})
 					: null,
 		);
@@ -157,9 +157,9 @@ describe("AuthSessionGate", () => {
 
 		expect(verified).toBe(true);
 		expect(mobileSession.authStatus).toBe("authenticated");
-		expect(mobileApiScope.tenantId).toBe("01JTENANT000000000000000TA");
-		expect(mobileApiScope.spaceId).toBe("01JSPACE0000000000000000SA");
-		expect(mobileApiScope.spaceName).toBe("강남점");
+		expect(mobileApiScope.tenantId).toBe("201");
+		expect(mobileApiScope.spaceId).toBe("101");
+		expect(mobileApiScope.fitnessCenterName).toBe("강남점");
 		expect(mobileApiScope.isSpaceSelectionResolved).toBe(true);
 		expect(mockGetCurrentSpace).toHaveBeenCalled();
 		expect(mockSetApiSessionScope).toHaveBeenCalledWith(mobileApiScope);

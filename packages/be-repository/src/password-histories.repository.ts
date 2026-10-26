@@ -18,7 +18,7 @@ export class PasswordHistoriesRepository {
 		this.logger = new Logger("PasswordHistoriesRepository");
 	}
 
-	async findById(id: string): Promise<PasswordHistory | null> {
+	async findById(id: bigint): Promise<PasswordHistory | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.findUnique({
@@ -29,11 +29,11 @@ export class PasswordHistoriesRepository {
 		return result ? toDomainEntity(PasswordHistory, result) : null;
 	}
 
-	async findByUserId(userSeq: bigint): Promise<PasswordHistory[]> {
-		this.logger.debug(`사용자별 이력 조회: ${userSeq.toString()}`);
+	async findByUserId(userId: bigint): Promise<PasswordHistory[]> {
+		this.logger.debug(`사용자별 이력 조회: ${userId.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.findMany({
-			where: { userSeq },
+			where: { userId },
 			include: { user: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -41,11 +41,11 @@ export class PasswordHistoriesRepository {
 		return result.map((item) => toDomainEntity(PasswordHistory, item));
 	}
 
-	async findLatestByUserId(userSeq: bigint): Promise<PasswordHistory | null> {
-		this.logger.debug(`최신 이력 조회: ${userSeq.toString()}`);
+	async findLatestByUserId(userId: bigint): Promise<PasswordHistory | null> {
+		this.logger.debug(`최신 이력 조회: ${userId.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.findFirst({
-			where: { userSeq },
+			where: { userId },
 			include: { user: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -79,10 +79,10 @@ export class PasswordHistoriesRepository {
 	async create(
 		data: AutoIdentityCreateInput<
 			Prisma.PasswordHistoryUncheckedCreateInput,
-			"id"
+			"passwordHistoryId"
 		>,
 	): Promise<PasswordHistory> {
-		this.logger.debug(`생성: ${data.userSeq.toString()}`);
+		this.logger.debug(`생성: ${data.userId.toString()}`);
 		const result = await this.txHost.tx.passwordHistory.create({
 			data,
 			include: { user: true },
@@ -91,7 +91,7 @@ export class PasswordHistoriesRepository {
 		return toDomainEntity(PasswordHistory, result);
 	}
 
-	async deleteById(id: string): Promise<PasswordHistory> {
+	async deleteById(id: bigint): Promise<PasswordHistory> {
 		this.logger.debug(`ID 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.delete({
@@ -102,11 +102,11 @@ export class PasswordHistoriesRepository {
 		return toDomainEntity(PasswordHistory, result);
 	}
 
-	async deleteByUserId(userSeq: bigint): Promise<{ count: number }> {
-		this.logger.debug(`사용자별 이력 전체 삭제: ${userSeq.toString()}`);
+	async deleteByUserId(userId: bigint): Promise<{ count: number }> {
+		this.logger.debug(`사용자별 이력 전체 삭제: ${userId.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.deleteMany({
-			where: { userSeq },
+			where: { userId },
 		});
 
 		return result;

@@ -10,18 +10,18 @@ describe("BigIntResponseInterceptor", () => {
 	it("Given 중첩된 bigint 응답 When 직렬화하면 Then 모든 bigint를 십진 문자열로 바꾼다", () => {
 		const response = new ResponseEntity(HttpStatus.OK, "성공", {
 			id: 1n,
-			items: [{ userSeq: 2n }, 3n],
+			items: [{ userId: 2n }, 3n],
 		});
 
 		const result = serializeResponseBigInts(response) as ResponseEntity<{
 			id: string;
-			items: Array<{ userSeq: string } | string>;
+			items: Array<{ userId: string } | string>;
 		}>;
 
 		expect(result).toBeInstanceOf(ResponseEntity);
 		expect(result.data).toEqual({
 			id: "1",
-			items: [{ userSeq: "2" }, "3"],
+			items: [{ userId: "2" }, "3"],
 		});
 	});
 

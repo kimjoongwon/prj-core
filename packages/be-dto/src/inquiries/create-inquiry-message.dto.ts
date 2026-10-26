@@ -6,7 +6,7 @@ import { PartialType, PickType } from "@nestjs/swagger";
  * 문의 메시지 생성 DTO
  */
 export class CreateInquiryMessageDto extends PartialType(
-	PickType(InquiryMessage, ["threadSeq", "contentType", "senderType"] as const),
+	PickType(InquiryMessage, ["threadId", "contentType", "senderType"] as const),
 	{ skipNullProperties: false },
 ) {
 	@StringField({

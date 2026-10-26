@@ -1,6 +1,6 @@
 export interface CommunityPostListInput {
 	skip?: number;
-	spaceId: string;
+	spaceId: bigint;
 	take?: number;
-	userId: string;
+	userId: bigint;
 }

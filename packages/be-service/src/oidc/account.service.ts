@@ -17,7 +17,7 @@ type OidcClaimTenant = TenantWithRelations & {
 function hasOidcClaimIds(
 	tenant: TenantWithRelations,
 ): tenant is OidcClaimTenant {
-	return Boolean(tenant.space?.id && tenant.role?.id);
+	return Boolean(tenant.space?.spaceId && tenant.role?.roleId);
 }
 
 /**
@@ -62,27 +62,27 @@ export class AccountService {
 	 * 캐시 히트 시 DB 쿼리를 스킵합니다.
 	 */
 	private async getClaims(
-		userSeq: string,
+		userId: string,
 		scope: string,
 	): Promise<AccountClaims> {
-		const cacheKey = `${ACCOUNT_CACHE_PREFIX}:${userSeq}`;
+		const cacheKey = `${ACCOUNT_CACHE_PREFIX}:${userId}`;
 
 		// 캐시 히트 확인
 		const cached = await this.redisService.get(cacheKey);
 		if (cached) {
-			this.logger.debug(`Account cache hit: ${userSeq}`);
+			this.logger.debug(`Account cache hit: ${userId}`);
 			const fullClaims = JSON.parse(cached) as AccountClaims;
 			return this.filterClaimsByScope(fullClaims, scope);
 		}
 
 		// 캐시 미스 - DB 조회
-		this.logger.debug(`Account cache miss: ${userSeq}`);
+		this.logger.debug(`Account cache miss: ${userId}`);
 		const user =
-			await this.usersRepository.findByUserIdWithTenantsAndProfiles(userSeq);
+			await this.usersRepository.findByUserIdWithTenantsAndProfiles(userId);
 
 		if (!user) {
-			this.logger.debug(`User not found: ${userSeq}`);
-			return { sub: userSeq };
+			this.logger.debug(`User not found: ${userId}`);
+			return { sub: userId };
 		}
 
 		// 전체 scope 기준으로 claims 빌드 후 캐시 저장
@@ -100,7 +100,8 @@ export class AccountService {
 	 * 사용자 정보로부터 전체 claims 빌드
 	 */
 	private buildFullClaims(user: {
-		id: string;
+		id: bigint;
+		userId: string;
 		name: string;
 		email: string;
 		phone: string;
@@ -113,7 +114,7 @@ export class AccountService {
 		);
 
 		return {
-			sub: user.id,
+			sub: user.userId,
 			name: user.name,
 			updated_at: user.updatedAt
 				? Math.floor(user.updatedAt.getTime() / 1000)
@@ -123,14 +124,14 @@ export class AccountService {
 			phone_number: user.phone,
 			phone_number_verified: true,
 			roles: tenants?.map((t) => ({
-				spaceId: t.space.id,
-				roleId: t.role.id,
+				spaceId: t.space.spaceId,
+				roleId: t.role.roleId,
 				roleName: t.role?.name,
 				roleDisplayName: t.role?.displayName,
 			})),
 			spaces: tenants?.map((t) => ({
-				spaceId: t.space.id,
-				spaceName: t.space?.name,
+				spaceId: t.space.spaceId,
+				fitnessCenterName: t.space?.fitnessCenter?.name,
 			})),
 		};
 	}

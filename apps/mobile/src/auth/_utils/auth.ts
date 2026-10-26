@@ -1,6 +1,5 @@
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
-import { isIntegrationUlid } from "@cocrepo/type";
 import type { MobileSpaceInfo } from "../mobile-api-scope";
 
 export type AuthQueryValue = string | string[];
@@ -28,17 +27,11 @@ const DEFAULT_AUTH_CALLBACK_FALLBACK_RETURN_TO = "/";
 const NATIVE_SESSION_STORAGE_KEY = "plate.mobile.native.session.v1";
 const NATIVE_SPACE_SELECTION_STORAGE_KEY =
 	"plate.mobile.native.space-selection.v1";
-const NATIVE_SPACE_SELECTION_PERSIST_VERSION = 4 as const;
-// version 3까지는 decimal 문자열 id를 저장했습니다. 와이어 id가 ULID로 바뀌면서
-// 복원 검증(isIntegrationUlid)에 실패해 구 저장값은 폐기·재선택 대상이 됩니다.
+const NATIVE_SPACE_SELECTION_PERSIST_VERSION = 2 as const;
 
 interface PersistedNativeSpaceSelection extends MobileSpaceInfo {
 	version: typeof NATIVE_SPACE_SELECTION_PERSIST_VERSION;
 }
-
-type PersistedNativeSpaceSelectionRecord = MobileSpaceInfo & {
-	version: number;
-};
 
 const toStringArray = (value: AuthQueryValue | undefined): string[] =>
 	typeof value === "string" ? [value] : (value ?? []);
@@ -126,7 +119,7 @@ const isOptionalNullableString = (value: unknown) =>
 
 const isPersistedNativeSpaceSelection = (
 	value: unknown,
-): value is PersistedNativeSpaceSelectionRecord => {
+): value is PersistedNativeSpaceSelection => {
 	if (typeof value !== "object" || value === null) {
 		return false;
 	}
@@ -134,9 +127,9 @@ const isPersistedNativeSpaceSelection = (
 	const selection = value as Record<string, unknown>;
 	return (
 		selection.version === NATIVE_SPACE_SELECTION_PERSIST_VERSION &&
-		typeof selection.spaceName === "string" &&
-		isIntegrationUlid(selection.spaceId) &&
-		isIntegrationUlid(selection.tenantId) &&
+		typeof selection.tenantId === "string" &&
+		typeof selection.spaceId === "string" &&
+		typeof selection.fitnessCenterName === "string" &&
 		isOptionalNullableString(selection.address) &&
 		isOptionalNullableString(selection.contentLanguageCode) &&
 		isOptionalNullableString(selection.imageFileId) &&
@@ -158,8 +151,7 @@ export const saveNativeSpaceSelection = async (space: MobileSpaceInfo) => {
 };
 
 /**
- * version 4 선택을 복원합니다. ULID 검증에 실패하는 구 decimal 저장값과
- * 다른 version payload는 폐기해 지점 재선택 경로로 유도합니다.
+ * version 2 선택만 복원하고 versionless 또는 이전 payload는 폐기합니다.
  */
 export const loadNativeSpaceSelection =
 	async (): Promise<MobileSpaceInfo | null> => {
@@ -180,10 +172,10 @@ export const loadNativeSpaceSelection =
 			return {
 				address: selection.address,
 				contentLanguageCode: selection.contentLanguageCode,
+				fitnessCenterName: selection.fitnessCenterName,
 				imageFileId: selection.imageFileId,
 				logoImageFileId: selection.logoImageFileId,
 				spaceId: selection.spaceId,
-				spaceName: selection.spaceName,
 				tenantId: selection.tenantId,
 			};
 		} catch {

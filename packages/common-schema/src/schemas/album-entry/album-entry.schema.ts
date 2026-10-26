@@ -10,19 +10,19 @@ import { AbstractSchema } from "../abstract.schema";
 export class AlbumEntrySchema
 	extends AbstractSchema
 {
-	id!: string;
+	albumEntryId!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdBySeq!: bigint | null;
+	createdById!: bigint | null;
 
 	@BigIntIdValidation({ description: "앨범 ID" })
-	albumSeq!: bigint;
+	albumId!: bigint;
 
 	@BigIntIdValidation({ description: "에셋 ID" })
-	assetSeq!: bigint;
+	assetId!: bigint;
 
 	@NumberValidation({ description: "표시 순서", int: true })
 	position!: number;

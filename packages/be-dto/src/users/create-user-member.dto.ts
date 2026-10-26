@@ -33,12 +33,12 @@ export class CreateUserMemberDto extends PickType(User, ["email"] as const) {
 	@BigIntIdField({
 		description: "역할 ID",
 	})
-	roleSeq: bigint;
+	roleId: bigint;
 
 	@BigIntIdFieldOptional({
 		description: "분류 카테고리 ID",
 	})
-	categorySeq?: bigint;
+	categoryId?: bigint;
 
 	@BigIntIdFieldOptional({
 		each: true,

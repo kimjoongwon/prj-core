@@ -9,6 +9,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { WhitelistType } from "@cocrepo/enum";
 import { WhitelistEntrySchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
@@ -19,14 +20,15 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class WhitelistEntry extends WhitelistEntrySchema {
 	@BigIntIdFieldMetadata({ description: "ID" })
-	declare seq: bigint;
+	declare id: bigint;
 	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 	@DateFieldOptionalMetadata({ nullable: true, description: "수정일" })
 	declare updatedAt: Date | null;
 
 	/** 공개 식별자 ULID */
-	declare id: WhitelistEntrySchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare whitelistEntryId: WhitelistEntrySchema["whitelistEntryId"];
 
 	// ============================================================================
 	// 기본 필드

@@ -50,13 +50,13 @@ export function buildUserQueryWhere(
 		};
 	}
 
-	if (input.categorySeq) {
-		where.classification = { categorySeq: input.categorySeq };
+	if (input.categoryId) {
+		where.classification = { categoryId: input.categoryId };
 	}
 
 	if (input.groupIds?.length) {
 		where.associations = {
-			some: { groupSeq: { in: input.groupIds }, removedAt: null },
+			some: { groupId: { in: input.groupIds }, removedAt: null },
 		};
 	}
 

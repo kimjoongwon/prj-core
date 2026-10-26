@@ -28,7 +28,7 @@ function createClient(overrides: Record<string, unknown> = {}) {
 function createUseCase() {
 	const user = {
 		id: 101n,
-		userSeq: "01J00000000000000000001001",
+		userId: "01J00000000000000000001001",
 		email: "user@example.com",
 	};
 	const oidcClientService = {
@@ -37,7 +37,7 @@ function createUseCase() {
 	const oidcClient = {
 		refreshTokens: jest.fn().mockResolvedValue({
 			access_token: createJwt({
-				sub: user.userSeq,
+				sub: user.userId,
 				exp: Math.floor(Date.now() / 1000) + 3600,
 			}),
 			refresh_token: "rotated-refresh-token",
@@ -102,7 +102,9 @@ describe("RefreshTokenWithIdpUseCase", () => {
 			"admin-web.0123456789abcdef0123456789abcdef",
 			"rotated-refresh-token",
 		);
-		expect(result.sessionId).toBe("admin-web.0123456789abcdef0123456789abcdef");
+		expect(result.sessionId).toBe(
+			"admin-web.0123456789abcdef0123456789abcdef",
+		);
 		expect(result.refreshToken).toBe("rotated-refresh-token");
 		expect(res.cookie).toHaveBeenCalledWith(
 			"loggedIn",

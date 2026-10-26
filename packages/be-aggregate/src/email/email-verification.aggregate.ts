@@ -1,5 +1,12 @@
-import type { EmailVerificationCreateInput } from "@cocrepo/input";
-import { EmailVerificationsRepository } from "@cocrepo/repository";
+import type {
+	EmailVerificationCreateInput,
+	GetEmailVerificationsQueryInput,
+} from "@cocrepo/input";
+import {
+	buildEmailVerificationQueryOrderBy,
+	buildEmailVerificationQueryWhere,
+	EmailVerificationsRepository,
+} from "@cocrepo/repository";
 import { EmailService } from "@cocrepo/service";
 import { Email, EmailVerificationToken, Phone } from "@cocrepo/vo";
 import {
@@ -49,7 +56,7 @@ export class EmailVerificationAggregate {
 					status: "PENDING",
 					expiresAt,
 					verifiedAt: null,
-					verifiedUser: { disconnect: true },
+					verifiedUserId: null,
 					lastSentAt,
 					sendCount: { increment: 1 },
 					lastSendStatus: null,
@@ -66,7 +73,55 @@ export class EmailVerificationAggregate {
 
 		await this.sendAndRecord(verification.id, email.value, tokenPair.rawToken);
 
-		return { email: email.value, expiresAt };
+		return {
+			email: email.value,
+			expiresAt,
+		};
+	}
+
+	async resend(id: bigint) {
+		const existing = await this.repository.findById(id);
+		if (!existing || existing.removedAt) {
+			throw new BadRequestException(EMAIL_VERIFICATION_ERROR.INVALID_TOKEN);
+		}
+
+		if (existing.status === "VERIFIED") {
+			throw new BadRequestException(EMAIL_VERIFICATION_ERROR.ALREADY_VERIFIED);
+		}
+
+		this.assertResendCooldown(existing);
+
+		const tokenPair = this.createTokenPair();
+		const expiresAt = this.createExpiresAt();
+
+		const updated = await this.repository.updateById(existing.id, {
+			tokenHash: tokenPair.tokenHash,
+			status: "PENDING",
+			expiresAt,
+			lastSentAt: new Date(),
+			sendCount: { increment: 1 },
+			lastSendStatus: null,
+			lastSendError: null,
+		});
+
+		await this.sendAndRecord(updated.id, updated.email, tokenPair.rawToken);
+		const latest = await this.repository.findById(updated.id);
+		return this.toDto(latest ?? updated);
+	}
+
+	async getMany(query: GetEmailVerificationsQueryInput) {
+		const where = buildEmailVerificationQueryWhere(query, { removedAt: null });
+		const verificationResult = await this.repository.findMany({
+			where,
+			orderBy: buildEmailVerificationQueryOrderBy(query),
+			skip: query.skip ?? 0,
+			take: query.take ?? 20,
+		});
+
+		return {
+			data: verificationResult.items.map((item) => this.toDto(item)),
+			totalCount: verificationResult.totalCount,
+		};
 	}
 
 	async consumePendingByRawToken(rawToken: string) {
@@ -93,16 +148,54 @@ export class EmailVerificationAggregate {
 		return verification;
 	}
 
-	async markVerified(id: string, userId: string) {
+	async markVerified(id: bigint, userId: bigint) {
 		return this.repository.updateById(id, {
 			status: "VERIFIED",
 			verifiedAt: new Date(),
-			verifiedUser: { connect: { id: userId } },
+			verifiedUserId: userId,
 		});
 	}
 
+	toDto(verification: {
+		id: bigint;
+		createdAt: Date;
+		updatedAt: Date | null;
+		email: string;
+		name: string;
+		status: "PENDING" | "VERIFIED" | "EXPIRED";
+		expiresAt: Date;
+		verifiedAt: Date | null;
+		lastSentAt: Date | null;
+		sendCount: number;
+		lastSendStatus: string | null;
+		verifiedUserId: bigint | null;
+	}) {
+		const resendAvailableAt = this.getResendAvailableAt(
+			verification.lastSentAt,
+		);
+
+		return {
+			id: verification.id,
+			createdAt: verification.createdAt,
+			updatedAt: verification.updatedAt,
+			email: verification.email,
+			name: verification.name,
+			status: verification.status,
+			expiresAt: verification.expiresAt,
+			verifiedAt: verification.verifiedAt,
+			lastSentAt: verification.lastSentAt,
+			sendCount: verification.sendCount,
+			lastSendStatus: verification.lastSendStatus,
+			verifiedUserId: verification.verifiedUserId,
+			canResend:
+				verification.status !== "VERIFIED" &&
+				(!resendAvailableAt || resendAvailableAt.getTime() <= Date.now()),
+			resendAvailableAt,
+		};
+	}
+
 	private async sendAndRecord(
-		verificationId: string,
+		verificationId: bigint,
 		email: string,
 		rawToken: string,
 	): Promise<void> {
@@ -154,7 +247,10 @@ export class EmailVerificationAggregate {
 
 	private createTokenPair(): { rawToken: string; tokenHash: string } {
 		const token = EmailVerificationToken.generate();
-		return { rawToken: token.value, tokenHash: token.toHash() };
+		return {
+			rawToken: token.value,
+			tokenHash: token.toHash(),
+		};
 	}
 
 	private buildConfirmUrl(rawToken: string): string {

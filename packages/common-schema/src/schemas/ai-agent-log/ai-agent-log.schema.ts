@@ -5,17 +5,17 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** AIAgentLog의 DB 필드 타입과 공통 검증입니다. */
 export class AIAgentLogSchema
-	extends PickSchemaType(AbstractSchema, ["seq", "createdAt"] as const)
+	extends PickSchemaType(AbstractSchema, ["id", "createdAt"] as const)
 {
-	id!: string;
+	aiAgentLogId!: string;
 
-	declare seq: bigint;
+	declare id: bigint;
 
 	declare createdAt: Date;
 
-	inquirySeq!: bigint;
+	inquiryId!: bigint;
 
-	messageSeq!: bigint | null;
+	messageId!: bigint | null;
 
 	action!: AIAgentAction;
 

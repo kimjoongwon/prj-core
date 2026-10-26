@@ -2,7 +2,8 @@ import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { parseAcceptLanguage } from "@cocrepo/toolkit";
 import {
 	type ContextUserSnapshot,
-	INTEGRATION_ULID_PATTERN,
+	type DatabaseId,
+	parseDecimalId,
 } from "@cocrepo/type";
 import {
 	BadRequestException,
@@ -81,29 +82,29 @@ export class RequestContextMiddleware implements NestMiddleware {
 
 		// Tenant 설정 및 Space ID 파생
 		const tenant = resolveCurrentTenantById(user?.tenants, tenantId);
-		const spaceSeq = tenant ? resolveTenantSpaceId(tenant) : undefined;
+		const spaceId = tenant ? resolveTenantSpaceId(tenant) : undefined;
 		this.cls.set(CONTEXT_KEYS.TENANT, tenant);
-		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceSeq);
+		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceId);
 
 		if (user && tenant) {
 			this.logger.dev("Request 컨텍스트 설정 완료", {
-				userSeq: user.id.toString().slice(-8),
+				userId: user.id.toString().slice(-8),
 				requestedTenantId: tenantId?.toString().slice(-8),
 				tenantId: tenant.id.toString().slice(-8),
-				spaceSeq: spaceSeq?.toString().slice(-8),
+				spaceId: spaceId?.toString().slice(-8),
 				language,
 			});
 		}
 	}
 
 	/**
-	 * x-tenant-id wire 값(테넌트 공개 ULID)을 검증합니다.
+	 * x-tenant-id wire 값을 검증하고 런타임 DatabaseId로 변환합니다.
 	 *
 	 * @param request 현재 HTTP 요청
-	 * @returns 헤더가 없으면 undefined, 유효하면 테넌트 ULID 문자열
-	 * @throws BadRequestException 헤더가 ULID가 아닌 경우
+	 * @returns 헤더가 없으면 undefined, 유효하면 bigint tenant ID
+	 * @throws BadRequestException 헤더가 canonical decimal ID가 아닌 경우
 	 */
-	private parseTenantIdHeader(request: Request): string | undefined {
+	private parseTenantIdHeader(request: Request): DatabaseId | undefined {
 		const headerValue = this.readRequestHeader(
 			request,
 			REQUEST_HEADER_KEYS.TENANT_ID,
@@ -112,13 +113,14 @@ export class RequestContextMiddleware implements NestMiddleware {
 			return undefined;
 		}
 
-		if (!INTEGRATION_ULID_PATTERN.test(headerValue)) {
+		const tenantId = parseDecimalId(headerValue);
+		if (tenantId === null) {
 			throw new BadRequestException(
-				"x-tenant-id 헤더는 26자 ULID 공개 식별자여야 합니다.",
+				"x-tenant-id 헤더는 canonical positive bigint ID 문자열이어야 합니다.",
 			);
 		}
 
-		return headerValue;
+		return tenantId;
 	}
 
 	/**

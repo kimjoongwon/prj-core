@@ -8,6 +8,7 @@ import {
 	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { AbilitySchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Action } from "./action.entity";
 import { PolicyEntry } from "./policy-entry.entity";
@@ -26,7 +27,7 @@ import { Subject } from "./subject.entity";
 @AbstractEntityFields()
 export class Ability extends AbilitySchema {
 	/** 공개 식별자 ULID */
-	declare id: AbilitySchema["id"];
+	@Exclude({ toPlainOnly: true }) declare abilityId: AbilitySchema["abilityId"];
 
 	// 메타데이터
 	/** 권한 이름 (재사용 가능한 고유 이름) */
@@ -49,9 +50,9 @@ export class Ability extends AbilitySchema {
 
 	// 연결 대상
 	/** Subject ID (권한 대상) */
-	@BigIntIdFieldMetadata() declare subjectSeq: AbilitySchema["subjectSeq"];
+	@BigIntIdFieldMetadata() declare subjectId: AbilitySchema["subjectId"];
 	/** Action ID (행위 정의) */
-	@BigIntIdFieldMetadata() declare actionSeq: AbilitySchema["actionSeq"];
+	@BigIntIdFieldMetadata() declare actionId: AbilitySchema["actionId"];
 
 	// RoleAssignment에서 조회할 때 설정되는 필드 (optional)
 	/** 우선순위 (Policy assignment priority 값) */

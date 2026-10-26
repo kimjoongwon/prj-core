@@ -32,7 +32,7 @@ export class SafeWalletsRepository {
 		this.logger = new Logger("SafeWalletsRepository");
 	}
 
-	async findById(id: string): Promise<SafeWalletRecord | null> {
+	async findById(id: bigint): Promise<SafeWalletRecord | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.findUnique({
@@ -47,7 +47,7 @@ export class SafeWalletsRepository {
 		this.logger.debug(`트랜잭션 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.findUnique({
-			where: { id },
+			where: { safeWalletId: id },
 			include: {
 				transactions: {
 					orderBy: [{ createdAt: "desc" }],
@@ -71,11 +71,11 @@ export class SafeWalletsRepository {
 		return result ? (toDomainData(result) as SafeWalletRecord) : null;
 	}
 
-	async findBySpaceId(spaceSeq: bigint): Promise<SafeWalletRecord[]> {
-		this.logger.debug(`Space별 지갑 조회: ${spaceSeq.toString()}`);
+	async findBySpaceId(spaceId: bigint): Promise<SafeWalletRecord[]> {
+		this.logger.debug(`Space별 지갑 조회: ${spaceId.toString()}`);
 
 		const results = await this.txHost.tx.safeWallet.findMany({
-			where: { spaceSeq, removedAt: null },
+			where: { spaceId, removedAt: null },
 			include: safeWalletInclude,
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -107,7 +107,10 @@ export class SafeWalletsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<Prisma.SafeWalletUncheckedCreateInput, "id">,
+		data: AutoIdentityCreateInput<
+			Prisma.SafeWalletUncheckedCreateInput,
+			"safeWalletId"
+		>,
 	): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 생성: ${data.address}`);
 		const result = await this.txHost.tx.safeWallet.create({
@@ -119,8 +122,11 @@ export class SafeWalletsRepository {
 	}
 
 	async updateById(
-		id: string,
-		data: AutoIdentityUpdateInput<Prisma.SafeWalletUncheckedUpdateInput, "id">,
+		id: bigint,
+		data: AutoIdentityUpdateInput<
+			Prisma.SafeWalletUncheckedUpdateInput,
+			"safeWalletId"
+		>,
 	): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.safeWallet.update({
@@ -132,7 +138,7 @@ export class SafeWalletsRepository {
 		return toDomainData(result);
 	}
 
-	async removeById(id: string): Promise<SafeWalletRecord> {
+	async removeById(id: bigint): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.delete({

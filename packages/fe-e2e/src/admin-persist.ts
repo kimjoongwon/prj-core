@@ -1,6 +1,6 @@
-import { type IntegrationUlid, isIntegrationUlid } from "@cocrepo/type";
+import { type DecimalId, isDecimalId } from "@cocrepo/type";
 
-const ADMIN_ACCOUNT_PERSIST_VERSION = 4 as const;
+const ADMIN_ACCOUNT_PERSIST_VERSION = 2 as const;
 
 /** Admin 저장 문서의 native 인증 session 계약입니다. */
 export interface AdminNativeAuthSession {
@@ -13,18 +13,18 @@ export interface AdminNativeAuthSession {
 
 /** Admin account section에 저장하는 Space/FitnessCenter 선택 계약입니다. */
 export interface AdminPersistSpaceSelection {
-	tenantId: IntegrationUlid;
-	spaceId: IntegrationUlid;
-	spaceName: string;
+	tenantId: DecimalId;
+	spaceId: DecimalId;
+	fitnessCenterName: string;
 	contentLanguageCode?: string | null;
 }
 
 /** Admin account section의 현재 persist 계약입니다. */
 export interface AdminPersistAccount {
 	version: typeof ADMIN_ACCOUNT_PERSIST_VERSION;
-	tenantId: IntegrationUlid | null;
-	spaceId: IntegrationUlid | null;
-	spaceName: string | null;
+	tenantId: DecimalId | null;
+	spaceId: DecimalId | null;
+	fitnessCenterName: string | null;
 	contentLanguageCode: string | null;
 	availableSpaces: AdminPersistSpaceSelection[];
 }
@@ -73,15 +73,15 @@ export function parseAdminPersistStorageDocument(
  *
  * @param raw 기존 localStorage JSON
  * @param selection 선택한 tenant/space/FitnessCenter
-	 * @returns account version 4 계약으로 정규화된 저장 문서
+ * @returns account version 2 계약으로 정규화된 저장 문서
  */
 export function mergeAdminPersistAccountSelection(
 	raw: string | null,
 	selection: AdminPersistSpaceSelection,
 ): AdminPersistStorageDocument {
-	if (!isIntegrationUlid(selection.tenantId) || !isIntegrationUlid(selection.spaceId)) {
+	if (!isDecimalId(selection.tenantId) || !isDecimalId(selection.spaceId)) {
 		throw new Error(
-			"Admin persist selection requires canonical ULID tenant/space IDs.",
+			"Admin persist selection requires canonical decimal tenant/space IDs.",
 		);
 	}
 
@@ -100,7 +100,7 @@ export function mergeAdminPersistAccountSelection(
 			version: ADMIN_ACCOUNT_PERSIST_VERSION,
 			tenantId: selection.tenantId,
 			spaceId: selection.spaceId,
-			spaceName: selection.spaceName,
+			fitnessCenterName: selection.fitnessCenterName,
 			contentLanguageCode: selection.contentLanguageCode ?? null,
 			availableSpaces,
 		},
@@ -111,20 +111,20 @@ export function mergeAdminPersistAccountSelection(
  * Admin 저장 문서에서 현재 tenant/space 선택값을 읽습니다.
  *
  * @param raw localStorage JSON
-	 * @returns canonical ULID를 가진 선택값, 없으면 undefined
+ * @returns canonical decimal ID를 가진 선택값, 없으면 undefined
  */
 export function readAdminPersistSpaceSelection(
 	raw: string | null,
 ): AdminPersistSpaceSelection | undefined {
 	const account = parseAdminPersistStorageDocument(raw).account;
-	if (!account?.tenantId || !account.spaceId || !account.spaceName) {
+	if (!account?.tenantId || !account.spaceId || !account.fitnessCenterName) {
 		return undefined;
 	}
 
 	return {
 		tenantId: account.tenantId,
 		spaceId: account.spaceId,
-		spaceName: account.spaceName,
+		fitnessCenterName: account.fitnessCenterName,
 		contentLanguageCode: account.contentLanguageCode,
 	};
 }
@@ -154,11 +154,11 @@ function normalizeAdminPersistAccount(
 
 	return {
 		version: ADMIN_ACCOUNT_PERSIST_VERSION,
-		tenantId: isIntegrationUlid(value.tenantId) ? value.tenantId : null,
-		spaceId: isIntegrationUlid(value.spaceId) ? value.spaceId : null,
-		spaceName:
-			typeof value.spaceName === "string"
-				? value.spaceName
+		tenantId: isDecimalId(value.tenantId) ? value.tenantId : null,
+		spaceId: isDecimalId(value.spaceId) ? value.spaceId : null,
+		fitnessCenterName:
+			typeof value.fitnessCenterName === "string"
+				? value.fitnessCenterName
 				: null,
 		contentLanguageCode:
 			typeof value.contentLanguageCode === "string"
@@ -175,9 +175,9 @@ function normalizeAdminPersistSpaces(
 		? value.filter(
 				(space): space is AdminPersistSpaceSelection =>
 					isRecord(space) &&
-					isIntegrationUlid(space.tenantId) &&
-					isIntegrationUlid(space.spaceId) &&
-					typeof space.spaceName === "string" &&
+					isDecimalId(space.tenantId) &&
+					isDecimalId(space.spaceId) &&
+					typeof space.fitnessCenterName === "string" &&
 					(space.contentLanguageCode === undefined ||
 						space.contentLanguageCode === null ||
 						typeof space.contentLanguageCode === "string"),

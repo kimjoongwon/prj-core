@@ -10,7 +10,7 @@ import { AbstractSchema } from "../abstract.schema";
 /** User의 DB 필드 타입과 공통 검증입니다. */
 export class UserSchema extends AbstractSchema {
 	@ULIDValidation()
-	id!: string;
+	userId!: string;
 
 	@StringValidation({ description: "연락처" })
 	phone!: string;

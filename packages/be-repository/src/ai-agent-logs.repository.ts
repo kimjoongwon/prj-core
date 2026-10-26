@@ -18,7 +18,7 @@ export class AIAgentLogsRepository {
 		this.logger = new Logger("AIAgentLogsRepository");
 	}
 
-	async findById(id: string): Promise<AIAgentLog | null> {
+	async findById(id: bigint): Promise<AIAgentLog | null> {
 		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.aIAgentLog.findUnique({
@@ -29,11 +29,11 @@ export class AIAgentLogsRepository {
 		return result ? toDomainEntity(AIAgentLog, result) : null;
 	}
 
-	async findByInquiryId(inquirySeq: bigint): Promise<AIAgentLog[]> {
-		this.logger.debug(`문의별 AI 로그 조회: ${inquirySeq.toString()}`);
+	async findByInquiryId(inquiryId: bigint): Promise<AIAgentLog[]> {
+		this.logger.debug(`문의별 AI 로그 조회: ${inquiryId.toString()}`);
 
 		const results = await this.txHost.tx.aIAgentLog.findMany({
-			where: { inquirySeq },
+			where: { inquiryId },
 			include: { inquiry: true, message: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -41,11 +41,11 @@ export class AIAgentLogsRepository {
 		return results.map((item) => toDomainEntity(AIAgentLog, item));
 	}
 
-	async findByMessageId(messageSeq: bigint): Promise<AIAgentLog | null> {
-		this.logger.debug(`메시지별 AI 로그 조회: ${messageSeq}`);
+	async findByMessageId(messageId: bigint): Promise<AIAgentLog | null> {
+		this.logger.debug(`메시지별 AI 로그 조회: ${messageId}`);
 
 		const result = await this.txHost.tx.aIAgentLog.findFirst({
-			where: { messageSeq },
+			where: { messageId },
 			include: { inquiry: true, message: true },
 		});
 
@@ -76,9 +76,12 @@ export class AIAgentLogsRepository {
 	}
 
 	async create(
-		data: AutoIdentityCreateInput<Prisma.AIAgentLogUncheckedCreateInput, "id">,
+		data: AutoIdentityCreateInput<
+			Prisma.AIAgentLogUncheckedCreateInput,
+			"aiAgentLogId"
+		>,
 	): Promise<AIAgentLog> {
-		this.logger.debug(`로그 생성: ${data.inquirySeq.toString()}`);
+		this.logger.debug(`로그 생성: ${data.inquiryId.toString()}`);
 		const result = await this.txHost.tx.aIAgentLog.create({
 			data,
 			include: { inquiry: true, message: true },
@@ -87,7 +90,7 @@ export class AIAgentLogsRepository {
 		return toDomainEntity(AIAgentLog, result);
 	}
 
-	async deleteById(id: string): Promise<AIAgentLog> {
+	async deleteById(id: bigint): Promise<AIAgentLog> {
 		this.logger.debug(`로그 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.aIAgentLog.delete({
@@ -98,9 +101,9 @@ export class AIAgentLogsRepository {
 		return toDomainEntity(AIAgentLog, result);
 	}
 
-	async countByInquiryId(inquirySeq: bigint): Promise<number> {
+	async countByInquiryId(inquiryId: bigint): Promise<number> {
 		return this.txHost.tx.aIAgentLog.count({
-			where: { inquirySeq },
+			where: { inquiryId },
 		});
 	}
 }

@@ -27,153 +27,153 @@ export type AggregateTenantAccessRequest = {
 }
 
 export type TenantAccessRequestAvgAggregateOutputType = {
-  seq: number | null
-  requesterSeq: number | null
-  spaceSeq: number | null
-  requestedRoleSeq: number | null
-  previousRoleSeq: number | null
-  reviewerSeq: number | null
-  appliedTenantSeq: number | null
+  id: number | null
+  requesterId: number | null
+  spaceId: number | null
+  requestedRoleId: number | null
+  previousRoleId: number | null
+  reviewerId: number | null
+  appliedTenantId: number | null
 }
 
 export type TenantAccessRequestSumAggregateOutputType = {
-  seq: bigint | null
-  requesterSeq: bigint | null
-  spaceSeq: bigint | null
-  requestedRoleSeq: bigint | null
-  previousRoleSeq: bigint | null
-  reviewerSeq: bigint | null
-  appliedTenantSeq: bigint | null
+  id: bigint | null
+  requesterId: bigint | null
+  spaceId: bigint | null
+  requestedRoleId: bigint | null
+  previousRoleId: bigint | null
+  reviewerId: bigint | null
+  appliedTenantId: bigint | null
 }
 
 export type TenantAccessRequestMinAggregateOutputType = {
-  id: string | null
-  seq: bigint | null
+  tenantAccessRequestId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  requesterSeq: bigint | null
-  spaceSeq: bigint | null
-  requestedRoleSeq: bigint | null
-  previousRoleSeq: bigint | null
+  requesterId: bigint | null
+  spaceId: bigint | null
+  requestedRoleId: bigint | null
+  previousRoleId: bigint | null
   reason: string | null
   status: $Enums.TenantAccessRequestStatus | null
-  reviewerSeq: bigint | null
+  reviewerId: bigint | null
   reviewComment: string | null
   reviewedAt: Date | null
-  appliedTenantSeq: bigint | null
+  appliedTenantId: bigint | null
 }
 
 export type TenantAccessRequestMaxAggregateOutputType = {
-  id: string | null
-  seq: bigint | null
+  tenantAccessRequestId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  requesterSeq: bigint | null
-  spaceSeq: bigint | null
-  requestedRoleSeq: bigint | null
-  previousRoleSeq: bigint | null
+  requesterId: bigint | null
+  spaceId: bigint | null
+  requestedRoleId: bigint | null
+  previousRoleId: bigint | null
   reason: string | null
   status: $Enums.TenantAccessRequestStatus | null
-  reviewerSeq: bigint | null
+  reviewerId: bigint | null
   reviewComment: string | null
   reviewedAt: Date | null
-  appliedTenantSeq: bigint | null
+  appliedTenantId: bigint | null
 }
 
 export type TenantAccessRequestCountAggregateOutputType = {
+  tenantAccessRequestId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  requesterSeq: number
-  spaceSeq: number
-  requestedRoleSeq: number
-  previousRoleSeq: number
+  requesterId: number
+  spaceId: number
+  requestedRoleId: number
+  previousRoleId: number
   reason: number
   status: number
-  reviewerSeq: number
+  reviewerId: number
   reviewComment: number
   reviewedAt: number
-  appliedTenantSeq: number
+  appliedTenantId: number
   _all: number
 }
 
 
 export type TenantAccessRequestAvgAggregateInputType = {
-  seq?: true
-  requesterSeq?: true
-  spaceSeq?: true
-  requestedRoleSeq?: true
-  previousRoleSeq?: true
-  reviewerSeq?: true
-  appliedTenantSeq?: true
+  id?: true
+  requesterId?: true
+  spaceId?: true
+  requestedRoleId?: true
+  previousRoleId?: true
+  reviewerId?: true
+  appliedTenantId?: true
 }
 
 export type TenantAccessRequestSumAggregateInputType = {
-  seq?: true
-  requesterSeq?: true
-  spaceSeq?: true
-  requestedRoleSeq?: true
-  previousRoleSeq?: true
-  reviewerSeq?: true
-  appliedTenantSeq?: true
+  id?: true
+  requesterId?: true
+  spaceId?: true
+  requestedRoleId?: true
+  previousRoleId?: true
+  reviewerId?: true
+  appliedTenantId?: true
 }
 
 export type TenantAccessRequestMinAggregateInputType = {
+  tenantAccessRequestId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  requesterSeq?: true
-  spaceSeq?: true
-  requestedRoleSeq?: true
-  previousRoleSeq?: true
+  requesterId?: true
+  spaceId?: true
+  requestedRoleId?: true
+  previousRoleId?: true
   reason?: true
   status?: true
-  reviewerSeq?: true
+  reviewerId?: true
   reviewComment?: true
   reviewedAt?: true
-  appliedTenantSeq?: true
+  appliedTenantId?: true
 }
 
 export type TenantAccessRequestMaxAggregateInputType = {
+  tenantAccessRequestId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  requesterSeq?: true
-  spaceSeq?: true
-  requestedRoleSeq?: true
-  previousRoleSeq?: true
+  requesterId?: true
+  spaceId?: true
+  requestedRoleId?: true
+  previousRoleId?: true
   reason?: true
   status?: true
-  reviewerSeq?: true
+  reviewerId?: true
   reviewComment?: true
   reviewedAt?: true
-  appliedTenantSeq?: true
+  appliedTenantId?: true
 }
 
 export type TenantAccessRequestCountAggregateInputType = {
+  tenantAccessRequestId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  requesterSeq?: true
-  spaceSeq?: true
-  requestedRoleSeq?: true
-  previousRoleSeq?: true
+  requesterId?: true
+  spaceId?: true
+  requestedRoleId?: true
+  previousRoleId?: true
   reason?: true
   status?: true
-  reviewerSeq?: true
+  reviewerId?: true
   reviewComment?: true
   reviewedAt?: true
-  appliedTenantSeq?: true
+  appliedTenantId?: true
   _all?: true
 }
 
@@ -264,21 +264,21 @@ export type TenantAccessRequestGroupByArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 export type TenantAccessRequestGroupByOutputType = {
-  id: string
-  seq: bigint
+  tenantAccessRequestId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  requesterSeq: bigint
-  spaceSeq: bigint
-  requestedRoleSeq: bigint
-  previousRoleSeq: bigint | null
+  requesterId: bigint
+  spaceId: bigint
+  requestedRoleId: bigint
+  previousRoleId: bigint | null
   reason: string | null
   status: $Enums.TenantAccessRequestStatus
-  reviewerSeq: bigint | null
+  reviewerId: bigint | null
   reviewComment: string | null
   reviewedAt: Date | null
-  appliedTenantSeq: bigint | null
+  appliedTenantId: bigint | null
   _count: TenantAccessRequestCountAggregateOutputType | null
   _avg: TenantAccessRequestAvgAggregateOutputType | null
   _sum: TenantAccessRequestSumAggregateOutputType | null
@@ -305,21 +305,21 @@ export type TenantAccessRequestWhereInput = {
   AND?: Prisma.TenantAccessRequestWhereInput | Prisma.TenantAccessRequestWhereInput[]
   OR?: Prisma.TenantAccessRequestWhereInput[]
   NOT?: Prisma.TenantAccessRequestWhereInput | Prisma.TenantAccessRequestWhereInput[]
-  id?: Prisma.StringFilter<"TenantAccessRequest"> | string
-  seq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  tenantAccessRequestId?: Prisma.StringFilter<"TenantAccessRequest"> | string
+  id?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"TenantAccessRequest"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
-  requesterSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  spaceSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  previousRoleSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  requesterId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  spaceId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  requestedRoleId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  previousRoleId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
   reason?: Prisma.StringNullableFilter<"TenantAccessRequest"> | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFilter<"TenantAccessRequest"> | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  reviewerId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
   reviewComment?: Prisma.StringNullableFilter<"TenantAccessRequest"> | string | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
-  appliedTenantSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  appliedTenantId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
   requester?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   reviewer?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
@@ -329,21 +329,21 @@ export type TenantAccessRequestWhereInput = {
 }
 
 export type TenantAccessRequestOrderByWithRelationInput = {
+  tenantAccessRequestId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  requesterSeq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  requestedRoleSeq?: Prisma.SortOrder
-  previousRoleSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  requesterId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  requestedRoleId?: Prisma.SortOrder
+  previousRoleId?: Prisma.SortOrderInput | Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  reviewerSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewerId?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewComment?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  appliedTenantSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  appliedTenantId?: Prisma.SortOrderInput | Prisma.SortOrder
   requester?: Prisma.UserOrderByWithRelationInput
   reviewer?: Prisma.UserOrderByWithRelationInput
   space?: Prisma.SpaceOrderByWithRelationInput
@@ -353,48 +353,48 @@ export type TenantAccessRequestOrderByWithRelationInput = {
 }
 
 export type TenantAccessRequestWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   AND?: Prisma.TenantAccessRequestWhereInput | Prisma.TenantAccessRequestWhereInput[]
   OR?: Prisma.TenantAccessRequestWhereInput[]
   NOT?: Prisma.TenantAccessRequestWhereInput | Prisma.TenantAccessRequestWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"TenantAccessRequest"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
-  requesterSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  spaceSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  previousRoleSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  requesterId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  spaceId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  requestedRoleId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  previousRoleId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
   reason?: Prisma.StringNullableFilter<"TenantAccessRequest"> | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFilter<"TenantAccessRequest"> | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  reviewerId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
   reviewComment?: Prisma.StringNullableFilter<"TenantAccessRequest"> | string | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
-  appliedTenantSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  appliedTenantId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
   requester?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   reviewer?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   requestedRole?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   previousRole?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
   appliedTenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
-}, "seq" | "id">
+}, "id" | "tenantAccessRequestId">
 
 export type TenantAccessRequestOrderByWithAggregationInput = {
+  tenantAccessRequestId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  requesterSeq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  requestedRoleSeq?: Prisma.SortOrder
-  previousRoleSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  requesterId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  requestedRoleId?: Prisma.SortOrder
+  previousRoleId?: Prisma.SortOrderInput | Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  reviewerSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewerId?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewComment?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  appliedTenantSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  appliedTenantId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TenantAccessRequestCountOrderByAggregateInput
   _avg?: Prisma.TenantAccessRequestAvgOrderByAggregateInput
   _max?: Prisma.TenantAccessRequestMaxOrderByAggregateInput
@@ -406,26 +406,26 @@ export type TenantAccessRequestScalarWhereWithAggregatesInput = {
   AND?: Prisma.TenantAccessRequestScalarWhereWithAggregatesInput | Prisma.TenantAccessRequestScalarWhereWithAggregatesInput[]
   OR?: Prisma.TenantAccessRequestScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TenantAccessRequestScalarWhereWithAggregatesInput | Prisma.TenantAccessRequestScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"TenantAccessRequest"> | string
-  seq?: Prisma.BigIntWithAggregatesFilter<"TenantAccessRequest"> | bigint | number
+  tenantAccessRequestId?: Prisma.StringWithAggregatesFilter<"TenantAccessRequest"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"TenantAccessRequest"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TenantAccessRequest"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TenantAccessRequest"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TenantAccessRequest"> | Date | string | null
-  requesterSeq?: Prisma.BigIntWithAggregatesFilter<"TenantAccessRequest"> | bigint | number
-  spaceSeq?: Prisma.BigIntWithAggregatesFilter<"TenantAccessRequest"> | bigint | number
-  requestedRoleSeq?: Prisma.BigIntWithAggregatesFilter<"TenantAccessRequest"> | bigint | number
-  previousRoleSeq?: Prisma.BigIntNullableWithAggregatesFilter<"TenantAccessRequest"> | bigint | number | null
+  requesterId?: Prisma.BigIntWithAggregatesFilter<"TenantAccessRequest"> | bigint | number
+  spaceId?: Prisma.BigIntWithAggregatesFilter<"TenantAccessRequest"> | bigint | number
+  requestedRoleId?: Prisma.BigIntWithAggregatesFilter<"TenantAccessRequest"> | bigint | number
+  previousRoleId?: Prisma.BigIntNullableWithAggregatesFilter<"TenantAccessRequest"> | bigint | number | null
   reason?: Prisma.StringNullableWithAggregatesFilter<"TenantAccessRequest"> | string | null
   status?: Prisma.EnumTenantAccessRequestStatusWithAggregatesFilter<"TenantAccessRequest"> | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.BigIntNullableWithAggregatesFilter<"TenantAccessRequest"> | bigint | number | null
+  reviewerId?: Prisma.BigIntNullableWithAggregatesFilter<"TenantAccessRequest"> | bigint | number | null
   reviewComment?: Prisma.StringNullableWithAggregatesFilter<"TenantAccessRequest"> | string | null
   reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TenantAccessRequest"> | Date | string | null
-  appliedTenantSeq?: Prisma.BigIntNullableWithAggregatesFilter<"TenantAccessRequest"> | bigint | number | null
+  appliedTenantId?: Prisma.BigIntNullableWithAggregatesFilter<"TenantAccessRequest"> | bigint | number | null
 }
 
 export type TenantAccessRequestCreateInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -442,26 +442,26 @@ export type TenantAccessRequestCreateInput = {
 }
 
 export type TenantAccessRequestUncheckedCreateInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -478,44 +478,44 @@ export type TenantAccessRequestUpdateInput = {
 }
 
 export type TenantAccessRequestUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestCreateManyInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -526,21 +526,21 @@ export type TenantAccessRequestUpdateManyMutationInput = {
 }
 
 export type TenantAccessRequestUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestListRelationFilter = {
@@ -554,77 +554,77 @@ export type TenantAccessRequestOrderByRelationAggregateInput = {
 }
 
 export type TenantAccessRequestCountOrderByAggregateInput = {
+  tenantAccessRequestId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  requesterSeq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  requestedRoleSeq?: Prisma.SortOrder
-  previousRoleSeq?: Prisma.SortOrder
+  requesterId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  requestedRoleId?: Prisma.SortOrder
+  previousRoleId?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  reviewerSeq?: Prisma.SortOrder
+  reviewerId?: Prisma.SortOrder
   reviewComment?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
-  appliedTenantSeq?: Prisma.SortOrder
+  appliedTenantId?: Prisma.SortOrder
 }
 
 export type TenantAccessRequestAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  requesterSeq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  requestedRoleSeq?: Prisma.SortOrder
-  previousRoleSeq?: Prisma.SortOrder
-  reviewerSeq?: Prisma.SortOrder
-  appliedTenantSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  requesterId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  requestedRoleId?: Prisma.SortOrder
+  previousRoleId?: Prisma.SortOrder
+  reviewerId?: Prisma.SortOrder
+  appliedTenantId?: Prisma.SortOrder
 }
 
 export type TenantAccessRequestMaxOrderByAggregateInput = {
+  tenantAccessRequestId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  requesterSeq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  requestedRoleSeq?: Prisma.SortOrder
-  previousRoleSeq?: Prisma.SortOrder
+  requesterId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  requestedRoleId?: Prisma.SortOrder
+  previousRoleId?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  reviewerSeq?: Prisma.SortOrder
+  reviewerId?: Prisma.SortOrder
   reviewComment?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
-  appliedTenantSeq?: Prisma.SortOrder
+  appliedTenantId?: Prisma.SortOrder
 }
 
 export type TenantAccessRequestMinOrderByAggregateInput = {
+  tenantAccessRequestId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  requesterSeq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  requestedRoleSeq?: Prisma.SortOrder
-  previousRoleSeq?: Prisma.SortOrder
+  requesterId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  requestedRoleId?: Prisma.SortOrder
+  previousRoleId?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  reviewerSeq?: Prisma.SortOrder
+  reviewerId?: Prisma.SortOrder
   reviewComment?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrder
-  appliedTenantSeq?: Prisma.SortOrder
+  appliedTenantId?: Prisma.SortOrder
 }
 
 export type TenantAccessRequestSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  requesterSeq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  requestedRoleSeq?: Prisma.SortOrder
-  previousRoleSeq?: Prisma.SortOrder
-  reviewerSeq?: Prisma.SortOrder
-  appliedTenantSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  requesterId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  requestedRoleId?: Prisma.SortOrder
+  previousRoleId?: Prisma.SortOrder
+  reviewerId?: Prisma.SortOrder
+  appliedTenantId?: Prisma.SortOrder
 }
 
 export type TenantAccessRequestCreateNestedManyWithoutRequestedRoleInput = {
@@ -884,8 +884,8 @@ export type TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput = {
 }
 
 export type TenantAccessRequestCreateWithoutRequestedRoleInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -901,20 +901,20 @@ export type TenantAccessRequestCreateWithoutRequestedRoleInput = {
 }
 
 export type TenantAccessRequestUncheckedCreateWithoutRequestedRoleInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  spaceId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestCreateOrConnectWithoutRequestedRoleInput = {
@@ -928,8 +928,8 @@ export type TenantAccessRequestCreateManyRequestedRoleInputEnvelope = {
 }
 
 export type TenantAccessRequestCreateWithoutPreviousRoleInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -945,20 +945,20 @@ export type TenantAccessRequestCreateWithoutPreviousRoleInput = {
 }
 
 export type TenantAccessRequestUncheckedCreateWithoutPreviousRoleInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
+  requesterId: bigint | number
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestCreateOrConnectWithoutPreviousRoleInput = {
@@ -991,21 +991,21 @@ export type TenantAccessRequestScalarWhereInput = {
   AND?: Prisma.TenantAccessRequestScalarWhereInput | Prisma.TenantAccessRequestScalarWhereInput[]
   OR?: Prisma.TenantAccessRequestScalarWhereInput[]
   NOT?: Prisma.TenantAccessRequestScalarWhereInput | Prisma.TenantAccessRequestScalarWhereInput[]
-  id?: Prisma.StringFilter<"TenantAccessRequest"> | string
-  seq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  tenantAccessRequestId?: Prisma.StringFilter<"TenantAccessRequest"> | string
+  id?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"TenantAccessRequest"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
-  requesterSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  spaceSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
-  previousRoleSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  requesterId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  spaceId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  requestedRoleId?: Prisma.BigIntFilter<"TenantAccessRequest"> | bigint | number
+  previousRoleId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
   reason?: Prisma.StringNullableFilter<"TenantAccessRequest"> | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFilter<"TenantAccessRequest"> | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  reviewerId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
   reviewComment?: Prisma.StringNullableFilter<"TenantAccessRequest"> | string | null
   reviewedAt?: Prisma.DateTimeNullableFilter<"TenantAccessRequest"> | Date | string | null
-  appliedTenantSeq?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
+  appliedTenantId?: Prisma.BigIntNullableFilter<"TenantAccessRequest"> | bigint | number | null
 }
 
 export type TenantAccessRequestUpsertWithWhereUniqueWithoutPreviousRoleInput = {
@@ -1025,8 +1025,8 @@ export type TenantAccessRequestUpdateManyWithWhereWithoutPreviousRoleInput = {
 }
 
 export type TenantAccessRequestCreateWithoutSpaceInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1042,20 +1042,20 @@ export type TenantAccessRequestCreateWithoutSpaceInput = {
 }
 
 export type TenantAccessRequestUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestCreateOrConnectWithoutSpaceInput = {
@@ -1085,8 +1085,8 @@ export type TenantAccessRequestUpdateManyWithWhereWithoutSpaceInput = {
 }
 
 export type TenantAccessRequestCreateWithoutAppliedTenantInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1102,18 +1102,18 @@ export type TenantAccessRequestCreateWithoutAppliedTenantInput = {
 }
 
 export type TenantAccessRequestUncheckedCreateWithoutAppliedTenantInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
 }
@@ -1145,8 +1145,8 @@ export type TenantAccessRequestUpdateManyWithWhereWithoutAppliedTenantInput = {
 }
 
 export type TenantAccessRequestCreateWithoutRequesterInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1162,20 +1162,20 @@ export type TenantAccessRequestCreateWithoutRequesterInput = {
 }
 
 export type TenantAccessRequestUncheckedCreateWithoutRequesterInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestCreateOrConnectWithoutRequesterInput = {
@@ -1189,8 +1189,8 @@ export type TenantAccessRequestCreateManyRequesterInputEnvelope = {
 }
 
 export type TenantAccessRequestCreateWithoutReviewerInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1206,20 +1206,20 @@ export type TenantAccessRequestCreateWithoutReviewerInput = {
 }
 
 export type TenantAccessRequestUncheckedCreateWithoutReviewerInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestCreateOrConnectWithoutReviewerInput = {
@@ -1265,42 +1265,42 @@ export type TenantAccessRequestUpdateManyWithWhereWithoutReviewerInput = {
 }
 
 export type TenantAccessRequestCreateManyRequestedRoleInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  spaceId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestCreateManyPreviousRoleInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
+  requesterId: bigint | number
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestUpdateWithoutRequestedRoleInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1316,42 +1316,42 @@ export type TenantAccessRequestUpdateWithoutRequestedRoleInput = {
 }
 
 export type TenantAccessRequestUncheckedUpdateWithoutRequestedRoleInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestUncheckedUpdateManyWithoutRequestedRoleInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestUpdateWithoutPreviousRoleInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1367,59 +1367,59 @@ export type TenantAccessRequestUpdateWithoutPreviousRoleInput = {
 }
 
 export type TenantAccessRequestUncheckedUpdateWithoutPreviousRoleInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestUncheckedUpdateManyWithoutPreviousRoleInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestCreateManySpaceInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1435,59 +1435,59 @@ export type TenantAccessRequestUpdateWithoutSpaceInput = {
 }
 
 export type TenantAccessRequestUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestCreateManyAppliedTenantInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
 }
 
 export type TenantAccessRequestUpdateWithoutAppliedTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1503,76 +1503,76 @@ export type TenantAccessRequestUpdateWithoutAppliedTenantInput = {
 }
 
 export type TenantAccessRequestUncheckedUpdateWithoutAppliedTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TenantAccessRequestCreateManyRequesterInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
-  reviewerSeq?: bigint | number | null
+  reviewerId?: bigint | number | null
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestCreateManyReviewerInput = {
-  id?: string
-  seq?: bigint | number
+  tenantAccessRequestId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  requesterSeq: bigint | number
-  spaceSeq: bigint | number
-  requestedRoleSeq: bigint | number
-  previousRoleSeq?: bigint | number | null
+  requesterId: bigint | number
+  spaceId: bigint | number
+  requestedRoleId: bigint | number
+  previousRoleId?: bigint | number | null
   reason?: string | null
   status?: $Enums.TenantAccessRequestStatus
   reviewComment?: string | null
   reviewedAt?: Date | string | null
-  appliedTenantSeq?: bigint | number | null
+  appliedTenantId?: bigint | number | null
 }
 
 export type TenantAccessRequestUpdateWithoutRequesterInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1588,42 +1588,42 @@ export type TenantAccessRequestUpdateWithoutRequesterInput = {
 }
 
 export type TenantAccessRequestUncheckedUpdateWithoutRequesterInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestUncheckedUpdateManyWithoutRequesterInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
-  reviewerSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  reviewerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestUpdateWithoutReviewerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1639,57 +1639,57 @@ export type TenantAccessRequestUpdateWithoutReviewerInput = {
 }
 
 export type TenantAccessRequestUncheckedUpdateWithoutReviewerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type TenantAccessRequestUncheckedUpdateManyWithoutReviewerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  tenantAccessRequestId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  requesterSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  spaceSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  requestedRoleSeq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  previousRoleSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  requesterId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  requestedRoleId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  previousRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTenantAccessRequestStatusFieldUpdateOperationsInput | $Enums.TenantAccessRequestStatus
   reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  appliedTenantSeq?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  appliedTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 
 
 export type TenantAccessRequestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  tenantAccessRequestId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  requesterSeq?: boolean
-  spaceSeq?: boolean
-  requestedRoleSeq?: boolean
-  previousRoleSeq?: boolean
+  requesterId?: boolean
+  spaceId?: boolean
+  requestedRoleId?: boolean
+  previousRoleId?: boolean
   reason?: boolean
   status?: boolean
-  reviewerSeq?: boolean
+  reviewerId?: boolean
   reviewComment?: boolean
   reviewedAt?: boolean
-  appliedTenantSeq?: boolean
+  appliedTenantId?: boolean
   requester?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reviewer?: boolean | Prisma.TenantAccessRequest$reviewerArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -1699,21 +1699,21 @@ export type TenantAccessRequestSelect<ExtArgs extends runtime.Types.Extensions.I
 }, ExtArgs["result"]["tenantAccessRequest"]>
 
 export type TenantAccessRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  tenantAccessRequestId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  requesterSeq?: boolean
-  spaceSeq?: boolean
-  requestedRoleSeq?: boolean
-  previousRoleSeq?: boolean
+  requesterId?: boolean
+  spaceId?: boolean
+  requestedRoleId?: boolean
+  previousRoleId?: boolean
   reason?: boolean
   status?: boolean
-  reviewerSeq?: boolean
+  reviewerId?: boolean
   reviewComment?: boolean
   reviewedAt?: boolean
-  appliedTenantSeq?: boolean
+  appliedTenantId?: boolean
   requester?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reviewer?: boolean | Prisma.TenantAccessRequest$reviewerArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -1723,21 +1723,21 @@ export type TenantAccessRequestSelectCreateManyAndReturn<ExtArgs extends runtime
 }, ExtArgs["result"]["tenantAccessRequest"]>
 
 export type TenantAccessRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  tenantAccessRequestId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  requesterSeq?: boolean
-  spaceSeq?: boolean
-  requestedRoleSeq?: boolean
-  previousRoleSeq?: boolean
+  requesterId?: boolean
+  spaceId?: boolean
+  requestedRoleId?: boolean
+  previousRoleId?: boolean
   reason?: boolean
   status?: boolean
-  reviewerSeq?: boolean
+  reviewerId?: boolean
   reviewComment?: boolean
   reviewedAt?: boolean
-  appliedTenantSeq?: boolean
+  appliedTenantId?: boolean
   requester?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reviewer?: boolean | Prisma.TenantAccessRequest$reviewerArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -1747,24 +1747,24 @@ export type TenantAccessRequestSelectUpdateManyAndReturn<ExtArgs extends runtime
 }, ExtArgs["result"]["tenantAccessRequest"]>
 
 export type TenantAccessRequestSelectScalar = {
+  tenantAccessRequestId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  requesterSeq?: boolean
-  spaceSeq?: boolean
-  requestedRoleSeq?: boolean
-  previousRoleSeq?: boolean
+  requesterId?: boolean
+  spaceId?: boolean
+  requestedRoleId?: boolean
+  previousRoleId?: boolean
   reason?: boolean
   status?: boolean
-  reviewerSeq?: boolean
+  reviewerId?: boolean
   reviewComment?: boolean
   reviewedAt?: boolean
-  appliedTenantSeq?: boolean
+  appliedTenantId?: boolean
 }
 
-export type TenantAccessRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "requesterSeq" | "spaceSeq" | "requestedRoleSeq" | "previousRoleSeq" | "reason" | "status" | "reviewerSeq" | "reviewComment" | "reviewedAt" | "appliedTenantSeq", ExtArgs["result"]["tenantAccessRequest"]>
+export type TenantAccessRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"tenantAccessRequestId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "requesterId" | "spaceId" | "requestedRoleId" | "previousRoleId" | "reason" | "status" | "reviewerId" | "reviewComment" | "reviewedAt" | "appliedTenantId", ExtArgs["result"]["tenantAccessRequest"]>
 export type TenantAccessRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   requester?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reviewer?: boolean | Prisma.TenantAccessRequest$reviewerArgs<ExtArgs>
@@ -1801,21 +1801,21 @@ export type $TenantAccessRequestPayload<ExtArgs extends runtime.Types.Extensions
     appliedTenant: Prisma.$TenantPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: bigint
+    tenantAccessRequestId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    requesterSeq: bigint
-    spaceSeq: bigint
-    requestedRoleSeq: bigint
-    previousRoleSeq: bigint | null
+    requesterId: bigint
+    spaceId: bigint
+    requestedRoleId: bigint
+    previousRoleId: bigint | null
     reason: string | null
     status: $Enums.TenantAccessRequestStatus
-    reviewerSeq: bigint | null
+    reviewerId: bigint | null
     reviewComment: string | null
     reviewedAt: Date | null
-    appliedTenantSeq: bigint | null
+    appliedTenantId: bigint | null
   }, ExtArgs["result"]["tenantAccessRequest"]>
   composites: {}
 }
@@ -1899,8 +1899,8 @@ export interface TenantAccessRequestDelegate<ExtArgs extends runtime.Types.Exten
    * // Get first 10 TenantAccessRequests
    * const tenantAccessRequests = await prisma.tenantAccessRequest.findMany({ take: 10 })
    *
-   * // Only select the `id`
-   * const tenantAccessRequestWithIdOnly = await prisma.tenantAccessRequest.findMany({ select: { id: true } })
+   * // Only select the `tenantAccessRequestId`
+   * const tenantAccessRequestWithTenantAccessRequestIdOnly = await prisma.tenantAccessRequest.findMany({ select: { tenantAccessRequestId: true } })
    *
    */
   findMany<T extends TenantAccessRequestFindManyArgs>(args?: Prisma.SelectSubset<T, TenantAccessRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1944,9 +1944,9 @@ export interface TenantAccessRequestDelegate<ExtArgs extends runtime.Types.Exten
    *   ]
    * })
    *
-   * // Create many TenantAccessRequests and only return the `id`
-   * const tenantAccessRequestWithIdOnly = await prisma.tenantAccessRequest.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many TenantAccessRequests and only return the `tenantAccessRequestId`
+   * const tenantAccessRequestWithTenantAccessRequestIdOnly = await prisma.tenantAccessRequest.createManyAndReturn({
+   *   select: { tenantAccessRequestId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -2035,9 +2035,9 @@ export interface TenantAccessRequestDelegate<ExtArgs extends runtime.Types.Exten
    *   ]
    * })
    *
-   * // Update zero or more TenantAccessRequests and only return the `id`
-   * const tenantAccessRequestWithIdOnly = await prisma.tenantAccessRequest.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more TenantAccessRequests and only return the `tenantAccessRequestId`
+   * const tenantAccessRequestWithTenantAccessRequestIdOnly = await prisma.tenantAccessRequest.updateManyAndReturn({
+   *   select: { tenantAccessRequestId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -2245,21 +2245,21 @@ export interface Prisma__TenantAccessRequestClient<T, Null = never, ExtArgs exte
  * Fields of the TenantAccessRequest model
  */
 export interface TenantAccessRequestFieldRefs {
-  readonly id: Prisma.FieldRef<"TenantAccessRequest", 'String'>
-  readonly seq: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
+  readonly tenantAccessRequestId: Prisma.FieldRef<"TenantAccessRequest", 'String'>
+  readonly id: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"TenantAccessRequest", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TenantAccessRequest", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"TenantAccessRequest", 'DateTime'>
-  readonly requesterSeq: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
-  readonly spaceSeq: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
-  readonly requestedRoleSeq: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
-  readonly previousRoleSeq: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
+  readonly requesterId: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
+  readonly spaceId: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
+  readonly requestedRoleId: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
+  readonly previousRoleId: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
   readonly reason: Prisma.FieldRef<"TenantAccessRequest", 'String'>
   readonly status: Prisma.FieldRef<"TenantAccessRequest", 'TenantAccessRequestStatus'>
-  readonly reviewerSeq: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
+  readonly reviewerId: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
   readonly reviewComment: Prisma.FieldRef<"TenantAccessRequest", 'String'>
   readonly reviewedAt: Prisma.FieldRef<"TenantAccessRequest", 'DateTime'>
-  readonly appliedTenantSeq: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
+  readonly appliedTenantId: Prisma.FieldRef<"TenantAccessRequest", 'BigInt'>
 }
 
 

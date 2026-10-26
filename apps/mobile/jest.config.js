@@ -14,10 +14,6 @@ module.exports = {
     // 훅 dispatcher가 null이 되는 이중 로딩을 막는다.
     "^react$": "<rootDir>/node_modules/react/index.js",
   },
-  // react-native-gesture-handler 3.x는 네이티브 모듈 프록시(v3/NativeProxy)를 기동 시점에
-  // 설치합니다. 공식 jestSetup 목으로 대체하지 않으면 installUIRuntimeBindings가 없어
-  // 스위트 전체가 뜨지 않습니다.
-  setupFiles: ["react-native-gesture-handler/jestSetup"],
   setupFilesAfterEnv: ["<rootDir>/test/jestExpoRuntimeSetup.js"],
   transformIgnorePatterns: [
 		"node_modules/(?!.*(@cocrepo|(jest-)?react-native|@react-native|decode-uri-component|expo|@expo|heroui-native|react-native-reanimated|react-native-worklets|react-native-svg|uniwind))",

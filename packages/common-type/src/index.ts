@@ -18,10 +18,7 @@ export type Constructor<
  * 모든 엔티티가 가지는 공통 필드 인터페이스
  */
 export interface BaseEntityFields {
-	/** 공개 식별자 ULID */
-	id: string;
-	/** 내부 일련번호 (통신선에 노출하지 않는 BigInt) */
-	seq: DatabaseId;
+	id: DatabaseId;
 	createdAt: Date;
 	updatedAt: Date | null;
 	removedAt: Date | null;

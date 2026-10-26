@@ -45,16 +45,16 @@ describe("TokenStorageService", () => {
 	describe("saveRefreshToken", () => {
 		it("리프레시 토큰을 Redis에 저장해야 한다", async () => {
 			// Given
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			const refreshToken = "test-refresh-token";
 			mockRedisService.set.mockResolvedValue(undefined);
 
 			// When
-			await service.saveRefreshToken(userSeq, refreshToken);
+			await service.saveRefreshToken(userId, refreshToken);
 
 			// Then
 			expect(mockRedisService.set).toHaveBeenCalledWith(
-				`refresh:${userSeq}`,
+				`refresh:${userId}`,
 				expect.stringContaining(refreshToken),
 				604800, // 7일 = 7 * 24 * 60 * 60 초
 			);
@@ -63,16 +63,16 @@ describe("TokenStorageService", () => {
 		it("기본 TTL을 사용해야 한다 (설정이 없을 때)", async () => {
 			// Given
 			mockConfigService.get.mockReturnValue(null);
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			const refreshToken = "test-refresh-token";
 			mockRedisService.set.mockResolvedValue(undefined);
 
 			// When
-			await service.saveRefreshToken(userSeq, refreshToken);
+			await service.saveRefreshToken(userId, refreshToken);
 
 			// Then
 			expect(mockRedisService.set).toHaveBeenCalledWith(
-				`refresh:${userSeq}`,
+				`refresh:${userId}`,
 				expect.any(String),
 				604800, // 기본 7일
 			);
@@ -82,7 +82,7 @@ describe("TokenStorageService", () => {
 	describe("getRefreshToken", () => {
 		it("저장된 리프레시 토큰을 조회해야 한다", async () => {
 			// Given
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			const storedData = JSON.stringify({
 				token: "test-refresh-token",
 				createdAt: new Date().toISOString(),
@@ -90,20 +90,20 @@ describe("TokenStorageService", () => {
 			mockRedisService.get.mockResolvedValue(storedData);
 
 			// When
-			const result = await service.getRefreshToken(userSeq);
+			const result = await service.getRefreshToken(userId);
 
 			// Then
-			expect(mockRedisService.get).toHaveBeenCalledWith(`refresh:${userSeq}`);
+			expect(mockRedisService.get).toHaveBeenCalledWith(`refresh:${userId}`);
 			expect(result).toBe("test-refresh-token");
 		});
 
 		it("토큰이 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const userSeq = "non-existent-user";
+			const userId = "non-existent-user";
 			mockRedisService.get.mockResolvedValue(null);
 
 			// When
-			const result = await service.getRefreshToken(userSeq);
+			const result = await service.getRefreshToken(userId);
 
 			// Then
 			expect(result).toBeNull();
@@ -111,11 +111,11 @@ describe("TokenStorageService", () => {
 
 		it("잘못된 JSON은 null을 반환해야 한다", async () => {
 			// Given
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			mockRedisService.get.mockResolvedValue("invalid-json");
 
 			// When
-			const result = await service.getRefreshToken(userSeq);
+			const result = await service.getRefreshToken(userId);
 
 			// Then
 			expect(result).toBeNull();
@@ -125,7 +125,7 @@ describe("TokenStorageService", () => {
 	describe("validateRefreshToken", () => {
 		it("유효한 리프레시 토큰은 true를 반환해야 한다", async () => {
 			// Given
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			const refreshToken = "valid-refresh-token";
 			const storedData = JSON.stringify({
 				token: refreshToken,
@@ -134,7 +134,7 @@ describe("TokenStorageService", () => {
 			mockRedisService.get.mockResolvedValue(storedData);
 
 			// When
-			const result = await service.validateRefreshToken(userSeq, refreshToken);
+			const result = await service.validateRefreshToken(userId, refreshToken);
 
 			// Then
 			expect(result).toBe(true);
@@ -142,7 +142,7 @@ describe("TokenStorageService", () => {
 
 		it("일치하지 않는 토큰은 false를 반환해야 한다", async () => {
 			// Given
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			const refreshToken = "wrong-token";
 			const storedData = JSON.stringify({
 				token: "stored-token",
@@ -151,7 +151,7 @@ describe("TokenStorageService", () => {
 			mockRedisService.get.mockResolvedValue(storedData);
 
 			// When
-			const result = await service.validateRefreshToken(userSeq, refreshToken);
+			const result = await service.validateRefreshToken(userId, refreshToken);
 
 			// Then
 			expect(result).toBe(false);
@@ -159,11 +159,11 @@ describe("TokenStorageService", () => {
 
 		it("저장된 토큰이 없으면 false를 반환해야 한다", async () => {
 			// Given
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			mockRedisService.get.mockResolvedValue(null);
 
 			// When
-			const result = await service.validateRefreshToken(userSeq, "any-token");
+			const result = await service.validateRefreshToken(userId, "any-token");
 
 			// Then
 			expect(result).toBe(false);
@@ -173,18 +173,18 @@ describe("TokenStorageService", () => {
 	describe("deleteRefreshToken", () => {
 		it("리프레시 토큰을 삭제해야 한다", async () => {
 			// Given
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			mockRedisService.del.mockResolvedValue(1);
 
 			// When
-			await service.deleteRefreshToken(userSeq);
+			await service.deleteRefreshToken(userId);
 
 			// Then
-			expect(mockRedisService.keys).toHaveBeenCalledWith(`session:${userSeq}:*`);
+			expect(mockRedisService.keys).toHaveBeenCalledWith(`session:${userId}:*`);
 			expect(mockRedisService.delByPattern).toHaveBeenCalledWith(
-				`session:${userSeq}:*`,
+				`session:${userId}:*`,
 			);
-			expect(mockRedisService.del).toHaveBeenCalledWith(`refresh:${userSeq}`);
+			expect(mockRedisService.del).toHaveBeenCalledWith(`refresh:${userId}`);
 		});
 	});
 
@@ -252,18 +252,18 @@ describe("TokenStorageService", () => {
 	describe("invalidateAllUserTokens", () => {
 		it("사용자의 모든 토큰을 무효화해야 한다", async () => {
 			// Given
-			const userSeq = "user-test-id";
+			const userId = "user-test-id";
 			mockRedisService.del.mockResolvedValue(1);
 
 			// When
-			await service.invalidateAllUserTokens(userSeq);
+			await service.invalidateAllUserTokens(userId);
 
 			// Then
-			expect(mockRedisService.keys).toHaveBeenCalledWith(`session:${userSeq}:*`);
+			expect(mockRedisService.keys).toHaveBeenCalledWith(`session:${userId}:*`);
 			expect(mockRedisService.delByPattern).toHaveBeenCalledWith(
-				`session:${userSeq}:*`,
+				`session:${userId}:*`,
 			);
-			expect(mockRedisService.del).toHaveBeenCalledWith(`refresh:${userSeq}`);
+			expect(mockRedisService.del).toHaveBeenCalledWith(`refresh:${userId}`);
 		});
 	});
 });

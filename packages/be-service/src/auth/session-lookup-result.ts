@@ -1,7 +1,7 @@
 import type { SessionMetadata } from "./session-metadata";
 
 export interface SessionLookupResult {
-	userSeq: string;
-	sessionSeq: string;
+	userId: string;
+	sessionId: string;
 	session: SessionMetadata;
 }

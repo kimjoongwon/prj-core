@@ -11,10 +11,10 @@ import { AbstractSchema } from "../abstract.schema";
 /** UserStatus의 DB 필드 타입과 공통 검증입니다. */
 export class UserStatusSchema extends AbstractSchema {
 	@ULIDValidation()
-	id!: string;
+	userStatusId!: string;
 
 	@BigIntIdValidation()
-	userSeq!: bigint;
+	userId!: bigint;
 
 	@BooleanValidation({ description: "활성 상태" })
 	isActive!: boolean;
@@ -38,5 +38,5 @@ export class UserStatusSchema extends AbstractSchema {
 		nullable: true,
 		description: "현재 선택된 Tenant membership ID",
 	})
-	currentTenantSeq!: bigint | null;
+	currentTenantId!: bigint | null;
 }

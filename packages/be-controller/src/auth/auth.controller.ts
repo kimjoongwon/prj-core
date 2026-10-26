@@ -1,19 +1,26 @@
+import { ParseBigIntIdPipe } from "@cocrepo/be-common";
 import {
 	ConfirmEmailVerificationCommand,
+	ForceResetPasswordCommand,
+	GetAuthAuditLogStatsQuery,
+	GetAuthAuditLogsQuery,
 	GetAuthLoginRedirectCommand,
 	GetCurrentSpaceQuery,
 	GetMySpacesQuery,
 	GetSignUpSpacesQuery,
 	HandleOidcCallbackCommand,
+	InvalidateUserSessionsCommand,
 	LogoutWithCookieCommand,
 	RefreshTokenWithIdpCommand,
 	SetCurrentSpaceCommand,
 	SignUpCommand,
+	UnlockAccountCommand,
 	VerifyTokenQuery,
 } from "@cocrepo/command";
 import {
 	AUTH_ERRORS,
 	REQUEST_HEADER_KEYS,
+	SYSTEM_ROLES,
 	Token,
 } from "@cocrepo/constant";
 import {
@@ -23,17 +30,23 @@ import {
 	ApiTenantHeader,
 	Public,
 	ResponseMessage,
+	Roles,
 	SkipSpaceCheck,
 } from "@cocrepo/decorator";
 import {
+	AuditLogStatsDto,
+	AuthAuditLogDto,
 	EmailVerificationRequestedDto,
 	LogoutResponseDto,
+	PageMetaDto,
+	QueryAuthAuditLogDto,
 	SetCurrentSpaceDto,
 	SignUpPayloadDto,
 	SpaceDto,
 	TokenRefreshResponseDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
+import { formatDatabaseId } from "@cocrepo/type";
 import {
 	BadRequestException,
 	Body,
@@ -206,7 +219,10 @@ export class AuthController {
 		@Body() signUpDto: SignUpPayloadDto,
 		@Headers(REQUEST_HEADER_KEYS.TENANT_ID) requestedSpaceId?: string,
 	) {
-		if (requestedSpaceId && requestedSpaceId !== signUpDto.spaceId) {
+		if (
+			requestedSpaceId &&
+			requestedSpaceId !== formatDatabaseId(signUpDto.spaceId)
+		) {
 			throw new BadRequestException("SIGN_UP_SPACE_HEADER_MISMATCH");
 		}
 
@@ -335,4 +351,95 @@ export class AuthController {
 		);
 	}
 
+	@HttpCode(HttpStatus.OK)
+	@Get("audit-logs")
+	@ApiOperation({
+		operationId: "getAuthAuditLogs",
+		summary: "인증 감사 로그 조회",
+		description:
+			"로그인 시도에 대한 감사 로그를 현재 선택 tenant scope 기준으로 조회합니다.",
+	})
+	@ApiAuth()
+	@ApiErrors(401, 403, 500)
+	@ApiResponseEntity(AuthAuditLogDto, HttpStatus.OK, {
+		isArray: true,
+		metaDto: PageMetaDto,
+	})
+	@ResponseMessage("감사 로그 조회 성공")
+	async getAuthAuditLogs(@Query() query: QueryAuthAuditLogDto) {
+		return this.queryBus.execute(new GetAuthAuditLogsQuery(query));
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Get("audit-logs/stats")
+	@ApiOperation({
+		operationId: "getAuthAuditLogStats",
+		summary: "감사 로그 통계 조회",
+		description: "오늘의 로그인 성공/실패/잠금 건수와 전체 건수를 조회합니다.",
+	})
+	@ApiAuth()
+	@ApiErrors(401, 403, 500)
+	@ApiResponseEntity(AuditLogStatsDto, HttpStatus.OK)
+	@ResponseMessage("감사 로그 통계 조회 성공")
+	async getAuthAuditLogStats() {
+		return this.queryBus.execute(new GetAuthAuditLogStatsQuery());
+	}
+
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Post("users/:userId/unlock")
+	@ApiOperation({
+		operationId: "unlockAccount",
+		summary: "계정 잠금 해제",
+		description: "잠긴 계정을 해제합니다. PLATFORM_ADMIN 권한이 필요합니다.",
+	})
+	@ApiParam({ name: "userId", type: String })
+	@ApiAuth()
+	@ApiErrors(401, 403, 404)
+	@ApiResponseEntity(Boolean, HttpStatus.OK)
+	@ResponseMessage("계정 잠금이 해제되었습니다.")
+	async unlockAccount(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
+		return this.commandBus.execute(new UnlockAccountCommand(userId));
+	}
+
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Post("users/:userId/force-reset-password")
+	@ApiOperation({
+		operationId: "forceResetPassword",
+		summary: "비밀번호 강제 재설정",
+		description:
+			"임시 비밀번호를 생성하여 이메일로 발송합니다. PLATFORM_ADMIN 권한이 필요합니다.",
+	})
+	@ApiParam({ name: "userId", type: String })
+	@ApiAuth()
+	@ApiErrors(401, 403, 404)
+	@ApiResponseEntity(Boolean, HttpStatus.OK)
+	@ResponseMessage("임시 비밀번호가 이메일로 발송되었습니다.")
+	async forceResetPassword(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
+		return this.commandBus.execute(new ForceResetPasswordCommand(userId));
+	}
+
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
+	@SkipSpaceCheck()
+	@HttpCode(HttpStatus.OK)
+	@Post("users/:userId/invalidate-sessions")
+	@ApiOperation({
+		operationId: "invalidateUserSessions",
+		summary: "사용자 전체 세션 무효화",
+		description:
+			"특정 사용자의 모든 세션을 강제 종료합니다. PLATFORM_ADMIN 권한이 필요합니다.",
+	})
+	@ApiParam({ name: "userId", type: String })
+	@ApiAuth()
+	@ApiErrors(401, 403, 404)
+	@ApiResponseEntity(Boolean, HttpStatus.OK)
+	@ResponseMessage("사용자의 모든 세션이 무효화되었습니다.")
+	async invalidateUserSessions(
+		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+	) {
+		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
+	}
 }

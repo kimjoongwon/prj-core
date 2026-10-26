@@ -12,12 +12,12 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** AuthAuditLog의 DB 필드 타입과 공통 검증입니다. */
 export class AuthAuditLogSchema
-	extends PickSchemaType(AbstractSchema, ["seq", "createdAt"] as const)
+	extends PickSchemaType(AbstractSchema, ["id", "createdAt"] as const)
 {
-	id!: string;
+	authAuditLogId!: string;
 
 	@BigIntIdValidation({ description: "ID" })
-	declare seq: bigint;
+	declare id: bigint;
 
 	@DateValidation({ description: "생성일" })
 	declare createdAt: Date;
@@ -26,7 +26,7 @@ export class AuthAuditLogSchema
 	email!: string;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "사용자 ID" })
-	userSeq!: bigint | null;
+	userId!: bigint | null;
 
 	@EnumValidation(() => AuthAuditResult, { description: "결과" })
 	result!: AuthAuditResult;

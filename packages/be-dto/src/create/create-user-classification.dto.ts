@@ -2,6 +2,6 @@ import { UserClassification } from "@cocrepo/entity";
 import { PickType } from "@nestjs/swagger";
 
 export class CreateUserClassificationDto extends PickType(UserClassification, [
-	"categorySeq",
-	"userSeq",
+	"categoryId",
+	"userId",
 ] as const) {}

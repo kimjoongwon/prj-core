@@ -5,6 +5,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { PolicySchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { PolicyEntry } from "./policy-entry.entity";
 import { RoleAssignment } from "./role-assignment.entity";
@@ -14,15 +15,16 @@ import { User } from "./user.entity";
 /** Space별 Ability를 묶어 Role에 할당하는 권한 정책입니다. */
 @AbstractEntityFields()
 export class Policy extends PolicySchema {
-	declare id: PolicySchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare policyId: PolicySchema["policyId"];
 	@BigIntIdFieldMetadata({ description: "Policy ID" })
-	declare seq: bigint;
+	declare id: bigint;
 
 	@BigIntIdFieldMetadata({ description: "Space ID" })
-	declare spaceSeq: PolicySchema["spaceSeq"];
+	declare spaceId: PolicySchema["spaceId"];
 
 	@BigIntIdFieldMetadata({ nullable: true, description: "생성자 ID" })
-	declare createdBySeq: PolicySchema["createdBySeq"];
+	declare createdById: PolicySchema["createdById"];
 
 	@StringFieldMetadata({
 		description: "정책 식별자",

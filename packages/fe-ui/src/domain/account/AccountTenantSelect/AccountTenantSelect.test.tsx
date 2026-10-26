@@ -4,7 +4,7 @@ import { AccountTenantSelect } from "./AccountTenantSelect";
 
 const mocks = vi.hoisted(() => ({
 	account: {
-		currentSpaceName: "Fitness Center A" as string | null,
+		currentFitnessCenterName: "Fitness Center A" as string | null,
 	},
 	selection: {
 		currentTenantId: "tenant-a" as string | null,
@@ -60,7 +60,7 @@ vi.mock("../../../input/Select/Select", () => ({
 
 describe("AccountTenantSelect", () => {
 	beforeEach(() => {
-		mocks.account.currentSpaceName = "Fitness Center A";
+		mocks.account.currentFitnessCenterName = "Fitness Center A";
 		mocks.selection.currentTenantId = "tenant-a";
 		mocks.selection.isPending = false;
 		mocks.selection.options = [

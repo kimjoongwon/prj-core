@@ -11,16 +11,16 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** InquiryAttachment의 DB 필드 타입과 공통 검증입니다. */
 export class InquiryAttachmentSchema
-	extends PickSchemaType(AbstractSchema, ["seq", "createdAt"] as const)
+	extends PickSchemaType(AbstractSchema, ["id", "createdAt"] as const)
 {
-	id!: string;
+	inquiryAttachmentId!: string;
 
-	declare seq: bigint;
+	declare id: bigint;
 
 	declare createdAt: Date;
 
 	@BigIntIdValidation({ description: "소속 메시지 ID" })
-	messageSeq!: bigint;
+	messageId!: bigint;
 
 	@StringValidation({ description: "원본 파일명" })
 	fileName!: string;

@@ -7,7 +7,7 @@ import type {
 	Subject,
 } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
-import { SYSTEM_SPACE_NAME, SYSTEM_SPACE_ULID } from "./constants";
+import { SYSTEM_SPACE_ULID } from "./constants";
 import {
 	abilitySeedData,
 	actionSeedData,
@@ -41,13 +41,12 @@ async function ensureSystemSpace(db: DbClient): Promise<void> {
 	// Reference data owns the canonical system space row because other catalogs
 	// (taxonomy, groups, roles) hang from it.
 	await db.space.upsert({
-		where: { id: SYSTEM_SPACE_ULID },
+		where: { spaceId: SYSTEM_SPACE_ULID },
 		update: {
 			removedAt: null,
 		},
 		create: {
-			id: SYSTEM_SPACE_ULID,
-			name: SYSTEM_SPACE_NAME,
+			spaceId: SYSTEM_SPACE_ULID,
 		},
 	});
 }
@@ -58,12 +57,12 @@ async function ensureSystemTenant(db: DbClient, roles: Record<string, Role>) {
 		throw new Error("PLATFORM_ADMIN role is required for system tenant.");
 	}
 
-	await ensureSystemAdminUsers(db, platformAdminRole.seq);
+	await ensureSystemAdminUsers(db, platformAdminRole.id);
 
 	const systemTenant = await db.tenant.findFirst({
 		where: {
-			space: { id: SYSTEM_SPACE_ULID },
-			roleSeq: platformAdminRole.seq,
+			space: { spaceId: SYSTEM_SPACE_ULID },
+			roleId: platformAdminRole.id,
 			removedAt: null,
 		},
 		orderBy: { createdAt: "asc" },
@@ -79,35 +78,35 @@ async function ensureSystemTenant(db: DbClient, roles: Record<string, Role>) {
 async function syncSpaceCategories(
 	db: DbClient,
 	systemSpaceId: DbId,
-	createdBySeq: DbId,
+	createdById: DbId,
 ): Promise<void> {
-	const categoryMap = new Map<string, { seq: DbId }>();
+	const categoryMap = new Map<string, { id: DbId }>();
 
 	// Parent-child category links are resolved in memory as we upsert categories
 	// in seed order, so later entries can refer to earlier category ids.
 	for (const categoryData of spaceCategorySeedData) {
 		const spaceCategoryEnum = categoryData.spaceCategoryEnum;
-		const parentSeq = categoryData.parentCategoryCode
-			? (categoryMap.get(categoryData.parentCategoryCode)?.seq ?? null)
+		const parentId = categoryData.parentCategoryCode
+			? (categoryMap.get(categoryData.parentCategoryCode)?.id ?? null)
 			: null;
 
 		const category = await db.category.upsert({
 			where: { name: spaceCategoryEnum.name },
 			update: {
-				spaceSeq: systemSpaceId,
-				createdBySeq,
-				parentSeq,
+				spaceId: systemSpaceId,
+				createdById,
+				parentId,
 				removedAt: null,
 			},
 			create: {
 				name: spaceCategoryEnum.name,
-				spaceSeq: systemSpaceId,
-				createdBySeq,
-				parentSeq,
+				spaceId: systemSpaceId,
+				createdById,
+				parentId,
 			},
 		});
 
-		categoryMap.set(spaceCategoryEnum.code, { seq: category.seq });
+		categoryMap.set(spaceCategoryEnum.code, { id: category.id });
 	}
 
 	const rootCategory = categoryMap.get("ROOT");
@@ -116,14 +115,14 @@ async function syncSpaceCategories(
 	}
 
 	await db.spaceClassification.upsert({
-		where: { spaceSeq: systemSpaceId },
+		where: { spaceId: systemSpaceId },
 		update: {
-			categorySeq: rootCategory.seq,
+			categoryId: rootCategory.id,
 			removedAt: null,
 		},
 		create: {
-			spaceSeq: systemSpaceId,
-			categorySeq: rootCategory.seq,
+			spaceId: systemSpaceId,
+			categoryId: rootCategory.id,
 		},
 	});
 }
@@ -131,7 +130,7 @@ async function syncSpaceCategories(
 async function syncSpaceGroups(
 	db: DbClient,
 	systemSpaceId: DbId,
-	createdBySeq: DbId,
+	createdById: DbId,
 ): Promise<void> {
 	// Group rows do not have a single natural unique key for this lookup shape,
 	// so we restore/create them and then ensure the space association exists.
@@ -141,7 +140,7 @@ async function syncSpaceGroups(
 			where: {
 				name: spaceGroupEnum.name,
 				type: "Space",
-				spaceSeq: systemSpaceId,
+				spaceId: systemSpaceId,
 			},
 		});
 
@@ -150,29 +149,29 @@ async function syncSpaceGroups(
 				data: {
 					name: spaceGroupEnum.name,
 					type: "Space",
-					spaceSeq: systemSpaceId,
-					createdBySeq,
+					spaceId: systemSpaceId,
+					createdById,
 				},
 			});
 		} else if (group.removedAt) {
 			group = await db.group.update({
-				where: { seq: group.seq },
+				where: { id: group.id },
 				data: { removedAt: null },
 			});
 		}
 
 		const existingAssociation = await db.spaceAssociation.findFirst({
 			where: {
-				spaceSeq: systemSpaceId,
-				groupSeq: group.seq,
+				spaceId: systemSpaceId,
+				groupId: group.id,
 			},
 		});
 
 		if (!existingAssociation) {
 			await db.spaceAssociation.create({
 				data: {
-					spaceSeq: systemSpaceId,
-					groupSeq: group.seq,
+					spaceId: systemSpaceId,
+					groupId: group.id,
 				},
 			});
 		}
@@ -204,7 +203,7 @@ async function syncRoles(db: DbClient): Promise<Record<string, Role>> {
 async function syncRoleCategories(
 	db: DbClient,
 	systemSpaceId: DbId,
-	createdBySeq: DbId,
+	createdById: DbId,
 ): Promise<void> {
 	for (const categoryData of roleCategorySeedData) {
 		const roleCategoryEnum = categoryData.roleCategoryEnum;
@@ -212,14 +211,14 @@ async function syncRoleCategories(
 		await db.category.upsert({
 			where: { name: roleCategoryEnum.name },
 			update: {
-				spaceSeq: systemSpaceId,
-				createdBySeq,
+				spaceId: systemSpaceId,
+				createdById,
 				removedAt: null,
 			},
 			create: {
 				name: roleCategoryEnum.name,
-				spaceSeq: systemSpaceId,
-				createdBySeq,
+				spaceId: systemSpaceId,
+				createdById,
 			},
 		});
 	}
@@ -250,14 +249,14 @@ async function syncRoleClassifications(
 		}
 
 		await db.roleClassification.upsert({
-			where: { roleSeq: role.seq },
+			where: { roleId: role.id },
 			update: {
-				categorySeq: category.seq,
+				categoryId: category.id,
 				removedAt: null,
 			},
 			create: {
-				roleSeq: role.seq,
-				categorySeq: category.seq,
+				roleId: role.id,
+				categoryId: category.id,
 			},
 		});
 	}
@@ -266,7 +265,7 @@ async function syncRoleClassifications(
 async function syncRoleGroups(
 	db: DbClient,
 	systemSpaceId: DbId,
-	createdBySeq: DbId,
+	createdById: DbId,
 ): Promise<Record<string, Group>> {
 	const groups: Record<string, Group> = {};
 
@@ -276,7 +275,7 @@ async function syncRoleGroups(
 			where: {
 				name: roleGroupEnum.name,
 				type: "Role",
-				spaceSeq: systemSpaceId,
+				spaceId: systemSpaceId,
 			},
 		});
 
@@ -285,13 +284,13 @@ async function syncRoleGroups(
 				data: {
 					name: roleGroupEnum.name,
 					type: "Role",
-					spaceSeq: systemSpaceId,
-					createdBySeq,
+					spaceId: systemSpaceId,
+					createdById,
 				},
 			});
 		} else if (group.removedAt) {
 			group = await db.group.update({
-				where: { seq: group.seq },
+				where: { id: group.id },
 				data: { removedAt: null },
 			});
 		}
@@ -323,14 +322,14 @@ async function syncRoleAssociations(
 		}
 
 		await db.roleAssociation.upsert({
-			where: { roleSeq: role.seq },
+			where: { roleId: role.id },
 			update: {
-				groupSeq: group.seq,
+				groupId: group.id,
 				removedAt: null,
 			},
 			create: {
-				roleSeq: role.seq,
-				groupSeq: group.seq,
+				roleId: role.id,
+				groupId: group.id,
 			},
 		});
 	}
@@ -419,7 +418,7 @@ async function syncAbilitiesAndPolicies(
 	subjects: Record<string, Subject>,
 	actions: Record<string, Action>,
 ): Promise<void> {
-	const abilityMap = new Map<string, { seq: DbId }>();
+	const abilityMap = new Map<string, { id: DbId }>();
 
 	// Phase 1: materialize unique ability records. Multiple roles may point to
 	// the same subject/action/condition combination.
@@ -433,15 +432,15 @@ async function syncAbilitiesAndPolicies(
 			);
 		}
 
-		const abilityKey = `${subject.seq}:${action.seq}:${abilityData.inverted}:${JSON.stringify(abilityData.conditions ?? null)}`;
+		const abilityKey = `${subject.id}:${action.id}:${abilityData.inverted}:${JSON.stringify(abilityData.conditions ?? null)}`;
 		if (!abilityMap.has(abilityKey)) {
 			const abilityName = getAbilityName(abilityData, action, subject);
 			const ability = await db.ability.upsert({
 				where: { name: abilityName },
 				update: {
 					description: abilityData.description,
-					subjectSeq: subject.seq,
-					actionSeq: action.seq,
+					subjectId: subject.id,
+					actionId: action.id,
 					fields: [],
 					conditions: abilityData.conditions
 						? (abilityData.conditions as Prisma.InputJsonObject)
@@ -453,8 +452,8 @@ async function syncAbilitiesAndPolicies(
 				create: {
 					name: abilityName,
 					description: abilityData.description,
-					subjectSeq: subject.seq,
-					actionSeq: action.seq,
+					subjectId: subject.id,
+					actionId: action.id,
 					fields: [],
 					conditions: abilityData.conditions
 						? (abilityData.conditions as Prisma.InputJsonObject)
@@ -463,16 +462,16 @@ async function syncAbilitiesAndPolicies(
 					reason: abilityData.reason ?? null,
 				},
 			});
-			abilityMap.set(abilityKey, { seq: ability.seq });
+			abilityMap.set(abilityKey, { id: ability.id });
 		}
 	}
 
 	const activeTenants = await db.tenant.findMany({
 		where: { removedAt: null },
-		select: { spaceSeq: true, userSeq: true },
+		select: { spaceId: true, userId: true },
 	});
 	const policyScopes = Array.from(
-		new Map(activeTenants.map((tenant) => [tenant.spaceSeq, tenant])).values(),
+		new Map(activeTenants.map((tenant) => [tenant.spaceId, tenant])).values(),
 	);
 
 	const abilityIdsByRoleName = new Map<string, Set<DbId>>();
@@ -493,7 +492,7 @@ async function syncAbilitiesAndPolicies(
 			);
 		}
 
-		const abilityKey = `${subject.seq}:${action.seq}:${abilityData.inverted}:${JSON.stringify(abilityData.conditions ?? null)}`;
+		const abilityKey = `${subject.id}:${action.id}:${abilityData.inverted}:${JSON.stringify(abilityData.conditions ?? null)}`;
 		const ability = abilityMap.get(abilityKey);
 
 		if (!ability) {
@@ -502,7 +501,7 @@ async function syncAbilitiesAndPolicies(
 
 		const abilityIds =
 			abilityIdsByRoleName.get(abilityData.roleName) ?? new Set<DbId>();
-		abilityIds.add(ability.seq);
+		abilityIds.add(ability.id);
 		abilityIdsByRoleName.set(abilityData.roleName, abilityIds);
 
 		const currentPriority = priorityByRoleName.get(abilityData.roleName) ?? 0;
@@ -524,8 +523,8 @@ async function syncAbilitiesAndPolicies(
 		for (const scope of policyScopes) {
 			const policy = await db.policy.upsert({
 				where: {
-					spaceSeq_name: {
-						spaceSeq: scope.spaceSeq,
+					spaceId_name: {
+						spaceId: scope.spaceId,
 						name: policyName,
 					},
 				},
@@ -535,8 +534,8 @@ async function syncAbilitiesAndPolicies(
 					removedAt: null,
 				},
 				create: {
-					spaceSeq: scope.spaceSeq,
-					createdBySeq: scope.userSeq,
+					spaceId: scope.spaceId,
+					createdById: scope.userId,
 					name: policyName,
 					displayName: `${role.displayName ?? role.name} 기본 정책`,
 					description: `${role.displayName ?? role.name} 역할에 자동 할당되는 시스템 권한 정책입니다.`,
@@ -546,34 +545,34 @@ async function syncAbilitiesAndPolicies(
 			const abilityIdList = Array.from(abilityIds);
 			await db.policyEntry.updateMany({
 				where: {
-					policySeq: policy.seq,
+					policyId: policy.id,
 					removedAt: null,
-					abilitySeq: { notIn: abilityIdList },
+					abilityId: { notIn: abilityIdList },
 				},
 				data: { removedAt: new Date() },
 			});
 
-			for (const abilitySeq of abilityIdList) {
+			for (const abilityId of abilityIdList) {
 				await db.policyEntry.upsert({
 					where: {
-						policySeq_abilitySeq: {
-							policySeq: policy.seq,
-							abilitySeq,
+						policyId_abilityId: {
+							policyId: policy.id,
+							abilityId,
 						},
 					},
 					update: { removedAt: null },
 					create: {
-						policySeq: policy.seq,
-						abilitySeq,
+						policyId: policy.id,
+						abilityId,
 					},
 				});
 			}
 
 			await db.roleAssignment.upsert({
 				where: {
-					roleSeq_policySeq: {
-						roleSeq: role.seq,
-						policySeq: policy.seq,
+					roleId_policyId: {
+						roleId: role.id,
+						policyId: policy.id,
 					},
 				},
 				update: {
@@ -582,8 +581,8 @@ async function syncAbilitiesAndPolicies(
 					removedAt: null,
 				},
 				create: {
-					roleSeq: role.seq,
-					policySeq: policy.seq,
+					roleId: role.id,
+					policyId: policy.id,
 					isActive: true,
 					priority: priorityByRoleName.get(roleName) ?? 0,
 				},
@@ -711,14 +710,14 @@ export async function syncReferenceData(
 	const roles = await syncRoles(db);
 	const systemTenant = await ensureSystemTenant(db, roles);
 
-	await syncSpaceCategories(db, systemTenant.spaceSeq, systemTenant.userSeq);
-	await syncSpaceGroups(db, systemTenant.spaceSeq, systemTenant.userSeq);
-	await syncRoleCategories(db, systemTenant.spaceSeq, systemTenant.userSeq);
+	await syncSpaceCategories(db, systemTenant.spaceId, systemTenant.userId);
+	await syncSpaceGroups(db, systemTenant.spaceId, systemTenant.userId);
+	await syncRoleCategories(db, systemTenant.spaceId, systemTenant.userId);
 	await syncRoleClassifications(db, roles);
 	const groups = await syncRoleGroups(
 		db,
-		systemTenant.spaceSeq,
-		systemTenant.userSeq,
+		systemTenant.spaceId,
+		systemTenant.userId,
 	);
 	await syncRoleAssociations(db, roles, groups);
 

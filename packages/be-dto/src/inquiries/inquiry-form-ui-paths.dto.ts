@@ -18,7 +18,7 @@ export class InquiryFormUiPathsDto {
 	@ApiProperty({
 		description: "비활성 경로 목록",
 		type: [String],
-		example: ["customerSeq"],
+		example: ["customerId"],
 	})
 	disabledPaths!: string[];
 }

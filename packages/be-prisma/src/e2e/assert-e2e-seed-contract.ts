@@ -7,7 +7,7 @@ export async function assertE2eSeedContract(
 ): Promise<void> {
 	const [systemSpace, adminUser, adminClient, roles] = await Promise.all([
 		prisma.space.findUnique({
-			where: { id: SYSTEM_SPACE_ULID },
+			where: { spaceId: SYSTEM_SPACE_ULID },
 		}),
 		prisma.user.findFirst({
 			where: { email: resolveSystemAdminSeedData()[0].email },

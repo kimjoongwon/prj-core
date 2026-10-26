@@ -15,12 +15,12 @@ import {
 import { BadRequestException, ConflictException } from "@nestjs/common";
 import { ReservationAggregate } from "../src/reservation/reservation.aggregate";
 
-const spaceId = "01JAAAAAAAAAAAAAAAAAAAAAAAA";
+const spaceId = 101n;
 const tenantId = 606n;
-const userId = "01JCCCCCCCCCCCCCCCCCCCCCCCC";
-const timelineId = "01JTIMELINE000000000000000303";
-const sessionId = "01JSESSION000000000000000404";
-const programId = "01JPROGRAM000000000000000505";
+const userId = 202n;
+const timelineId = 303n;
+const sessionId = 404n;
+const programId = 505n;
 const occurrenceStartAt = new Date("2026-06-01T10:00:00.000Z");
 
 describe("ReservationAggregate", () => {
@@ -77,7 +77,7 @@ describe("ReservationAggregate", () => {
 		expect(repository.create).toHaveBeenCalledWith(
 			expect.objectContaining({
 				spaceId,
-				createdBy: { connect: { id: userId } },
+				createdById: userId,
 				userId,
 				timelineId,
 				sessionId,
@@ -205,7 +205,7 @@ describe("ReservationAggregate", () => {
 			service.cancel({
 				spaceId,
 				userId,
-				reservationId: "01JRESERV7777777777777777777",
+				reservationId: 777n,
 				now: new Date("2026-06-01T08:00:00.000Z"),
 			}),
 		).rejects.toThrow(BadRequestException);
@@ -230,9 +230,9 @@ function buildProgram(input: { capacity: number }): BookingProgramRecord {
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
-		routineSeq: 808n,
+		routineId: 808n,
 		sessionId,
-		instructorSeq: 909n,
+		instructorId: 909n,
 		capacity: input.capacity,
 		name: "Morning Flow",
 		level: "BEGINNER",
@@ -257,7 +257,7 @@ function buildProgram(input: { capacity: number }): BookingProgramRecord {
 				updatedAt: null,
 				removedAt: null,
 				spaceId,
-				createdBySeq: null,
+				createdById: null,
 				name: "June",
 				description: null,
 			},
@@ -272,9 +272,9 @@ function buildReservation(input: Record<string, unknown> = {}): Reservation {
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
-		space: { id: spaceId },
-		createdBy: { connect: { id: userId } },
-		user: { id: userId },
+		spaceId,
+		createdById: input.createdById === undefined ? userId : input.createdById,
+		userId,
 		timelineId,
 		sessionId,
 		programId,

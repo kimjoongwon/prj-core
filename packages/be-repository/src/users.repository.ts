@@ -6,8 +6,8 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import {
-	flattenIdpAccountRecord,
 	IDP_ACCOUNT_SELECT,
+	flattenIdpAccountRecord,
 	type IdpAccountRecord,
 } from "./idp-account.select";
 import {
@@ -41,8 +41,8 @@ export class UsersRepository {
 	/**
 	 * ID로 조회 (기본 정보만)
 	 */
-	async findById(id: string): Promise<User | null> {
-		this.logger.debug(`공개 ID로 조회: ${id}`);
+	async findById(id: bigint): Promise<User | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
 			where: { id },
@@ -56,9 +56,9 @@ export class UsersRepository {
 	 * 현재 선택 Tenant는 UserStatus 1:1 관계에서 읽어 평평하게 포함합니다(CLS 스냅샷 계약 유지).
 	 */
 	async findByIdWithTenantsAndProfiles(
-		id: string,
-	): Promise<(User & { currentTenantSeq: bigint | null }) | null> {
-		this.logger.debug(`공개 ID로 사용자 조회: ${id}`);
+		id: bigint,
+	): Promise<(User & { currentTenantId: bigint | null }) | null> {
+		this.logger.debug(`ID로 사용자 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
 			where: { id },
@@ -121,7 +121,7 @@ export class UsersRepository {
 					include: { group: true },
 				},
 				status: {
-					select: { currentTenantSeq: true },
+					select: { currentTenantId: true },
 				},
 			},
 		} as never);
@@ -132,31 +132,36 @@ export class UsersRepository {
 
 		// as never 쿼리는 select 결과를 스칼라로만 추론하므로 status는 수동으로 꺼낸다.
 		const { status, ...user } = result as unknown as {
-			status: { currentTenantSeq: bigint | null } | null;
+			status: { currentTenantId: bigint | null } | null;
 		} & Record<string, unknown>;
 		return toDomainEntity(User, {
 			...user,
-			currentTenantSeq: status?.currentTenantSeq ?? null,
-		}) as User & { currentTenantSeq: bigint | null };
+			currentTenantId: status?.currentTenantId ?? null,
+		}) as User & { currentTenantId: bigint | null };
 	}
 
 	/**
 	 * 인증·OIDC 연동 경계에서 모델 ULID로 사용자와 권한 그래프를 조회합니다.
 	 */
 	async findByUserIdWithTenantsAndProfiles(
-		userSeq: string,
-	): Promise<(User & { currentTenantSeq: bigint | null }) | null> {
-		this.logger.debug(`사용자 ULID로 조회: ${userSeq}`);
+		userId: string,
+	): Promise<(User & { currentTenantId: bigint | null }) | null> {
+		this.logger.debug(`사용자 ULID로 조회: ${userId}`);
 
-		return this.findByIdWithTenantsAndProfiles(userSeq);
+		const user = await this.txHost.tx.user.findUnique({
+			where: { userId },
+			select: { id: true },
+		});
+
+		return user ? this.findByIdWithTenantsAndProfiles(user.id) : null;
 	}
 
 	/**
 	 * 이메일로 조회 (id, email, password만 select)
 	 */
 	async findByEmailSelectCredentials(email: string): Promise<{
-		id: string;
-		seq: bigint;
+		id: bigint;
+		userId: string;
 		email: string;
 		password: string;
 	} | null> {
@@ -164,7 +169,7 @@ export class UsersRepository {
 
 		return this.txHost.tx.user.findUnique({
 			where: { email },
-			select: { id: true, seq: true, email: true, password: true },
+			select: { id: true, userId: true, email: true, password: true },
 		});
 	}
 
@@ -258,7 +263,7 @@ export class UsersRepository {
 	 */
 	async findManyIdpAccounts(params: {
 		input: IdpAccountListInput;
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 	}): Promise<{ data: IdpAccountRecord[]; totalCount: number }> {
 		this.logger.debug(
 			`IDP 계정 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개`,
@@ -295,8 +300,8 @@ export class UsersRepository {
 	 * IDP 계정 상세 projection 조회.
 	 */
 	async findIdpAccountById(params: {
-		userId: string;
-		spaceIds?: string[];
+		userId: bigint;
+		spaceIds?: bigint[];
 	}): Promise<IdpAccountRecord | null> {
 		this.logger.debug(`IDP 계정 조회: ${params.userId}`);
 
@@ -315,14 +320,14 @@ export class UsersRepository {
 	 * IDP 계정 projection 수정. data는 UserStatus 상태 필드만 다룹니다.
 	 */
 	async updateIdpAccountById(params: {
-		userId: string;
+		userId: bigint;
 		data: {
 			isActive?: boolean;
 			failedLoginAttempts?: number;
 			lockedUntil?: Date | null;
 			isPermanentlyLocked?: boolean;
 		};
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 	}): Promise<IdpAccountRecord | null> {
 		this.logger.debug(`IDP 계정 수정: ${params.userId}`);
 
@@ -354,7 +359,7 @@ export class UsersRepository {
 		orderBy: Prisma.UserOrderByWithRelationInput[];
 		skip: number;
 		take: number;
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 		includedRoleNames?: string[];
 	}): Promise<{ users: User[]; totalCount: number }> {
 		this.logger.debug(
@@ -422,7 +427,7 @@ export class UsersRepository {
 
 	private applySpaceScopeToUserWhere(
 		where: Prisma.UserWhereInput,
-		spaceIds?: string[],
+		spaceIds?: bigint[],
 	): Prisma.UserWhereInput {
 		if (spaceIds === undefined) {
 			return where;
@@ -453,7 +458,7 @@ export class UsersRepository {
 	 * 접근 가능한 Space ID 목록으로 회원 통계 조회
 	 */
 	async countStatsBySpaceIds(params?: {
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 	}): Promise<UserStats> {
 		const queryParams = params ?? {};
 		this.logger.debug(
@@ -514,21 +519,21 @@ export class UsersRepository {
 	 * ID와 접근 가능한 Space ID 범위로 사용자 조회
 	 * (Tenants, Profiles, Classification, Associations 포함)
 	 *
-	 * @param userSeq 조회할 사용자 ULID
+	 * @param userId 조회할 사용자 ULID
 	 * @param spaceIds 접근 가능한 Space ULID 목록. undefined면 Space 제한 없음
 	 * @returns 범위 안의 사용자 또는 null
 	 */
 	async findByIdAndSpaceIdsWithRelations(
-		userSeq: string,
-		spaceIds?: string[],
+		userId: string,
+		spaceIds?: bigint[],
 	): Promise<User | null> {
 		this.logger.debug(
-			`ID와 Space 범위로 조회: userSeq=${userSeq.slice(-8)}, scope=${spaceIds?.join(",") ?? "all"}`,
+			`ID와 Space 범위로 조회: userId=${userId.slice(-8)}, scope=${spaceIds?.join(",") ?? "all"}`,
 		);
 
 		const result = await this.txHost.tx.user.findFirst({
 			where: {
-				userSeq,
+				userId,
 				...(spaceIds
 					? {
 							tenants: {
@@ -574,22 +579,24 @@ export class UsersRepository {
 			},
 		} as never);
 
-		return result ? toDomainEntity(User, flattenUserStatus(result)) : null;
+		return result
+			? toDomainEntity(User, flattenUserStatus(result))
+			: null;
 	}
 
 	/**
 	 * 사용자와 현재 Space에 속한 활성 Tenant 상세를 권한 그래프와 함께 조회합니다.
 	 */
 	async findTenantDetailForUserInSpace(
-		userSeq: string,
+		userId: string,
 		tenantId: string,
-		spaceSeq: string,
+		spaceId: string,
 	): Promise<Tenant | null> {
 		const result = await this.txHost.tx.tenant.findFirst({
 			where: {
-				id: tenantId,
-				user: { id: userSeq },
-				space: { id: spaceSeq },
+				tenantId,
+				user: { userId },
+				space: { spaceId },
 				removedAt: null,
 			},
 			include: {
@@ -606,7 +613,7 @@ export class UsersRepository {
 						assignments: {
 							where: {
 								removedAt: null,
-								policy: { space: { id: spaceSeq }, removedAt: null },
+								policy: { space: { spaceId }, removedAt: null },
 							},
 							orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 							include: {
@@ -672,41 +679,18 @@ export class UsersRepository {
 		return toDomainEntity(User, result);
 	}
 
-	/** 공개 ULID로 사용자의 현재 Tenant 선택값을 UserStatus에 저장합니다. */
-	async updateCurrentTenantIdByPublicIds(
-		userId: string,
-		tenantId: string,
+	/** 사용자의 현재 Tenant 선택값을 UserStatus에 저장합니다. */
+	async updateCurrentTenantId(
+		userId: bigint,
+		currentTenantId: bigint | null,
 	): Promise<void> {
-		this.logger.debug(`현재 Tenant 저장(공개 ID): userId=${userId}`);
+		this.logger.debug(`현재 Tenant 저장: userId=${userId.toString()}`);
 
 		await this.txHost.tx.user.update({
 			where: { id: userId },
 			data: {
 				status: {
-					upsert: {
-						create: { currentTenant: { connect: { id: tenantId } } },
-						update: { currentTenant: { connect: { id: tenantId } } },
-					},
-				},
-			},
-		});
-	}
-
-	/** 사용자의 현재 Tenant 선택값을 UserStatus에 저장합니다. */
-	async updateCurrentTenantId(
-		userSeq: bigint,
-		currentTenantSeq: bigint | null,
-	): Promise<void> {
-		this.logger.debug(`현재 Tenant 저장: userSeq=${userSeq.toString()}`);
-
-		await this.txHost.tx.user.update({
-			where: { seq: userSeq },
-			data: {
-				status: {
-					upsert: {
-						create: { currentTenantSeq },
-						update: { currentTenantSeq },
-					},
+					upsert: { create: { currentTenantId }, update: { currentTenantId } },
 				},
 			},
 		});
@@ -719,7 +703,7 @@ export class UsersRepository {
 		this.logger.debug(`비밀번호 업데이트: ${id.toString()}`);
 
 		await this.txHost.tx.user.update({
-			where: { id: id },
+			where: { userId: id },
 			data: {
 				password: hashedPassword,
 				passwordChangedAt: new Date(),
@@ -748,7 +732,7 @@ export class UsersRepository {
 		this.logger.debug(`계정 잠금 해제: ${id.toString()}`);
 
 		await this.txHost.tx.user.update({
-			where: { id: id },
+			where: { userId: id },
 			data: {
 				status: {
 					upsert: {
@@ -782,7 +766,7 @@ export class UsersRepository {
 		this.logger.debug(`보안 정보 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
-			where: { id: id, removedAt: null },
+			where: { userId: id, removedAt: null },
 			select: {
 				email: true,
 				passwordChangedAt: true,

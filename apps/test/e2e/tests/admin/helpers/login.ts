@@ -2,7 +2,6 @@ import {
 	type AdminPersistSpaceSelection,
 	mergeAdminPersistAccountSelection,
 	parseAdminPersistStorageDocument,
-	readAdminPersistSpaceSelection,
 	runOidcLoginFlow,
 } from "@cocrepo/e2e";
 import type { Page } from "@playwright/test";
@@ -18,9 +17,18 @@ const ADMIN_ORIGIN =
 	process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin/";
 
 const ADMIN_PREWARM_PATHS = [
-	ADMIN_LOGIN_PATH,
 	ADMIN_DASHBOARD_PATH,
+	"/admin/actions",
+	"/admin/abilities",
+	"/admin/assets",
+	"/admin/templates",
+	"/admin/tasks",
+	"/admin/routines",
+	"/admin/inquiries",
+	"/admin/subjects",
+	"/admin/spaces",
 	"/admin/roles",
+	"/admin/timelines",
 	"/admin/users",
 ];
 
@@ -44,12 +52,45 @@ async function ensureAdminDashboard(page: Page) {
 export async function readAdminPersistRawSelection(
 	page: Page,
 ): Promise<AdminPersistSpaceSelection | null> {
-	const raw = await page.evaluate(
-		(storageKey) => window.localStorage.getItem(storageKey),
-		ADMIN_PERSIST_KEY,
-	);
+	const selection = await page.evaluate((storageKey) => {
+		const raw = window.localStorage.getItem(storageKey);
+		if (!raw) {
+			return null;
+		}
 
-	return readAdminPersistSpaceSelection(raw) ?? null;
+		try {
+			const parsed = JSON.parse(raw) as {
+				account?: {
+					tenantId?: unknown;
+					spaceId?: unknown;
+					fitnessCenterName?: unknown;
+					contentLanguageCode?: unknown;
+				};
+			};
+			const account = parsed.account;
+			if (
+				typeof account?.tenantId === "string" &&
+				typeof account.spaceId === "string" &&
+				typeof account.fitnessCenterName === "string"
+			) {
+				return {
+					tenantId: account.tenantId,
+					spaceId: account.spaceId,
+					fitnessCenterName: account.fitnessCenterName,
+					contentLanguageCode:
+						typeof account.contentLanguageCode === "string"
+							? account.contentLanguageCode
+							: null,
+				};
+			}
+		} catch {
+			return null;
+		}
+
+		return null;
+	}, ADMIN_PERSIST_KEY);
+
+	return selection;
 }
 
 /**

@@ -25,25 +25,19 @@ export async function createInquiryDomainData(
 	console.log("========================================");
 
 	const users = await prisma.user.findMany();
-	const fitnessCenters = await prisma.fitnessCenter.findMany({
-		include: { space: true },
-	});
+	const fitnessCenters = await prisma.fitnessCenter.findMany();
 
-	// Inquiry seeds reference users/spaces by business keys, so materialize
-	// lookup maps once before the staged inserts below. 시드의 이름 키는 이제
-	// Space 이름을 기준으로 합니다.
+	// Inquiry seeds reference users/fitness centers by business keys, so materialize
+	// lookup maps once before the staged inserts below.
 	const userByEmail = new Map(users.map((user) => [user.email, user]));
 	const fitnessCenterByName = new Map(
-		fitnessCenters.map((fitnessCenter) => [
-			fitnessCenter.space.name,
-			fitnessCenter,
-		]),
+		fitnessCenters.map((fitnessCenter) => [fitnessCenter.name, fitnessCenter]),
 	);
 
 	console.log("\n[1/6] Inquiry 생성 중...");
 	// Later inquiry child tables are all keyed off the inquiry number from the
 	// seed source, so we keep the resolved DB ids here.
-	const inquiryByNumber = new Map<string, { seq: DbId }>();
+	const inquiryByNumber = new Map<string, { id: DbId }>();
 	let inquiryCreated = 0;
 	let inquirySkipped = 0;
 
@@ -67,7 +61,7 @@ export async function createInquiryDomainData(
 			const assignee = inquiryData.assigneeEmail
 				? userByEmail.get(inquiryData.assigneeEmail)
 				: null;
-			const createdBySeq = assignee?.seq ?? customer?.seq;
+			const createdById = assignee?.id ?? customer?.id;
 
 			const now = new Date();
 			const slaResponseDue = new Date(now.getTime() + 24 * 60 * 60 * 1000);
@@ -75,8 +69,8 @@ export async function createInquiryDomainData(
 
 			const inquiry = await prisma.inquiry.create({
 				data: {
-					spaceSeq: fitnessCenter.spaceSeq,
-					createdBySeq,
+					spaceId: fitnessCenter.spaceId,
+					createdById,
 					inquiryNumber: inquiryData.inquiryNumber,
 					title: inquiryData.title,
 					category: inquiryData.category as
@@ -109,8 +103,8 @@ export async function createInquiryDomainData(
 						| "NORMAL"
 						| "HIGH"
 						| "URGENT",
-					customerSeq: customer?.seq,
-					assigneeSeq: assignee?.seq,
+					customerId: customer?.id,
+					assigneeId: assignee?.id,
 					slaResponseDue,
 					slaResolveDue,
 					sentiment: inquiryData.sentiment as
@@ -125,12 +119,14 @@ export async function createInquiryDomainData(
 				},
 			});
 
-			inquiryByNumber.set(inquiryData.inquiryNumber, { seq: inquiry.seq,
+			inquiryByNumber.set(inquiryData.inquiryNumber, {
+				id: inquiry.id,
 			});
 			inquiryCreated++;
 			console.log(`  - Inquiry 생성: ${inquiryData.inquiryNumber}`);
 		} else {
-			inquiryByNumber.set(inquiryData.inquiryNumber, { seq: existing.seq,
+			inquiryByNumber.set(inquiryData.inquiryNumber, {
+				id: existing.id,
 			});
 			inquirySkipped++;
 		}
@@ -142,7 +138,7 @@ export async function createInquiryDomainData(
 	console.log("\n[2/6] InquiryThread 생성 중...");
 	// A single inquiry can own multiple threads; preserve the created thread ids
 	// in seed order so message/participant rows can address them by index.
-	const threadByInquiryNumber = new Map<string, { seq: DbId }[]>();
+	const threadByInquiryNumber = new Map<string, { id: DbId }[]>();
 	let threadCreated = 0;
 	let threadSkipped = 0;
 
@@ -155,32 +151,34 @@ export async function createInquiryDomainData(
 
 		const existing = await prisma.inquiryThread.findFirst({
 			where: {
-				inquirySeq: inquiryInfo.seq,
-				createdBySeq: createdBy.seq,
+				inquiryId: inquiryInfo.id,
+				createdById: createdBy.id,
 			},
 		});
 
 		if (!existing) {
 			const thread = await prisma.inquiryThread.create({
 				data: {
-					inquirySeq: inquiryInfo.seq,
+					inquiryId: inquiryInfo.id,
 					title: threadData.title,
 					status: threadData.status as "ACTIVE" | "RESOLVED" | "CLOSED",
-					createdBySeq: createdBy.seq,
+					createdById: createdBy.id,
 				},
 			});
 
 			if (!threadByInquiryNumber.has(threadData.inquiryNumber)) {
 				threadByInquiryNumber.set(threadData.inquiryNumber, []);
 			}
-			threadByInquiryNumber.get(threadData.inquiryNumber)?.push({ seq: thread.seq,
+			threadByInquiryNumber.get(threadData.inquiryNumber)?.push({
+				id: thread.id,
 			});
 			threadCreated++;
 		} else {
 			if (!threadByInquiryNumber.has(threadData.inquiryNumber)) {
 				threadByInquiryNumber.set(threadData.inquiryNumber, []);
 			}
-			threadByInquiryNumber.get(threadData.inquiryNumber)?.push({ seq: existing.seq,
+			threadByInquiryNumber.get(threadData.inquiryNumber)?.push({
+				id: existing.id,
 			});
 			threadSkipped++;
 		}
@@ -202,14 +200,14 @@ export async function createInquiryDomainData(
 
 		// Seed data points to a thread by index rather than db id.
 		const threadIndex = Math.min(messageData.threadIndex, threads.length - 1);
-		const threadSeq = threads[threadIndex].seq;
+		const threadId = threads[threadIndex].id;
 		const sender = messageData.senderEmail
 			? userByEmail.get(messageData.senderEmail)
 			: null;
 
 		const existing = await prisma.inquiryMessage.findFirst({
 			where: {
-				threadSeq,
+				threadId,
 				content: messageData.content,
 			},
 		});
@@ -217,9 +215,9 @@ export async function createInquiryDomainData(
 		if (!existing) {
 			await prisma.inquiryMessage.create({
 				data: {
-					threadSeq,
-					inquirySeq: inquiryInfo.seq,
-					senderSeq: sender?.seq,
+					threadId,
+					inquiryId: inquiryInfo.id,
+					senderId: sender?.id,
 					senderType: messageData.senderType as "USER" | "AI" | "SYSTEM",
 					content: messageData.content,
 					contentType: messageData.contentType as
@@ -252,7 +250,7 @@ export async function createInquiryDomainData(
 		const user = userByEmail.get(participantData.userEmail);
 		if (!user) continue;
 
-		let threadSeq: DbId | undefined;
+		let threadId: DbId | undefined;
 		if (participantData.threadIndex !== undefined) {
 			const threads = threadByInquiryNumber.get(participantData.inquiryNumber);
 			if (threads && threads.length > 0) {
@@ -260,24 +258,24 @@ export async function createInquiryDomainData(
 					participantData.threadIndex,
 					threads.length - 1,
 				);
-				threadSeq = threads[threadIndex].seq;
+				threadId = threads[threadIndex].id;
 			}
 		}
 
 		const existing = await prisma.inquiryParticipant.findFirst({
 			where: {
-				inquirySeq: inquiryInfo.seq,
-				threadSeq,
-				userSeq: user.seq,
+				inquiryId: inquiryInfo.id,
+				threadId,
+				userId: user.id,
 			},
 		});
 
 		if (!existing) {
 			await prisma.inquiryParticipant.create({
 				data: {
-					inquirySeq: inquiryInfo.seq,
-					threadSeq,
-					userSeq: user.seq,
+					inquiryId: inquiryInfo.id,
+					threadId,
+					userId: user.id,
 					role: participantData.role as
 						| "CUSTOMER"
 						| "AGENT"
@@ -310,7 +308,7 @@ export async function createInquiryDomainData(
 
 			const existing = await prisma.inquiryTag.findFirst({
 				where: {
-					inquirySeq: inquiryInfo.seq,
+					inquiryId: inquiryInfo.id,
 					name: tagName,
 				},
 			});
@@ -318,7 +316,7 @@ export async function createInquiryDomainData(
 			if (!existing) {
 				await prisma.inquiryTag.create({
 					data: {
-						inquirySeq: inquiryInfo.seq,
+						inquiryId: inquiryInfo.id,
 						name: tagName,
 						color: tagMaster?.color,
 					},
@@ -342,13 +340,13 @@ export async function createInquiryDomainData(
 		if (!inquiryInfo) continue;
 
 		const existing = await prisma.sentimentAnalysis.findUnique({
-			where: { inquirySeq: inquiryInfo.seq },
+			where: { inquiryId: inquiryInfo.id },
 		});
 
 		if (!existing) {
 			await prisma.sentimentAnalysis.create({
 				data: {
-					inquirySeq: inquiryInfo.seq,
+					inquiryId: inquiryInfo.id,
 					sentiment: sentimentData.sentiment as
 						| "POSITIVE"
 						| "NEUTRAL"

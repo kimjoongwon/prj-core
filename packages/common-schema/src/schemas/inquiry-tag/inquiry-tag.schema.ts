@@ -4,9 +4,9 @@ import { AbstractSchema } from "../abstract.schema";
 export class InquiryTagSchema
 	extends AbstractSchema
 {
-	id!: string;
+	inquiryTagId!: string;
 
-	inquirySeq!: bigint;
+	inquiryId!: bigint;
 
 	name!: string;
 

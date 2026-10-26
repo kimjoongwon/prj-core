@@ -1,3 +1,4 @@
+import { TaskAggregate } from "@cocrepo/aggregate";
 import {
 	JwtStrategy,
 	SPACE_RESOURCE_SCOPE_SWAGGER_EXTENSION,
@@ -7,9 +8,11 @@ import {
 import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
 import { ApiAuth } from "@cocrepo/decorator";
+import { SpaceScope } from "@cocrepo/dto";
 import { SpaceCategoryName } from "@cocrepo/enum";
 import {
 	SpacesRepository,
+	TasksRepository,
 	TenantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
@@ -25,6 +28,8 @@ import {
 	HttpStatus,
 	INestApplication,
 	Injectable,
+	Query,
+	UnauthorizedException,
 } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
@@ -39,25 +44,28 @@ import {
 	signOidcTestToken,
 } from "./helpers/test-auth.helper";
 
-const USER_ULID = "01JMEMBER00000000000000E2E";
-const TENANT_A_ID = "01JTENANT000000000000000TA";
-const TENANT_B_ID = "01JTENANT000000000000000TB";
-const SPACE_A_ID = "01JSPACE0000000000000000SA";
-const SPACE_B_ID = "01JSPACE0000000000000000SB";
+const USER_ULID = "01J00000000000000000001001";
+const USER_ID = 1001n;
+const TENANT_A_ID = 2001n;
+const TENANT_B_ID = 3001n;
+const SPACE_A_ID = 1111n;
+const SPACE_B_ID = 2222n;
 const ROOT_SCOPED_SPACE_IDS = [SPACE_B_ID, SPACE_A_ID];
 const BRANCH_SCOPED_SPACE_IDS = [SPACE_A_ID];
-const UNKNOWN_TENANT_ID = "01JTENANT000000000000000XN";
+const UNKNOWN_TENANT_ID = 4444n;
+const FITNESS_CENTER_ID = 5555n;
+const COMPANY_ID = 6666n;
 
 function createTestUser() {
 	return {
-		id: USER_ULID,
+		id: USER_ID,
 		email: "scope-e2e@example.com",
 		tenants: [
 			{
 				id: TENANT_A_ID,
+				spaceId: SPACE_A_ID,
 				role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 				space: {
-					id: SPACE_A_ID,
 					classification: {
 						category: {
 							name: SpaceCategoryName.BRANCH.name,
@@ -67,9 +75,9 @@ function createTestUser() {
 			},
 			{
 				id: TENANT_B_ID,
+				spaceId: SPACE_B_ID,
 				role: { name: SYSTEM_ROLES.PLATFORM_ADMIN },
 				space: {
-					id: SPACE_B_ID,
 					classification: {
 						category: {
 							name: SpaceCategoryName.ROOT.name,
@@ -102,6 +110,7 @@ class SpaceScopeTestController {
 	constructor(
 		private readonly spaceContext: SpaceContext,
 		private readonly userService: UserService,
+		private readonly taskService: TaskAggregate,
 	) {}
 
 	@Get("context")
@@ -146,6 +155,20 @@ class SpaceScopeTestController {
 		} as never);
 	}
 
+	@Get("tasks")
+	async probeTasks(@Query("spaceScope") spaceScope?: SpaceScope) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
+			throw new UnauthorizedException("SPACE_NOT_SELECTED");
+		}
+
+		return this.taskService.findTasks({
+			spaceId,
+			spaceScope: spaceScope ?? SpaceScope.CURRENT,
+			skip: 0,
+			take: 10,
+		});
+	}
 }
 
 describe("Space Scope API (E2E)", () => {
@@ -154,6 +177,7 @@ describe("Space Scope API (E2E)", () => {
 	let swaggerDocument: ReturnType<typeof SwaggerModule.createDocument>;
 
 	const usersRepoCalls: Array<Record<string, unknown>> = [];
+	const tasksRepoCalls: Array<Record<string, unknown>> = [];
 	const spacesRepoCalls: Array<Record<string, unknown>> = [];
 
 	const usersRepositoryMock = {
@@ -172,9 +196,16 @@ describe("Space Scope API (E2E)", () => {
 		},
 	};
 
+	const tasksRepositoryMock = {
+		findManyTasks: async (params: Record<string, unknown>) => {
+			tasksRepoCalls.push({ type: "findManyTasks", ...params });
+			return [[], 0];
+		},
+	};
+
 	const spacesRepositoryMock = {
 		findSpaceIdsByCategoryHierarchy: async (
-			spaceId: string,
+			spaceId: bigint,
 			scope: SpaceResourceScope = SpaceResourceScope.WITH_DESCENDANTS,
 		) => {
 			spacesRepoCalls.push({
@@ -194,6 +225,39 @@ describe("Space Scope API (E2E)", () => {
 			}
 			return BRANCH_SCOPED_SPACE_IDS;
 		},
+		findManyWithFitnessCenter: async (params?: Record<string, unknown>) => {
+			spacesRepoCalls.push({
+				type: "findManyWithFitnessCenter",
+				...(params ?? {}),
+			});
+			return [[], 0];
+		},
+		findFitnessCenterBySpaceId: async (spaceId: bigint) => {
+			spacesRepoCalls.push({ type: "findFitnessCenterBySpaceId", spaceId });
+			return {
+				id: FITNESS_CENTER_ID,
+				spaceId,
+				companyId: COMPANY_ID,
+				name: `FitnessCenter ${spaceId.toString()}`,
+				label: null,
+				address: "Seoul",
+				phone: "02-1234-5678",
+				email: "scope-fitness-center@example.com",
+				imageFileId: null,
+				removedAt: null,
+				company: {
+					id: COMPANY_ID,
+					name: "Scope Company",
+					label: null,
+					address: "Seoul",
+					phone: "02-1234-5678",
+					email: "scope-company@example.com",
+					businessNo: "1234567890",
+					logoImageFileId: null,
+					removedAt: null,
+				},
+			};
+		},
 	};
 
 	beforeAll(async () => {
@@ -207,6 +271,7 @@ describe("Space Scope API (E2E)", () => {
 			providers: [
 				SpaceContext,
 				UserService,
+				TaskAggregate,
 				{
 					provide: AuthCacheService,
 					useValue: {
@@ -216,6 +281,10 @@ describe("Space Scope API (E2E)", () => {
 				{
 					provide: UsersRepository,
 					useValue: usersRepositoryMock,
+				},
+				{
+					provide: TasksRepository,
+					useValue: tasksRepositoryMock,
 				},
 				{
 					provide: TenantsRepository,
@@ -241,6 +310,8 @@ describe("Space Scope API (E2E)", () => {
 			})
 			.overrideProvider(UsersRepository)
 			.useValue(usersRepositoryMock)
+			.overrideProvider(TasksRepository)
+			.useValue(tasksRepositoryMock)
 			.overrideProvider(SpacesRepository)
 			.useValue(spacesRepositoryMock);
 
@@ -259,6 +330,7 @@ describe("Space Scope API (E2E)", () => {
 
 	beforeEach(() => {
 		usersRepoCalls.length = 0;
+		tasksRepoCalls.length = 0;
 		spacesRepoCalls.length = 0;
 	});
 
@@ -337,12 +409,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID,
-			spaceIds: BRANCH_SCOPED_SPACE_IDS,
+			spaceId: SPACE_A_ID.toString(),
+			spaceIds: BRANCH_SCOPED_SPACE_IDS.map(String),
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -356,12 +428,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID);
+			.set("x-tenant-id", TENANT_B_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_B_ID,
-			spaceIds: ROOT_SCOPED_SPACE_IDS,
+			spaceId: SPACE_B_ID.toString(),
+			spaceIds: ROOT_SCOPED_SPACE_IDS.map(String),
 			tenantRole: SYSTEM_ROLES.PLATFORM_ADMIN,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -375,12 +447,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context/ancestors")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID,
-			spaceIds: [SPACE_A_ID, SPACE_B_ID],
+			spaceId: SPACE_A_ID.toString(),
+			spaceIds: [SPACE_A_ID.toString(), SPACE_B_ID.toString()],
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -394,12 +466,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context/tree")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID,
-			spaceIds: [SPACE_A_ID, SPACE_B_ID],
+			spaceId: SPACE_A_ID.toString(),
+			spaceIds: [SPACE_A_ID.toString(), SPACE_B_ID.toString()],
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -413,7 +485,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
@@ -438,7 +510,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID);
+			.set("x-tenant-id", TENANT_B_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
@@ -459,11 +531,107 @@ describe("Space Scope API (E2E)", () => {
 		});
 	});
 
+	it("비 PLATFORM_ADMIN 사용자가 INCLUDE_ANCESTORS를 보내도 tasks 조회는 현재 space만 사용한다", async () => {
+		const response = await request(app.getHttpServer())
+			.get("/api/v1/test-space-scope/tasks")
+			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-tenant-id", TENANT_A_ID.toString());
+
+		expect(response.status).toBe(HttpStatus.OK);
+		expect(tasksRepoCalls[0]).toMatchObject({
+			type: "findManyTasks",
+			spaceIds: BRANCH_SCOPED_SPACE_IDS,
+		});
+	});
+
+	it("PLATFORM_ADMIN 사용자의 tasks 조회도 INCLUDE_ANCESTORS에서 category scope를 사용한다", async () => {
+		const response = await request(app.getHttpServer())
+			.get("/api/v1/test-space-scope/tasks")
+			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-tenant-id", TENANT_B_ID.toString());
+
+		expect(response.status).toBe(HttpStatus.OK);
+		expect(tasksRepoCalls[0]).toMatchObject({
+			type: "findManyTasks",
+			spaceIds: ROOT_SCOPED_SPACE_IDS,
+		});
+	});
+
+	it("spaces 목록도 현재 scope 기준으로 spaceIds를 전달한다", async () => {
+		const limitedResponse = await request(app.getHttpServer())
+			.get("/api/v1/spaces")
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-tenant-id", TENANT_A_ID.toString());
+
+		expect(limitedResponse.status).toBe(HttpStatus.OK);
+		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_A_ID,
+			scope: SpaceResourceScope.WITH_DESCENDANTS,
+		});
+		expect(spacesRepoCalls[1]).toEqual({
+			type: "findManyWithFitnessCenter",
+			spaceIds: BRANCH_SCOPED_SPACE_IDS,
+		});
+
+		spacesRepoCalls.length = 0;
+
+		const fullResponse = await request(app.getHttpServer())
+			.get("/api/v1/spaces")
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-tenant-id", TENANT_B_ID.toString());
+
+		expect(fullResponse.status).toBe(HttpStatus.OK);
+		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_B_ID,
+			scope: SpaceResourceScope.WITH_DESCENDANTS,
+		});
+		expect(spacesRepoCalls[1]).toEqual({
+			type: "findManyWithFitnessCenter",
+			spaceIds: ROOT_SCOPED_SPACE_IDS,
+		});
+	});
+
+	it("비 PLATFORM_ADMIN 사용자는 다른 space의 FitnessCenter 상세에 접근할 수 없고 PLATFORM_ADMIN은 접근 가능하다", async () => {
+		const forbiddenResponse = await request(app.getHttpServer())
+			.get(`/api/v1/spaces/${SPACE_B_ID.toString()}/fitness-center`)
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-tenant-id", TENANT_A_ID.toString());
+
+		expect(forbiddenResponse.status).toBe(HttpStatus.FORBIDDEN);
+		expect(
+			spacesRepoCalls.some(
+				(call) => call.type === "findFitnessCenterBySpaceId",
+			),
+		).toBe(false);
+
+		spacesRepoCalls.length = 0;
+
+		const allowedResponse = await request(app.getHttpServer())
+			.get(`/api/v1/spaces/${SPACE_A_ID.toString()}/fitness-center`)
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-tenant-id", TENANT_B_ID.toString());
+
+		expect(allowedResponse.status).toBe(HttpStatus.OK);
+		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_B_ID,
+			scope: SpaceResourceScope.WITH_DESCENDANTS,
+		});
+		expect(spacesRepoCalls[1]).toEqual({
+			type: "findFitnessCenterBySpaceId",
+			spaceId: SPACE_A_ID,
+		});
+	});
+
 	it("tenant가 없는 x-tenant-id는 403으로 차단한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", UNKNOWN_TENANT_ID);
+			.set("x-tenant-id", UNKNOWN_TENANT_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.FORBIDDEN);
 	});

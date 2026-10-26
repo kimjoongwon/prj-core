@@ -153,9 +153,9 @@ describe("mobile community tab route", () => {
 		mockInvalidateQueries.mockReset();
 		mobileApiScope.clear();
 		mobileApiScope.setSpaceInfo({
-			tenantId: "01JTENANT000000000000000TA",
-      spaceId: "01JSPACE0000000000000000SA",
-			spaceName: "강남점",
+			tenantId: "tenant-1",
+      spaceId: "space-1",
+			fitnessCenterName: "강남점",
 			contentLanguageCode: "ko_KR",
 		});
 		mockUseGetCommunityPosts.mockReturnValue({
@@ -164,7 +164,7 @@ describe("mobile community tab route", () => {
 					{
 						authorName: "민지 회원",
 						createdAt: new Date("2026-05-27T09:00:00.000Z"),
-						id: "01JFEEDPST00000000000000PA",
+						id: 1n,
 						isMine: true,
 						isPinned: false,
 						text: "오늘 저녁 수업 끝나고 스트레칭 같이 하실 분 계신가요?",
@@ -181,7 +181,7 @@ describe("mobile community tab route", () => {
 			isPending: false,
 			mutateAsync: jest.fn().mockResolvedValue({
 				data: {
-					id: "01JFEEDPST00000000000000PB",
+					id: 2n,
 				},
 			}),
 		});

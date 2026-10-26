@@ -1,3 +1,3 @@
 export class GetSubjectFieldsQuery {
-	constructor(readonly subjectId: string) {}
+	constructor(readonly subjectId: bigint) {}
 }

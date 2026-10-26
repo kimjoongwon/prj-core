@@ -14,25 +14,25 @@ import { AbstractSchema } from "../abstract.schema";
 export class ReservationSchema
 	extends AbstractSchema
 {
-	id!: string;
+	reservationId!: string;
 
 	@BigIntIdValidation({ description: "Space ID" })
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdBySeq!: bigint | null;
+	createdById!: bigint | null;
 
 	@BigIntIdValidation({ description: "예약 사용자 ID" })
-	userSeq!: bigint;
+	userId!: bigint;
 
 	@BigIntIdValidation({ description: "타임라인 ID" })
-	timelineSeq!: bigint;
+	timelineId!: bigint;
 
 	@BigIntIdValidation({ description: "세션 ID" })
-	sessionSeq!: bigint;
+	sessionId!: bigint;
 
 	@BigIntIdValidation({ description: "프로그램 ID" })
-	programSeq!: bigint;
+	programId!: bigint;
 
 	@DateValidation({ description: "예약 발생 회차 시작 시각" })
 	occurrenceStartAt!: Date;

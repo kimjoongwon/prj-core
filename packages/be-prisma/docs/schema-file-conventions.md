@@ -18,8 +18,8 @@ Prisma 스키마는 데이터베이스의 설계도입니다.
 
 ```prisma
 model User {
-  id     String @unique @default(ulid()) @map("user_id") @db.Char(26)
-  seq    BigInt @id @default(autoincrement()) @map("id")
+  userId String @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id     BigInt @id @default(autoincrement())
   email  String @unique
 }
 ```
@@ -69,9 +69,10 @@ packages/be-prisma/schema/
 
 모든 model의 식별자 계약은 같습니다.
 
-- `id`: 공개 식별자 ULID, `String @unique @default(ulid()) @map("<snake>_id") @db.Char(26)`. API와 URL에는 `id`(ULID)만 노출합니다.
-- `seq`: 내부 PK/FK join용 숫자, `BigInt @id @default(autoincrement()) @map("id")`. 통신선에 노출하지 않습니다.
-- relation scalar: `<relation>Seq` 이름과 `BigInt`, `@map("<relation>_id")`, `references: [seq]` 사용
+- `id`: 내부 PK/FK join용 숫자, `BigInt @id @default(autoincrement())`
+- 공개 ULID: 파일명의 kebab-case를 lowerCamelCase로 바꾼 뒤 `Id`를 붙인 필드, `String @unique @default(ulid()) @map("<snake>_id") @db.Char(26)`
+- relation scalar: `<relation>Id` 이름과 `BigInt`, `@map("<relation>_id")`, `references: [id]` 사용
+- API와 URL에는 내부 PK인 `id`를 노출하지 않고 공개 ULID 필드를 사용
 
 메타데이터 종류와 형식, 의미와 판단 기준은 이 문서에서 다시 정의하지 않습니다.
 
@@ -184,8 +185,8 @@ NotificationRule -> notification-rule.prisma
 // @description: 알림 전달 조건과 채널 선택 규칙을 관리
 /// @displayName 알림 규칙
 model NotificationRule {
-  id                 String @unique @default(ulid()) @map("notification_rule_id") @db.Char(26)
-  seq                BigInt @id @default(autoincrement()) @map("id")
+  notificationRuleId String @unique @default(ulid()) @map("notification_rule_id") @db.Char(26)
+  id                 BigInt @id @default(autoincrement())
 }
 ```
 

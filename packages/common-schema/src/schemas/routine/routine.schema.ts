@@ -7,13 +7,13 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Routine의 DB 필드 타입과 공통 검증입니다. */
 export class RoutineSchema extends AbstractSchema {
-	id!: string;
+	routineId!: string;
 
 	@BigIntIdValidation()
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true })
-	createdBySeq!: bigint | null;
+	createdById!: bigint | null;
 
 	@StringValidation()
 	name!: string;

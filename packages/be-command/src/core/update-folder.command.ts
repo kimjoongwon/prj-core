@@ -4,7 +4,7 @@ export class UpdateFolderCommand implements UpdateFolderCommandInput {
 	readonly name?: UpdateFolderCommandInput["name"];
 
 	constructor(
-		readonly folderId: string,
+		readonly folderId: bigint,
 		input: UpdateFolderCommandInput,
 	) {
 		Object.assign(this, input);

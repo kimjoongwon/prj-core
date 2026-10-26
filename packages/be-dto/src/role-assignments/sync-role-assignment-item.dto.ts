@@ -1,13 +1,13 @@
-import { StringField } from "@cocrepo/decorator/field";
+import { BigIntIdField } from "@cocrepo/decorator/field";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsNumber, IsOptional } from "class-validator";
 
 export class SyncRoleAssignmentItemDto {
-	@StringField({
-		description: "Policy 공개 ID (Role에 할당할 정책, ULID)",
-		example: "01JPOLICY0000000000000000PC",
+	@BigIntIdField({
+		description: "Policy ID (Role에 할당할 정책)",
+		example: "1",
 	})
-	policyId!: string;
+	policyId!: bigint;
 
 	@ApiProperty({
 		description: "활성화 여부",

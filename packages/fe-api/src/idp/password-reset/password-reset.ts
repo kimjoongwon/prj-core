@@ -4,7 +4,7 @@
  * OIDC Identity Provider
  * OpenID Connect Identity Provider API
  *
- * OIDC 인증 API를 제공합니다.
+ * OIDC 인증 및 IDP 관리 API를 제공합니다.
  *
  * **인증 방법:**
  * 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
@@ -32,7 +32,6 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
-	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -252,7 +251,7 @@ export const prefetchGetPasswordPolicyQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetPasswordPolicyQueryOptions(options);
 
-	await queryClient.query(queryOptions).catch(() => {});
+	await queryClient.prefetchQuery(queryOptions);
 
 	return queryClient;
 };
@@ -278,19 +277,11 @@ export const getGetPasswordPolicySuspenseQueryOptions = <
 		Awaited<ReturnType<typeof getPasswordPolicy>>
 	> = ({ signal }) => getPasswordPolicy({ signal, ...requestOptions });
 
-	return queryOptionsBuilder({
-		queryKey,
-		...queryOptions,
-		queryFn: queryOptions?.queryFn ?? queryFn,
-	}) as UseSuspenseQueryOptions<
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getPasswordPolicy>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
-		throwOnError?: ((this: never, error: TError) => boolean) & {
-			readonly __inferenceOnly: never;
-		};
-	};
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
 export type GetPasswordPolicySuspenseQueryResult = NonNullable<
@@ -535,7 +526,7 @@ export const prefetchGetPasswordPolicyInfiniteQuery = async <
 	const queryOptions =
 		getGetPasswordPolicySuspenseInfiniteQueryOptions(options);
 
-	await queryClient.infiniteQuery(queryOptions).catch(() => {});
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
 	return queryClient;
 };
@@ -859,7 +850,7 @@ export const prefetchValidateResetTokenQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getValidateResetTokenQueryOptions(token, options);
 
-	await queryClient.query(queryOptions).catch(() => {});
+	await queryClient.prefetchQuery(queryOptions);
 
 	return queryClient;
 };
@@ -889,19 +880,11 @@ export const getValidateResetTokenSuspenseQueryOptions = <
 		Awaited<ReturnType<typeof validateResetToken>>
 	> = ({ signal }) => validateResetToken(token, { signal, ...requestOptions });
 
-	return queryOptionsBuilder({
-		queryKey,
-		...queryOptions,
-		queryFn: queryOptions?.queryFn ?? queryFn,
-	}) as UseSuspenseQueryOptions<
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof validateResetToken>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
-		throwOnError?: ((this: never, error: TError) => boolean) & {
-			readonly __inferenceOnly: never;
-		};
-	};
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
 export type ValidateResetTokenSuspenseQueryResult = NonNullable<
@@ -1165,7 +1148,7 @@ export const prefetchValidateResetTokenInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.infiniteQuery(queryOptions).catch(() => {});
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
 	return queryClient;
 };

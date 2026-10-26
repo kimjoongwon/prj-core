@@ -101,16 +101,16 @@ const branchSpace = {
     },
     createdAt: "2026-05-17T00:00:00.000Z",
     email: "gangnam@example.com",
-    id: "01JFCENTER00000000000000FA",
+    id: "301",
+    name: "강남점",
     phone: "02-0000-0000",
     removedAt: null,
-    spaceId: "01JSPACE0000000000000000SA",
+    spaceId: "101",
     updatedAt: "2026-05-17T00:00:00.000Z",
   },
-  id: "01JSPACE0000000000000000SA",
-  name: "강남점",
+  id: "101",
   removedAt: null,
-  tenantId: "01JTENANT000000000000000TA",
+  tenantId: "201",
   updatedAt: "2026-05-17T00:00:00.000Z",
 };
 
@@ -118,12 +118,12 @@ const platformSpace = {
   ...branchSpace,
   fitnessCenter: {
     ...branchSpace.fitnessCenter,
-    id: "01JFCENTER00000000000000FB",
-    spaceId: "01JSPACE0000000000000000SB",
+    id: "302",
+    name: "플랫폼 운영본부",
+    spaceId: "102",
   },
-  id: "01JSPACE0000000000000000SB",
-  name: "플랫폼 운영본부",
-  tenantId: "01JTENANT000000000000000TB",
+  id: "102",
+  tenantId: "202",
 };
 
 describe("mobile select space route", () => {
@@ -153,23 +153,21 @@ describe("mobile select space route", () => {
     expect(screen.getByText("강남점:서울 강남구 샘플로")).toBeTruthy();
     expect(screen.queryByText(/플랫폼 운영본부/)).toBeNull();
 
-    fireEvent.press(screen.getByLabelText("space-01JTENANT000000000000000TA"));
+    fireEvent.press(screen.getByLabelText("space-201"));
 
     await waitFor(() => {
-      expect(mockMutateAsync).toHaveBeenCalledWith({
-        tenantId: "01JTENANT000000000000000TA",
-      });
+      expect(mockMutateAsync).toHaveBeenCalledWith({ tenantId: "201" });
     });
-    expect(mobileApiScope.tenantId).toBe("01JTENANT000000000000000TA");
-    expect(mobileApiScope.spaceId).toBe("01JSPACE0000000000000000SA");
-    expect(mobileApiScope.spaceName).toBe("강남점");
+    expect(mobileApiScope.tenantId).toBe("201");
+    expect(mobileApiScope.spaceId).toBe("101");
+    expect(mobileApiScope.fitnessCenterName).toBe("강남점");
     const persistedSelectionCall = (
       SecureStore.setItemAsync as jest.Mock
     ).mock.calls.find(([key]) => String(key).includes("space-selection"));
     expect(JSON.parse(persistedSelectionCall?.[1] ?? "{}")).toMatchObject({
-      spaceName: "강남점",
+      fitnessCenterName: "강남점",
       logoImageFileId: "company-logo-branch",
-      version: 4,
+      version: 2,
     });
     expect(mockInvalidateQueries).toHaveBeenCalled();
     expect(mockReplace).toHaveBeenCalledWith("/");

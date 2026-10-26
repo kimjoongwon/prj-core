@@ -22,7 +22,10 @@ import {
 	type PressableProps,
 } from "react-native";
 import { mobileSession } from "@/auth/mobile-session";
-import { mobileApiScope } from "@/auth/mobile-api-scope";
+import {
+	mobileApiScope,
+	toMobileDecimalId,
+} from "@/auth/mobile-api-scope";
 import {
 	toSelectableMobileSpaceInfos,
 	toSpaceListItemInfos,
@@ -66,11 +69,12 @@ const findSpaceByItem = (
 ) =>
 	spaces.find(
 		(space) =>
-			space.tenantId != null && space.tenantId === item.id,
+			space.tenantId != null &&
+			toMobileDecimalId(space.tenantId, "space.tenantId") === item.id,
 	);
 
 const getHeaderSubtitle = () =>
-	mobileApiScope.spaceName || "지점 선택";
+	mobileApiScope.fitnessCenterName || "지점 선택";
 
 const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 	const queryClient = useQueryClient();

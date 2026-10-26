@@ -6,9 +6,9 @@ import { PickType } from "@nestjs/swagger";
  * 파생 리소스 생성 DTO
  */
 export class CreateDerivativeDto extends PickType(Derivative, [
-	"spaceSeq",
-	"createdBySeq",
-	"assetSeq",
+	"spaceId",
+	"createdById",
+	"assetId",
 	"kind",
 	"profile",
 	"storageKey",

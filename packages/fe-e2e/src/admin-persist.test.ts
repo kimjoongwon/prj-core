@@ -55,13 +55,13 @@ describe("admin persist contract", () => {
 				version: 4,
 				tenantId: oldTenantId,
 				spaceId: oldSpaceId,
-				spaceName: "Old Fitness Center",
+				fitnessCenterName: "Old Fitness Center",
 				contentLanguageCode: "en_US",
 			availableSpaces: [
 				{
 					tenantId: oldTenantId,
 					spaceId: oldSpaceId,
-					spaceName: "Old Fitness Center",
+					fitnessCenterName: "Old Fitness Center",
 					contentLanguageCode: "en_US",
 				},
 			],
@@ -72,7 +72,7 @@ describe("admin persist contract", () => {
 		const document = mergeAdminPersistAccountSelection(raw, {
 			tenantId: newTenantId,
 			spaceId: newSpaceId,
-			spaceName: "New Fitness Center",
+			fitnessCenterName: "New Fitness Center",
 			contentLanguageCode: "ko_KR",
 		});
 
@@ -80,19 +80,19 @@ describe("admin persist contract", () => {
 			version: 4,
 			tenantId: newTenantId,
 			spaceId: newSpaceId,
-			spaceName: "New Fitness Center",
+			fitnessCenterName: "New Fitness Center",
 			contentLanguageCode: "ko_KR",
 			availableSpaces: [
 				{
 					tenantId: newTenantId,
 					spaceId: newSpaceId,
-					spaceName: "New Fitness Center",
+					fitnessCenterName: "New Fitness Center",
 					contentLanguageCode: "ko_KR",
 				},
 				{
 					tenantId: oldTenantId,
 					spaceId: oldSpaceId,
-					spaceName: "Old Fitness Center",
+					fitnessCenterName: "Old Fitness Center",
 					contentLanguageCode: "en_US",
 				},
 			],
@@ -114,20 +114,20 @@ describe("admin persist contract", () => {
 		const document = mergeAdminPersistAccountSelection(raw, {
 			tenantId: newTenantId,
 			spaceId: newSpaceId,
-			spaceName: "Current Fitness Center",
+			fitnessCenterName: "Current Fitness Center",
 		});
 
 		expect(document.account).toEqual({
 			version: 4,
 			tenantId: newTenantId,
 			spaceId: newSpaceId,
-			spaceName: "Current Fitness Center",
+			fitnessCenterName: "Current Fitness Center",
 			contentLanguageCode: null,
 			availableSpaces: [
 				{
 					tenantId: newTenantId,
 					spaceId: newSpaceId,
-					spaceName: "Current Fitness Center",
+					fitnessCenterName: "Current Fitness Center",
 				},
 			],
 		});
@@ -142,13 +142,13 @@ describe("admin persist contract", () => {
 				version: 4,
 				tenantId: invalidUlidFixture,
 				spaceId: newSpaceId,
-				spaceName: "Invalid Fitness Center",
+				fitnessCenterName: "Invalid Fitness Center",
 				contentLanguageCode: "ko_KR",
 				availableSpaces: [
 					{
 						tenantId: invalidUlidFixture,
 						spaceId: newSpaceId,
-						spaceName: "Invalid Fitness Center",
+						fitnessCenterName: "Invalid Fitness Center",
 					},
 				],
 			},

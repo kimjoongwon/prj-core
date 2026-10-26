@@ -1,5 +1,5 @@
 export interface CommunityPostResult {
-	id: string;
+	id: bigint;
 	title: string | null;
 	text: string;
 	authorName: string;

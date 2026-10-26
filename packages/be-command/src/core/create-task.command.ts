@@ -9,8 +9,8 @@ export class CreateTaskCommand implements CreateTaskCommandInput {
 
 	constructor(
 		input: CreateTaskCommandInput,
-		readonly spaceId: string,
-		readonly createdById: string,
+		readonly spaceId: bigint,
+		readonly createdById: bigint,
 	) {
 		Object.assign(this, input);
 	}

@@ -3,12 +3,7 @@ import {
 	inheritTransformationMetadata,
 	inheritValidationMetadata,
 } from "@nestjs/mapped-types";
-import {
-	ApiProperty,
-	DECORATORS,
-	PartialType,
-	PickType,
-} from "@nestjs/swagger";
+import { ApiProperty, DECORATORS, PartialType, PickType } from "@nestjs/swagger";
 import { QueryDto } from "./query.dto";
 
 /**

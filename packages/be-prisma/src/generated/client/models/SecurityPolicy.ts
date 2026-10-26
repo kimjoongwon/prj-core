@@ -27,7 +27,7 @@ export type AggregateSecurityPolicy = {
 }
 
 export type SecurityPolicyAvgAggregateOutputType = {
-  seq: number | null
+  id: number | null
   passwordMinLength: number | null
   passwordExpirationDays: number | null
   passwordReuseLimit: number | null
@@ -40,7 +40,7 @@ export type SecurityPolicyAvgAggregateOutputType = {
 }
 
 export type SecurityPolicySumAggregateOutputType = {
-  seq: bigint | null
+  id: bigint | null
   passwordMinLength: number | null
   passwordExpirationDays: number | null
   passwordReuseLimit: number | null
@@ -53,8 +53,8 @@ export type SecurityPolicySumAggregateOutputType = {
 }
 
 export type SecurityPolicyMinAggregateOutputType = {
-  id: string | null
-  seq: bigint | null
+  securityPolicyId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   key: string | null
@@ -77,8 +77,8 @@ export type SecurityPolicyMinAggregateOutputType = {
 }
 
 export type SecurityPolicyMaxAggregateOutputType = {
-  id: string | null
-  seq: bigint | null
+  securityPolicyId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   key: string | null
@@ -101,8 +101,8 @@ export type SecurityPolicyMaxAggregateOutputType = {
 }
 
 export type SecurityPolicyCountAggregateOutputType = {
+  securityPolicyId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   key: number
@@ -127,7 +127,7 @@ export type SecurityPolicyCountAggregateOutputType = {
 
 
 export type SecurityPolicyAvgAggregateInputType = {
-  seq?: true
+  id?: true
   passwordMinLength?: true
   passwordExpirationDays?: true
   passwordReuseLimit?: true
@@ -140,7 +140,7 @@ export type SecurityPolicyAvgAggregateInputType = {
 }
 
 export type SecurityPolicySumAggregateInputType = {
-  seq?: true
+  id?: true
   passwordMinLength?: true
   passwordExpirationDays?: true
   passwordReuseLimit?: true
@@ -153,8 +153,8 @@ export type SecurityPolicySumAggregateInputType = {
 }
 
 export type SecurityPolicyMinAggregateInputType = {
+  securityPolicyId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   key?: true
@@ -177,8 +177,8 @@ export type SecurityPolicyMinAggregateInputType = {
 }
 
 export type SecurityPolicyMaxAggregateInputType = {
+  securityPolicyId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   key?: true
@@ -201,8 +201,8 @@ export type SecurityPolicyMaxAggregateInputType = {
 }
 
 export type SecurityPolicyCountAggregateInputType = {
+  securityPolicyId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   key?: true
@@ -312,8 +312,8 @@ export type SecurityPolicyGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 export type SecurityPolicyGroupByOutputType = {
-  id: string
-  seq: bigint
+  securityPolicyId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   key: string
@@ -359,8 +359,8 @@ export type SecurityPolicyWhereInput = {
   AND?: Prisma.SecurityPolicyWhereInput | Prisma.SecurityPolicyWhereInput[]
   OR?: Prisma.SecurityPolicyWhereInput[]
   NOT?: Prisma.SecurityPolicyWhereInput | Prisma.SecurityPolicyWhereInput[]
-  id?: Prisma.StringFilter<"SecurityPolicy"> | string
-  seq?: Prisma.BigIntFilter<"SecurityPolicy"> | bigint | number
+  securityPolicyId?: Prisma.StringFilter<"SecurityPolicy"> | string
+  id?: Prisma.BigIntFilter<"SecurityPolicy"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"SecurityPolicy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"SecurityPolicy"> | Date | string | null
   key?: Prisma.StringFilter<"SecurityPolicy"> | string
@@ -383,8 +383,8 @@ export type SecurityPolicyWhereInput = {
 }
 
 export type SecurityPolicyOrderByWithRelationInput = {
+  securityPolicyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -407,8 +407,8 @@ export type SecurityPolicyOrderByWithRelationInput = {
 }
 
 export type SecurityPolicyWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: bigint | number
+  securityPolicyId?: string
+  id?: bigint | number
   key?: string
   AND?: Prisma.SecurityPolicyWhereInput | Prisma.SecurityPolicyWhereInput[]
   OR?: Prisma.SecurityPolicyWhereInput[]
@@ -431,11 +431,11 @@ export type SecurityPolicyWhereUniqueInput = Prisma.AtLeast<{
   ipWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
   emailDomainWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
   corsOriginWhitelistEnabled?: Prisma.BoolFilter<"SecurityPolicy"> | boolean
-}, "seq" | "id" | "key">
+}, "id" | "securityPolicyId" | "key">
 
 export type SecurityPolicyOrderByWithAggregationInput = {
+  securityPolicyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -466,8 +466,8 @@ export type SecurityPolicyScalarWhereWithAggregatesInput = {
   AND?: Prisma.SecurityPolicyScalarWhereWithAggregatesInput | Prisma.SecurityPolicyScalarWhereWithAggregatesInput[]
   OR?: Prisma.SecurityPolicyScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SecurityPolicyScalarWhereWithAggregatesInput | Prisma.SecurityPolicyScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"SecurityPolicy"> | string
-  seq?: Prisma.BigIntWithAggregatesFilter<"SecurityPolicy"> | bigint | number
+  securityPolicyId?: Prisma.StringWithAggregatesFilter<"SecurityPolicy"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"SecurityPolicy"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SecurityPolicy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SecurityPolicy"> | Date | string | null
   key?: Prisma.StringWithAggregatesFilter<"SecurityPolicy"> | string
@@ -490,8 +490,8 @@ export type SecurityPolicyScalarWhereWithAggregatesInput = {
 }
 
 export type SecurityPolicyCreateInput = {
-  id?: string
-  seq?: bigint | number
+  securityPolicyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   key: string
@@ -514,8 +514,8 @@ export type SecurityPolicyCreateInput = {
 }
 
 export type SecurityPolicyUncheckedCreateInput = {
-  id?: string
-  seq?: bigint | number
+  securityPolicyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   key: string
@@ -538,8 +538,8 @@ export type SecurityPolicyUncheckedCreateInput = {
 }
 
 export type SecurityPolicyUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  securityPolicyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
@@ -562,8 +562,8 @@ export type SecurityPolicyUpdateInput = {
 }
 
 export type SecurityPolicyUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  securityPolicyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
@@ -586,8 +586,8 @@ export type SecurityPolicyUncheckedUpdateInput = {
 }
 
 export type SecurityPolicyCreateManyInput = {
-  id?: string
-  seq?: bigint | number
+  securityPolicyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   key: string
@@ -610,8 +610,8 @@ export type SecurityPolicyCreateManyInput = {
 }
 
 export type SecurityPolicyUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  securityPolicyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
@@ -634,8 +634,8 @@ export type SecurityPolicyUpdateManyMutationInput = {
 }
 
 export type SecurityPolicyUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  securityPolicyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
@@ -658,8 +658,8 @@ export type SecurityPolicyUncheckedUpdateManyInput = {
 }
 
 export type SecurityPolicyCountOrderByAggregateInput = {
+  securityPolicyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -682,7 +682,7 @@ export type SecurityPolicyCountOrderByAggregateInput = {
 }
 
 export type SecurityPolicyAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   passwordMinLength?: Prisma.SortOrder
   passwordExpirationDays?: Prisma.SortOrder
   passwordReuseLimit?: Prisma.SortOrder
@@ -695,8 +695,8 @@ export type SecurityPolicyAvgOrderByAggregateInput = {
 }
 
 export type SecurityPolicyMaxOrderByAggregateInput = {
+  securityPolicyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -719,8 +719,8 @@ export type SecurityPolicyMaxOrderByAggregateInput = {
 }
 
 export type SecurityPolicyMinOrderByAggregateInput = {
+  securityPolicyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -743,7 +743,7 @@ export type SecurityPolicyMinOrderByAggregateInput = {
 }
 
 export type SecurityPolicySumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   passwordMinLength?: Prisma.SortOrder
   passwordExpirationDays?: Prisma.SortOrder
   passwordReuseLimit?: Prisma.SortOrder
@@ -758,8 +758,8 @@ export type SecurityPolicySumOrderByAggregateInput = {
 
 
 export type SecurityPolicySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  securityPolicyId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   key?: boolean
@@ -782,8 +782,8 @@ export type SecurityPolicySelect<ExtArgs extends runtime.Types.Extensions.Intern
 }, ExtArgs["result"]["securityPolicy"]>
 
 export type SecurityPolicySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  securityPolicyId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   key?: boolean
@@ -806,8 +806,8 @@ export type SecurityPolicySelectCreateManyAndReturn<ExtArgs extends runtime.Type
 }, ExtArgs["result"]["securityPolicy"]>
 
 export type SecurityPolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  securityPolicyId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   key?: boolean
@@ -830,8 +830,8 @@ export type SecurityPolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Type
 }, ExtArgs["result"]["securityPolicy"]>
 
 export type SecurityPolicySelectScalar = {
+  securityPolicyId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   key?: boolean
@@ -853,14 +853,14 @@ export type SecurityPolicySelectScalar = {
   corsOriginWhitelistEnabled?: boolean
 }
 
-export type SecurityPolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "key" | "passwordMinLength" | "passwordRequireUppercase" | "passwordRequireLowercase" | "passwordRequireNumber" | "passwordRequireSpecial" | "passwordExpirationDays" | "passwordReuseLimit" | "temporaryLockThreshold" | "temporaryLockDurationMin" | "permanentLockThreshold" | "accessTokenTtlSec" | "refreshTokenTtlSec" | "sessionTtlSec" | "ipWhitelistEnabled" | "emailDomainWhitelistEnabled" | "corsOriginWhitelistEnabled", ExtArgs["result"]["securityPolicy"]>
+export type SecurityPolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"securityPolicyId" | "id" | "createdAt" | "updatedAt" | "key" | "passwordMinLength" | "passwordRequireUppercase" | "passwordRequireLowercase" | "passwordRequireNumber" | "passwordRequireSpecial" | "passwordExpirationDays" | "passwordReuseLimit" | "temporaryLockThreshold" | "temporaryLockDurationMin" | "permanentLockThreshold" | "accessTokenTtlSec" | "refreshTokenTtlSec" | "sessionTtlSec" | "ipWhitelistEnabled" | "emailDomainWhitelistEnabled" | "corsOriginWhitelistEnabled", ExtArgs["result"]["securityPolicy"]>
 
 export type $SecurityPolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SecurityPolicy"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: bigint
+    securityPolicyId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     /**
@@ -1014,8 +1014,8 @@ export interface SecurityPolicyDelegate<ExtArgs extends runtime.Types.Extensions
    * // Get first 10 SecurityPolicies
    * const securityPolicies = await prisma.securityPolicy.findMany({ take: 10 })
    *
-   * // Only select the `id`
-   * const securityPolicyWithIdOnly = await prisma.securityPolicy.findMany({ select: { id: true } })
+   * // Only select the `securityPolicyId`
+   * const securityPolicyWithSecurityPolicyIdOnly = await prisma.securityPolicy.findMany({ select: { securityPolicyId: true } })
    *
    */
   findMany<T extends SecurityPolicyFindManyArgs>(args?: Prisma.SelectSubset<T, SecurityPolicyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SecurityPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1059,9 +1059,9 @@ export interface SecurityPolicyDelegate<ExtArgs extends runtime.Types.Extensions
    *   ]
    * })
    *
-   * // Create many SecurityPolicies and only return the `id`
-   * const securityPolicyWithIdOnly = await prisma.securityPolicy.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many SecurityPolicies and only return the `securityPolicyId`
+   * const securityPolicyWithSecurityPolicyIdOnly = await prisma.securityPolicy.createManyAndReturn({
+   *   select: { securityPolicyId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1150,9 +1150,9 @@ export interface SecurityPolicyDelegate<ExtArgs extends runtime.Types.Extensions
    *   ]
    * })
    *
-   * // Update zero or more SecurityPolicies and only return the `id`
-   * const securityPolicyWithIdOnly = await prisma.securityPolicy.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more SecurityPolicies and only return the `securityPolicyId`
+   * const securityPolicyWithSecurityPolicyIdOnly = await prisma.securityPolicy.updateManyAndReturn({
+   *   select: { securityPolicyId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1354,8 +1354,8 @@ export interface Prisma__SecurityPolicyClient<T, Null = never, ExtArgs extends r
  * Fields of the SecurityPolicy model
  */
 export interface SecurityPolicyFieldRefs {
-  readonly id: Prisma.FieldRef<"SecurityPolicy", 'String'>
-  readonly seq: Prisma.FieldRef<"SecurityPolicy", 'BigInt'>
+  readonly securityPolicyId: Prisma.FieldRef<"SecurityPolicy", 'String'>
+  readonly id: Prisma.FieldRef<"SecurityPolicy", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"SecurityPolicy", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SecurityPolicy", 'DateTime'>
   readonly key: Prisma.FieldRef<"SecurityPolicy", 'String'>

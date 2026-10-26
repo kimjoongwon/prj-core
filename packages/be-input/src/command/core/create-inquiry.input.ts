@@ -11,7 +11,7 @@ export interface CreateInquiryCommandInput {
 	channel: InquiryChannel;
 	source?: InquirySource;
 	priority?: InquiryPriority;
-	customerId?: string;
-	assigneeId?: string;
+	customerId?: bigint;
+	assigneeId?: bigint;
 	content?: string;
 }

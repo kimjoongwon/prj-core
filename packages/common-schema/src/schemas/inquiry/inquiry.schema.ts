@@ -20,13 +20,13 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Inquiry의 DB 필드 타입과 공통 검증입니다. */
 export class InquirySchema extends AbstractSchema {
-	id!: string;
+	inquiryId!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdBySeq!: bigint | null;
+	createdById!: bigint | null;
 
 	@StringValidation({ description: "문의 번호" })
 	inquiryNumber!: string;
@@ -50,10 +50,10 @@ export class InquirySchema extends AbstractSchema {
 	priority!: InquiryPriority;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "고객 ID" })
-	customerSeq!: bigint | null;
+	customerId!: bigint | null;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "담당자 ID" })
-	assigneeSeq!: bigint | null;
+	assigneeId!: bigint | null;
 
 	@DateValidation({ nullable: true, description: "첫 응답 일시" })
 	firstResponseAt!: Date | null;

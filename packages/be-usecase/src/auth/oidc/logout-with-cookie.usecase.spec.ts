@@ -73,7 +73,7 @@ function createMocks() {
 	};
 	const tokenStorageService = {
 		getSessionBySessionId: jest.fn().mockResolvedValue({
-			userSeq: "01J00000000000000000001001",
+			userId: "01J00000000000000000001001",
 			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
@@ -160,7 +160,7 @@ describe("LogoutWithCookieUseCase", () => {
 	it("만료된 ID Token은 id_token_hint에서 제외해 확인 화면 경유 URL을 반환한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
-			userSeq: "01J00000000000000000001001",
+			userId: "01J00000000000000000001001",
 			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
@@ -187,7 +187,7 @@ describe("LogoutWithCookieUseCase", () => {
 	it("발급자가 현재 OP와 다른 ID Token(발급자 단일화 이전 세션)은 id_token_hint에서 제외한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
-			userSeq: "01J00000000000000000001001",
+			userId: "01J00000000000000000001001",
 			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
@@ -212,7 +212,7 @@ describe("LogoutWithCookieUseCase", () => {
 	it("audience가 클라이언트와 다른 ID Token은 id_token_hint에서 제외한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
-			userSeq: "01J00000000000000000001001",
+			userId: "01J00000000000000000001001",
 			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
 			session: {
 				refreshToken: "stored-refresh-token",
@@ -283,7 +283,7 @@ describe("LogoutWithCookieUseCase", () => {
 	it("세션 레코드에 ID Token이 없으면 client_id만 담은 확인 화면 end_session URL을 반환한다", async () => {
 		const mocks = createMocks();
 		mocks.tokenStorageService.getSessionBySessionId.mockResolvedValue({
-			userSeq: "01J00000000000000000001001",
+			userId: "01J00000000000000000001001",
 			sessionId: "admin-web.0123456789abcdef0123456789abcdef",
 			session: { refreshToken: "stored-refresh-token" },
 		});

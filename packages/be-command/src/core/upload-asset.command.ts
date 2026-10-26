@@ -1,6 +1,6 @@
 import type {
-	UploadAssetCommandInput,
 	UploadedAssetFileInput,
+	UploadAssetCommandInput,
 } from "@cocrepo/input";
 export class UploadAssetCommand implements UploadAssetCommandInput {
 	readonly folderId!: UploadAssetCommandInput["folderId"];
@@ -8,7 +8,7 @@ export class UploadAssetCommand implements UploadAssetCommandInput {
 	constructor(
 		input: UploadAssetCommandInput,
 		readonly file: UploadedAssetFileInput | undefined,
-		readonly createdById: string,
+		readonly createdById: bigint,
 	) {
 		Object.assign(this, input);
 	}

@@ -36,13 +36,13 @@ function resolveSystemAdminSeeds(targetEmails?: readonly string[]) {
 
 async function ensureSystemAdminProfile(
 	db: SystemAdminDbClient,
-	userSeq: DbId,
+	userId: DbId,
 	name: string,
 	nickname: string,
 ): Promise<void> {
 	const existingProfile = await db.profile.findFirst({
 		where: {
-			user: { seq: userSeq },
+			user: { id: userId },
 			removedAt: null,
 		},
 	});
@@ -53,7 +53,7 @@ async function ensureSystemAdminProfile(
 
 	await db.profile.create({
 		data: {
-			user: { connect: { seq: userSeq } },
+			user: { connect: { id: userId } },
 			name,
 			nickname,
 			address: "",
@@ -102,7 +102,7 @@ export async function ensureSystemAdminUsers(
 		} else {
 			await ensureSystemAdminProfile(
 				db,
-				systemAdminUser.seq,
+				systemAdminUser.id,
 				userData.profile.name,
 				userData.profile.nickname,
 			);
@@ -111,9 +111,9 @@ export async function ensureSystemAdminUsers(
 
 		const existingTenant = await db.tenant.findFirst({
 			where: {
-				user: { seq: systemAdminUser.seq },
-				space: { id: SYSTEM_SPACE_ULID },
-				role: { seq: platformAdminRoleId },
+				user: { id: systemAdminUser.id },
+				space: { spaceId: SYSTEM_SPACE_ULID },
+				role: { id: platformAdminRoleId },
 				removedAt: null,
 			},
 		});
@@ -125,7 +125,7 @@ export async function ensureSystemAdminUsers(
 			// 이미 다른 시드 계정(예: e2e admin@plate.com)이 이 테넌트를 소유하면
 			// 유니크 제약 실패로 전체 부트스트랩이 죽지 않도록 생성을 건너뛴다.
 			const tenantOwnedByOtherAccount = await db.tenant.findUnique({
-				where: { id: SYSTEM_TENANT_ULID },
+				where: { tenantId: SYSTEM_TENANT_ULID },
 			});
 			if (tenantOwnedByOtherAccount) {
 				console.log(
@@ -134,10 +134,10 @@ export async function ensureSystemAdminUsers(
 			} else {
 				await db.tenant.create({
 					data: {
-						id: SYSTEM_TENANT_ULID,
-						user: { connect: { seq: systemAdminUser.seq } },
-						space: { connect: { id: SYSTEM_SPACE_ULID } },
-						role: { connect: { seq: platformAdminRoleId } },
+						tenantId: SYSTEM_TENANT_ULID,
+						user: { connect: { id: systemAdminUser.id } },
+						space: { connect: { spaceId: SYSTEM_SPACE_ULID } },
+						role: { connect: { id: platformAdminRoleId } },
 					},
 				});
 				console.log(`System admin tenant created: ${userData.email}`);

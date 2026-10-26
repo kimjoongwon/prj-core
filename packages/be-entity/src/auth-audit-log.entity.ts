@@ -8,6 +8,7 @@ import {
 } from "@cocrepo/decorator/field";
 import { AuthAuditResult } from "@cocrepo/enum";
 import { AuthAuditLogSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
@@ -16,12 +17,13 @@ import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 @AbstractEntityFields()
 export class AuthAuditLog extends AuthAuditLogSchema {
 	@BigIntIdFieldMetadata({ description: "ID" })
-	declare seq: bigint;
+	declare id: bigint;
 	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 
 	/** 공개 식별자 ULID */
-	declare id: AuthAuditLogSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare authAuditLogId: AuthAuditLogSchema["authAuditLogId"];
 
 	// ============================================================================
 	// 필수 필드
@@ -37,7 +39,7 @@ export class AuthAuditLog extends AuthAuditLogSchema {
 	// Nullable 필드
 	// ============================================================================
 	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "사용자 ID" })
-	declare userSeq: AuthAuditLogSchema["userSeq"];
+	declare userId: AuthAuditLogSchema["userId"];
 	@StringFieldOptionalMetadata({ nullable: true, description: "실패 사유" })
 	declare failureReason: AuthAuditLogSchema["failureReason"];
 	@StringFieldOptionalMetadata({ nullable: true, description: "User Agent" })

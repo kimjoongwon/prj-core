@@ -31,7 +31,7 @@ export class OidcDirectUsersRepository {
 			where: { email },
 			select: {
 				id: true,
-				seq: true,
+				userId: true,
 				email: true,
 				password: true,
 				status: {
@@ -50,7 +50,7 @@ export class OidcDirectUsersRepository {
 
 		return {
 			id: user.id,
-			seq: user.seq,
+			userId: user.userId,
 			email: user.email,
 			password: user.password,
 			failedLoginAttempts: user.status?.failedLoginAttempts ?? 0,
@@ -64,7 +64,7 @@ export class OidcDirectUsersRepository {
 	 * 로그인 실패 처리 (실패 횟수 증가 + 잠금 설정) — UserStatus에 기록
 	 */
 	async updateLoginFailure(
-		userSeq: bigint,
+		userId: bigint,
 		failedAttempts: number,
 		lockData?: { lockedUntil?: Date; isPermanentlyLocked?: boolean },
 	): Promise<void> {
@@ -77,7 +77,7 @@ export class OidcDirectUsersRepository {
 			}),
 		};
 		await prisma.user.update({
-			where: { seq: userSeq },
+			where: { id: userId },
 			data: { status: { upsert: { create: data, update: data } } },
 		});
 	}
@@ -85,7 +85,7 @@ export class OidcDirectUsersRepository {
 	/**
 	 * 로그인 성공 처리 (실패 횟수 리셋 + 마지막 로그인 정보 업데이트) — UserStatus에 기록
 	 */
-	async updateLoginSuccess(userSeq: bigint, ipAddress: string): Promise<void> {
+	async updateLoginSuccess(userId: bigint, ipAddress: string): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
 		const data = {
 			failedLoginAttempts: 0,
@@ -94,7 +94,7 @@ export class OidcDirectUsersRepository {
 			lastLoginIp: ipAddress,
 		};
 		await prisma.user.update({
-			where: { seq: userSeq },
+			where: { id: userId },
 			data: { status: { upsert: { create: data, update: data } } },
 		});
 	}
@@ -102,14 +102,14 @@ export class OidcDirectUsersRepository {
 	/**
 	 * 잠금 자동 해제 (일시 잠금 시간 경과 후) — UserStatus에 기록
 	 */
-	async clearLock(userSeq: bigint): Promise<void> {
+	async clearLock(userId: bigint): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
 		const data = {
 			failedLoginAttempts: 0,
 			lockedUntil: null,
 		};
 		await prisma.user.update({
-			where: { seq: userSeq },
+			where: { id: userId },
 			data: { status: { upsert: { create: data, update: data } } },
 		});
 	}
@@ -119,7 +119,7 @@ export class OidcDirectUsersRepository {
 	 */
 	async createAuditLog(data: {
 		email: string;
-		userSeq?: bigint;
+		userId?: bigint;
 		result: AuthAuditResult;
 		failureReason?: string;
 		ipAddress: string;
@@ -131,7 +131,7 @@ export class OidcDirectUsersRepository {
 			await prisma.authAuditLog.create({
 				data: {
 					email: data.email,
-					...(data.userSeq ? { userSeq: data.userSeq } : {}),
+					...(data.userId ? { userId: data.userId } : {}),
 					result: data.result,
 					failureReason: data.failureReason ?? null,
 					ipAddress: data.ipAddress,
@@ -150,7 +150,7 @@ export class OidcDirectUsersRepository {
 	 * ID로 사용자 조회 (Tenants 포함)
 	 * AccountService의 claims 빌드에 사용합니다.
 	 */
-	async findByIdWithTenants(id: string) {
+	async findByIdWithTenants(id: bigint) {
 		this.logger.debug(`ID로 사용자 조회: ${id.toString()}`);
 
 		const prisma = await this.directPrismaProvider.getClient();

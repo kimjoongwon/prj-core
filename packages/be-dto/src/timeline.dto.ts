@@ -8,6 +8,8 @@ export class TimelineDto extends EntityResponseType(Timeline, {
 		"createdAt",
 		"updatedAt",
 		"removedAt",
+		"spaceId",
+		"createdById",
 		"name",
 		"description",
 		"sessions",

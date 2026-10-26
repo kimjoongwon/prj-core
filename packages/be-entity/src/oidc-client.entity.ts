@@ -5,13 +5,15 @@ import {
 } from "@cocrepo/decorator/field";
 import { OidcClientSchema } from "@cocrepo/schema";
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { Exclude } from "class-transformer";
 import { IsObject, IsOptional } from "class-validator";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 @AbstractEntityFields()
 export class OidcClient extends OidcClientSchema {
 	/** 공개 식별자 ULID */
-	declare id: OidcClientSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare oidcClientId: OidcClientSchema["oidcClientId"];
 
 	@StringFieldMetadata({
 		description: "클라이언트 식별자",

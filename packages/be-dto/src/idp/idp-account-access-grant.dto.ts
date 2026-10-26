@@ -1,21 +1,17 @@
 import {
+	BigIntIdField,
 	DateField,
 	DateFieldOptional,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-	ULIDFieldOptional,
 } from "@cocrepo/decorator/field";
 
 export class IdpAccountAccessGrantDto {
-	@ULIDField({ description: "테넌트 ULID" })
-	tenantId!: string;
+	@BigIntIdField({ description: "테넌트 ID" })
+	tenantId!: bigint;
 
-	@ULIDFieldOptional({
-		nullable: true,
-		description: "접근 대상 Space ULID",
-	})
-	spaceId!: string | null;
+	@BigIntIdField({ description: "접근 대상 Space ID" })
+	spaceId!: bigint;
 
 	@StringField({ description: "접근 대상 Space 이름" })
 	spaceName!: string;
@@ -26,11 +22,8 @@ export class IdpAccountAccessGrantDto {
 	})
 	spaceLabel!: string | null;
 
-	@ULIDFieldOptional({
-		nullable: true,
-		description: "부여된 Role ULID",
-	})
-	roleId!: string | null;
+	@BigIntIdField({ description: "부여된 Role ID" })
+	roleId!: bigint;
 
 	@StringField({ description: "부여된 Role 식별자" })
 	roleName!: string;

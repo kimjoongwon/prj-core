@@ -1,4 +1,4 @@
-import { parseIntegrationUlid } from "@cocrepo/type";
+import { parseDecimalId } from "@cocrepo/type/database-id";
 import {
 	type QueryClient,
 	type UseMutationOptions,
@@ -69,10 +69,10 @@ export const setCurrentSpace = (
 	payload: SetCurrentSpacePayload,
 	options?: SecondParameter<typeof customFetch>,
 ) => {
-	// 공간 선택의 공개 ULID를 문자열 그대로 전송합니다.
-	const tenantId = parseIntegrationUlid(payload.tenantId);
+	// 기존 문자열 입력 계약을 공용 클라이언트의 bigint 안전 직렬화에 연결합니다.
+	const tenantId = parseDecimalId(payload.tenantId);
 	if (tenantId === null) {
-		throw new TypeError("tenantId must be a canonical ULID string");
+		throw new TypeError("tenantId must be a canonical positive BIGINT string");
 	}
 	return customFetch<CurrentSpaceResponse>("/api/v1/auth/current-space", {
 		...options,

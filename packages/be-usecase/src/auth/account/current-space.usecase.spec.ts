@@ -8,12 +8,13 @@ import { GetCurrentSpaceUseCase } from "./get-current-space.usecase";
 import { SetCurrentSpaceUseCase } from "./set-current-space.usecase";
 
 const activeTenant = {
-	id: "01JTENANT000000000000000002",
-	space: { id: "01JSPACE0000000000000000101" },
+	id: 201n,
+	spaceId: 101n,
 	removedAt: null,
 };
 const currentSpace = {
-	id: "01JSPACE0000000000000000101",
+	id: 101n,
+	spaceId: "01J00000000000000000001001",
 	fitnessCenter: {
 		name: "Current Fitness Center",
 		company: {
@@ -22,9 +23,10 @@ const currentSpace = {
 	},
 };
 
-function createDependencies(currentTenantId: string | null = activeTenant.id) {
+function createDependencies(currentTenantId: bigint | null = activeTenant.id) {
 	const user = {
-		id: "01JUSER00000000000000000301",
+		id: 301n,
+		userId: "01J00000000000000000002001",
 		currentTenantId,
 		tenants: [activeTenant],
 	};
@@ -42,7 +44,7 @@ function createDependencies(currentTenantId: string | null = activeTenant.id) {
 }
 
 describe("current-space use cases", () => {
-	it("Given 저장된 활성 currentTenantSeq When 현재 Space를 조회하면 Then fitnessCenter.company 포함 Space를 반환한다", async () => {
+	it("Given 저장된 활성 currentTenantId When 현재 Space를 조회하면 Then fitnessCenter.company 포함 Space를 반환한다", async () => {
 		const { cls, spaces } = createDependencies();
 		const useCase = new GetCurrentSpaceUseCase(cls, spaces);
 
@@ -54,7 +56,7 @@ describe("current-space use cases", () => {
 
 	it("Given currentTenantId가 없거나 접근할 수 없음 When 현재 Space를 조회하면 Then null을 반환한다", async () => {
 		const noSelection = createDependencies(null);
-		const invalidSelection = createDependencies("01JTENANT000000000000000099");
+		const invalidSelection = createDependencies(999n);
 
 		await expect(
 			new GetCurrentSpaceUseCase(noSelection.cls, noSelection.spaces).execute(
@@ -78,10 +80,7 @@ describe("current-space use cases", () => {
 				new SetCurrentSpaceCommand({ tenantId: activeTenant.id }),
 			),
 		).resolves.toEqual({ ...currentSpace, tenantId: activeTenant.id });
-		expect(users.setCurrentTenant).toHaveBeenCalledWith(
-			"01JUSER00000000000000000301",
-			activeTenant.id,
-		);
+		expect(users.setCurrentTenant).toHaveBeenCalledWith(301n, activeTenant.id);
 	});
 
 	it("Given 소유하지 않은 Tenant When 현재 Space를 설정하면 Then 저장하지 않고 거부한다", async () => {
@@ -89,9 +88,7 @@ describe("current-space use cases", () => {
 		const useCase = new SetCurrentSpaceUseCase(cls, spaces, users);
 
 		await expect(
-			useCase.execute(
-				new SetCurrentSpaceCommand({ tenantId: "01JTENANT000000000000000099" }),
-			),
+			useCase.execute(new SetCurrentSpaceCommand({ tenantId: 999n })),
 		).rejects.toBeInstanceOf(ForbiddenException);
 		expect(users.setCurrentTenant).not.toHaveBeenCalled();
 	});

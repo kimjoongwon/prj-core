@@ -26,29 +26,13 @@ function toAccountBootstrapSpace(
 	const fitnessCenter = normalizeFitnessCenter(source.fitnessCenter);
 	const id = toWireId(source.id);
 	const tenantId = toWireId(source.tenantId);
-	const name = normalizeSpaceText(source.name);
-	const label = normalizeSpaceText(source.label);
 
 	return {
 		id: id ?? undefined,
 		tenantId: tenantId ?? undefined,
-		name,
-		label,
 		contentLanguageCode,
 		fitnessCenter,
 	};
-}
-
-function normalizeSpaceText(value: unknown): string | null | undefined {
-	if (typeof value === "string") {
-		return value;
-	}
-
-	if (value === null) {
-		return null;
-	}
-
-	return undefined;
 }
 
 export function normalizeAccountBootstrapSpaces(
@@ -90,6 +74,7 @@ function normalizeFitnessCenter(
 	const company = normalizeCompany(source.company);
 
 	return {
+		name: typeof source.name === "string" ? source.name : null,
 		company,
 	};
 }
@@ -132,7 +117,7 @@ export type {
 	UseAccountBootstrapReturn,
 } from "@cocrepo/type";
 
-export function resolveCurrentSpaceDisplayName(
+export function resolveCurrentSpaceFitnessCenterName(
 	currentSpace: AccountBootstrapSpaceLike | null | undefined,
 	spaces: AccountBootstrapSpaceLike[],
 ) {
@@ -146,8 +131,9 @@ export function resolveCurrentSpaceDisplayName(
 	}
 
 	return (
-		currentSpace.name ??
-		spaces.find((space) => isSameWireId(space.id, currentSpaceId))?.name ??
+		currentSpace.fitnessCenter?.name ??
+		spaces.find((space) => isSameWireId(space.id, currentSpaceId))
+			?.fitnessCenter?.name ??
 		""
 	);
 }
@@ -182,7 +168,7 @@ export function useTenantBootstrap<
 				.map((space) => ({
 					tenantId: space.tenantId!,
 					spaceId: space.id!,
-					spaceName: space.name ?? "",
+					fitnessCenterName: space.fitnessCenter?.name ?? "",
 					contentLanguageCode: space.contentLanguageCode ?? null,
 				})),
 		);
@@ -201,7 +187,7 @@ export function useTenantBootstrap<
 		) {
 			account.setCurrentTenant(
 				currentSpace.tenantId,
-				resolveCurrentSpaceDisplayName(currentSpace, spaces),
+				resolveCurrentSpaceFitnessCenterName(currentSpace, spaces),
 				currentSpace.contentLanguageCode ??
 					spaces.find((space) => isSameWireId(space.id, currentSpace.id))
 						?.contentLanguageCode ??

@@ -6,8 +6,8 @@ import { PickType } from "@nestjs/swagger";
  * 에셋 생성 DTO
  */
 export class CreateAssetDto extends PickType(Asset, [
-	"spaceSeq",
-	"folderSeq",
+	"spaceId",
+	"folderId",
 	"kind",
 	"status",
 	"originalName",
@@ -16,7 +16,7 @@ export class CreateAssetDto extends PickType(Asset, [
 	"extension",
 	"checksum",
 	"metadata",
-	"createdBySeq",
+	"createdById",
 ] as const) {
 	@StringFieldOptional({
 		nullable: true,

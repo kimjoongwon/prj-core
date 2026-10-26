@@ -8,16 +8,16 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Program의 DB 필드 타입과 공통 검증입니다. */
 export class ProgramSchema extends AbstractSchema {
-	id!: string;
+	programId!: string;
 
 	@BigIntIdValidation()
-	routineSeq!: bigint;
+	routineId!: bigint;
 
 	@BigIntIdValidation()
-	sessionSeq!: bigint;
+	sessionId!: bigint;
 
 	@BigIntIdValidation()
-	instructorSeq!: bigint;
+	instructorId!: bigint;
 
 	@NumberValidation()
 	capacity!: number;

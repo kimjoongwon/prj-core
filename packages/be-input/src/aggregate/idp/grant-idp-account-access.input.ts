@@ -1,4 +1,4 @@
 export interface GrantIdpAccountAccessInput {
-	spaceId: string;
-	roleId: string;
+	spaceId: bigint;
+	roleId: bigint;
 }

@@ -1,4 +1,4 @@
-import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	GetRoleAssignmentsQuery,
 	SyncRoleAssignmentsCommand,
@@ -47,7 +47,7 @@ export class RoleAssignmentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "roleId",
-		description: "Role ID (ULID)",
+		description: "Role ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
@@ -55,7 +55,7 @@ export class RoleAssignmentsController {
 		isArray: true,
 	})
 	@ResponseMessage("역할 정책 할당 목록 조회 성공")
-	async getRoleAssignments(@Param("roleId", ParseUlidPipe) roleId: string) {
+	async getRoleAssignments(@Param("roleId", ParseBigIntIdPipe) roleId: bigint) {
 		return this.queryBus.execute(new GetRoleAssignmentsQuery(roleId));
 	}
 
@@ -71,7 +71,7 @@ export class RoleAssignmentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "roleId",
-		description: "Role ID (ULID)",
+		description: "Role ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -84,7 +84,7 @@ export class RoleAssignmentsController {
 	})
 	@ResponseMessage("역할 정책 할당 동기화 성공")
 	async syncRoleAssignments(
-		@Param("roleId", ParseUlidPipe) roleId: string,
+		@Param("roleId", ParseBigIntIdPipe) roleId: bigint,
 		@Body() dto: SyncRoleAssignmentsDto,
 	) {
 		return this.commandBus.execute(

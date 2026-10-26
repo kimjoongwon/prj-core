@@ -58,7 +58,7 @@ const FALLBACK_ABILITY_RULES: AbilityRule[] = [
 const STORYBOOK_ADMIN_SPACE: AccountSpaceInfo = {
 	spaceId: "storybook-space",
 	tenantId: "storybook-tenant",
-	spaceName: "Storybook Fitness Center",
+	fitnessCenterName: "Storybook Fitness Center",
 };
 
 function makeQueryClient() {
@@ -171,7 +171,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 			account.setAvailableSpaces([STORYBOOK_ADMIN_SPACE]);
 			account.setCurrentTenant(
 				STORYBOOK_ADMIN_SPACE.tenantId,
-				STORYBOOK_ADMIN_SPACE.spaceName,
+				STORYBOOK_ADMIN_SPACE.fitnessCenterName,
 				null,
 				STORYBOOK_ADMIN_SPACE.spaceId,
 			);

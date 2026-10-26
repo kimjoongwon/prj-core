@@ -4,7 +4,7 @@
  * OIDC Identity Provider
  * OpenID Connect Identity Provider API
  *
- * OIDC 인증 API를 제공합니다.
+ * OIDC 인증 및 IDP 관리 API를 제공합니다.
  *
  * **인증 방법:**
  * 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
@@ -32,7 +32,6 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
-	queryOptions as queryOptionsBuilder,
 	useMutation,
 	useQuery,
 	useSuspenseInfiniteQuery,
@@ -241,7 +240,7 @@ export const prefetchGetInteractionQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetInteractionQueryOptions(uid, options);
 
-	await queryClient.query(queryOptions).catch(() => {});
+	await queryClient.prefetchQuery(queryOptions);
 
 	return queryClient;
 };
@@ -270,19 +269,11 @@ export const getGetInteractionSuspenseQueryOptions = <
 		signal,
 	}) => getInteraction(uid, { signal, ...requestOptions });
 
-	return queryOptionsBuilder({
-		queryKey,
-		...queryOptions,
-		queryFn: queryOptions?.queryFn ?? queryFn,
-	}) as UseSuspenseQueryOptions<
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getInteraction>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
-		throwOnError?: ((this: never, error: TError) => boolean) & {
-			readonly __inferenceOnly: never;
-		};
-	};
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
 export type GetInteractionSuspenseQueryResult = NonNullable<
@@ -543,7 +534,7 @@ export const prefetchGetInteractionInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.infiniteQuery(queryOptions).catch(() => {});
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
 	return queryClient;
 };

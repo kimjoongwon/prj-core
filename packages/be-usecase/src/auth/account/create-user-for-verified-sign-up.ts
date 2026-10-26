@@ -12,10 +12,10 @@ export async function createUserForVerifiedSignUp(params: {
 	nickname?: string;
 	phone: string;
 	address: string;
-	spaceId: string;
+	spaceId: bigint;
 	email: string;
 	passwordHash: string;
-}): Promise<{ id: string }> {
+}): Promise<{ id: bigint }> {
 	const userRole = await params.rolesService.getDefaultUserRole();
 
 	if (!userRole) {

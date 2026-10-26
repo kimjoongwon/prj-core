@@ -1,7 +1,11 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
 import { SpacesRepository } from "@cocrepo/repository";
-import { type ContextTenantSnapshot, SpaceResourceScope } from "@cocrepo/type";
+import {
+	type ContextTenantSnapshot,
+	type DatabaseId,
+	SpaceResourceScope,
+} from "@cocrepo/type";
 import {
 	BadRequestException,
 	type CallHandler,
@@ -40,8 +44,8 @@ export class SpaceScopeInterceptor implements NestInterceptor {
 		next: CallHandler,
 	): Promise<Observable<unknown>> {
 		const tenant = this.cls.get<ContextTenantSnapshot>(CONTEXT_KEYS.TENANT);
-		const tenantId = this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
-		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
+		const tenantId = this.cls.get<DatabaseId>(CONTEXT_KEYS.TENANT_ID);
+		const spaceId = this.cls.get<DatabaseId>(CONTEXT_KEYS.SPACE_ID);
 		const shouldEnforceSpace =
 			!this.reflector.getAllAndOverride<boolean>(PUBLIC_ROUTE_KEY, [
 				context.getHandler(),

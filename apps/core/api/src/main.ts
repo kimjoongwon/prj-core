@@ -70,10 +70,10 @@ const SWAGGER_TENANT_SELECTOR_JS = `
 
   function spaceLabel(space) {
     var fitnessCenter = space && space.fitnessCenter;
-    var spaceName = space && space.name;
+    var fitnessCenterName = fitnessCenter && fitnessCenter.name;
     var companyName = fitnessCenter && fitnessCenter.company && fitnessCenter.company.name;
     var fallback = space && space.id ? space.id : 'Unknown Space';
-    return spaceName || companyName || fallback;
+    return fitnessCenterName || companyName || fallback;
   }
 
   window.fetch = function(url, init) {

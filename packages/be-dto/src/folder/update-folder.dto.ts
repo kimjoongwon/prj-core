@@ -1,16 +1,14 @@
-import { StringField, ULIDFieldOptional } from "@cocrepo/decorator/field";
+import { StringField } from "@cocrepo/decorator/field";
+import { Folder } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 import { IsOptional } from "class-validator";
 
 /**
  * 폴더 생성 DTO
  */
-export class UpdateFolderDto {
-	@ULIDFieldOptional({
-		nullable: true,
-		description: "상위 폴더 ULID (루트면 null)",
-	})
-	parentFolderId?: string | null;
-
+export class UpdateFolderDto extends PartialType(
+	PickType(Folder, ["parentFolderId"] as const),
+) {
 	@IsOptional()
 	@StringField({
 		description: "폴더명",

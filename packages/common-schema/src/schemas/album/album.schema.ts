@@ -9,10 +9,10 @@ import { AbstractSchema } from "../abstract.schema";
 
 /** Album의 DB 필드 타입과 공통 검증입니다. */
 export class AlbumSchema extends AbstractSchema {
-	id!: string;
+	albumId!: string;
 
 	@BigIntIdValidation({ description: "소속 Space ID" })
-	spaceSeq!: bigint;
+	spaceId!: bigint;
 
 	@StringValidation({ description: "앨범명" })
 	name!: string;
@@ -21,11 +21,11 @@ export class AlbumSchema extends AbstractSchema {
 	description!: string | null;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "커버 에셋 ID" })
-	coverAssetSeq!: bigint | null;
+	coverAssetId!: bigint | null;
 
 	@NumberValidation({ description: "정렬 순서", int: true })
 	sortOrder!: number;
 
 	@BigIntIdValidationOptional({ nullable: true, description: "생성자 ID" })
-	createdBySeq!: bigint | null;
+	createdById!: bigint | null;
 }

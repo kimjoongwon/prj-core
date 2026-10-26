@@ -109,7 +109,7 @@ export class PoliciesGuard implements CanActivate {
 
 		if (!hasPermission) {
 			this.logger.warn(
-				`권한 없음: userSeq=${user.id}, handler=${policyHandlers.map((h) => h.constructor.name).join(", ")}`,
+				`권한 없음: userId=${user.id}, handler=${policyHandlers.map((h) => h.constructor.name).join(", ")}`,
 			);
 			throw new ForbiddenException("해당 작업에 대한 권한이 없습니다.");
 		}

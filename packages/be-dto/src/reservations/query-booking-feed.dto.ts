@@ -1,14 +1,11 @@
-import {
-	DateFieldOptional,
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
-import { Reservation } from "@cocrepo/entity";
+import { DateFieldOptional, StringFieldOptional } from "@cocrepo/decorator/field";
 import { EntityQueryType } from "../query/entity-query-type";
+import { Reservation } from "@cocrepo/entity";
 
-export class QueryBookingFeedDto extends EntityQueryType(
-	Reservation,
-	[] as const,
-) {
+export class QueryBookingFeedDto extends EntityQueryType(Reservation, [
+	"timelineId",
+	"programId",
+] as const) {
 	@DateFieldOptional({ description: "조회 시작 일시" })
 	dateFrom?: Date;
 

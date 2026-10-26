@@ -12,15 +12,15 @@ import { AbstractSchema } from "../abstract.schema";
 /** TemplateVariable의 DB 필드 타입과 공통 검증입니다. */
 export class TemplateVariableSchema
 	extends PickSchemaType(AbstractSchema, [
-		"seq",
+		"id",
 		"createdAt",
 		"updatedAt",
 	] as const)
 {
-	id!: string;
+	templateVariableId!: string;
 
 	@BigIntIdValidation({ description: "ID" })
-	declare seq: bigint;
+	declare id: bigint;
 
 	@DateValidation({ description: "생성일" })
 	declare createdAt: Date;
@@ -41,5 +41,5 @@ export class TemplateVariableSchema
 	isRequired!: boolean;
 
 	@BigIntIdValidation({ description: "템플릿 ID" })
-	templateSeq!: bigint;
+	templateId!: bigint;
 }

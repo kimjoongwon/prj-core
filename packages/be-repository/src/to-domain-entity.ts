@@ -1,4 +1,4 @@
-import { type DomainData, hydrateEntity } from "@cocrepo/entity";
+import { hydrateEntity, type DomainData } from "@cocrepo/entity";
 import type { ClassConstructor } from "class-transformer";
 
 /**

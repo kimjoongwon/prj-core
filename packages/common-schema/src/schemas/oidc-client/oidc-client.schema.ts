@@ -11,7 +11,7 @@ import { AbstractSchema } from "../abstract.schema";
 export class OidcClientSchema
 	extends AbstractSchema
 {
-	id!: string;
+	oidcClientId!: string;
 
 	@StringValidation({
 		description: "클라이언트 식별자",

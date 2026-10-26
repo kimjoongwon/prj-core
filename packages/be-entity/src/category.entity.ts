@@ -5,6 +5,7 @@ import {
 	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { CategorySchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Space } from "./space.entity";
 import { User } from "./user.entity";
@@ -12,16 +13,17 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class Category extends CategorySchema {
 	/** 공개 식별자 ULID */
-	declare id: CategorySchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare categoryId: CategorySchema["categoryId"];
 
 	@StringFieldMetadata({ default: "" })
 	declare name: CategorySchema["name"];
 	@BigIntIdFieldMetadata()
-	declare spaceSeq: CategorySchema["spaceSeq"];
+	declare spaceId: CategorySchema["spaceId"];
 	@BigIntIdFieldMetadata({ nullable: true, default: null })
-	declare parentSeq: CategorySchema["parentSeq"];
+	declare parentId: CategorySchema["parentId"];
 	@BigIntIdFieldOptionalMetadata({ nullable: true })
-	declare createdBySeq: CategorySchema["createdBySeq"];
+	declare createdById: CategorySchema["createdById"];
 
 	@ClassField(() => Category, { required: false })
 	parent?: Category;
@@ -74,8 +76,8 @@ export class Category extends CategorySchema {
 
 	toOption() {
 		return {
-			key: this.seq,
-			value: this.seq,
+			key: this.id,
+			value: this.id,
 			text: this.name,
 		};
 	}

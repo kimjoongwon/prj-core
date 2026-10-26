@@ -1,5 +1,6 @@
 import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
 import { UserAssociationSchema } from "@cocrepo/schema";
+import { Exclude } from "class-transformer";
 import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Group } from "./group.entity";
 import { User } from "./user.entity";
@@ -7,12 +8,13 @@ import { User } from "./user.entity";
 @AbstractEntityFields()
 export class UserAssociation extends UserAssociationSchema {
 	/** 공개 식별자 ULID */
-	declare id: UserAssociationSchema["id"];
+	@Exclude({ toPlainOnly: true })
+	declare userAssociationId: UserAssociationSchema["userAssociationId"];
 
 	@BigIntIdFieldMetadata()
-	declare userSeq: UserAssociationSchema["userSeq"];
+	declare userId: UserAssociationSchema["userId"];
 	@BigIntIdFieldMetadata()
-	declare groupSeq: UserAssociationSchema["groupSeq"];
+	declare groupId: UserAssociationSchema["groupId"];
 
 	@ClassField(() => Group, { required: false, swagger: false })
 	group?: Group;

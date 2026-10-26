@@ -523,6 +523,954 @@
           ]
         }
       }
+    },
+    {
+      "operationId": "getAuthAuditLogs",
+      "method": "GET",
+      "path": "/api/v1/auth/audit-logs",
+      "parameterSchemas": {
+        "query:skip": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "query:take": {
+          "minimum": 1,
+          "maximum": 200,
+          "type": "number"
+        },
+        "query:result": {
+          "$ref": "#/components/schemas/AuthAuditResult"
+        },
+        "query:email": {
+          "type": "string"
+        },
+        "query:ipAddress": {
+          "type": "string"
+        },
+        "query:clientId": {
+          "type": "string"
+        },
+        "query:startDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "query:endDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuthAuditLogDto"
+                  }
+                },
+                "meta": {
+                  "$ref": "#/components/schemas/PageMetaDto"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getAuthAuditLogStats",
+      "method": "GET",
+      "path": "/api/v1/auth/audit-logs/stats",
+      "parameterSchemas": {},
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/AuditLogStatsDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "unlockAccount",
+      "method": "POST",
+      "path": "/api/v1/auth/users/{userId}/unlock",
+      "parameterSchemas": {
+        "path:userId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "forceResetPassword",
+      "method": "POST",
+      "path": "/api/v1/auth/users/{userId}/force-reset-password",
+      "parameterSchemas": {
+        "path:userId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "invalidateUserSessions",
+      "method": "POST",
+      "path": "/api/v1/auth/users/{userId}/invalidate-sessions",
+      "parameterSchemas": {
+        "path:userId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "boolean"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getOidcClients",
+      "method": "GET",
+      "path": "/api/v1/oidc-clients",
+      "parameterSchemas": {
+        "query:skip": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "query:take": {
+          "minimum": 1,
+          "maximum": 200,
+          "type": "number"
+        },
+        "query:isActive": {
+          "type": "boolean"
+        },
+        "query:search": {
+          "type": "string"
+        },
+        "query:sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OidcClientDto"
+                  }
+                },
+                "meta": {
+                  "$ref": "#/components/schemas/PageMetaDto"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "createOidcClient",
+      "method": "POST",
+      "path": "/api/v1/oidc-clients",
+      "requestSchema": {
+        "$ref": "#/components/schemas/CreateOidcClientDto"
+      },
+      "parameterSchemas": {},
+      "responseSchemas": {
+        "201": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 201
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/OidcClientDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getOidcClient",
+      "method": "GET",
+      "path": "/api/v1/oidc-clients/{oidcClientId}",
+      "parameterSchemas": {
+        "path:oidcClientId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/OidcClientDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "updateOidcClient",
+      "method": "PATCH",
+      "path": "/api/v1/oidc-clients/{oidcClientId}",
+      "requestSchema": {
+        "$ref": "#/components/schemas/UpdateOidcClientDto"
+      },
+      "parameterSchemas": {
+        "path:oidcClientId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/OidcClientDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "deleteOidcClient",
+      "method": "DELETE",
+      "path": "/api/v1/oidc-clients/{oidcClientId}",
+      "parameterSchemas": {
+        "path:oidcClientId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {}
+    },
+    {
+      "operationId": "toggleActiveOidcClient",
+      "method": "PATCH",
+      "path": "/api/v1/oidc-clients/{oidcClientId}/toggle-active",
+      "parameterSchemas": {
+        "path:oidcClientId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/OidcClientDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getEmailVerifications",
+      "method": "GET",
+      "path": "/api/v1/idp/email-verifications",
+      "parameterSchemas": {
+        "query:skip": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "query:take": {
+          "minimum": 1,
+          "maximum": 200,
+          "type": "number"
+        },
+        "query:status": {
+          "$ref": "#/components/schemas/EmailVerificationStatus"
+        },
+        "query:email": {
+          "type": "string"
+        },
+        "query:startDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "query:endDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "query:sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmailVerificationDto"
+                  }
+                },
+                "meta": {
+                  "$ref": "#/components/schemas/PageMetaDto"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "resendEmailVerification",
+      "method": "POST",
+      "path": "/api/v1/idp/email-verifications/{emailVerificationId}/resend",
+      "parameterSchemas": {
+        "path:emailVerificationId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/EmailVerificationDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getSecurityPolicy",
+      "method": "GET",
+      "path": "/api/v1/idp/security-policy",
+      "parameterSchemas": {},
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/SecurityPolicyDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "updateSecurityPolicy",
+      "method": "PATCH",
+      "path": "/api/v1/idp/security-policy",
+      "requestSchema": {
+        "$ref": "#/components/schemas/UpdateSecurityPolicyDto"
+      },
+      "parameterSchemas": {},
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/SecurityPolicyDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getIdpAccounts",
+      "method": "GET",
+      "path": "/api/v1/idp/accounts",
+      "parameterSchemas": {
+        "query:skip": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "query:take": {
+          "minimum": 1,
+          "maximum": 200,
+          "type": "number"
+        },
+        "query:isActive": {
+          "type": "boolean"
+        },
+        "query:search": {
+          "type": "string"
+        },
+        "query:isLocked": {
+          "type": "boolean"
+        },
+        "query:sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdpAccountDto"
+                  }
+                },
+                "meta": {
+                  "$ref": "#/components/schemas/PageMetaDto"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getIdpAccount",
+      "method": "GET",
+      "path": "/api/v1/idp/accounts/{userId}",
+      "parameterSchemas": {
+        "path:userId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/IdpAccountDetailDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getIdpAccountAccessGrantForm",
+      "method": "GET",
+      "path": "/api/v1/idp/accounts/{userId}/access-grant-form",
+      "parameterSchemas": {
+        "path:userId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/IdpAccountAccessGrantFormBootstrapDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "grantIdpAccountAccess",
+      "method": "POST",
+      "path": "/api/v1/idp/accounts/{userId}/access-grants",
+      "requestSchema": {
+        "$ref": "#/components/schemas/GrantIdpAccountAccessDto"
+      },
+      "parameterSchemas": {
+        "path:userId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/IdpAccountDetailDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "toggleIdpAccountActive",
+      "method": "PATCH",
+      "path": "/api/v1/idp/accounts/{userId}/toggle-active",
+      "parameterSchemas": {
+        "path:userId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/IdpAccountDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "resetIdpAccountFailedAttempts",
+      "method": "POST",
+      "path": "/api/v1/idp/accounts/{userId}/reset-failed-attempts",
+      "parameterSchemas": {
+        "path:userId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {}
+    },
+    {
+      "operationId": "getIdpDashboardStats",
+      "method": "GET",
+      "path": "/api/v1/idp/dashboard/stats",
+      "parameterSchemas": {},
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/DashboardStatsDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getIdpLoginTrend",
+      "method": "GET",
+      "path": "/api/v1/idp/dashboard/login-trend",
+      "parameterSchemas": {},
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoginTrendItemDto"
+                  }
+                },
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "total": {
+                      "type": "number",
+                      "description": "전체 항목 수"
+                    },
+                    "page": {
+                      "type": "number",
+                      "description": "현재 페이지"
+                    },
+                    "limit": {
+                      "type": "number",
+                      "description": "페이지당 항목 수"
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "description": "전체 페이지 수"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getOidcSessions",
+      "method": "GET",
+      "path": "/api/v1/oidc-sessions",
+      "parameterSchemas": {
+        "query:skip": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "query:take": {
+          "minimum": 1,
+          "maximum": 200,
+          "type": "number"
+        },
+        "query:modelType": {
+          "type": "string"
+        },
+        "query:accountId": {
+          "type": "string"
+        },
+        "query:sort": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OidcSessionDto"
+                  }
+                },
+                "meta": {
+                  "$ref": "#/components/schemas/PageMetaDto"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "getOidcSessionStats",
+      "method": "GET",
+      "path": "/api/v1/oidc-sessions/stats",
+      "parameterSchemas": {},
+      "responseSchemas": {
+        "200": {
+          "allOf": [
+            {
+              "properties": {
+                "httpStatus": {
+                  "type": "number",
+                  "nullable": false,
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "nullable": false
+                },
+                "data": {
+                  "$ref": "#/components/schemas/OidcSessionStatsDto",
+                  "nullable": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operationId": "revokeOidcSession",
+      "method": "POST",
+      "path": "/api/v1/oidc-sessions/{key}/revoke",
+      "parameterSchemas": {
+        "path:key": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {}
+    },
+    {
+      "operationId": "revokeAllOidcSessions",
+      "method": "POST",
+      "path": "/api/v1/oidc-sessions/revoke-all",
+      "parameterSchemas": {},
+      "responseSchemas": {}
+    },
+    {
+      "operationId": "revokeOidcSessionsByGrant",
+      "method": "POST",
+      "path": "/api/v1/oidc-sessions/revoke-by-grant/{grantId}",
+      "parameterSchemas": {
+        "path:grantId": {
+          "type": "string"
+        }
+      },
+      "responseSchemas": {}
     }
   ],
   "schemas": {
@@ -874,13 +1822,20 @@
         "address": {
           "type": "string"
         },
+        "userId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "user": {
           "$ref": "#/components/schemas/UserDto"
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -902,6 +1857,7 @@
         "name",
         "nickname",
         "address",
+        "userId",
         "id",
         "createdAt",
         "updatedAt",
@@ -925,6 +1881,27 @@
           "type": "string",
           "default": ""
         },
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "parentId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "nullable": true,
+          "default": null,
+          "format": "int64"
+        },
+        "createdById": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "nullable": true,
+          "format": "int64"
+        },
         "parent": {
           "$ref": "#/components/schemas/CategoryDto"
         },
@@ -935,9 +1912,10 @@
           }
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -956,6 +1934,8 @@
       },
       "required": [
         "name",
+        "spaceId",
+        "parentId",
         "id",
         "createdAt",
         "updatedAt",
@@ -965,6 +1945,18 @@
     "SpaceClassificationDto": {
       "type": "object",
       "properties": {
+        "categoryId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "category": {
           "$ref": "#/components/schemas/CategoryDto"
         },
@@ -972,9 +1964,10 @@
           "$ref": "#/components/schemas/SpaceDto"
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -992,6 +1985,8 @@
         }
       },
       "required": [
+        "categoryId",
+        "spaceId",
         "id",
         "createdAt",
         "updatedAt",
@@ -1001,10 +1996,23 @@
     "SpaceAssociationDto": {
       "type": "object",
       "properties": {
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "groupId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1022,6 +2030,8 @@
         }
       },
       "required": [
+        "spaceId",
+        "groupId",
         "id",
         "createdAt",
         "updatedAt",
@@ -1062,9 +2072,10 @@
           }
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1097,9 +2108,10 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "contentLanguageCode": {
           "allOf": [
@@ -1107,24 +2119,23 @@
               "$ref": "#/components/schemas/LanguageCode"
             }
           ]
-        },
+        }
+      },
+      "required": [
+        "id",
+        "contentLanguageCode"
+      ]
+    },
+    "FitnessCenterDto": {
+      "type": "object",
+      "properties": {
         "name": {
           "type": "string"
         },
         "label": {
           "type": "string",
           "nullable": true
-        }
-      },
-      "required": [
-        "id",
-        "contentLanguageCode",
-        "name"
-      ]
-    },
-    "FitnessCenterDto": {
-      "type": "object",
-      "properties": {
+        },
         "address": {
           "type": "string"
         },
@@ -1133,6 +2144,18 @@
         },
         "email": {
           "type": "string"
+        },
+        "companyId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "imageFileId": {
           "type": "string",
@@ -1158,78 +2181,10 @@
           ]
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
-        },
-        "createdAt": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "updatedAt": {
-          "format": "date-time",
-          "type": "string",
-          "nullable": true
-        },
-        "removedAt": {
-          "format": "date-time",
-          "type": "string",
-          "nullable": true
-        }
-      },
-      "required": [
-        "address",
-        "phone",
-        "email",
-        "id",
-        "createdAt",
-        "updatedAt",
-        "removedAt"
-      ]
-    },
-    "SpaceDto": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Space의 표시 이름. 공간 선택·목록·검색의 원천입니다."
-        },
-        "label": {
-          "type": "string",
-          "description": "Space 표시 이름 아래에 함께 보여주는 보조 라벨입니다.",
-          "nullable": true
-        },
-        "contentLanguageCode": {
-          "description": "이 Space에서 작성되는 운영 리소스의 콘텐츠 언어",
-          "default": "ko_KR",
-          "allOf": [
-            {
-              "$ref": "#/components/schemas/LanguageCode"
-            }
-          ]
-        },
-        "tenantId": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "이 Space 접근에 사용할 Tenant ULID",
-          "nullable": true
-        },
-        "spaceClassification": {
-          "$ref": "#/components/schemas/SpaceClassificationDto"
-        },
-        "spaceAssociations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/components/schemas/SpaceAssociationDto"
-          }
-        },
-        "fitnessCenter": {
-          "$ref": "#/components/schemas/FitnessCenterDto"
-        },
-        "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1248,6 +2203,71 @@
       },
       "required": [
         "name",
+        "address",
+        "phone",
+        "email",
+        "companyId",
+        "spaceId",
+        "id",
+        "createdAt",
+        "updatedAt",
+        "removedAt"
+      ]
+    },
+    "SpaceDto": {
+      "type": "object",
+      "properties": {
+        "contentLanguageCode": {
+          "description": "이 Space에서 작성되는 운영 리소스의 콘텐츠 언어",
+          "default": "ko_KR",
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/LanguageCode"
+            }
+          ]
+        },
+        "tenantId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "이 Space 접근에 사용할 Tenant ID",
+          "nullable": true,
+          "format": "int64"
+        },
+        "spaceClassification": {
+          "$ref": "#/components/schemas/SpaceClassificationDto"
+        },
+        "spaceAssociations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SpaceAssociationDto"
+          }
+        },
+        "fitnessCenter": {
+          "$ref": "#/components/schemas/FitnessCenterDto"
+        },
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true
+        },
+        "removedAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "required": [
         "contentLanguageCode",
         "id",
         "createdAt",
@@ -1258,6 +2278,18 @@
     "RoleClassificationDto": {
       "type": "object",
       "properties": {
+        "categoryId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "roleId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "category": {
           "$ref": "#/components/schemas/CategoryDto"
         },
@@ -1265,9 +2297,10 @@
           "$ref": "#/components/schemas/RoleDto"
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1285,6 +2318,8 @@
         }
       },
       "required": [
+        "categoryId",
+        "roleId",
         "id",
         "createdAt",
         "updatedAt",
@@ -1294,10 +2329,23 @@
     "RoleAssociationDto": {
       "type": "object",
       "properties": {
+        "roleId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "groupId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1315,6 +2363,8 @@
         }
       },
       "required": [
+        "roleId",
+        "groupId",
         "id",
         "createdAt",
         "updatedAt",
@@ -1390,9 +2440,10 @@
           "type": "number"
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1453,6 +2504,18 @@
         "inverted": {
           "type": "boolean"
         },
+        "subjectId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "actionId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "subject": {
           "$ref": "#/components/schemas/SubjectResponseDto"
         },
@@ -1460,9 +2523,10 @@
           "$ref": "#/components/schemas/ActionResponseDto"
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1508,6 +2572,8 @@
       "required": [
         "name",
         "inverted",
+        "subjectId",
+        "actionId",
         "id",
         "createdAt",
         "updatedAt",
@@ -1520,6 +2586,27 @@
     "PolicyEntryResponseDto": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "PolicyEntry ID",
+          "format": "int64"
+        },
+        "policyId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "Policy ID",
+          "format": "int64"
+        },
+        "abilityId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "Ability ID",
+          "format": "int64"
+        },
         "createdAt": {
           "format": "date-time",
           "type": "string",
@@ -1547,23 +2634,42 @@
               "$ref": "#/components/schemas/AbilityResponseDto"
             }
           ]
-        },
-        "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
         }
       },
       "required": [
+        "id",
+        "policyId",
+        "abilityId",
         "createdAt",
         "updatedAt",
-        "removedAt",
-        "id"
+        "removedAt"
       ]
     },
     "PolicyResponseDto": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "Policy ID",
+          "format": "int64"
+        },
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "Space ID",
+          "format": "int64"
+        },
+        "createdById": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "nullable": true,
+          "description": "생성자 ID",
+          "format": "int64"
+        },
         "name": {
           "type": "string",
           "description": "정책 식별자",
@@ -1607,26 +2713,44 @@
           "items": {
             "$ref": "#/components/schemas/PolicyEntryResponseDto"
           }
-        },
-        "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
         }
       },
       "required": [
+        "id",
+        "spaceId",
+        "createdById",
         "name",
         "displayName",
         "description",
         "createdAt",
         "updatedAt",
-        "removedAt",
-        "id"
+        "removedAt"
       ]
     },
     "RoleAssignmentResponseDto": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "Role assignment ID",
+          "format": "int64"
+        },
+        "roleId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "Role ID",
+          "format": "int64"
+        },
+        "policyId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "Policy ID",
+          "format": "int64"
+        },
         "isActive": {
           "type": "boolean",
           "description": "활성화 여부",
@@ -1664,30 +2788,22 @@
               "$ref": "#/components/schemas/PolicyResponseDto"
             }
           ]
-        },
-        "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
         }
       },
       "required": [
+        "id",
+        "roleId",
+        "policyId",
         "isActive",
         "priority",
         "createdAt",
         "updatedAt",
-        "removedAt",
-        "id"
+        "removedAt"
       ]
     },
     "RoleDto": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
-        },
         "name": {
           "type": "string",
           "description": "역할 식별자",
@@ -1729,6 +2845,12 @@
             "$ref": "#/components/schemas/RoleAssignmentResponseDto"
           }
         },
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "createdAt": {
           "format": "date-time",
           "type": "string"
@@ -1745,10 +2867,10 @@
         }
       },
       "required": [
-        "id",
         "name",
         "classification",
         "associations",
+        "id",
         "createdAt",
         "updatedAt",
         "removedAt"
@@ -1757,6 +2879,24 @@
     "TenantDto": {
       "type": "object",
       "properties": {
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "roleId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "space": {
           "$ref": "#/components/schemas/SpaceDto"
         },
@@ -1767,9 +2907,10 @@
           "$ref": "#/components/schemas/RoleDto"
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1787,6 +2928,9 @@
         }
       },
       "required": [
+        "spaceId",
+        "userId",
+        "roleId",
         "id",
         "createdAt",
         "updatedAt",
@@ -1796,10 +2940,23 @@
     "UserAssociationDto": {
       "type": "object",
       "properties": {
+        "userId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "groupId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1817,6 +2974,8 @@
         }
       },
       "required": [
+        "userId",
+        "groupId",
         "id",
         "createdAt",
         "updatedAt",
@@ -1826,6 +2985,18 @@
     "UserClassificationDto": {
       "type": "object",
       "properties": {
+        "categoryId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "user": {
           "$ref": "#/components/schemas/UserDto"
         },
@@ -1833,9 +3004,10 @@
           "$ref": "#/components/schemas/CategoryDto"
         },
         "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
         },
         "createdAt": {
           "format": "date-time",
@@ -1853,6 +3025,8 @@
         }
       },
       "required": [
+        "categoryId",
+        "userId",
         "id",
         "createdAt",
         "updatedAt",
@@ -1862,11 +3036,6 @@
     "UserDto": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "공개 식별자 ULID"
-        },
         "name": {
           "type": "string",
           "description": "사용자 이름"
@@ -1914,6 +3083,12 @@
             }
           ]
         },
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
         "createdAt": {
           "format": "date-time",
           "type": "string"
@@ -1927,6 +3102,13 @@
           "format": "date-time",
           "type": "string",
           "nullable": true
+        },
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "소속 공간 ID",
+          "format": "int64"
         },
         "failedLoginAttempts": {
           "type": "number",
@@ -1956,23 +3138,33 @@
         "isActive": {
           "type": "boolean",
           "description": "활성 상태"
+        },
+        "currentTenantId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "nullable": true,
+          "description": "현재 선택된 Tenant membership ID",
+          "format": "int64"
         }
       },
       "required": [
-        "id",
         "name",
         "email",
         "phone",
         "passwordChangedAt",
+        "id",
         "createdAt",
         "updatedAt",
         "removedAt",
+        "spaceId",
         "failedLoginAttempts",
         "lockedUntil",
         "isPermanentlyLocked",
         "lastLoginAt",
         "lastLoginIp",
-        "isActive"
+        "isActive",
+        "currentTenantId"
       ]
     },
     "TokenRefreshResponseDto": {
@@ -2044,17 +3236,18 @@
       "properties": {
         "nickname": {
           "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
           "minLength": 2,
           "maxLength": 50,
           "example": "홍길동",
           "description": "닉네임 (2-50자)"
         },
         "spaceId": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "example": "01J00000000000000000000001",
-          "description": "가입할 공간 공개 ID (ULID)"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "example": "1",
+          "description": "스페이스 ID",
+          "format": "int64"
         },
         "email": {
           "type": "string",
@@ -2063,7 +3256,6 @@
         },
         "name": {
           "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
           "minLength": 2,
           "maxLength": 50,
           "example": "홍길동",
@@ -2076,7 +3268,6 @@
         },
         "address": {
           "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
           "minLength": 2,
           "maxLength": 255,
           "example": "서울특별시 강남구 샘플로 123",
@@ -2131,10 +3322,12 @@
       "type": "object",
       "properties": {
         "tenantId": {
-          "type": "string",
-          "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
-          "description": "현재 선택할 Tenant 공개 ID (ULID)",
-          "example": "01JTENANT00000000000000000K"
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "현재 선택할 Tenant ID",
+          "example": "1",
+          "format": "int64"
         }
       },
       "required": [
@@ -2151,6 +3344,1214 @@
           "nullable": true
         }
       }
+    },
+    "AuthAuditResult": {
+      "type": "string",
+      "enum": [
+        "SUCCESS",
+        "FAILURE",
+        "LOCKED"
+      ],
+      "description": "결과"
+    },
+    "AuthAuditLogDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "ID",
+          "format": "int64"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string",
+          "description": "생성일"
+        },
+        "email": {
+          "type": "string",
+          "description": "이메일"
+        },
+        "result": {
+          "description": "결과",
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/AuthAuditResult"
+            }
+          ]
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "IP 주소"
+        },
+        "userId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "nullable": true,
+          "description": "사용자 ID",
+          "format": "int64"
+        },
+        "failureReason": {
+          "type": "string",
+          "nullable": true,
+          "description": "실패 사유"
+        },
+        "userAgent": {
+          "type": "string",
+          "nullable": true,
+          "description": "User Agent"
+        },
+        "clientId": {
+          "type": "string",
+          "nullable": true,
+          "description": "클라이언트 ID"
+        }
+      },
+      "required": [
+        "id",
+        "createdAt",
+        "email",
+        "result",
+        "ipAddress"
+      ]
+    },
+    "PageMetaDto": {
+      "type": "object",
+      "properties": {
+        "skip": {
+          "type": "number"
+        },
+        "take": {
+          "type": "number"
+        },
+        "totalCount": {
+          "type": "number"
+        },
+        "pageCount": {
+          "type": "number"
+        },
+        "hasPreviousPage": {
+          "type": "boolean"
+        },
+        "hasNextPage": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "skip",
+        "take",
+        "totalCount",
+        "pageCount",
+        "hasPreviousPage",
+        "hasNextPage"
+      ]
+    },
+    "AuditLogStatsDto": {
+      "type": "object",
+      "properties": {
+        "todaySuccessCount": {
+          "type": "number",
+          "description": "오늘 성공 건수"
+        },
+        "todayFailureCount": {
+          "type": "number",
+          "description": "오늘 실패 건수"
+        },
+        "todayLockedCount": {
+          "type": "number",
+          "description": "오늘 잠금 건수"
+        },
+        "totalCount": {
+          "type": "number",
+          "description": "전체 건수"
+        }
+      },
+      "required": [
+        "todaySuccessCount",
+        "todayFailureCount",
+        "todayLockedCount",
+        "totalCount"
+      ]
+    },
+    "OidcClientDto": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "클라이언트 식별자",
+          "maxLength": 64,
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "clientSecret": {
+          "type": "string",
+          "nullable": true,
+          "description": "클라이언트 시크릿"
+        },
+        "name": {
+          "type": "string",
+          "description": "클라이언트 이름",
+          "maxLength": 128
+        },
+        "redirectUris": {
+          "description": "리다이렉트 URI 목록",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loginUrl": {
+          "type": "string",
+          "nullable": true,
+          "description": "로그인 화면 URL"
+        },
+        "defaultReturnTo": {
+          "type": "string",
+          "nullable": true,
+          "description": "인증 성공 후 기본 복귀 URL"
+        },
+        "grantTypes": {
+          "description": "허용된 Grant 타입",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "responseTypes": {
+          "description": "응답 타입",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokenEndpointAuthMethod": {
+          "type": "string",
+          "description": "토큰 엔드포인트 인증 방식",
+          "maxLength": 50
+        },
+        "scope": {
+          "type": "string",
+          "description": "허용된 스코프"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "활성화 여부"
+        },
+        "isFirstParty": {
+          "type": "boolean",
+          "description": "First-party 클라이언트 여부"
+        },
+        "skipConsent": {
+          "type": "boolean",
+          "description": "권한 동의 화면 생략 여부"
+        },
+        "loginUi": {
+          "type": "object",
+          "description": "로그인 화면 표시 설정",
+          "additionalProperties": true,
+          "nullable": true
+        },
+        "logoUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "로고 URI"
+        },
+        "policyUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "정책 URI"
+        },
+        "tosUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "서비스 약관 URI"
+        },
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true
+        },
+        "removedAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "required": [
+        "clientId",
+        "name",
+        "redirectUris",
+        "grantTypes",
+        "responseTypes",
+        "tokenEndpointAuthMethod",
+        "scope",
+        "isActive",
+        "isFirstParty",
+        "skipConsent",
+        "id",
+        "createdAt",
+        "updatedAt",
+        "removedAt"
+      ]
+    },
+    "CreateOidcClientDto": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "클라이언트 식별자",
+          "maxLength": 64,
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "clientSecret": {
+          "type": "string",
+          "nullable": true,
+          "description": "클라이언트 시크릿"
+        },
+        "name": {
+          "type": "string",
+          "description": "클라이언트 이름",
+          "maxLength": 128
+        },
+        "redirectUris": {
+          "description": "리다이렉트 URI 목록",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loginUrl": {
+          "type": "string",
+          "nullable": true,
+          "description": "로그인 화면 URL"
+        },
+        "defaultReturnTo": {
+          "type": "string",
+          "nullable": true,
+          "description": "인증 성공 후 기본 복귀 URL"
+        },
+        "grantTypes": {
+          "description": "허용된 Grant 타입",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "responseTypes": {
+          "description": "응답 타입",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokenEndpointAuthMethod": {
+          "type": "string",
+          "description": "토큰 엔드포인트 인증 방식",
+          "maxLength": 50
+        },
+        "scope": {
+          "type": "string",
+          "description": "허용된 스코프"
+        },
+        "isFirstParty": {
+          "type": "boolean",
+          "description": "First-party 클라이언트 여부"
+        },
+        "loginUi": {
+          "type": "object",
+          "description": "로그인 화면 표시 설정",
+          "additionalProperties": true,
+          "nullable": true
+        },
+        "logoUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "로고 URI"
+        },
+        "policyUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "정책 URI"
+        },
+        "tosUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "서비스 약관 URI"
+        },
+        "skipConsent": {
+          "type": "boolean",
+          "description": "권한 동의 화면 생략 여부"
+        }
+      },
+      "required": [
+        "clientId",
+        "name",
+        "redirectUris",
+        "grantTypes",
+        "responseTypes",
+        "tokenEndpointAuthMethod",
+        "scope",
+        "isFirstParty"
+      ]
+    },
+    "UpdateOidcClientDto": {
+      "type": "object",
+      "properties": {
+        "clientSecret": {
+          "type": "string",
+          "nullable": true,
+          "description": "클라이언트 시크릿"
+        },
+        "name": {
+          "type": "string",
+          "description": "클라이언트 이름",
+          "maxLength": 128
+        },
+        "redirectUris": {
+          "description": "리다이렉트 URI 목록",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "loginUrl": {
+          "type": "string",
+          "nullable": true,
+          "description": "로그인 화면 URL"
+        },
+        "defaultReturnTo": {
+          "type": "string",
+          "nullable": true,
+          "description": "인증 성공 후 기본 복귀 URL"
+        },
+        "grantTypes": {
+          "description": "허용된 Grant 타입",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "responseTypes": {
+          "description": "응답 타입",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokenEndpointAuthMethod": {
+          "type": "string",
+          "description": "토큰 엔드포인트 인증 방식",
+          "maxLength": 50
+        },
+        "scope": {
+          "type": "string",
+          "description": "허용된 스코프"
+        },
+        "isFirstParty": {
+          "type": "boolean",
+          "description": "First-party 클라이언트 여부"
+        },
+        "skipConsent": {
+          "type": "boolean",
+          "description": "권한 동의 화면 생략 여부"
+        },
+        "loginUi": {
+          "type": "object",
+          "description": "로그인 화면 표시 설정",
+          "additionalProperties": true,
+          "nullable": true
+        },
+        "logoUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "로고 URI"
+        },
+        "policyUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "정책 URI"
+        },
+        "tosUri": {
+          "type": "string",
+          "nullable": true,
+          "description": "서비스 약관 URI"
+        }
+      }
+    },
+    "EmailVerificationStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "VERIFIED",
+        "EXPIRED"
+      ],
+      "description": "상태"
+    },
+    "EmailVerificationDto": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "이메일"
+        },
+        "name": {
+          "type": "string",
+          "description": "이름"
+        },
+        "status": {
+          "description": "상태",
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/EmailVerificationStatus"
+            }
+          ]
+        },
+        "expiresAt": {
+          "format": "date-time",
+          "type": "string",
+          "description": "만료 시각"
+        },
+        "verifiedAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "인증 시각"
+        },
+        "lastSentAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 발송 시각"
+        },
+        "sendCount": {
+          "type": "number",
+          "description": "발송 횟수",
+          "minimum": 0
+        },
+        "lastSendStatus": {
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 발송 상태"
+        },
+        "verifiedUserId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "nullable": true,
+          "description": "인증 완료 사용자 ID",
+          "format": "int64"
+        },
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "수정일"
+        },
+        "canResend": {
+          "type": "boolean",
+          "description": "재발송 가능 여부"
+        },
+        "resendAvailableAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "재발송 가능 시각"
+        }
+      },
+      "required": [
+        "email",
+        "name",
+        "status",
+        "expiresAt",
+        "sendCount",
+        "id",
+        "createdAt",
+        "canResend"
+      ]
+    },
+    "SecurityPolicyDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "ID",
+          "format": "int64"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string",
+          "description": "생성일"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "수정일"
+        },
+        "key": {
+          "type": "string",
+          "description": "정책 키"
+        },
+        "passwordMinLength": {
+          "type": "number",
+          "description": "최소 비밀번호 길이",
+          "minimum": 4,
+          "maximum": 128
+        },
+        "passwordRequireUppercase": {
+          "type": "boolean",
+          "description": "대문자 필수"
+        },
+        "passwordRequireLowercase": {
+          "type": "boolean",
+          "description": "소문자 필수"
+        },
+        "passwordRequireNumber": {
+          "type": "boolean",
+          "description": "숫자 필수"
+        },
+        "passwordRequireSpecial": {
+          "type": "boolean",
+          "description": "특수문자 필수"
+        },
+        "passwordExpirationDays": {
+          "type": "number",
+          "description": "비밀번호 만료 일수 (0=무제한)",
+          "minimum": 0
+        },
+        "passwordReuseLimit": {
+          "type": "number",
+          "description": "비밀번호 재사용 제한 횟수",
+          "minimum": 0
+        },
+        "temporaryLockThreshold": {
+          "type": "number",
+          "description": "일시 잠금 임계값",
+          "minimum": 1
+        },
+        "temporaryLockDurationMin": {
+          "type": "number",
+          "description": "일시 잠금 시간 (분)",
+          "minimum": 1
+        },
+        "permanentLockThreshold": {
+          "type": "number",
+          "description": "영구 잠금 임계값",
+          "minimum": 1
+        },
+        "accessTokenTtlSec": {
+          "type": "number",
+          "description": "Access Token TTL (초)",
+          "minimum": 60
+        },
+        "refreshTokenTtlSec": {
+          "type": "number",
+          "description": "Refresh Token TTL (초)",
+          "minimum": 60
+        },
+        "sessionTtlSec": {
+          "type": "number",
+          "description": "세션 TTL (초)",
+          "minimum": 60
+        },
+        "ipWhitelistEnabled": {
+          "type": "boolean",
+          "description": "IP 화이트리스트 활성화"
+        },
+        "emailDomainWhitelistEnabled": {
+          "type": "boolean",
+          "description": "이메일 도메인 화이트리스트 활성화"
+        },
+        "corsOriginWhitelistEnabled": {
+          "type": "boolean",
+          "description": "CORS Origin 화이트리스트 활성화"
+        }
+      },
+      "required": [
+        "id",
+        "createdAt",
+        "key",
+        "passwordMinLength",
+        "passwordRequireUppercase",
+        "passwordRequireLowercase",
+        "passwordRequireNumber",
+        "passwordRequireSpecial",
+        "passwordExpirationDays",
+        "passwordReuseLimit",
+        "temporaryLockThreshold",
+        "temporaryLockDurationMin",
+        "permanentLockThreshold",
+        "accessTokenTtlSec",
+        "refreshTokenTtlSec",
+        "sessionTtlSec",
+        "ipWhitelistEnabled",
+        "emailDomainWhitelistEnabled",
+        "corsOriginWhitelistEnabled"
+      ]
+    },
+    "UpdateSecurityPolicyDto": {
+      "type": "object",
+      "properties": {
+        "passwordMinLength": {
+          "type": "number",
+          "description": "최소 비밀번호 길이",
+          "minimum": 4,
+          "maximum": 128
+        },
+        "passwordRequireUppercase": {
+          "type": "boolean",
+          "description": "대문자 필수"
+        },
+        "passwordRequireLowercase": {
+          "type": "boolean",
+          "description": "소문자 필수"
+        },
+        "passwordRequireNumber": {
+          "type": "boolean",
+          "description": "숫자 필수"
+        },
+        "passwordRequireSpecial": {
+          "type": "boolean",
+          "description": "특수문자 필수"
+        },
+        "passwordExpirationDays": {
+          "type": "number",
+          "description": "비밀번호 만료 일수 (0=무제한)",
+          "minimum": 0
+        },
+        "passwordReuseLimit": {
+          "type": "number",
+          "description": "비밀번호 재사용 제한 횟수",
+          "minimum": 0
+        },
+        "temporaryLockThreshold": {
+          "type": "number",
+          "description": "일시 잠금 임계값",
+          "minimum": 1
+        },
+        "temporaryLockDurationMin": {
+          "type": "number",
+          "description": "일시 잠금 시간 (분)",
+          "minimum": 1
+        },
+        "permanentLockThreshold": {
+          "type": "number",
+          "description": "영구 잠금 임계값",
+          "minimum": 1
+        },
+        "accessTokenTtlSec": {
+          "type": "number",
+          "description": "Access Token TTL (초)",
+          "minimum": 60
+        },
+        "refreshTokenTtlSec": {
+          "type": "number",
+          "description": "Refresh Token TTL (초)",
+          "minimum": 60
+        },
+        "sessionTtlSec": {
+          "type": "number",
+          "description": "세션 TTL (초)",
+          "minimum": 60
+        },
+        "ipWhitelistEnabled": {
+          "type": "boolean",
+          "description": "IP 화이트리스트 활성화"
+        },
+        "emailDomainWhitelistEnabled": {
+          "type": "boolean",
+          "description": "이메일 도메인 화이트리스트 활성화"
+        },
+        "corsOriginWhitelistEnabled": {
+          "type": "boolean",
+          "description": "CORS Origin 화이트리스트 활성화"
+        }
+      }
+    },
+    "IdpAccountAccessGrantFormOptionItemDto": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "옵션 값",
+          "example": "01J00000000000000000000000"
+        },
+        "label": {
+          "type": "string",
+          "description": "옵션 라벨",
+          "example": "본사"
+        },
+        "description": {
+          "type": "string",
+          "description": "보조 설명",
+          "example": "서울 강남구"
+        }
+      },
+      "required": [
+        "value",
+        "label"
+      ]
+    },
+    "IdpAccountAccessGrantFormUiPathsDto": {
+      "type": "object",
+      "properties": {
+        "readOnlyPaths": {
+          "description": "읽기 전용 경로 목록",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hiddenPaths": {
+          "description": "숨김 경로 목록",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledPaths": {
+          "description": "비활성 경로 목록",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "readOnlyPaths",
+        "hiddenPaths",
+        "disabledPaths"
+      ]
+    },
+    "IdpAccountAccessGrantFormFieldMetaDto": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "필드 라벨",
+          "example": "Space"
+        }
+      }
+    },
+    "IdpAccountDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "사용자 이름"
+        },
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "이메일"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "활성 상태"
+        },
+        "failedLoginAttempts": {
+          "type": "number",
+          "description": "로그인 실패 횟수"
+        },
+        "isPermanentlyLocked": {
+          "type": "boolean",
+          "description": "영구 잠금 여부"
+        },
+        "lockedUntil": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "일시 잠금 해제 시간"
+        },
+        "lastLoginAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 로그인 시간"
+        },
+        "lastLoginIp": {
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 로그인 IP"
+        }
+      },
+      "required": [
+        "name",
+        "id",
+        "createdAt",
+        "email",
+        "isActive",
+        "failedLoginAttempts",
+        "isPermanentlyLocked"
+      ]
+    },
+    "IdpAccountAccessGrantDto": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "테넌트 ID",
+          "format": "int64"
+        },
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "접근 대상 Space ID",
+          "format": "int64"
+        },
+        "spaceName": {
+          "type": "string",
+          "description": "접근 대상 Space 이름"
+        },
+        "spaceLabel": {
+          "type": "string",
+          "nullable": true,
+          "description": "접근 대상 Space 라벨"
+        },
+        "roleId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "부여된 Role ID",
+          "format": "int64"
+        },
+        "roleName": {
+          "type": "string",
+          "description": "부여된 Role 식별자"
+        },
+        "roleDisplayName": {
+          "type": "string",
+          "nullable": true,
+          "description": "부여된 Role 표시명"
+        },
+        "grantedAt": {
+          "format": "date-time",
+          "type": "string",
+          "description": "권한 부여일"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "권한 변경일"
+        }
+      },
+      "required": [
+        "tenantId",
+        "spaceId",
+        "spaceName",
+        "roleId",
+        "roleName",
+        "grantedAt"
+      ]
+    },
+    "IdpAccountDetailDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "사용자 이름"
+        },
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "이메일"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "활성 상태"
+        },
+        "failedLoginAttempts": {
+          "type": "number",
+          "description": "로그인 실패 횟수"
+        },
+        "isPermanentlyLocked": {
+          "type": "boolean",
+          "description": "영구 잠금 여부"
+        },
+        "lockedUntil": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "일시 잠금 해제 시간"
+        },
+        "lastLoginAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 로그인 시간"
+        },
+        "lastLoginIp": {
+          "type": "string",
+          "nullable": true,
+          "description": "마지막 로그인 IP"
+        },
+        "accessGrants": {
+          "description": "계정에 부여된 Space/Role 접근 권한 목록",
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/IdpAccountAccessGrantDto"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "id",
+        "createdAt",
+        "email",
+        "isActive",
+        "failedLoginAttempts",
+        "isPermanentlyLocked",
+        "accessGrants"
+      ]
+    },
+    "IdpAccountAccessGrantFormBootstrapDto": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "폼 모드",
+          "enum": [
+            "CREATE"
+          ],
+          "example": "CREATE"
+        },
+        "defaultObject": {
+          "type": "object",
+          "description": "초기 폼 객체",
+          "additionalProperties": true
+        },
+        "options": {
+          "type": "object",
+          "description": "경로별 선택 옵션",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdpAccountAccessGrantFormOptionItemDto"
+            }
+          }
+        },
+        "ui": {
+          "description": "UI 제어 경로",
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/IdpAccountAccessGrantFormUiPathsDto"
+            }
+          ]
+        },
+        "fieldMeta": {
+          "type": "object",
+          "description": "경로별 필드 메타",
+          "additionalProperties": {
+            "$ref": "#/components/schemas/IdpAccountAccessGrantFormFieldMetaDto"
+          }
+        }
+      },
+      "required": [
+        "mode",
+        "defaultObject",
+        "options",
+        "ui",
+        "fieldMeta"
+      ]
+    },
+    "GrantIdpAccountAccessDto": {
+      "type": "object",
+      "properties": {
+        "spaceId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "권한을 부여할 Space ID",
+          "format": "int64"
+        },
+        "roleId": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "description": "부여할 Role ID",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "spaceId",
+        "roleId"
+      ]
+    },
+    "DashboardStatsDto": {
+      "type": "object",
+      "properties": {
+        "activeSessionCount": {
+          "type": "number",
+          "description": "활성 세션 수"
+        },
+        "todaySuccessCount": {
+          "type": "number",
+          "description": "오늘 성공 건수"
+        },
+        "todayFailureCount": {
+          "type": "number",
+          "description": "오늘 실패 건수"
+        },
+        "todayLockedCount": {
+          "type": "number",
+          "description": "오늘 잠금 건수"
+        },
+        "lockedAccountCount": {
+          "type": "number",
+          "description": "잠금 계정 수"
+        },
+        "activeClientCount": {
+          "type": "number",
+          "description": "활성 클라이언트 수"
+        }
+      },
+      "required": [
+        "activeSessionCount",
+        "todaySuccessCount",
+        "todayFailureCount",
+        "todayLockedCount",
+        "lockedAccountCount",
+        "activeClientCount"
+      ]
+    },
+    "LoginTrendItemDto": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "날짜 (YYYY-MM-DD)"
+        },
+        "successCount": {
+          "type": "number",
+          "description": "성공 건수"
+        },
+        "failureCount": {
+          "type": "number",
+          "description": "실패 건수"
+        }
+      },
+      "required": [
+        "date",
+        "successCount",
+        "failureCount"
+      ]
+    },
+    "OidcSessionDto": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "모델 키"
+        },
+        "modelType": {
+          "type": "string",
+          "description": "모델 유형"
+        },
+        "id": {
+          "type": "integer",
+          "pattern": "^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+          "x-runtime-type": "bigint",
+          "format": "int64"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "grantId": {
+          "type": "string",
+          "description": "Grant ID (토큰 폐기용)"
+        },
+        "uid": {
+          "type": "string",
+          "description": "세션 UID"
+        },
+        "accountId": {
+          "type": "string",
+          "description": "계정 ID"
+        },
+        "expiresAt": {
+          "format": "date-time",
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "required": [
+        "key",
+        "modelType",
+        "id",
+        "createdAt",
+        "expiresAt"
+      ]
+    },
+    "OidcSessionStatsDto": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "number",
+          "description": "전체 세션/토큰 수"
+        },
+        "byModelType": {
+          "type": "object",
+          "description": "모델 타입별 건수",
+          "additionalProperties": {
+            "type": "number"
+          },
+          "example": {
+            "Session": 5,
+            "AccessToken": 10,
+            "RefreshToken": 8
+          }
+        }
+      },
+      "required": [
+        "totalCount",
+        "byModelType"
+      ]
     }
   }
 }

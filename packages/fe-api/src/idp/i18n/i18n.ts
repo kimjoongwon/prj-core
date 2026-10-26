@@ -4,7 +4,7 @@
  * OIDC Identity Provider
  * OpenID Connect Identity Provider API
  *
- * OIDC 인증 API를 제공합니다.
+ * OIDC 인증 및 IDP 관리 API를 제공합니다.
  *
  * **인증 방법:**
  * 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
@@ -29,7 +29,6 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
-	queryOptions as queryOptionsBuilder,
 	useQuery,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
@@ -231,7 +230,7 @@ export const prefetchGetI18nCatalogQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetI18nCatalogQueryOptions(languageCode, options);
 
-	await queryClient.query(queryOptions).catch(() => {});
+	await queryClient.prefetchQuery(queryOptions);
 
 	return queryClient;
 };
@@ -261,19 +260,11 @@ export const getGetI18nCatalogSuspenseQueryOptions = <
 		signal,
 	}) => getI18nCatalog(languageCode, { signal, ...requestOptions });
 
-	return queryOptionsBuilder({
-		queryKey,
-		...queryOptions,
-		queryFn: queryOptions?.queryFn ?? queryFn,
-	}) as UseSuspenseQueryOptions<
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getI18nCatalog>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
-		throwOnError?: ((this: never, error: TError) => boolean) & {
-			readonly __inferenceOnly: never;
-		};
-	};
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
 export type GetI18nCatalogSuspenseQueryResult = NonNullable<
@@ -537,7 +528,7 @@ export const prefetchGetI18nCatalogInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.infiniteQuery(queryOptions).catch(() => {});
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
 	return queryClient;
 };

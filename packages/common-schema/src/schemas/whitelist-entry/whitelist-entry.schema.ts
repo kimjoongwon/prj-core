@@ -14,15 +14,15 @@ import { AbstractSchema } from "../abstract.schema";
 /** WhitelistEntry의 DB 필드 타입과 공통 검증입니다. */
 export class WhitelistEntrySchema
 	extends PickSchemaType(AbstractSchema, [
-		"seq",
+		"id",
 		"createdAt",
 		"updatedAt",
 	] as const)
 {
-	id!: string;
+	whitelistEntryId!: string;
 
 	@BigIntIdValidation({ description: "ID" })
-	declare seq: bigint;
+	declare id: bigint;
 
 	@DateValidation({ description: "생성일" })
 	declare createdAt: Date;

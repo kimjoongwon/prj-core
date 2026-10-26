@@ -14,6 +14,7 @@ import {
 import { isScopeKindAccessible, Token } from "@cocrepo/constant";
 import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
 import { type AuthSession, useApp } from "@cocrepo/store";
+import { formatDatabaseId } from "@cocrepo/type";
 import { Spinner } from "@heroui/react";
 import {
 	type DehydratedState,
@@ -131,7 +132,7 @@ async function runAutoSelectFirstSpace(queryClient: QueryClient): Promise<void> 
 	}
 
 	const selectedSpaceResponse = await setCurrentSpace({
-		tenantId: firstTenantId,
+		tenantId: formatDatabaseId(firstTenantId),
 	});
 	queryClient.setQueryData(
 		getCurrentSpaceQueryKey(),
