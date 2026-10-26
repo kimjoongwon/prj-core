@@ -1,9 +1,5 @@
 import { Company, FitnessCenter, Space } from "@cocrepo/entity";
-import {
-	LanguageCode,
-	Prisma,
-	PrismaClient,
-} from "@cocrepo/prisma";
+import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { SpaceResourceScope } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
@@ -177,20 +173,6 @@ export class SpacesRepository {
 	}
 
 	/**
-	 * 전체 Space 목록 조회
-	 */
-	async findAll(): Promise<Space[]> {
-		this.logger.debug("전체 Space 목록 조회");
-
-		const results = await this.txHost.tx.space.findMany({
-			where: { removedAt: null },
-			orderBy: { createdAt: "desc" },
-		});
-
-		return results.map((result) => toDomainEntity(Space, result));
-	}
-
-	/**
 	 * Space에 종속된 FitnessCenter 조회
 	 */
 	async findFitnessCenterBySpaceId(
@@ -213,118 +195,6 @@ export class SpacesRepository {
 		const fitnessCenter = this.toFitnessCenterWithCompany(result);
 		fitnessCenter.space = toDomainEntity(Space, result.space);
 		return fitnessCenter;
-	}
-
-	/**
-	 * Space 생성
-	 */
-	async create(data: Prisma.SpaceUncheckedCreateInput): Promise<Space> {
-		this.logger.debug(`Space 생성: ${data.name}`);
-
-		const result = await this.txHost.tx.space.create({
-			data,
-		});
-
-		return toDomainEntity(Space, result);
-	}
-
-	/**
-	 * Space에 Company와 FitnessCenter detail 생성
-	 */
-	async createFitnessCenterBySpaceId(
-		spaceId: bigint,
-		data: {
-			company: Prisma.CompanyUncheckedCreateInput;
-			fitnessCenter: Omit<
-				Prisma.FitnessCenterUncheckedCreateInput,
-				"id" | "fitnessCenterId" | "companyId" | "spaceId"
-			>;
-		},
-	): Promise<Space> {
-		this.logger.debug(`Space에 FitnessCenter 생성: ${spaceId.toString()}`);
-
-		const company = await this.txHost.tx.company.create({
-			data: data.company,
-		});
-
-		await this.txHost.tx.fitnessCenter.create({
-			data: {
-				...data.fitnessCenter,
-				companyId: company.id,
-				spaceId,
-			},
-		});
-
-		const space = await this.findById(spaceId);
-		if (!space) {
-			throw new Error("FITNESS_CENTER_CREATE_FAILED");
-		}
-
-		return space;
-	}
-
-	/**
-	 * Space 수정
-	 */
-	async updateById(
-		id: bigint,
-		data: Prisma.SpaceUncheckedUpdateInput,
-	): Promise<Space> {
-		this.logger.debug(`Space 수정: ${id.toString()}`);
-
-		const result = await this.txHost.tx.space.update({
-			where: { id },
-			data,
-		});
-
-		return toDomainEntity(Space, result);
-	}
-
-	/**
-	 * Space 소프트 삭제
-	 */
-	async removeById(id: bigint): Promise<Space> {
-		this.logger.debug(`Space 소프트 삭제: ${id.toString()}`);
-
-		const result = await this.txHost.tx.space.update({
-			where: { id },
-			data: { removedAt: new Date() },
-		});
-
-		return toDomainEntity(Space, result);
-	}
-
-	/**
-	 * Space의 FitnessCenter detail 수정
-	 */
-	async updateFitnessCenterBySpaceId(
-		spaceId: bigint,
-		data: {
-			fitnessCenter: Prisma.FitnessCenterUncheckedUpdateInput;
-		},
-	): Promise<Space> {
-		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceId.toString()}`);
-
-		const fitnessCenter = await this.txHost.tx.fitnessCenter.findFirst({
-			where: { spaceId },
-			select: { id: true },
-		});
-
-		if (!fitnessCenter) {
-			throw new Error("FITNESS_CENTER_UPDATE_FAILED");
-		}
-
-		await this.txHost.tx.fitnessCenter.update({
-			where: { id: fitnessCenter.id },
-			data: data.fitnessCenter,
-		});
-
-		const space = await this.findById(spaceId);
-		if (!space) {
-			throw new Error("FITNESS_CENTER_UPDATE_FAILED");
-		}
-
-		return space;
 	}
 
 	/**
