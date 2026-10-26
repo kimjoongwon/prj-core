@@ -66,31 +66,29 @@ export const useHandlers = <TData extends DataGridRow>(
 				skip: 0,
 			});
 		},
-		changeRowSelection: action(
-			(nextSelection: Updater<RowSelectionState>) => {
-				const selectedKeys =
-					state.table.selectionSource?.selectedKeys ??
-					state.table.selectedRowKeys;
-				const currentSelection = Object.fromEntries(
-					Array.from(selectedKeys, (key) => [key, true]),
-				);
-				const selection =
-					typeof nextSelection === "function"
-						? nextSelection(currentSelection)
-						: nextSelection;
-				const nextKeys = new Set(
-					Object.entries(selection)
-						.filter(([, selected]) => selected)
-						.map(([key]) => key),
-				);
-				if (state.table.selectionSource?.setSelectedKeys) {
-					state.table.selectionSource.setSelectedKeys(nextKeys);
-				} else {
-					state.table.selectedRowKeys = nextKeys;
-				}
-				state.table.selection?.onSelectionChange?.(nextKeys);
-			},
-		),
+		changeRowSelection: action((nextSelection: Updater<RowSelectionState>) => {
+			const selectedKeys =
+				state.table.selectionSource?.selectedKeys ??
+				state.table.selectedRowKeys;
+			const currentSelection = Object.fromEntries(
+				Array.from(selectedKeys, (key) => [key, true]),
+			);
+			const selection =
+				typeof nextSelection === "function"
+					? nextSelection(currentSelection)
+					: nextSelection;
+			const nextKeys = new Set(
+				Object.entries(selection)
+					.filter(([, selected]) => selected)
+					.map(([key]) => key),
+			);
+			if (state.table.selectionSource?.setSelectedKeys) {
+				state.table.selectionSource.setSelectedKeys(nextKeys);
+			} else {
+				state.table.selectedRowKeys = nextKeys;
+			}
+			state.table.selection?.onSelectionChange?.(nextKeys);
+		}),
 	};
 	const selectedKeys =
 		state.table.selectionSource?.selectedKeys ?? state.table.selectedRowKeys;
@@ -98,7 +96,16 @@ export const useHandlers = <TData extends DataGridRow>(
 		...handlers,
 		changeGrouping: groupingHandlers.changeGrouping,
 		changeTablePagination: paginationHandlers.changeTablePagination,
-		rowsWithChanges: combineRowsWithChanges(state, state.table.rows),
+		getRowsWithChanges: (
+			sourceRows: TData[],
+			getRowsWithChanges?: (
+				gridState: DataGridState<TData>,
+				rows: TData[],
+			) => TData[],
+		) =>
+			getRowsWithChanges
+				? getRowsWithChanges(state, sourceRows)
+				: combineRowsWithChanges(state, sourceRows),
 		grouping: getGrouping(state),
 		rowSelection: Object.fromEntries(
 			Array.from(selectedKeys, (key) => [key, true]),

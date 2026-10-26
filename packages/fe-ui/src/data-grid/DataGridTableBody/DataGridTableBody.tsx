@@ -22,12 +22,11 @@ export const DataGridTableBody = <T extends { id: Key }>({
 	selectionGroupName: string;
 }) => {
 	const handlers = useHandlers(state);
-	const tableState = state.table;
 	const bodyRows = table.getRowModel().rows;
 	const selectionMode =
-		tableState.selection?.mode === "none"
+		state.table.selection?.mode === "none"
 			? undefined
-			: tableState.selection?.mode;
+			: state.table.selection?.mode;
 	const tableColumnCount =
 		table.getVisibleLeafColumns().length + (selectionMode ? 1 : 0);
 	const moveToAdjacentCell = handlers.getCellNavigation(table, rowState);
@@ -44,7 +43,6 @@ export const DataGridTableBody = <T extends { id: Key }>({
 				) : (
 					<DataGridTableRow
 						key={row.id}
-						tableState={tableState}
 						state={rowState}
 						row={row}
 						selectionMode={selectionMode}

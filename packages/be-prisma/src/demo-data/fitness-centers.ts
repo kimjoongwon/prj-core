@@ -4,7 +4,7 @@ import { resolveSystemAdminSeedData } from "../bootstrap/data/system-users";
  * dev/stg에서 쓰는 사용자/피트니스센터 데모 데이터입니다.
  *
  * 브랜드·지점명·주소·전화번호·이메일은 전부 실존하지 않는 가상의 데모 값입니다.
- * 이 파일의 핵심 참조 키는 `email`, `fitnessCenter name`입니다. bootstrap 로직은 이 문자열을 기준으로
+ * 이 파일의 핵심 참조 키는 `email`, `space name(피트니스센터 이름)`입니다. bootstrap 로직은 이 문자열을 기준으로
  * user, fitnessCenter, membership 관계를 이어 붙이므로 값 변경 시 후속 매핑도 함께 봐야 합니다.
  */
 

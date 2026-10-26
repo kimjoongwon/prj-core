@@ -1,3 +1,4 @@
+import { useInputStateInspection } from "@cocrepo/hook";
 import { cloneDeep } from "@cocrepo/toolkit";
 import {
 	Description,
@@ -6,7 +7,10 @@ import {
 	Label,
 	ListBox,
 } from "@heroui/react";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type { ComponentProps, ReactNode } from "react";
+import { useCallback, useEffect, useId } from "react";
 import type { Key } from "react-aria-components";
 import { useT } from "../../i18n";
 
@@ -65,12 +69,30 @@ export interface SelectProps<T extends object = object>
  * Select 컴포넌트
  * HeroUI Select의 래퍼로, Option 배열 기반으로 동작합니다.
  */
-export function Select<T extends object = object>(props: SelectProps<T>) {
+export function createSelectState(initialValue: Key | null = null) {
+	return makeAutoObservable(
+		{
+			value: initialValue,
+			setValue(nextValue: Key | null) {
+				this.value = nextValue;
+			},
+		},
+		{},
+		{ autoBind: true, name: "SelectState" },
+	);
+}
+export type SelectState = ReturnType<typeof createSelectState>;
+
+export const Select = observer(function Select<T extends object = object>(
+	props: SelectProps<T>,
+) {
 	const t = useT();
 	const {
 		children,
 		classNames,
 		defaultItems,
+		defaultSelectedKey,
+		defaultValue,
 		description,
 		errorMessage,
 		isClearable: _isClearable,
@@ -88,6 +110,28 @@ export function Select<T extends object = object>(props: SelectProps<T>) {
 		"aria-label": ariaLabelProp,
 		...rest
 	} = props;
+	const internalState = useLocalObservable(() =>
+		createSelectState(
+			(defaultValue as Key | null | undefined) ??
+			(defaultSelectedKey as Key | null | undefined) ?? null,
+		),
+	);
+	const inputStateId = useId();
+	const inspection = useInputStateInspection();
+	const isControlled = value !== undefined;
+	const selectedValue = isControlled ? value : internalState.value;
+	// ListBox item ids are serialized strings; normalize numeric keys for HeroUI
+	// while retaining the public numeric value in the selected-state reader.
+	const heroSelectedValue =
+		typeof selectedValue === "number" ? String(selectedValue) : selectedValue;
+	const reader = useCallback(
+		() => (isControlled ? value : internalState.value),
+		[internalState, isControlled, value],
+	);
+	useEffect(
+		() => inspection?.registerInputState(inputStateId, reader),
+		[inspection, inputStateId, reader, selectedValue],
+	);
 
 	const _options = cloneDeep(options);
 	const ariaLabel =
@@ -101,6 +145,7 @@ export function Select<T extends object = object>(props: SelectProps<T>) {
 
 	const handleChange = (key: Key | null) => {
 		const stringValue = key == null ? "" : String(key);
+		if (!isControlled) internalState.setValue(key);
 		onValueChange?.(stringValue);
 		onChange?.(key);
 	};
@@ -110,7 +155,7 @@ export function Select<T extends object = object>(props: SelectProps<T>) {
 			{...rest}
 			className={classNames?.base ?? rest.className}
 			items={items ?? defaultItems}
-			value={value as Key | null | undefined}
+			value={heroSelectedValue as Key | null | undefined}
 			onChange={handleChange}
 			aria-label={ariaLabel}
 			variant={
@@ -122,7 +167,12 @@ export function Select<T extends object = object>(props: SelectProps<T>) {
 			) : null}
 			<HeroSelect.Trigger className={classNames?.trigger}>
 				<HeroSelect.Value className={classNames?.value}>
-					{typeof placeholder === "string" ? t(placeholder) : placeholder}
+					{({ defaultChildren, isPlaceholder }) =>
+						isPlaceholder
+							? typeof placeholder === "string"
+								? t(placeholder)
+								: placeholder
+							: defaultChildren}
 				</HeroSelect.Value>
 				<HeroSelect.Indicator className={classNames?.indicator} />
 			</HeroSelect.Trigger>
@@ -158,4 +208,4 @@ export function Select<T extends object = object>(props: SelectProps<T>) {
 			) : null}
 		</HeroSelect>
 	);
-}
+});

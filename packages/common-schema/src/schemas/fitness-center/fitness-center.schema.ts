@@ -1,22 +1,13 @@
 import {
 	BigIntIdValidation,
 	StringValidation,
-	StringValidationOptional,
 	UUIDValidationOptional,
 } from "../../decorators/model-validation";
 import { AbstractSchema } from "../abstract.schema";
 
-/** FitnessCenter의 DB 필드 타입과 공통 검증입니다. */
-export class FitnessCenterSchema
-	extends AbstractSchema
-{
+/** FitnessCenter의 DB 필드 타입과 공통 검증입니다. 공간의 이름은 Space가 소유합니다. */
+export class FitnessCenterSchema extends AbstractSchema {
 	fitnessCenterId!: string;
-
-	@StringValidation()
-	name!: string;
-
-	@StringValidationOptional({ nullable: true })
-	label!: string | null;
 
 	@StringValidation()
 	address!: string;

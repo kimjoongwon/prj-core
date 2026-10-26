@@ -132,7 +132,7 @@ describe("RootStore", () => {
 					version: 2,
 					tenantId: TENANT_A,
 					spaceId: SPACE_A,
-					fitnessCenterName: "Fitness Center A",
+					spaceName: "Fitness Center A",
 					contentLanguageCode: "ko_KR",
 					availableSpaces: [],
 				},
@@ -151,7 +151,7 @@ describe("RootStore", () => {
 		expect(root.app.account.authSession.accessToken).toBe("access-token");
 		expect(root.app.account.currentTenantId).toBe(TENANT_A);
 		expect(root.app.account.currentSpaceId).toBe(SPACE_A);
-		expect(root.app.account.currentFitnessCenterName).toBe("Fitness Center A");
+		expect(root.app.account.currentSpaceName).toBe("Fitness Center A");
 		expect(root.app.language.languageCode).toBe("en_US");
 	});
 
@@ -169,13 +169,13 @@ describe("RootStore", () => {
 					version: 2,
 					tenantId: "01J7G2V0ULIDLIKEVALUE",
 					spaceId: "space-ulid-value",
-					fitnessCenterName: "Fitness Center A",
+					spaceName: "Fitness Center A",
 					contentLanguageCode: "ko_KR",
 					availableSpaces: [
 						{
 							tenantId: TENANT_A,
 							spaceId: SPACE_A,
-							fitnessCenterName: "Fitness Center A",
+							spaceName: "Fitness Center A",
 						},
 					],
 				},
@@ -190,7 +190,7 @@ describe("RootStore", () => {
 		expect(root.isStarted).toBe(true);
 		expect(root.app.account.currentTenantId).toBeNull();
 		expect(root.app.account.currentSpaceId).toBeNull();
-		expect(root.app.account.currentFitnessCenterName).toBeNull();
+		expect(root.app.account.currentSpaceName).toBeNull();
 		expect(root.app.account.authSession.accessToken).toBe("access-token");
 		expect(root.app.language.languageCode).toBe("en_US");
 		expect(storage.write).toHaveBeenCalledWith("root-test", {
@@ -202,16 +202,16 @@ describe("RootStore", () => {
 				refreshTokenExpiresAt: expect.any(Number),
 			},
 			account: {
-				version: 2,
+				version: 3,
 				tenantId: null,
 				spaceId: null,
-				fitnessCenterName: null,
+				spaceName: null,
 				contentLanguageCode: null,
 				availableSpaces: [
 					{
 						tenantId: TENANT_A,
 						spaceId: SPACE_A,
-						fitnessCenterName: "Fitness Center A",
+						spaceName: "Fitness Center A",
 						contentLanguageCode: null,
 					},
 				],

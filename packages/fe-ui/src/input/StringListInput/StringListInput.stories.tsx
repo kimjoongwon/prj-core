@@ -34,3 +34,14 @@ export const Default: Story = {
 		);
 	},
 };
+
+export const ExternalState: Story = {
+	render: () => {
+		const [value, setValue] = useState(["https://api.example.com/callback"]);
+		return (
+			<div className="w-[420px]">
+				<StringListInput value={value} onChange={setValue} />
+			</div>
+		);
+	},
+};

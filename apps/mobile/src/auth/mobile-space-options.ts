@@ -1,4 +1,4 @@
-import type { SpaceDto } from "@cocrepo/api/core/model";
+import type { SpaceDto } from "@cocrepo/api/idp/model";
 import type { SpaceListItemInfo } from "@cocrepo/mo-ui";
 import type { ImageSourcePropType } from "react-native";
 import { getCoreApiBaseUrl } from "./auth-config";
@@ -46,7 +46,7 @@ export const toSpaceListItemInfo = (
   address: space.address,
   id: space.tenantId,
   imageSource: createSpaceImageSource(space),
-  name: space.fitnessCenterName,
+  name: space.spaceName,
 });
 
 export const toSpaceListItemInfos = (

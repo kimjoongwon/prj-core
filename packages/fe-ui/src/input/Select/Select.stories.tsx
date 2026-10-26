@@ -1,4 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { makeAutoObservable } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import { Select as BoundSelect } from "./index";
 import { Select } from "./Select";
 
 const meta = {
@@ -50,6 +53,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const createSelectStoryState = () =>
+	makeAutoObservable(
+		{ country: "kr" },
+		{},
+		{ autoBind: true, name: "SelectStoryState" },
+	);
+
 const countryOptions = [
 	{ key: "1", value: "kr", text: "Korea" },
 	{ key: "2", value: "us", text: "United States" },
@@ -70,5 +80,20 @@ export const Default: Story = {
 				story: "Default select with country options.",
 			},
 		},
+	},
+};
+
+export const ExternalState: Story = {
+	args: { options: countryOptions, label: "Country" },
+	render: () => {
+		const state = useLocalObservable(createSelectStoryState);
+		return (
+			<BoundSelect
+				options={countryOptions}
+				label="Country"
+				state={state}
+				path="country"
+			/>
+		);
 	},
 };

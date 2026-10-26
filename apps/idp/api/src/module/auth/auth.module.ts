@@ -2,6 +2,7 @@ import {
 	AbilityAggregate,
 	AuthAuditLogAggregate,
 	EmailVerificationAggregate,
+	OidcClientAggregate,
 	RoleAggregate,
 	SpaceAggregate,
 } from "@cocrepo/aggregate";
@@ -10,10 +11,9 @@ import { OidcClient } from "@cocrepo/client";
 import { SpaceContext } from "@cocrepo/context";
 import { AuthController } from "@cocrepo/controller";
 import {
-	AbilitiesRepository,
 	AuthAuditLogsRepository,
 	EmailVerificationsRepository,
-	PolicyEntriesRepository,
+	OidcClientsRepository,
 	RoleAssignmentsRepository,
 	RolesRepository,
 	SpacesRepository,
@@ -36,16 +36,16 @@ import { AuthUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { InteractionModule } from "../interaction/interaction.module";
-import { OidcClientsModule } from "../oidc-client/oidc-clients.module";
+import { OidcModule } from "../oidc/oidc.module";
 
 @Module({
-	imports: [CqrsModule, OidcClientsModule, InteractionModule],
+	imports: [CqrsModule, OidcModule, InteractionModule],
 	providers: [
 		...AuthUseCaseProviders,
 		OidcClient,
+		OidcClientAggregate,
+		OidcClientsRepository,
 		AbilityAggregate,
-		AbilitiesRepository,
-		PolicyEntriesRepository,
 		RoleAssignmentsRepository,
 		TokenService,
 		TokenStorageService,

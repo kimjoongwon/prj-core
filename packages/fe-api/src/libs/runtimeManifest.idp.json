@@ -2119,23 +2119,24 @@
               "$ref": "#/components/schemas/LanguageCode"
             }
           ]
-        }
-      },
-      "required": [
-        "id",
-        "contentLanguageCode"
-      ]
-    },
-    "FitnessCenterDto": {
-      "type": "object",
-      "properties": {
+        },
         "name": {
           "type": "string"
         },
         "label": {
           "type": "string",
           "nullable": true
-        },
+        }
+      },
+      "required": [
+        "id",
+        "contentLanguageCode",
+        "name"
+      ]
+    },
+    "FitnessCenterDto": {
+      "type": "object",
+      "properties": {
         "address": {
           "type": "string"
         },
@@ -2202,7 +2203,6 @@
         }
       },
       "required": [
-        "name",
         "address",
         "phone",
         "email",
@@ -2217,6 +2217,15 @@
     "SpaceDto": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string",
+          "description": "Space의 표시 이름. 공간 선택·목록·검색의 원천입니다."
+        },
+        "label": {
+          "type": "string",
+          "description": "Space 표시 이름 아래에 함께 보여주는 보조 라벨입니다.",
+          "nullable": true
+        },
         "contentLanguageCode": {
           "description": "이 Space에서 작성되는 운영 리소스의 콘텐츠 언어",
           "default": "ko_KR",
@@ -2268,6 +2277,7 @@
         }
       },
       "required": [
+        "name",
         "contentLanguageCode",
         "id",
         "createdAt",

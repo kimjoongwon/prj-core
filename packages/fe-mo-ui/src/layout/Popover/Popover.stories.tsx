@@ -1,8 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { Popover } from "./index";
+import { useStorybookState } from "../../storybook";
+
+function createPopoverStoryState() {
+	return makeAutoObservable(
+		{ isOpen: false, setOpen(isOpen: boolean) { this.isOpen = isOpen; } },
+		{},
+		{ autoBind: true, name: "PopoverStoryState" },
+	);
+}
 
 const meta = {
 	title: "layout/Popover",
@@ -17,7 +28,13 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-	render: () => (
+	render: () => <PopoverStory />,
+};
+
+const PopoverStory = observer(function PopoverStory() {
+		const state = useLocalObservable(createPopoverStoryState);
+		useStorybookState(() => ({ isOpen: state.isOpen }));
+		return (
 		<View className="flex-1 justify-center px-4 py-5">
 			<View className="gap-4 rounded-lg border border-border bg-surface p-4">
 				<View className="gap-1">
@@ -28,7 +45,7 @@ export const Default: Story = {
 						버튼 주변에 보조 설명과 작은 액션을 띄웁니다.
 					</Typography>
 				</View>
-				<Popover isDefaultOpen>
+				<Popover isOpen={state.isOpen} onOpenChange={state.setOpen}>
 					<Popover.Trigger>
 						<Button variant="secondary">정책 보기</Button>
 					</Popover.Trigger>
@@ -57,5 +74,5 @@ export const Default: Story = {
 				</Popover>
 			</View>
 		</View>
-	),
-};
+		);
+});

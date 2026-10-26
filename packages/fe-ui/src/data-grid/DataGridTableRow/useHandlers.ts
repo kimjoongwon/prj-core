@@ -4,7 +4,6 @@ import type { Cell, Row } from "@tanstack/react-table";
 import { action, reaction, runInAction } from "mobx";
 import type { KeyboardEvent } from "react";
 import type { DataGridRow } from "../DataGrid";
-import type { DataGridTableState } from "../DataGridTable/DataGridTable";
 import type {
 	DataGridTableRowState,
 	EditDirection,
@@ -260,18 +259,10 @@ export function useHandlers<T extends DataGridRow>(
 ) {
 	return {
 		getRowInteractionProps: (row: Row<T>) => getRowInteractionProps(state, row),
-		observeEditRequests: (
-			tableState: Pick<DataGridTableState<T>, "instance">,
-			row: Row<T>,
-		) =>
+		observeEditRequests: (row: Row<T>) =>
 			reaction(
 				() => state.editRequest,
-				(request) =>
-					openRequestedCell(
-						state,
-						tableState.instance?.getRow(row.id) ?? row,
-						request,
-					),
+				(request) => openRequestedCell(state, row, request),
 				{ fireImmediately: true },
 			),
 		getCellInteractions: (

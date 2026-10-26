@@ -7,3 +7,4 @@ expo-env.d.ts
 *.tsbuildinfo
 
 .rnstorybook/storybook.requires.ts
+.rnstorybook/story-sources.json

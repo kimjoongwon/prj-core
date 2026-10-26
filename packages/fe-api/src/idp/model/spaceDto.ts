@@ -17,6 +17,13 @@ import type { SpaceAssociationDto } from "./spaceAssociationDto";
 import type { SpaceClassificationDto } from "./spaceClassificationDto";
 
 export interface SpaceDto {
+	/** Space의 표시 이름. 공간 선택·목록·검색의 원천입니다. */
+	name: string;
+	/**
+	 * Space 표시 이름 아래에 함께 보여주는 보조 라벨입니다.
+	 * @nullable
+	 */
+	label?: string | null;
 	/** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
 	contentLanguageCode: LanguageCode;
 	/**

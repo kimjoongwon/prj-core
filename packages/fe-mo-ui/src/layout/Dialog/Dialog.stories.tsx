@@ -1,8 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { Button } from "../../input/Button";
 import { Dialog } from "./index";
+import { useStorybookState } from "../../storybook";
+
+function createDialogStoryState() {
+	return makeAutoObservable(
+		{ isOpen: false, setOpen(isOpen: boolean) { this.isOpen = isOpen; } },
+		{},
+		{ autoBind: true, name: "DialogStoryState" },
+	);
+}
 
 const meta = {
 	title: "layout/Dialog",
@@ -17,7 +28,13 @@ export default meta;
 type Story = StoryObj;
 
 export const Open: Story = {
-	render: () => (
+	render: () => <DialogStory />,
+};
+
+const DialogStory = observer(function DialogStory() {
+		const state = useLocalObservable(createDialogStoryState);
+		useStorybookState(() => ({ isOpen: state.isOpen }));
+		return (
 		<View className="flex-1 justify-center px-4 py-5">
 			<View className="gap-2 rounded-lg border border-border bg-surface p-4">
 				<Typography className="font-extrabold" type="h5">Dialog</Typography>
@@ -25,7 +42,10 @@ export const Open: Story = {
 					파괴적 작업이나 중요한 확인을 중앙 오버레이로 묻습니다.
 				</Typography>
 			</View>
-			<Dialog isOpen onOpenChange={() => undefined}>
+			<Button onPress={() => state.setOpen(true)} variant="secondary">
+				취소 확인 열기
+			</Button>
+			<Dialog isOpen={state.isOpen} onOpenChange={state.setOpen}>
 				<Dialog.Portal>
 					<Dialog.Overlay className="bg-backdrop" />
 					<Dialog.Content className="mx-5 gap-4 rounded-xl border border-border bg-surface p-4">
@@ -53,5 +73,5 @@ export const Open: Story = {
 				</Dialog.Portal>
 			</Dialog>
 		</View>
-	),
-};
+		);
+});

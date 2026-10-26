@@ -19,7 +19,7 @@ export const DataGridTableHeader = <T extends DataGridRow>({
 	state,
 	table,
 }: DataGridTableHeaderProps<T>) => {
-	const handlers = useHandlers(state);
+	const handlers = useHandlers(state, table);
 	const headerGroups = table.getHeaderGroups();
 	const { selectionMode, isAllRowsSelected } = handlers;
 	const t = handlers.translate;

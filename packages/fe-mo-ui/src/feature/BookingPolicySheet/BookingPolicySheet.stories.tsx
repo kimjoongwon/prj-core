@@ -1,8 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { ScrollView, View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import type { BookingClassFeedItem } from "../../widget/BookingClassCard";
 import { BookingPolicySheet } from "./index";
+import { useStorybookState } from "../../storybook";
+
+function createBookingPolicySheetStoryState() {
+	return makeAutoObservable(
+		{ memoValue: "어깨에 무리가 가지 않도록 부탁드립니다.", setMemo(value: string) { this.memoValue = value; } },
+		{},
+		{ autoBind: true, name: "BookingPolicySheetStoryState" },
+	);
+}
 
 const item: BookingClassFeedItem = {
 	availableCount: 3,
@@ -34,7 +45,13 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-	render: () => (
+	render: () => <BookingPolicySheetStory />,
+};
+
+const BookingPolicySheetStory = observer(function BookingPolicySheetStory() {
+	const state = useLocalObservable(createBookingPolicySheetStoryState);
+	useStorybookState(() => ({ memoValue: state.memoValue }));
+	return (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
 				<Typography className="font-extrabold" type="h5">
@@ -51,12 +68,12 @@ export const Default: Story = {
 				item={item}
 				memoLabel="코치에게 남길 말"
 				memoPlaceholder="부상이나 요청 사항을 입력해 주세요."
-				memoValue="어깨에 무리가 가지 않도록 부탁드립니다."
+				memoValue={state.memoValue}
 				onCancel={() => undefined}
-				onChangeMemo={() => undefined}
+				onChangeMemo={state.setMemo}
 				onConfirm={() => undefined}
 				title="예약 확인"
 			/>
 		</ScrollView>
-	),
-};
+	);
+});

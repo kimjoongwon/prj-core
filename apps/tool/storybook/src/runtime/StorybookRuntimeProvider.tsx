@@ -25,7 +25,10 @@ import type {
 	AbilityRule,
 	NavigatorLike,
 } from "../../../../../packages/common-type/src";
-import { setApiLocale, setApiSessionScope } from "../../../../../packages/fe-api/src/core/client";
+import {
+	setApiLocale,
+	setApiSessionScope,
+} from "../../../../../packages/fe-api/src/core/client";
 
 type StorybookRealm = "none" | "admin" | "idp";
 type StoryRender = () => ReactNode;
@@ -55,7 +58,7 @@ const FALLBACK_ABILITY_RULES: AbilityRule[] = [
 const STORYBOOK_ADMIN_SPACE: AccountSpaceInfo = {
 	spaceId: "storybook-space",
 	tenantId: "storybook-tenant",
-	fitnessCenterName: "Storybook Fitness Center",
+	spaceName: "Storybook Fitness Center",
 };
 
 function makeQueryClient() {
@@ -168,7 +171,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 			account.setAvailableSpaces([STORYBOOK_ADMIN_SPACE]);
 			account.setCurrentTenant(
 				STORYBOOK_ADMIN_SPACE.tenantId,
-				STORYBOOK_ADMIN_SPACE.fitnessCenterName,
+				STORYBOOK_ADMIN_SPACE.spaceName,
 				null,
 				STORYBOOK_ADMIN_SPACE.spaceId,
 			);

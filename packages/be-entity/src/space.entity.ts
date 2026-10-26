@@ -2,6 +2,8 @@ import {
 	BigIntIdFieldOptional,
 	ClassField,
 	EnumFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { LanguageCode } from "@cocrepo/enum";
 import { SpaceSchema } from "@cocrepo/schema";
@@ -19,6 +21,15 @@ export class Space extends SpaceSchema {
 	@Exclude({ toPlainOnly: true })
 	declare spaceId: SpaceSchema["spaceId"];
 
+	@StringFieldMetadata({
+		description: "Space의 표시 이름. 공간 선택·목록·검색의 원천입니다.",
+	})
+	declare name: SpaceSchema["name"];
+	@StringFieldOptionalMetadata({
+		description: "Space 표시 이름 아래에 함께 보여주는 보조 라벨입니다.",
+		nullable: true,
+	})
+	declare label: SpaceSchema["label"];
 	@EnumFieldMetadata(() => LanguageCode, {
 		description: "이 Space에서 작성되는 운영 리소스의 콘텐츠 언어",
 		default: LanguageCode.ko_KR,

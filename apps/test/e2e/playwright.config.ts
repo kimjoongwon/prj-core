@@ -240,7 +240,7 @@ function getWebServers() {
  * Playwright E2E 테스트 설정 (멀티앱, Sidecar 방식)
  *
  * 테스트 파일은 각 페이지 코드 옆에 *.e2e.ts 로 위치합니다:
- *   apps/admin/web/src/app/(admin)/templates/page.e2e.ts
+ *   apps/admin/web/src/app/(authenticated)/(admin)/roles/page.e2e.ts
  *
  * 앱별 테스트 실행:
  *   pnpm --filter=test-e2e test:admin

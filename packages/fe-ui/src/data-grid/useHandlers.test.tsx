@@ -150,7 +150,9 @@ describe("DataGrid observable와 담당 handlers", () => {
 		act(() =>
 			first.result.current.setValue(originalEmployee, "name", "재렌더 후 편집"),
 		);
-		act(() => first.result.current.setValue(originalEmployee, "name", "김민서"));
+		act(() =>
+			first.result.current.setValue(originalEmployee, "name", "김민서"),
+		);
 		expect(getChangesSnapshot(state).updated).toEqual([]);
 	});
 
@@ -212,6 +214,54 @@ describe("DataGrid observable와 담당 handlers", () => {
 			});
 		});
 		expect(screen.getByText(/총\s*0건/)).toBeInTheDocument();
+	});
+
+	it("영역 표시는 기본값을 유지하고 명시적으로 숨긴 영역은 DOM에 렌더링하지 않는다", () => {
+		const { state } = createEmployeeState();
+		runInAction(() => {
+			state.toolbar.rightInputs = [
+				{
+					id: "toolbar-action",
+					type: "button",
+					label: "도구",
+					handlers: { onClick: vi.fn() },
+				},
+			];
+			state.groupPanel.show = "always";
+			state.table.selectedRowKeys = new Set([originalEmployee.id]);
+			state.actionBar.actions = <button type="button">선택 동작</button>;
+		});
+		const view = render(<DataGrid state={state} />);
+		expect(screen.getByRole("button", { name: "도구" })).toBeInTheDocument();
+		expect(screen.getByLabelText("그룹 기준")).toBeInTheDocument();
+		expect(screen.getByText(/총\s*50건/)).toBeInTheDocument();
+		expect(screen.getByText("1개 선택됨")).toBeInTheDocument();
+
+		view.rerender(<DataGrid state={state} show={{ pagination: false }} />);
+		expect(screen.getByRole("button", { name: "도구" })).toBeInTheDocument();
+		expect(screen.queryByText(/총\s*50건/)).not.toBeInTheDocument();
+		expect(screen.getByLabelText("그룹 기준")).toBeInTheDocument();
+
+		view.rerender(
+			<DataGrid
+				state={state}
+				show={{
+					toolbar: false,
+					groupPanel: false,
+					pagination: false,
+					actionBar: false,
+				}}
+			/>,
+		);
+		expect(
+			screen.queryByRole("button", { name: "도구" }),
+		).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("그룹 기준")).not.toBeInTheDocument();
+		expect(screen.queryByText(/총\s*50건/)).not.toBeInTheDocument();
+		expect(screen.queryByText("1개 선택됨")).not.toBeInTheDocument();
+		expect(
+			screen.getByRole("table", { name: "데이터 테이블" }),
+		).toBeInTheDocument();
 	});
 
 	it("ActionBar 소유 설정과 액션을 선택 원본과 함께 갱신한다", () => {

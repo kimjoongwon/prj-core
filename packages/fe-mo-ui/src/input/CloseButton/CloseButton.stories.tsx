@@ -30,7 +30,9 @@ export const Default: Story = {};
 export const Sizes: Story = {
 	render: () => (
 		<VStack alignItems="center" gap="section">
-			<Typography color="muted" type="body-sm" weight="semibold">Close actions</Typography>
+			<Typography color="muted" type="body-sm" weight="semibold">
+				Close actions
+			</Typography>
 			<HStack
 				alignItems="center"
 				className="rounded-lg border border-border bg-surface p-3"

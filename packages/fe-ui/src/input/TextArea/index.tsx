@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import {
@@ -22,16 +21,11 @@ function isBoundTextAreaProps<T>(
 	return "state" in props && "path" in props;
 }
 
-const TextArea = observer(<T extends object>(props: TextAreaProps<T>) => {
-	if (!isBoundTextAreaProps(props)) {
-		return <PureTextArea {...props} />;
-	}
+const BoundTextArea = observer(<T extends object>(props: BoundTextAreaProps<T>) => {
 
 	const { state, path, ...rest } = props;
 
-	const initialValue = tools.get(state, path, "") as string;
-
-	const formField = useFormField({ value: initialValue, state, path });
+	const formField = useFormField({ defaultValue: "", state, path });
 
 	const handleChange = (value: string) => {
 		formField.setValue(value);
@@ -46,5 +40,10 @@ const TextArea = observer(<T extends object>(props: TextAreaProps<T>) => {
 	);
 });
 
-export { TextArea };
+const TextArea = <T extends object>(props: TextAreaProps<T>) =>
+	isBoundTextAreaProps(props) ? <BoundTextArea {...props} /> : <PureTextArea {...props} />;
+
+export type { TextAreaState } from "./TextArea";
+export { createTextAreaState } from "./TextArea";
 export type { PureTextAreaProps };
+export { TextArea };

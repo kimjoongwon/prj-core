@@ -78,7 +78,7 @@ describe("mobile profile tab route", () => {
 			mobileSession.isAuthenticated = true;
 			mobileSession.isVerifying = false;
 			mobileApiScope.setSpaceInfo({
-				fitnessCenterName: "광화문 스튜디오",
+				spaceName: "광화문 스튜디오",
 				spaceId: "space-1",
 				tenantId: "tenant-1",
 			});

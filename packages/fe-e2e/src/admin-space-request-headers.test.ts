@@ -1,11 +1,10 @@
-import { type DecimalId, isDecimalId } from "@cocrepo/type";
-import { describe, expect, it } from "vitest";
-import { getAdminSpaceRequestHeaders } from "./admin-space-request-headers";
+import { type IntegrationUlid, isIntegrationUlid } from "@cocrepo/type";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { expectSpaceHeader } from "./expect-space-header";
 
-function decimalIdFixture(value: string): DecimalId {
-	if (!isDecimalId(value)) {
-		throw new Error(`Invalid decimal ID fixture: ${value}`);
+function ulidFixture(value: string): IntegrationUlid {
+	if (!isIntegrationUlid(value)) {
+		throw new Error(`Invalid ULID fixture: ${value}`);
 	}
 
 	return value;
@@ -23,8 +22,15 @@ function routeWithTenantHeader(tenantId: string) {
 }
 
 describe("Admin Space request header contract", () => {
-	it("Given bootstrap에서 얻은 tenant ID가 있을 때 When header를 만들면 Then decimal 문자열을 변경하지 않는다", () => {
-		const tenantId = decimalIdFixture("601");
+	afterEach(() => vi.unstubAllEnvs());
+
+	it("Given bootstrap에서 얻은 tenant ID가 있을 때 When header를 만들면 Then ULID 문자열을 변경하지 않는다", async () => {
+		vi.stubEnv("E2E_ADMIN_BASE_URL", "http://localhost:3400");
+		vi.resetModules();
+		const { getAdminSpaceRequestHeaders } = await import(
+			"./admin-space-request-headers"
+		);
+		const tenantId = ulidFixture("01J00000000000000000000005");
 
 		expect(
 			getAdminSpaceRequestHeaders(tenantId, {
@@ -33,7 +39,7 @@ describe("Admin Space request header contract", () => {
 		).toEqual({
 			Authorization: "Bearer access-token",
 			// 상태 변경 API의 쿠키 인증은 신뢰된 Origin을 함께 보낸다.
-			Origin: "http://localhost:3000",
+			Origin: "http://localhost:3400",
 			"x-tenant-id": tenantId,
 		});
 		expect(() =>
@@ -41,18 +47,23 @@ describe("Admin Space request header contract", () => {
 		).not.toThrow();
 	});
 
-	it("Given 비정상 decimal tenant fixture가 있을 때 When header를 만들거나 검증하면 Then 공용 validator 기준으로 거부한다", () => {
-		const invalidDecimalIdFixture = "0";
-		expect(isDecimalId(invalidDecimalIdFixture)).toBe(false);
+	it("Given 비정상 ULID tenant fixture가 있을 때 When header를 만들거나 검증하면 Then 공용 validator 기준으로 거부한다", async () => {
+		vi.stubEnv("E2E_ADMIN_BASE_URL", "http://localhost:3400");
+		vi.resetModules();
+		const { getAdminSpaceRequestHeaders } = await import(
+			"./admin-space-request-headers"
+		);
+		const invalidUlidFixture = "0";
+		expect(isIntegrationUlid(invalidUlidFixture)).toBe(false);
 
 		expect(() =>
-			getAdminSpaceRequestHeaders(decimalIdFixture("602"), {
+			getAdminSpaceRequestHeaders(ulidFixture("01J00000000000000000000006"), {
 				Authorization: "Bearer access-token",
-				"x-tenant-id": invalidDecimalIdFixture,
+				"x-tenant-id": invalidUlidFixture,
 			}),
-		).toThrow("x-tenant-id must be a canonical decimal ID.");
+		).toThrow("x-tenant-id must be a canonical ULID.");
 		expect(() =>
-			expectSpaceHeader(routeWithTenantHeader(invalidDecimalIdFixture)),
-		).toThrow("x-tenant-id header must be a canonical decimal ID.");
+			expectSpaceHeader(routeWithTenantHeader(invalidUlidFixture)),
+		).toThrow("x-tenant-id header must be a canonical ULID.");
 	});
 });

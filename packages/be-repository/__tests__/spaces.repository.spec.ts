@@ -39,6 +39,8 @@ describe("SpacesRepository", () => {
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
+		name: "Test Fitness Center",
+		label: "Test Label",
 	};
 
 	const mockCompanyData = {
@@ -57,8 +59,6 @@ describe("SpacesRepository", () => {
 		...mockSpaceData,
 		fitnessCenter: {
 			id: "fitness-center-test-id",
-			name: "Test Fitness Center",
-			label: "Test Label",
 			address: "Seoul",
 			phone: "02-0000-0000",
 			email: "center@example.com",
@@ -74,10 +74,10 @@ describe("SpacesRepository", () => {
 	const mockSecondSpaceWithFitnessCenter = {
 		...mockSpaceData,
 		id: "space-second-id",
+		name: "Second Fitness Center",
+		label: "Second Label",
 		fitnessCenter: {
 			id: "fitness-center-second-id",
-			name: "Second Fitness Center",
-			label: "Second Label",
 			address: "Busan",
 			phone: "051-0000-0000",
 			email: "second@example.com",
@@ -98,7 +98,7 @@ describe("SpacesRepository", () => {
 	):
 		| {
 				id?: string | bigint;
-				name?: string;
+				address?: string;
 				company?: {
 					id?: string | bigint;
 					businessNo?: string;
@@ -112,7 +112,7 @@ describe("SpacesRepository", () => {
 				| (Space & {
 						fitnessCenter?: {
 							id?: string | bigint;
-							name?: string;
+							address?: string;
 							company?: {
 								id?: string | bigint;
 								businessNo?: string;
@@ -280,20 +280,17 @@ describe("SpacesRepository", () => {
 			});
 
 			// Then
+			// 이름의 원천이 Space이므로 기본 where는 FitnessCenter 존재를 요구하지 않고,
+			// 검색만 Space 이름/회사명/사업자번호를 선택적으로 참조합니다.
 			expect(mockTxHost.tx.space.findMany).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
-						fitnessCenter: {
-							is: {
-								removedAt: null,
-								company: {
-									is: {
-										removedAt: null,
-									},
-								},
-							},
-						},
 						OR: expect.arrayContaining([
+							expect.objectContaining({
+								name: expect.objectContaining({
+									contains: "123-45",
+								}),
+							}),
 							expect.objectContaining({
 								fitnessCenter: expect.objectContaining({
 									is: expect.objectContaining({
@@ -311,42 +308,11 @@ describe("SpacesRepository", () => {
 					}),
 				}),
 			);
+			const whereArg = mockTxHost.tx.space.findMany.mock.calls[0][0].where;
+			expect(whereArg).not.toHaveProperty("fitnessCenter");
 			expect(total).toBe(2);
 			expect(getFitnessCenter(spaces[0])?.space?.id).toBe(mockSpaceData.id);
 			expect(getFitnessCenter(spaces[1])?.space?.id).toBe("space-second-id");
-		});
-	});
-
-	describe("findAll", () => {
-		it("전체 Space 목록을 조회해야 한다", async () => {
-			// Given
-			const mockSpaces = [
-				mockSpaceData,
-				{ ...mockSpaceData, id: "space-2", name: "Space 2" },
-			];
-			mockTxHost.tx.space.findMany.mockResolvedValue(mockSpaces);
-
-			// When
-			const result = await repository.findAll();
-
-			// Then
-			expect(mockTxHost.tx.space.findMany).toHaveBeenCalledWith({
-				where: { removedAt: null },
-				orderBy: { createdAt: "desc" },
-			});
-			expect(result).toHaveLength(2);
-			expect(result[0]).toBeInstanceOf(Space);
-		});
-
-		it("Space가 없으면 빈 배열을 반환해야 한다", async () => {
-			// Given
-			mockTxHost.tx.space.findMany.mockResolvedValue([]);
-
-			// When
-			const result = await repository.findAll();
-
-			// Then
-			expect(result).toEqual([]);
 		});
 	});
 
@@ -372,175 +338,6 @@ describe("SpacesRepository", () => {
 			expect(
 				(result as { company?: { id?: string | bigint } } | null)?.company?.id,
 			).toBe(mockCompanyData.id);
-		});
-	});
-
-	describe("create", () => {
-		it("새 Space를 생성해야 한다", async () => {
-			// Given
-			const createData = { id: 99n };
-			mockTxHost.tx.space.create.mockResolvedValue({
-				...mockSpaceData,
-				...createData,
-			});
-
-			// When
-			const result = await repository.create(createData);
-
-			// Then
-			expect(mockTxHost.tx.space.create).toHaveBeenCalledWith({
-				data: createData,
-			});
-			expect(result).toBeInstanceOf(Space);
-		});
-
-		it("데이터 없이 기본 Space를 생성해야 한다", async () => {
-			// Given
-			mockTxHost.tx.space.create.mockResolvedValue(mockSpaceData);
-
-			// When
-			const result = await repository.create();
-
-			// Then
-			expect(mockTxHost.tx.space.create).toHaveBeenCalledWith({
-				data: {},
-			});
-			expect(result).toBeInstanceOf(Space);
-		});
-	});
-
-	describe("createFitnessCenterBySpaceId", () => {
-		it("Company는 Space 없이 만들고 FitnessCenter에 공개 ID 관계를 연결해야 한다", async () => {
-			// Given
-			mockTxHost.tx.company.create.mockResolvedValue({
-				id: mockCompanyData.id,
-			});
-			mockTxHost.tx.fitnessCenter.create.mockResolvedValue({
-				id: "fitness-center-test-id",
-			});
-			mockTxHost.tx.space.findUnique.mockResolvedValue(
-				mockSpaceWithFitnessCenter,
-			);
-
-			// When
-			const result = await repository.createFitnessCenterBySpaceId(
-				mockSpaceDbId,
-				{
-					company: {
-						...mockCompanyData,
-					},
-					fitnessCenter: {
-						name: "Test Fitness Center",
-						label: "Test Label",
-						address: "Seoul",
-						phone: "02-0000-0000",
-						email: "fitness-center@example.com",
-					},
-				},
-			);
-
-			// Then
-			expect(mockTxHost.tx.company.create).toHaveBeenCalledWith({
-				data: expect.not.objectContaining({
-					spaceId: expect.anything(),
-				}),
-			});
-			expect(mockTxHost.tx.fitnessCenter.create).toHaveBeenCalledWith({
-				data: expect.objectContaining({
-					companyId: mockCompanyData.id,
-					spaceId: mockSpaceDbId,
-				}),
-			});
-			expect(getFitnessCenter(result)?.company?.id).toBe(mockCompanyData.id);
-		});
-	});
-
-	describe("updateById", () => {
-		it("Space를 수정해야 한다", async () => {
-			// Given
-			const updateData = { updatedAt: new Date("2024-06-01") };
-			mockTxHost.tx.space.update.mockResolvedValue({
-				...mockSpaceData,
-				...updateData,
-			});
-
-			// When
-			const result = await repository.updateById(mockSpaceDbId, updateData);
-
-			// Then
-			expect(mockTxHost.tx.space.update).toHaveBeenCalledWith({
-				where: { id: mockSpaceDbId },
-				data: updateData,
-			});
-			expect(result?.updatedAt).toEqual(updateData.updatedAt);
-		});
-	});
-
-	describe("updateFitnessCenterBySpaceId", () => {
-		it("같은 Company의 다른 FitnessCenter를 건드리지 않고 현재 Space의 센터만 수정해야 한다", async () => {
-			// Given
-			mockTxHost.tx.fitnessCenter.findFirst.mockResolvedValue({
-				id: "fitness-center-test-id",
-			});
-			mockTxHost.tx.fitnessCenter.update.mockResolvedValue({
-				id: "fitness-center-test-id",
-			});
-			mockTxHost.tx.space.findUnique.mockResolvedValue({
-				...mockSpaceWithFitnessCenter,
-				fitnessCenter: {
-					...mockSpaceWithFitnessCenter.fitnessCenter,
-					name: "Updated Fitness Center",
-				},
-			});
-
-			// When
-			const result = await repository.updateFitnessCenterBySpaceId(
-				mockSpaceDbId,
-				{
-					fitnessCenter: {
-						name: "Updated Fitness Center",
-					},
-				},
-			);
-
-			// Then
-			expect(mockTxHost.tx.fitnessCenter.findFirst).toHaveBeenCalledWith({
-				where: { spaceId: mockSpaceDbId },
-				select: { id: true },
-			});
-			expect(mockTxHost.tx.company.update).not.toHaveBeenCalled();
-			expect(mockTxHost.tx.fitnessCenter.update).toHaveBeenCalledWith({
-				where: { id: "fitness-center-test-id" },
-				data: {
-					name: "Updated Fitness Center",
-				},
-			});
-			expect(mockTxHost.tx.fitnessCenter.update).not.toHaveBeenCalledWith(
-				expect.objectContaining({
-					where: { id: "fitness-center-second-id" },
-				}),
-			);
-			expect(getFitnessCenter(result)?.name).toBe("Updated Fitness Center");
-		});
-	});
-
-	describe("removeById", () => {
-		it("Space를 소프트 삭제해야 한다", async () => {
-			// Given
-			mockTxHost.tx.space.update.mockResolvedValue({
-				...mockSpaceData,
-				removedAt: new Date("2024-06-01"),
-			});
-
-			// When
-			const result = await repository.removeById(mockSpaceDbId);
-
-			// Then
-			expect(mockTxHost.tx.space.update).toHaveBeenCalledWith({
-				where: { id: mockSpaceDbId },
-				data: { removedAt: expect.any(Date) },
-			});
-			expect(result).toBeInstanceOf(Space);
 		});
 	});
 

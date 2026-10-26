@@ -1,5 +1,6 @@
 "use client";
 
+import type { Table } from "@tanstack/react-table";
 import { type Column, flexRender, type Header } from "@tanstack/react-table";
 import { isValidElement, type ReactNode } from "react";
 import type { Translate } from "../../i18n";
@@ -41,6 +42,7 @@ const getHeaderAccessibleLabel = <TData extends DataGridRow>(
 /** 헤더가 책임지는 정렬·선택 표시·너비 변경을 제공합니다. */
 export const useHandlers = <TData extends DataGridRow>(
 	state: DataGridTableState<TData>,
+	table: Table<TData>,
 ) => {
 	const handlers = {
 		translate,
@@ -50,14 +52,11 @@ export const useHandlers = <TData extends DataGridRow>(
 			column.toggleSorting(),
 		selectionCheckboxRef: (input: HTMLInputElement | null) => {
 			if (!input) return;
-			const table = state.instance;
 			input.indeterminate = Boolean(
-				table && !table.getIsAllRowsSelected() && table.getIsSomeRowsSelected(),
+				!table.getIsAllRowsSelected() && table.getIsSomeRowsSelected(),
 			);
 		},
 		changeColumnSizing: (columnId: string, size: number | null) => {
-			const table = state.instance;
-			if (!table) return;
 			if (size == null) {
 				table.getColumn(columnId)?.resetSize();
 				return;
@@ -67,9 +66,8 @@ export const useHandlers = <TData extends DataGridRow>(
 	};
 	const selectionMode =
 		state.selection?.mode === "none" ? undefined : state.selection?.mode;
-	const table = state.instance;
-	const isAllRowsSelected = Boolean(table?.getIsAllRowsSelected());
-	const isSomeRowsSelected = Boolean(table?.getIsSomeRowsSelected());
+	const isAllRowsSelected = table.getIsAllRowsSelected();
+	const isSomeRowsSelected = table.getIsSomeRowsSelected();
 	const selectionAriaChecked: boolean | "mixed" = isAllRowsSelected
 		? true
 		: isSomeRowsSelected

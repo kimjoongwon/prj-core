@@ -13,28 +13,17 @@ import type { NextFunction, Request, Response } from "express";
 import { Logger } from "nestjs-pino";
 import type { OidcConfig, RuntimeSecurityConfig } from "./config";
 import { AbilitiesModule } from "./module/abilities";
-import { ActionsModule } from "./module/actions";
 import { AppModule } from "./module/app.module";
 import { AssetsModule } from "./module/assets";
 import { CommunityModule } from "./module/community";
 import { isNestDevtoolsEnabled } from "./module/devtools.module";
 import { FoldersModule } from "./module/folders";
 import { I18nCatalogModule } from "./module/i18n";
-import { InquiriesModule } from "./module/inquiries";
 import { PasswordResetModule } from "./module/password-reset";
 import { PoliciesModule } from "./module/policies";
 import { ReservationsModule } from "./module/reservations";
 import { RoleAssignmentsModule } from "./module/role-assignments";
 import { RolesModule } from "./module/roles";
-import { RoutinesModule } from "./module/routines";
-import { ServiceDocumentsModule } from "./module/service-documents";
-import { SpacesModule } from "./module/spaces";
-import { SubjectsModule } from "./module/subjects";
-import { TasksModule } from "./module/tasks";
-import { TemplatesModule } from "./module/templates";
-import { TenantAccessRequestsModule } from "./module/tenant-access-requests";
-import { TimelinesModule } from "./module/timelines";
-import { TranslationsModule } from "./module/translations";
 import { UsersModule } from "./module/users";
 import { createCookieCsrfProtection } from "./security/cookie-csrf-protection.middleware";
 import { setNestApp } from "./setNestApp";
@@ -81,10 +70,10 @@ const SWAGGER_TENANT_SELECTOR_JS = `
 
   function spaceLabel(space) {
     var fitnessCenter = space && space.fitnessCenter;
-    var fitnessCenterName = fitnessCenter && fitnessCenter.name;
+    var spaceName = space && space.name;
     var companyName = fitnessCenter && fitnessCenter.company && fitnessCenter.company.name;
     var fallback = space && space.id ? space.id : 'Unknown Space';
-    return fitnessCenterName || companyName || fallback;
+    return spaceName || companyName || fallback;
   }
 
   window.fetch = function(url, init) {
@@ -275,11 +264,8 @@ const SWAGGER_TENANT_SELECTOR_JS = `
 `;
 
 const SWAGGER_MODULES = [
-	SpacesModule,
 	UsersModule,
-	ActionsModule,
 	AssetsModule,
-	SubjectsModule,
 	AbilitiesModule,
 	RolesModule,
 	I18nCatalogModule,
@@ -287,14 +273,6 @@ const SWAGGER_MODULES = [
 	PoliciesModule,
 	RoleAssignmentsModule,
 	FoldersModule,
-	TemplatesModule,
-	ServiceDocumentsModule,
-	TranslationsModule,
-	TimelinesModule,
-	TasksModule,
-	RoutinesModule,
-	InquiriesModule,
-	TenantAccessRequestsModule,
 	ReservationsModule,
 	PasswordResetModule,
 ];
@@ -529,7 +507,7 @@ async function bootstrap() {
 			.setTitle(process.env.APP_NAME || "Plate")
 			.setVersion("1.0.0")
 			.setDescription(
-				"API 문서입니다. Core API와 IDP 관리 API를 함께 제공합니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
+				"Core API 문서입니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
 					"**인증 방법:**\n" +
 					"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
 					"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송\n\n" +

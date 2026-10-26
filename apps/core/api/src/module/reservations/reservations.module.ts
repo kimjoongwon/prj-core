@@ -4,7 +4,6 @@ import { ReservationsController } from "@cocrepo/controller";
 import {
 	ReservationsRepository,
 	TenantsRepository,
-	TimelinesRepository,
 } from "@cocrepo/repository";
 import { ReservationUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
@@ -17,7 +16,6 @@ import { CqrsModule } from "@nestjs/cqrs";
 		ReservationAggregate,
 		ReservationsRepository,
 		TenantsRepository,
-		TimelinesRepository,
 		AuthContext,
 		SpaceContext,
 		...ReservationUseCaseProviders,

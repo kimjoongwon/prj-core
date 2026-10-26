@@ -1,41 +1,39 @@
 "use client";
 
 import { useFormField } from "@cocrepo/hook";
-import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { RadioGroup as PureRadioGroup } from "./RadioGroup";
 import type { RadioGroupProps as PureRadioGroupProps } from "./RadioGroup.props";
 
-export interface RadioGroupProps<T>
-	extends MobxProps<T>,
-		Omit<PureRadioGroupProps, "value" | "onValueChange"> {}
+export type RadioGroupProps<T extends object = object> =
+	| (MobxProps<T> & Omit<PureRadioGroupProps, "value" | "onValueChange">)
+	| PureRadioGroupProps;
 
-const RadioGroup = observer(<T extends object>(props: RadioGroupProps<T>) => {
+const BoundRadioGroup = observer(<T extends object>(props: MobxProps<T> & Omit<PureRadioGroupProps, "value" | "onValueChange">) => {
 	const { state, path, options, ...rest } = props;
 
-	const rawValue = tools.get(state, path);
-	const value =
-		options?.find((option) => String(option.value) === String(rawValue)) !==
-		undefined
-			? String(rawValue)
-			: "";
-
-	const formField = useFormField<T, string>({ value, state, path });
+	const formField = useFormField<T, string | number>({ defaultValue: "", state, path });
 
 	const handleValueChange = (value: string) => {
-		formField.setValue(value);
+		const option = options?.find((candidate) => String(candidate.value) === value);
+		formField.setValue(option?.value ?? value);
 	};
 
 	return (
 		<PureRadioGroup
 			{...rest}
 			options={options}
-			value={formField.state.value}
+			value={formField.state.value == null ? "" : String(formField.state.value)}
 			onValueChange={handleValueChange}
 		/>
 	);
 });
 
-export { RadioGroup };
+const RadioGroup = <T extends object>(props: RadioGroupProps<T>) =>
+	"state" in props && "path" in props ? <BoundRadioGroup {...props} /> : <PureRadioGroup {...props} />;
+
+export type { RadioGroupState } from "./RadioGroup";
+export { createRadioGroupState } from "./RadioGroup";
 export type { RadioOption } from "./RadioGroup.props";
+export { RadioGroup };

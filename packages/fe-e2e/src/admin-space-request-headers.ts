@@ -1,4 +1,4 @@
-import { isDecimalId } from "@cocrepo/type";
+import { isIntegrationUlid } from "@cocrepo/type";
 import { readAdminPersistSpaceSelection } from "./admin-persist";
 import { getAdminRequestHeaders } from "./admin-request-headers";
 import {
@@ -19,8 +19,8 @@ export function getAdminSpaceRequestHeaders(
 ) {
 	const resolvedTenantId =
 		headers["x-tenant-id"] ?? tenantId ?? readSelectedTenantId();
-	if (!isDecimalId(resolvedTenantId)) {
-		throw new Error("x-tenant-id must be a canonical decimal ID.");
+	if (!isIntegrationUlid(resolvedTenantId)) {
+		throw new Error("x-tenant-id must be a canonical ULID.");
 	}
 
 	return getAdminRequestHeaders({

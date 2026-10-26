@@ -22,19 +22,13 @@ import { APP_GUARD, RouterModule } from "@nestjs/core";
 import { DevtoolsModule } from "@nestjs/devtools-integration";
 import { ThrottlerGuard } from "@nestjs/throttler";
 import { AuthModule } from "./auth";
-import { EmailVerificationsModule } from "./email-verification";
 import { globalModules } from "./global.module";
 import { I18nCatalogModule } from "./i18n";
-import { IdpAccountsModule } from "./idp-accounts";
-import { IdpDashboardModule } from "./idp-dashboard";
 import { InteractionModule } from "./interaction/interaction.module";
 import { OidcModule } from "./oidc/oidc.module";
-import { OidcClientsModule } from "./oidc-client";
-import { OidcSessionsModule } from "./oidc-session";
 import { PasswordResetModule } from "./password-reset/password-reset.module";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
-import { SecurityPolicyModule } from "./security-policy";
 
 const enableNestDevtools =
 	process.env.ENABLE_NEST_DEVTOOLS === "true" &&
@@ -59,12 +53,6 @@ const enableNestDevtools =
 		PasswordResetModule,
 		// server에서 이동된 모듈
 		AuthModule,
-		EmailVerificationsModule,
-		SecurityPolicyModule,
-		IdpAccountsModule,
-		IdpDashboardModule,
-		OidcClientsModule,
-		OidcSessionsModule,
 		RouterModule.register([
 			{
 				path: "api",
@@ -79,30 +67,6 @@ const enableNestDevtools =
 							{
 								path: "auth",
 								module: AuthModule,
-							},
-							{
-								path: "idp/security-policy",
-								module: SecurityPolicyModule,
-							},
-							{
-								path: "idp/email-verifications",
-								module: EmailVerificationsModule,
-							},
-							{
-								path: "idp/accounts",
-								module: IdpAccountsModule,
-							},
-							{
-								path: "idp/dashboard",
-								module: IdpDashboardModule,
-							},
-							{
-								path: "oidc-clients",
-								module: OidcClientsModule,
-							},
-							{
-								path: "oidc-sessions",
-								module: OidcSessionsModule,
 							},
 						],
 					},

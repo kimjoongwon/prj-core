@@ -34,7 +34,7 @@ async function createSpaceSnapshot() {
 
 	return observer(function SpaceSnapshot() {
 		const account = useApp().account;
-		const value = `${account.currentTenantId ?? "none"}:${account.currentSpaceId ?? "none"}:${account.currentFitnessCenterName ?? "none"}:${account.isSelectionResolved ? "resolved" : "pending"}`;
+		const value = `${account.currentTenantId ?? "none"}:${account.currentSpaceId ?? "none"}:${account.currentSpaceName ?? "none"}:${account.isSelectionResolved ? "resolved" : "pending"}`;
 
 		return <output aria-label="storybook-admin-space">{value}</output>;
 	});
@@ -143,7 +143,7 @@ describe("StorybookRuntimeProvider", () => {
 		window.history.replaceState(
 			{},
 			"",
-			"/iframe.html?id=screen-spacelistscreen--default&viewMode=story",
+			"/iframe.html?id=screen-rolelistscreen--default&viewMode=story",
 		);
 
 		const { withStorybookRuntime } = await loadProvider();
@@ -158,8 +158,8 @@ describe("StorybookRuntimeProvider", () => {
 					</>
 				),
 				{
-					id: "screen-spacelistscreen--default",
-					title: "screen/SpaceListScreen",
+					id: "screen-rolelistscreen--default",
+					title: "screen/RoleListScreen",
 					parameters: {
 						storybookRuntime: {
 							realm: "admin",

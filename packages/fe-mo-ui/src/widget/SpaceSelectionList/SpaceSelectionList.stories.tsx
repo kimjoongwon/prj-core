@@ -1,7 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import { ScrollView, View } from "react-native";
 import { Typography } from "../../data-display/Typography";
 import { SpaceSelectionList } from "./index";
+import { useStorybookState } from "../../storybook";
+
+function createSpaceSelectionListStoryState() {
+	return makeAutoObservable(
+		{ selectedSpaceId: "gangnam", selectSpace(spaceId: string) { this.selectedSpaceId = spaceId; } },
+		{},
+		{ autoBind: true, name: "SpaceSelectionListStoryState" },
+	);
+}
 
 const spaces = [
 	{
@@ -34,7 +45,13 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-	render: () => (
+	render: () => <SpaceSelectionListStory />,
+};
+
+const SpaceSelectionListStory = observer(function SpaceSelectionListStory() {
+		const state = useLocalObservable(createSpaceSelectionListStoryState);
+		useStorybookState(() => ({ selectedSpaceId: state.selectedSpaceId }));
+		return (
 		<ScrollView contentContainerClassName="gap-4 px-4 py-5">
 			<View className="gap-2">
 				<Typography className="font-extrabold" type="h5">
@@ -45,13 +62,13 @@ export const Default: Story = {
 				</Typography>
 			</View>
 			<SpaceSelectionList
-				onSelectSpace={() => undefined}
-				selectedSpaceId="gangnam"
+				onSelectSpace={(space) => state.selectSpace(space.id)}
+				selectedSpaceId={state.selectedSpaceId}
 				spaces={spaces}
 			/>
 		</ScrollView>
-	),
-};
+		);
+});
 
 export const Empty: Story = {
 	render: () => (

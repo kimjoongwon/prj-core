@@ -34,7 +34,7 @@ describe("AccountService", () => {
 		service = module.get(AccountService);
 	});
 
-	it("roles scope claims에 fitnessCenterName을 포함한다", async () => {
+	it("roles scope claims에 spaceName을 포함한다", async () => {
 		usersRepository.findByUserIdWithTenantsAndProfiles.mockResolvedValue({
 			id: 1n,
 			userId: "user-1",
@@ -54,9 +54,7 @@ describe("AccountService", () => {
 					},
 					space: {
 						spaceId: "01J00000000000000000000011",
-						fitnessCenter: {
-							name: "System Fitness Center",
-						},
+						name: "System Fitness Center",
 					},
 				},
 			],
@@ -80,7 +78,7 @@ describe("AccountService", () => {
 			spaces: [
 				{
 					spaceId: "01J00000000000000000000011",
-					fitnessCenterName: "System Fitness Center",
+					spaceName: "System Fitness Center",
 				},
 			],
 		});

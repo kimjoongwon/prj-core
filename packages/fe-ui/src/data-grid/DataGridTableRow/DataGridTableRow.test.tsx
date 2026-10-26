@@ -2,7 +2,6 @@ import { createTable, getCoreRowModel } from "@tanstack/react-table";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { observable, observableRef, runInAction } from "mobx";
 import { describe, expect, it, vi } from "vitest";
-import type { DataGridTableState } from "../DataGridTable/DataGridTable";
 import {
 	DataGridTableRow,
 	type DataGridTableRowState,
@@ -36,26 +35,10 @@ describe("DataGridTableRow 편집 요청", () => {
 				onClick: false,
 			},
 		);
-		const tableState = observable<
-			DataGridTableState<{ id: string; name: string }>
-		>(
-			{
-				rows: table.options.data,
-				row: state,
-				columns: table.options.columns,
-				expandedRowIds: {},
-				selectedRowKeys: new Set<string>(),
-				selection: undefined,
-				getSubRows: undefined,
-				instance: table,
-			},
-			{ columns: observableRef, instance: false, row: false },
-		);
-		const { unmount } = render(
+		const renderDataGridTableRow = () => (
 			<table>
 				<tbody>
 					<DataGridTableRow
-						tableState={tableState}
 						state={state}
 						row={table.getRow("alpha")}
 						selectionMode={undefined}
@@ -64,8 +47,9 @@ describe("DataGridTableRow 편집 요청", () => {
 						onMoveToAdjacentCell={vi.fn()}
 					/>
 				</tbody>
-			</table>,
+			</table>
 		);
+		const { rerender, unmount } = render(renderDataGridTableRow());
 		expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
 		const rowElement = screen.getByRole("row");
 		fireEvent.click(rowElement);
@@ -76,6 +60,7 @@ describe("DataGridTableRow 편집 요청", () => {
 			...options,
 			data: [{ id: "alpha", name: "Updated Alpha" }],
 		}));
+		rerender(renderDataGridTableRow());
 		act(() => {
 			runInAction(() => {
 				state.editRequest = {

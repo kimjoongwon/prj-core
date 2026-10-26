@@ -2,8 +2,26 @@ import { Plus, Trash2 } from "lucide-react";
 import { Button } from "../Button/Button";
 import { TextField } from "../TextField/TextField";
 import type { StringListInputProps } from "./StringListInput.props";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useCallback, useEffect, useId } from "react";
+import { useInputStateInspection } from "@cocrepo/hook";
 
-export function StringListInput({
+export function createStringListInputState(initialValue: string[] = []) {
+	return makeAutoObservable(
+		{
+			value: [...initialValue],
+			setValue(nextValue: string[]) {
+				this.value = nextValue;
+			},
+		},
+		{},
+		{ autoBind: true, name: "StringListInputState" },
+	);
+}
+export type StringListInputState = ReturnType<typeof createStringListInputState>;
+
+export const StringListInput = observer(function StringListInput({
 	value,
 	onChange,
 	errors,
@@ -15,23 +33,42 @@ export function StringListInput({
 	inputClassName = "flex-1",
 	emptyValue = "",
 }: StringListInputProps) {
+	const internalState = useLocalObservable(() =>
+		createStringListInputState(value ?? []),
+	);
+	const inputStateId = useId();
+	const inspection = useInputStateInspection();
+	const isControlled = value !== undefined;
+	const selectedValue = (isControlled ? value : internalState.value) ?? [];
+	const reader = useCallback(
+		() => (isControlled ? value : internalState.value),
+		[internalState, isControlled, value],
+	);
+	useEffect(
+		() => inspection?.registerInputState(inputStateId, reader),
+		[inspection, inputStateId, reader, selectedValue],
+	);
+	const updateValue = (nextValue: string[]) => {
+		if (!isControlled) internalState.setValue(nextValue);
+		onChange?.(nextValue);
+	};
 	const handleAdd = () => {
-		onChange([...value, emptyValue]);
+		updateValue([...selectedValue, emptyValue]);
 	};
 
 	const handleRemove = (index: number) => {
-		onChange(value.filter((_, valueIndex) => valueIndex !== index));
+		updateValue(selectedValue.filter((_, valueIndex) => valueIndex !== index));
 	};
 
 	const handleChange = (index: number, nextValue: string) => {
-		const nextValues = [...value];
+		const nextValues = [...selectedValue];
 		nextValues[index] = nextValue;
-		onChange(nextValues);
+		updateValue(nextValues);
 	};
 
 	return (
 		<div className={className}>
-			{value.map((item, index) => (
+			{selectedValue.map((item, index) => (
 				<div key={index} className="flex items-start gap-2">
 					<TextField
 						size="sm"
@@ -70,4 +107,4 @@ export function StringListInput({
 			)}
 		</div>
 	);
-}
+});

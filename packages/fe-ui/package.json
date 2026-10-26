@@ -19,6 +19,11 @@
 			"import": "./src/layout/index.ts",
 			"default": "./src/layout/index.ts"
 		},
+		"./storybook": {
+			"types": "./src/storybook/index.ts",
+			"import": "./src/storybook/index.ts",
+			"default": "./src/storybook/index.ts"
+		},
 		"./package.json": "./package.json"
 	},
 	"main": "./index.ts",

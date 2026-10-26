@@ -10,9 +10,8 @@ import type {
 	ValueAggregator,
 	ValueSplitter,
 } from "@cocrepo/type";
-import { action, reaction } from "mobx";
-import { useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { action } from "mobx";
+import { useMemo, useRef } from "react";
 
 export type {
 	UseFormFieldMultiOptions,
@@ -20,16 +19,21 @@ export type {
 	UseFormFieldSingleOptions,
 } from "@cocrepo/type";
 
-type SinglePathOptions<
-	TState extends object,
-	TValue,
-> = UseFormFieldSingleOptions<TState, TValue, Paths<TState, 4>>;
+type SinglePathOptions<TState extends object, TValue> = Omit<
+	UseFormFieldSingleOptions<TState, TValue, Paths<TState, 4>>,
+	"value"
+> & {
+	value?: TValue;
+	defaultValue?: TValue;
+};
 
 type MultiPathOptions<
 	TState extends object,
 	TValue,
 	TPaths extends PathTuple<TState> = PathTuple<TState>,
-> = UseFormFieldMultiOptions<TState, TValue, TPaths> & {
+> = Omit<UseFormFieldMultiOptions<TState, TValue, TPaths>, "value"> & {
+	value?: TValue;
+	defaultValue?: TValue;
 	valueSplitter: ValueSplitter<TValue, TPaths>;
 	valueAggregator?: ValueAggregator<TValue, TPaths>;
 };
@@ -52,13 +56,11 @@ function isSinglePathOptions<
 	return "path" in options && typeof options.path === "string";
 }
 
-// Single-path overload
 export function useFormField<
 	TState extends object = Record<string, unknown>,
 	TValue = unknown,
 >(options: SinglePathOptions<TState, TValue>): UseFormFieldReturn<TValue>;
 
-// Multi-path overload
 export function useFormField<
 	TState extends object = Record<string, unknown>,
 	TValue = unknown,
@@ -67,7 +69,6 @@ export function useFormField<
 	options: MultiPathOptions<TState, TValue, TPaths>,
 ): UseFormFieldReturn<TValue>;
 
-// Implementation
 export function useFormField<
 	TState extends object = Record<string, unknown>,
 	TValue = unknown,
@@ -84,92 +85,78 @@ export function useFormField<
 	options: FormFieldOptions<TState, TValue, TPaths>,
 ): UseFormFieldReturn<TValue> {
 	const isSinglePath = isSinglePathOptions(options);
-	const debugPath = isSinglePath
-		? String(options.path)
-		: options.paths.join(",");
-	const pathDependency = isSinglePath ? options.path : options.paths;
-	const splitterDependency = isSinglePath ? undefined : options.valueSplitter;
-	const aggregatorDependency = isSinglePath
-		? undefined
-		: options.valueAggregator;
+	const fallbackValue = options.value !== undefined
+		? options.value
+		: options.defaultValue;
+	const pathDependency = isSinglePath
+		? options.path
+		: options.paths.join("\u0000");
+	const latestOptionsRef = useRef(options);
+	latestOptionsRef.current = options;
 
-	const localState = useLocalObservable(() => ({
-		value: options.value,
-	}));
-
-	// setValue with action wrapper and debug name
-	const setValue = action(
-		`useFormField.setValue[${debugPath}]`,
-		(newValue: TValue) => {
-			localState.value = newValue;
-		},
-	) as unknown as (value: TValue) => void;
-
-	useEffect(() => {
+	return useMemo(() => {
 		if (isSinglePath) {
-			const setterDisposer = reaction(
-				() => localState.value,
-				(value) => {
-					tools.set(options.state, options.path, value);
+			const state = {
+				get value() {
+					const externalValue = tools.get(options.state, options.path);
+					return (externalValue === undefined
+						? fallbackValue
+						: externalValue) as TValue;
 				},
-			);
-
-			const getterDisposer = reaction(
-				() => tools.get(options.state, options.path),
-				(value) => {
-					localState.value = value as TValue;
+				set value(nextValue: TValue) {
+					tools.set(options.state, options.path, nextValue);
 				},
-			);
-
-			return () => {
-				setterDisposer();
-				getterDisposer();
 			};
-		} else {
-			const setterDisposer = reaction(
-				() => localState.value,
-				(value) => {
-					// Use valueSplitter to split value to each path
-					const mapped = options.valueSplitter(value, options.paths);
-					options.paths.forEach((path: string) => {
-						tools.set(options.state, path, mapped[path]);
-					});
-				},
-			);
 
-			const getterDisposer = reaction(
-				() => {
-					// Get values from all paths and combine into object
-					const values: Record<string, unknown> = {};
-					options.paths.forEach((path: string) => {
-						values[path] = tools.get(options.state, path);
-					});
-					return values;
-				},
-				(values) => {
-					// Use valueAggregator to aggregate values if provided
-					if (options.valueAggregator) {
-						localState.value = options.valueAggregator(values, options.paths);
-					}
-				},
-			);
-
-			return () => {
-				setterDisposer();
-				getterDisposer();
+			return {
+				state,
+				setValue: action(
+					`useFormField.setValue[${String(options.path)}]`,
+					(nextValue: TValue) => {
+						state.value = nextValue;
+					},
+				),
 			};
 		}
-	}, [
-		localState,
-		isSinglePath,
-		options.state,
-		pathDependency,
-		splitterDependency,
-		aggregatorDependency,
-	]);
 
-	return {
-		state: localState,
-		setValue,
-	};
+		let multiValue = fallbackValue as TValue;
+		const state = {
+			get value() {
+				const currentOptions = latestOptionsRef.current as MultiPathOptions<
+					TState,
+					TValue,
+					TPaths
+				>;
+				const values: Record<string, unknown> = {};
+				currentOptions.paths.forEach((path: string) => {
+					values[path] = tools.get(currentOptions.state, path);
+				});
+				return currentOptions.valueAggregator
+					? currentOptions.valueAggregator(values, currentOptions.paths)
+					: multiValue;
+			},
+			set value(nextValue: TValue) {
+				const currentOptions = latestOptionsRef.current as MultiPathOptions<
+					TState,
+					TValue,
+					TPaths
+				>;
+				multiValue = nextValue;
+				const mapped = currentOptions.valueSplitter(nextValue, currentOptions.paths);
+				currentOptions.paths.forEach((path: string) => {
+					tools.set(currentOptions.state, path, mapped[path]);
+				});
+			},
+		};
+
+		return {
+			state,
+			setValue: action(
+				`useFormField.setValue[${options.paths.join(",")}]`,
+				(nextValue: TValue) => {
+					state.value = nextValue;
+				},
+			),
+		};
+	}, [fallbackValue, isSinglePath, options.state, pathDependency]);
 }

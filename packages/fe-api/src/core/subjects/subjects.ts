@@ -32,6 +32,7 @@ import type {
 	UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
+	queryOptions as queryOptionsBuilder,
 	useQuery,
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
@@ -244,7 +245,7 @@ export const prefetchGetSubjectsQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetSubjectsQueryOptions(params, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -273,11 +274,19 @@ export const getGetSubjectsSuspenseQueryOptions = <
 		signal,
 	}) => getSubjects(params, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getSubjects>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetSubjectsSuspenseQueryResult = NonNullable<
@@ -538,7 +547,7 @@ export const prefetchGetSubjectsInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -738,7 +747,7 @@ export const prefetchGetSubjectFieldsQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetSubjectFieldsQueryOptions(id, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -767,11 +776,19 @@ export const getGetSubjectFieldsSuspenseQueryOptions = <
 		Awaited<ReturnType<typeof getSubjectFields>>
 	> = ({ signal }) => getSubjectFields(id, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getSubjectFields>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetSubjectFieldsSuspenseQueryResult = NonNullable<
@@ -1032,7 +1049,7 @@ export const prefetchGetSubjectFieldsInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -1208,7 +1225,7 @@ export const prefetchGetSubjectByIdQuery = async <
 ): Promise<QueryClient> => {
 	const queryOptions = getGetSubjectByIdQueryOptions(id, options);
 
-	await queryClient.prefetchQuery(queryOptions);
+	await queryClient.query(queryOptions).catch(() => {});
 
 	return queryClient;
 };
@@ -1237,11 +1254,19 @@ export const getGetSubjectByIdSuspenseQueryOptions = <
 		signal,
 	}) => getSubjectById(id, { signal, ...requestOptions });
 
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+	return queryOptionsBuilder({
+		queryKey,
+		...queryOptions,
+		queryFn: queryOptions?.queryFn ?? queryFn,
+	}) as UseSuspenseQueryOptions<
 		Awaited<ReturnType<typeof getSubjectById>>,
 		TError,
 		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+	> & { queryKey: DataTag<QueryKey, TData, TError> } & {
+		throwOnError?: ((this: never, error: TError) => boolean) & {
+			readonly __inferenceOnly: never;
+		};
+	};
 };
 
 export type GetSubjectByIdSuspenseQueryResult = NonNullable<
@@ -1502,7 +1527,7 @@ export const prefetchGetSubjectByIdInfiniteQuery = async <
 		options,
 	);
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+	await queryClient.infiniteQuery(queryOptions).catch(() => {});
 
 	return queryClient;
 };

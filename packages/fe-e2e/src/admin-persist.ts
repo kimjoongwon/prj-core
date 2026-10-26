@@ -15,7 +15,7 @@ export interface AdminNativeAuthSession {
 export interface AdminPersistSpaceSelection {
 	tenantId: DecimalId;
 	spaceId: DecimalId;
-	fitnessCenterName: string;
+	spaceName: string;
 	contentLanguageCode?: string | null;
 }
 
@@ -24,7 +24,7 @@ export interface AdminPersistAccount {
 	version: typeof ADMIN_ACCOUNT_PERSIST_VERSION;
 	tenantId: DecimalId | null;
 	spaceId: DecimalId | null;
-	fitnessCenterName: string | null;
+	spaceName: string | null;
 	contentLanguageCode: string | null;
 	availableSpaces: AdminPersistSpaceSelection[];
 }
@@ -100,7 +100,7 @@ export function mergeAdminPersistAccountSelection(
 			version: ADMIN_ACCOUNT_PERSIST_VERSION,
 			tenantId: selection.tenantId,
 			spaceId: selection.spaceId,
-			fitnessCenterName: selection.fitnessCenterName,
+			spaceName: selection.spaceName,
 			contentLanguageCode: selection.contentLanguageCode ?? null,
 			availableSpaces,
 		},
@@ -117,14 +117,14 @@ export function readAdminPersistSpaceSelection(
 	raw: string | null,
 ): AdminPersistSpaceSelection | undefined {
 	const account = parseAdminPersistStorageDocument(raw).account;
-	if (!account?.tenantId || !account.spaceId || !account.fitnessCenterName) {
+	if (!account?.tenantId || !account.spaceId || !account.spaceName) {
 		return undefined;
 	}
 
 	return {
 		tenantId: account.tenantId,
 		spaceId: account.spaceId,
-		fitnessCenterName: account.fitnessCenterName,
+		spaceName: account.spaceName,
 		contentLanguageCode: account.contentLanguageCode,
 	};
 }
@@ -156,9 +156,9 @@ function normalizeAdminPersistAccount(
 		version: ADMIN_ACCOUNT_PERSIST_VERSION,
 		tenantId: isDecimalId(value.tenantId) ? value.tenantId : null,
 		spaceId: isDecimalId(value.spaceId) ? value.spaceId : null,
-		fitnessCenterName:
-			typeof value.fitnessCenterName === "string"
-				? value.fitnessCenterName
+		spaceName:
+			typeof value.spaceName === "string"
+				? value.spaceName
 				: null,
 		contentLanguageCode:
 			typeof value.contentLanguageCode === "string"
@@ -177,7 +177,7 @@ function normalizeAdminPersistSpaces(
 					isRecord(space) &&
 					isDecimalId(space.tenantId) &&
 					isDecimalId(space.spaceId) &&
-					typeof space.fitnessCenterName === "string" &&
+					typeof space.spaceName === "string" &&
 					(space.contentLanguageCode === undefined ||
 						space.contentLanguageCode === null ||
 						typeof space.contentLanguageCode === "string"),
