@@ -271,7 +271,6 @@ export type UserWhereInput = {
   createdContents?: Prisma.ContentListRelationFilter
   createdTimelines?: Prisma.TimelineListRelationFilter
   createdTasks?: Prisma.TaskListRelationFilter
-  createdSafeWallets?: Prisma.SafeWalletListRelationFilter
   createdRoutines?: Prisma.RoutineListRelationFilter
   instructedPrograms?: Prisma.ProgramListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
@@ -316,7 +315,6 @@ export type UserOrderByWithRelationInput = {
   createdContents?: Prisma.ContentOrderByRelationAggregateInput
   createdTimelines?: Prisma.TimelineOrderByRelationAggregateInput
   createdTasks?: Prisma.TaskOrderByRelationAggregateInput
-  createdSafeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput
   createdRoutines?: Prisma.RoutineOrderByRelationAggregateInput
   instructedPrograms?: Prisma.ProgramOrderByRelationAggregateInput
   reservations?: Prisma.ReservationOrderByRelationAggregateInput
@@ -364,7 +362,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdContents?: Prisma.ContentListRelationFilter
   createdTimelines?: Prisma.TimelineListRelationFilter
   createdTasks?: Prisma.TaskListRelationFilter
-  createdSafeWallets?: Prisma.SafeWalletListRelationFilter
   createdRoutines?: Prisma.RoutineListRelationFilter
   instructedPrograms?: Prisma.ProgramListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
@@ -443,7 +440,6 @@ export type UserCreateInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -488,7 +484,6 @@ export type UserUncheckedCreateInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -533,7 +528,6 @@ export type UserUpdateInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -578,7 +572,6 @@ export type UserUncheckedUpdateInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -1049,22 +1042,6 @@ export type UserUpdateOneWithoutCreatedRoutinesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedRoutinesInput, Prisma.UserUpdateWithoutCreatedRoutinesInput>, Prisma.UserUncheckedUpdateWithoutCreatedRoutinesInput>
 }
 
-export type UserCreateNestedOneWithoutCreatedSafeWalletsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedSafeWalletsInput, Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedSafeWalletsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutCreatedSafeWalletsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedSafeWalletsInput, Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedSafeWalletsInput
-  upsert?: Prisma.UserUpsertWithoutCreatedSafeWalletsInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedSafeWalletsInput, Prisma.UserUpdateWithoutCreatedSafeWalletsInput>, Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput>
-}
-
 export type UserCreateNestedOneWithoutCreatedTasksInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTasksInput, Prisma.UserUncheckedCreateWithoutCreatedTasksInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTasksInput
@@ -1209,7 +1186,6 @@ export type UserCreateWithoutCreatedAlbumEntriesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -1253,7 +1229,6 @@ export type UserUncheckedCreateWithoutCreatedAlbumEntriesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -1313,7 +1288,6 @@ export type UserUpdateWithoutCreatedAlbumEntriesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -1357,7 +1331,6 @@ export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -1401,7 +1374,6 @@ export type UserCreateWithoutCreatedAlbumsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -1445,7 +1417,6 @@ export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -1505,7 +1476,6 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -1549,7 +1519,6 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -1593,7 +1562,6 @@ export type UserCreateWithoutCreatedAssetsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -1637,7 +1605,6 @@ export type UserUncheckedCreateWithoutCreatedAssetsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -1697,7 +1664,6 @@ export type UserUpdateWithoutCreatedAssetsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -1741,7 +1707,6 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -1784,7 +1749,6 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -1828,7 +1792,6 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -1888,7 +1851,6 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -1932,7 +1894,6 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -1976,7 +1937,6 @@ export type UserCreateWithoutCreatedCategoriesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -2020,7 +1980,6 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -2080,7 +2039,6 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -2124,7 +2082,6 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -2168,7 +2125,6 @@ export type UserCreateWithoutCreatedContentsInput = {
   createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -2212,7 +2168,6 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
   createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -2272,7 +2227,6 @@ export type UserUpdateWithoutCreatedContentsInput = {
   createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -2316,7 +2270,6 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -2361,7 +2314,6 @@ export type UserCreateWithoutCreatedDerivativesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -2405,7 +2357,6 @@ export type UserUncheckedCreateWithoutCreatedDerivativesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -2465,7 +2416,6 @@ export type UserUpdateWithoutCreatedDerivativesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -2509,7 +2459,6 @@ export type UserUncheckedUpdateWithoutCreatedDerivativesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -2552,7 +2501,6 @@ export type UserCreateWithoutEmailVerificationsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -2596,7 +2544,6 @@ export type UserUncheckedCreateWithoutEmailVerificationsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -2656,7 +2603,6 @@ export type UserUpdateWithoutEmailVerificationsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -2700,7 +2646,6 @@ export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -2745,7 +2690,6 @@ export type UserCreateWithoutCreatedFoldersInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -2789,7 +2733,6 @@ export type UserUncheckedCreateWithoutCreatedFoldersInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -2849,7 +2792,6 @@ export type UserUpdateWithoutCreatedFoldersInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -2893,7 +2835,6 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -2936,7 +2877,6 @@ export type UserCreateWithoutCreatedGroupsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -2980,7 +2920,6 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -3040,7 +2979,6 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -3084,7 +3022,6 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -3129,7 +3066,6 @@ export type UserCreateWithoutInquiryMessagesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -3173,7 +3109,6 @@ export type UserUncheckedCreateWithoutInquiryMessagesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -3233,7 +3168,6 @@ export type UserUpdateWithoutInquiryMessagesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -3277,7 +3211,6 @@ export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -3321,7 +3254,6 @@ export type UserCreateWithoutInquiryParticipantsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -3365,7 +3297,6 @@ export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -3425,7 +3356,6 @@ export type UserUpdateWithoutInquiryParticipantsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -3469,7 +3399,6 @@ export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -3513,7 +3442,6 @@ export type UserCreateWithoutCreatedThreadsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -3557,7 +3485,6 @@ export type UserUncheckedCreateWithoutCreatedThreadsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -3617,7 +3544,6 @@ export type UserUpdateWithoutCreatedThreadsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -3661,7 +3587,6 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -3705,7 +3630,6 @@ export type UserCreateWithoutCreatedInquiriesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -3749,7 +3673,6 @@ export type UserUncheckedCreateWithoutCreatedInquiriesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -3798,7 +3721,6 @@ export type UserCreateWithoutCustomerInquiriesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -3842,7 +3764,6 @@ export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -3891,7 +3812,6 @@ export type UserCreateWithoutAssignedInquiriesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -3935,7 +3855,6 @@ export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -3995,7 +3914,6 @@ export type UserUpdateWithoutCreatedInquiriesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -4039,7 +3957,6 @@ export type UserUncheckedUpdateWithoutCreatedInquiriesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -4094,7 +4011,6 @@ export type UserUpdateWithoutCustomerInquiriesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -4138,7 +4054,6 @@ export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -4193,7 +4108,6 @@ export type UserUpdateWithoutAssignedInquiriesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -4237,7 +4151,6 @@ export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -4280,7 +4193,6 @@ export type UserCreateWithoutPasswordHistoryInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -4324,7 +4236,6 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -4384,7 +4295,6 @@ export type UserUpdateWithoutPasswordHistoryInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -4428,7 +4338,6 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -4473,7 +4382,6 @@ export type UserCreateWithoutCreatedPoliciesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -4517,7 +4425,6 @@ export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -4577,7 +4484,6 @@ export type UserUpdateWithoutCreatedPoliciesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -4621,7 +4527,6 @@ export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -4664,7 +4569,6 @@ export type UserCreateWithoutProfilesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -4708,7 +4612,6 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -4768,7 +4671,6 @@ export type UserUpdateWithoutProfilesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -4812,7 +4714,6 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -4857,7 +4758,6 @@ export type UserCreateWithoutInstructedProgramsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
@@ -4901,7 +4801,6 @@ export type UserUncheckedCreateWithoutInstructedProgramsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4961,7 +4860,6 @@ export type UserUpdateWithoutInstructedProgramsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
@@ -5005,7 +4903,6 @@ export type UserUncheckedUpdateWithoutInstructedProgramsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5049,7 +4946,6 @@ export type UserCreateWithoutCreatedReservationsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -5093,7 +4989,6 @@ export type UserUncheckedCreateWithoutCreatedReservationsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -5142,7 +5037,6 @@ export type UserCreateWithoutReservationsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
@@ -5186,7 +5080,6 @@ export type UserUncheckedCreateWithoutReservationsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5246,7 +5139,6 @@ export type UserUpdateWithoutCreatedReservationsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -5290,7 +5182,6 @@ export type UserUncheckedUpdateWithoutCreatedReservationsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -5345,7 +5236,6 @@ export type UserUpdateWithoutReservationsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
@@ -5389,7 +5279,6 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5433,7 +5322,6 @@ export type UserCreateWithoutCreatedRoutinesInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
@@ -5477,7 +5365,6 @@ export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5537,7 +5424,6 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
@@ -5581,199 +5467,6 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
-  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
-  createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput
-  customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput
-  assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput
-  createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput
-  inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
-  inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
-  createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutCreatedSafeWalletsInput = {
-  userId?: string
-  id?: bigint | number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  passwordChangedAt?: Date | string | null
-  status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
-  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
-  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput
-  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput
-  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput
-  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
-  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
-  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
-  createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
-  createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
-  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput
-  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput
-  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput
-  createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput
-  createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput
-  customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput
-  assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput
-  createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput
-  inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
-  inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
-  createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
-  userId?: string
-  id?: bigint | number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  passwordChangedAt?: Date | string | null
-  status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
-  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
-  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput
-  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput
-  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput
-  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
-  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
-  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
-  createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
-  createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput
-  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput
-  createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput
-  customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput
-  assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput
-  createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput
-  inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
-  inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
-  createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutCreatedSafeWalletsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedSafeWalletsInput, Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput>
-}
-
-export type UserUpsertWithoutCreatedSafeWalletsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedSafeWalletsInput, Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedSafeWalletsInput, Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutCreatedSafeWalletsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedSafeWalletsInput, Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput>
-}
-
-export type UserUpdateWithoutCreatedSafeWalletsInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
-  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
-  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput
-  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput
-  createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput
-  createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
-  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
-  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
-  createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
-  createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
-  createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput
-  createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput
-  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput
-  createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput
-  createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput
-  customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput
-  assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput
-  createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput
-  inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
-  inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
-  createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
-  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
-  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput
-  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5816,7 +5509,6 @@ export type UserCreateWithoutCreatedTasksInput = {
   createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -5860,7 +5552,6 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -5920,7 +5611,6 @@ export type UserUpdateWithoutCreatedTasksInput = {
   createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -5964,7 +5654,6 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -6008,7 +5697,6 @@ export type UserCreateWithoutTenantAccessRequestsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -6052,7 +5740,6 @@ export type UserUncheckedCreateWithoutTenantAccessRequestsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -6101,7 +5788,6 @@ export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -6145,7 +5831,6 @@ export type UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -6205,7 +5890,6 @@ export type UserUpdateWithoutTenantAccessRequestsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -6249,7 +5933,6 @@ export type UserUncheckedUpdateWithoutTenantAccessRequestsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -6304,7 +5987,6 @@ export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -6348,7 +6030,6 @@ export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -6392,7 +6073,6 @@ export type UserCreateWithoutTenantsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -6436,7 +6116,6 @@ export type UserUncheckedCreateWithoutTenantsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -6496,7 +6175,6 @@ export type UserUpdateWithoutTenantsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -6540,7 +6218,6 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -6584,7 +6261,6 @@ export type UserCreateWithoutCreatedTimelinesInput = {
   createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -6628,7 +6304,6 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -6688,7 +6363,6 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
   createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -6732,7 +6406,6 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -6776,7 +6449,6 @@ export type UserCreateWithoutAssociationsInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -6820,7 +6492,6 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -6880,7 +6551,6 @@ export type UserUpdateWithoutAssociationsInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -6924,7 +6594,6 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -6968,7 +6637,6 @@ export type UserCreateWithoutClassificationInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -7012,7 +6680,6 @@ export type UserUncheckedCreateWithoutClassificationInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -7072,7 +6739,6 @@ export type UserUpdateWithoutClassificationInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -7116,7 +6782,6 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -7160,7 +6825,6 @@ export type UserCreateWithoutStatusInput = {
   createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
@@ -7204,7 +6868,6 @@ export type UserUncheckedCreateWithoutStatusInput = {
   createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
   instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
@@ -7264,7 +6927,6 @@ export type UserUpdateWithoutStatusInput = {
   createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
@@ -7308,7 +6970,6 @@ export type UserUncheckedUpdateWithoutStatusInput = {
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -7346,7 +7007,6 @@ export type UserCountOutputType = {
   createdContents: number
   createdTimelines: number
   createdTasks: number
-  createdSafeWallets: number
   createdRoutines: number
   instructedPrograms: number
   reservations: number
@@ -7379,7 +7039,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   createdContents?: boolean | UserCountOutputTypeCountCreatedContentsArgs
   createdTimelines?: boolean | UserCountOutputTypeCountCreatedTimelinesArgs
   createdTasks?: boolean | UserCountOutputTypeCountCreatedTasksArgs
-  createdSafeWallets?: boolean | UserCountOutputTypeCountCreatedSafeWalletsArgs
   createdRoutines?: boolean | UserCountOutputTypeCountCreatedRoutinesArgs
   instructedPrograms?: boolean | UserCountOutputTypeCountInstructedProgramsArgs
   reservations?: boolean | UserCountOutputTypeCountReservationsArgs
@@ -7497,13 +7156,6 @@ export type UserCountOutputTypeCountCreatedTimelinesArgs<ExtArgs extends runtime
  */
 export type UserCountOutputTypeCountCreatedTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TaskWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountCreatedSafeWalletsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SafeWalletWhereInput
 }
 
 /**
@@ -7645,7 +7297,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdContents?: boolean | Prisma.User$createdContentsArgs<ExtArgs>
   createdTimelines?: boolean | Prisma.User$createdTimelinesArgs<ExtArgs>
   createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
-  createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>
   createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>
   instructedPrograms?: boolean | Prisma.User$instructedProgramsArgs<ExtArgs>
   reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
@@ -7721,7 +7372,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdContents?: boolean | Prisma.User$createdContentsArgs<ExtArgs>
   createdTimelines?: boolean | Prisma.User$createdTimelinesArgs<ExtArgs>
   createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
-  createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>
   createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>
   instructedPrograms?: boolean | Prisma.User$instructedProgramsArgs<ExtArgs>
   reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
@@ -7764,7 +7414,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdContents: Prisma.$ContentPayload<ExtArgs>[]
     createdTimelines: Prisma.$TimelinePayload<ExtArgs>[]
     createdTasks: Prisma.$TaskPayload<ExtArgs>[]
-    createdSafeWallets: Prisma.$SafeWalletPayload<ExtArgs>[]
     createdRoutines: Prisma.$RoutinePayload<ExtArgs>[]
     instructedPrograms: Prisma.$ProgramPayload<ExtArgs>[]
     reservations: Prisma.$ReservationPayload<ExtArgs>[]
@@ -8217,7 +7866,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   createdContents<T extends Prisma.User$createdContentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdContentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdTimelines<T extends Prisma.User$createdTimelinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTimelinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdTasks<T extends Prisma.User$createdTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdSafeWallets<T extends Prisma.User$createdSafeWalletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdSafeWalletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdRoutines<T extends Prisma.User$createdRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   instructedPrograms<T extends Prisma.User$instructedProgramsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$instructedProgramsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reservations<T extends Prisma.User$reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9013,30 +8661,6 @@ export type User$createdTasksArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
-}
-
-/**
- * User.createdSafeWallets
- */
-export type User$createdSafeWalletsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the SafeWallet
-   */
-  select?: Prisma.SafeWalletSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the SafeWallet
-   */
-  omit?: Prisma.SafeWalletOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SafeWalletInclude<ExtArgs> | null
-  where?: Prisma.SafeWalletWhereInput
-  orderBy?: Prisma.SafeWalletOrderByWithRelationInput | Prisma.SafeWalletOrderByWithRelationInput[]
-  cursor?: Prisma.SafeWalletWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.SafeWalletScalarFieldEnum | Prisma.SafeWalletScalarFieldEnum[]
 }
 
 /**

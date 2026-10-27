@@ -49,18 +49,26 @@ describe("admin permission derived seeds", () => {
 		for (const subject of ["menu:dashboard", "menu:users", "menu:roles"]) {
 			expect(
 				adminPlatformAdminAbilitySeedData.some(
-					(ability) => ability.subject === subject && ability.actionName === "manage",
+					(ability) =>
+						ability.subject === subject && ability.actionName === "manage",
 				),
 			).toBe(true);
 			expect(
 				adminCompanyManagerMenuAccessAbilitySeedData.some(
-					(ability) => ability.subject === subject && ability.actionName === "access",
+					(ability) =>
+						ability.subject === subject && ability.actionName === "access",
 				),
 			).toBe(true);
 		}
-		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("menu:assets");
-		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("page:assets:list");
-		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("page:assets:detail");
+		expect(
+			adminPlatformAdminAbilitySeedData.map((ability) => ability.subject),
+		).not.toContain("menu:assets");
+		expect(
+			adminPlatformAdminAbilitySeedData.map((ability) => ability.subject),
+		).not.toContain("page:assets:list");
+		expect(
+			adminPlatformAdminAbilitySeedData.map((ability) => ability.subject),
+		).not.toContain("page:assets:detail");
 	});
 
 	it("keeps PLATFORM_ADMIN as a true super role with manage all", () => {
@@ -84,6 +92,13 @@ describe("admin permission derived seeds", () => {
 				"menu:role-categories:list",
 			]),
 		);
+		for (const subjectName of [
+			"menu:wallets",
+			"menu:wallets:list",
+			"menu:wallets:transactions",
+		]) {
+			expect(legacyAdminMenuSubjectNames).not.toContain(subjectName);
+		}
 		expect(legacyAdminPageSubjectNames).toEqual(
 			expect.arrayContaining([...legacyRolePageSubjectNames]),
 		);
@@ -109,6 +124,13 @@ describe("admin permission derived seeds", () => {
 		expect(seededSubjectNames).not.toContain("page:assets:list");
 		expect(seededSubjectNames).not.toContain("page:assets:detail");
 		expect(seededSubjectNames).not.toContain("menu:schedules");
+		for (const subjectName of [
+			"menu:wallets",
+			"menu:wallets:list",
+			"menu:wallets:transactions",
+		]) {
+			expect(seededSubjectNames).not.toContain(subjectName);
+		}
 		expect(seededSubjectNames).not.toContain("menu:files");
 		for (const subjectName of legacyRolePageSubjectNames) {
 			expect(seededSubjectNames).not.toContain(subjectName);

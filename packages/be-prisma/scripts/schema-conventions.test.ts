@@ -97,8 +97,8 @@ describe("schema conventions", () => {
 		expect(toPublicIdentifierFieldName("user")).toBe("userId");
 		expect(toPublicIdentifierFieldName("oidc-client")).toBe("oidcClientId");
 		expect(toPublicIdentifierFieldName("ai-agent-log")).toBe("aiAgentLogId");
-		expect(toPublicIdentifierFieldName("safe-transaction")).toBe(
-			"safeTransactionId",
+		expect(toPublicIdentifierFieldName("tenant-access-request")).toBe(
+			"tenantAccessRequestId",
 		);
 	});
 

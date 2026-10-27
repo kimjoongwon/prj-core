@@ -21,7 +21,6 @@ model Space {
   emailVerifications   EmailVerification[]
   tenantAccessRequests TenantAccessRequest[]
   policies             Policy[]
-  safeWallets          SafeWallet[]
   folders              Folder[]
   categories           Category[]
   contents             Content[]

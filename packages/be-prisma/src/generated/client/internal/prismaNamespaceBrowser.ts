@@ -92,9 +92,6 @@ export const ModelName = {
   RoleClassification: 'RoleClassification',
   Role: 'Role',
   Routine: 'Routine',
-  SafeConfirmation: 'SafeConfirmation',
-  SafeTransaction: 'SafeTransaction',
-  SafeWallet: 'SafeWallet',
   SecurityPolicy: 'SecurityPolicy',
   SentimentAnalysis: 'SentimentAnalysis',
   ServiceDocument: 'ServiceDocument',
@@ -875,61 +872,6 @@ export const RoutineScalarFieldEnum = {
 } as const
 
 export type RoutineScalarFieldEnum = (typeof RoutineScalarFieldEnum)[keyof typeof RoutineScalarFieldEnum]
-
-
-export const SafeConfirmationScalarFieldEnum = {
-  safeConfirmationId: 'safeConfirmationId',
-  id: 'id',
-  createdAt: 'createdAt',
-  safeTransactionId: 'safeTransactionId',
-  owner: 'owner',
-  signature: 'signature'
-} as const
-
-export type SafeConfirmationScalarFieldEnum = (typeof SafeConfirmationScalarFieldEnum)[keyof typeof SafeConfirmationScalarFieldEnum]
-
-
-export const SafeTransactionScalarFieldEnum = {
-  safeTransactionId: 'safeTransactionId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  safeTxHash: 'safeTxHash',
-  safeWalletId: 'safeWalletId',
-  to: 'to',
-  value: 'value',
-  data: 'data',
-  nonce: 'nonce',
-  operation: 'operation',
-  tokenAddress: 'tokenAddress',
-  tokenSymbol: 'tokenSymbol',
-  tokenDecimals: 'tokenDecimals',
-  confirmationsRequired: 'confirmationsRequired',
-  isExecuted: 'isExecuted',
-  executionTxHash: 'executionTxHash',
-  executedAt: 'executedAt'
-} as const
-
-export type SafeTransactionScalarFieldEnum = (typeof SafeTransactionScalarFieldEnum)[keyof typeof SafeTransactionScalarFieldEnum]
-
-
-export const SafeWalletScalarFieldEnum = {
-  safeWalletId: 'safeWalletId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  address: 'address',
-  chainId: 'chainId',
-  threshold: 'threshold',
-  nonce: 'nonce',
-  owners: 'owners',
-  spaceId: 'spaceId',
-  createdById: 'createdById'
-} as const
-
-export type SafeWalletScalarFieldEnum = (typeof SafeWalletScalarFieldEnum)[keyof typeof SafeWalletScalarFieldEnum]
 
 
 export const SecurityPolicyScalarFieldEnum = {

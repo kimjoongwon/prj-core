@@ -438,9 +438,6 @@ export const ModelName = {
   RoleClassification: 'RoleClassification',
   Role: 'Role',
   Routine: 'Routine',
-  SafeConfirmation: 'SafeConfirmation',
-  SafeTransaction: 'SafeTransaction',
-  SafeWallet: 'SafeWallet',
   SecurityPolicy: 'SecurityPolicy',
   SentimentAnalysis: 'SentimentAnalysis',
   ServiceDocument: 'ServiceDocument',
@@ -477,7 +474,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ability" | "action" | "activity" | "aIAgentLog" | "albumEntry" | "album" | "asset" | "authAuditLog" | "category" | "company" | "content" | "derivative" | "document" | "emailVerification" | "exercise" | "fitnessCenter" | "folder" | "group" | "image" | "inquiryAttachment" | "inquiryMessage" | "inquiryParticipant" | "inquiryTag" | "inquiryThread" | "inquiry" | "oidcClient" | "oidcModel" | "passwordHistory" | "policyEntry" | "policy" | "post" | "profile" | "programActivity" | "program" | "referenceDataMigrationHistory" | "reservation" | "roleAssignment" | "roleAssociation" | "roleClassification" | "role" | "routine" | "safeConfirmation" | "safeTransaction" | "safeWallet" | "securityPolicy" | "sentimentAnalysis" | "serviceDocument" | "session" | "spaceAssociation" | "spaceClassification" | "space" | "subject" | "task" | "templateVariable" | "template" | "tenantAccessRequest" | "tenant" | "timeline" | "translation" | "userAssociation" | "userClassification" | "userStatus" | "user" | "video" | "whitelistEntry"
+    modelProps: "ability" | "action" | "activity" | "aIAgentLog" | "albumEntry" | "album" | "asset" | "authAuditLog" | "category" | "company" | "content" | "derivative" | "document" | "emailVerification" | "exercise" | "fitnessCenter" | "folder" | "group" | "image" | "inquiryAttachment" | "inquiryMessage" | "inquiryParticipant" | "inquiryTag" | "inquiryThread" | "inquiry" | "oidcClient" | "oidcModel" | "passwordHistory" | "policyEntry" | "policy" | "post" | "profile" | "programActivity" | "program" | "referenceDataMigrationHistory" | "reservation" | "roleAssignment" | "roleAssociation" | "roleClassification" | "role" | "routine" | "securityPolicy" | "sentimentAnalysis" | "serviceDocument" | "session" | "spaceAssociation" | "spaceClassification" | "space" | "subject" | "task" | "templateVariable" | "template" | "tenantAccessRequest" | "tenant" | "timeline" | "translation" | "userAssociation" | "userClassification" | "userStatus" | "user" | "video" | "whitelistEntry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3515,228 +3512,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    SafeConfirmation: {
-      payload: Prisma.$SafeConfirmationPayload<ExtArgs>
-      fields: Prisma.SafeConfirmationFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.SafeConfirmationFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.SafeConfirmationFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>
-        }
-        findFirst: {
-          args: Prisma.SafeConfirmationFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.SafeConfirmationFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>
-        }
-        findMany: {
-          args: Prisma.SafeConfirmationFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>[]
-        }
-        create: {
-          args: Prisma.SafeConfirmationCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>
-        }
-        createMany: {
-          args: Prisma.SafeConfirmationCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.SafeConfirmationCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>[]
-        }
-        delete: {
-          args: Prisma.SafeConfirmationDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>
-        }
-        update: {
-          args: Prisma.SafeConfirmationUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>
-        }
-        deleteMany: {
-          args: Prisma.SafeConfirmationDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.SafeConfirmationUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.SafeConfirmationUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>[]
-        }
-        upsert: {
-          args: Prisma.SafeConfirmationUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeConfirmationPayload>
-        }
-        aggregate: {
-          args: Prisma.SafeConfirmationAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSafeConfirmation>
-        }
-        groupBy: {
-          args: Prisma.SafeConfirmationGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SafeConfirmationGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.SafeConfirmationCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SafeConfirmationCountAggregateOutputType> | number
-        }
-      }
-    }
-    SafeTransaction: {
-      payload: Prisma.$SafeTransactionPayload<ExtArgs>
-      fields: Prisma.SafeTransactionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.SafeTransactionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.SafeTransactionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>
-        }
-        findFirst: {
-          args: Prisma.SafeTransactionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.SafeTransactionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>
-        }
-        findMany: {
-          args: Prisma.SafeTransactionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>[]
-        }
-        create: {
-          args: Prisma.SafeTransactionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>
-        }
-        createMany: {
-          args: Prisma.SafeTransactionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.SafeTransactionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>[]
-        }
-        delete: {
-          args: Prisma.SafeTransactionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>
-        }
-        update: {
-          args: Prisma.SafeTransactionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>
-        }
-        deleteMany: {
-          args: Prisma.SafeTransactionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.SafeTransactionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.SafeTransactionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>[]
-        }
-        upsert: {
-          args: Prisma.SafeTransactionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeTransactionPayload>
-        }
-        aggregate: {
-          args: Prisma.SafeTransactionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSafeTransaction>
-        }
-        groupBy: {
-          args: Prisma.SafeTransactionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SafeTransactionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.SafeTransactionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SafeTransactionCountAggregateOutputType> | number
-        }
-      }
-    }
-    SafeWallet: {
-      payload: Prisma.$SafeWalletPayload<ExtArgs>
-      fields: Prisma.SafeWalletFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.SafeWalletFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.SafeWalletFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>
-        }
-        findFirst: {
-          args: Prisma.SafeWalletFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.SafeWalletFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>
-        }
-        findMany: {
-          args: Prisma.SafeWalletFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>[]
-        }
-        create: {
-          args: Prisma.SafeWalletCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>
-        }
-        createMany: {
-          args: Prisma.SafeWalletCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.SafeWalletCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>[]
-        }
-        delete: {
-          args: Prisma.SafeWalletDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>
-        }
-        update: {
-          args: Prisma.SafeWalletUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>
-        }
-        deleteMany: {
-          args: Prisma.SafeWalletDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.SafeWalletUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.SafeWalletUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>[]
-        }
-        upsert: {
-          args: Prisma.SafeWalletUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SafeWalletPayload>
-        }
-        aggregate: {
-          args: Prisma.SafeWalletAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSafeWallet>
-        }
-        groupBy: {
-          args: Prisma.SafeWalletGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SafeWalletGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.SafeWalletCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SafeWalletCountAggregateOutputType> | number
-        }
-      }
-    }
     SecurityPolicy: {
       payload: Prisma.$SecurityPolicyPayload<ExtArgs>
       fields: Prisma.SecurityPolicyFieldRefs
@@ -6073,61 +5848,6 @@ export const RoutineScalarFieldEnum = {
 export type RoutineScalarFieldEnum = (typeof RoutineScalarFieldEnum)[keyof typeof RoutineScalarFieldEnum]
 
 
-export const SafeConfirmationScalarFieldEnum = {
-  safeConfirmationId: 'safeConfirmationId',
-  id: 'id',
-  createdAt: 'createdAt',
-  safeTransactionId: 'safeTransactionId',
-  owner: 'owner',
-  signature: 'signature'
-} as const
-
-export type SafeConfirmationScalarFieldEnum = (typeof SafeConfirmationScalarFieldEnum)[keyof typeof SafeConfirmationScalarFieldEnum]
-
-
-export const SafeTransactionScalarFieldEnum = {
-  safeTransactionId: 'safeTransactionId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  safeTxHash: 'safeTxHash',
-  safeWalletId: 'safeWalletId',
-  to: 'to',
-  value: 'value',
-  data: 'data',
-  nonce: 'nonce',
-  operation: 'operation',
-  tokenAddress: 'tokenAddress',
-  tokenSymbol: 'tokenSymbol',
-  tokenDecimals: 'tokenDecimals',
-  confirmationsRequired: 'confirmationsRequired',
-  isExecuted: 'isExecuted',
-  executionTxHash: 'executionTxHash',
-  executedAt: 'executedAt'
-} as const
-
-export type SafeTransactionScalarFieldEnum = (typeof SafeTransactionScalarFieldEnum)[keyof typeof SafeTransactionScalarFieldEnum]
-
-
-export const SafeWalletScalarFieldEnum = {
-  safeWalletId: 'safeWalletId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  address: 'address',
-  chainId: 'chainId',
-  threshold: 'threshold',
-  nonce: 'nonce',
-  owners: 'owners',
-  spaceId: 'spaceId',
-  createdById: 'createdById'
-} as const
-
-export type SafeWalletScalarFieldEnum = (typeof SafeWalletScalarFieldEnum)[keyof typeof SafeWalletScalarFieldEnum]
-
-
 export const SecurityPolicyScalarFieldEnum = {
   securityPolicyId: 'securityPolicyId',
   id: 'id',
@@ -7247,9 +6967,6 @@ export type GlobalOmitConfig = {
   roleClassification?: Prisma.RoleClassificationOmit
   role?: Prisma.RoleOmit
   routine?: Prisma.RoutineOmit
-  safeConfirmation?: Prisma.SafeConfirmationOmit
-  safeTransaction?: Prisma.SafeTransactionOmit
-  safeWallet?: Prisma.SafeWalletOmit
   securityPolicy?: Prisma.SecurityPolicyOmit
   sentimentAnalysis?: Prisma.SentimentAnalysisOmit
   serviceDocument?: Prisma.ServiceDocumentOmit
