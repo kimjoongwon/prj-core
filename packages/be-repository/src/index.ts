@@ -37,7 +37,6 @@ export {
 export type { RoleAssignmentInput } from "./role-assignments.repository";
 export { RoleAssignmentsRepository } from "./role-assignments.repository";
 export { RolesRepository } from "./roles.repository";
-export { SafeWalletsRepository } from "./safe-wallets.repository";
 export { SecurityPoliciesRepository } from "./security-policies.repository";
 export { SpacesRepository } from "./spaces.repository";
 export { TemplatesRepository } from "./templates.repository";

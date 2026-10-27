@@ -89,13 +89,13 @@ name
 
 예:
 
-| model 이름        | 계산된 파일 이름          |
-| ----------------- | -------------------------- |
-| `User`            | `user.prisma`              |
-| `OidcClient`      | `oidc-client.prisma`       |
-| `AIAgentLog`      | `ai-agent-log.prisma`      |
-| `S3Asset`         | `s3-asset.prisma`           |
-| `SafeTransaction` | `safe-transaction.prisma`  |
+| model 이름             | 계산된 파일 이름               |
+| ---------------------- | ------------------------------ |
+| `User`                 | `user.prisma`                  |
+| `OidcClient`           | `oidc-client.prisma`           |
+| `AIAgentLog`           | `ai-agent-log.prisma`          |
+| `S3Asset`              | `s3-asset.prisma`              |
+| `TenantAccessRequest`  | `tenant-access-request.prisma` |
 
 사람이 별도의 경로 표에서 파일 이름을 고르지 않습니다. 변환 함수가 유일한 경로 규칙입니다.
 

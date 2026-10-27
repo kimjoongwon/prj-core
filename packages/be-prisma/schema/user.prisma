@@ -35,7 +35,6 @@ model User {
   createdContents              Content[]
   createdTimelines             Timeline[]
   createdTasks                 Task[]
-  createdSafeWallets           SafeWallet[]
   createdRoutines              Routine[]
   instructedPrograms           Program[]             @relation("ProgramInstructor")
   reservations                 Reservation[]         @relation("ReservationUser")

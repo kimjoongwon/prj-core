@@ -245,21 +245,6 @@ export type Role = Prisma.RoleModel
  */
 export type Routine = Prisma.RoutineModel
 /**
- * Model SafeConfirmation
- * @displayName Safe 트랜잭션 서명
- */
-export type SafeConfirmation = Prisma.SafeConfirmationModel
-/**
- * Model SafeTransaction
- * @displayName Safe 트랜잭션
- */
-export type SafeTransaction = Prisma.SafeTransactionModel
-/**
- * Model SafeWallet
- * @displayName Safe 지갑
- */
-export type SafeWallet = Prisma.SafeWalletModel
-/**
  * Model SecurityPolicy
  * @displayName 보안 정책
  */
