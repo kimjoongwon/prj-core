@@ -25,7 +25,6 @@ model Space {
   categories           Category[]
   contents             Content[]
   tasks                Task[]
-  inquiries            Inquiry[]
   albums               Album[]
   albumEntries         AlbumEntry[]
   groups               Group[]

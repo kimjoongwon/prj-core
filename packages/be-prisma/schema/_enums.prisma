@@ -1,14 +1,3 @@
-/// @displayName AI 작업 유형
-enum AIAgentAction {
-  DRAFT_GENERATION
-  AUTO_CLASSIFICATION
-  SENTIMENT_ANALYSIS
-  AUTO_RESPONSE
-  KNOWLEDGE_SEARCH
-  SUMMARIZATION
-  TRANSLATION
-}
-
 /// @displayName 에셋 타입
 enum AssetKind {
   IMAGE
@@ -21,16 +10,6 @@ enum AssetStatus {
   UPLOADING
   READY
   FAILED
-}
-
-/// @displayName 첨부파일 유형
-enum AttachmentFileType {
-  IMAGE
-  VIDEO
-  AUDIO
-  DOCUMENT
-  ARCHIVE
-  OTHER
 }
 
 /// @displayName 인증 감사 결과
@@ -63,61 +42,6 @@ enum GroupTypes {
   User
 }
 
-/// @displayName 문의 카테고리
-enum InquiryCategory {
-  GENERAL
-  DELIVERY
-  REFUND
-  PRODUCT
-  ACCOUNT
-  TECHNICAL
-  COMPLAINT
-  OTHER
-}
-
-/// @displayName 문의 채널
-enum InquiryChannel {
-  WEB
-  EMAIL
-  CHAT
-  SMS
-  PHONE
-  WALK_IN
-}
-
-/// @displayName 문의 참여자 역할
-enum InquiryParticipantRole {
-  CUSTOMER
-  AGENT
-  SUPERVISOR
-  VIEWER
-}
-
-/// @displayName 문의 우선순위
-enum InquiryPriority {
-  LOW
-  NORMAL
-  HIGH
-  URGENT
-}
-
-/// @displayName 문의 접수 유형
-enum InquirySource {
-  ONLINE
-  OFFLINE
-}
-
-/// @displayName 문의 상태
-enum InquiryStatus {
-  NEW
-  OPEN
-  IN_PROGRESS
-  WAITING_CUSTOMER
-  RESOLVED
-  CLOSED
-  ESCALATED
-}
-
 /// @displayName 언어 코드
 enum LanguageCode {
   /// @displayName 한국어
@@ -130,16 +54,6 @@ enum LanguageCode {
   ja_JP
 
   @@map("language_code")
-}
-
-/// @displayName 메시지 콘텐츠 유형
-enum MessageContentType {
-  TEXT
-  HTML
-  MARKDOWN
-  IMAGE
-  FILE
-  SYSTEM
 }
 
 /// @displayName 반복 요일
@@ -164,20 +78,6 @@ enum ReservationStatus {
   CONFIRMED
   WAITLISTED
   CANCELED
-}
-
-/// @displayName 발신자 유형
-enum SenderType {
-  USER
-  AI
-  SYSTEM
-}
-
-/// @displayName 감정 유형
-enum SentimentType {
-  POSITIVE
-  NEUTRAL
-  NEGATIVE
 }
 
 /// @displayName 서비스 문서 본문 형식
@@ -267,13 +167,6 @@ enum TextTypes {
   Editor
   Input
   Textarea
-}
-
-/// @displayName 스레드 상태
-enum ThreadStatus {
-  ACTIVE
-  RESOLVED
-  CLOSED
 }
 
 /// @displayName 화이트리스트 유형

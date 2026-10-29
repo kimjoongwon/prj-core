@@ -535,6 +535,14 @@ export type AlbumEntryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type NullableBigIntFieldUpdateOperationsInput = {
+  set?: bigint | number | null
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
+}
+
 export type AlbumEntryCreateNestedManyWithoutAlbumInput = {
   create?: Prisma.XOR<Prisma.AlbumEntryCreateWithoutAlbumInput, Prisma.AlbumEntryUncheckedCreateWithoutAlbumInput> | Prisma.AlbumEntryCreateWithoutAlbumInput[] | Prisma.AlbumEntryUncheckedCreateWithoutAlbumInput[]
   connectOrCreate?: Prisma.AlbumEntryCreateOrConnectWithoutAlbumInput | Prisma.AlbumEntryCreateOrConnectWithoutAlbumInput[]

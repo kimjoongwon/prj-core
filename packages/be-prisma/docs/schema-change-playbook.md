@@ -67,7 +67,7 @@
 예:
 
 - `User`
-- `Inquiry`
+- `Reservation`
 - `Asset`
 
 주로 바꾸는 곳:

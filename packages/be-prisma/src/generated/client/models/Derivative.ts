@@ -702,6 +702,14 @@ export type EnumDerivativeKindFieldUpdateOperationsInput = {
   set?: $Enums.DerivativeKind
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type DerivativeCreateNestedManyWithoutSpaceInput = {
   create?: Prisma.XOR<Prisma.DerivativeCreateWithoutSpaceInput, Prisma.DerivativeUncheckedCreateWithoutSpaceInput> | Prisma.DerivativeCreateWithoutSpaceInput[] | Prisma.DerivativeUncheckedCreateWithoutSpaceInput[]
   connectOrCreate?: Prisma.DerivativeCreateOrConnectWithoutSpaceInput | Prisma.DerivativeCreateOrConnectWithoutSpaceInput[]
