@@ -4,7 +4,6 @@ export * from "./assets/assets";
 export * from "./community/community";
 export * from "./folders/folders";
 export * from "./i18n/i18n";
-export * from "./inquiries/inquiries";
 export * from "./password-reset/password-reset";
 export * from "./policies/policies";
 export * from "./reservations/reservations";

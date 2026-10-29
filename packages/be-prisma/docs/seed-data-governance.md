@@ -435,8 +435,6 @@ Demo/Test Data가 없으면 앱이 동작하지 않는다면 그것은 demo가 �
 | `sessionLoadProfileSeedData`              | 샘플 사용자 부하 정보        |
 | `createTimelineSessionExerciseDomainData` | 샘플 일정 도메인 데이터      |
 | `assetSeedData` 계열                      | 샘플 asset                   |
-| `inquirySeedData` 계열                    | 샘플 inquiry                 |
-| `inquiryTagMasterData`                    | 샘플 inquiry tag 보조 데이터 |
 
 ### 정리가 필요한 항목
 

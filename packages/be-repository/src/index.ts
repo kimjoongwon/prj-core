@@ -3,7 +3,6 @@ export { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 
 // Repositories
 // 필요할 때 생성합니다. 가이드: .codex/agents/be-repository-builder.toml
-export { AIAgentLogsRepository } from "./ai-agent-logs.repository";
 export { AlbumsRepository } from "./albums.repository";
 export { AssetsRepository } from "./assets.repository";
 export { AuthAuditLogsRepository } from "./auth-audit-logs.repository";

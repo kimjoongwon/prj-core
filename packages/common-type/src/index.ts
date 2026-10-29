@@ -231,17 +231,6 @@ export type { HttpRequestLike } from "./http-request-like";
 export type { AppIconName } from "./icon";
 export type { InputStateProps } from "./input-state";
 // ============================================
-// Inquiry 관련 타입
-// ============================================
-export type {
-	InquiryCategory,
-	InquiryChannel,
-	InquiryMessage,
-	InquiryParticipant,
-	InquiryPriority,
-	InquiryStatus,
-} from "./inquiry";
-// ============================================
 // JSON 관련 타입
 // ============================================
 export type { JsonArray, JsonObject, JsonValue } from "./json";

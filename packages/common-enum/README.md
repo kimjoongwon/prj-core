@@ -7,14 +7,13 @@
 DB enum의 단일 원천은 `@cocrepo/prisma`의 Prisma schema입니다. 이 패키지는 브라우저 안전한 `@cocrepo/prisma/enums`에서 생성 enum을 그대로 재export합니다. enum 값과 타입을 직접 복제하지 않습니다. 이 경로는 Prisma Client를 불러오지 않습니다.
 
 ```ts
-import { AssetKind, AssetKindLabel, InquiryStatus } from "@cocrepo/enum";
+import { AssetKind, AssetKindLabel } from "@cocrepo/enum";
 
 const kind: AssetKind = AssetKind.IMAGE; // "IMAGE"
 const label = AssetKindLabel[kind]; // "이미지"
-const status: InquiryStatus = InquiryStatus.NEW;
 ```
 
-표시 정보는 `Record<Enum, string>`으로 선언하여 Prisma enum 변경 시 누락된 라벨을 타입 검사에서 발견합니다. 문의 도메인의 `*Options`, `InquiryStatusTransitions`, `getAllowedStatusOptions`는 기존 공개 계약을 유지합니다.
+표시 정보는 `Record<Enum, string>`으로 선언하여 Prisma enum 변경 시 누락된 라벨을 타입 검사에서 발견합니다.
 
 ## 클래스 API 전환
 
@@ -28,7 +27,7 @@ Prisma 대응 enum은 클래스 인스턴스가 아닌 생성된 문자열 상�
 
 ## 검증
 
-`pnpm --filter @cocrepo/enum type-check`, `pnpm --filter @cocrepo/enum lint`, `pnpm --filter @cocrepo/enum test`로 생성 enum 재export 동일성, 라벨의 완전성, 문의 상태 전이 계약을 검증합니다.
+`pnpm --filter @cocrepo/enum type-check`, `pnpm --filter @cocrepo/enum lint`, `pnpm --filter @cocrepo/enum test`로 생성 enum 재export 동일성과 라벨의 완전성을 검증합니다.
 
 ### 런타임별 진입점
 

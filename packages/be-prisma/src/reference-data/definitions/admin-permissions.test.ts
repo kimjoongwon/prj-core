@@ -25,6 +25,14 @@ const legacyRolePageSubjectNames = [
 	"page:role-categories:edit",
 ] as const;
 
+const removedInquiryMenuSubjectNames = [
+	"menu:inquiries",
+	"menu:inquiries:list",
+	"menu:inquiries:direct",
+	"menu:inquiries:answered",
+	"menu:inquiries:faq",
+] as const;
+
 describe("admin permission derived seeds", () => {
 	it("covers every admin menu subject from the shared catalog", () => {
 		expect(adminMenuSubjectSeedData.map((subject) => subject.name)).toEqual(
@@ -80,6 +88,28 @@ describe("admin permission derived seeds", () => {
 					ability.inverted === false,
 			),
 		).toBe(true);
+	});
+
+	it("does not recreate removed inquiry subjects or grants", () => {
+		const seededSubjectNames = subjectSeedData.map((subject) => subject.name);
+		const adminMenuSubjectNames = adminMenuSubjectSeedData.map(
+			(subject) => subject.name,
+		);
+		const platformAdminGrantSubjects = adminPlatformAdminAbilitySeedData.map(
+			(ability) => ability.subject,
+		);
+		const companyManagerGrantSubjects =
+			adminCompanyManagerMenuAccessAbilitySeedData.map(
+				(ability) => ability.subject,
+			);
+
+		for (const subjectName of removedInquiryMenuSubjectNames) {
+			expect(seededSubjectNames).not.toContain(subjectName);
+			expect(adminMenuSubjectNames).not.toContain(subjectName);
+			expect(platformAdminGrantSubjects).not.toContain(subjectName);
+			expect(companyManagerGrantSubjects).not.toContain(subjectName);
+			expect(legacyAdminMenuSubjectNames).not.toContain(subjectName);
+		}
 	});
 
 	it("keeps legacy admin prune targets separate from the current catalog", () => {
