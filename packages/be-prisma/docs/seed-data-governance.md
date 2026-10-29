@@ -99,7 +99,6 @@ Bootstrap Data의 특징:
 - 샘플 fitness center
 - 샘플 timeline과 exercise
 - 샘플 asset
-- 샘플 inquiry
 
 Demo/Test Data의 특징:
 

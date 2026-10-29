@@ -42,7 +42,7 @@ packages/be-prisma/schema/
 ├── _base.prisma
 ├── _enums.prisma
 ├── ability.prisma
-├── ai-agent-log.prisma
+├── auth-audit-log.prisma
 ├── oidc-client.prisma
 ├── user.prisma
 └── ...                     # 나머지 모델도 같은 규칙으로 계산
@@ -50,10 +50,10 @@ packages/be-prisma/schema/
 
 현재 구조의 계약은 다음과 같습니다.
 
-- 모델 파일 64개
+- 모델 파일 54개
 - 예약 파일 2개: `_base.prisma`, `_enums.prisma`
-- 전체 `.prisma` 파일 66개
-- 모델 64개와 enum 32개
+- 전체 `.prisma` 파일 56개
+- 모델 54개와 enum 19개
 
 전체 모델 이름을 문서에 복사해 두지 않습니다. 실제 `schema/*.prisma` 선언이 단일 기준입니다.
 
@@ -93,7 +93,7 @@ name
 | ---------------------- | ------------------------------ |
 | `User`                 | `user.prisma`                  |
 | `OidcClient`           | `oidc-client.prisma`           |
-| `AIAgentLog`           | `ai-agent-log.prisma`          |
+| `AuthAuditLog`         | `auth-audit-log.prisma`        |
 | `S3Asset`              | `s3-asset.prisma`              |
 | `TenantAccessRequest`  | `tenant-access-request.prisma` |
 

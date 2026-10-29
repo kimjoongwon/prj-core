@@ -218,7 +218,7 @@ name
   .toLowerCase();
 ```
 
-예를 들어 `OidcClient`는 `schema/oidc-client.prisma`, `AIAgentLog`는 `schema/ai-agent-log.prisma`입니다. 전체 모델 경로 목록은 따로 관리하지 않으며 실제 schema가 단일 기준입니다.
+예를 들어 `OidcClient`는 `schema/oidc-client.prisma`, `AuthAuditLog`는 `schema/auth-audit-log.prisma`입니다. 전체 모델 경로 목록은 따로 관리하지 않으며 실제 schema가 단일 기준입니다.
 
 ### Configuration
 
@@ -235,10 +235,10 @@ export default defineConfig({
 
 Current schema contains:
 
-- **66 schema files**: 64 model files + `_base.prisma` + `_enums.prisma`
-- **64 models**: one model per root file
-- **32 enums**: all declared in `_enums.prisma`
-- **96 declarations**: 64 models + 32 enums
+- **56 schema files**: 54 model files + `_base.prisma` + `_enums.prisma`
+- **54 models**: one model per root file
+- **19 enums**: all declared in `_enums.prisma`
+- **73 declarations**: 54 models + 19 enums
 - **0 schema subdirectories**
 - Automatic cross-file model referencing (no imports needed)
 

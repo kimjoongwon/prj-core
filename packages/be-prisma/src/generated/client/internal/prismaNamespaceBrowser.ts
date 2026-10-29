@@ -54,7 +54,6 @@ export const ModelName = {
   Ability: 'Ability',
   Action: 'Action',
   Activity: 'Activity',
-  AIAgentLog: 'AIAgentLog',
   AlbumEntry: 'AlbumEntry',
   Album: 'Album',
   Asset: 'Asset',
@@ -70,12 +69,6 @@ export const ModelName = {
   Folder: 'Folder',
   Group: 'Group',
   Image: 'Image',
-  InquiryAttachment: 'InquiryAttachment',
-  InquiryMessage: 'InquiryMessage',
-  InquiryParticipant: 'InquiryParticipant',
-  InquiryTag: 'InquiryTag',
-  InquiryThread: 'InquiryThread',
-  Inquiry: 'Inquiry',
   OidcClient: 'OidcClient',
   OidcModel: 'OidcModel',
   PasswordHistory: 'PasswordHistory',
@@ -93,7 +86,6 @@ export const ModelName = {
   Role: 'Role',
   Routine: 'Routine',
   SecurityPolicy: 'SecurityPolicy',
-  SentimentAnalysis: 'SentimentAnalysis',
   ServiceDocument: 'ServiceDocument',
   Session: 'Session',
   SpaceAssociation: 'SpaceAssociation',
@@ -182,27 +174,6 @@ export const ActivityScalarFieldEnum = {
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
-
-
-export const AIAgentLogScalarFieldEnum = {
-  aiAgentLogId: 'aiAgentLogId',
-  id: 'id',
-  createdAt: 'createdAt',
-  inquiryId: 'inquiryId',
-  messageId: 'messageId',
-  action: 'action',
-  input: 'input',
-  output: 'output',
-  confidence: 'confidence',
-  wasAccepted: 'wasAccepted',
-  wasModified: 'wasModified',
-  responseTimeMs: 'responseTimeMs',
-  model: 'model',
-  tokenCount: 'tokenCount',
-  errorMessage: 'errorMessage'
-} as const
-
-export type AIAgentLogScalarFieldEnum = (typeof AIAgentLogScalarFieldEnum)[keyof typeof AIAgentLogScalarFieldEnum]
 
 
 export const AlbumEntryScalarFieldEnum = {
@@ -479,136 +450,6 @@ export const ImageScalarFieldEnum = {
 } as const
 
 export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
-
-
-export const InquiryAttachmentScalarFieldEnum = {
-  inquiryAttachmentId: 'inquiryAttachmentId',
-  id: 'id',
-  createdAt: 'createdAt',
-  messageId: 'messageId',
-  fileName: 'fileName',
-  fileSize: 'fileSize',
-  mimeType: 'mimeType',
-  fileType: 'fileType',
-  url: 'url',
-  thumbnailUrl: 'thumbnailUrl',
-  width: 'width',
-  height: 'height',
-  duration: 'duration',
-  isDeleted: 'isDeleted'
-} as const
-
-export type InquiryAttachmentScalarFieldEnum = (typeof InquiryAttachmentScalarFieldEnum)[keyof typeof InquiryAttachmentScalarFieldEnum]
-
-
-export const InquiryMessageScalarFieldEnum = {
-  inquiryMessageId: 'inquiryMessageId',
-  id: 'id',
-  createdAt: 'createdAt',
-  threadId: 'threadId',
-  inquiryId: 'inquiryId',
-  senderId: 'senderId',
-  senderType: 'senderType',
-  clientMessageId: 'clientMessageId',
-  content: 'content',
-  contentType: 'contentType',
-  deliveredAt: 'deliveredAt',
-  readAt: 'readAt',
-  editedAt: 'editedAt',
-  isEdited: 'isEdited',
-  isDeleted: 'isDeleted',
-  metadata: 'metadata'
-} as const
-
-export type InquiryMessageScalarFieldEnum = (typeof InquiryMessageScalarFieldEnum)[keyof typeof InquiryMessageScalarFieldEnum]
-
-
-export const InquiryParticipantScalarFieldEnum = {
-  inquiryParticipantId: 'inquiryParticipantId',
-  id: 'id',
-  joinedAt: 'joinedAt',
-  leftAt: 'leftAt',
-  inquiryId: 'inquiryId',
-  threadId: 'threadId',
-  userId: 'userId',
-  role: 'role',
-  isOnline: 'isOnline',
-  isTyping: 'isTyping',
-  lastSeenAt: 'lastSeenAt',
-  lastReadAt: 'lastReadAt',
-  unreadCount: 'unreadCount'
-} as const
-
-export type InquiryParticipantScalarFieldEnum = (typeof InquiryParticipantScalarFieldEnum)[keyof typeof InquiryParticipantScalarFieldEnum]
-
-
-export const InquiryTagScalarFieldEnum = {
-  inquiryTagId: 'inquiryTagId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  inquiryId: 'inquiryId',
-  name: 'name',
-  color: 'color'
-} as const
-
-export type InquiryTagScalarFieldEnum = (typeof InquiryTagScalarFieldEnum)[keyof typeof InquiryTagScalarFieldEnum]
-
-
-export const InquiryThreadScalarFieldEnum = {
-  inquiryThreadId: 'inquiryThreadId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  closedAt: 'closedAt',
-  inquiryId: 'inquiryId',
-  title: 'title',
-  status: 'status',
-  createdById: 'createdById',
-  lastMessageAt: 'lastMessageAt',
-  lastMessagePreview: 'lastMessagePreview',
-  messageCount: 'messageCount'
-} as const
-
-export type InquiryThreadScalarFieldEnum = (typeof InquiryThreadScalarFieldEnum)[keyof typeof InquiryThreadScalarFieldEnum]
-
-
-export const InquiryScalarFieldEnum = {
-  inquiryId: 'inquiryId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  spaceId: 'spaceId',
-  createdById: 'createdById',
-  inquiryNumber: 'inquiryNumber',
-  title: 'title',
-  category: 'category',
-  channel: 'channel',
-  source: 'source',
-  status: 'status',
-  priority: 'priority',
-  customerId: 'customerId',
-  assigneeId: 'assigneeId',
-  firstResponseAt: 'firstResponseAt',
-  resolvedAt: 'resolvedAt',
-  closedAt: 'closedAt',
-  slaResponseDue: 'slaResponseDue',
-  slaResolveDue: 'slaResolveDue',
-  isSlaResponseBreached: 'isSlaResponseBreached',
-  isSlaResolveBreached: 'isSlaResolveBreached',
-  sentiment: 'sentiment',
-  sentimentScore: 'sentimentScore',
-  aiResolutionAttempted: 'aiResolutionAttempted',
-  aiResolved: 'aiResolved',
-  isRealtimeChat: 'isRealtimeChat',
-  lastMessageAt: 'lastMessageAt',
-  unreadCount: 'unreadCount',
-  metadata: 'metadata'
-} as const
-
-export type InquiryScalarFieldEnum = (typeof InquiryScalarFieldEnum)[keyof typeof InquiryScalarFieldEnum]
 
 
 export const OidcClientScalarFieldEnum = {
@@ -899,25 +740,6 @@ export const SecurityPolicyScalarFieldEnum = {
 } as const
 
 export type SecurityPolicyScalarFieldEnum = (typeof SecurityPolicyScalarFieldEnum)[keyof typeof SecurityPolicyScalarFieldEnum]
-
-
-export const SentimentAnalysisScalarFieldEnum = {
-  sentimentAnalysisId: 'sentimentAnalysisId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  inquiryId: 'inquiryId',
-  messageId: 'messageId',
-  sentiment: 'sentiment',
-  score: 'score',
-  confidence: 'confidence',
-  emotions: 'emotions',
-  keywords: 'keywords',
-  urgency: 'urgency',
-  analyzedAt: 'analyzedAt'
-} as const
-
-export type SentimentAnalysisScalarFieldEnum = (typeof SentimentAnalysisScalarFieldEnum)[keyof typeof SentimentAnalysisScalarFieldEnum]
 
 
 export const ServiceDocumentScalarFieldEnum = {

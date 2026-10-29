@@ -708,18 +708,18 @@ model PolicyEntry {
 1:1 관계라는 사실만으로 상속이나 다형성으로 분류하지 않습니다.
 
 ```prisma
-// @data-type: TRANSACTION
-// @description: Inquiry에 종속되어 감정 분석 결과를 보관
-/// @displayName 감정 분석
-model SentimentAnalysis {
-  sentimentAnalysisId String  @unique @default(ulid()) @map("sentiment_analysis_id") @db.Char(26)
-  id                  BigInt  @id @default(autoincrement())
-  inquiryId           BigInt  @unique @map("inquiry_id")
-  inquiry             Inquiry @relation(fields: [inquiryId], references: [id])
+// @data-type: MASTER
+// @description: User에 종속되는 사용자 인증 상태 1:1 상세 정보
+/// @displayName 사용자 상태
+model UserStatus {
+  userStatusId String @unique @default(ulid()) @map("user_status_id") @db.Char(26)
+  id           BigInt @id @default(autoincrement())
+  userId       BigInt @unique @map("user_id")
+  user         User   @relation(fields: [userId], references: [id])
 }
 ```
 
-`@unique`와 `@relation`이 두 모델의 구조를 이미 표현합니다. 이 사실만으로 `SentimentAnalysis`가 `Inquiry`의 하위 타입이 되지는 않습니다.
+`@unique`와 `@relation`이 두 모델의 구조를 이미 표현합니다. 이 사실만으로 `UserStatus`가 `User`의 하위 타입이 되지는 않습니다.
 
 ## 11. 실제 다형성은 어떻게 표현하나요?
 

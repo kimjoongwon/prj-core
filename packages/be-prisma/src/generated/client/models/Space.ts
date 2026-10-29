@@ -251,7 +251,6 @@ export type SpaceWhereInput = {
   categories?: Prisma.CategoryListRelationFilter
   contents?: Prisma.ContentListRelationFilter
   tasks?: Prisma.TaskListRelationFilter
-  inquiries?: Prisma.InquiryListRelationFilter
   albums?: Prisma.AlbumListRelationFilter
   albumEntries?: Prisma.AlbumEntryListRelationFilter
   groups?: Prisma.GroupListRelationFilter
@@ -282,7 +281,6 @@ export type SpaceOrderByWithRelationInput = {
   categories?: Prisma.CategoryOrderByRelationAggregateInput
   contents?: Prisma.ContentOrderByRelationAggregateInput
   tasks?: Prisma.TaskOrderByRelationAggregateInput
-  inquiries?: Prisma.InquiryOrderByRelationAggregateInput
   albums?: Prisma.AlbumOrderByRelationAggregateInput
   albumEntries?: Prisma.AlbumEntryOrderByRelationAggregateInput
   groups?: Prisma.GroupOrderByRelationAggregateInput
@@ -316,7 +314,6 @@ export type SpaceWhereUniqueInput = Prisma.AtLeast<{
   categories?: Prisma.CategoryListRelationFilter
   contents?: Prisma.ContentListRelationFilter
   tasks?: Prisma.TaskListRelationFilter
-  inquiries?: Prisma.InquiryListRelationFilter
   albums?: Prisma.AlbumListRelationFilter
   albumEntries?: Prisma.AlbumEntryListRelationFilter
   groups?: Prisma.GroupListRelationFilter
@@ -377,7 +374,6 @@ export type SpaceCreateInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -408,7 +404,6 @@ export type SpaceUncheckedCreateInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -439,7 +434,6 @@ export type SpaceUpdateInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -470,7 +464,6 @@ export type SpaceUncheckedUpdateInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -700,20 +693,6 @@ export type SpaceUpdateOneRequiredWithoutGroupsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutGroupsInput, Prisma.SpaceUpdateWithoutGroupsInput>, Prisma.SpaceUncheckedUpdateWithoutGroupsInput>
 }
 
-export type SpaceCreateNestedOneWithoutInquiriesInput = {
-  create?: Prisma.XOR<Prisma.SpaceCreateWithoutInquiriesInput, Prisma.SpaceUncheckedCreateWithoutInquiriesInput>
-  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutInquiriesInput
-  connect?: Prisma.SpaceWhereUniqueInput
-}
-
-export type SpaceUpdateOneRequiredWithoutInquiriesNestedInput = {
-  create?: Prisma.XOR<Prisma.SpaceCreateWithoutInquiriesInput, Prisma.SpaceUncheckedCreateWithoutInquiriesInput>
-  connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutInquiriesInput
-  upsert?: Prisma.SpaceUpsertWithoutInquiriesInput
-  connect?: Prisma.SpaceWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SpaceUpdateToOneWithWhereWithoutInquiriesInput, Prisma.SpaceUpdateWithoutInquiriesInput>, Prisma.SpaceUncheckedUpdateWithoutInquiriesInput>
-}
-
 export type SpaceCreateNestedOneWithoutPoliciesInput = {
   create?: Prisma.XOR<Prisma.SpaceCreateWithoutPoliciesInput, Prisma.SpaceUncheckedCreateWithoutPoliciesInput>
   connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPoliciesInput
@@ -864,7 +843,6 @@ export type SpaceCreateWithoutAlbumEntriesInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput
@@ -894,7 +872,6 @@ export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput
@@ -940,7 +917,6 @@ export type SpaceUpdateWithoutAlbumEntriesInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput
@@ -970,7 +946,6 @@ export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1000,7 +975,6 @@ export type SpaceCreateWithoutAlbumsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput
@@ -1030,7 +1004,6 @@ export type SpaceUncheckedCreateWithoutAlbumsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput
@@ -1076,7 +1049,6 @@ export type SpaceUpdateWithoutAlbumsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput
@@ -1106,7 +1078,6 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1136,7 +1107,6 @@ export type SpaceCreateWithoutAssetsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1166,7 +1136,6 @@ export type SpaceUncheckedCreateWithoutAssetsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1212,7 +1181,6 @@ export type SpaceUpdateWithoutAssetsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1242,7 +1210,6 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1271,7 +1238,6 @@ export type SpaceCreateWithoutCategoriesInput = {
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1301,7 +1267,6 @@ export type SpaceUncheckedCreateWithoutCategoriesInput = {
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1347,7 +1312,6 @@ export type SpaceUpdateWithoutCategoriesInput = {
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1377,7 +1341,6 @@ export type SpaceUncheckedUpdateWithoutCategoriesInput = {
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1407,7 +1370,6 @@ export type SpaceCreateWithoutContentsInput = {
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1437,7 +1399,6 @@ export type SpaceUncheckedCreateWithoutContentsInput = {
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1483,7 +1444,6 @@ export type SpaceUpdateWithoutContentsInput = {
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1513,7 +1473,6 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1544,7 +1503,6 @@ export type SpaceCreateWithoutDerivativesInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1574,7 +1532,6 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1620,7 +1577,6 @@ export type SpaceUpdateWithoutDerivativesInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1650,7 +1606,6 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1679,7 +1634,6 @@ export type SpaceCreateWithoutEmailVerificationsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1709,7 +1663,6 @@ export type SpaceUncheckedCreateWithoutEmailVerificationsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1755,7 +1708,6 @@ export type SpaceUpdateWithoutEmailVerificationsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1785,7 +1737,6 @@ export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1815,7 +1766,6 @@ export type SpaceCreateWithoutFitnessCenterInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1845,7 +1795,6 @@ export type SpaceUncheckedCreateWithoutFitnessCenterInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -1891,7 +1840,6 @@ export type SpaceUpdateWithoutFitnessCenterInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -1921,7 +1869,6 @@ export type SpaceUncheckedUpdateWithoutFitnessCenterInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -1951,7 +1898,6 @@ export type SpaceCreateWithoutFoldersInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -1981,7 +1927,6 @@ export type SpaceUncheckedCreateWithoutFoldersInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2027,7 +1972,6 @@ export type SpaceUpdateWithoutFoldersInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2057,7 +2001,6 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2088,7 +2031,6 @@ export type SpaceCreateWithoutGroupsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput
@@ -2118,7 +2060,6 @@ export type SpaceUncheckedCreateWithoutGroupsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput
@@ -2164,7 +2105,6 @@ export type SpaceUpdateWithoutGroupsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput
@@ -2194,145 +2134,8 @@ export type SpaceUncheckedUpdateWithoutGroupsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput
-  routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
-  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput
-  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput
-}
-
-export type SpaceCreateWithoutInquiriesInput = {
-  spaceId?: string
-  id?: bigint | number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  label?: string | null
-  contentLanguageCode?: $Enums.LanguageCode
-  fitnessCenter?: Prisma.FitnessCenterCreateNestedOneWithoutSpaceInput
-  associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput
-  classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput
-  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput
-  policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput
-  folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
-  contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
-  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
-  groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput
-  routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput
-  assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput
-  derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput
-  timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput
-}
-
-export type SpaceUncheckedCreateWithoutInquiriesInput = {
-  spaceId?: string
-  id?: bigint | number
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  label?: string | null
-  contentLanguageCode?: $Enums.LanguageCode
-  fitnessCenter?: Prisma.FitnessCenterUncheckedCreateNestedOneWithoutSpaceInput
-  associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput
-  classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput
-  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput
-  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput
-  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
-  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
-  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput
-  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput
-  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput
-  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput
-}
-
-export type SpaceCreateOrConnectWithoutInquiriesInput = {
-  where: Prisma.SpaceWhereUniqueInput
-  create: Prisma.XOR<Prisma.SpaceCreateWithoutInquiriesInput, Prisma.SpaceUncheckedCreateWithoutInquiriesInput>
-}
-
-export type SpaceUpsertWithoutInquiriesInput = {
-  update: Prisma.XOR<Prisma.SpaceUpdateWithoutInquiriesInput, Prisma.SpaceUncheckedUpdateWithoutInquiriesInput>
-  create: Prisma.XOR<Prisma.SpaceCreateWithoutInquiriesInput, Prisma.SpaceUncheckedCreateWithoutInquiriesInput>
-  where?: Prisma.SpaceWhereInput
-}
-
-export type SpaceUpdateToOneWithWhereWithoutInquiriesInput = {
-  where?: Prisma.SpaceWhereInput
-  data: Prisma.XOR<Prisma.SpaceUpdateWithoutInquiriesInput, Prisma.SpaceUncheckedUpdateWithoutInquiriesInput>
-}
-
-export type SpaceUpdateWithoutInquiriesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
-  fitnessCenter?: Prisma.FitnessCenterUpdateOneWithoutSpaceNestedInput
-  associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput
-  classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput
-  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput
-  policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput
-  folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
-  contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
-  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
-  groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput
-  routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput
-  derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput
-  timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput
-}
-
-export type SpaceUncheckedUpdateWithoutInquiriesInput = {
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contentLanguageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
-  fitnessCenter?: Prisma.FitnessCenterUncheckedUpdateOneWithoutSpaceNestedInput
-  associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput
-  classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput
-  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput
-  policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput
-  folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
-  contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
-  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2359,7 +2162,6 @@ export type SpaceCreateWithoutPoliciesInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2389,7 +2191,6 @@ export type SpaceUncheckedCreateWithoutPoliciesInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2435,7 +2236,6 @@ export type SpaceUpdateWithoutPoliciesInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2465,7 +2265,6 @@ export type SpaceUncheckedUpdateWithoutPoliciesInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2496,7 +2295,6 @@ export type SpaceCreateWithoutReservationsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2526,7 +2324,6 @@ export type SpaceUncheckedCreateWithoutReservationsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2572,7 +2369,6 @@ export type SpaceUpdateWithoutReservationsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2602,7 +2398,6 @@ export type SpaceUncheckedUpdateWithoutReservationsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2632,7 +2427,6 @@ export type SpaceCreateWithoutRoutinesInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2662,7 +2456,6 @@ export type SpaceUncheckedCreateWithoutRoutinesInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2708,7 +2501,6 @@ export type SpaceUpdateWithoutRoutinesInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2738,7 +2530,6 @@ export type SpaceUncheckedUpdateWithoutRoutinesInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2767,7 +2558,6 @@ export type SpaceCreateWithoutAssociationsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2797,7 +2587,6 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2843,7 +2632,6 @@ export type SpaceUpdateWithoutAssociationsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -2873,7 +2661,6 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -2903,7 +2690,6 @@ export type SpaceCreateWithoutClassificationInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -2933,7 +2719,6 @@ export type SpaceUncheckedCreateWithoutClassificationInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -2979,7 +2764,6 @@ export type SpaceUpdateWithoutClassificationInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -3009,7 +2793,6 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3039,7 +2822,6 @@ export type SpaceCreateWithoutTasksInput = {
   folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -3069,7 +2851,6 @@ export type SpaceUncheckedCreateWithoutTasksInput = {
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -3115,7 +2896,6 @@ export type SpaceUpdateWithoutTasksInput = {
   folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -3145,7 +2925,6 @@ export type SpaceUncheckedUpdateWithoutTasksInput = {
   folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3175,7 +2954,6 @@ export type SpaceCreateWithoutTenantAccessRequestsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -3205,7 +2983,6 @@ export type SpaceUncheckedCreateWithoutTenantAccessRequestsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -3251,7 +3028,6 @@ export type SpaceUpdateWithoutTenantAccessRequestsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -3281,7 +3057,6 @@ export type SpaceUncheckedUpdateWithoutTenantAccessRequestsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3311,7 +3086,6 @@ export type SpaceCreateWithoutTenantsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -3341,7 +3115,6 @@ export type SpaceUncheckedCreateWithoutTenantsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -3387,7 +3160,6 @@ export type SpaceUpdateWithoutTenantsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -3417,7 +3189,6 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3448,7 +3219,6 @@ export type SpaceCreateWithoutTimelinesInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput
@@ -3478,7 +3248,6 @@ export type SpaceUncheckedCreateWithoutTimelinesInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput
@@ -3524,7 +3293,6 @@ export type SpaceUpdateWithoutTimelinesInput = {
   categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput
@@ -3554,7 +3322,6 @@ export type SpaceUncheckedUpdateWithoutTimelinesInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput
@@ -3579,7 +3346,6 @@ export type SpaceCountOutputType = {
   categories: number
   contents: number
   tasks: number
-  inquiries: number
   albums: number
   albumEntries: number
   groups: number
@@ -3600,7 +3366,6 @@ export type SpaceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   categories?: boolean | SpaceCountOutputTypeCountCategoriesArgs
   contents?: boolean | SpaceCountOutputTypeCountContentsArgs
   tasks?: boolean | SpaceCountOutputTypeCountTasksArgs
-  inquiries?: boolean | SpaceCountOutputTypeCountInquiriesArgs
   albums?: boolean | SpaceCountOutputTypeCountAlbumsArgs
   albumEntries?: boolean | SpaceCountOutputTypeCountAlbumEntriesArgs
   groups?: boolean | SpaceCountOutputTypeCountGroupsArgs
@@ -3687,13 +3452,6 @@ export type SpaceCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Ext
 /**
  * SpaceCountOutputType without action
  */
-export type SpaceCountOutputTypeCountInquiriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InquiryWhereInput
-}
-
-/**
- * SpaceCountOutputType without action
- */
 export type SpaceCountOutputTypeCountAlbumsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AlbumWhereInput
 }
@@ -3768,7 +3526,6 @@ export type SpaceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   categories?: boolean | Prisma.Space$categoriesArgs<ExtArgs>
   contents?: boolean | Prisma.Space$contentsArgs<ExtArgs>
   tasks?: boolean | Prisma.Space$tasksArgs<ExtArgs>
-  inquiries?: boolean | Prisma.Space$inquiriesArgs<ExtArgs>
   albums?: boolean | Prisma.Space$albumsArgs<ExtArgs>
   albumEntries?: boolean | Prisma.Space$albumEntriesArgs<ExtArgs>
   groups?: boolean | Prisma.Space$groupsArgs<ExtArgs>
@@ -3826,7 +3583,6 @@ export type SpaceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   categories?: boolean | Prisma.Space$categoriesArgs<ExtArgs>
   contents?: boolean | Prisma.Space$contentsArgs<ExtArgs>
   tasks?: boolean | Prisma.Space$tasksArgs<ExtArgs>
-  inquiries?: boolean | Prisma.Space$inquiriesArgs<ExtArgs>
   albums?: boolean | Prisma.Space$albumsArgs<ExtArgs>
   albumEntries?: boolean | Prisma.Space$albumEntriesArgs<ExtArgs>
   groups?: boolean | Prisma.Space$groupsArgs<ExtArgs>
@@ -3854,7 +3610,6 @@ export type $SpacePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     categories: Prisma.$CategoryPayload<ExtArgs>[]
     contents: Prisma.$ContentPayload<ExtArgs>[]
     tasks: Prisma.$TaskPayload<ExtArgs>[]
-    inquiries: Prisma.$InquiryPayload<ExtArgs>[]
     albums: Prisma.$AlbumPayload<ExtArgs>[]
     albumEntries: Prisma.$AlbumEntryPayload<ExtArgs>[]
     groups: Prisma.$GroupPayload<ExtArgs>[]
@@ -4287,7 +4042,6 @@ export interface Prisma__SpaceClient<T, Null = never, ExtArgs extends runtime.Ty
   categories<T extends Prisma.Space$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contents<T extends Prisma.Space$contentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$contentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tasks<T extends Prisma.Space$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  inquiries<T extends Prisma.Space$inquiriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$inquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   albums<T extends Prisma.Space$albumsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$albumsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   albumEntries<T extends Prisma.Space$albumEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$albumEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groups<T extends Prisma.Space$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Space$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4977,30 +4731,6 @@ export type Space$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
-}
-
-/**
- * Space.inquiries
- */
-export type Space$inquiriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Inquiry
-   */
-  select?: Prisma.InquirySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Inquiry
-   */
-  omit?: Prisma.InquiryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.InquiryInclude<ExtArgs> | null
-  where?: Prisma.InquiryWhereInput
-  orderBy?: Prisma.InquiryOrderByWithRelationInput | Prisma.InquiryOrderByWithRelationInput[]
-  cursor?: Prisma.InquiryWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.InquiryScalarFieldEnum | Prisma.InquiryScalarFieldEnum[]
 }
 
 /**

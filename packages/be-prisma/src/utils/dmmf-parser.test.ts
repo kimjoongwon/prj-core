@@ -32,7 +32,8 @@ describe("DmmfParser field contract manifest", () => {
 				expect.objectContaining({ fieldName: "currentTenant" }),
 			]),
 		);
-		const userStatusFields = parser.parseFieldContractManifestByModel("UserStatus");
+		const userStatusFields =
+			parser.parseFieldContractManifestByModel("UserStatus");
 		expect(userStatusFields).toContainEqual({
 			modelName: "UserStatus",
 			fieldName: "userId",
@@ -67,26 +68,30 @@ describe("DmmfParser field contract manifest", () => {
 
 	it("enum field를 enum type으로 식별하고 존재하지 않는 model은 빈 목록을 반환한다", async () => {
 		const parser = await getDmmfParser();
-		const actionLogFields = parser.parseFieldContractManifestByModel("AIAgentLog");
+		const assetFields = parser.parseFieldContractManifestByModel("Asset");
 
-		expect(actionLogFields).toContainEqual({
-			modelName: "AIAgentLog",
-			fieldName: "action",
-			type: "AIAgentAction",
+		expect(assetFields).toContainEqual({
+			modelName: "Asset",
+			fieldName: "kind",
+			type: "AssetKind",
 			isRequired: true,
 			isList: false,
 			isRelation: false,
 			isEnum: true,
 			dbName: null,
 		});
-		expect(parser.parseFieldContractManifestByModel("MissingModel")).toEqual([]);
+		expect(parser.parseFieldContractManifestByModel("MissingModel")).toEqual(
+			[],
+		);
 	});
 
 	it("기존 field parser는 관계 필드를 계속 제외한다", async () => {
 		const parser = await getDmmfParser();
 
-		expect(parser.parseFieldsByModel("User").some((field) => field.name === "profiles")).toBe(
-			false,
-		);
+		expect(
+			parser
+				.parseFieldsByModel("User")
+				.some((field) => field.name === "profiles"),
+		).toBe(false);
 	});
 });

@@ -43,13 +43,13 @@ model User {
 }
 `;
 
-const aiAgentLogModel = `
+const authAuditLogModel = `
 // @data-type: EVENT
-// @description: AI 에이전트 작업 이력을 기록
-/// @displayName AI 에이전트 로그
-model AIAgentLog {
-  aiAgentLogId String @unique @default(ulid()) @map("ai_agent_log_id") @db.Char(26)
-  id           BigInt @id @default(autoincrement())
+// @description: 로그인 시도와 결과를 기록
+/// @displayName 인증 감사 로그
+model AuthAuditLog {
+  authAuditLogId String @unique @default(ulid()) @map("auth_audit_log_id") @db.Char(26)
+  id             BigInt @id @default(autoincrement())
 }
 `;
 
@@ -65,7 +65,7 @@ function createValidFiles(
 	return [
 		{ path: "_base.prisma", text: baseSchema },
 		{ path: "_enums.prisma", text: enumsSchema },
-		{ path: "ai-agent-log.prisma", text: aiAgentLogModel },
+		{ path: "auth-audit-log.prisma", text: authAuditLogModel },
 		{ path: "user.prisma", text: userModel },
 	].map((file) => ({
 		...file,
@@ -89,14 +89,16 @@ describe("schema conventions", () => {
 	it("Given Prisma 선언 이름 When 파일명을 계산하면 Then 승인된 kebab-case 계약을 따른다", () => {
 		expect(toKebabCase("User")).toBe("user");
 		expect(toKebabCase("OidcClient")).toBe("oidc-client");
-		expect(toKebabCase("AIAgentLog")).toBe("ai-agent-log");
+		expect(toKebabCase("AuthAuditLog")).toBe("auth-audit-log");
 		expect(toKebabCase("OAuth2Client")).toBe("o-auth2-client");
 	});
 
 	it("Given schema 파일명 When 공개 식별자 필드명을 계산하면 Then lowerCamel Id 계약을 따른다", () => {
 		expect(toPublicIdentifierFieldName("user")).toBe("userId");
 		expect(toPublicIdentifierFieldName("oidc-client")).toBe("oidcClientId");
-		expect(toPublicIdentifierFieldName("ai-agent-log")).toBe("aiAgentLogId");
+		expect(toPublicIdentifierFieldName("auth-audit-log")).toBe(
+			"authAuditLogId",
+		);
 		expect(toPublicIdentifierFieldName("tenant-access-request")).toBe(
 			"tenantAccessRequestId",
 		);
