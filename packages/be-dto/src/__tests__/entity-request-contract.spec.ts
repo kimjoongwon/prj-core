@@ -7,7 +7,6 @@ import { UpdateAssetDto } from "../asset/update-asset.dto";
 import { CreateRoleDto } from "../create/create-role.dto";
 import { CreateFolderDto } from "../folder/create-folder.dto";
 import { UpdateFolderDto } from "../folder/update-folder.dto";
-import { CreateInquiryDto } from "../inquiries/create-inquiry.dto";
 import { CreatePolicyDto } from "../policies/create-policy.dto";
 import { UpdatePolicyDto } from "../policies/update-policy.dto";
 import { CreateServiceDocumentDto } from "../service-documents/create-service-document.dto";
@@ -117,14 +116,6 @@ describe("Entity에서 파생한 요청 DTO 계약", () => {
 				content: "내용",
 				version: "1",
 				platform: null,
-			}),
-		).rejects.toThrow();
-		await expect(
-			validateRequest(CreateInquiryDto, {
-				title: "문의 제목",
-				category: "GENERAL",
-				channel: "WEB",
-				priority: null,
 			}),
 		).rejects.toThrow();
 	});

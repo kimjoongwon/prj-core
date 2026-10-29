@@ -21,10 +21,6 @@ const dashboardCards = [
 		value: "-",
 	},
 	{
-		label: "신규 문의",
-		value: "-",
-	},
-	{
 		label: "이번 달 매출",
 		value: "-",
 	},
@@ -49,7 +45,7 @@ export const DashboardScreen = observer(() => {
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+							<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 								{dashboardCards.map((card) => (
 									<div
 										key={card.label}

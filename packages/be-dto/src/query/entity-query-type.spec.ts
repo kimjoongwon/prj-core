@@ -13,7 +13,6 @@ import { EntityQueryType } from "./entity-query-type";
 import { QueryDto } from "./query.dto";
 import { AlbumQueryDto } from "../album/album-query.dto";
 import { FolderQueryDto } from "../folder/folder-query.dto";
-import { QueryInquiryDto } from "../inquiries/query-inquiry.dto";
 import { QueryTenantAccessRequestDto } from "../tenant-access-requests/query-tenant-access-request.dto";
 import { QueryIdpAccountDto } from "./query-idp-account.dto";
 import { QueryOidcSessionDto } from "./query-oidc-session.dto";
@@ -166,27 +165,6 @@ describe("EntityQueryType", () => {
 		invalidFilter: unknown;
 	}>([
 		{
-			queryType: QueryInquiryDto,
-			filterKey: "category",
-			wireFilter: "GENERAL",
-			parsedFilter: "GENERAL",
-			invalidFilter: "UNKNOWN",
-		},
-		{
-			queryType: QueryInquiryDto,
-			filterKey: "channel",
-			wireFilter: "WEB",
-			parsedFilter: "WEB",
-			invalidFilter: "UNKNOWN",
-		},
-		{
-			queryType: QueryInquiryDto,
-			filterKey: "priority",
-			wireFilter: "NORMAL",
-			parsedFilter: "NORMAL",
-			invalidFilter: "UNKNOWN",
-		},
-		{
 			queryType: AlbumQueryDto,
 			filterKey: "spaceId",
 			wireFilter: "123",
@@ -263,10 +241,6 @@ describe("EntityQueryType", () => {
 	});
 
 	it("Entity와 의미가 다른 ID null 및 검색 계약은 Query 선언을 유지한다", async () => {
-		const inquiryQuery = plainToInstance(QueryInquiryDto, {
-			assigneeId: null,
-			customerId: null,
-		});
 		const folderQuery = plainToInstance(FolderQueryDto, {
 			parentFolderId: null,
 		});
@@ -275,9 +249,6 @@ describe("EntityQueryType", () => {
 			search: "null",
 		});
 
-		expect(
-			(await validate(inquiryQuery)).map((error) => error.property).sort(),
-		).toEqual(["assigneeId", "customerId"]);
 		expect(
 			(await validate(folderQuery)).map((error) => error.property),
 		).toContain("parentFolderId");

@@ -7,5 +7,4 @@
 
 export * from "./asset";
 export * from "./fitness-centers";
-export * from "./inquiry";
 export * from "./timeline";

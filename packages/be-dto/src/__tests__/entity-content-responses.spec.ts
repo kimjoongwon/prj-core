@@ -6,9 +6,6 @@ import { AlbumDetailResponseDto } from "../album/album-detail-response.dto";
 import { AssetDto } from "../asset/asset.dto";
 import { AssetDetailWrapperResponseDto } from "../asset/asset-detail-wrapper-response.dto";
 import { FolderDto } from "../folder/folder.dto";
-import { InquiryDetailDto } from "../inquiries/inquiry-detail.dto";
-import { InquiryMessageDto } from "../inquiries/inquiry-message.dto";
-import { SentimentResultDto } from "../inquiries/sentiment-result.dto";
 import { prepareEntityResponseType } from "../mapped-types";
 import { TranslationResponseDto } from "../translations/translation-response.dto";
 
@@ -126,75 +123,6 @@ describe("Entity 기반 콘텐츠 응답의 공개 필드 계약", () => {
 		expect(response.entries?.[0]).not.toHaveProperty("albumEntryId");
 		expect(response.entries?.[0].asset).not.toHaveProperty("password");
 		expect(response).not.toHaveProperty("albumId");
-	});
-
-	it("문의 상세의 별도 감정 분석과 스레드·참여자 관계를 유지한다", () => {
-		prepareEntityResponseType(InquiryDetailDto);
-		const response = plainToInstance(InquiryDetailDto, {
-			id: "10",
-			inquiryId: "secret-ulid",
-			aiAgentLogs: [{ prompt: "private" }],
-			sentiment: {
-				id: "11",
-				sentiment: "POSITIVE",
-				score: 0.9,
-				sentimentAnalysisId: "secret-ulid",
-				emotions: { private: true },
-			},
-			threads: [
-				{
-					id: "12",
-					title: null,
-					inquiryThreadId: "secret-ulid",
-					messages: [{}],
-				},
-			],
-			participants: [
-				{
-					id: "13",
-					userName: "고객",
-					userAvatar: null,
-					inquiryParticipantId: "secret-ulid",
-					user: { password: "secret" },
-				},
-			],
-		});
-		expect(response.sentiment).toBeInstanceOf(SentimentResultDto);
-		expect(response.sentiment).toMatchObject({ score: 0.9 });
-		expect(response.sentiment).not.toHaveProperty("emotions");
-		expect(response.threads[0].title).toBeNull();
-		expect(response.threads[0]).not.toHaveProperty("messages");
-		expect(response.participants[0]).toMatchObject({
-			userName: "고객",
-			userAvatar: null,
-		});
-		expect(response.participants[0]).not.toHaveProperty("user");
-		expect(response).not.toHaveProperty("aiAgentLogs");
-	});
-
-	it("메시지 발신자 표시 정보와 첨부 크기의 number 계약을 유지한다", () => {
-		prepareEntityResponseType(InquiryMessageDto);
-		const response = plainToInstance(InquiryMessageDto, {
-			id: "15",
-			senderName: "고객",
-			senderAvatar: null,
-			inquiryMessageId: "secret-ulid",
-			attachments: [
-				{
-					id: "16",
-					fileSize: 512n,
-					fileName: "photo.png",
-					inquiryAttachmentId: "secret-ulid",
-					fileType: "IMAGE",
-					unexpected: true,
-				},
-			],
-		});
-		expect(response).toMatchObject({ senderName: "고객", senderAvatar: null });
-		expect(response.attachments?.[0].fileSize).toBe(512);
-		expect(response.attachments?.[0]).not.toHaveProperty("fileType");
-		expect(response.attachments?.[0]).not.toHaveProperty("inquiryAttachmentId");
-		expect(response.attachments?.[0]).not.toHaveProperty("unexpected");
 	});
 
 	it("번역 API의 문자열 식별자와 명시한 공통 필드를 유지한다", () => {
