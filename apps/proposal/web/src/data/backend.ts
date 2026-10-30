@@ -40,6 +40,7 @@ export const backendStep: StepData = {
 			costRange: "개발 비용 절감 (풀스택 가능)",
 			bestFor: "빠른 MVP + 소규모 팀",
 			monthlyCost: 0,
+			isRecommended: true,
 		},
 	],
 	comparison: [

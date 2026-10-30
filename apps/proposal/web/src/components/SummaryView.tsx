@@ -46,7 +46,7 @@ function ArchDiagram({
 
   if (selection.frontend === "react-native" && selection.backend === "nestjs") {
     return (
-      `┌─────────────── 모노레포 (TypeScript) ──────────────┐
+      `┌─────────── 모노레포 · Turborepo (TypeScript) ──────────┐
 │                                                     │
 │  ┌─────────────────┐    ┌─────────────────────┐   │
 │  │  apps/web       │    │  apps/mobile         │   │
@@ -115,7 +115,7 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
   const infraName = infra?.name ?? "—";
 
   const repoLabel = isMonorepo
-    ? { value: "모노레포 (Monorepo)", note: "프론트+백엔드+공통 타입 = 하나의 TypeScript 저장소" }
+    ? { value: "모노레포 (Monorepo)", note: "Turborepo — 프론트+백엔드+공통 타입 = 하나의 TypeScript 저장소" }
     : isRN
       ? { value: "분리 저장소 (Multi-repo)", note: `React Native(TS) + ${beName}(${isMonorepo ? "TS" : "Java"}) — 언어가 달라 저장소 분리` }
       : { value: "분리 저장소 (Multi-repo)", note: `Flutter(Dart) + ${beName} — 언어가 달라 저장소 분리` };
@@ -138,7 +138,7 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
               <VStack gap="dense" alignItems="start">
                 <Typography.Heading level={4}>모노레포 통합 개발</Typography.Heading>
                 <Typography.Paragraph size="sm">
-                  프론트엔드(React Native)와 백엔드(NestJS)가 <strong>하나의 TypeScript 저장소</strong>에서 관리됩니다.
+                  프론트엔드(React Native)와 백엔드(NestJS)가 <strong>Turborepo 하나의 TypeScript 저장소</strong>에서 관리됩니다.
                   AI 에이전트가 전체 코드베이스를 하나의 컨텍스트로 이해하고 작업하므로:
                 </Typography.Paragraph>
                 <VStack gap="dense" alignItems="start">
@@ -152,7 +152,7 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
                   </HStack>
                   <HStack gap="inline" alignItems="center">
                     <Bot className="h-4 w-4 text-accent" />
-                    <Typography.Paragraph size="sm">빌드·테스트·배포 파이프라인 하나로 통합 — 운영 단순</Typography.Paragraph>
+                    <Typography.Paragraph size="sm">Turborepo 증분 빌드 — 변경된 부분만 빌드해 CI 시간 단축</Typography.Paragraph>
                   </HStack>
                 </VStack>
               </VStack>
@@ -186,6 +186,7 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
             <SummaryRow label="☁️ 인프라" value={infraName} note={infra?.costRange} />
             <SummaryRow label="📦 저장소" value="Cloudflare R2" note="10GB 무료 · 송신 무료" />
             <SummaryRow label="🗄️ 데이터베이스" value="PostgreSQL" note="ACID 준수 · JSONB · 무료" />
+            {isMonorepo && <SummaryRow label="🧱 모노레포 도구" value="Turborepo" note="증분 빌드 · 캐시 공유" />}
             <SummaryRow
               label="🤖 AI 서비스"
               value={selection.aiService ? "FastAPI + LangChain + pgvector" : "불필요"}

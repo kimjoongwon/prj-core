@@ -31,7 +31,12 @@ export function ChoiceCard({ selected, onSelect, option }: ChoiceCardProps) {
               </span>
             )}
           </HStack>
-          <Chip size="sm">{option.vendor}</Chip>
+          <HStack gap="dense" alignItems="center">
+            {option.isRecommended && (
+              <Chip size="sm" variant="soft" color="accent">추천</Chip>
+            )}
+            <Chip size="sm">{option.vendor}</Chip>
+          </HStack>
         </HStack>
 
         <Typography.Paragraph size="sm" color="muted">

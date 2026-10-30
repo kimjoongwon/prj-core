@@ -24,6 +24,7 @@ export const frontendStep: StepData = {
       costRange: "개발 비용 동일",
       bestFor: "AI 통합 개발 + 모노레포 + 장기 확장",
       monthlyCost: 0,
+      isRecommended: true,
     },
     {
       id: "flutter",
