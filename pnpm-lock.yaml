@@ -1186,9 +1186,6 @@ importers:
       framer-motion:
         specifier: 'catalog:'
         version: 12.43.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      lucide-react:
-        specifier: 'catalog:'
-        version: 0.533.0(react@19.3.1)
       mobx:
         specifier: 'catalog:'
         version: 7.1.0

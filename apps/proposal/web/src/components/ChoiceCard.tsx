@@ -1,6 +1,5 @@
 "use client";
 
-import { Check } from "lucide-react";
 import { Chip, VStack, HStack, Typography } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
 import type { TechOption } from "../data/types";
@@ -26,9 +25,7 @@ export function ChoiceCard({ selected, onSelect, option }: ChoiceCardProps) {
           <HStack gap="inline" alignItems="center">
             <Typography.Heading level={4}>{option.name}</Typography.Heading>
             {selected && (
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent">
-                <Check className="h-4 w-4 text-accent-foreground" />
-              </span>
+              <span aria-hidden="true" className="text-lg leading-none">✅</span>
             )}
           </HStack>
           <HStack gap="dense" alignItems="center">

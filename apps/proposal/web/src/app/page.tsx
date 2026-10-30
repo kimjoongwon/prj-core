@@ -3,7 +3,6 @@
 import { useState, useCallback } from "react";
 import { Button, Container, VStack, HStack, Typography, Chip } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { Rocket, CheckCircle2, Pencil, Server, Eye, Sparkles, User } from "lucide-react";
 import { Stepper } from "../components/Stepper";
 import { StepShell } from "../components/StepShell";
 import { ChoiceCard } from "../components/ChoiceCard";
@@ -158,7 +157,7 @@ export default function Page() {
             <Card className="w-full border-2 border-accent bg-accent-soft p-5">
               <VStack gap="section">
                 <HStack gap="inline" alignItems="center">
-                  <Eye className="h-5 w-5 text-accent" />
+                  <span aria-hidden="true" className="text-xl leading-none">👀</span>
                   <Typography.Heading level={4}>{transparencyFeatures.title}</Typography.Heading>
                 </HStack>
                 <Typography.Paragraph size="sm">{transparencyFeatures.description}</Typography.Paragraph>
@@ -179,7 +178,7 @@ export default function Page() {
             <Card className="w-full p-6">
               <VStack gap="section">
                 <HStack gap="inline" alignItems="center">
-                  <Server className="h-5 w-5 text-accent" />
+                  <span aria-hidden="true" className="text-xl leading-none">🖥️</span>
                   <Typography.Heading level={4}>기본 제공 K8s 스택</Typography.Heading>
                 </HStack>
                 <Typography.Paragraph size="sm" color="muted">
@@ -194,7 +193,7 @@ export default function Page() {
                         </Typography.Paragraph>
                         {cat.tools.map((tool) => (
                           <HStack key={tool.name} gap="inline" alignItems="start">
-                            <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+                            <span aria-hidden="true" className="mt-0.5 shrink-0 text-sm leading-none">✅</span>
                             <VStack gap="flush" alignItems="start">
                               <Typography.Paragraph size="xs" className="font-semibold">{tool.name}</Typography.Paragraph>
                               <Typography.Paragraph size="xs" color="muted">{tool.role}</Typography.Paragraph>
@@ -259,7 +258,7 @@ export default function Page() {
                 <Typography.Paragraph size="sm" className="font-semibold">AI 스택 구성</Typography.Paragraph>
                 {aiStack.map((tech) => (
                   <HStack key={tech.id} gap="inline" alignItems="center">
-                    <CheckCircle2 className="h-4 w-4 text-accent" />
+                    <span aria-hidden="true" className="text-base leading-none">✅</span>
                     <Typography.Paragraph size="sm" className="font-medium">{tech.name}</Typography.Paragraph>
                     <Typography.Paragraph size="sm" color="muted">— {tech.tagline}</Typography.Paragraph>
                   </HStack>
@@ -315,7 +314,7 @@ export default function Page() {
                   isIconOnly
                   aria-label="수정"
                 >
-                  <Pencil className="h-4 w-4" />
+                  <span aria-hidden="true" className="text-base leading-none">✏️</span>
                 </Button>
               </HStack>
             ))}
@@ -337,9 +336,7 @@ export default function Page() {
       {step === 0 && (
         <Container width="narrow" className="flex min-h-screen flex-col items-center justify-center">
           <VStack gap="roomy" alignItems="center">
-            <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent">
-              <Rocket className="h-8 w-8 text-accent-foreground" />
-            </span>
+            <span aria-hidden="true" className="text-6xl leading-none">🚀</span>
             <Typography.Heading level={1} align="center">기술 스택 선택</Typography.Heading>
             <Typography.Paragraph size="base" color="muted" align="center">
               제가 추천하는 기본 스택으로 미리 구성되어 있습니다. 단계별로 확인하고 필요한 부분만 바꿔주세요.
@@ -347,7 +344,7 @@ export default function Page() {
             <Card className="w-full border-2 border-border bg-surface p-5">
               <VStack gap="section" alignItems="start" fullWidth>
                 <HStack gap="inline" alignItems="center">
-                  <User className="h-5 w-5 text-accent" />
+                  <span aria-hidden="true" className="text-xl leading-none">🧑‍💻</span>
                   <Typography.Heading level={4}>{founderIntroduction.headline}</Typography.Heading>
                 </HStack>
                 <Typography.Paragraph size="sm">{founderIntroduction.description}</Typography.Paragraph>
@@ -371,7 +368,7 @@ export default function Page() {
             <Card className="w-full border-2 border-accent bg-accent-soft p-5">
               <VStack gap="section" alignItems="start" fullWidth>
                 <HStack gap="inline" alignItems="center">
-                  <Sparkles className="h-5 w-5 text-accent" />
+                  <span aria-hidden="true" className="text-xl leading-none">✨</span>
                   <Typography.Heading level={4}>추천 기본 스택</Typography.Heading>
                 </HStack>
                 <div className="grid w-full gap-3 sm:grid-cols-2">
