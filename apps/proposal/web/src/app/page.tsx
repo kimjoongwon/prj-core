@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { Button, Container, VStack, HStack, Typography, Chip } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { Rocket, CheckCircle2, Pencil, Server, Eye } from "lucide-react";
+import { Rocket, CheckCircle2, Pencil, Server, Eye, Sparkles } from "lucide-react";
 import { Stepper } from "../components/Stepper";
 import { StepShell } from "../components/StepShell";
 import { ChoiceCard } from "../components/ChoiceCard";
@@ -16,6 +16,7 @@ import { infrastructureStep, homeServerStack } from "../data/infrastructure";
 import { storageStep, databaseStep } from "../data/fixed";
 import { aiServiceStep, aiStack } from "../data/ai-service";
 import { transparencyFeatures } from "../data/transparency";
+import { recommendedStack } from "../data/recommended-stack";
 import type { SelectionState } from "../data/types";
 import { TOTAL_STEPS } from "../data/types";
 
@@ -32,8 +33,8 @@ const STEP_META = [
 ];
 
 const INITIAL: SelectionState = {
-  frontend: null,
-  backend: null,
+  frontend: "react-native",
+  backend: "nestjs",
   infrastructure: null,
   aiService: false,
   designTool: null,
@@ -340,8 +341,29 @@ export default function Page() {
             </span>
             <Typography.Heading level={1} align="center">기술 스택 선택</Typography.Heading>
             <Typography.Paragraph size="base" color="muted" align="center">
-              프로젝트에 사용할 기술을 단계별로 선택해주세요. 모든 선택이 끝나면 검토 후 최종 구성을 확인할 수 있습니다.
+              제가 추천하는 기본 스택으로 미리 구성되어 있습니다. 단계별로 확인하고 필요한 부분만 바꿔주세요.
             </Typography.Paragraph>
+            <Card className="w-full border-2 border-accent bg-accent-soft p-5">
+              <VStack gap="section" alignItems="start" fullWidth>
+                <HStack gap="inline" alignItems="center">
+                  <Sparkles className="h-5 w-5 text-accent" />
+                  <Typography.Heading level={4}>추천 기본 스택</Typography.Heading>
+                </HStack>
+                <div className="grid w-full gap-3 sm:grid-cols-2">
+                  {recommendedStack.map((tech) => (
+                    <div key={tech.id} className="rounded-lg bg-surface p-3">
+                      <VStack gap="dense" alignItems="start">
+                        <HStack gap="inline" alignItems="center" justifyContent="between" fullWidth>
+                          <Typography.Paragraph size="sm" className="font-bold text-accent">{tech.name}</Typography.Paragraph>
+                          <Chip size="sm" variant="soft">{tech.role}</Chip>
+                        </HStack>
+                        <Typography.Paragraph size="xs" color="muted">{tech.reason}</Typography.Paragraph>
+                      </VStack>
+                    </div>
+                  ))}
+                </div>
+              </VStack>
+            </Card>
             <HStack gap="inline" className="flex-wrap justify-center">
               {["프론트엔드", "백엔드", "디자인", "인프라", "저장소", "DB", "AI", "검토"].map((label) => (
                 <Chip key={label} size="sm">{label}</Chip>

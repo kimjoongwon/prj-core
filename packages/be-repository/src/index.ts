@@ -3,7 +3,6 @@ export { PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 
 // Repositories
 // 필요할 때 생성합니다. 가이드: .codex/agents/be-repository-builder.toml
-export { AIAgentLogsRepository } from "./ai-agent-logs.repository";
 export { AlbumsRepository } from "./albums.repository";
 export { AssetsRepository } from "./assets.repository";
 export { AuthAuditLogsRepository } from "./auth-audit-logs.repository";
@@ -37,7 +36,6 @@ export {
 export type { RoleAssignmentInput } from "./role-assignments.repository";
 export { RoleAssignmentsRepository } from "./role-assignments.repository";
 export { RolesRepository } from "./roles.repository";
-export { SafeWalletsRepository } from "./safe-wallets.repository";
 export { SecurityPoliciesRepository } from "./security-policies.repository";
 export { SpacesRepository } from "./spaces.repository";
 export { TemplatesRepository } from "./templates.repository";

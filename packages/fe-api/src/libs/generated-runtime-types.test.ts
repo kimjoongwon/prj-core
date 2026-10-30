@@ -2,8 +2,8 @@ import { describe, expect, expectTypeOf, it, vi } from "vitest";
 import { getCurrentSpace, setCurrentSpace } from "../idp/auth/auth";
 import type { setCurrentSpace as setLegacyCurrentSpace } from "../idp/auth/current-space";
 import type { CreateSessionDto } from "../core/model/createSessionDto";
-import type { InquiryParticipant } from "../core/model/inquiryParticipant";
 import type { UserDto } from "../core/model/userDto";
+import type { UserTenantDetailResponseDto } from "../core/model/userTenantDetailResponseDto";
 
 const jsonResponse = (body: unknown, status = 200) =>
 	new Response(JSON.stringify(body), {
@@ -17,11 +17,8 @@ describe("생성 SDK의 bigint·Date 런타임 계약", () => {
 		expectTypeOf<UserDto["createdAt"]>().toEqualTypeOf<Date>();
 		expectTypeOf<UserDto["updatedAt"]>().toEqualTypeOf<Date | null>();
 		expectTypeOf<UserDto["failedLoginAttempts"]>().toEqualTypeOf<number>();
-		expectTypeOf<InquiryParticipant["id"]>().toEqualTypeOf<bigint>();
-		expectTypeOf<InquiryParticipant["threadId"]>().toEqualTypeOf<
-			bigint | null | undefined
-		>();
-		expectTypeOf<InquiryParticipant["joinedAt"]>().toEqualTypeOf<Date>();
+		expectTypeOf<UserTenantDetailResponseDto["spaceId"]>().toEqualTypeOf<bigint>();
+		expectTypeOf<UserTenantDetailResponseDto["roleId"]>().toEqualTypeOf<bigint>();
 		expectTypeOf<CreateSessionDto["timelineId"]>().toEqualTypeOf<bigint>();
 		expectTypeOf<CreateSessionDto["startDateTime"]>().toEqualTypeOf<
 			Date | null | undefined

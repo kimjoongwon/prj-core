@@ -14,7 +14,6 @@
 | Folder | 금지 문자와 최대 길이가 있는 폴더명 입력 규칙을 유지합니다. 부모 ID는 Folder에서 가져옵니다. |
 | Asset / Derivative | DB의 `bigint` 파일 크기는 기존 API의 `number` 계약으로 받습니다. Asset의 `publicUrl`은 API 전용 투영입니다. |
 | Ability | ID는 Entity에서 가져옵니다. 강제 변환하지 않는 문자열·boolean 검증, 임의 JSON conditions와 입력의 기본값 문서는 요청 계약입니다. |
-| Inquiry / InquiryMessage | 제목·내용 길이와 최초 메시지, 기본 스레드 선택, nullable 저장 ID에 대한 null 금지 등 입력 문맥을 유지합니다. |
 | Policy / ServiceDocument / TemplateVariable / Activity | 저장된 nullable 값과 생성 입력의 null 금지가 다른 필드는 요청에 남깁니다. 그 외 필수/선택 필드는 Entity Pick과 Partial로 조합합니다. |
 | Task / Session / Routine / Template | 중첩 요청의 기존 공개 DTO 타입과 조합 항목을 유지합니다. 도메인 객체 전체를 입력으로 확장하지 않습니다. |
 | FitnessCenter | 생성에 함께 필요한 사업자 정보·콘텐츠 언어와 최소 Space 투영을 유지합니다. `CreateSpaceWithFitnessCenterDto`는 같은 복합 생성 payload의 공개 wrapper입니다. |

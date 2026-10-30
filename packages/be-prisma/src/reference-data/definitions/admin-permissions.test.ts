@@ -25,6 +25,14 @@ const legacyRolePageSubjectNames = [
 	"page:role-categories:edit",
 ] as const;
 
+const removedInquiryMenuSubjectNames = [
+	"menu:inquiries",
+	"menu:inquiries:list",
+	"menu:inquiries:direct",
+	"menu:inquiries:answered",
+	"menu:inquiries:faq",
+] as const;
+
 describe("admin permission derived seeds", () => {
 	it("covers every admin menu subject from the shared catalog", () => {
 		expect(adminMenuSubjectSeedData.map((subject) => subject.name)).toEqual(
@@ -49,18 +57,26 @@ describe("admin permission derived seeds", () => {
 		for (const subject of ["menu:dashboard", "menu:users", "menu:roles"]) {
 			expect(
 				adminPlatformAdminAbilitySeedData.some(
-					(ability) => ability.subject === subject && ability.actionName === "manage",
+					(ability) =>
+						ability.subject === subject && ability.actionName === "manage",
 				),
 			).toBe(true);
 			expect(
 				adminCompanyManagerMenuAccessAbilitySeedData.some(
-					(ability) => ability.subject === subject && ability.actionName === "access",
+					(ability) =>
+						ability.subject === subject && ability.actionName === "access",
 				),
 			).toBe(true);
 		}
-		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("menu:assets");
-		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("page:assets:list");
-		expect(adminPlatformAdminAbilitySeedData.map((ability) => ability.subject)).not.toContain("page:assets:detail");
+		expect(
+			adminPlatformAdminAbilitySeedData.map((ability) => ability.subject),
+		).not.toContain("menu:assets");
+		expect(
+			adminPlatformAdminAbilitySeedData.map((ability) => ability.subject),
+		).not.toContain("page:assets:list");
+		expect(
+			adminPlatformAdminAbilitySeedData.map((ability) => ability.subject),
+		).not.toContain("page:assets:detail");
 	});
 
 	it("keeps PLATFORM_ADMIN as a true super role with manage all", () => {
@@ -74,6 +90,28 @@ describe("admin permission derived seeds", () => {
 		).toBe(true);
 	});
 
+	it("does not recreate removed inquiry subjects or grants", () => {
+		const seededSubjectNames = subjectSeedData.map((subject) => subject.name);
+		const adminMenuSubjectNames = adminMenuSubjectSeedData.map(
+			(subject) => subject.name,
+		);
+		const platformAdminGrantSubjects = adminPlatformAdminAbilitySeedData.map(
+			(ability) => ability.subject,
+		);
+		const companyManagerGrantSubjects =
+			adminCompanyManagerMenuAccessAbilitySeedData.map(
+				(ability) => ability.subject,
+			);
+
+		for (const subjectName of removedInquiryMenuSubjectNames) {
+			expect(seededSubjectNames).not.toContain(subjectName);
+			expect(adminMenuSubjectNames).not.toContain(subjectName);
+			expect(platformAdminGrantSubjects).not.toContain(subjectName);
+			expect(companyManagerGrantSubjects).not.toContain(subjectName);
+			expect(legacyAdminMenuSubjectNames).not.toContain(subjectName);
+		}
+	});
+
 	it("keeps legacy admin prune targets separate from the current catalog", () => {
 		expect(legacyAdminMenuSubjectNames).toEqual(
 			expect.arrayContaining([
@@ -84,6 +122,13 @@ describe("admin permission derived seeds", () => {
 				"menu:role-categories:list",
 			]),
 		);
+		for (const subjectName of [
+			"menu:wallets",
+			"menu:wallets:list",
+			"menu:wallets:transactions",
+		]) {
+			expect(legacyAdminMenuSubjectNames).not.toContain(subjectName);
+		}
 		expect(legacyAdminPageSubjectNames).toEqual(
 			expect.arrayContaining([...legacyRolePageSubjectNames]),
 		);
@@ -109,6 +154,13 @@ describe("admin permission derived seeds", () => {
 		expect(seededSubjectNames).not.toContain("page:assets:list");
 		expect(seededSubjectNames).not.toContain("page:assets:detail");
 		expect(seededSubjectNames).not.toContain("menu:schedules");
+		for (const subjectName of [
+			"menu:wallets",
+			"menu:wallets:list",
+			"menu:wallets:transactions",
+		]) {
+			expect(seededSubjectNames).not.toContain(subjectName);
+		}
 		expect(seededSubjectNames).not.toContain("menu:files");
 		for (const subjectName of legacyRolePageSubjectNames) {
 			expect(seededSubjectNames).not.toContain(subjectName);

@@ -24,7 +24,6 @@ const PREVIOUS_ADMIN_MENU_SUBJECT_NAMES = [
 	"menu:users",
 	"menu:reservations",
 	"menu:notifications",
-	"menu:inquiries",
 	"menu:contents",
 	"menu:templates",
 	"menu:sessions",
@@ -60,10 +59,6 @@ const PREVIOUS_ADMIN_MENU_SUBJECT_NAMES = [
 	"menu:notifications:history",
 	"menu:notifications:templates",
 	"menu:notifications:settings",
-	"menu:inquiries:list",
-	"menu:inquiries:direct",
-	"menu:inquiries:answered",
-	"menu:inquiries:faq",
 	"menu:contents:notices",
 	"menu:contents:banners",
 	"menu:contents:events",
@@ -85,7 +80,6 @@ const PREVIOUS_ADMIN_MENU_SUBJECT_NAMES = [
 	"menu:roles:abilities",
 	"menu:schedules",
 	"menu:files",
-	"menu:wallets",
 	"menu:settings",
 	"menu:users:profiles",
 	"menu:users:categories",
@@ -98,8 +92,6 @@ const PREVIOUS_ADMIN_MENU_SUBJECT_NAMES = [
 	"menu:files:categories",
 	"menu:contents:posts",
 	"menu:contents:list",
-	"menu:wallets:list",
-	"menu:wallets:transactions",
 	"menu:settings:spaces",
 	"menu:settings:admins",
 	"menu:settings:abilities",
@@ -134,12 +126,12 @@ const adminMenuSubjectDisplayMap = buildAdminMenuSubjectDisplayMap();
 
 export const adminMenuSubjectSeedData: AdminDerivedSubjectSeedData[] =
 	Array.from(adminMenuSubjectDisplayMap.entries()).map(
-	([name, displayName], index) => ({
-		name,
-		displayName,
-		group: "menu",
-		order: 100 + index,
-	}),
+		([name, displayName], index) => ({
+			name,
+			displayName,
+			group: "menu",
+			order: 100 + index,
+		}),
 	);
 
 export const adminPageSubjectSeedData: AdminDerivedSubjectSeedData[] =

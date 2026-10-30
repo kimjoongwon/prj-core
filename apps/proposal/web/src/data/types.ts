@@ -8,6 +8,8 @@ export interface TechOption {
   costRange: string;
   bestFor: string;
   monthlyCost: number;
+  /** 추천 기본 스택에 포함된 선택지 — 카드에 "추천" 배지 표시 */
+  isRecommended?: boolean;
 }
 
 export interface ComparisonRow {

@@ -55,11 +55,6 @@ export type Action = Prisma.ActionModel
  */
 export type Activity = Prisma.ActivityModel
 /**
- * Model AIAgentLog
- * @displayName AI 에이전트 로그
- */
-export type AIAgentLog = Prisma.AIAgentLogModel
-/**
  * Model AlbumEntry
  * @displayName 앨범 엔트리
  */
@@ -134,36 +129,6 @@ export type Group = Prisma.GroupModel
  * @displayName 이미지 상세
  */
 export type Image = Prisma.ImageModel
-/**
- * Model InquiryAttachment
- * @displayName 문의 첨부파일
- */
-export type InquiryAttachment = Prisma.InquiryAttachmentModel
-/**
- * Model InquiryMessage
- * @displayName 문의 메시지
- */
-export type InquiryMessage = Prisma.InquiryMessageModel
-/**
- * Model InquiryParticipant
- * @displayName 문의 참여자
- */
-export type InquiryParticipant = Prisma.InquiryParticipantModel
-/**
- * Model InquiryTag
- * @displayName 문의 태그
- */
-export type InquiryTag = Prisma.InquiryTagModel
-/**
- * Model InquiryThread
- * @displayName 문의 스레드
- */
-export type InquiryThread = Prisma.InquiryThreadModel
-/**
- * Model Inquiry
- * @displayName 문의
- */
-export type Inquiry = Prisma.InquiryModel
 /**
  * Model OidcClient
  * @displayName OIDC 클라이언트
@@ -245,30 +210,10 @@ export type Role = Prisma.RoleModel
  */
 export type Routine = Prisma.RoutineModel
 /**
- * Model SafeConfirmation
- * @displayName Safe 트랜잭션 서명
- */
-export type SafeConfirmation = Prisma.SafeConfirmationModel
-/**
- * Model SafeTransaction
- * @displayName Safe 트랜잭션
- */
-export type SafeTransaction = Prisma.SafeTransactionModel
-/**
- * Model SafeWallet
- * @displayName Safe 지갑
- */
-export type SafeWallet = Prisma.SafeWalletModel
-/**
  * Model SecurityPolicy
  * @displayName 보안 정책
  */
 export type SecurityPolicy = Prisma.SecurityPolicyModel
-/**
- * Model SentimentAnalysis
- * @displayName 감정 분석
- */
-export type SentimentAnalysis = Prisma.SentimentAnalysisModel
 /**
  * Model ServiceDocument
  * @displayName 서비스 문서

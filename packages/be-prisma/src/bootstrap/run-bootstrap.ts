@@ -3,7 +3,6 @@ import { SYSTEM_SPACE_ULID } from "../reference-data/constants";
 import { syncReferenceData } from "../reference-data/sync-reference-data";
 import { createAssetDomainData } from "./asset";
 import { ensureSecurityPolicyDefaults } from "./defaults";
-import { createInquiryDomainData } from "./inquiry";
 import {
 	classifyFitnessCenterSpacesAsBranch,
 	createHierarchicalTenants,
@@ -37,7 +36,6 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 	await ensureSecurityPolicyDefaults(prisma);
 	await createAssetDomainData(prisma);
 	await ensureBootstrapTemplates(prisma);
-	await createInquiryDomainData(prisma);
 
 	console.log(
 		`Bootstrap 완료 (superAdminUserId=${systemBootstrap.superAdminUser.id})`,
