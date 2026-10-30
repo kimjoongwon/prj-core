@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { Button, Container, VStack, HStack, Typography, Chip } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { Rocket, CheckCircle2, Pencil, Server, Eye, Sparkles } from "lucide-react";
+import { Rocket, CheckCircle2, Pencil, Server, Eye, Sparkles, User } from "lucide-react";
 import { Stepper } from "../components/Stepper";
 import { StepShell } from "../components/StepShell";
 import { ChoiceCard } from "../components/ChoiceCard";
@@ -17,6 +17,7 @@ import { storageStep, databaseStep } from "../data/fixed";
 import { aiServiceStep, aiStack } from "../data/ai-service";
 import { transparencyFeatures } from "../data/transparency";
 import { recommendedStack } from "../data/recommended-stack";
+import { founderIntroduction } from "../data/introduction";
 import type { SelectionState } from "../data/types";
 import { TOTAL_STEPS } from "../data/types";
 
@@ -343,6 +344,30 @@ export default function Page() {
             <Typography.Paragraph size="base" color="muted" align="center">
               제가 추천하는 기본 스택으로 미리 구성되어 있습니다. 단계별로 확인하고 필요한 부분만 바꿔주세요.
             </Typography.Paragraph>
+            <Card className="w-full border-2 border-border bg-surface p-5">
+              <VStack gap="section" alignItems="start" fullWidth>
+                <HStack gap="inline" alignItems="center">
+                  <User className="h-5 w-5 text-accent" />
+                  <Typography.Heading level={4}>{founderIntroduction.headline}</Typography.Heading>
+                </HStack>
+                <Typography.Paragraph size="sm">{founderIntroduction.description}</Typography.Paragraph>
+                <div className="grid w-full gap-3 sm:grid-cols-2">
+                  {founderIntroduction.points.map((point) => (
+                    <div key={point.id} className="rounded-lg bg-surface-secondary p-3">
+                      <VStack gap="dense" alignItems="start">
+                        <Typography.Paragraph size="sm" className="font-bold text-accent">{point.title}</Typography.Paragraph>
+                        <Typography.Paragraph size="xs" color="muted">{point.detail}</Typography.Paragraph>
+                      </VStack>
+                    </div>
+                  ))}
+                </div>
+                <div className="w-full border-t border-separator pt-3">
+                  <Typography.Paragraph size="sm" className="font-semibold">
+                    {founderIntroduction.closingStatement}
+                  </Typography.Paragraph>
+                </div>
+              </VStack>
+            </Card>
             <Card className="w-full border-2 border-accent bg-accent-soft p-5">
               <VStack gap="section" alignItems="start" fullWidth>
                 <HStack gap="inline" alignItems="center">
