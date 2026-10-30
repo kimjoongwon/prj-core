@@ -17,7 +17,6 @@
     "@heroui/react": "3.1.0",
     "@heroui/styles": "3.1.0",
     "framer-motion": "catalog:",
-    "lucide-react": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
     "next": "^16.4.3",

@@ -1,7 +1,6 @@
 "use client";
 
 import { HStack } from "@cocrepo/ui";
-import { Check } from "lucide-react";
 
 interface StepperProps {
   currentStep: number;
@@ -28,7 +27,7 @@ export function Stepper({ currentStep, totalSteps }: StepperProps) {
                     : "bg-surface-secondary text-foreground/40"
               }`}
             >
-              {isDone ? <Check className="h-3.5 w-3.5" /> : i + 1}
+              {isDone ? <span aria-hidden="true" className="text-xs leading-none">✅</span> : i + 1}
             </span>
             {i < totalSteps - 1 && (
               <span className={`h-px w-8 ${i < currentStep ? "bg-accent" : "bg-separator"}`} />

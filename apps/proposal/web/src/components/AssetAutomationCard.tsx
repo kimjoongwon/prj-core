@@ -3,17 +3,16 @@
 import Image from "next/image";
 import { Chip, HStack, Typography, VStack } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { Focus, Layers, Lock, RefreshCw, Wand2 } from "lucide-react";
 import {
 	assetAutomationFramework,
 	type AssetSellingPointIcon,
 } from "../data/asset-automation";
 
-const SELLING_POINT_ICONS: Record<AssetSellingPointIcon, typeof Layers> = {
-	batch: Layers,
-	styleLock: Lock,
-	fastIteration: RefreshCw,
-	designerFocus: Focus,
+const SELLING_POINT_EMOJIS: Record<AssetSellingPointIcon, string> = {
+	batch: "🗂️",
+	styleLock: "🔒",
+	fastIteration: "⚡",
+	designerFocus: "🎯",
 };
 
 // next/image와 달리 일반 <a>에는 basePath가 붙지 않아 경로에 직접 반영
@@ -27,9 +26,7 @@ export function AssetAutomationCard() {
 		<Card className="w-full border-2 border-accent bg-accent-soft p-5">
 			<VStack gap="section" alignItems="start" fullWidth>
 				<HStack gap="block" alignItems="center" fullWidth>
-					<span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent">
-						<Wand2 className="h-5 w-5 text-accent-foreground" />
-					</span>
+					<span className="shrink-0 text-2xl leading-none" aria-hidden="true">🪄</span>
 					<VStack gap="flush" alignItems="start">
 						<Typography.Heading level={4}>
 							{assetAutomationFramework.title}
@@ -52,12 +49,12 @@ export function AssetAutomationCard() {
 				<div className="grid w-full gap-4 md:grid-cols-2">
 					<VStack gap="section" alignItems="start">
 						{assetAutomationFramework.sellingPoints.map((point) => {
-							const PointIcon = SELLING_POINT_ICONS[point.icon];
+							const pointEmoji = SELLING_POINT_EMOJIS[point.icon];
 							return (
 								<HStack key={point.name} gap="inline" alignItems="start">
-									<span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface">
-										<PointIcon className="h-4 w-4 text-accent" />
-									</span>
+										<span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface text-base leading-none" aria-hidden="true">
+											{pointEmoji}
+										</span>
 									<VStack gap="flush" alignItems="start">
 										<Typography.Paragraph size="sm" className="font-bold">
 											{point.name}
