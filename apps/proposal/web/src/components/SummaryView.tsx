@@ -2,7 +2,6 @@
 
 import { Button, Chip, VStack, HStack, Typography, Container } from "@cocrepo/ui";
 import { Card } from "@heroui/react";
-import { RotateCcw, Printer, FolderGit2, Bot, Split, Wand2 } from "lucide-react";
 import type { SelectionState } from "../data/types";
 import { frontendStep } from "../data/frontend";
 import { backendStep } from "../data/backend";
@@ -132,9 +131,7 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
         {isMonorepo && (
           <Card className="w-full border-2 border-accent bg-accent-soft p-5">
             <HStack gap="block" alignItems="start">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent">
-                <FolderGit2 className="h-5 w-5 text-accent-foreground" />
-              </span>
+              <span aria-hidden="true" className="shrink-0 text-2xl leading-none">📁</span>
               <VStack gap="dense" alignItems="start">
                 <Typography.Heading level={4}>모노레포 통합 개발</Typography.Heading>
                 <Typography.Paragraph size="sm">
@@ -143,15 +140,15 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
                 </Typography.Paragraph>
                 <VStack gap="dense" alignItems="start">
                   <HStack gap="inline" alignItems="center">
-                    <Bot className="h-4 w-4 text-accent" />
+                    <span aria-hidden="true" className="text-base leading-none">🤖</span>
                     <Typography.Paragraph size="sm">API 변경 시 프론트·백엔드 동시 수정 — 불일치 버그 원천 차단</Typography.Paragraph>
                   </HStack>
                   <HStack gap="inline" alignItems="center">
-                    <Bot className="h-4 w-4 text-accent" />
+                    <span aria-hidden="true" className="text-base leading-none">🤖</span>
                     <Typography.Paragraph size="sm">타입 정의 공유 — 웹·앱·서버가 같은 인터페이스 사용</Typography.Paragraph>
                   </HStack>
                   <HStack gap="inline" alignItems="center">
-                    <Bot className="h-4 w-4 text-accent" />
+                    <span aria-hidden="true" className="text-base leading-none">🤖</span>
                     <Typography.Paragraph size="sm">Turborepo 증분 빌드 — 변경된 부분만 빌드해 CI 시간 단축</Typography.Paragraph>
                   </HStack>
                 </VStack>
@@ -164,9 +161,7 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
         {!isMonorepo && (
           <Card className="w-full border-2 border-border bg-surface p-5">
             <HStack gap="block" alignItems="start">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-secondary">
-                <Split className="h-5 w-5 text-foreground" />
-              </span>
+              <span aria-hidden="true" className="shrink-0 text-2xl leading-none">🔀</span>
               <VStack gap="dense" alignItems="start">
                 <Typography.Heading level={4}>분리 저장소 구조</Typography.Heading>
                 <Typography.Paragraph size="sm">
@@ -207,9 +202,7 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
         {/* AI 에셋 자동화 판매 강조 */}
         <Card className="w-full border-2 border-accent bg-accent-soft p-5">
           <HStack gap="block" alignItems="start">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent">
-              <Wand2 className="h-5 w-5 text-accent-foreground" />
-            </span>
+            <span aria-hidden="true" className="shrink-0 text-2xl leading-none">🪄</span>
             <VStack gap="dense" alignItems="start">
               <Typography.Heading level={4}>AI 에셋 자동화 프레임워크</Typography.Heading>
               <Typography.Paragraph size="sm">
@@ -286,10 +279,10 @@ export function SummaryView({ selection, onReset }: SummaryViewProps) {
 
         <HStack gap="inline" className="pb-8">
           <Button variant="outline" size="md" onClick={onReset}>
-            <RotateCcw className="h-4 w-4" /> 다시 선택
+            <span aria-hidden="true" className="text-base leading-none">🔄</span> 다시 선택
           </Button>
           <Button variant="primary" size="md" onClick={() => window.print()}>
-            <Printer className="h-4 w-4" /> 인쇄 / PDF 저장
+            <span aria-hidden="true" className="text-base leading-none">🖨️</span> 인쇄 / PDF 저장
           </Button>
         </HStack>
       </VStack>
