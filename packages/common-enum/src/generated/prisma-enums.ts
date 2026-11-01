@@ -155,16 +155,6 @@ export const TemplateType = {
 export type TemplateType = (typeof TemplateType)[keyof typeof TemplateType];
 
 
-export const TenantAccessRequestStatus = {
-	PENDING: "PENDING",
-	APPROVED: "APPROVED",
-	REJECTED: "REJECTED",
-	CANCELED: "CANCELED",
-} as const;
-
-export type TenantAccessRequestStatus = (typeof TenantAccessRequestStatus)[keyof typeof TenantAccessRequestStatus];
-
-
 export const TextTypes = {
 	Editor: "Editor",
 	Input: "Input",

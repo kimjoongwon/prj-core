@@ -95,7 +95,6 @@ export const ModelName = {
   Task: 'Task',
   TemplateVariable: 'TemplateVariable',
   Template: 'Template',
-  TenantAccessRequest: 'TenantAccessRequest',
   Tenant: 'Tenant',
   Timeline: 'Timeline',
   Translation: 'Translation',
@@ -885,27 +884,6 @@ export const TemplateScalarFieldEnum = {
 } as const
 
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
-
-
-export const TenantAccessRequestScalarFieldEnum = {
-  tenantAccessRequestId: 'tenantAccessRequestId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  requesterId: 'requesterId',
-  spaceId: 'spaceId',
-  requestedRoleId: 'requestedRoleId',
-  previousRoleId: 'previousRoleId',
-  reason: 'reason',
-  status: 'status',
-  reviewerId: 'reviewerId',
-  reviewComment: 'reviewComment',
-  reviewedAt: 'reviewedAt',
-  appliedTenantId: 'appliedTenantId'
-} as const
-
-export type TenantAccessRequestScalarFieldEnum = (typeof TenantAccessRequestScalarFieldEnum)[keyof typeof TenantAccessRequestScalarFieldEnum]
 
 
 export const TenantScalarFieldEnum = {

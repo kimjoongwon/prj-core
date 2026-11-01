@@ -517,6 +517,12 @@ reference-data sync와 새 data migration으로 값을 맞춥니다.
 3. 후속 schema migration에서 필드 삭제
 ```
 
+PreSync Job이 앱 rollout보다 먼저 schema migration을 적용하는 환경에서는 현재 실행 중인
+이전 이미지도 삭제 대상을 조회하지 않아야 한 단계 DROP이 안전합니다. 배포 전에 등록된
+Command/Query/Event handler, repository와 직접 Prisma 호출이 없는지 확인하고, 같은 DB를
+공유하는 다른 workload의 소비 여부도 별도로 확인합니다. 하나라도 남아 있으면 소비 계약
+제거 릴리스와 DROP migration 릴리스를 나눕니다.
+
 ### 안전한 이름 변경 순서
 
 운영 상황에 따라 바로 rename하지 않고 새 필드를 추가해 옮기는 방법을 사용합니다.

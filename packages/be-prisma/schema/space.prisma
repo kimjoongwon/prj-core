@@ -19,7 +19,6 @@ model Space {
   classification       SpaceClassification?
   tenants              Tenant[]
   emailVerifications   EmailVerification[]
-  tenantAccessRequests TenantAccessRequest[]
   policies             Policy[]
   folders              Folder[]
   categories           Category[]

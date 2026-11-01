@@ -99,9 +99,6 @@ describe("schema conventions", () => {
 		expect(toPublicIdentifierFieldName("auth-audit-log")).toBe(
 			"authAuditLogId",
 		);
-		expect(toPublicIdentifierFieldName("tenant-access-request")).toBe(
-			"tenantAccessRequestId",
-		);
 	});
 
 	it("Given 단일 폴더 schema When 검증하면 Then count와 data-type 요약을 반환한다", () => {

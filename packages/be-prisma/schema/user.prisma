@@ -22,8 +22,6 @@ model User {
   status                       UserStatus?
   profiles                     Profile[]
   tenants                      Tenant[]              @relation("TenantUser")
-  tenantAccessRequests         TenantAccessRequest[] @relation("TenantAccessRequestRequester")
-  reviewedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestReviewer")
   classification               UserClassification?
   associations                 UserAssociation[]
   passwordHistory              PasswordHistory[]

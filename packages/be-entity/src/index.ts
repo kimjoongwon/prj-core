@@ -50,7 +50,6 @@ export * from "./task.entity";
 export * from "./template.entity";
 export * from "./template-variable.entity";
 export * from "./tenant.entity";
-export * from "./tenant-access-request.entity";
 export * from "./timeline.entity";
 export * from "./translation.entity";
 export * from "./user.entity";

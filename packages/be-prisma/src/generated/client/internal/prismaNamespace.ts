@@ -441,7 +441,6 @@ export const ModelName = {
   Task: 'Task',
   TemplateVariable: 'TemplateVariable',
   Template: 'Template',
-  TenantAccessRequest: 'TenantAccessRequest',
   Tenant: 'Tenant',
   Timeline: 'Timeline',
   Translation: 'Translation',
@@ -466,7 +465,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ability" | "action" | "activity" | "albumEntry" | "album" | "asset" | "authAuditLog" | "category" | "company" | "content" | "derivative" | "document" | "emailVerification" | "exercise" | "fitnessCenter" | "folder" | "group" | "image" | "oidcClient" | "oidcModel" | "passwordHistory" | "policyEntry" | "policy" | "post" | "profile" | "programActivity" | "program" | "referenceDataMigrationHistory" | "reservation" | "roleAssignment" | "roleAssociation" | "roleClassification" | "role" | "routine" | "securityPolicy" | "serviceDocument" | "session" | "spaceAssociation" | "spaceClassification" | "space" | "subject" | "task" | "templateVariable" | "template" | "tenantAccessRequest" | "tenant" | "timeline" | "translation" | "userAssociation" | "userClassification" | "userStatus" | "user" | "video" | "whitelistEntry"
+    modelProps: "ability" | "action" | "activity" | "albumEntry" | "album" | "asset" | "authAuditLog" | "category" | "company" | "content" | "derivative" | "document" | "emailVerification" | "exercise" | "fitnessCenter" | "folder" | "group" | "image" | "oidcClient" | "oidcModel" | "passwordHistory" | "policyEntry" | "policy" | "post" | "profile" | "programActivity" | "program" | "referenceDataMigrationHistory" | "reservation" | "roleAssignment" | "roleAssociation" | "roleClassification" | "role" | "routine" | "securityPolicy" | "serviceDocument" | "session" | "spaceAssociation" | "spaceClassification" | "space" | "subject" | "task" | "templateVariable" | "template" | "tenant" | "timeline" | "translation" | "userAssociation" | "userClassification" | "userStatus" | "user" | "video" | "whitelistEntry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3726,80 +3725,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    TenantAccessRequest: {
-      payload: Prisma.$TenantAccessRequestPayload<ExtArgs>
-      fields: Prisma.TenantAccessRequestFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.TenantAccessRequestFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.TenantAccessRequestFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>
-        }
-        findFirst: {
-          args: Prisma.TenantAccessRequestFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.TenantAccessRequestFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>
-        }
-        findMany: {
-          args: Prisma.TenantAccessRequestFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>[]
-        }
-        create: {
-          args: Prisma.TenantAccessRequestCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>
-        }
-        createMany: {
-          args: Prisma.TenantAccessRequestCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.TenantAccessRequestCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>[]
-        }
-        delete: {
-          args: Prisma.TenantAccessRequestDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>
-        }
-        update: {
-          args: Prisma.TenantAccessRequestUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>
-        }
-        deleteMany: {
-          args: Prisma.TenantAccessRequestDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.TenantAccessRequestUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.TenantAccessRequestUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>[]
-        }
-        upsert: {
-          args: Prisma.TenantAccessRequestUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantAccessRequestPayload>
-        }
-        aggregate: {
-          args: Prisma.TenantAccessRequestAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTenantAccessRequest>
-        }
-        groupBy: {
-          args: Prisma.TenantAccessRequestGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TenantAccessRequestGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.TenantAccessRequestCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TenantAccessRequestCountAggregateOutputType> | number
-        }
-      }
-    }
     Tenant: {
       payload: Prisma.$TenantPayload<ExtArgs>
       fields: Prisma.TenantFieldRefs
@@ -5269,27 +5194,6 @@ export const TemplateScalarFieldEnum = {
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
 
 
-export const TenantAccessRequestScalarFieldEnum = {
-  tenantAccessRequestId: 'tenantAccessRequestId',
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  requesterId: 'requesterId',
-  spaceId: 'spaceId',
-  requestedRoleId: 'requestedRoleId',
-  previousRoleId: 'previousRoleId',
-  reason: 'reason',
-  status: 'status',
-  reviewerId: 'reviewerId',
-  reviewComment: 'reviewComment',
-  reviewedAt: 'reviewedAt',
-  appliedTenantId: 'appliedTenantId'
-} as const
-
-export type TenantAccessRequestScalarFieldEnum = (typeof TenantAccessRequestScalarFieldEnum)[keyof typeof TenantAccessRequestScalarFieldEnum]
-
-
 export const TenantScalarFieldEnum = {
   tenantId: 'tenantId',
   id: 'id',
@@ -5797,20 +5701,6 @@ export type ListEnumTemplateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
- * Reference to a field of type 'TenantAccessRequestStatus'
- */
-export type EnumTenantAccessRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TenantAccessRequestStatus'>
-
-
-
-/**
- * Reference to a field of type 'TenantAccessRequestStatus[]'
- */
-export type ListEnumTenantAccessRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TenantAccessRequestStatus[]'>
-
-
-
-/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -6032,7 +5922,6 @@ export type GlobalOmitConfig = {
   task?: Prisma.TaskOmit
   templateVariable?: Prisma.TemplateVariableOmit
   template?: Prisma.TemplateOmit
-  tenantAccessRequest?: Prisma.TenantAccessRequestOmit
   tenant?: Prisma.TenantOmit
   timeline?: Prisma.TimelineOmit
   translation?: Prisma.TranslationOmit
