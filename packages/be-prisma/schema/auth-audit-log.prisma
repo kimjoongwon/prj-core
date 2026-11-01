@@ -1,4 +1,6 @@
 // @data-type: EVENT
+// @model-role: HISTORY
+// @aggregate-owner: NONE
 // @description: 로그인 시도와 결과를 기록하는 인증 감사 로그
 /// @displayName 인증 감사 로그
 model AuthAuditLog {

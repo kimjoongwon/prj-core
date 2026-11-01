@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: OBJECT
+// @aggregate-owner: Company
 // @description: 사업자/회사 정보를 관리하고 여러 피트니스 센터를 묶는 모델
 /// @displayName 회사
 model Company {

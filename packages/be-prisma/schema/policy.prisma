@@ -1,5 +1,6 @@
 // @data-type: CONFIGURATION
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Policy
 // @description: 여러 Ability를 묶어 Role에 할당되는 공간별 권한 정책 묶음
 /// @displayName 정책
 model Policy {

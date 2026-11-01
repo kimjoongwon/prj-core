@@ -1,4 +1,6 @@
 // @data-type: CONFIGURATION
+// @model-role: OBJECT
+// @aggregate-owner: Program
 // @description: Session과 Routine을 연결하고 운영 속성을 보관하는 운영 조인 모델
 /// @displayName 프로그램
 model Program {

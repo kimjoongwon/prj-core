@@ -1,5 +1,6 @@
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Group
 // @description: 사용자·공간·역할을 묶는 그룹 루트
 /// @displayName 그룹
 model Group {

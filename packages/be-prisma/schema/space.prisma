@@ -1,5 +1,6 @@
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Space
 // @description: FitnessCenter 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 공간 기반 모델
 /// @displayName 공간
 model Space {

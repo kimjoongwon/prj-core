@@ -1,5 +1,6 @@
 // @data-type: TRANSACTION
-// @aggregate-root: true
+// @model-role: TECHNICAL_STATE
+// @aggregate-owner: NONE
 // @description: OIDC provider가 참조하는 전역 모델 저장 카탈로그
 /// @displayName OIDC 모델
 model OidcModel {

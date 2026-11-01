@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: DETAIL
+// @aggregate-owner: Asset
 // @description: Asset에 종속되어 파생 리소스를 누적 관리하는 1:N 하위 모델
 /// @displayName 파생 리소스
 model Derivative {

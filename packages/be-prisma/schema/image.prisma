@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: DETAIL
+// @aggregate-owner: Asset
 // @description: Asset(kind=IMAGE)에 종속되는 이미지 1:1 상세 정보
 /// @displayName 이미지 상세
 model Image {

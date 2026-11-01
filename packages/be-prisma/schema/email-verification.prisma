@@ -1,5 +1,6 @@
 // @data-type: TRANSACTION
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: EmailVerification
 // @description: 회원가입 전 이메일 인증 요청과 발송/완료 상태를 기록하는 전역 인증 로그
 /// @displayName 이메일 인증
 model EmailVerification {

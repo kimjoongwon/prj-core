@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: ASSOCIATION
+// @aggregate-owner: Album
 // @description: Album과 Asset을 연결하고 앨범 내 배치 정보를 보관하는 운영 조인 모델
 /// @displayName 앨범 엔트리
 model AlbumEntry {

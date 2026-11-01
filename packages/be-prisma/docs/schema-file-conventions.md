@@ -181,6 +181,8 @@ NotificationRule -> notification-rule.prisma
 
 ```prisma
 // @data-type: CONFIGURATION
+// @model-role: OBJECT
+// @aggregate-owner: NotificationRule
 // @description: 알림 전달 조건과 채널 선택 규칙을 관리
 /// @displayName 알림 규칙
 model NotificationRule {
@@ -191,9 +193,9 @@ model NotificationRule {
 
 같은 업무 흐름에서 쓰더라도 두 번째 model이 필요하면 두 번째 파일을 만듭니다.
 
-### 4단계: 데이터 타입을 판단합니다
+### 4단계: 모델 메타데이터를 판단합니다
 
-다섯 타입 중 하나를 고릅니다. 분류가 어렵다면 경로를 바꾸지 말고 승인된 spec이나 도메인 owner에게 의미를 확인합니다.
+다섯 데이터 타입, 여섯 모델 역할과 Aggregate owner를 고릅니다. 분류가 어렵다면 경로를 바꾸지 말고 승인된 spec이나 도메인 owner에게 의미를 확인합니다. 정확한 값과 판단 기준은 [schema-metadata-guide.md](./schema-metadata-guide.md)를 따릅니다.
 
 ### 5단계: 자동 검사를 실행합니다
 

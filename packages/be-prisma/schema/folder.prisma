@@ -1,5 +1,6 @@
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Folder
 // @description: 에셋 저장 구조를 독립 관리하는 Space 범위 폴더 루트
 /// @displayName 폴더
 model Folder {

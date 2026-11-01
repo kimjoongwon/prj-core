@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: ASSOCIATION
+// @aggregate-owner: User
 // @description: User와 Category를 연결하는 분류 링크
 /// @displayName 사용자 분류
 model UserClassification {

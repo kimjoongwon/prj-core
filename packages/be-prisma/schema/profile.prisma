@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: DETAIL
+// @aggregate-owner: User
 // @description: User에 종속되어 프로필 정보를 관리하는 1:N 하위 모델
 /// @displayName 프로필
 model Profile {
