@@ -144,7 +144,6 @@ test("정리된 Admin 메뉴와 접근 제어는 유지한 화면만 노출한�
 		"/subjects",
 		"/tasks",
 		"/templates",
-		"/tenant-access-requests",
 		"/terms",
 		"/timelines",
 		"/translations",

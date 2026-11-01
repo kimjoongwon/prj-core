@@ -1,5 +1,6 @@
 // @data-type: CONFIGURATION
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Routine
 // @description: 반복 수행되는 활동 묶음을 정의하는 루틴
 /// @displayName 루틴
 model Routine {

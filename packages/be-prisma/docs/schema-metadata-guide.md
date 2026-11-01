@@ -8,7 +8,7 @@
 
 > 모든 모델은 업무 데이터 성격을 `@data-type`으로 설명합니다.
 >
-> DDD의 Aggregate Root는 데이터 타입과 별개로 판단하고, 관계와 DB 구조는 Prisma schema 자체로 표현합니다.
+> 모델의 도메인 역할은 `@model-role`, Aggregate 경계 소유는 `@aggregate-owner`로 명시하며 관계와 DB 구조는 Prisma schema 자체로 표현합니다.
 
 파일을 어디에 두는지는
 [schema-file-conventions.md](./schema-file-conventions.md)를 봅니다.
@@ -20,6 +20,8 @@
 - **model**: 같은 종류의 내용을 적는 장부입니다. `User`라면 사용자 장부입니다.
 - **row**: 장부에 적은 한 줄입니다. 민지 사용자 한 명이 row 하나입니다.
 - **`@data-type`**: “이 장부를 왜 보관하지?”라는 질문에 답하는 스티커입니다.
+- **`@model-role`**: “이 모델이 도메인 구조에서 무엇을 맡지?”에 답하는 스티커입니다.
+- **`@aggregate-owner`**: “이 모델의 변경 경계를 어느 Root가 소유하지?”에 답하는 스티커입니다.
 
 `@data-type`은 필드의 자료형을 말하지 않습니다. `String`, `Int`, `DateTime` 같은 Prisma 타입과도 관계없습니다.
 
@@ -35,7 +37,9 @@
 
 > 이 row는 **주인공**, **공용 기준**, **여러 번 적용할 규칙**, **진행 중인 일**, **이미 일어난 사실** 중 무엇인가?
 
-나머지 절은 이 표를 실제 schema와 연결해서 자세히 설명합니다.
+`@aggregate-owner`가 모델 자신의 이름이면 Aggregate Root, 다른 Root 이름이면 그 Aggregate의 하위 모델, `NONE`이면 Aggregate 외부 모델입니다. Root 여부를 별도 태그로 중복 기록하지 않습니다.
+
+나머지 절은 이 분류를 실제 schema와 연결해서 자세히 설명합니다.
 
 ## 1. 기준 자료
 
@@ -81,13 +85,14 @@ Entity, Value Object, Service 같은 DDD 분류는 테이블 모양만으로 결
 
 ### 설계 메타데이터
 
-설계 메타데이터는 아래 세 종류가 전부이며 슬래시 2개(`//`)로 작성합니다.
+설계 메타데이터는 아래 네 종류가 전부이며 슬래시 2개(`//`)로 작성합니다.
 
-| 형식                       | 필수 여부          | 답하는 질문                                      |
-| -------------------------- | ------------------ | ------------------------------------------------ |
-| `// @data-type: <TYPE>`    | 모든 모델에 필수   | 이 모델은 어떤 성격의 업무 데이터를 저장하는가? |
-| `// @description: <설명>`  | 모든 모델에 필수   | 이 모델이 담당하는 업무 책임은 무엇인가?         |
-| `// @aggregate-root: true` | 필요한 모델만 선택 | 이 모델이 Aggregate의 일관성 경계 진입점인가?    |
+| 형식                            | 필수 여부        | 답하는 질문                                                |
+| ------------------------------- | ---------------- | ---------------------------------------------------------- |
+| `// @data-type: <TYPE>`         | 모든 모델에 필수 | 이 모델은 어떤 성격의 업무 데이터를 저장하는가?           |
+| `// @model-role: <ROLE>`        | 모든 모델에 필수 | 이 모델은 도메인 구조에서 어떤 역할을 맡는가?              |
+| `// @aggregate-owner: <OWNER>`  | 모든 모델에 필수 | 이 모델의 변경 경계를 소유하는 Aggregate Root는 무엇인가?  |
+| `// @description: <설명>`       | 모든 모델에 필수 | 이 모델이 담당하는 업무 책임은 무엇인가?                   |
 
 설계 메타데이터는 model 선언 앞의 한 주석 블록에 모읍니다. 그 블록의 마지막 줄에는 model의 `/// @displayName`이 옵니다. 다른 이름을 추가하지 않으며 `schema:check`가 이름, 개수, 위치와 값 형식을 검사합니다.
 
@@ -114,12 +119,13 @@ Entity, Value Object, Service 같은 DDD 분류는 테이블 모양만으로 결
 | model     | `@@index`, `@@map`, `@@unique`                                            |
 | enum      | `@@map`                                                                   |
 
-`@data-type`과 `@aggregate-root`는 서로 독립적입니다.
+`@data-type`, `@model-role`, Aggregate Root 여부는 서로 독립적입니다.
 
 - `@data-type`은 “어떤 종류의 업무 데이터를 저장하는가?”에 답합니다.
-- `@aggregate-root`는 “어떤 모델을 통해 이 묶음의 불변식을 지키며 변경하는가?”에 답합니다.
+- `@model-role`은 “도메인 구조에서 어떤 책임을 맡는가?”에 답합니다.
+- `@aggregate-owner`는 “어떤 Root를 통해 이 묶음의 불변식을 지키며 변경하는가?”에 답합니다.
 
-예를 들어 `MASTER` 모델이 항상 Aggregate Root인 것도 아니고, `TRANSACTION` 모델만 Aggregate Root가 될 수 있는 것도 아닙니다.
+예를 들어 `OBJECT`가 항상 Aggregate Root인 것도 아니고, `DETAIL`이 Root가 될 수 없는 것도 아닙니다. validator는 역할과 Root 여부를 1:1로 묶지 않습니다.
 
 ## 3. 다섯 가지 `@data-type`
 
@@ -346,8 +352,7 @@ isActive = true
 
 대표 예:
 
-- 문의와 문의 메시지
-- 예약 또는 접근 요청
+- 예약
 - 외부 시스템과 진행 중인 교환 상태
 
 #### 실제 예시 1: `Reservation`은 수업 예약 한 건의 진행표
@@ -374,25 +379,6 @@ WAITLISTED -> CONFIRMED -> CANCELED
 - 취소하면 `canceledAt`과 `cancelReason`이 채워집니다.
 
 민지라는 사람 자체나 수업 프로그램 자체가 아니라 **특정 수업 회차를 예약한 업무 한 건**이므로 `TRANSACTION`입니다.
-
-#### 실제 예시 2: `TenantAccessRequest`는 공간 입장 신청서
-
-[실제 `TenantAccessRequest` schema 보기](../schema/tenant-access-request.prisma)
-
-```text
-requesterId = "user-minji"
-spaceId = "space-math"
-requestedRoleId = "role-member"
-reason = "수업에 참여하고 싶어요"
-status = PENDING
-```
-
-- 신청할 때 `PENDING`으로 생깁니다.
-- 관리자가 승인하면 `APPROVED`, 거절하면 `REJECTED`가 됩니다.
-- 검토한 사람과 시각은 `reviewerId`, `reviewedAt`에 채워집니다.
-- 승인 뒤 만들어진 실제 멤버십은 `Tenant`가 담당합니다.
-
-`TenantAccessRequest`는 멤버십 자체가 아니라 멤버십을 만들어 달라는 **신청부터 처리 결과까지의 진행표**입니다.
 
 여기서 `TRANSACTION`은 SQL의 `BEGIN`, `COMMIT`, `ROLLBACK`으로 묶는 **DB transaction**을 뜻하지 않습니다. 한 `TRANSACTION` 모델을 여러 DB transaction에 걸쳐 처리할 수 있고, 하나의 DB transaction에서 여러 데이터 타입을 함께 변경할 수도 있습니다.
 
@@ -532,7 +518,7 @@ AuthAuditLog는 로그인 한 번의 결과를 시각과 함께 남기기 위해
 | 비교 대상                              | 왼쪽                                           | 오른쪽                                                     |
 | -------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------- |
 | `User`와 `AuthAuditLog`                | 현재 사용자 카드인 `MASTER`                    | 로그인할 때마다 남는 과거 사실인 `EVENT`                   |
-| `Role`과 `TenantAccessRequest`         | 모두가 쓰는 역할 정의인 `REFERENCE`            | 그 역할을 달라는 신청 한 건인 `TRANSACTION`                |
+| `Role`과 `Reservation`                 | 모두가 쓰는 역할 정의인 `REFERENCE`            | 특정 회차를 예약한 업무 한 건인 `TRANSACTION`              |
 | `SecurityPolicy`와 `User`              | 여러 사용자에게 적용할 규칙인 `CONFIGURATION`  | 특정 사용자 한 명의 현재 상태인 `MASTER`                   |
 | `Template`과 실제 메시지               | 앞으로 메시지를 만드는 틀인 `CONFIGURATION`    | 실제 발송 한 건은 별도 업무 기록 또는 발생 사실            |
 | `Reservation`과 예약 취소 발생 기록    | 예약 전체 진행을 관리하는 `TRANSACTION`        | “10시에 취소했다”만 따로 남기면 `EVENT`                     |
@@ -572,7 +558,8 @@ relation 개수, 파일 이름, API CRUD 유무만으로 타입을 결정하지 
 
 ```prisma
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: User
 // @description: 사용자 계정의 현재 상태와 생명주기를 관리
 /// @displayName 사용자
 model User {
@@ -581,18 +568,22 @@ model User {
 }
 ```
 
-Aggregate Root가 아니라면 `@aggregate-root` 줄만 뺍니다.
+모든 태그는 필수입니다. Aggregate Root이면 `@aggregate-owner`에 모델 자신의 이름을, 하위 모델이면 소유 Root 이름을, Aggregate 외부이면 `NONE`을 씁니다.
 
 ### 설계 메타데이터
 
 ```prisma
 // @data-type: CONFIGURATION
+// @model-role: OBJECT
+// @aggregate-owner: OidcClient
 // @description: 인증 요청을 처리할 외부 client 설정을 관리
 ```
 
 - 슬래시는 2개입니다.
 - 태그 이름 뒤에 콜론(`:`)을 씁니다.
 - `@data-type` 값은 다섯 허용값 중 하나를 대문자로 씁니다.
+- `@model-role` 값은 여섯 허용값 중 하나를 대문자로 씁니다.
+- `@aggregate-owner` 값은 `NONE` 또는 실제 UpperCamelCase 모델 이름을 씁니다.
 - `schema:check`가 이름, 개수, 위치와 값 형식을 검사합니다.
 
 ### Prisma DMMF 문서
@@ -653,33 +644,97 @@ Aggregate Root가 아니라면 `@aggregate-root` 줄만 뺍니다.
 /// @displayname 사용자
 ```
 
-## 8. `@aggregate-root: true`
+## 8. `@model-role`과 `@aggregate-owner`
 
-Aggregate는 여러 도메인 객체를 하나의 일관성 단위로 다루는 DDD 패턴입니다. Aggregate Root는 외부에서 그 묶음을 변경할 때 사용하는 진입점입니다.
+`@model-role`은 모델의 도메인 구조상 책임을 분류합니다.
 
-단순히 아래 조건에 해당한다는 이유로 붙이지 않습니다.
+| 역할              | 판단 기준                                                        |
+| ----------------- | ---------------------------------------------------------------- |
+| `OBJECT`          | 업무 대상, 규칙 또는 설정 자체의 identity와 현재 상태를 관리     |
+| `DETAIL`          | 부모의 세부 객체나 상태 정보를 관리하며 1:1뿐 아니라 1:N도 포함  |
+| `ASSOCIATION`     | 모델 사이의 관계와 그 관계가 소유하는 속성을 관리                |
+| `SNAPSHOT`        | 특정 시점의 값을 복사하여 이후 원본 변경과 분리해 보존            |
+| `HISTORY`         | 이미 발생한 사실이나 과거 상태를 누적 보존                        |
+| `TECHNICAL_STATE` | 외부 프로토콜 또는 라이브러리의 내부 처리 상태를 보존             |
 
-- 특정 데이터 타입이다.
-- 독립 CRUD API가 있다.
-- 중요한 모델처럼 보인다.
-- relation이 많다.
-- 다른 모델이 이 모델을 참조한다.
+Aggregate는 함께 일관성을 지켜야 하는 도메인 객체 묶음이며, Aggregate Root는 외부에서 그 묶음을 변경할 때 사용하는 진입점입니다. Root 여부는 별도 boolean 태그로 기록하지 않고 `@aggregate-owner`에서 파생합니다.
 
-태그를 붙이기 전에 아래 질문에 답해야 합니다.
+- 모델 자신의 이름: self-owned Aggregate Root입니다.
+- 다른 모델 이름: 그 self-owned Root가 소유하는 하위 모델입니다.
+- `NONE`: Aggregate 경계 외부 모델임을 명시합니다.
 
-1. 외부 로직이 하위 모델을 Root 없이 직접 변경해도 되는가?
-2. Root가 보호해야 하는 비즈니스 불변식은 무엇인가?
-3. 한 명령에서 일관성을 보장할 범위는 어디까지인가?
-4. 외부 Aggregate는 내부 객체가 아니라 Root의 identity를 참조하는가?
+다른 모델을 owner로 지정하면 그 모델이 실제로 존재하고 자신의 이름을 owner로 가진 Root여야 합니다. 하위 모델을 다시 owner로 지정하는 체인과 순환은 허용하지 않습니다. 부모 FK가 있다는 이유만으로 ownership을 추론하지 않고 승인된 도메인 경계를 기록합니다. `@model-role`과 Root 여부는 독립적이므로 validator가 특정 역할을 Root 또는 하위로 강제하지 않습니다.
 
-답이 분명하지 않다면 태그를 추가하지 않고 승인된 spec 또는 도메인 owner에게 확인합니다.
+이 메타데이터는 현재 기능과 DB 구조를 설명하는 계약입니다. 분류를 적용한다는 이유로 기능을 다시 구현하거나 field, relation, enum, constraint, migration을 변경하지 않습니다. 예를 들어 `Exercise`에 없는 discriminator를 만들지 않습니다.
+
+### 현재 53개 모델 분류
+
+| 모델 | `@model-role` | `@aggregate-owner` |
+| --- | --- | --- |
+| `Ability` | `OBJECT` | `Ability` |
+| `Action` | `OBJECT` | `Action` |
+| `Album` | `OBJECT` | `Album` |
+| `Asset` | `OBJECT` | `Asset` |
+| `Category` | `OBJECT` | `Category` |
+| `Company` | `OBJECT` | `Company` |
+| `Content` | `OBJECT` | `Content` |
+| `EmailVerification` | `OBJECT` | `EmailVerification` |
+| `Folder` | `OBJECT` | `Folder` |
+| `Group` | `OBJECT` | `Group` |
+| `OidcClient` | `OBJECT` | `OidcClient` |
+| `Policy` | `OBJECT` | `Policy` |
+| `Program` | `OBJECT` | `Program` |
+| `Reservation` | `OBJECT` | `Reservation` |
+| `Role` | `OBJECT` | `Role` |
+| `Routine` | `OBJECT` | `Routine` |
+| `SecurityPolicy` | `OBJECT` | `SecurityPolicy` |
+| `ServiceDocument` | `OBJECT` | `ServiceDocument` |
+| `Session` | `OBJECT` | `Session` |
+| `Space` | `OBJECT` | `Space` |
+| `Subject` | `OBJECT` | `Subject` |
+| `Task` | `OBJECT` | `Task` |
+| `Template` | `OBJECT` | `Template` |
+| `Timeline` | `OBJECT` | `Timeline` |
+| `Translation` | `OBJECT` | `Translation` |
+| `User` | `OBJECT` | `User` |
+| `WhitelistEntry` | `OBJECT` | `WhitelistEntry` |
+| `Derivative` | `DETAIL` | `Asset` |
+| `Document` | `DETAIL` | `Asset` |
+| `Image` | `DETAIL` | `Asset` |
+| `Video` | `DETAIL` | `Asset` |
+| `Exercise` | `DETAIL` | `Task` |
+| `FitnessCenter` | `DETAIL` | `Space` |
+| `Post` | `DETAIL` | `Content` |
+| `Profile` | `DETAIL` | `User` |
+| `UserStatus` | `DETAIL` | `User` |
+| `TemplateVariable` | `DETAIL` | `Template` |
+| `Activity` | `ASSOCIATION` | `Routine` |
+| `AlbumEntry` | `ASSOCIATION` | `Album` |
+| `PolicyEntry` | `ASSOCIATION` | `Policy` |
+| `RoleAssignment` | `ASSOCIATION` | `Role` |
+| `RoleAssociation` | `ASSOCIATION` | `Role` |
+| `RoleClassification` | `ASSOCIATION` | `Role` |
+| `SpaceAssociation` | `ASSOCIATION` | `Space` |
+| `SpaceClassification` | `ASSOCIATION` | `Space` |
+| `Tenant` | `ASSOCIATION` | `User` |
+| `UserAssociation` | `ASSOCIATION` | `User` |
+| `UserClassification` | `ASSOCIATION` | `User` |
+| `ProgramActivity` | `SNAPSHOT` | `Program` |
+| `PasswordHistory` | `HISTORY` | `User` |
+| `AuthAuditLog` | `HISTORY` | `NONE` |
+| `ReferenceDataMigrationHistory` | `HISTORY` | `NONE` |
+| `OidcModel` | `TECHNICAL_STATE` | `NONE` |
+
+합계는 `OBJECT` 27개, `DETAIL` 10개, `ASSOCIATION` 11개, `SNAPSHOT` 1개, `HISTORY` 3개, `TECHNICAL_STATE` 1개입니다. Aggregate 소유 상태는 Root 27개, 하위 23개, 외부 3개입니다.
 
 ## 9. 관계 모델은 어떻게 표현하나요?
 
-추가 속성이 있는 관계는 Prisma의 explicit relation model로 표현합니다. 별도 분류 태그를 붙이지 않습니다.
+추가 속성이 있는 관계는 Prisma의 explicit relation model로 표현하고 `@model-role: ASSOCIATION`으로 책임을 분류합니다.
 
 ```prisma
 // @data-type: CONFIGURATION
+// @model-role: ASSOCIATION
+// @aggregate-owner: Policy
 // @description: Policy와 Ability를 연결하여 정책의 권한 구성을 관리
 /// @displayName 정책 권한
 model PolicyEntry {
@@ -709,6 +764,8 @@ model PolicyEntry {
 
 ```prisma
 // @data-type: MASTER
+// @model-role: DETAIL
+// @aggregate-owner: User
 // @description: User에 종속되는 사용자 인증 상태 1:1 상세 정보
 /// @displayName 사용자 상태
 model UserStatus {
@@ -737,6 +794,8 @@ enum AssetKind {
 ```prisma
 // `asset.prisma`
 // @data-type: MASTER
+// @model-role: OBJECT
+// @aggregate-owner: Asset
 // @description: 보관되는 파일 자산의 공통 identity와 종류를 관리
 /// @displayName 자산
 model Asset {
@@ -766,7 +825,7 @@ model Asset {
 - relation 종류: FK, `@relation`, `@unique`, `@@id`
 - explicit join 의미: model 이름과 relation 필드
 - 실제 다형성: discriminator와 relation
-- 도메인 소유권: 승인된 spec과 도메인 코드
+- Aggregate가 보호하는 세부 불변식: 승인된 spec과 도메인 코드
 
 ## 13. 자동 검사
 
@@ -777,11 +836,14 @@ pnpm --filter=@cocrepo/prisma exec prisma validate
 
 `schema:check`가 검사하는 항목:
 
-- 모든 모델에 필수 설계 메타데이터인 `@data-type`, `@description`이 정확히 하나 있는가
+- 모든 모델에 필수 설계 메타데이터인 `@data-type`, `@model-role`, `@aggregate-owner`, `@description`이 정확히 하나 있는가
 - 모든 모델에 Prisma 문서 주석인 `/// @displayName`이 정확히 하나 있는가
 - `@data-type`이 다섯 허용값 중 하나인가
-- `@aggregate-root`가 중복되지 않았는가
-- 설계 메타데이터가 현재 세 종류로만 구성되어 있는가
+- `@model-role`이 여섯 허용값 중 하나인가
+- `@aggregate-owner`가 `NONE` 또는 UpperCamelCase 모델 이름인가
+- owner 모델이 존재하고 self-owned Root인지, 하위 owner 체인이나 순환이 없는가
+- legacy `@aggregate-root`를 포함한 미지원 설계 태그가 없는가
+- 설계 메타데이터가 현재 네 종류로만 구성되어 있는가
 - model의 설계 메타데이터와 Prisma 문서 주석이 하나의 model 주석 블록에 있는가
 - 파일 구조와 이름이 flat schema 계약을 지키는가
 
@@ -800,10 +862,12 @@ pnpm --filter=@cocrepo/prisma exec prisma validate
 - [ ] `TRANSACTION`을 DB transaction 의미로 사용하지 않았다.
 - [ ] `EVENT`를 Event Sourcing 사용 표시로 해석하지 않았다.
 - [ ] `REFERENCE` 모델 분류와 Reference Data row 운영 정책을 별도로 판단했다.
+- [ ] 모든 모델에 `@model-role`과 `@aggregate-owner`가 정확히 하나 있다.
+- [ ] Root는 자기 이름, 하위 모델은 직접 소유하는 self-owned Root 이름, Aggregate 외부 모델은 `NONE`을 쓴다.
 - [ ] 모든 모델에 `@description`과 `/// @displayName`이 정확히 하나 있다.
 - [ ] Aggregate Root의 불변식과 경계를 설명할 수 있다.
 - [ ] 관계는 model 이름, FK, relation과 unique constraint로 표현했다.
-- [ ] 설계 메타데이터가 `@data-type`, `@description`, `@aggregate-root`로만 구성되어 있다.
+- [ ] 설계 메타데이터가 `@data-type`, `@model-role`, `@aggregate-owner`, `@description`으로만 구성되어 있다.
 - [ ] `schema:check`와 `prisma validate`가 성공했다.
 
 ## 15. 용어
@@ -819,6 +883,8 @@ pnpm --filter=@cocrepo/prisma exec prisma validate
 | Event Sourcing          | 상태를 event 기록의 재생으로 복원하는 아키텍처 패턴          |
 | Aggregate               | 함께 일관성을 지켜야 하는 도메인 객체 묶음                  |
 | Aggregate Root          | Aggregate 외부에서 접근하는 일관성 경계의 진입점             |
+| model role              | 모델이 도메인 구조에서 맡는 객체·상세·관계·보존 역할        |
+| aggregate owner         | 모델의 변경 경계를 직접 소유하는 self-owned Root 또는 `NONE` |
 | explicit relation model | 관계 테이블을 Prisma model로 직접 선언한 구조               |
 | discriminator           | row가 어느 타입인지 구분하는 `type` 또는 `kind` 필드        |
 | invariant               | 데이터가 바뀌어도 반드시 지켜야 하는 비즈니스 규칙          |

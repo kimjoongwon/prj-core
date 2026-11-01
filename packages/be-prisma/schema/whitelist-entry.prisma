@@ -1,5 +1,6 @@
 // @data-type: CONFIGURATION
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: WhitelistEntry
 // @description: 인증 정책이 참조하는 화이트리스트 카탈로그
 /// @displayName 화이트리스트 항목
 model WhitelistEntry {

@@ -207,7 +207,7 @@ Prisma는 `schema/`의 모든 `.prisma` 파일을 자동으로 하나의 스키�
 
 ### 모델 메타데이터 계약
 
-메타데이터 종류와 형식, 데이터 타입, Aggregate Root, Prisma 문서 주석과 기본 속성의 구분은 [`docs/schema-metadata-guide.md`](./docs/schema-metadata-guide.md)가 단독으로 소유합니다. 모든 model 파일은 이 계약을 따릅니다.
+메타데이터 종류와 형식, 데이터 타입, 모델 역할, Aggregate 소유 경계, Prisma 문서 주석과 기본 속성의 구분은 [`docs/schema-metadata-guide.md`](./docs/schema-metadata-guide.md)가 단독으로 소유합니다. 모든 model 파일은 `@data-type`, `@model-role`, `@aggregate-owner`, `@description` 계약을 따릅니다. Aggregate Root 여부는 `@aggregate-owner`가 모델 자신의 이름인지로 파생하며 별도 태그로 중복 기록하지 않습니다.
 
 파일 이름은 아래 규칙으로만 계산합니다.
 
@@ -235,10 +235,10 @@ export default defineConfig({
 
 Current schema contains:
 
-- **56 schema files**: 54 model files + `_base.prisma` + `_enums.prisma`
-- **54 models**: one model per root file
-- **19 enums**: all declared in `_enums.prisma`
-- **73 declarations**: 54 models + 19 enums
+- **55 schema files**: 53 model files + `_base.prisma` + `_enums.prisma`
+- **53 models**: one model per root file
+- **18 enums**: all declared in `_enums.prisma`
+- **71 declarations**: 53 models + 18 enums
 - **0 schema subdirectories**
 - Automatic cross-file model referencing (no imports needed)
 

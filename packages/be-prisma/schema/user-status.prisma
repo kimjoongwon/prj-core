@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: DETAIL
+// @aggregate-owner: User
 // @description: User에 종속되는 사용자 인증 상태 1:1 상세 정보
 /// @displayName 사용자 상태
 model UserStatus {

@@ -1,5 +1,6 @@
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: ASSOCIATION
+// @aggregate-owner: User
 // @description: User + Space + Role을 연결하는 멤버십 모델
 /// @displayName 테넌트
 model Tenant {
@@ -15,7 +16,6 @@ model Tenant {
   space     Space     @relation(fields: [spaceId], references: [id])
   user      User      @relation("TenantUser", fields: [userId], references: [id])
 
-  accessRequests     TenantAccessRequest[]
   currentUserStatuses UserStatus[]          @relation("UserStatusCurrentTenant")
 
   @@unique([userId, spaceId])

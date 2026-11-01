@@ -1,5 +1,6 @@
 // @data-type: CONFIGURATION
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Task
 // @description: Exercise 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 작업 기반 모델
 /// @displayName 태스크
 model Task {

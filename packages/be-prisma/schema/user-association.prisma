@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: ASSOCIATION
+// @aggregate-owner: User
 // @description: User와 Group을 연결하는 그룹 링크
 /// @displayName 사용자 그룹
 model UserAssociation {

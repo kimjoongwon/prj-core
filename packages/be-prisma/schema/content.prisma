@@ -1,5 +1,6 @@
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Content
 // @description: 사용자 생성 콘텐츠
 /// @displayName 콘텐츠
 model Content {

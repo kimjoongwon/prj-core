@@ -32,7 +32,8 @@ enum UserStatus {
 
 const userModel = `
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: User
 // @description: 사용자 계정의 현재 상태와 생명주기를 관리
 /// @displayName 사용자
 model User {
@@ -45,6 +46,8 @@ model User {
 
 const authAuditLogModel = `
 // @data-type: EVENT
+// @model-role: HISTORY
+// @aggregate-owner: NONE
 // @description: 로그인 시도와 결과를 기록
 /// @displayName 인증 감사 로그
 model AuthAuditLog {
@@ -74,6 +77,45 @@ function createValidFiles(
 }
 
 /**
+ * Aggregate owner 그래프 검증에 사용할 최소 유효 모델을 만듭니다.
+ *
+ * @param modelName Prisma 모델 이름
+ * @param modelRole 모델 역할
+ * @param aggregateOwner Aggregate owner 모델 이름 또는 NONE
+ * @returns 모델 파일 입력
+ */
+function createModelFile(
+	modelName: string,
+	modelRole:
+		| "OBJECT"
+		| "DETAIL"
+		| "ASSOCIATION"
+		| "SNAPSHOT"
+		| "HISTORY"
+		| "TECHNICAL_STATE",
+	aggregateOwner: string,
+): SchemaFileInput {
+	const kebabName = toKebabCase(modelName);
+	const publicIdentifierName = toPublicIdentifierFieldName(kebabName);
+	const publicIdentifierMap = `${kebabName.replace(/-/g, "_")}_id`;
+
+	return {
+		path: `${kebabName}.prisma`,
+		text: `
+// @data-type: MASTER
+// @model-role: ${modelRole}
+// @aggregate-owner: ${aggregateOwner}
+// @description: Aggregate owner 검증 fixture
+/// @displayName ${modelName}
+model ${modelName} {
+  ${publicIdentifierName} String @unique @default(ulid()) @map("${publicIdentifierMap}") @db.Char(26)
+  id BigInt @id @default(autoincrement())
+}
+`,
+	};
+}
+
+/**
  * 검증 오류가 기대한 일부 문자열을 포함하는지 확인합니다.
  *
  * @param errors 실제 오류 목록
@@ -99,9 +141,6 @@ describe("schema conventions", () => {
 		expect(toPublicIdentifierFieldName("auth-audit-log")).toBe(
 			"authAuditLogId",
 		);
-		expect(toPublicIdentifierFieldName("tenant-access-request")).toBe(
-			"tenantAccessRequestId",
-		);
 	});
 
 	it("Given 단일 폴더 schema When 검증하면 Then count와 data-type 요약을 반환한다", () => {
@@ -109,6 +148,19 @@ describe("schema conventions", () => {
 
 		expect(result.errors).toEqual([]);
 		expect(result.summary).toEqual({
+			aggregateOwnershipCounts: {
+				child: 0,
+				external: 1,
+				root: 1,
+			},
+			modelRoleCounts: {
+				ASSOCIATION: 0,
+				DETAIL: 0,
+				HISTORY: 1,
+				OBJECT: 1,
+				SNAPSHOT: 0,
+				TECHNICAL_STATE: 0,
+			},
 			modelTypeCounts: {
 				CONFIGURATION: 0,
 				EVENT: 1,
@@ -126,6 +178,12 @@ describe("schema conventions", () => {
 		);
 		expect(formatSchemaCheckSuccess(result.summary)).toContain(
 			"MASTER=1, REFERENCE=0, CONFIGURATION=0, TRANSACTION=0, EVENT=1",
+		);
+		expect(formatSchemaCheckSuccess(result.summary)).toContain(
+			"OBJECT=1, DETAIL=0, ASSOCIATION=0, SNAPSHOT=0, HISTORY=1, TECHNICAL_STATE=0",
+		);
+		expect(formatSchemaCheckSuccess(result.summary)).toContain(
+			"ROOT=1, CHILD=0, EXTERNAL=1",
 		);
 	});
 
@@ -188,6 +246,7 @@ model BadBase {
 		const result = validateSchemaConventions({
 			files: createValidFiles({
 				"_enums.prisma": `
+// @model-role: OBJECT
 enum UserStatus {
   ACTIVE
 }
@@ -204,6 +263,7 @@ enum LanguageCode {
 		});
 
 		expectErrors(result.errors, [
+			"[_enums.prisma] reserved schema file must not declare architecture tags",
 			"[_enums.prisma] only enum declarations are allowed, found generator client",
 			"[_enums.prisma] enums must be sorted alphabetically: expected LanguageCode, UserStatus",
 			"expected exactly 1 generator block globally, found 2",
@@ -259,6 +319,8 @@ model Profile {
 					path: "wrong-name.prisma",
 					text: `
 // @data-type: MASTER
+// @model-role: OBJECT
+// @aggregate-owner: NONE
 // @description: 잘못된 모델명
 /// @displayName 사용자
 model user_profile {
@@ -282,8 +344,10 @@ model user_profile {
 				"user.prisma": `
 // @data-type: MASTER
 // @data-type: EVENT
-// @aggregate-root: true
-// @aggregate-root: true
+// @model-role: OBJECT
+// @model-role: DETAIL
+// @aggregate-owner: User
+// @aggregate-owner: NONE
 /// @displayName 사용자
 /// @DisplayName 잘못된 표시명
 model User {
@@ -300,7 +364,8 @@ model User {
 			"[user.prisma] User must contain exactly 1 @data-type, found 2",
 			"[user.prisma] User must contain exactly 1 @description, found 0",
 			"[user.prisma] User contains invalid displayName casing",
-			"[user.prisma] User must contain at most 1 @aggregate-root, found 2",
+			"[user.prisma] User must contain exactly 1 @model-role, found 2",
+			"[user.prisma] User must contain exactly 1 @aggregate-owner, found 2",
 		]);
 	});
 
@@ -311,6 +376,8 @@ model User {
 			files: createValidFiles({
 				"user.prisma": `
 // @data-type: MASTER
+// @model-role: OBJECT
+// @aggregate-owner: User
 // @description: 잘못된 식별자 계약
 /// @displayName 사용자
 model User {
@@ -338,6 +405,8 @@ model User {
 			files: createValidFiles({
 				"user.prisma": `
 // @data-type: master
+// @model-role: object
+// @aggregate-owner: user
 // @aggregate-root: false
 // @description: 사용자
 /// @displayName 사용자
@@ -353,7 +422,63 @@ model User {
 
 		expectErrors(result.errors, [
 			"[user.prisma] @data-type must be one of MASTER, REFERENCE, CONFIGURATION, TRANSACTION, EVENT",
-			"[user.prisma] @aggregate-root only supports the value true",
+			"[user.prisma] @model-role must be one of OBJECT, DETAIL, ASSOCIATION, SNAPSHOT, HISTORY, TECHNICAL_STATE",
+			"[user.prisma] @aggregate-owner must be NONE or an UpperCamelCase model name",
+			"[user.prisma] legacy architecture tag @aggregate-root is not allowed; use @aggregate-owner",
+		]);
+	});
+
+	it("Given 모델 역할과 Root 여부 조합이 다르면 When 검증하면 Then 두 분류를 독립적으로 허용한다", () => {
+		const result = validateSchemaConventions({
+			files: [
+				...createValidFiles(),
+				createModelFile("DetailRoot", "DETAIL", "DetailRoot"),
+				createModelFile("ObjectChild", "OBJECT", "User"),
+			],
+		});
+
+		expect(result.errors).toEqual([]);
+	});
+
+	it("Given Aggregate 하위 모델이 존재하지 않는 owner를 가리키면 When 검증하면 Then 누락 owner를 거부한다", () => {
+		const result = validateSchemaConventions({
+			files: [
+				...createValidFiles(),
+				createModelFile("Profile", "DETAIL", "MissingRoot"),
+			],
+		});
+
+		expectErrors(result.errors, [
+			"Profile @aggregate-owner references missing model MissingRoot",
+		]);
+	});
+
+	it("Given Aggregate 하위 모델이 다른 하위 모델을 owner로 삼으면 When 검증하면 Then 직속 Root만 허용한다", () => {
+		const result = validateSchemaConventions({
+			files: [
+				...createValidFiles(),
+				createModelFile("Profile", "DETAIL", "User"),
+				createModelFile("Post", "DETAIL", "Profile"),
+			],
+		});
+
+		expectErrors(result.errors, [
+			"Post @aggregate-owner must reference a self-owned aggregate root; Profile is owned by User",
+		]);
+	});
+
+	it("Given Aggregate owner 경로가 순환하면 When 검증하면 Then 순환 경로를 거부한다", () => {
+		const result = validateSchemaConventions({
+			files: [
+				...createValidFiles(),
+				createModelFile("Profile", "DETAIL", "Post"),
+				createModelFile("Post", "DETAIL", "Profile"),
+			],
+		});
+
+		expectErrors(result.errors, [
+			"aggregate ownership cycle is not allowed: Post -> Profile -> Post",
+			"aggregate ownership cycle is not allowed: Profile -> Post -> Profile",
 		]);
 	});
 
@@ -362,6 +487,8 @@ model User {
 			files: createValidFiles({
 				"user.prisma": `
 // @data-type: MASTER
+// @model-role: OBJECT
+// @aggregate-owner: User
 // @description: 사용자
 /// @displayName 사용자
 
@@ -378,6 +505,8 @@ model User {
 		expectErrors(result.errors, [
 			"[user.prisma] architecture tags must directly precede a model declaration",
 			"[user.prisma] User must contain exactly 1 @data-type, found 0",
+			"[user.prisma] User must contain exactly 1 @model-role, found 0",
+			"[user.prisma] User must contain exactly 1 @aggregate-owner, found 0",
 			"[user.prisma] User must contain exactly 1 @description, found 0",
 		]);
 	});
@@ -432,6 +561,8 @@ enum UserStatus {
 					path: "User.prisma",
 					text: `
 // @data-type: MASTER
+// @model-role: OBJECT
+// @aggregate-owner: NONE
 // @description: 중복 사용자
 /// @displayName 사용자 중복
 model UserCopy {

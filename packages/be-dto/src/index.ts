@@ -46,7 +46,6 @@ export * from "./subject.dto";
 export * from "./task.dto";
 export * from "./template";
 export * from "./tenant.dto";
-export * from "./tenant-access-requests";
 export * from "./timeline.dto";
 export * from "./translations";
 export * from "./update";

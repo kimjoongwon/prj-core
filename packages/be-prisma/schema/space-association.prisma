@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: ASSOCIATION
+// @aggregate-owner: Space
 // @description: Space와 Group을 연결하는 그룹 링크
 /// @displayName 공간 그룹
 model SpaceAssociation {

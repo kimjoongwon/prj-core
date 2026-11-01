@@ -44,7 +44,6 @@ export * from "./task";
 export * from "./template";
 export * from "./template-variable";
 export * from "./tenant";
-export * from "./tenant-access-request";
 export * from "./timeline";
 export * from "./translation";
 export * from "./user";

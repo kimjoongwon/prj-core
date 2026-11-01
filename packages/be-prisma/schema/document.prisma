@@ -1,4 +1,6 @@
 // @data-type: MASTER
+// @model-role: DETAIL
+// @aggregate-owner: Asset
 // @description: Asset(kind=DOCUMENT)에 종속되는 문서 1:1 상세 정보
 /// @displayName 문서 상세
 model Document {

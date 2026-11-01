@@ -1,4 +1,6 @@
 // @data-type: REFERENCE
+// @model-role: ASSOCIATION
+// @aggregate-owner: Role
 // @description: Role과 Category를 연결하는 분류 링크
 /// @displayName 역할 분류
 model RoleClassification {

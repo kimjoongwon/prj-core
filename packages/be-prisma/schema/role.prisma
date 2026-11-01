@@ -1,5 +1,6 @@
 // @data-type: REFERENCE
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Role
 // @description: 권한 체계를 정의하는 핵심 역할 도메인 객체
 /// @displayName 역할
 model Role {
@@ -16,12 +17,10 @@ model Role {
   /// @displayName 설명
   description String?
 
-  associations                  RoleAssociation[]
-  classification                RoleClassification?
-  assignments                   RoleAssignment[]
-  tenants                       Tenant[]
-  requestedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestRequestedRole")
-  previousTenantAccessRequests  TenantAccessRequest[] @relation("TenantAccessRequestPreviousRole")
+  associations   RoleAssociation[]
+  classification RoleClassification?
+  assignments    RoleAssignment[]
+  tenants        Tenant[]
 
   @@map("roles")
 }

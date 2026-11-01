@@ -1,4 +1,6 @@
 // @data-type: CONFIGURATION
+// @model-role: DETAIL
+// @aggregate-owner: Task
 // @description: Task에 종속되는 1:1 운동 상세 모델
 /// @displayName 운동
 model Exercise {

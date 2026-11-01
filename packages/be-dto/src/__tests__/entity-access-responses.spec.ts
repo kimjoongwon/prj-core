@@ -17,7 +17,6 @@ import { OidcSessionDto } from "../oidc/oidc-session.dto";
 import { PolicyEntryResponseDto } from "../policies/policy-entry-response.dto";
 import { PolicyResponseDto } from "../policies/policy-response.dto";
 import { RoleAssignmentResponseDto } from "../role-assignments/role-assignment-response.dto";
-import { TenantAccessRequestDto } from "../tenant-access-requests/tenant-access-request.dto";
 import { UserDetailResponseDto } from "../users/user-detail-response.dto";
 
 function serializeAccessResponse<T>(responseClass: Type<T>, snapshot: object) {
@@ -38,7 +37,6 @@ function accessResponseSchemas() {
 		EmailVerificationDto,
 		IdpAccountDto,
 		IdpAccountDetailDto,
-		TenantAccessRequestDto,
 	]) {
 		schemas = generateSchema(responseClass as Type<object>, schemas).schemas;
 	}
@@ -293,10 +291,6 @@ describe("접근·인증 Entity 응답", () => {
 			type: "object",
 			additionalProperties: true,
 			nullable: true,
-		});
-		expect(schemas.TenantAccessRequestDto.properties?.reviewer).toMatchObject({
-			nullable: true,
-			allOf: [{ $ref: "#/components/schemas/UserDto" }],
 		});
 	});
 });

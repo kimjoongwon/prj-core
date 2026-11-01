@@ -13,11 +13,24 @@ export const PRISMA_DATA_TYPES = [
 
 export type PrismaDataType = (typeof PRISMA_DATA_TYPES)[number];
 
+export const PRISMA_MODEL_ROLES = [
+	"OBJECT",
+	"DETAIL",
+	"ASSOCIATION",
+	"SNAPSHOT",
+	"HISTORY",
+	"TECHNICAL_STATE",
+] as const;
+
+export type PrismaModelRole = (typeof PRISMA_MODEL_ROLES)[number];
+
 const allowedDataTypes = new Set<string>(PRISMA_DATA_TYPES);
+const allowedModelRoles = new Set<string>(PRISMA_MODEL_ROLES);
 const allowedArchitectureTags = new Set([
-	"aggregate-root",
+	"aggregate-owner",
 	"data-type",
 	"description",
+	"model-role",
 ]);
 
 export interface SchemaFileInput {
@@ -31,6 +44,12 @@ export interface SchemaConventionInput {
 }
 
 export interface SchemaValidationSummary {
+	aggregateOwnershipCounts: {
+		child: number;
+		external: number;
+		root: number;
+	};
+	modelRoleCounts: Record<PrismaModelRole, number>;
 	modelTypeCounts: Record<PrismaDataType, number>;
 	declarationCount: number;
 	enumCount: number;
@@ -58,6 +77,10 @@ interface Declaration {
 interface DocumentedModel {
 	documentation: string;
 	name: string;
+}
+
+interface ModelArchitectureMetadata extends DocumentedModel {
+	file: string;
 }
 
 /**
@@ -128,8 +151,16 @@ export function formatSchemaCheckSuccess(
 	const modelTypeSummary = PRISMA_DATA_TYPES.map(
 		(modelType) => `${modelType}=${summary.modelTypeCounts[modelType]}`,
 	).join(", ");
+	const modelRoleSummary = PRISMA_MODEL_ROLES.map(
+		(modelRole) => `${modelRole}=${summary.modelRoleCounts[modelRole]}`,
+	).join(", ");
+	const ownershipSummary = [
+		`ROOT=${summary.aggregateOwnershipCounts.root}`,
+		`CHILD=${summary.aggregateOwnershipCounts.child}`,
+		`EXTERNAL=${summary.aggregateOwnershipCounts.external}`,
+	].join(", ");
 
-	return `[schema:check] OK (${summary.fileCount} files / ${summary.modelCount} models / ${summary.enumCount} enums / ${summary.declarationCount} declarations; data-types: ${modelTypeSummary})`;
+	return `[schema:check] OK (${summary.fileCount} files / ${summary.modelCount} models / ${summary.enumCount} enums / ${summary.declarationCount} declarations; data-types: ${modelTypeSummary}; model-roles: ${modelRoleSummary}; aggregate-ownership: ${ownershipSummary})`;
 }
 
 /**
@@ -147,6 +178,8 @@ export function validateSchemaConventions(
 	const declarationsByName = new Map<string, Declaration[]>();
 	const textsByFile = new Map<string, string>();
 	const modelTypeCounts = createEmptyModelTypeCounts();
+	const modelRoleCounts = createEmptyModelRoleCounts();
+	const modelMetadata: ModelArchitectureMetadata[] = [];
 	let modelCount = 0;
 	let enumCount = 0;
 
@@ -191,6 +224,8 @@ export function validateSchemaConventions(
 
 		validateModelFile({
 			architectureTags,
+			modelMetadata,
+			modelRoleCounts,
 			modelTypeCounts,
 			declarations,
 			errors,
@@ -205,11 +240,15 @@ export function validateSchemaConventions(
 		errors,
 	);
 	validateDuplicateDeclarations(declarationsByName, errors);
+	validateAggregateOwnership(modelMetadata, errors);
 	validateUnusedEnums(declarationsByName, textsByFile, errors);
+	const aggregateOwnershipCounts = countAggregateOwnership(modelMetadata);
 
 	return {
 		errors,
 		summary: {
+			aggregateOwnershipCounts,
+			modelRoleCounts,
 			modelTypeCounts,
 			declarationCount: modelCount + enumCount,
 			enumCount,
@@ -279,6 +318,22 @@ function createEmptyModelTypeCounts(): Record<PrismaDataType, number> {
 		MASTER: 0,
 		REFERENCE: 0,
 		TRANSACTION: 0,
+	};
+}
+
+/**
+ * 모델 역할별 집계 객체를 초기화합니다.
+ *
+ * @returns 모든 모델 역할이 0인 집계 객체
+ */
+function createEmptyModelRoleCounts(): Record<PrismaModelRole, number> {
+	return {
+		ASSOCIATION: 0,
+		DETAIL: 0,
+		HISTORY: 0,
+		OBJECT: 0,
+		SNAPSHOT: 0,
+		TECHNICAL_STATE: 0,
 	};
 }
 
@@ -454,6 +509,12 @@ function validateArchitectureTags(
 	errors: string[],
 ): void {
 	for (const tag of tags) {
+		if (tag.name === "aggregate-root") {
+			errors.push(
+				`[${filePath}] legacy architecture tag @aggregate-root is not allowed; use @aggregate-owner`,
+			);
+			continue;
+		}
 		if (!allowedArchitectureTags.has(tag.name)) {
 			errors.push(`[${filePath}] unsupported architecture tag: @${tag.name}`);
 			continue;
@@ -464,9 +525,6 @@ function validateArchitectureTags(
 			continue;
 		}
 
-		if (tag.name === "aggregate-root" && tag.value !== "true") {
-			errors.push(`[${filePath}] @aggregate-root only supports the value true`);
-		}
 		if (tag.name === "data-type" && !allowedDataTypes.has(tag.value)) {
 			errors.push(
 				`[${filePath}] @data-type must be one of ${PRISMA_DATA_TYPES.join(", ")}`,
@@ -474,6 +532,20 @@ function validateArchitectureTags(
 		}
 		if (tag.name === "description" && tag.value.length === 0) {
 			errors.push(`[${filePath}] @description must not be empty`);
+		}
+		if (tag.name === "model-role" && !allowedModelRoles.has(tag.value)) {
+			errors.push(
+				`[${filePath}] @model-role must be one of ${PRISMA_MODEL_ROLES.join(", ")}`,
+			);
+		}
+		if (
+			tag.name === "aggregate-owner" &&
+			tag.value !== "NONE" &&
+			!isUpperCamelCase(tag.value)
+		) {
+			errors.push(
+				`[${filePath}] @aggregate-owner must be NONE or an UpperCamelCase model name`,
+			);
 		}
 	}
 }
@@ -566,6 +638,8 @@ function validateEnumsFile(
 
 interface ValidateModelFileOptions {
 	architectureTags: ArchitectureTag[];
+	modelMetadata: ModelArchitectureMetadata[];
+	modelRoleCounts: Record<PrismaModelRole, number>;
 	modelTypeCounts: Record<PrismaDataType, number>;
 	declarations: Declaration[];
 	errors: string[];
@@ -582,6 +656,8 @@ interface ValidateModelFileOptions {
 function validateModelFile(options: ValidateModelFileOptions): void {
 	const {
 		architectureTags,
+		modelMetadata,
+		modelRoleCounts,
 		modelTypeCounts,
 		declarations,
 		errors,
@@ -645,7 +721,14 @@ function validateModelFile(options: ValidateModelFileOptions): void {
 		);
 	}
 
-	validateModelMetadata(filePath, model, modelTypeCounts, errors);
+	modelMetadata.push({ ...model, file: filePath });
+	validateModelMetadata(
+		filePath,
+		model,
+		modelTypeCounts,
+		modelRoleCounts,
+		errors,
+	);
 	validateModelIdentityContract(filePath, model.name, text, errors);
 }
 
@@ -767,17 +850,20 @@ function validateModelIdentityContract(
  * @param filePath 검사 중인 schema 상대 경로
  * @param model 검사할 모델과 인접 문서 주석
  * @param modelTypeCounts 데이터 타입별 모델 수 집계
+ * @param modelRoleCounts 모델 역할별 모델 수 집계
  * @param errors 오류 누적 목록
  */
 function validateModelMetadata(
 	filePath: string,
 	model: DocumentedModel,
 	modelTypeCounts: Record<PrismaDataType, number>,
+	modelRoleCounts: Record<PrismaModelRole, number>,
 	errors: string[],
 ): void {
 	const modelTypes = getTagValues(model.documentation, "data-type");
 	const descriptions = getTagValues(model.documentation, "description");
-	const aggregateRoots = getTagValues(model.documentation, "aggregate-root");
+	const modelRoles = getTagValues(model.documentation, "model-role");
+	const aggregateOwners = getTagValues(model.documentation, "aggregate-owner");
 	const displayNames = getDisplayNames(model.documentation);
 	const invalidDisplayNameCount = countMatches(
 		model.documentation,
@@ -807,11 +893,169 @@ function validateModelMetadata(
 			`[${filePath}] ${model.name} contains invalid displayName casing (@DisplayName or @displayname)`,
 		);
 	}
-	if (aggregateRoots.length > 1) {
+	if (modelRoles.length !== 1) {
 		errors.push(
-			`[${filePath}] ${model.name} must contain at most 1 @aggregate-root, found ${aggregateRoots.length}`,
+			`[${filePath}] ${model.name} must contain exactly 1 @model-role, found ${modelRoles.length}`,
 		);
 	}
+	if (modelRoles.length === 1 && allowedModelRoles.has(modelRoles[0])) {
+		modelRoleCounts[modelRoles[0] as PrismaModelRole] += 1;
+	}
+	if (aggregateOwners.length !== 1) {
+		errors.push(
+			`[${filePath}] ${model.name} must contain exactly 1 @aggregate-owner, found ${aggregateOwners.length}`,
+		);
+	}
+}
+
+/**
+ * Aggregate owner가 존재하는 self-owned Root를 직접 가리키는지 검사합니다.
+ *
+ * @param modelMetadata 모델별 설계 메타데이터
+ * @param errors 오류 누적 목록
+ */
+function validateAggregateOwnership(
+	modelMetadata: ModelArchitectureMetadata[],
+	errors: string[],
+): void {
+	const duplicateNames = new Set<string>();
+	const metadataByName = new Map<string, ModelArchitectureMetadata>();
+
+	for (const metadata of modelMetadata) {
+		if (metadataByName.has(metadata.name)) {
+			duplicateNames.add(metadata.name);
+		}
+		metadataByName.set(metadata.name, metadata);
+	}
+
+	for (const metadata of modelMetadata) {
+		if (duplicateNames.has(metadata.name)) {
+			continue;
+		}
+
+		const aggregateOwners = getTagValues(
+			metadata.documentation,
+			"aggregate-owner",
+		);
+		if (aggregateOwners.length !== 1) {
+			continue;
+		}
+
+		const aggregateOwner = aggregateOwners[0];
+		if (aggregateOwner === "NONE" || aggregateOwner === metadata.name) {
+			continue;
+		}
+
+		const ownerMetadata = metadataByName.get(aggregateOwner);
+		if (!ownerMetadata) {
+			errors.push(
+				`[${metadata.file}] ${metadata.name} @aggregate-owner references missing model ${aggregateOwner}`,
+			);
+			continue;
+		}
+		if (duplicateNames.has(aggregateOwner)) {
+			continue;
+		}
+
+		const ownerAggregateOwners = getTagValues(
+			ownerMetadata.documentation,
+			"aggregate-owner",
+		);
+		if (ownerAggregateOwners.length !== 1) {
+			continue;
+		}
+		if (ownerAggregateOwners[0] === aggregateOwner) {
+			continue;
+		}
+
+		const cycle = findAggregateOwnershipCycle(metadata.name, metadataByName);
+		if (cycle) {
+			errors.push(
+				`[${metadata.file}] aggregate ownership cycle is not allowed: ${cycle.join(" -> ")}`,
+			);
+			continue;
+		}
+
+		errors.push(
+			`[${metadata.file}] ${metadata.name} @aggregate-owner must reference a self-owned aggregate root; ${aggregateOwner} is owned by ${ownerAggregateOwners[0]}`,
+		);
+	}
+}
+
+/**
+ * 모델에서 시작하는 Aggregate owner 경로의 순환을 찾습니다.
+ *
+ * @param startModelName 경로 시작 모델
+ * @param metadataByName 모델명별 설계 메타데이터
+ * @returns 순환 경로 또는 null
+ */
+function findAggregateOwnershipCycle(
+	startModelName: string,
+	metadataByName: Map<string, ModelArchitectureMetadata>,
+): string[] | null {
+	const path: string[] = [];
+	const pathIndexByName = new Map<string, number>();
+	let currentModelName = startModelName;
+
+	while (currentModelName !== "NONE") {
+		const existingIndex = pathIndexByName.get(currentModelName);
+		if (existingIndex !== undefined) {
+			return [...path.slice(existingIndex), currentModelName];
+		}
+
+		const metadata = metadataByName.get(currentModelName);
+		if (!metadata) {
+			return null;
+		}
+
+		const aggregateOwners = getTagValues(
+			metadata.documentation,
+			"aggregate-owner",
+		);
+		if (aggregateOwners.length !== 1) {
+			return null;
+		}
+		if (aggregateOwners[0] === currentModelName) {
+			return null;
+		}
+
+		pathIndexByName.set(currentModelName, path.length);
+		path.push(currentModelName);
+		currentModelName = aggregateOwners[0];
+	}
+
+	return null;
+}
+
+/**
+ * Aggregate 소유 상태를 Root, 하위, 외부로 집계합니다.
+ *
+ * @param modelMetadata 모델별 설계 메타데이터
+ * @returns Aggregate 소유 상태별 모델 수
+ */
+function countAggregateOwnership(
+	modelMetadata: ModelArchitectureMetadata[],
+): SchemaValidationSummary["aggregateOwnershipCounts"] {
+	const counts = { child: 0, external: 0, root: 0 };
+
+	for (const metadata of modelMetadata) {
+		const aggregateOwners = getTagValues(
+			metadata.documentation,
+			"aggregate-owner",
+		);
+		if (aggregateOwners.length !== 1) {
+			continue;
+		}
+		if (aggregateOwners[0] === "NONE") {
+			counts.external += 1;
+		} else if (aggregateOwners[0] === metadata.name) {
+			counts.root += 1;
+		} else {
+			counts.child += 1;
+		}
+	}
+
+	return counts;
 }
 
 /**

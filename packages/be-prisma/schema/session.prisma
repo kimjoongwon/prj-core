@@ -1,4 +1,6 @@
 // @data-type: CONFIGURATION
+// @model-role: OBJECT
+// @aggregate-owner: Session
 // @description: Timeline에 종속되는 시간 단위 이벤트
 /// @displayName 세션
 model Session {
