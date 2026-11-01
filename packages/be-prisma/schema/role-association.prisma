@@ -1,4 +1,6 @@
 // @data-type: REFERENCE
+// @model-role: ASSOCIATION
+// @aggregate-owner: Role
 // @description: Role과 Group을 연결하는 그룹 링크
 /// @displayName 역할 그룹
 model RoleAssociation {

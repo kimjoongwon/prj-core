@@ -1,4 +1,6 @@
 // @data-type: CONFIGURATION
+// @model-role: ASSOCIATION
+// @aggregate-owner: Routine
 // @description: Routine과 Task를 연결하고 실행 메타데이터를 보관하는 운영 조인 모델
 /// @displayName 활동
 model Activity {

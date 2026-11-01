@@ -8,7 +8,7 @@ description: "Prisma Repository를 생성·검토·수정합니다."
 ## 역할·수정 범위
 
 - `packages/be-repository/src/{aggregate-root}.repository.ts`, 인접 query input/result/mapper/helper와 owner 계약·테스트·barrel을 소유합니다.
-- Aggregate Root만 독립 Repository를 갖습니다. 도메인 규칙·Controller·DTO·schema는 각 역할 범위입니다.
+- 모델별 Repository의 필요성과 분리는 persistence 사용처와 공개 계약으로 판단합니다. Aggregate Root 여부는 metadata의 `@model-role`이 아니라 `@aggregate-owner`가 자기 모델명을 가리키는지로 확인하며, 하위 모델 전용 Repository도 해당 모델의 저장·조회 계약이 있으면 구성할 수 있습니다. 도메인 규칙·Controller·DTO·schema는 각 역할 범위입니다.
 
 ## 입력 계약
 
@@ -24,7 +24,7 @@ description: "Prisma Repository를 생성·검토·수정합니다."
 
 ### 구현 전 필수 조건
 
-- 대응 `<모델 kebab-case>.prisma`에 model 하나와 `@aggregate-root: true`가 확인되어야 합니다. 불명확하면 schema/domain 계약을 확보합니다.
+- 대응 `<모델 kebab-case>.prisma`에 대상 model의 `@model-role`과 `@aggregate-owner` metadata가 확인되어야 합니다. `@aggregate-owner`가 자기 모델명이면 Aggregate Root, 다른 모델명이면 해당 Root의 하위 모델, `NONE`이면 외부 모델로 분류하고, 이 owner 관계를 Repository 계약과 소비 경로에 반영합니다. Repository 존재·분리는 Root 여부의 근거로 사용하지 않으며, metadata가 불명확하면 schema/domain 계약을 확보합니다.
 - 자기 범위에서 만들 수 있는 입력은 직접 만들고 다른 역할의 산출물은 단계에 맞게 확보합니다.
 
 ### 입력 필요 조건
@@ -36,7 +36,7 @@ description: "Prisma Repository를 생성·검토·수정합니다."
 
 ## 기술 규칙
 
-- 기존 root Repository 확장을 우선하고 새 Repository는 기존 확장으로 표현할 수 없을 때만 만듭니다. 인벤토리 행/root 근거가 없으면 계약-gap의 누락 owner·소비 경로를 확인합니다.
+- 기존 Repository 확장을 우선하고 새 Repository는 기존 확장으로 표현할 수 없을 때 만듭니다. Root Repository는 `@aggregate-owner`가 자기 모델명인 모델의 aggregate 경계를 반영하고, 하위 모델 Repository는 독립 persistence 계약이 필요한 경우에만 둡니다. 인벤토리 행/owner 근거가 없으면 계약-gap의 누락 owner·소비 경로를 확인합니다.
 - Profile/FitnessCenter/Exercise/RoleAssociation/InquiryMessage 같은 종속 모델은 root의 include/select/relation filter/query 메서드로 접근합니다.
 - Profile은 UsersRepository, FitnessCenter는 SpacesRepository, Exercise는 TasksRepository 같은 실제 root 계약에 포함합니다.
 - class당 한 파일을 사용하고 top-level interface/type/enum/helper/mapper는 인접 파일로 나눕니다.
@@ -88,7 +88,7 @@ description: "Prisma Repository를 생성·검토·수정합니다."
 ## 검증·보고
 
 - `pnpm --filter=@cocrepo/repository type-check`, `pnpm --filter=@cocrepo/repository lint`와 관련 Repository 테스트를 실행합니다.
-- root 태그·종속 조회·Prisma mapping/transaction과 네 권한 관계·메서드·bigint/Date·비밀번호/ULID 보존을 확인합니다.
+- `@aggregate-owner` 소유 경계와 자기 소유 Root 파생, 종속 조회·Prisma mapping/transaction과 네 권한 관계·메서드·bigint/Date·비밀번호/ULID 보존을 확인합니다.
 - 자기 기본 검증과 추가 완료 기준, 모든 필수 하위의 완료를 충족해야 `완료`입니다. 필수 검증 미통과는 `검증 실패`입니다.
 - 최종 보고는 다음 다섯 Markdown 섹션으로 간결하게 반환합니다.
   - `## 작업 결과`: `완료`, `입력 필요`, `검증 실패` 중 하나. 런타임 종료와 작업 완료를 구분합니다.

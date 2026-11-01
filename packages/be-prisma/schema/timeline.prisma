@@ -1,5 +1,6 @@
 // @data-type: CONFIGURATION
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Timeline
 // @description: 세션들을 논리적으로 그룹화하는 시간 단위 컨테이너
 /// @displayName 타임라인
 model Timeline {

@@ -1,4 +1,6 @@
 // @data-type: CONFIGURATION
+// @model-role: ASSOCIATION
+// @aggregate-owner: Role
 // @description: Role에 Policy를 할당하고 활성 상태와 우선순위를 관리
 /// @displayName 역할의 정책 할당
 model RoleAssignment {

@@ -1,5 +1,6 @@
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Album
 // @description: 사용자 정의 에셋 컬렉션
 /// @displayName 앨범
 model Album {

@@ -1,5 +1,6 @@
 // @data-type: TRANSACTION
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Reservation
 // @description: 사용자의 프로그램 발생 회차 예약 상태를 관리하는 예약 루트
 /// @displayName 예약
 model Reservation {

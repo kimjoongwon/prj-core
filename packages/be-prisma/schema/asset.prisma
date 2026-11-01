@@ -1,5 +1,6 @@
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: OBJECT
+// @aggregate-owner: Asset
 // @description: 미디어 리소스의 공통 identity와 메타데이터를 제공하는 CTI 부모 테이블
 /// @displayName 에셋
 model Asset {

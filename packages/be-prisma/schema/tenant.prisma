@@ -1,5 +1,6 @@
 // @data-type: MASTER
-// @aggregate-root: true
+// @model-role: ASSOCIATION
+// @aggregate-owner: User
 // @description: User + Space + Role을 연결하는 멤버십 모델
 /// @displayName 테넌트
 model Tenant {

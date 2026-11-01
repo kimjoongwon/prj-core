@@ -1,4 +1,6 @@
 // @data-type: CONFIGURATION
+// @model-role: DETAIL
+// @aggregate-owner: Template
 // @description: Template에 종속되어 치환 변수를 관리하는 1:N 하위 모델
 /// @displayName 템플릿 변수
 model TemplateVariable {

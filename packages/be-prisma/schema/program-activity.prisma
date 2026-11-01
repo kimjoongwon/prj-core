@@ -1,4 +1,6 @@
 // @data-type: CONFIGURATION
+// @model-role: SNAPSHOT
+// @aggregate-owner: Program
 // @description: Program 생성 시점의 실행 운동 계획을 보관하는 운영 스냅샷
 /// @displayName 프로그램 활동
 model ProgramActivity {

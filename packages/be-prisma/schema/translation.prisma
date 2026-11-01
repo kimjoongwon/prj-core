@@ -1,11 +1,12 @@
 // @data-type: REFERENCE
+// @model-role: OBJECT
+// @aggregate-owner: Translation
 // ============================================================================
 // Translation Domain - 다국어 번역
 // ============================================================================
 //
 // 시스템 전역에서 사용되는 다국어 번역 데이터를 관리합니다.
 //
-// @aggregate-root: true
 // @description: 다국어 리소스를 제공하는 전역 번역 카탈로그
 /// @displayName 번역
 model Translation {

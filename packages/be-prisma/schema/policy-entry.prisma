@@ -1,4 +1,6 @@
 // @data-type: CONFIGURATION
+// @model-role: ASSOCIATION
+// @aggregate-owner: Policy
 // @description: Policy에 포함되는 Ability 항목과 그 연결 생명주기를 관리
 /// @displayName 정책의 권한 항목
 model PolicyEntry {
