@@ -15,7 +15,6 @@ export * from "./spaces/spaces";
 export * from "./subjects/subjects";
 export * from "./tasks/tasks";
 export * from "./templates/templates";
-export * from "./tenant-access-requests/tenant-access-requests";
 export * from "./timelines/timelines";
 export * from "./translations/translations";
 export * from "./users/users";

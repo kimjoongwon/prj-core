@@ -15,7 +15,6 @@ model Tenant {
   space     Space     @relation(fields: [spaceId], references: [id])
   user      User      @relation("TenantUser", fields: [userId], references: [id])
 
-  accessRequests     TenantAccessRequest[]
   currentUserStatuses UserStatus[]          @relation("UserStatusCurrentTenant")
 
   @@unique([userId, spaceId])

@@ -259,8 +259,6 @@ export type UserWhereInput = {
   status?: Prisma.XOR<Prisma.UserStatusNullableScalarRelationFilter, Prisma.UserStatusWhereInput> | null
   profiles?: Prisma.ProfileListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
-  tenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
   classification?: Prisma.XOR<Prisma.UserClassificationNullableScalarRelationFilter, Prisma.UserClassificationWhereInput> | null
   associations?: Prisma.UserAssociationListRelationFilter
   passwordHistory?: Prisma.PasswordHistoryListRelationFilter
@@ -297,8 +295,6 @@ export type UserOrderByWithRelationInput = {
   status?: Prisma.UserStatusOrderByWithRelationInput
   profiles?: Prisma.ProfileOrderByRelationAggregateInput
   tenants?: Prisma.TenantOrderByRelationAggregateInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestOrderByRelationAggregateInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestOrderByRelationAggregateInput
   classification?: Prisma.UserClassificationOrderByWithRelationInput
   associations?: Prisma.UserAssociationOrderByRelationAggregateInput
   passwordHistory?: Prisma.PasswordHistoryOrderByRelationAggregateInput
@@ -338,8 +334,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.XOR<Prisma.UserStatusNullableScalarRelationFilter, Prisma.UserStatusWhereInput> | null
   profiles?: Prisma.ProfileListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
-  tenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
   classification?: Prisma.XOR<Prisma.UserClassificationNullableScalarRelationFilter, Prisma.UserClassificationWhereInput> | null
   associations?: Prisma.UserAssociationListRelationFilter
   passwordHistory?: Prisma.PasswordHistoryListRelationFilter
@@ -410,8 +404,6 @@ export type UserCreateInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -448,8 +440,6 @@ export type UserUncheckedCreateInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -486,8 +476,6 @@ export type UserUpdateInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -524,8 +512,6 @@ export type UserUncheckedUpdateInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -924,36 +910,6 @@ export type UserUpdateOneWithoutCreatedTasksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedTasksInput, Prisma.UserUpdateWithoutCreatedTasksInput>, Prisma.UserUncheckedUpdateWithoutCreatedTasksInput>
 }
 
-export type UserCreateNestedOneWithoutTenantAccessRequestsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantAccessRequestsInput, Prisma.UserUncheckedCreateWithoutTenantAccessRequestsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantAccessRequestsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserCreateNestedOneWithoutReviewedTenantAccessRequestsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedTenantAccessRequestsInput, Prisma.UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedTenantAccessRequestsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutTenantAccessRequestsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantAccessRequestsInput, Prisma.UserUncheckedCreateWithoutTenantAccessRequestsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantAccessRequestsInput
-  upsert?: Prisma.UserUpsertWithoutTenantAccessRequestsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTenantAccessRequestsInput, Prisma.UserUpdateWithoutTenantAccessRequestsInput>, Prisma.UserUncheckedUpdateWithoutTenantAccessRequestsInput>
-}
-
-export type UserUpdateOneWithoutReviewedTenantAccessRequestsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedTenantAccessRequestsInput, Prisma.UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedTenantAccessRequestsInput
-  upsert?: Prisma.UserUpsertWithoutReviewedTenantAccessRequestsInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedTenantAccessRequestsInput, Prisma.UserUpdateWithoutReviewedTenantAccessRequestsInput>, Prisma.UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput>
-}
-
 export type UserCreateNestedOneWithoutTenantsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutTenantsInput, Prisma.UserUncheckedCreateWithoutTenantsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantsInput
@@ -1040,8 +996,6 @@ export type UserCreateWithoutCreatedAlbumEntriesInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -1077,8 +1031,6 @@ export type UserUncheckedCreateWithoutCreatedAlbumEntriesInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -1130,8 +1082,6 @@ export type UserUpdateWithoutCreatedAlbumEntriesInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -1167,8 +1117,6 @@ export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -1204,8 +1152,6 @@ export type UserCreateWithoutCreatedAlbumsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -1241,8 +1187,6 @@ export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -1294,8 +1238,6 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -1331,8 +1273,6 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -1368,8 +1308,6 @@ export type UserCreateWithoutCreatedAssetsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -1405,8 +1343,6 @@ export type UserUncheckedCreateWithoutCreatedAssetsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -1458,8 +1394,6 @@ export type UserUpdateWithoutCreatedAssetsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -1495,8 +1429,6 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -1532,8 +1464,6 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -1569,8 +1499,6 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -1622,8 +1550,6 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -1659,8 +1585,6 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -1696,8 +1620,6 @@ export type UserCreateWithoutCreatedCategoriesInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -1733,8 +1655,6 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -1786,8 +1706,6 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -1823,8 +1741,6 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -1860,8 +1776,6 @@ export type UserCreateWithoutCreatedContentsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -1897,8 +1811,6 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -1950,8 +1862,6 @@ export type UserUpdateWithoutCreatedContentsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -1987,8 +1897,6 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -2024,8 +1932,6 @@ export type UserCreateWithoutCreatedDerivativesInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -2061,8 +1967,6 @@ export type UserUncheckedCreateWithoutCreatedDerivativesInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -2114,8 +2018,6 @@ export type UserUpdateWithoutCreatedDerivativesInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -2151,8 +2053,6 @@ export type UserUncheckedUpdateWithoutCreatedDerivativesInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -2188,8 +2088,6 @@ export type UserCreateWithoutEmailVerificationsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -2225,8 +2123,6 @@ export type UserUncheckedCreateWithoutEmailVerificationsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -2278,8 +2174,6 @@ export type UserUpdateWithoutEmailVerificationsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -2315,8 +2209,6 @@ export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -2352,8 +2244,6 @@ export type UserCreateWithoutCreatedFoldersInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -2389,8 +2279,6 @@ export type UserUncheckedCreateWithoutCreatedFoldersInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -2442,8 +2330,6 @@ export type UserUpdateWithoutCreatedFoldersInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -2479,8 +2365,6 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -2516,8 +2400,6 @@ export type UserCreateWithoutCreatedGroupsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -2553,8 +2435,6 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -2606,8 +2486,6 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -2643,8 +2521,6 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -2680,8 +2556,6 @@ export type UserCreateWithoutPasswordHistoryInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
@@ -2717,8 +2591,6 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -2770,8 +2642,6 @@ export type UserUpdateWithoutPasswordHistoryInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
@@ -2807,8 +2677,6 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -2844,8 +2712,6 @@ export type UserCreateWithoutCreatedPoliciesInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -2881,8 +2747,6 @@ export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -2934,8 +2798,6 @@ export type UserUpdateWithoutCreatedPoliciesInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -2971,8 +2833,6 @@ export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -3007,8 +2867,6 @@ export type UserCreateWithoutProfilesInput = {
   passwordChangedAt?: Date | string | null
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -3044,8 +2902,6 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   passwordChangedAt?: Date | string | null
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -3097,8 +2953,6 @@ export type UserUpdateWithoutProfilesInput = {
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -3134,8 +2988,6 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -3172,8 +3024,6 @@ export type UserCreateWithoutInstructedProgramsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -3209,8 +3059,6 @@ export type UserUncheckedCreateWithoutInstructedProgramsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -3262,8 +3110,6 @@ export type UserUpdateWithoutInstructedProgramsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -3299,8 +3145,6 @@ export type UserUncheckedUpdateWithoutInstructedProgramsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -3336,8 +3180,6 @@ export type UserCreateWithoutCreatedReservationsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -3373,8 +3215,6 @@ export type UserUncheckedCreateWithoutCreatedReservationsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -3415,8 +3255,6 @@ export type UserCreateWithoutReservationsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -3452,8 +3290,6 @@ export type UserUncheckedCreateWithoutReservationsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -3505,8 +3341,6 @@ export type UserUpdateWithoutCreatedReservationsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -3542,8 +3376,6 @@ export type UserUncheckedUpdateWithoutCreatedReservationsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -3590,8 +3422,6 @@ export type UserUpdateWithoutReservationsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -3627,8 +3457,6 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -3664,8 +3492,6 @@ export type UserCreateWithoutCreatedRoutinesInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -3701,8 +3527,6 @@ export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -3754,8 +3578,6 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -3791,8 +3613,6 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -3828,8 +3648,6 @@ export type UserCreateWithoutCreatedTasksInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -3865,8 +3683,6 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -3918,8 +3734,6 @@ export type UserUpdateWithoutCreatedTasksInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -3955,8 +3769,6 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -3966,334 +3778,6 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
   createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
-  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
-  createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutTenantAccessRequestsInput = {
-  userId?: string
-  id?: bigint | number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  passwordChangedAt?: Date | string | null
-  status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
-  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
-  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput
-  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput
-  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput
-  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
-  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
-  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
-  createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
-  createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
-  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput
-  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput
-  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput
-  createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput
-  createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutTenantAccessRequestsInput = {
-  userId?: string
-  id?: bigint | number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  passwordChangedAt?: Date | string | null
-  status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
-  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
-  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput
-  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput
-  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput
-  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
-  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
-  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
-  createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
-  createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput
-  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput
-  createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutTenantAccessRequestsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutTenantAccessRequestsInput, Prisma.UserUncheckedCreateWithoutTenantAccessRequestsInput>
-}
-
-export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
-  userId?: string
-  id?: bigint | number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  passwordChangedAt?: Date | string | null
-  status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
-  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput
-  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput
-  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput
-  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
-  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
-  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
-  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
-  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
-  createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
-  createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
-  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput
-  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput
-  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput
-  createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput
-  createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput = {
-  userId?: string
-  id?: bigint | number
-  updatedAt?: Date | string | null
-  createdAt?: Date | string
-  removedAt?: Date | string | null
-  phone: string
-  name: string
-  email: string
-  password: string
-  passwordChangedAt?: Date | string | null
-  status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
-  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
-  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput
-  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput
-  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput
-  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
-  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
-  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
-  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
-  createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
-  createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput
-  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput
-  createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput
-  createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutReviewedTenantAccessRequestsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedTenantAccessRequestsInput, Prisma.UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput>
-}
-
-export type UserUpsertWithoutTenantAccessRequestsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutTenantAccessRequestsInput, Prisma.UserUncheckedUpdateWithoutTenantAccessRequestsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutTenantAccessRequestsInput, Prisma.UserUncheckedCreateWithoutTenantAccessRequestsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutTenantAccessRequestsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutTenantAccessRequestsInput, Prisma.UserUncheckedUpdateWithoutTenantAccessRequestsInput>
-}
-
-export type UserUpdateWithoutTenantAccessRequestsInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
-  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
-  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput
-  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput
-  createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput
-  createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
-  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
-  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
-  createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
-  createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
-  createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput
-  createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput
-  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput
-  createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput
-  createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutTenantAccessRequestsInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
-  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
-  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput
-  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
-  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
-  createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUpsertWithoutReviewedTenantAccessRequestsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedTenantAccessRequestsInput, Prisma.UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedTenantAccessRequestsInput, Prisma.UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutReviewedTenantAccessRequestsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedTenantAccessRequestsInput, Prisma.UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput>
-}
-
-export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
-  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput
-  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput
-  createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput
-  createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
-  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
-  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
-  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
-  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
-  createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
-  createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
-  createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput
-  createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput
-  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput
-  createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput
-  createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
-  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
-  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
-  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput
-  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
-  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
   instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -4319,8 +3803,6 @@ export type UserCreateWithoutTenantsInput = {
   passwordChangedAt?: Date | string | null
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -4356,8 +3838,6 @@ export type UserUncheckedCreateWithoutTenantsInput = {
   passwordChangedAt?: Date | string | null
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -4409,8 +3889,6 @@ export type UserUpdateWithoutTenantsInput = {
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -4446,8 +3924,6 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -4484,8 +3960,6 @@ export type UserCreateWithoutCreatedTimelinesInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -4521,8 +3995,6 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -4574,8 +4046,6 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -4611,8 +4081,6 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -4648,8 +4116,6 @@ export type UserCreateWithoutAssociationsInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
@@ -4685,8 +4151,6 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -4738,8 +4202,6 @@ export type UserUpdateWithoutAssociationsInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
@@ -4775,8 +4237,6 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -4812,8 +4272,6 @@ export type UserCreateWithoutClassificationInput = {
   status?: Prisma.UserStatusCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
@@ -4849,8 +4307,6 @@ export type UserUncheckedCreateWithoutClassificationInput = {
   status?: Prisma.UserStatusUncheckedCreateNestedOneWithoutUserInput
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
@@ -4902,8 +4358,6 @@ export type UserUpdateWithoutClassificationInput = {
   status?: Prisma.UserStatusUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
@@ -4939,8 +4393,6 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   status?: Prisma.UserStatusUncheckedUpdateOneWithoutUserNestedInput
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
@@ -4975,8 +4427,6 @@ export type UserCreateWithoutStatusInput = {
   passwordChangedAt?: Date | string | null
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
@@ -5012,8 +4462,6 @@ export type UserUncheckedCreateWithoutStatusInput = {
   passwordChangedAt?: Date | string | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
   classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
   associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
@@ -5065,8 +4513,6 @@ export type UserUpdateWithoutStatusInput = {
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
@@ -5102,8 +4548,6 @@ export type UserUncheckedUpdateWithoutStatusInput = {
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
-  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
   classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
   associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
   passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
@@ -5134,8 +4578,6 @@ export type UserUncheckedUpdateWithoutStatusInput = {
 export type UserCountOutputType = {
   profiles: number
   tenants: number
-  tenantAccessRequests: number
-  reviewedTenantAccessRequests: number
   associations: number
   passwordHistory: number
   authAuditLogs: number
@@ -5160,8 +4602,6 @@ export type UserCountOutputType = {
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profiles?: boolean | UserCountOutputTypeCountProfilesArgs
   tenants?: boolean | UserCountOutputTypeCountTenantsArgs
-  tenantAccessRequests?: boolean | UserCountOutputTypeCountTenantAccessRequestsArgs
-  reviewedTenantAccessRequests?: boolean | UserCountOutputTypeCountReviewedTenantAccessRequestsArgs
   associations?: boolean | UserCountOutputTypeCountAssociationsArgs
   passwordHistory?: boolean | UserCountOutputTypeCountPasswordHistoryArgs
   authAuditLogs?: boolean | UserCountOutputTypeCountAuthAuditLogsArgs
@@ -5205,20 +4645,6 @@ export type UserCountOutputTypeCountProfilesArgs<ExtArgs extends runtime.Types.E
  */
 export type UserCountOutputTypeCountTenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TenantWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountTenantAccessRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TenantAccessRequestWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountReviewedTenantAccessRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TenantAccessRequestWhereInput
 }
 
 /**
@@ -5369,8 +4795,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   status?: boolean | Prisma.User$statusArgs<ExtArgs>
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   tenants?: boolean | Prisma.User$tenantsArgs<ExtArgs>
-  tenantAccessRequests?: boolean | Prisma.User$tenantAccessRequestsArgs<ExtArgs>
-  reviewedTenantAccessRequests?: boolean | Prisma.User$reviewedTenantAccessRequestsArgs<ExtArgs>
   classification?: boolean | Prisma.User$classificationArgs<ExtArgs>
   associations?: boolean | Prisma.User$associationsArgs<ExtArgs>
   passwordHistory?: boolean | Prisma.User$passwordHistoryArgs<ExtArgs>
@@ -5438,8 +4862,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean | Prisma.User$statusArgs<ExtArgs>
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   tenants?: boolean | Prisma.User$tenantsArgs<ExtArgs>
-  tenantAccessRequests?: boolean | Prisma.User$tenantAccessRequestsArgs<ExtArgs>
-  reviewedTenantAccessRequests?: boolean | Prisma.User$reviewedTenantAccessRequestsArgs<ExtArgs>
   classification?: boolean | Prisma.User$classificationArgs<ExtArgs>
   associations?: boolean | Prisma.User$associationsArgs<ExtArgs>
   passwordHistory?: boolean | Prisma.User$passwordHistoryArgs<ExtArgs>
@@ -5474,8 +4896,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     status: Prisma.$UserStatusPayload<ExtArgs> | null
     profiles: Prisma.$ProfilePayload<ExtArgs>[]
     tenants: Prisma.$TenantPayload<ExtArgs>[]
-    tenantAccessRequests: Prisma.$TenantAccessRequestPayload<ExtArgs>[]
-    reviewedTenantAccessRequests: Prisma.$TenantAccessRequestPayload<ExtArgs>[]
     classification: Prisma.$UserClassificationPayload<ExtArgs> | null
     associations: Prisma.$UserAssociationPayload<ExtArgs>[]
     passwordHistory: Prisma.$PasswordHistoryPayload<ExtArgs>[]
@@ -5920,8 +5340,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   status<T extends Prisma.User$statusArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$statusArgs<ExtArgs>>): Prisma.Prisma__UserStatusClient<runtime.Types.Result.GetResult<Prisma.$UserStatusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   profiles<T extends Prisma.User$profilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenants<T extends Prisma.User$tenantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  tenantAccessRequests<T extends Prisma.User$tenantAccessRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tenantAccessRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reviewedTenantAccessRequests<T extends Prisma.User$reviewedTenantAccessRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedTenantAccessRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classification<T extends Prisma.User$classificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$classificationArgs<ExtArgs>>): Prisma.Prisma__UserClassificationClient<runtime.Types.Result.GetResult<Prisma.$UserClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   associations<T extends Prisma.User$associationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$associationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passwordHistory<T extends Prisma.User$passwordHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6438,54 +5856,6 @@ export type User$tenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.TenantScalarFieldEnum | Prisma.TenantScalarFieldEnum[]
-}
-
-/**
- * User.tenantAccessRequests
- */
-export type User$tenantAccessRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the TenantAccessRequest
-   */
-  select?: Prisma.TenantAccessRequestSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the TenantAccessRequest
-   */
-  omit?: Prisma.TenantAccessRequestOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TenantAccessRequestInclude<ExtArgs> | null
-  where?: Prisma.TenantAccessRequestWhereInput
-  orderBy?: Prisma.TenantAccessRequestOrderByWithRelationInput | Prisma.TenantAccessRequestOrderByWithRelationInput[]
-  cursor?: Prisma.TenantAccessRequestWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TenantAccessRequestScalarFieldEnum | Prisma.TenantAccessRequestScalarFieldEnum[]
-}
-
-/**
- * User.reviewedTenantAccessRequests
- */
-export type User$reviewedTenantAccessRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the TenantAccessRequest
-   */
-  select?: Prisma.TenantAccessRequestSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the TenantAccessRequest
-   */
-  omit?: Prisma.TenantAccessRequestOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TenantAccessRequestInclude<ExtArgs> | null
-  where?: Prisma.TenantAccessRequestWhereInput
-  orderBy?: Prisma.TenantAccessRequestOrderByWithRelationInput | Prisma.TenantAccessRequestOrderByWithRelationInput[]
-  cursor?: Prisma.TenantAccessRequestWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TenantAccessRequestScalarFieldEnum | Prisma.TenantAccessRequestScalarFieldEnum[]
 }
 
 /**

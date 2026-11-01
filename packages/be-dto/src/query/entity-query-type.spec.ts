@@ -13,7 +13,6 @@ import { EntityQueryType } from "./entity-query-type";
 import { QueryDto } from "./query.dto";
 import { AlbumQueryDto } from "../album/album-query.dto";
 import { FolderQueryDto } from "../folder/folder-query.dto";
-import { QueryTenantAccessRequestDto } from "../tenant-access-requests/query-tenant-access-request.dto";
 import { QueryIdpAccountDto } from "./query-idp-account.dto";
 import { QueryOidcSessionDto } from "./query-oidc-session.dto";
 
@@ -177,27 +176,6 @@ describe("EntityQueryType", () => {
 			wireFilter: "false",
 			parsedFilter: false,
 			invalidFilter: "UNKNOWN",
-		},
-		{
-			queryType: QueryTenantAccessRequestDto,
-			filterKey: "status",
-			wireFilter: "PENDING",
-			parsedFilter: "PENDING",
-			invalidFilter: "UNKNOWN",
-		},
-		{
-			queryType: QueryTenantAccessRequestDto,
-			filterKey: "spaceId",
-			wireFilter: "123",
-			parsedFilter: 123n,
-			invalidFilter: "0",
-		},
-		{
-			queryType: QueryTenantAccessRequestDto,
-			filterKey: "requesterId",
-			wireFilter: "456",
-			parsedFilter: 456n,
-			invalidFilter: "-1",
 		},
 		{
 			queryType: QueryOidcSessionDto,

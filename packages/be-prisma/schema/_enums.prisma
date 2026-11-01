@@ -137,32 +137,6 @@ enum TemplateType {
   PUSH
 }
 
-// ============================================================================
-// Tenant Access Request Domain - 테넌트 접근 신청 도메인
-// ============================================================================
-//
-// TenantAccessRequest는 사용자가 특정 Space와 Role을 요청하고,
-// 권한 있는 관리자가 승인/반려하는 워크플로우 aggregate입니다.
-//
-// 관계 구조:
-//   TenantAccessRequest
-//     │
-//     ├─── requester User
-//     ├─── reviewer User?
-//     ├─── Space
-//     ├─── requested Role
-//     ├─── previous Role?
-//     └─── applied Tenant?
-//
-// ============================================================================
-
-enum TenantAccessRequestStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  CANCELED
-}
-
 enum TextTypes {
   Editor
   Input

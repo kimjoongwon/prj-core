@@ -95,7 +95,6 @@ name
 | `OidcClient`           | `oidc-client.prisma`           |
 | `AuthAuditLog`         | `auth-audit-log.prisma`        |
 | `S3Asset`              | `s3-asset.prisma`              |
-| `TenantAccessRequest`  | `tenant-access-request.prisma` |
 
 사람이 별도의 경로 표에서 파일 이름을 고르지 않습니다. 변환 함수가 유일한 경로 규칙입니다.
 

@@ -16,12 +16,10 @@ model Role {
   /// @displayName 설명
   description String?
 
-  associations                  RoleAssociation[]
-  classification                RoleClassification?
-  assignments                   RoleAssignment[]
-  tenants                       Tenant[]
-  requestedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestRequestedRole")
-  previousTenantAccessRequests  TenantAccessRequest[] @relation("TenantAccessRequestPreviousRole")
+  associations   RoleAssociation[]
+  classification RoleClassification?
+  assignments    RoleAssignment[]
+  tenants        Tenant[]
 
   @@map("roles")
 }

@@ -1,4 +1,3 @@
-export * from "./approve-tenant-access-request.input";
 export * from "./create-ability.input";
 export * from "./create-action.input";
 export * from "./create-community-post.input";
@@ -27,10 +26,8 @@ export * from "./get-timelines-query.input";
 export * from "./get-translations-query.input";
 export * from "./get-users-by-space-query.input";
 export * from "./list-spaces-query.input";
-export * from "./list-tenant-access-requests-for-review-query.input";
 export * from "./move-asset.input";
 export * from "./preview-template-query.input";
-export * from "./reject-tenant-access-request.input";
 export * from "./send-test-template.input";
 export * from "./sync-role-assignments.input";
 export * from "./update-ability.input";

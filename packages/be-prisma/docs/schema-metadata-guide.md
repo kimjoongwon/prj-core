@@ -346,8 +346,7 @@ isActive = true
 
 대표 예:
 
-- 문의와 문의 메시지
-- 예약 또는 접근 요청
+- 예약
 - 외부 시스템과 진행 중인 교환 상태
 
 #### 실제 예시 1: `Reservation`은 수업 예약 한 건의 진행표
@@ -374,25 +373,6 @@ WAITLISTED -> CONFIRMED -> CANCELED
 - 취소하면 `canceledAt`과 `cancelReason`이 채워집니다.
 
 민지라는 사람 자체나 수업 프로그램 자체가 아니라 **특정 수업 회차를 예약한 업무 한 건**이므로 `TRANSACTION`입니다.
-
-#### 실제 예시 2: `TenantAccessRequest`는 공간 입장 신청서
-
-[실제 `TenantAccessRequest` schema 보기](../schema/tenant-access-request.prisma)
-
-```text
-requesterId = "user-minji"
-spaceId = "space-math"
-requestedRoleId = "role-member"
-reason = "수업에 참여하고 싶어요"
-status = PENDING
-```
-
-- 신청할 때 `PENDING`으로 생깁니다.
-- 관리자가 승인하면 `APPROVED`, 거절하면 `REJECTED`가 됩니다.
-- 검토한 사람과 시각은 `reviewerId`, `reviewedAt`에 채워집니다.
-- 승인 뒤 만들어진 실제 멤버십은 `Tenant`가 담당합니다.
-
-`TenantAccessRequest`는 멤버십 자체가 아니라 멤버십을 만들어 달라는 **신청부터 처리 결과까지의 진행표**입니다.
 
 여기서 `TRANSACTION`은 SQL의 `BEGIN`, `COMMIT`, `ROLLBACK`으로 묶는 **DB transaction**을 뜻하지 않습니다. 한 `TRANSACTION` 모델을 여러 DB transaction에 걸쳐 처리할 수 있고, 하나의 DB transaction에서 여러 데이터 타입을 함께 변경할 수도 있습니다.
 
@@ -532,7 +512,7 @@ AuthAuditLog는 로그인 한 번의 결과를 시각과 함께 남기기 위해
 | 비교 대상                              | 왼쪽                                           | 오른쪽                                                     |
 | -------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------- |
 | `User`와 `AuthAuditLog`                | 현재 사용자 카드인 `MASTER`                    | 로그인할 때마다 남는 과거 사실인 `EVENT`                   |
-| `Role`과 `TenantAccessRequest`         | 모두가 쓰는 역할 정의인 `REFERENCE`            | 그 역할을 달라는 신청 한 건인 `TRANSACTION`                |
+| `Role`과 `Reservation`                 | 모두가 쓰는 역할 정의인 `REFERENCE`            | 특정 회차를 예약한 업무 한 건인 `TRANSACTION`              |
 | `SecurityPolicy`와 `User`              | 여러 사용자에게 적용할 규칙인 `CONFIGURATION`  | 특정 사용자 한 명의 현재 상태인 `MASTER`                   |
 | `Template`과 실제 메시지               | 앞으로 메시지를 만드는 틀인 `CONFIGURATION`    | 실제 발송 한 건은 별도 업무 기록 또는 발생 사실            |
 | `Reservation`과 예약 취소 발생 기록    | 예약 전체 진행을 관리하는 `TRANSACTION`        | “10시에 취소했다”만 따로 남기면 `EVENT`                     |

@@ -260,11 +260,6 @@ export type TemplateVariable = Prisma.TemplateVariableModel
  */
 export type Template = Prisma.TemplateModel
 /**
- * Model TenantAccessRequest
- * @displayName 테넌트 접근 신청
- */
-export type TenantAccessRequest = Prisma.TenantAccessRequestModel
-/**
  * Model Tenant
  * @displayName 테넌트
  */
