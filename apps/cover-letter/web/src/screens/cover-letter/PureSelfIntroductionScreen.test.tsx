@@ -64,7 +64,9 @@ describe("PureSelfIntroductionScreen", () => {
 			assert.match(applicationRoot.textContent ?? "", new RegExp(selfIntroduction.name));
 			assert.match(applicationRoot.textContent ?? "", new RegExp(selfIntroduction.role));
 
-			const renderedSections = applicationRoot.querySelectorAll("section");
+			const renderedSections = applicationRoot.querySelectorAll(
+				".self-introduction-screen__section",
+			);
 			assert.equal(renderedSections.length, 5);
 			for (const [index, section] of selfIntroduction.sections.entries()) {
 				const renderedSection = renderedSections[index];
@@ -79,6 +81,72 @@ describe("PureSelfIntroductionScreen", () => {
 					section.paragraphs,
 				);
 			}
+
+			const mobileCareer = applicationRoot.querySelector(
+				".self-introduction-screen__mobile-career",
+			);
+			assert.ok(mobileCareer);
+			assert.equal(
+				mobileCareer.querySelector("h2")?.textContent,
+				selfIntroduction.mobileCareer.title,
+			);
+			assert.equal(
+				mobileCareer.querySelector("p")?.textContent,
+				selfIntroduction.mobileCareer.description,
+			);
+			const mobileCareerTables = mobileCareer.querySelectorAll("table");
+			assert.equal(mobileCareerTables.length, 2);
+			assert.deepEqual(
+				Array.from(mobileCareerTables[0].querySelectorAll("thead th")).map(
+					(header) => header.textContent,
+				),
+				selfIntroduction.mobileCareer.columns.map((column) => column.label),
+			);
+			const renderedCareerRows = mobileCareerTables[0].querySelectorAll("tbody tr");
+			assert.equal(
+				renderedCareerRows.length,
+				selfIntroduction.mobileCareer.entries.length,
+			);
+			for (const [index, entry] of selfIntroduction.mobileCareer.entries.entries()) {
+				assert.deepEqual(
+					Array.from(renderedCareerRows[index].querySelectorAll("td")).map(
+						(cell) => cell.textContent,
+					),
+					selfIntroduction.mobileCareer.columns.map((column) => entry[column.key]),
+				);
+			}
+			assert.equal(
+				mobileCareer.querySelector("h3")?.textContent,
+				selfIntroduction.mobileCareer.commonCapabilities.title,
+			);
+			assert.deepEqual(
+				Array.from(mobileCareerTables[1].querySelectorAll("thead th")).map(
+					(header) => header.textContent,
+				),
+				selfIntroduction.mobileCareer.commonCapabilities.columns.map(
+					(column) => column.label,
+				),
+			);
+			const renderedCapabilityRows = mobileCareerTables[1].querySelectorAll("tbody tr");
+			assert.equal(
+				renderedCapabilityRows.length,
+				selfIntroduction.mobileCareer.commonCapabilities.entries.length,
+			);
+			for (const [index, entry] of selfIntroduction.mobileCareer.commonCapabilities.entries.entries()) {
+				assert.deepEqual(
+					Array.from(renderedCapabilityRows[index].querySelectorAll("td")).map(
+						(cell) => cell.textContent,
+					),
+					selfIntroduction.mobileCareer.commonCapabilities.columns.map(
+						(column) => entry[column.key],
+					),
+				);
+			}
+			assert.match(mobileCareer.textContent ?? "", /중국어·일본어 다국어 지원/);
+			assert.match(
+				mobileCareer.textContent ?? "",
+				/MyHub.*ELPG.*WEGO.*WEGO\+.*두산 밥캣.*mySUNI.*Connect mySUNI.*FCM/,
+			);
 
 			const downloadLink = applicationRoot.querySelector("a");
 			assert.ok(downloadLink);

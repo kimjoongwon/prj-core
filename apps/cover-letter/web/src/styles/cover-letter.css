@@ -97,6 +97,72 @@ body {
 	margin-top: 1rem;
 }
 
+.self-introduction-screen__mobile-career {
+	margin-top: clamp(2.5rem, 6vw, 4rem);
+	padding-top: clamp(2rem, 5vw, 3rem);
+	border-top: 1px solid #d6dde8;
+}
+
+.self-introduction-screen__mobile-career h2 {
+	margin: 0 0 0.875rem;
+	font-size: clamp(1.25rem, 3vw, 1.5rem);
+	letter-spacing: -0.025em;
+	line-height: 1.35;
+}
+
+.self-introduction-screen__mobile-career > p {
+	margin: 0;
+	color: #344255;
+	font-size: clamp(1rem, 2vw, 1.0625rem);
+	letter-spacing: -0.012em;
+	line-height: 1.75;
+	word-break: keep-all;
+}
+
+.self-introduction-screen__mobile-career h3 {
+	margin: clamp(2rem, 5vw, 3rem) 0 0.875rem;
+	color: #152033;
+	font-size: clamp(1.125rem, 2.5vw, 1.25rem);
+	letter-spacing: -0.02em;
+	line-height: 1.4;
+}
+
+.self-introduction-screen__career-table-scroll {
+	margin-top: 1.25rem;
+	overflow-x: auto;
+	border: 1px solid #d6dde8;
+	border-radius: 0.5rem;
+}
+
+.self-introduction-screen__career-table-scroll table {
+	width: 100%;
+	min-width: 43rem;
+	border-collapse: collapse;
+	color: #344255;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+}
+
+.self-introduction-screen__career-table-scroll th,
+.self-introduction-screen__career-table-scroll td {
+	padding: 0.875rem 1rem;
+	border-bottom: 1px solid #d6dde8;
+	text-align: left;
+	vertical-align: top;
+	word-break: keep-all;
+}
+
+.self-introduction-screen__career-table-scroll th {
+	background: #f1f5fb;
+	color: #1f3b72;
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.self-introduction-screen__career-table-scroll tbody tr:last-child td {
+	border-bottom: 0;
+}
+
 .self-introduction-screen__footer {
 	margin-top: clamp(2.5rem, 6vw, 4rem);
 	padding-top: 1.5rem;
