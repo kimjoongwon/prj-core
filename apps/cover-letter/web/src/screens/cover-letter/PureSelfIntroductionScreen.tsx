@@ -19,6 +19,18 @@ export function PureSelfIntroductionScreen({
 					<p className="self-introduction-screen__eyebrow">{selfIntroduction.role}</p>
 					<h1>{selfIntroduction.title}</h1>
 					<p className="self-introduction-screen__name">{selfIntroduction.name}</p>
+					<nav aria-label="외부 프로필" className="self-introduction-screen__profiles">
+						{selfIntroduction.profileLinks.map((profileLink) => (
+							<a
+								href={profileLink.href}
+								key={profileLink.href}
+								rel="noreferrer"
+								target="_blank"
+							>
+								{profileLink.label}
+							</a>
+						))}
+					</nav>
 				</header>
 
 				<div className="self-introduction-screen__sections">

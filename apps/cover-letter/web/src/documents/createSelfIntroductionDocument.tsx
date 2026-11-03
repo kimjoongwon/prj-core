@@ -1,5 +1,6 @@
 import {
 	Document,
+	ExternalHyperlink,
 	Paragraph,
 	Section,
 	Table,
@@ -151,13 +152,38 @@ export function createSelfIntroductionDocument(
 						{...KOREAN_RUN_PROPERTIES}
 					/>
 				</Paragraph>
-				<Paragraph alignment="center" spacing={{ after: 280 }}>
+				<Paragraph alignment="center" spacing={{ after: 90 }}>
 					<TextRun
 						text={`${authoredSelfIntroduction.name} | ${authoredSelfIntroduction.role}`}
 						size={20}
 						color="000000"
 						{...KOREAN_RUN_PROPERTIES}
 					/>
+				</Paragraph>
+				<Paragraph alignment="center" spacing={{ after: 280 }}>
+					{authoredSelfIntroduction.profileLinks.flatMap((profileLink, index) => [
+						...(index === 0
+							? []
+							: [
+									<TextRun
+										key={`${profileLink.href}-separator`}
+										text=" | "
+										size={18}
+										color="555555"
+										{...KOREAN_RUN_PROPERTIES}
+									/>,
+								]
+						),
+						<ExternalHyperlink key={profileLink.href} link={profileLink.href}>
+							<TextRun
+								text={profileLink.label}
+								size={18}
+								color="1F3B72"
+								underline={{ type: "single" }}
+								{...KOREAN_RUN_PROPERTIES}
+							/>
+						</ExternalHyperlink>,
+					])}
 				</Paragraph>
 				{authoredSelfIntroduction.sections.flatMap((section) => {
 					let precedingParagraphsLength = 0;

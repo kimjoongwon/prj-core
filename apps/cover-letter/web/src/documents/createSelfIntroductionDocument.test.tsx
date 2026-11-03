@@ -55,6 +55,15 @@ async function readZipEntry(bytes: Uint8Array, entryName: string) {
 	assert.fail(`Missing ZIP entry: ${entryName}`);
 }
 
+function escapeXmlText(text: string) {
+	return text
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;")
+		.replaceAll("'", "&apos;");
+}
+
 describe("createSelfIntroductionDocument", () => {
 	it("완성 원고 전체와 한글 문서 서식을 포함한 OOXML을 만든다", async () => {
 		const docxBuffer = await renderToBuffer(
@@ -62,12 +71,20 @@ describe("createSelfIntroductionDocument", () => {
 		);
 		const archive = new Uint8Array(docxBuffer);
 		const documentXml = await readZipEntry(archive, "word/document.xml");
+		const relationshipsXml = await readZipEntry(
+			archive,
+			"word/_rels/document.xml.rels",
+		);
 		const stylesXml = await readZipEntry(archive, "word/styles.xml");
 
 		assert.deepEqual(Array.from(archive.slice(0, 2)), [0x50, 0x4b]);
 		assert.match(documentXml, /자기소개서/);
 		assert.match(documentXml, /김중원/);
 		assert.match(documentXml, /웹·모바일 풀스택 개발자/);
+		for (const profileLink of selfIntroduction.profileLinks) {
+			assert.ok(documentXml.includes(escapeXmlText(profileLink.label)));
+			assert.ok(relationshipsXml.includes(profileLink.href));
+		}
 		for (const section of selfIntroduction.sections) {
 			assert.match(documentXml, new RegExp(section.title));
 			for (const paragraph of section.paragraphs) {
