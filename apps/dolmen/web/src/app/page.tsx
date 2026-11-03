@@ -32,10 +32,14 @@ export default function Page() {
 
 			<ChatPanel />
 
-			<footer className="pb-4">
+			<footer className="flex flex-col gap-1 pb-4">
 				<Typography.Paragraph color="muted" className="text-xs">
 					MOMO는 등록된 이력서를 바탕으로 답하는 AI입니다. 답변의 이력서 출처를
 					함께 확인해 주세요. 이력서에 없는 내용은 추측하지 않습니다.
+				</Typography.Paragraph>
+				<Typography.Paragraph color="muted" className="text-xs">
+					이 사이트는 지원자가 직접 구축했습니다 — React · Next.js · FastAPI ·
+					Google Gemini · Kubernetes.
 				</Typography.Paragraph>
 			</footer>
 		</Container>

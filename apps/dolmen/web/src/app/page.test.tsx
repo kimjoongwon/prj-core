@@ -30,6 +30,9 @@ it("면접 주제와 AI의 이력서 근거 범위를 방문자에게 안내한�
 	expect(container.querySelector("footer")).toHaveTextContent(
 		"이력서에 없는 내용은 추측하지 않습니다.",
 	);
+	expect(container.querySelector("footer")).toHaveTextContent(
+		"React · Next.js · FastAPI · Google Gemini · Kubernetes",
+	);
 	expect(container).not.toHaveTextContent(
 		/온보딩|위키|hello-agents|임베딩|SSE|서비스 연결|근거 \d+개/,
 	);
