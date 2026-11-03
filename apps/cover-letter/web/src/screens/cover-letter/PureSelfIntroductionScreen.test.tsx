@@ -78,7 +78,7 @@ describe("PureSelfIntroductionScreen", () => {
 			const renderedSections = applicationRoot.querySelectorAll(
 				".self-introduction-screen__section",
 			);
-			assert.equal(renderedSections.length, 5);
+			assert.equal(renderedSections.length, selfIntroduction.sections.length);
 			for (const [index, section] of selfIntroduction.sections.entries()) {
 				const renderedSection = renderedSections[index];
 				assert.equal(
@@ -91,7 +91,25 @@ describe("PureSelfIntroductionScreen", () => {
 					),
 					section.paragraphs,
 				);
+				const renderedSectionLinks = renderedSection.querySelectorAll(
+					".self-introduction-screen__section-links a",
+				);
+				assert.equal(renderedSectionLinks.length, section.links?.length ?? 0);
+				for (const [linkIndex, sectionLink] of (section.links ?? []).entries()) {
+					const renderedSectionLink = renderedSectionLinks[linkIndex];
+					assert.equal(renderedSectionLink.textContent, sectionLink.label);
+					assert.equal(
+						renderedSectionLink.getAttribute("href"),
+						sectionLink.href,
+					);
+					assert.equal(renderedSectionLink.getAttribute("target"), "_blank");
+					assert.equal(renderedSectionLink.getAttribute("rel"), "noreferrer");
+				}
 			}
+			assert.match(
+				applicationRoot.textContent ?? "",
+				/O2O 경력코칭 AI 에이전트 서비스에 참여하며/,
+			);
 
 			const mobileCareer = applicationRoot.querySelector(
 				".self-introduction-screen__mobile-career",
