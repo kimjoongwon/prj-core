@@ -35,6 +35,70 @@ export function PureSelfIntroductionScreen({
 					))}
 				</div>
 
+				<section
+					aria-labelledby="mobile-career-heading"
+					className="self-introduction-screen__mobile-career"
+				>
+					<h2 id="mobile-career-heading">
+						{selfIntroduction.mobileCareer.title}
+					</h2>
+					<p>{selfIntroduction.mobileCareer.description}</p>
+					<div className="self-introduction-screen__career-table-scroll">
+						<table>
+							<thead>
+								<tr>
+									{selfIntroduction.mobileCareer.columns.map((column) => (
+										<th key={column.key} scope="col">
+											{column.label}
+										</th>
+									))}
+								</tr>
+							</thead>
+							<tbody>
+								{selfIntroduction.mobileCareer.entries.map((entry) => (
+									<tr
+										key={`${entry.period}-${entry.companyAndProject}-${entry.technologies}`}
+									>
+										{selfIntroduction.mobileCareer.columns.map((column) => (
+											<td key={column.key}>{entry[column.key]}</td>
+										))}
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+
+					<h3>{selfIntroduction.mobileCareer.commonCapabilities.title}</h3>
+					<div className="self-introduction-screen__career-table-scroll">
+						<table>
+							<thead>
+								<tr>
+									{selfIntroduction.mobileCareer.commonCapabilities.columns.map(
+										(column) => (
+											<th key={column.key} scope="col">
+												{column.label}
+											</th>
+										),
+									)}
+								</tr>
+							</thead>
+							<tbody>
+								{selfIntroduction.mobileCareer.commonCapabilities.entries.map(
+									(entry) => (
+										<tr key={entry.area}>
+											{selfIntroduction.mobileCareer.commonCapabilities.columns.map(
+												(column) => (
+													<td key={column.key}>{entry[column.key]}</td>
+												),
+											)}
+										</tr>
+									),
+								)}
+							</tbody>
+						</table>
+					</div>
+				</section>
+
 				<footer className="self-introduction-screen__footer">
 					<a
 						className="self-introduction-screen__download"

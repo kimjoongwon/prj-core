@@ -3,12 +3,61 @@ export interface SelfIntroductionSection {
 	paragraphs: readonly string[];
 }
 
+export type MobileCareerColumnKey =
+	| "period"
+	| "companyAndProject"
+	| "technologies"
+	| "responsibilities";
+
+export interface MobileCareerColumn {
+	key: MobileCareerColumnKey;
+	label: string;
+}
+
+export interface MobileCareerEntry {
+	period: string;
+	companyAndProject: string;
+	technologies: string;
+	responsibilities: string;
+}
+
+export type MobileCommonCapabilityColumnKey =
+	| "area"
+	| "projects"
+	| "responsibilities";
+
+export interface MobileCommonCapabilityColumn {
+	key: MobileCommonCapabilityColumnKey;
+	label: string;
+}
+
+export interface MobileCommonCapabilityEntry {
+	area: string;
+	projects: string;
+	responsibilities: string;
+}
+
+export interface MobileCommonCapabilities {
+	title: string;
+	columns: readonly MobileCommonCapabilityColumn[];
+	entries: readonly MobileCommonCapabilityEntry[];
+}
+
+export interface MobileCareer {
+	title: string;
+	description: string;
+	columns: readonly MobileCareerColumn[];
+	entries: readonly MobileCareerEntry[];
+	commonCapabilities: MobileCommonCapabilities;
+}
+
 export interface SelfIntroduction {
 	title: string;
 	name: string;
 	role: string;
 	downloadFileName: string;
 	sections: readonly SelfIntroductionSection[];
+	mobileCareer: MobileCareer;
 }
 
 /** 공개 검증을 마친 자기소개서 본문입니다. 화면과 빌드 시 DOCX가 함께 소비합니다. */
@@ -49,4 +98,108 @@ export const selfIntroduction: SelfIntroduction = {
 			],
 		},
 	],
+	mobileCareer: {
+		title: "React Native 및 모바일 개발 경력",
+		description:
+			"React Native 개발부터 iOS·Android 앱 배포와 운영까지 담당한 경력입니다.",
+		columns: [
+			{ key: "period", label: "기간" },
+			{ key: "companyAndProject", label: "회사·프로젝트" },
+			{ key: "technologies", label: "기술" },
+			{ key: "responsibilities", label: "주요 업무" },
+		],
+		entries: [
+			{
+				period: "2019.06–2020.12",
+				companyAndProject: "스마트링크커뮤니케이션 · FIRSTEP",
+				technologies: "React Native",
+				responsibilities:
+					"RN 개발 환경 구성, 회원가입·회원탈퇴, 커뮤니티 게시판·게시글 CRUD, 화면 상태 및 데이터 관리 구조 구현.",
+			},
+			{
+				period: "2019.06–2020.12",
+				companyAndProject: "스마트링크커뮤니케이션 · 회사가요",
+				technologies: "React Native",
+				responsibilities:
+					"사용자 스케줄 관리 앱 단독 개발, 일·월 단위 일정 관리, 스케줄 API 연동 및 서비스 구조 설계.",
+			},
+			{
+				period: "2021.01–2021.12",
+				companyAndProject: "마이허브앤헬스케어 · MyHub",
+				technologies: "React Native",
+				responsibilities:
+					"건강기능식품 성분 관리 모바일 앱 개발, 성분 정보 조회 및 API 연동, 관리자·백엔드와 연결되는 서비스 전반 단독 개발·운영.",
+			},
+			{
+				period: "2022.10–2026.05",
+				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
+				technologies: "React Native",
+				responsibilities:
+					"대내·대외 앱 2개의 iOS·Android 개발·운영 전담, Ionic·Capacitor 기반 앱의 RN 마이그레이션.",
+			},
+			{
+				period: "2022.10–2026.05",
+				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
+				technologies: "React Native · WebView",
+				responsibilities:
+					"Web ↔ Native 브리지 및 앱 생명주기 설계·개발, 서비스별 인증·정책을 반영한 앱 전환, 웹·모바일 공통 모듈 개발.",
+			},
+			{
+				period: "2022.10–2026.05",
+				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
+				technologies: "iOS · Android 배포",
+				responsibilities:
+					"iOS 인증서·Provisioning Profile 및 Android 배포 환경 관리, App Store·Google Play 심사·배포, 엔터프라이즈 배포·운영.",
+			},
+			{
+				period: "2022.10–2026.05",
+				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
+				technologies: "CodePush",
+				responsibilities:
+					"CodePush 도입·운영, JavaScript 업데이트 배포 체계 구축, 앱 버전·릴리스 관리 및 모바일 장애 대응.",
+			},
+			{
+				period: "2026.05–현재",
+				companyAndProject: "SK가스 · WEGO+",
+				technologies: "Swift · Kotlin · WebView",
+				responsibilities:
+					"iOS·Android WebView 앱 개발, 웹·네이티브 브리지, 로그인·세션·자동 로그인, 파일·사진·위치·Tmap 등 단말 기능 연동.",
+			},
+			{
+				period: "2026.05–현재",
+				companyAndProject: "SK가스 · WEGO+",
+				technologies: "Firebase · FCM",
+				responsibilities:
+					"FCM 푸시 연동, 등록·갱신 정보의 웹 전달, 알림 권한·수신 동의 처리, 알림 클릭 후 화면 이동 및 백엔드 연동 규격 정리.",
+			},
+			{
+				period: "2026.05–현재",
+				companyAndProject: "SK가스 · WEGO+",
+				technologies: "빌드·배포·운영",
+				responsibilities:
+					"iOS 서명·프로비저닝 구성, fastlane 배포 구성, DEV·PROD 환경 분리, Remote Config 기반 업데이트·점검 정책 및 WebView 장애 복구 기능 구현.",
+			},
+		],
+		commonCapabilities: {
+			title: "모바일 공통 기능 개발 및 운영",
+			columns: [
+				{ key: "area", label: "업무 영역" },
+				{ key: "projects", label: "프로젝트" },
+				{ key: "responsibilities", label: "수행 내용" },
+			],
+			entries: [
+				{
+					area: "다국어 지원",
+					projects: "Sugar Market",
+					responsibilities: "중국어·일본어 다국어 지원 적용.",
+				},
+				{
+					area: "푸시 알림",
+					projects:
+						"MyHub · ELPG · WEGO · WEGO+ · 두산 밥캣 · mySUNI · Connect mySUNI",
+					responsibilities: "Firebase Cloud Messaging(FCM) 설정 및 푸시 연동.",
+				},
+			],
+		},
+	},
 };

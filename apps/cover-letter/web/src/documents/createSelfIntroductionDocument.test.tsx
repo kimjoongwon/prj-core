@@ -74,6 +74,37 @@ describe("createSelfIntroductionDocument", () => {
 				assert.match(documentXml, new RegExp(paragraph));
 			}
 		}
+		assert.ok(documentXml.includes(selfIntroduction.mobileCareer.title));
+		assert.ok(documentXml.includes(selfIntroduction.mobileCareer.description));
+		for (const column of selfIntroduction.mobileCareer.columns) {
+			assert.ok(documentXml.includes(column.label));
+		}
+		for (const entry of selfIntroduction.mobileCareer.entries) {
+			assert.ok(documentXml.includes(entry.period));
+			assert.ok(documentXml.includes(entry.companyAndProject));
+			assert.ok(documentXml.includes(entry.technologies));
+			assert.ok(documentXml.includes(entry.responsibilities));
+		}
+		assert.ok(
+			documentXml.includes(
+				selfIntroduction.mobileCareer.commonCapabilities.title,
+			),
+		);
+		for (const column of selfIntroduction.mobileCareer.commonCapabilities.columns) {
+			assert.ok(documentXml.includes(column.label));
+		}
+		for (const entry of selfIntroduction.mobileCareer.commonCapabilities.entries) {
+			assert.ok(documentXml.includes(entry.area));
+			assert.ok(documentXml.includes(entry.projects));
+			assert.ok(documentXml.includes(entry.responsibilities));
+		}
+		assert.equal((documentXml.match(/w:tblHeader/g) ?? []).length, 2);
+		assert.equal(
+			(documentXml.match(/w:cantSplit/g) ?? []).length,
+			selfIntroduction.mobileCareer.entries.length +
+				selfIntroduction.mobileCareer.commonCapabilities.entries.length +
+				2,
+		);
 		assert.match(documentXml, /w:eastAsia="맑은 고딕"/);
 		assert.match(documentXml, /w:eastAsia="ko-KR"/);
 		assert.match(stylesXml, /w:eastAsia="맑은 고딕"/);
