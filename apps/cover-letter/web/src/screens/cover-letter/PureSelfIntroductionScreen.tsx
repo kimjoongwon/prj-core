@@ -43,6 +43,20 @@ export function PureSelfIntroductionScreen({
 							{section.paragraphs.map((paragraph) => (
 								<p key={paragraph}>{paragraph}</p>
 							))}
+							{section.links?.length ? (
+								<div className="self-introduction-screen__section-links">
+									{section.links.map((sectionLink) => (
+										<a
+											href={sectionLink.href}
+											key={sectionLink.href}
+											rel="noreferrer"
+											target="_blank"
+										>
+											{sectionLink.label}
+										</a>
+									))}
+								</div>
+							) : null}
 						</section>
 					))}
 				</div>

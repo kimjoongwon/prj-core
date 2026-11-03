@@ -215,12 +215,27 @@ export function createSelfIntroductionDocument(
 								</Paragraph>
 							);
 						}),
+						...(section.links ?? []).map((sectionLink) => (
+							<Paragraph
+								key={`${section.title}-${sectionLink.href}`}
+								spacing={{ after: 120 }}
+							>
+								<ExternalHyperlink link={sectionLink.href}>
+									<TextRun
+										text={sectionLink.label}
+										size={20}
+										color="1F3B72"
+										underline={{ type: "single" }}
+										{...KOREAN_RUN_PROPERTIES}
+									/>
+								</ExternalHyperlink>
+							</Paragraph>
+						)),
 					];
 				})}
 				<Paragraph
 					spacing={{ before: 240, after: 80 }}
 					keepNext
-					pageBreakBefore
 				>
 					<TextRun
 						text={authoredSelfIntroduction.mobileCareer.title}

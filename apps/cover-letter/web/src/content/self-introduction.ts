@@ -1,6 +1,7 @@
 export interface SelfIntroductionSection {
 	title: string;
 	paragraphs: readonly string[];
+	links?: readonly ProfileLink[];
 }
 
 export type MobileCareerColumnKey =
@@ -73,7 +74,7 @@ export const selfIntroduction: SelfIntroduction = {
 	name: "김중원",
 	role: "웹·모바일 풀스택 개발자",
 	downloadFileName: "김중원-자기소개서.docx",
-	documentVersion: "20261103-profile-links",
+	documentVersion: "20261103-ai-experience",
 	profileLinks: [
 		{ label: "AI 경력 Q&A", href: "https://onjitda.com/dolmen" },
 		{ label: "GitHub", href: "https://github.com/kimjoongwon" },
@@ -101,6 +102,19 @@ export const selfIntroduction: SelfIntroduction = {
 			title: "구현 이후의 배포와 운영도 책임져 왔습니다",
 			paragraphs: [
 				"CRAA에서는 온라인 시험 사이트를 단독으로 구축한 뒤 팀원 두 명의 업무와 일정을 조율했고, WebRTC 기반 실시간 감독 기능을 구현했습니다. 마이허브와 동영상 강의 CMS에서는 프론트엔드·백엔드·데이터 모델·AWS EKS 배포 환경까지 서비스 전반을 개발했습니다. 여러 프로젝트에서 얻은 경험을 바탕으로 기능뿐 아니라 의존성, 환경 설정, 배포와 장애 대응까지 연결해 문제를 살펴봅니다.",
+			],
+		},
+		{
+			title: "AI 에이전트를 배우고 적용하고 있습니다",
+			paragraphs: [
+				"mySUNI의 sunibot 학습도우미와 SK 커리어플랫폼의 O2O 경력코칭 AI 에이전트 서비스에 참여하며, 서비스 맥락에서 AI 에이전트가 활용되는 경험을 쌓았습니다.",
+				"현재는 Hello Agent를 통해 AI 에이전트의 기본 지식을 학습하고 있습니다. 이 학습을 바탕으로 개인 이력서에 대해 응답하고 MOMO 캐릭터가 보이는 챗봇을 만들었습니다.",
+			],
+			links: [
+				{
+					label: "MOMO 이력서 챗봇: https://onjitda.com/dolmen",
+					href: "https://onjitda.com/dolmen",
+				},
 			],
 		},
 		{

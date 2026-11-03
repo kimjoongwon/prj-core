@@ -123,6 +123,33 @@ body {
 	margin-top: 1rem;
 }
 
+.self-introduction-screen__section-links {
+	display: grid;
+	gap: 0.5rem;
+	margin-top: 1.25rem;
+}
+
+.self-introduction-screen__section-links a {
+	width: fit-content;
+	max-width: 100%;
+	color: #294b8f;
+	font-size: 0.9375rem;
+	font-weight: 700;
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+	text-underline-offset: 0.2em;
+}
+
+.self-introduction-screen__section-links a:hover {
+	color: #1f3b72;
+}
+
+.self-introduction-screen__section-links a:focus-visible {
+	border-radius: 0.125rem;
+	outline: 3px solid #7896ef;
+	outline-offset: 3px;
+}
+
 .self-introduction-screen__mobile-career {
 	margin-top: clamp(2.5rem, 6vw, 4rem);
 	padding-top: clamp(2rem, 5vw, 3rem);
