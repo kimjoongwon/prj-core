@@ -71,6 +71,32 @@ body {
 	font-weight: 600;
 }
 
+.self-introduction-screen__profiles {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.625rem;
+	margin-top: 1rem;
+}
+
+.self-introduction-screen__profiles a {
+	padding-bottom: 0.125rem;
+	border-bottom: 1px solid currentcolor;
+	color: #294b8f;
+	font-size: 0.9375rem;
+	font-weight: 700;
+	text-underline-offset: 0.2em;
+}
+
+.self-introduction-screen__profiles a:hover {
+	color: #1f3b72;
+}
+
+.self-introduction-screen__profiles a:focus-visible {
+	border-radius: 0.125rem;
+	outline: 3px solid #7896ef;
+	outline-offset: 3px;
+}
+
 .self-introduction-screen__sections {
 	display: grid;
 	gap: clamp(2rem, 5vw, 3rem);
