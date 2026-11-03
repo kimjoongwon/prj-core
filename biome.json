@@ -8,6 +8,7 @@
 	"files": {
 		"ignoreUnknown": false,
 		"includes": [
+			"./apps/cover-letter/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/admin/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/core/api/**/*.{cjs,js,jsx,mjs,ts,tsx}",
 			"./apps/design/web/**/*.{cjs,js,jsx,mjs,ts,tsx}",

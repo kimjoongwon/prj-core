@@ -121,6 +121,18 @@
     },
 
     // === 앱 태스크 ===
+    "cover-letter-web#start:dev": {
+      "dependsOn": ["^build"],
+      "passThroughEnv": ["COVER_LETTER_WEB_PORT"],
+      "cache": false,
+      "persistent": true
+    },
+    "cover-letter-web#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "index.html", "vite.config.ts", "tsconfig.json", "package.json"],
+      "outputs": ["dist/**"],
+      "cache": true
+    },
     "admin-web#build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "tsconfig.json", "package.json", "next.config.*", "postcss.config.*"],

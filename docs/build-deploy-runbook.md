@@ -20,10 +20,23 @@
 |---|---|---|---|
 | `core-api`, `admin-web`, `idp-api`, `idp-web` | `main` → prod, `stg` → stg | prod + stg | main push 경로 매칭. stg 빌드는 수동 |
 | `proposal-web`, `design-web`, `live-web` | `main` | prod | main push 경로 매칭 |
+| `cover-letter-web` | `main` | prod. 최초 태그 파일과 Application은 아래 부트스트랩 순서로 생성 | main push 경로 매칭 |
 | `tool-storybook` | `main` | prod | 수동 예비 잡(push-router 대상 제외) |
 | `dolmen-api`, `dolmen-web` | `main` → prod, `stg` → stg | **stg만 존재** | 라우터에는 main 대상으로도 등록됨. 아래 구성 차이 주의 |
 
 현재 태그 파일은 prod 8개, stg 6개다. `values-stg.yaml` 또는 `values-prod.yaml`이 차트에 있다는 이유만으로 해당 환경의 배포가 존재하는 것은 아니다. ArgoCD Application과 `prj-deploy` 태그 파일을 함께 확인한다.
+
+### Cover Letter Web 최초 배포
+
+`cover-letter-web`은 React/Vite 정적 앱이며 운영 경로는 `https://onjitda.com/cover-letter`다. 기존 `proposal-web`과 같은 Jenkins·Harbor·ArgoCD 경로를 사용한다. 신규 앱의 최초 태그는 추측하거나 로컬에서 작성하지 않고 이미지 빌드가 성공한 뒤 Jenkins가 생성한다.
+
+1. `prj-devops main`에 차트, 빌드 잡·라우터 등록, 공용 범프 스크립트의 `--initialize` 계약을 먼저 반영한다. Jenkins Job DSL 변경은 기존 운영 절차로 적용한다.
+2. `prj-core`의 feature → `stg` PR·리뷰·사용자 승인 → `stg` → `main` PR·사용자 승인 흐름으로 앱과 Jenkinsfile을 승격한다. 앱 자체의 배포 환경은 prod만 지원한다.
+3. `cover-letter-web-build`를 `BRANCH_NAME=main`, `TRUSTED_DEPLOYMENT=true`, `INITIALIZE_APP=true`로 수동 실행한다. 이미지 push 이후 공용 GitOps 잡이 `prod/cover-letter-web.yaml`을 생성한다. `INITIALIZE_APP`의 기본값은 `false`이며 최초 생성 허용 조합은 `cover-letter-web/prod`다. 일반 범프의 파일 미존재 실패 계약은 유지한다.
+4. 유효한 SHA-12 이미지와 태그 파일을 확인한 뒤 `prj-devops main`에 `cover-letter-web-prod` Application과 `/cover-letter` ingress prefix를 활성화한다. 태그 파일보다 Application을 먼저 반영하면 valueFiles를 찾지 못하므로 활성화 변경을 분리한다.
+5. 대상 Application의 `Synced`·`Healthy`, 실제 파드 이미지, `/healthz`, 공개 페이지와 정적 asset 응답, Buzz 배포 알림을 확인한다.
+
+Vite base는 `/cover-letter/`, nginx 포트는 `8080`, Service 포트는 `80`이다. `/cover-letter`는 `/cover-letter/`로 이동하며 ingress rewrite는 없다. 앱은 서버 env나 OpenBao 시크릿을 소비하지 않는다. 작성 내용과 DOCX 생성은 브라우저에서 처리한다.
 
 **Dolmen 구성 차이:** Jenkinsfile·push-router는 main 빌드를 허용하지만 `prod/dolmen-api.yaml`, `prod/dolmen-web.yaml`과 prod Application은 없다. main 자동 빌드가 성공해도 후속 범프 스크립트는 `Values file not found`로 실패할 수 있다. 현재 연결된 배포 경로는 수동 `BRANCH_NAME=stg` 빌드다. 이 문서 갱신은 해당 소스를 변경하지 않는다.
 
@@ -71,6 +84,7 @@
 | `idp.onjitda.com`, `idp-stg.onjitda.com`의 `/oidc`, `/api` | 각 환경 idp-api |
 | IDP 호스트의 `/` | 각 환경 idp-web |
 | prod 메인 `/proposal`, `/design`, `/live`, `/story`, `/storybook` | 해당 prod 웹. Storybook 정규 prefix는 `/story`, `/storybook`은 legacy |
+| prod 메인 `/cover-letter` | `cover-letter-web-prod`. Vite 정적 문서 작성 앱, 서비스 80 → nginx 8080 |
 | prod 메인 `/live-stream` | SRS 미디어 서버(`prj-devops`가 관리하며 prj-deploy 이미지 범프 대상 아님) |
 | stg 메인 `/dolmen` | dolmen-web-stg. `/dolmen/api/*`는 Next.js route handler가 런타임 `DOLMEN_API_URL`로 프록시 |
 
