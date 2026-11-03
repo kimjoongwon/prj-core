@@ -21,7 +21,7 @@
 | `admin-web` | `apps/admin/web/.env.local` | `apps/admin/web/.env.example` | Next.js Admin Web |
 | `idp-web` | `apps/idp/web/.env.local` | `apps/idp/web/.env.example` | Next.js IDP Web(로그인/동의 UI) |
 | `proposal-web` | `apps/proposal/web/.env.local` | `apps/proposal/web/.env.example` | Next.js Proposal Web |
-| `cover-letter-web` | 없음 | 없음 | React/Vite 문서 작성 앱. 개발 포트만 `COVER_LETTER_WEB_PORT`(기본 3016), nginx 컨테이너 8080. 런타임 시크릿 없음 |
+| `cover-letter-web` | 없음 | 없음 | React/Vite 자기소개서 열람 페이지. 개발 포트만 `COVER_LETTER_WEB_PORT`(기본 3016), nginx 컨테이너 8080. 런타임 시크릿 없음 |
 | `design-web` | 없음(정적 콘텐츠) | 없음 | Next.js Design Web(디자인 링크 디렉터리, 포트만 `DESIGN_WEB_PORT`) |
 | `live-web` | `apps/live/web/.env.local` | `apps/live/web/.env.example` | Next.js 라이브커머스 데모(dev 3014, 컨테이너 3013) |
 | `dolmen-api` | `apps/dolmen/api/.env` | `apps/dolmen/api/.env.example` | Python FastAPI(등록 이력서 근거 면접 Q&A API) |

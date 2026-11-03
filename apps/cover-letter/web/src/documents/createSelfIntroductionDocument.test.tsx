@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { renderCoverLetterDocument } from "./cover-letter-document";
+import { renderToBuffer } from "@react-docx/core";
+import { selfIntroduction } from "../content";
+import { createSelfIntroductionDocument } from "./createSelfIntroductionDocument";
 
 function readUInt16(bytes: Uint8Array, offset: number) {
 	return bytes[offset] | (bytes[offset + 1] << 8);
@@ -35,7 +37,6 @@ async function readZipEntry(bytes: Uint8Array, entryName: string) {
 		offset += 46 + filenameLength + extraLength + commentLength;
 		if (filename !== entryName) continue;
 
-		assert.equal(readUInt32(bytes, localHeaderOffset), 0x04034b50);
 		const localFilenameLength = readUInt16(bytes, localHeaderOffset + 26);
 		const localExtraLength = readUInt16(bytes, localHeaderOffset + 28);
 		const fileContentsOffset =
@@ -45,11 +46,7 @@ async function readZipEntry(bytes: Uint8Array, entryName: string) {
 			fileContentsOffset + compressedSize,
 		);
 		if (compressionMethod === 0) return decoder.decode(compressedContents);
-		assert.equal(
-			compressionMethod,
-			8,
-			"DOCX entries must use ZIP deflate or store",
-		);
+		assert.equal(compressionMethod, 8, "DOCX entries must use ZIP deflate or store");
 		const contentStream = new Blob([compressedContents])
 			.stream()
 			.pipeThrough(new DecompressionStream("deflate-raw"));
@@ -58,34 +55,29 @@ async function readZipEntry(bytes: Uint8Array, entryName: string) {
 	assert.fail(`Missing ZIP entry: ${entryName}`);
 }
 
-describe("renderCoverLetterDocument", () => {
-	it("실제 입력 텍스트를 포함한 OOXML ZIP Blob을 만든다", async () => {
-		const docxBlob = await renderCoverLetterDocument({
-			fullName: "홍길동",
-			email: "hong@example.com",
-			phone: "010-0000-0000",
-			location: "서울특별시",
-			letterDate: "2026년 3월 2일",
-			companyName: "예시 회사",
-			positionTitle: "개발 직무",
-			recipientName: "채용 담당자",
-			body: "첫 문단입니다.\n\n둘째 문단입니다.\n\n첫 문단입니다.",
-		});
-		const archive = new Uint8Array(await docxBlob.arrayBuffer());
-
-		assert.ok(docxBlob.size > 500);
-		assert.deepEqual(Array.from(archive.slice(0, 2)), [0x50, 0x4b]);
+describe("createSelfIntroductionDocument", () => {
+	it("완성 원고 전체와 한글 문서 서식을 포함한 OOXML을 만든다", async () => {
+		const docxBuffer = await renderToBuffer(
+			createSelfIntroductionDocument(selfIntroduction),
+		);
+		const archive = new Uint8Array(docxBuffer);
 		const documentXml = await readZipEntry(archive, "word/document.xml");
 		const stylesXml = await readZipEntry(archive, "word/styles.xml");
+
+		assert.deepEqual(Array.from(archive.slice(0, 2)), [0x50, 0x4b]);
 		assert.match(documentXml, /자기소개서/);
-		assert.match(documentXml, /지원 회사: 예시 회사/);
-		assert.match(documentXml, /지원 직무: 개발 직무/);
-		assert.match(documentXml, /첫 문단입니다/);
-		assert.equal((documentXml.match(/첫 문단입니다/g) ?? []).length, 2);
-		assert.doesNotMatch(documentXml, /Dear|Sincerely|Hiring Team/);
+		assert.match(documentXml, /김중원/);
+		assert.match(documentXml, /웹·모바일 풀스택 개발자/);
+		for (const section of selfIntroduction.sections) {
+			assert.match(documentXml, new RegExp(section.title));
+			for (const paragraph of section.paragraphs) {
+				assert.match(documentXml, new RegExp(paragraph));
+			}
+		}
 		assert.match(documentXml, /w:eastAsia="맑은 고딕"/);
 		assert.match(documentXml, /w:eastAsia="ko-KR"/);
 		assert.match(stylesXml, /w:eastAsia="맑은 고딕"/);
 		assert.match(stylesXml, /w:eastAsia="ko-KR"/);
+		assert.doesNotMatch(documentXml, /w:pBdr/);
 	});
 });

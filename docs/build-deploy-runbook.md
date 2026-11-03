@@ -36,7 +36,7 @@
 4. 유효한 SHA-12 이미지와 태그 파일을 확인한 뒤 `prj-devops main`에 `cover-letter-web-prod` Application과 `/cover-letter` ingress prefix를 활성화한다. 태그 파일보다 Application을 먼저 반영하면 valueFiles를 찾지 못하므로 활성화 변경을 분리한다.
 5. 대상 Application의 `Synced`·`Healthy`, 실제 파드 이미지, `/healthz`, 공개 페이지와 정적 asset 응답, Buzz 배포 알림을 확인한다.
 
-Vite base는 `/cover-letter/`, nginx 포트는 `8080`, Service 포트는 `80`이다. `/cover-letter`는 `/cover-letter/`로 이동하며 ingress rewrite는 없다. 앱은 서버 env나 OpenBao 시크릿을 소비하지 않는다. 작성 내용과 DOCX 생성은 브라우저에서 처리한다.
+Vite base는 `/cover-letter/`, nginx 포트는 `8080`, Service 포트는 `80`이다. `/cover-letter`는 `/cover-letter/`로 이동하며 ingress rewrite는 없다. 앱은 서버 env나 OpenBao 시크릿을 소비하지 않는다. 완성된 자기소개서 원고로 DOCX를 빌드 시 생성하며, 방문자에게 정적 파일로 제공한다. 문서 생성 SDK는 클라이언트 번들에 포함하지 않는다.
 
 **Dolmen 구성 차이:** Jenkinsfile·push-router는 main 빌드를 허용하지만 `prod/dolmen-api.yaml`, `prod/dolmen-web.yaml`과 prod Application은 없다. main 자동 빌드가 성공해도 후속 범프 스크립트는 `Values file not found`로 실패할 수 있다. 현재 연결된 배포 경로는 수동 `BRANCH_NAME=stg` 빌드다. 이 문서 갱신은 해당 소스를 변경하지 않는다.
 
@@ -84,7 +84,7 @@ Vite base는 `/cover-letter/`, nginx 포트는 `8080`, Service 포트는 `80`이
 | `idp.onjitda.com`, `idp-stg.onjitda.com`의 `/oidc`, `/api` | 각 환경 idp-api |
 | IDP 호스트의 `/` | 각 환경 idp-web |
 | prod 메인 `/proposal`, `/design`, `/live`, `/story`, `/storybook` | 해당 prod 웹. Storybook 정규 prefix는 `/story`, `/storybook`은 legacy |
-| prod 메인 `/cover-letter` | `cover-letter-web-prod`. Vite 정적 문서 작성 앱, 서비스 80 → nginx 8080 |
+| prod 메인 `/cover-letter` | `cover-letter-web-prod`. Vite 정적 자기소개서 열람 페이지, 서비스 80 → nginx 8080 |
 | prod 메인 `/live-stream` | SRS 미디어 서버(`prj-devops`가 관리하며 prj-deploy 이미지 범프 대상 아님) |
 | stg 메인 `/dolmen` | dolmen-web-stg. `/dolmen/api/*`는 Next.js route handler가 런타임 `DOLMEN_API_URL`로 프록시 |
 
