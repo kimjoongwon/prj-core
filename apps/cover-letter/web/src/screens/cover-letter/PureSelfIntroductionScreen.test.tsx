@@ -45,7 +45,7 @@ describe("PureSelfIntroductionScreen", () => {
 			const { createRoot } = await import("react-dom/client");
 			const root = createRoot(applicationRoot);
 			const downloadHref =
-				"/cover-letter/documents/%EA%B9%80%EC%A4%91%EC%9B%90-%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C%EC%84%9C.docx";
+				"/cover-letter/documents/%EA%B9%80%EC%A4%91%EC%9B%90-%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C%EC%84%9C.docx?v=20261103-mobile-career";
 
 			await act(async () => {
 				root.render(
@@ -151,6 +151,10 @@ describe("PureSelfIntroductionScreen", () => {
 			const downloadLink = applicationRoot.querySelector("a");
 			assert.ok(downloadLink);
 			assert.equal(downloadLink.getAttribute("href"), downloadHref);
+			assert.match(
+				downloadLink.getAttribute("href") ?? "",
+				new RegExp(`v=${selfIntroduction.documentVersion}$`),
+			);
 			assert.equal(
 				downloadLink.getAttribute("download"),
 				selfIntroduction.downloadFileName,
