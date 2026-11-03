@@ -1,0 +1,334 @@
+:root {
+	color: #1c2430;
+	background: #f5f7fa;
+	font-family:
+		Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+		sans-serif;
+	font-synthesis: none;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	min-width: 320px;
+	min-height: 100vh;
+}
+
+button,
+input,
+textarea {
+	font: inherit;
+}
+
+button,
+input,
+textarea {
+	-webkit-tap-highlight-color: transparent;
+}
+
+.cover-letter-screen {
+	min-height: 100vh;
+	padding: clamp(1.25rem, 4vw, 4.5rem) clamp(1rem, 5vw, 6rem) 3rem;
+}
+
+.cover-letter-screen__content,
+.cover-letter-screen__editor {
+	max-width: 74rem;
+	margin-inline: auto;
+}
+
+.cover-letter-screen__content {
+	display: grid;
+	gap: 1.25rem;
+	margin-bottom: 1.5rem;
+}
+
+.cover-letter-screen__header {
+	max-width: 44rem;
+}
+
+.cover-letter-screen__eyebrow {
+	margin: 0 0 0.5rem;
+	color: #4659a7;
+	font-size: 0.875rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.cover-letter-screen h1,
+.cover-letter-screen h2,
+.cover-letter-screen h3,
+.cover-letter-screen p {
+	margin-top: 0;
+}
+
+.cover-letter-screen h1 {
+	margin-bottom: 0.75rem;
+	color: #152033;
+	font-size: clamp(2rem, 5vw, 3.25rem);
+	letter-spacing: -0.04em;
+	line-height: 1.08;
+}
+
+.cover-letter-screen__header > p:last-child {
+	margin-bottom: 0;
+	color: #506073;
+	font-size: 1.0625rem;
+	line-height: 1.65;
+}
+
+.cover-letter-screen__notice {
+	align-self: start;
+	padding: 1.125rem 1.25rem;
+	border: 1px solid #ced7e6;
+	border-radius: 0.75rem;
+	background: #eef3fb;
+	color: #334258;
+}
+
+.cover-letter-screen__notice h2 {
+	margin-bottom: 0.5rem;
+	font-size: 1rem;
+}
+
+.cover-letter-screen__notice p {
+	margin-bottom: 0.625rem;
+	font-size: 0.9375rem;
+	line-height: 1.55;
+}
+
+.cover-letter-screen__notice p:last-child {
+	margin-bottom: 0;
+}
+
+.cover-letter-editor {
+	display: grid;
+	gap: 1.5rem;
+}
+
+.cover-letter-editor > section {
+	min-width: 0;
+	padding: clamp(1rem, 3vw, 1.75rem);
+	border: 1px solid #d6dde8;
+	border-radius: 0.875rem;
+	background: #ffffff;
+	box-shadow: 0 1px 3px rgb(21 32 51 / 0.06);
+}
+
+.cover-letter-editor > section > header {
+	margin-bottom: 1.25rem;
+}
+
+.cover-letter-editor h2 {
+	margin-bottom: 0.375rem;
+	color: #152033;
+	font-size: 1.25rem;
+}
+
+.cover-letter-editor > section > header p {
+	margin-bottom: 0;
+	color: #5a687a;
+	font-size: 0.9375rem;
+	line-height: 1.5;
+}
+
+.cover-letter-editor__fields {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+}
+
+.cover-letter-editor label {
+	display: grid;
+	gap: 0.45rem;
+	color: #29384b;
+	font-size: 0.875rem;
+	font-weight: 650;
+}
+
+.cover-letter-editor input,
+.cover-letter-editor textarea {
+	width: 100%;
+	border: 1px solid #aebaca;
+	border-radius: 0.5rem;
+	background: #fff;
+	color: #172235;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.45;
+	transition:
+		border-color 160ms ease,
+		box-shadow 160ms ease;
+}
+
+.cover-letter-editor input {
+	min-height: 2.75rem;
+	padding: 0.625rem 0.75rem;
+}
+
+.cover-letter-editor textarea {
+	min-height: 15rem;
+	padding: 0.75rem;
+	resize: vertical;
+}
+
+.cover-letter-editor input::placeholder,
+.cover-letter-editor textarea::placeholder {
+	color: #738196;
+	opacity: 1;
+}
+
+.cover-letter-editor input:focus-visible,
+.cover-letter-editor textarea:focus-visible,
+.cover-letter-editor button:focus-visible {
+	outline: 3px solid #7896ef;
+	outline-offset: 2px;
+}
+
+.cover-letter-editor input:invalid:not(:placeholder-shown),
+.cover-letter-editor textarea:invalid:not(:placeholder-shown) {
+	border-color: #bb2435;
+}
+
+.cover-letter-editor__body-field {
+	margin-top: 1rem;
+}
+
+.cover-letter-editor__actions {
+	display: grid;
+	gap: 0.75rem;
+	margin-top: 1.25rem;
+}
+
+.cover-letter-editor__actions button {
+	justify-self: start;
+	min-height: 2.75rem;
+	padding: 0.625rem 1rem;
+	border: 1px solid #354b9d;
+	border-radius: 0.5rem;
+	background: #354b9d;
+	color: #fff;
+	cursor: pointer;
+	font-weight: 700;
+}
+
+.cover-letter-editor__actions button:hover:not(:disabled) {
+	background: #263c8a;
+}
+
+.cover-letter-editor__actions button:disabled {
+	border-color: #c5ccd6;
+	background: #c5ccd6;
+	color: #617083;
+	cursor: not-allowed;
+}
+
+.cover-letter-editor__actions p,
+.cover-letter-editor__actions output {
+	margin: 0;
+	font-size: 0.875rem;
+	line-height: 1.45;
+}
+
+.cover-letter-editor__actions p {
+	color: #5a687a;
+}
+
+.cover-letter-editor__actions output[data-state="error"] {
+	color: #a51c2e;
+	font-weight: 650;
+}
+
+.cover-letter-editor__actions output[data-state="success"] {
+	color: #12643b;
+	font-weight: 650;
+}
+
+.cover-letter-editor__preview {
+	min-height: 26rem;
+	padding: clamp(1rem, 3vw, 2rem);
+	border: 1px solid #d6dde8;
+	border-radius: 0.5rem;
+	background: #fcfcfd;
+}
+
+.cover-letter-editor__preview article {
+	max-width: 42rem;
+	margin-inline: auto;
+	color: #1c2430;
+	font-family: Georgia, "Times New Roman", serif;
+	line-height: 1.65;
+}
+
+.cover-letter-editor__preview article h3 {
+	margin-bottom: 0.125rem;
+	font-family: inherit;
+	font-size: 1.3rem;
+}
+
+.cover-letter-editor__preview article header p,
+.cover-letter-editor__preview article > div p,
+.cover-letter-editor__preview article footer p,
+.cover-letter-editor__preview article > p {
+	margin-bottom: 1rem;
+}
+
+.cover-letter-editor__preview article footer {
+	margin-top: 1.5rem;
+}
+
+.cover-letter-editor__preview-empty {
+	display: grid;
+	place-content: center;
+	min-height: 20rem;
+	max-width: 28rem;
+	margin-inline: auto;
+	color: #5a687a;
+	text-align: center;
+}
+
+.cover-letter-editor__preview-empty h3 {
+	margin-bottom: 0.5rem;
+	color: #334258;
+	font-size: 1.125rem;
+}
+
+.cover-letter-editor__preview-empty p {
+	margin-bottom: 0;
+	line-height: 1.55;
+}
+
+@media (min-width: 40rem) {
+	.cover-letter-editor__fields {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 64rem) {
+	.cover-letter-screen__content {
+		grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.58fr);
+		align-items: end;
+		gap: 3rem;
+	}
+
+	.cover-letter-editor {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		align-items: start;
+	}
+
+	.cover-letter-editor > section:nth-child(2) {
+		position: sticky;
+		top: 1.25rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cover-letter-editor input,
+	.cover-letter-editor textarea {
+		transition: none;
+	}
+}
