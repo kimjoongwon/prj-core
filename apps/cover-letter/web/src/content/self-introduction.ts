@@ -56,6 +56,7 @@ export interface SelfIntroduction {
 	name: string;
 	role: string;
 	downloadFileName: string;
+	documentVersion: string;
 	sections: readonly SelfIntroductionSection[];
 	mobileCareer: MobileCareer;
 }
@@ -66,6 +67,7 @@ export const selfIntroduction: SelfIntroduction = {
 	name: "김중원",
 	role: "웹·모바일 풀스택 개발자",
 	downloadFileName: "김중원-자기소개서.docx",
+	documentVersion: "20261103-mobile-career",
 	sections: [
 		{
 			title: "업무를 이해하고 구조로 정리합니다",
