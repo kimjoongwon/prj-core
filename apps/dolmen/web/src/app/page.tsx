@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Typography } from "@cocrepo/ui";
+import { Alert, Container, Typography } from "@cocrepo/ui";
 import { Landmark } from "lucide-react";
 import { ChatPanel } from "../components/ChatPanel";
 
@@ -23,8 +23,12 @@ export default function Page() {
 							</Typography.Paragraph>
 						</div>
 					</div>
-				</div>
-			</header>
+					</div>
+					<Alert
+						status="warning"
+						description="이 서비스는 무료 AI 모델로 운영됩니다. 모델이 혼잡한 시간대에는 답변이 느려지거나 중간에 끊길 수 있으니 잠시 후 다시 질문해 주세요."
+					/>
+				</header>
 
 			<ChatPanel />
 
