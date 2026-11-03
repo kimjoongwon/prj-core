@@ -70,7 +70,7 @@ class ResumeAgentTests(unittest.TestCase):
         second_initializer_started = threading.Event()
         release_initialization = threading.Event()
 
-        def initialize_llm():
+        def initialize_llm(*args, **kwargs):
             if first_initializer_started.is_set():
                 second_initializer_started.set()
             first_initializer_started.set()
@@ -97,7 +97,7 @@ class ResumeAgentTests(unittest.TestCase):
                         services = [request.result(timeout=1) for request in requests]
                     self.assertIs(services[0], services[1])
                     self.assertIs(dolmen_agent_service(), services[0])
-                    llm_factory.assert_called_once_with()
+                    llm_factory.assert_called_once_with(provider="openai")
 
     def test_failed_agent_initialization_releases_lock_and_allows_retry(self):
         initialized_llm = Mock()

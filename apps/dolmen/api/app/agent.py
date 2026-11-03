@@ -54,6 +54,12 @@ class DolmenConfigError(RuntimeError):
     """LLM 접속에 필요한 환경변수가 비어 있을 때 발생한다."""
 
 
+# LLM_BASE_URL은 OpenAI 호환 chat completions 주소만 계약으로 받는다. hello-agents는
+# googleapis.com 호스트를 자동 감지해 Gemini 전용 SDK 어댑터로 갈아타는데 그 선택
+# 의존성이 이미지에 없으므로, 프로토콜 계약에 맞춰 OpenAI 어댑터로 고정한다.
+DOLMEN_LLM_PROVIDER = "openai"
+
+
 class DolmenEmptyReplyError(RuntimeError):
     """모델이 표시 가능한 답변 없이 종료된 경우."""
 
@@ -380,7 +386,9 @@ def dolmen_agent_service() -> DolmenAgentService:
                 raise DolmenConfigError(
                     f"LLM 설정이 비어 있습니다: {', '.join(missing_env_names)}."
                 )
-            _dolmen_agent_service = DolmenAgentService(HelloAgentsLLM())
+            _dolmen_agent_service = DolmenAgentService(
+                HelloAgentsLLM(provider=DOLMEN_LLM_PROVIDER)
+            )
         return _dolmen_agent_service
 
 
