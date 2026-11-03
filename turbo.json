@@ -129,7 +129,7 @@
     },
     "cover-letter-web#build": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "index.html", "vite.config.ts", "tsconfig.json", "package.json"],
+      "inputs": ["src/**", "scripts/**", "index.html", "vite.config.ts", "tsconfig.json", "package.json"],
       "outputs": ["dist/**"],
       "cache": true
     },

@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { CoverLetterEditor } from "./features";
-import { CoverLetterScreen } from "./screens";
+import { selfIntroduction } from "./content/self-introduction";
+import { PureSelfIntroductionScreen } from "./screens";
+import "./styles/cover-letter.css";
 
 const applicationRoot = document.getElementById("root");
 
@@ -11,6 +12,10 @@ if (!applicationRoot) {
 
 createRoot(applicationRoot).render(
 	<StrictMode>
-		<CoverLetterScreen editor={<CoverLetterEditor />} />
+		<PureSelfIntroductionScreen
+			selfIntroduction={selfIntroduction}
+			downloadHref={`${import.meta.env.BASE_URL}documents/${encodeURIComponent(selfIntroduction.downloadFileName)}`}
+			downloadFileName={selfIntroduction.downloadFileName}
+		/>
 	</StrictMode>,
 );
