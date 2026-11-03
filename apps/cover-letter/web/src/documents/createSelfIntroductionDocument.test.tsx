@@ -90,6 +90,10 @@ describe("createSelfIntroductionDocument", () => {
 			for (const paragraph of section.paragraphs) {
 				assert.match(documentXml, new RegExp(paragraph));
 			}
+			for (const sectionLink of section.links ?? []) {
+				assert.ok(documentXml.includes(escapeXmlText(sectionLink.label)));
+				assert.ok(relationshipsXml.includes(sectionLink.href));
+			}
 		}
 		assert.ok(documentXml.includes(selfIntroduction.mobileCareer.title));
 		assert.ok(documentXml.includes(selfIntroduction.mobileCareer.description));
