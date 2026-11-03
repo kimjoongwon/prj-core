@@ -14,7 +14,7 @@ createRoot(applicationRoot).render(
 	<StrictMode>
 		<PureSelfIntroductionScreen
 			selfIntroduction={selfIntroduction}
-			downloadHref={`${import.meta.env.BASE_URL}documents/${encodeURIComponent(selfIntroduction.downloadFileName)}`}
+			downloadHref={`${import.meta.env.BASE_URL}documents/${encodeURIComponent(selfIntroduction.downloadFileName)}?v=${encodeURIComponent(selfIntroduction.documentVersion)}`}
 			downloadFileName={selfIntroduction.downloadFileName}
 		/>
 	</StrictMode>,
