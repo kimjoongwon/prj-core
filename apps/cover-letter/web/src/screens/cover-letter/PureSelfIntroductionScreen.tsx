@@ -133,6 +133,9 @@ export function PureSelfIntroductionScreen({
 					>
 						자기소개서 DOCX 다운로드
 					</a>
+					<p className="self-introduction-screen__footer-note">
+						이 문서는 @react-docx/core·docx 라이브러리로 빌드 시점에 자동 생성됩니다.
+					</p>
 				</footer>
 			</article>
 		</main>

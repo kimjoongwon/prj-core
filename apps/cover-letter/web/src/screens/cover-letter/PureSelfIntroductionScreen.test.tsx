@@ -192,6 +192,13 @@ describe("PureSelfIntroductionScreen", () => {
 			);
 			assert.equal(downloadLink.textContent, "자기소개서 DOCX 다운로드");
 
+			const footerNote = applicationRoot.querySelector(
+				".self-introduction-screen__footer-note",
+			);
+			assert.ok(footerNote);
+			assert.match(footerNote.textContent ?? "", /@react-docx\/core/);
+			assert.match(footerNote.textContent ?? "", /docx 라이브러리로 빌드 시점에 자동 생성/);
+
 			await act(async () => root.unmount());
 		} finally {
 			for (const [name, descriptor] of originalGlobalDescriptors) {
