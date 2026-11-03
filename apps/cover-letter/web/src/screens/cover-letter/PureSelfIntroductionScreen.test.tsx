@@ -125,6 +125,7 @@ describe("PureSelfIntroductionScreen", () => {
 			);
 			const mobileCareerTables = mobileCareer.querySelectorAll("table");
 			assert.equal(mobileCareerTables.length, 2);
+			assert.equal(selfIntroduction.mobileCareer.columns.length, 5);
 			assert.deepEqual(
 				Array.from(mobileCareerTables[0].querySelectorAll("thead th")).map(
 					(header) => header.textContent,
@@ -174,7 +175,7 @@ describe("PureSelfIntroductionScreen", () => {
 			assert.match(mobileCareer.textContent ?? "", /중국어·일본어 다국어 지원/);
 			assert.match(
 				mobileCareer.textContent ?? "",
-				/MyHub.*ELPG.*WEGO.*WEGO\+.*두산 밥캣.*mySUNI.*Connect mySUNI.*FCM/,
+				/My(?:\u2060)?Hub.*ELPG.*WEGO.*WEGO\+.*두산 밥캣.*mySUNI.*Connect(?: |\u00a0)mySUNI.*FCM/,
 			);
 
 			const downloadLink = applicationRoot.querySelector(
