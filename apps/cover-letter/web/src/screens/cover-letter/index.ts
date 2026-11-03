@@ -1,2 +1,2 @@
-export { CoverLetterScreen } from "./CoverLetterScreen";
-export type { CoverLetterScreenProps } from "./CoverLetterScreen";
+export { PureSelfIntroductionScreen } from "./PureSelfIntroductionScreen";
+export type { PureSelfIntroductionScreenProps } from "./PureSelfIntroductionScreen";
