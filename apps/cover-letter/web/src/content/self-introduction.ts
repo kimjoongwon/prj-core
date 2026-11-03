@@ -51,12 +51,18 @@ export interface MobileCareer {
 	commonCapabilities: MobileCommonCapabilities;
 }
 
+export interface ProfileLink {
+	label: string;
+	href: string;
+}
+
 export interface SelfIntroduction {
 	title: string;
 	name: string;
 	role: string;
 	downloadFileName: string;
 	documentVersion: string;
+	profileLinks: readonly ProfileLink[];
 	sections: readonly SelfIntroductionSection[];
 	mobileCareer: MobileCareer;
 }
@@ -67,7 +73,11 @@ export const selfIntroduction: SelfIntroduction = {
 	name: "김중원",
 	role: "웹·모바일 풀스택 개발자",
 	downloadFileName: "김중원-자기소개서.docx",
-	documentVersion: "20261103-mobile-career",
+	documentVersion: "20261103-profile-links",
+	profileLinks: [
+		{ label: "AI 경력 Q&A", href: "https://onjitda.com/dolmen" },
+		{ label: "GitHub", href: "https://github.com/kimjoongwon" },
+	],
 	sections: [
 		{
 			title: "업무를 이해하고 구조로 정리합니다",
@@ -158,7 +168,7 @@ export const selfIntroduction: SelfIntroduction = {
 				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
 				technologies: "CodePush",
 				responsibilities:
-					"CodePush 도입·운영, JavaScript 업데이트 배포 체계 구축, 앱 버전·릴리스 관리 및 모바일 장애 대응.",
+					"iOS·Android 양 플랫폼의 CodePush 도입·운영 및 JavaScript 업데이트 배포 체계 구축, 앱 버전·릴리스 관리 및 모바일 장애 대응.",
 			},
 			{
 				period: "2026.05–현재",

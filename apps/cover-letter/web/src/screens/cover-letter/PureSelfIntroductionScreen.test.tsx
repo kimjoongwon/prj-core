@@ -45,7 +45,7 @@ describe("PureSelfIntroductionScreen", () => {
 			const { createRoot } = await import("react-dom/client");
 			const root = createRoot(applicationRoot);
 			const downloadHref =
-				"/cover-letter/documents/%EA%B9%80%EC%A4%91%EC%9B%90-%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C%EC%84%9C.docx?v=20261103-mobile-career";
+				`/cover-letter/documents/%EA%B9%80%EC%A4%91%EC%9B%90-%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C%EC%84%9C.docx?v=${selfIntroduction.documentVersion}`;
 
 			await act(async () => {
 				root.render(
@@ -63,6 +63,17 @@ describe("PureSelfIntroductionScreen", () => {
 			);
 			assert.match(applicationRoot.textContent ?? "", new RegExp(selfIntroduction.name));
 			assert.match(applicationRoot.textContent ?? "", new RegExp(selfIntroduction.role));
+			const profileLinks = applicationRoot.querySelectorAll(
+				".self-introduction-screen__profiles a",
+			);
+			assert.equal(profileLinks.length, 2);
+			for (const [index, profileLink] of selfIntroduction.profileLinks.entries()) {
+				const renderedProfileLink = profileLinks[index];
+				assert.equal(renderedProfileLink.textContent, profileLink.label);
+				assert.equal(renderedProfileLink.getAttribute("href"), profileLink.href);
+				assert.equal(renderedProfileLink.getAttribute("target"), "_blank");
+				assert.equal(renderedProfileLink.getAttribute("rel"), "noreferrer");
+			}
 
 			const renderedSections = applicationRoot.querySelectorAll(
 				".self-introduction-screen__section",
@@ -148,7 +159,9 @@ describe("PureSelfIntroductionScreen", () => {
 				/MyHub.*ELPG.*WEGO.*WEGO\+.*두산 밥캣.*mySUNI.*Connect mySUNI.*FCM/,
 			);
 
-			const downloadLink = applicationRoot.querySelector("a");
+			const downloadLink = applicationRoot.querySelector(
+				".self-introduction-screen__footer a",
+			);
 			assert.ok(downloadLink);
 			assert.equal(downloadLink.getAttribute("href"), downloadHref);
 			assert.match(

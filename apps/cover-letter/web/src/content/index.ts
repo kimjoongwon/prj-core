@@ -8,6 +8,7 @@ export {
 	type MobileCommonCapabilityColumn,
 	type MobileCommonCapabilityColumnKey,
 	type MobileCommonCapabilityEntry,
+	type ProfileLink,
 	type SelfIntroduction,
 	type SelfIntroductionSection,
 } from "./self-introduction";
