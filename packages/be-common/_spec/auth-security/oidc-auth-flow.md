@@ -77,7 +77,7 @@ sequenceDiagram
 
 | 단계 | 파일 | 핵심 로직 |
 |------|------|----------|
-| 로그인 시작 | `apps/admin/web/src/app/auth/login/page.tsx` | `/api/v1/auth/oidc/login`으로 이동 |
+| 로그인 시작 | `apps/admin/web/src/app/auth/login/route.ts` | `/api/v1/auth/oidc/login`으로 307 이동 (OIDC 로그인 UI는 idp-web 소유) |
 | Authorization URL 생성 | `packages/be-usecase/src/auth/get-auth-login-redirect.usecase.ts` | `GetAuthLoginRedirectUseCase` - scope: `openid profile email roles` |
 | State 저장 (Redis) | `packages/be-service/src/auth/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
 | IDP 리다이렉트 | `packages/be-controller/src/auth/auth.controller.ts` | `login()` - Authorization URL로 redirect |
@@ -529,7 +529,7 @@ packages/be-service/src/idp/
 
 | 파일 | 역할 |
 |------|------|
-| `apps/admin/web/src/app/auth/login/page.tsx` | 로그인 페이지 (OIDC 리다이렉트) |
+| `apps/admin/web/src/app/auth/login/route.ts` | 로그인 진입 Route Handler (OIDC 리다이렉트) |
 | `apps/admin/web/next.config.ts` | API 프록시 설정 (rewrite: `/api/v1/*` → Core API) |
 | `packages/fe-api/src/libs/customFetch.ts` | fetch 클라이언트 (401 토큰 갱신·재시도, 세션/tenant 헤더 주입) |
 | `packages/fe-store/src/stores/account/authSession.ts` | 인증 상태 관리 (로그아웃 처리) |

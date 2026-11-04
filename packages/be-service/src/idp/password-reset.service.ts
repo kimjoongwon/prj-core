@@ -21,6 +21,7 @@ import {
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EmailService } from "../email/email.service";
+import type { OidcConfig } from "../oidc/oidc-config";
 import { RedisService } from "../redis/redis.service";
 import {
 	RESET_TOKEN_PREFIX,
@@ -47,9 +48,9 @@ export class PasswordResetService {
 		private readonly redisService: RedisService,
 		private readonly configService: ConfigService,
 	) {
-		this.authInteractionBaseUrl =
-			this.configService.get<string>("OIDC_INTERACTION_BASE_URL") ||
-			"http://localhost:3000/admin";
+		this.authInteractionBaseUrl = this.configService.getOrThrow<OidcConfig>(
+			"oidc",
+		).interactionBaseUrl;
 	}
 
 	/**
@@ -105,7 +106,7 @@ export class PasswordResetService {
 		// 사용자 조회 (없으면 조용히 종료)
 		const user =
 			await this.directUserRepository.findByEmailForAuth(normalizedEmail);
-		if (!user || !user.isActive) {
+		if (!user?.isActive) {
 			this.logger.debug(
 				`재설정 요청 무시 (사용자 미존재 또는 비활성): ${normalizedEmail}`,
 			);
