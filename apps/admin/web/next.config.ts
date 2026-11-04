@@ -76,23 +76,6 @@ const nextConfig: NextConfig = {
 					destination: `${idpApiInternalUrl}/api/v1/oidc-sessions/:path*`,
 					basePath: false,
 				},
-				// 비밀번호 재설정 → core-api(prod에서 /api Prefix 폴백이 core로 보내는
-				// 것과 같은 계약)
-				{
-					source: "/api/forgot-password",
-					destination: `${coreApiInternalUrl}/api/forgot-password`,
-					basePath: false,
-				},
-				{
-					source: "/api/password-policy",
-					destination: `${coreApiInternalUrl}/api/password-policy`,
-					basePath: false,
-				},
-				{
-					source: "/api/reset-password/:path*",
-					destination: `${coreApiInternalUrl}/api/reset-password/:path*`,
-					basePath: false,
-				},
 				// 나머지 → main server (port 3006)
 				{
 					source: "/api/v1/:path*",

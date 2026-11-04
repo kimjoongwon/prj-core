@@ -206,7 +206,7 @@ interface SessionCardProps {
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `apps/admin/web/src/app/auth/(flow)/forgot-password/` |
+| **위치** | `apps/idp/web/src/app/auth/(flow)/forgot-password/` |
 | **용도** | 비밀번호 찾기 이메일 입력 + 발송 확인 |
 
 **상태**:
@@ -218,7 +218,7 @@ interface SessionCardProps {
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `apps/admin/web/src/app/auth/(flow)/reset-password/[token]/` |
+| **위치** | `apps/idp/web/src/app/auth/(flow)/reset-password/[token]/` |
 | **용도** | 새 비밀번호 입력 + 정책 검증 |
 
 **상태**:

@@ -54,7 +54,7 @@ export const oidcConfig = registerAs("oidc", (): OidcConfig => {
 		cookieKeys: [cookieSecret],
 		jwksUri: process.env.OIDC_JWKS_URI || `${issuer}/oidc/jwks`,
 		interactionBaseUrl:
-			process.env.OIDC_INTERACTION_BASE_URL || `${adminBaseUrl}/admin`,
+			process.env.OIDC_INTERACTION_BASE_URL || "http://localhost:3008",
 		...(jwks ? { jwks } : {}),
 	};
 });
