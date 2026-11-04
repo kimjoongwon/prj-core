@@ -196,9 +196,8 @@ const idpWebServer = {
 
 const adminWebServer = {
 	command: `CORE_API_INTERNAL_URL="${coreApiInternalUrl}" IDP_API_INTERNAL_URL="${idpApiInternalUrl}" pnpm --filter=admin-web exec next dev --webpack -p "\${ADMIN_WEB_PORT:-3000}"`,
-	// /admin/auth/login은 이제 307 리다이렉트라 준비 확인용 200 응답이 아니므로
-	// 렌더만 되는 폼 페이지로 프로브한다.
-	url: new URL("/admin/auth/forgot-password", adminBaseUrl).toString(),
+	// Admin은 OIDC 로그인 진입점만 소유하며, 인증 화면은 idp-web이 렌더한다.
+	url: new URL("/admin/auth/login", adminBaseUrl).toString(),
 	reuseExistingServer,
 	timeout: 120000,
 	cwd: "../../..",

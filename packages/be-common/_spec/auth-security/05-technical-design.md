@@ -442,7 +442,7 @@ describe("LoginForm 강화", () => {
   it("실패 시 남은 시도 횟수가 표시되어야 한다")
   it("일시 잠금 시 Alert와 잠금 해제 시간이 표시되어야 한다")
   it("영구 잠금 시 비밀번호 재설정/관리자 문의 링크가 표시되어야 한다")
-  it("비밀번호를 잊으셨나요 링크가 /forgot-password로 이동해야 한다")
+  it("비밀번호를 잊으셨나요 링크가 IDP의 /auth/forgot-password로 이동해야 한다")
 })
 
 describe("ForgotPasswordForm", () => {
@@ -490,8 +490,8 @@ describe("SessionCard", () => {
 10. 이메일 서비스 (packages/be-service, Nodemailer + SMTP)
 11. PasswordResetModule (idp-server: 요청/검증/실행)
 12. 비밀번호 정책 표시 (packages/fe-ui)
-13. /forgot-password 페이지 (idp-client)
-14. /reset-password/[token] 페이지 (idp-client)
+13. idp-web /auth/forgot-password 페이지
+14. idp-web /auth/reset-password/[token] 페이지
 15. 비밀번호 변경 API (main server)
 16. /my-account/change-password 페이지 (admin)
 ```
@@ -536,7 +536,7 @@ describe("SessionCard", () => {
 | `apps/core/api/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
 | `packages/be-controller/src/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
 | `packages/be-usecase/src/auth/logout-with-cookie.usecase.ts` | logoutWithCookie 강화 |
-| `apps/admin/web/src/app/auth/(flow)/interaction/[uid]/page.tsx` | 잠금 UI, 남은 시도, 링크 |
+| `apps/idp/web/src/app/auth/(flow)/login/[uid]/page.tsx` | 잠금 UI, 남은 시도, 링크 |
 
 ### Phase 2
 
@@ -546,8 +546,8 @@ describe("SessionCard", () => {
 | `packages/be-common/src/utils/password-policy.ts` | 신규 |
 | `packages/be-service/src/email/email.service.ts` | 신규 |
 | `apps/core/api/src/module/password-reset/` | 신규 모듈 |
-| `apps/admin/web/src/app/auth/(flow)/forgot-password/` | 신규 페이지 |
-| `apps/admin/web/src/app/auth/(flow)/reset-password/[token]/` | 신규 페이지 |
+| `apps/idp/web/src/app/auth/(flow)/forgot-password/` | 인증 소유 페이지 |
+| `apps/idp/web/src/app/auth/(flow)/reset-password/[token]/` | 인증 소유 페이지 |
 | 각 비밀번호 입력 Form 내부 | 비밀번호 정책 표시 |
 | `apps/admin/web/src/app/(admin)/my-account/change-password/` | 신규 페이지 |
 
