@@ -7,8 +7,9 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, ValidationError
 from starlette.concurrency import run_in_threadpool
 
-from app.agent import build_resume_context, get_dolmen_llm
+from app.agent import build_resume_context
 from app.evaluation import judge_answer_once, judge_result
+from app.llm import read_llm_config
 from app.rag import dolmen_rag_service
 from app.resume import is_private_resume_question, sanitize_resume_text
 from app.settings import RETRIEVED_GROUNDS_LIMIT, is_debug_enabled
@@ -64,7 +65,7 @@ def evaluate_current_answer(judge_request: JudgeRequestBody) -> dict:
             sanitized_question,
             judge_request.answer,
             built_context.grounds,
-            get_dolmen_llm(),
+            read_llm_config(),
             resume_pages=built_context.resume_pages,
         )
     except Exception:

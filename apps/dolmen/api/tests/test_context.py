@@ -7,8 +7,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 from fastapi.testclient import TestClient
-from hello_agents import SimpleAgent
-from hello_agents.core.message import Message
+from langchain_core.messages import AIMessageChunk, convert_to_messages
 
 from app.agent import DolmenAgentService
 from app.context import build_context, estimate_input_tokens
@@ -17,6 +16,14 @@ from app.main import create_app
 from app.rag import ResumeReplyContext, RetrievedGround
 from app.resume import ResumePage
 from app.settings import ContextSettings, ResumeSettings, read_context_settings
+
+
+def history_message(content, role):
+    return convert_to_messages([(role, content)])[0]
+
+
+def completed_chunks(text="가상지원자님은 Python을 사용했습니다. (1쪽)"):
+    return iter([AIMessageChunk(content=text, response_metadata={"finish_reason": "stop"})])
 
 
 def ground(text, page=1, chunk_id="synthetic"):
@@ -68,7 +75,7 @@ class ContextBuilderTests(unittest.TestCase):
 
     def test_actual_native_message_estimate_is_budgeted_and_output_reserve_is_separate(self):
         pages = [ResumePage(1, "합성 경력")]
-        history = [Message("이전 질문", "user"), Message("이전 답변", "assistant")]
+        history = [history_message("이전 질문", "user"), history_message("이전 답변", "assistant")]
         result = self.build(pages, history=history)
         messages = [
             {"role": "system", "content": result.system_prompt},
@@ -124,7 +131,7 @@ class ContextBuilderTests(unittest.TestCase):
         for question in ["old", "recent", "recent", "latest"]:
             history.extend(
                 [
-                    Message(
+                    history_message(
                         json.dumps(
                             {
                                 "untrusted_interviewer_question": question,
@@ -133,7 +140,7 @@ class ContextBuilderTests(unittest.TestCase):
                         ),
                         "user",
                     ),
-                    Message("후속 답변", "assistant"),
+                    history_message("후속 답변", "assistant"),
                 ]
             )
         result = self.build([ResumePage(1, "현재 경력")], history=history)
@@ -158,7 +165,10 @@ class ContextBuilderTests(unittest.TestCase):
     def test_history_is_dropped_before_full_resume_and_only_as_complete_turns(self):
         pages = [ResumePage(1, "업무 경력")]
         base = self.build(pages)
-        history = [Message("오래된 질문" * 300, "user"), Message("오래된 답변" * 300, "assistant")]
+        history = [
+            history_message("오래된 질문" * 300, "user"),
+            history_message("오래된 답변" * 300, "assistant"),
+        ]
         result = self.build(
             pages, history=history, limit=base.diagnostic["budget"]["estimated_input_tokens"] + 10
         )
@@ -246,27 +256,37 @@ class ContextIntegrationTests(unittest.TestCase):
                 )
 
     def test_snapshot_precedes_provider_and_cancel_before_provider_releases_session(self):
-        with patch("app.agent.SimpleAgent") as factory:
+        with patch.object(self.service._llm, "stream") as factory:
             stream = self.stream()
             snapshot = next(stream)
             self.assertEqual(snapshot.status, "ready")
-            factory.return_value.stream_run.assert_not_called()
+            factory.assert_not_called()
             stream.close()
             self.assertEqual(self.service._active_sessions, set())
-            factory.return_value.stream_run.assert_not_called()
+            factory.assert_not_called()
 
     def test_actual_sdk_messages_match_estimate_and_output_max_tokens(self):
         actual_messages, kwargs_list = [], []
 
-        def reply(agent, prompt, **kwargs):
-            actual_messages.append(agent._build_messages(prompt))
+        def reply(messages, **kwargs):
+            actual_messages.append(
+                [
+                    {
+                        "role": {"human": "user", "ai": "assistant"}.get(
+                            message.type, message.type
+                        ),
+                        "content": message.content,
+                    }
+                    for message in messages
+                ]
+            )
             kwargs_list.append(kwargs)
-            yield "가상지원자님은 Python을 사용했습니다. (1쪽)"
+            yield from completed_chunks()
 
-        with patch.object(SimpleAgent, "stream_run", reply):
-            stream = self.stream()
-            snapshot = next(stream)
-            list(stream)
+        self.service._llm.stream.side_effect = reply
+        stream = self.stream()
+        snapshot = next(stream)
+        list(stream)
         self.assertEqual(
             estimate_input_tokens(actual_messages[0]),
             snapshot.diagnostic["budget"]["estimated_input_tokens"],
@@ -275,7 +295,7 @@ class ContextIntegrationTests(unittest.TestCase):
 
     def test_budget_failure_blocks_model_and_has_one_error_terminal(self):
         with patch.dict("os.environ", {"DOLMEN_CONTEXT_INPUT_TOKEN_LIMIT": "1024"}):
-            with patch("app.agent.SimpleAgent") as factory:
+            with patch.object(self.service._llm, "stream") as factory:
                 response = self.post()
         data = events(response)
         snapshot = next(event for event in data if event.get("event") == "context_built")
@@ -289,8 +309,8 @@ class ContextIntegrationTests(unittest.TestCase):
         factory.assert_not_called()
 
     def test_model_context_and_evaluation_are_before_terminal_and_share_uuid(self):
-        with patch("app.agent.SimpleAgent") as factory:
-            factory.return_value.stream_run.return_value = ["가상지원자님은 Python 사용. (1쪽)"]
+        with patch.object(self.service._llm, "stream") as factory:
+            factory.return_value = completed_chunks()
             response = self.post()
         data = events(response)
         names = [event.get("event", event["type"]) for event in data]
@@ -316,8 +336,8 @@ class ContextIntegrationTests(unittest.TestCase):
                     else "app.routes.chat.evaluate_answer"
                 )
                 with patch(target, side_effect=RuntimeError("PRIVATE_DIAGNOSTIC")):
-                    with patch("app.agent.SimpleAgent") as factory:
-                        factory.return_value.stream_run.return_value = ["가상지원자님 (1쪽)"]
+                    with patch.object(self.service._llm, "stream") as factory:
+                        factory.return_value = completed_chunks("가상지원자님 (1쪽)")
                         response = self.post()
                 data = events(response)
                 self.assertEqual(data[-1], {"type": "done"})
@@ -325,7 +345,7 @@ class ContextIntegrationTests(unittest.TestCase):
                 self.assertNotIn("PRIVATE_DIAGNOSTIC", response.text)
 
     def test_local_guards_skip_context_and_evaluation_and_never_call_model(self):
-        with patch("app.agent.SimpleAgent") as factory:
+        with patch.object(self.service._llm, "stream") as factory:
             response = self.post("전화번호는?")
         data = events(response)
         self.assertNotIn("context_built", [event.get("event") for event in data])
@@ -335,15 +355,15 @@ class ContextIntegrationTests(unittest.TestCase):
 
     def test_diagnostics_are_absent_when_debug_disabled(self):
         with patch.dict("os.environ", {"DOLMEN_DEBUG_ENABLED": "false"}):
-            with patch("app.agent.SimpleAgent") as factory:
-                factory.return_value.stream_run.return_value = ["가상지원자님 (1쪽)"]
+            with patch.object(self.service._llm, "stream") as factory:
+                factory.return_value = completed_chunks("가상지원자님 (1쪽)")
                 response = self.post()
         self.assertNotIn("debug", [event["type"] for event in events(response)])
 
     def test_invalid_evaluation_payload_cannot_expose_arbitrary_text(self):
         with patch("app.routes.chat.evaluate_answer", return_value={"raw": "PRIVATE_PROMPT"}):
-            with patch("app.agent.SimpleAgent") as factory:
-                factory.return_value.stream_run.return_value = ["가상지원자님 (1쪽)"]
+            with patch.object(self.service._llm, "stream") as factory:
+                factory.return_value = completed_chunks("가상지원자님 (1쪽)")
                 response = self.post()
         self.assertNotIn("PRIVATE_PROMPT", response.text)
         self.assertEqual(events(response)[-1], {"type": "done"})

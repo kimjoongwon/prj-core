@@ -88,8 +88,8 @@ Judge payload에만 적용한다. 같은 문맥 정책·예산에서 이력은 �
 
 SDK timeout과 전체 비동기 요청 deadline은 각각 15초, `max_retries=0`, 출력 상한은 700 tokens다.
 [공식 Python SDK 문서](https://developers.openai.com/api/reference/python)의
-timeout/재시도 계약과 설치된 SDK 구현을 확인했다. 기존 HelloAgents의 공개 설정을
-재사용하는 OpenAI 호환 제공자만 지원하며 다른 제공자는 `unsupported_provider`다. 전체 근거는
+timeout/재시도 계약과 설치된 SDK 구현을 확인했다. `app.llm.LLMConfig`의 명시적 접속 설정을
+사용하는 OpenAI 호환 제공자만 지원하며 다른 제공자는 `unsupported_provider`다. 전체 근거는
 16000자 이하이며 전체 쪽을 제공할 때 검색 조각 본문은 중복 전송하지 않고 출처만 포함한다.
 system/JSON/질문/답변/근거와 메시지 포장을 합친 UTF-8 bytes는
 `min(ContextSettings.input_token_limit, 65536)`
@@ -111,8 +111,8 @@ uv run --no-sync python scripts/evaluate.py --mode provider --judge --max-cases 
 ```
 
 `synthetic_tasks.json`의 가상 회사·이력서·가짜 연락처만 사용한다. 실제 등록 이력서 경로를 읽지 않는다.
-실제 PDF 생성 → 기존 PDF 추출/개인정보 정제 → 임시 RAGStore → 등록본 검색 → `/api/chat` SSE →
-`DolmenAgentService`와 `SimpleAgent` → 규칙 검사 경로를 재사용한다.
+실제 PDF 생성 → 기존 PDF 추출/개인정보 정제 → 임시 SQLite 문서 snapshot·LangChain Qdrant 색인 → 등록본 검색 → `/api/chat` SSE →
+`DolmenAgentService`와 LangChain 모델 스트리밍 → 규칙 검사 경로를 재사용한다.
 
 `deterministic`은 검색 백엔드와 LLM 응답만 고정 대역으로 바꾼 **계약 회귀**다. prompt와 응답 전달,
 정제·로컬 거절·예산 경계의 연결을 검증하지만 모델의 지시 준수나 의미 이해를 검증하지 않는다.
@@ -133,3 +133,14 @@ uv run --no-sync python scripts/evaluate.py --mode provider --judge --max-cases 
 사람은 provider 결과의 질문, 답변, 가상 원본의 회사/프로젝트/기술 경계, 작성 기준일, 미기재 안내와
 개인정보 거절을 대조하고 `human_review: pending`을 별도 검토 기록에서 승인/수정 필요로 판정한다.
 모델 의견과 사람이 검증한 사실을 같은 점수로 합치지 않는다.
+
+
+### 실제 임베딩 통합 회귀
+
+```bash
+DOLMEN_EMBEDDING_CACHE_DIR=/tmp/dolmen-langchain-fastembed-cache DOLMEN_TEST_REAL_EMBEDDINGS=true uv run --no-sync python -m unittest tests.test_rag_real_embeddings -q
+```
+
+실제 FastEmbed 모델과 로컬 Qdrant를 사용하며 최초 실행에는 모델 다운로드가 필요하다. 합성 한글
+이력서의 회사별 검색·출처·정제 경계와 passage/query 임베딩 동등성을 검증한다. 고정 대역을 쓰는
+기본 계약 테스트와 구분하며 실제 모델 응답의 품질이나 전체 정답률을 뜻하지 않는다.

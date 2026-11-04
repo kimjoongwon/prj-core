@@ -6,13 +6,24 @@ Dolmen은 면접관이 등록된 이력서에 대해 질문하면 모모가 지�
 
 화면 왼쪽은 모모와 질문·답변을 주고받는 채팅 영역이며, 오른쪽은 등록 데이터와 요청별 처리 기록을 펼쳐 보는 개발용 패널이다. 데이터 출처·정제 발췌·검색 점수와 실제 처리 이벤트의 경과 시간을 확인할 수 있다. 개발 정보 수집은 기본적으로 꺼져 있으며, API의 `DOLMEN_DEBUG_ENABLED=true` 설정으로 활성화한다.
 
+## 모델과 검색 구성
+
+FastAPI가 HTTP와 SSE를 제공하고, LangChain `ChatOpenAI`가 기존 OpenAI 호환 Chat Completions
+제공자에 연결한다. 검색은 LangChain `Document`와 `QdrantVectorStore`, 로컬 FastEmbed를 사용한다.
+질문 전에 정제 이력서를 검색하고 앱의 컨텍스트 정책으로 답변 입력을 구성하는 2-step RAG다.
+프레임워크에 대화 이력을 위임하지 않으며 성공한 전체 턴만 앱이 보관한다.
+
+문서 revision·활성 snapshot은 프레임워크 독립 SQLite 저장소가 소유한다. 새 검색 인덱스는
+정제 PDF에서 다시 생성하고, 이전 구현의 인덱스를 수정하거나 재사용하지 않는다. 모델 제공자와
+웹 공개 API는 동일하며 LangGraph·외부 tracing 활성화·새 데이터베이스 서버는 이 전환에 포함하지 않는다.
+
 ## 컨텍스트 관리와 평가
 
 답변 입력은 수집(Gather) → 선택(Select) → 구조화(Structure) → 압축(Compress) 단계로 구성한다. 작은 이력서는 쪽별 문맥을 함께 유지하고, 중복 검색 본문과 과거 턴에 반복된 자료를 줄인다. 입력 예산이 부족하면 오래된 대화부터 제외하며, 회사·프로젝트의 소속 관계를 깨는 임의의 본문 절단을 피한다. 오른쪽 패널에서 각 단계의 개수, 선택·제외 이유, 앱 입력 예산과 정제 발췌를 확인한다. 토큰 추정치는 제공자의 실제 청구 사용량과 구분한다.
 
 정상 답변에는 인용·표현·개인정보 관련 규칙 검사를 붙인다. 규칙 검사는 정답률이나 사실성 보증이 아니다. 별도의 LLM 평가 버튼은 기존 제공자를 한 번 호출해 근거 충실도·질문 관련성·답변 완결성을 평가한다. 평가 모델의 점수는 자동 검사와 분리하며, 평가 실패가 원래 답변의 완료 상태를 바꾸지 않는다. 지연·재시도·실패·취소 지표는 현재 브라우저에서 관측한 요청 범위로 한정한다.
 
-이 구성은 Hello-Agents의 [컨텍스트 엔지니어링](https://github.com/datawhalechina/hello-agents/blob/main/docs/chapter9/Chapter9-Context-Engineering.md)과 [에이전트 성능 평가](https://github.com/datawhalechina/hello-agents/blob/main/docs/chapter12/Chapter12-Agent-Performance-Evaluation.md)를 이력서 Q&A에 맞춰 적용한 것이다. 명령 실행·범용 메모리 도구와 외부 벤치마크 전체를 서비스에 연결하지는 않는다. 합성 이력서의 회귀 검증과 실제 제공자 응답 평가는 구분해 실행한다. 공개 계약과 평가 실행법은 [API 안내](./api/README.md)를 따른다.
+컨텍스트와 평가의 초기 학습 설계는 Hello-Agents의 [컨텍스트 엔지니어링](https://github.com/datawhalechina/hello-agents/blob/main/docs/chapter9/Chapter9-Context-Engineering.md)과 [에이전트 성능 평가](https://github.com/datawhalechina/hello-agents/blob/main/docs/chapter12/Chapter12-Agent-Performance-Evaluation.md)를 참고해 이력서 Q&A에 맞춰 작성했다. 현재 런타임은 LangChain을 사용하며 HelloAgents 패키지에 의존하지 않는다. 명령 실행·범용 메모리 도구와 외부 벤치마크 전체를 서비스에 연결하지는 않는다. 합성 이력서의 회귀 검증과 실제 제공자 응답 평가는 구분해 실행한다. 공개 계약과 평가 실행법은 [API 안내](./api/README.md)를 따른다.
 
 ## 이력서 등록
 
