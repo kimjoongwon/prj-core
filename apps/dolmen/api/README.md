@@ -4,6 +4,23 @@
 개발용 데이터·실행 관측은 서버의 `DOLMEN_DEBUG_ENABLED=true`일 때만 제공하며 기본값은 `false`다.
 운영에서는 활성화하지 않는다. 클라이언트가 플래그를 지정하거나 쿼리로 우회할 수 없다.
 
+## LangChain 실행과 이력서 색인
+
+`langchain-core`의 메시지, `langchain-openai`의 `ChatOpenAI`, `langchain-qdrant`의
+`QdrantVectorStore`를 사용한다. FastEmbed는 `Embeddings` 인터페이스에 연결하고 기존 문서
+`passage_embed`·질문 `query_embed` 전처리와 다국어 MiniLM 384차원을 유지한다.
+LLM 설정은 `app/llm.py`가 소유하며 `LLM_API_KEY`, `LLM_MODEL_ID`, `LLM_BASE_URL`을
+명시적으로 매핑한다. `LLM_TIMEOUT`은 양의 유한 초 단위 값이고 기본 60초다. SDK 내부 재시도는
+0이며, 첫 답변 조각 이전의 앱 재시도만 기존 HTTP 계층이 관리한다. 생성 temperature는 기존과 같은
+0.7을 명시한다.
+
+문서와 활성 revision은 `.rag/resume/resume-documents.sqlite3`, 벡터는
+`.rag/resume/qdrant-langchain-v1`의 `dolmen_resume_langchain_v1` collection에 보관한다.
+색인 버전은 `resume-langchain-passage-query-v1`이다. 구 `documents.db`와 `qdrant`는 열거나
+변경하지 않고, 정제 PDF를 새 저장소에 수집한다. 문서 집합을 준비한 뒤 벡터 색인을 동기화하고
+성공한 snapshot만 활성화한다. 실패한 수집·검색은 이전 등록본으로 답하지 않고 준비 오류로 차단한다.
+파드 재생성 시 재색인하는 기존 운영 방식은 유지하며 영속 서버 전환은 별도 작업이다.
+
 ## 등록 데이터 상태
 
 `GET /api/documents`는 기존 `revision`, `sources`, `resume_configured`, `resume_ready`,
@@ -85,7 +102,7 @@
 
 ```bash
 uv run --no-sync python -m unittest discover -s tests -q
-uv run --no-sync ruff check app tests
+uv run --no-sync ruff check app tests scripts
 uv lock --check
 ```
 
@@ -121,7 +138,7 @@ SDK의 iterator 정리가 끝난 뒤 이번 질문의 예산 선택 전 정상 �
 
 같은 등록본·세션에서는 최근 후속 질문을 유지한다. 등록본 revision 변경 시 이전 세션 전체를
 초기화하고 진행 중인 이전 등록본 응답도 중단한다. 세션 최대 50개, 최근 전체 2턴 보관,
-토큰 카운터 캐시 정리 정책을 유지한다.
+성공 턴만 앱의 세션 이력에 반영하는 정책을 유지한다.
 
 ## 컨텍스트 스냅샷과 규칙 평가 SSE
 
@@ -181,8 +198,8 @@ reason=context_budget_exceeded) → answer_evaluated(skipped) → error`이며 �
 형식·개인정보 패턴 검사이며 답변의 정답률을 뜻하지 않는다. 단순 패턴이므로 사람의 검토가 필요하다.
 
 평가 생성·진단 생성·직렬화 오류는 답변/재시도/기존 종료 이벤트를 바꾸지 않는다.
-`done` 또는 `error`는 요청마다 한 번이며, 그 뒤에는 추가 이벤트가 없다. 공유 LLM의 last_call_stats는 동시성·stale 값을 구분할 수 없어 읽지 않는다.
-대신 아래 요청별 RunResult에서 확인된 usage만 제공한다. `first_chunk.elapsed_ms`는 수집한 경우
+`done` 또는 `error`는 요청마다 한 번이며, 그 뒤에는 추가 이벤트가 없다. 공유 모델의 누적 통계는 읽지 않는다.
+대신 해당 요청의 LangChain 청크에서 확인한 종료 사유와 usage만 제공한다. `first_chunk.elapsed_ms`는 수집한 경우
 서버 관측 시작부터 첫 답변까지 실제 경과시간이며 공급자 token usage가 아니다.
 
 ## 선택적 모델 평가와 오프라인 평가
@@ -200,18 +217,20 @@ reason=context_budget_exceeded) → answer_evaluated(skipped) → error`이며 �
 
 ## 출력 종료 경계와 요청별 사용량
 
-모델 iterator가 정상 소진돼도 SDK의 `SimpleAgent.last_run.status=output_limit` 또는
+모델 iterator가 정상 소진돼도 요청별 `ReplyRunOutcome.status=output_limit` 또는
 `stop_reason=length|max_tokens|max_output_tokens`이면 잘린 답변이다. 공개 본문이 전혀 없는
 경우도 `empty_reply` 대신 `output_limit`로 기록한다. 부분 본문이 이미 표시된 경우에도
 `reply_failed(reason=output_limit) → answer_evaluated(skipped) → error`로 종료하며 `done`을
 보내거나 자동 재시도하지 않는다. 질문 범위를 줄여 다시 요청할 수 있다. 실패 턴은 정상 대화에
-저장하지 않는다. 다른 비정상 `RunResult.status`, 또는 `content_filter/tool_calls` 종료도
+저장하지 않는다. 비정상 종료 사유 또는 `content_filter/tool_calls` 종료도
 `incomplete_reply`로 처리한다. 실제 오류의 원인이 출력 상한인지 여부는 관측된 종료 사유로만
 판정하며, 빈 본문이나 지연만 보고 추정하지 않는다. 기본 출력 예약값 2048은 그대로 유지한다.
 
 개발 모드의 `reply_metrics`는 종료 결과가 생성된 시점, 기존 종료 이벤트 전에 추가된다.
-같은 세션의 `last_run`이 호출 전과 다른 **이번 요청의 새 결과 객체**인 경우만 읽는다.
-이 세션은 중복 실행을 차단하므로 다른 세션·이전 요청의 결과를 섞지 않는다.
+요청마다 새 `ReplyRunOutcome`으로 LangChain 청크의 `response_metadata.finish_reason`과
+`usage_metadata`를 수집한다. usage-only 마지막 청크도 소비하며, 사용량을 세션·재시도 간에
+누적하지 않는다. OpenAI 호환 제공자가 매 청크에 누적 usage를 반복해 보내도 합산하지 않고
+마지막 유효 snapshot을 사용한다. 다른 세션이나 이전 요청의 결과를 섞지 않는다.
 
 - `attempt`: 이번 응답 시도 번호.
 - `run_status`: `completed/output_limit/max_iterations/cancelled/budget_exhausted/failed/running/unknown`.

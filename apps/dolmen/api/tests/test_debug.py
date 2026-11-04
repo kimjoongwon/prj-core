@@ -7,6 +7,7 @@ from unittest.mock import Mock, patch
 from uuid import UUID
 
 from fastapi.testclient import TestClient
+from langchain_core.messages import AIMessageChunk
 
 from app.agent import DolmenAgentService, DolmenConfigError, build_resume_context
 from app.debug import ChatDebugTrace, safe_error_details
@@ -194,8 +195,9 @@ class DebugRouteTests(unittest.TestCase):
                 self.context = ResumeReplyContext(
                     grounds, 9, self.settings, self.context.resume_pages
                 )
-                with patch("app.agent.SimpleAgent") as model_factory:
-                    response = self.post_chat(DolmenAgentService(Mock()), question)
+                model = Mock()
+                with patch.object(model, "stream") as model_factory:
+                    response = self.post_chat(DolmenAgentService(model), question)
                 events = sse_events(response)
                 attempt = next(event for event in events if event.get("event") == "reply_attempt")
                 self.assertEqual(attempt["details"]["answer_path"], expected_path)
@@ -228,9 +230,12 @@ class DebugRouteTests(unittest.TestCase):
         sleep.assert_called_once_with(4)
 
     def test_empty_model_reply_has_failed_debug_before_error_and_no_first_chunk(self):
-        with patch("app.agent.SimpleAgent") as model_factory:
-            model_factory.return_value.stream_run.return_value = ["", " ", "\n"]
-            response = self.post_chat(DolmenAgentService(Mock()))
+        model = Mock()
+        with patch.object(model, "stream") as model_factory:
+            model_factory.return_value = [
+                AIMessageChunk(content=" ", response_metadata={"finish_reason": "stop"})
+            ]
+            response = self.post_chat(DolmenAgentService(model))
         events = sse_events(response)
         names = [event.get("event", event["type"]) for event in events]
         self.assertEqual(names[-3:], ["reply_failed", "answer_evaluated", "error"])

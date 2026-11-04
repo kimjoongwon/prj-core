@@ -1,14 +1,14 @@
 """등록 이력서만 검색하는 로컬 색인. 기존 .rag 위키 저장소와 분리한다."""
 
 import hashlib
+import math
 import os
 import re
 import threading
 from dataclasses import dataclass
 from pathlib import Path
 
-from hello_agents.retrieval import FastEmbedProvider, QdrantSearch, RAGStore
-
+from app.embeddings import ResumeFastEmbedEmbeddings
 from app.resume import (
     SANITIZER_VERSION,
     ResumePage,
@@ -17,6 +17,8 @@ from app.resume import (
     read_resume_pdf_bytes,
     split_resume_page_sections,
 )
+from app.resume_index import ResumeVectorIndex
+from app.resume_store import ResumeDocumentStore
 from app.settings import (
     DOLMEN_API_DIR,
     MAX_CHAT_HISTORY_TURNS,
@@ -33,7 +35,7 @@ DOLMEN_RAG_DIR = DOLMEN_API_DIR / ".rag" / "resume"
 DOLMEN_EMBEDDING_CACHE_DIR = os.getenv("DOLMEN_EMBEDDING_CACHE_DIR") or None
 DOLMEN_EMBEDDING_MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 DOLMEN_EMBEDDING_DIMENSION = 384
-RESUME_INDEX_VERSION = "resume-page-context-v2"
+RESUME_INDEX_VERSION = "resume-langchain-passage-query-v1"
 
 
 @dataclass(frozen=True)
@@ -73,20 +75,27 @@ class DolmenRagService:
         self._active_fingerprint: str | None = None
         self._section_count = 0
         self._resume_pages: list[ResumePage] = []
-        self.store = RAGStore(path=str(rag_dir / "documents.db"))
-        self.search_backend: QdrantSearch | None = None
+        self.store = ResumeDocumentStore(rag_dir / "resume-documents.sqlite3")
+        self.search_backend: ResumeVectorIndex | None = None
 
-    def _create_search_backend(self) -> QdrantSearch:
-        return QdrantSearch(
-            store=self.store,
-            embedding=FastEmbedProvider(
+    def _create_search_backend(self) -> ResumeVectorIndex:
+        return ResumeVectorIndex(
+            path=self._rag_dir / "qdrant-langchain-v1",
+            embedding=ResumeFastEmbedEmbeddings(
                 model_name=DOLMEN_EMBEDDING_MODEL_NAME,
                 dimension=DOLMEN_EMBEDDING_DIMENSION,
                 cache_dir=DOLMEN_EMBEDDING_CACHE_DIR,
             ),
-            path=str(self._rag_dir / "qdrant"),
-            collection="dolmen_resume",
+            dimension=DOLMEN_EMBEDDING_DIMENSION,
         )
+
+    def _invalidate_ready_state(self) -> None:
+        self._active_fingerprint = None
+        self._section_count = 0
+        self._resume_pages = []
+        if self.search_backend is not None:
+            self.search_backend.invalidate()
+        self.store.invalidate()
 
     def ensure_resume_ingested(self) -> None:
         """내용·정제 정책·작성 기준일이 바뀌면 이전 절을 철회한 뒤 새 색인으로 교체한다."""
@@ -115,46 +124,25 @@ class DolmenRagService:
                         expected_sections[document_id] = (source, section_text)
                 if not expected_sections:
                     raise ValueError
-                _, active_chunks = self.store.snapshot()
-                active_document_ids = {chunk.document_id for chunk in active_chunks}
-                can_reuse_documents = active_document_ids == set(expected_sections) and all(
-                    chunk.version.startswith(f"{fingerprint}:") for chunk in active_chunks
-                )
-                if can_reuse_documents:
-                    can_reuse_documents = all(
-                        (stored_document.source, stored_document.content)
-                        == expected_sections[document_id]
-                        for document_id in active_document_ids
-                        for stored_document in [self.store.read_document(document_id)]
-                    )
-                if not can_reuse_documents:
-                    # RAGStore는 같은 id의 새 버전을 교체하고, 줄어든 절은 명시적으로 철회한다.
-                    # revision 접미사는 A→B→A로 되돌려도 철회된 과거 버전을 재사용하지 않게 한다.
-                    version = f"{fingerprint}:{self.store.revision + 1}"
-                    for document_id, (source, section_text) in expected_sections.items():
-                        self.store.add_document(
-                            text=section_text,
-                            source=source,
-                            version=version,
-                            document_id=document_id,
-                            chunk_size=max(len(section_text), 1),
-                            overlap=0,
-                        )
-                    for document_id in active_document_ids - set(expected_sections):
-                        self.store.deactivate_document(document_id)
+                snapshot = self.store.read_active_snapshot()
+                if snapshot is None or not snapshot.matches_sections(
+                    fingerprint, expected_sections
+                ):
+                    # 전체 절을 단일 revision으로 준비하고 색인이 성공할 때만 활성화한다.
+                    # A→B→A도 새로운 revision/point id를 발급해 철회본을 재사용하지 않는다.
+                    snapshot = self.store.stage_snapshot(fingerprint, expected_sections)
                 if self.search_backend is None:
                     self.search_backend = self._create_search_backend()
-                self.search_backend.sync()
+                self.search_backend.sync(snapshot)
+                self.store.activate_snapshot(snapshot)
                 self._active_fingerprint = fingerprint
                 self._section_count = len(expected_sections)
                 self._resume_pages = resume_pages
             except ResumeUnavailableError:
-                self._active_fingerprint = None
-                self._resume_pages = []
+                self._invalidate_ready_state()
                 raise
             except Exception:
-                self._active_fingerprint = None
-                self._resume_pages = []
+                self._invalidate_ready_state()
                 raise ResumeUnavailableError(
                     "resume_not_ready",
                     "등록 이력서 색인을 준비하지 못했습니다. 서버의 색인 상태를 확인해 주세요.",
@@ -163,10 +151,14 @@ class DolmenRagService:
     def read_document_status(self) -> dict:
         with self._lock:
             self.ensure_resume_ingested()
-            _, active_chunks = self.store.snapshot()
+            snapshot = self.store.read_active_snapshot()
+            if snapshot is None:
+                raise ResumeUnavailableError(
+                    "resume_not_ready", "등록 이력서가 준비되지 않았습니다."
+                )
             document_status = {
-                "revision": self.store.revision,
-                "sources": sorted({chunk.source for chunk in active_chunks}),
+                "revision": snapshot.revision,
+                "sources": sorted({document.source for document in snapshot.documents}),
                 "resume_configured": True,
                 "resume_ready": True,
                 "section_count": self._section_count,
@@ -176,10 +168,7 @@ class DolmenRagService:
             try:
                 if is_debug_enabled():
                     # 같은 잠금·활성 snapshot의 정제 절만 읽고 전체 본문은 반환하지 않는다.
-                    active_documents = [
-                        self.store.read_document(document_id)
-                        for document_id in sorted({chunk.document_id for chunk in active_chunks})
-                    ]
+                    active_documents = snapshot.documents
                     document_status["debug"] = {
                         "page_count": len(self._resume_pages),
                         "sanitized_character_count": sum(
@@ -216,19 +205,21 @@ class DolmenRagService:
                 if self.search_backend is None:
                     raise ValueError
                 retrieval_results = self.search_backend.search(query=query, limit=limit)
+                if any(not math.isfinite(score) for _, score in retrieval_results):
+                    raise ValueError
                 return [
                     RetrievedGround(
                         chunk_id=ground.chunk_id,
                         source=ground.source,
                         version=ground.version,
-                        score=round(ground.score, 4),
+                        score=round(max(-1.0, min(1.0, cosine_score)), 4),
                         snippet=ground.content.strip()[:220],
                         content=ground.content.strip(),
                     )
-                    for ground in retrieval_results
+                    for ground, cosine_score in retrieval_results
                 ]
             except Exception:
-                self._active_fingerprint = None
+                self._invalidate_ready_state()
                 raise ResumeUnavailableError(
                     "resume_not_ready",
                     "등록 이력서 검색에 실패했습니다. 잠시 후 다시 질문해 주세요.",
@@ -243,6 +234,12 @@ class DolmenRagService:
                 resume_settings=self.resume_settings,
                 resume_pages=list(self._resume_pages),
             )
+
+    def close(self) -> None:
+        with self._lock:
+            if self.search_backend is not None:
+                self.search_backend.close()
+            self.store.close()
 
 
 _dolmen_rag_service: DolmenRagService | None = None

@@ -6,6 +6,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 from fastapi.testclient import TestClient
+from langchain_core.messages import AIMessageChunk
 
 from app.agent import DolmenAgentService
 from app.main import create_app
@@ -130,34 +131,36 @@ class ResumeRouteTests(unittest.TestCase):
     def test_real_agent_empty_reply_has_error_terminal_without_prefix_or_done(self):
         for model_chunks in ([], [" ", "\n"]):
             with self.subTest(model_chunks=model_chunks):
-                agent_service = DolmenAgentService(Mock())
+                llm = Mock()
+                llm.stream.return_value = [AIMessageChunk(content=text) for text in model_chunks]
+                agent_service = DolmenAgentService(llm)
                 with patch("app.routes.chat.dolmen_rag_service") as rag_factory:
                     rag_factory.return_value.retrieve_reply_context.return_value = (
                         self.reply_context
                     )
                     with patch("app.routes.chat.dolmen_agent_service", return_value=agent_service):
-                        with patch("app.agent.SimpleAgent") as agent_factory:
-                            agent_factory.return_value.stream_run.return_value = model_chunks
-                            response = self.client.post("/api/chat", json={
-                                "message": "경력은?", "session_id": "synthetic-session"
-                            })
+                        response = self.client.post("/api/chat", json={
+                            "message": "경력은?", "session_id": "synthetic-session"
+                        })
                 stream_events = parse_sse_events(response)
                 self.assertEqual([event["type"] for event in stream_events], ["sources", "error"])
                 self.assertNotIn("작성 이력서 기준입니다", response.text)
 
     def test_retry_with_real_agent_emits_date_once_in_first_answer_chunk(self):
-        agent_service = DolmenAgentService(Mock())
+        llm = Mock()
+        llm.stream.side_effect = [
+            RuntimeError("rate limit"),
+            iter([AIMessageChunk(content="경력 소개입니다.",
+                                 response_metadata={"finish_reason": "stop"})]),
+        ]
+        agent_service = DolmenAgentService(llm)
         with patch("app.routes.chat.dolmen_rag_service") as rag_factory:
             rag_factory.return_value.retrieve_reply_context.return_value = self.reply_context
             with patch("app.routes.chat.dolmen_agent_service", return_value=agent_service):
-                with patch("app.agent.SimpleAgent") as agent_factory:
-                    agent_factory.return_value.stream_run.side_effect = [
-                        RuntimeError("rate limit"), ["경력 소개입니다."]
-                    ]
-                    with patch("app.routes.chat.time.sleep"):
-                        response = self.client.post("/api/chat", json={
-                            "message": "경력은?", "session_id": "synthetic-session"
-                        })
+                with patch("app.routes.chat.time.sleep"):
+                    response = self.client.post("/api/chat", json={
+                        "message": "경력은?", "session_id": "synthetic-session"
+                    })
         stream_events = parse_sse_events(response)
         self.assertEqual([event["type"] for event in stream_events], [
             "sources", "status", "chunk", "done"

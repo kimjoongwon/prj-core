@@ -5,9 +5,9 @@ import json
 import threading
 import unittest
 from pathlib import Path
-from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+from langchain_core.messages import AIMessage, AIMessageChunk, HumanMessage
 from starlette.requests import ClientDisconnect
 
 from app.agent import DolmenAgentService
@@ -195,35 +195,27 @@ class SSEKeepAliveTests(unittest.IsolatedAsyncioTestCase):
         disconnect = asyncio.Event()
         saw_keep_alive = asyncio.Event()
         history = [
-            SimpleNamespace(
-                role="user",
+            HumanMessage(
                 content=json.dumps({"untrusted_interviewer_question": "이전 정상 질문"},
                                    ensure_ascii=False),
             ),
-            SimpleNamespace(role="assistant", content="이전 정상 답변"),
+            AIMessage(content="이전 정상 답변"),
         ]
         original_history = list(history)
-        fake_agent = Mock(last_run=None)
-        fake_agent.get_history.side_effect = lambda: list(history)
-        fake_agent.clear_history.side_effect = history.clear
-        fake_agent.add_message.side_effect = history.append
+        llm = Mock()
 
-        def delayed_model_reply(prompt, **kwargs):
+        def delayed_model_reply(messages, **kwargs):
             try:
                 if not release_reply.wait(2):
                     raise AssertionError("테스트가 SDK를 해제하지 않았습니다.")
-                yield "취소 직후 반환된 미완료 답변"
+                yield AIMessageChunk(content="취소 직후 반환된 미완료 답변")
             finally:
-                history.extend([
-                    SimpleNamespace(role="user", content=prompt),
-                    SimpleNamespace(role="assistant", content="SDK_SYNTHETIC_INTERRUPTED"),
-                ])
                 sdk_closed.set()
 
-        fake_agent.stream_run.side_effect = delayed_model_reply
-        agent_service = DolmenAgentService(Mock())
+        llm.stream.side_effect = delayed_model_reply
+        agent_service = DolmenAgentService(llm)
         agent_service._resume_revision = 1
-        agent_service._agents_by_session_id["session"] = fake_agent
+        agent_service._history_by_session_id["session"] = history
         ground = RetrievedGround("chunk", "등록 이력서 · 1쪽", "version", 0.9, "합성", "합성 경력")
         reply_context = ResumeReplyContext(
             [ground], 1, ResumeSettings(Path("private.pdf"), "합성지원자", "2026-09-27"),
@@ -274,8 +266,9 @@ class SSEKeepAliveTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(sdk_closed.is_set())
         self.assertEqual(agent_service._active_sessions, set())
         self.assertEqual(
-            [(message.role, message.content) for message in history],
-            [(message.role, message.content) for message in original_history],
+            [(message.type, message.content)
+             for message in agent_service._history_by_session_id["session"]],
+            [(message.type, message.content) for message in original_history],
         )
         self.assertNotIn("SDK_SYNTHETIC", str(history))
         self.assertEqual(
