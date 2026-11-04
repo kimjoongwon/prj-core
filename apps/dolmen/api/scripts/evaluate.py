@@ -14,7 +14,7 @@ API_DIRECTORY = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(API_DIRECTORY))
 
 from fastapi.testclient import TestClient  # noqa: E402
-from hello_agents import HelloAgentsLLM  # noqa: E402
+from langchain_core.messages import AIMessageChunk  # noqa: E402
 from pypdf import PdfWriter  # noqa: E402
 from pypdf.generic import (  # noqa: E402
     DecodedStreamObject,
@@ -27,44 +27,53 @@ from app.evaluation import (  # noqa: E402
     contains_private_information,
     summarize_execution_metrics,
 )
+from app.llm import LLMConfig, create_chat_model, read_llm_config  # noqa: E402
 from app.main import create_app  # noqa: E402
 from app.rag import DolmenRagService  # noqa: E402
 from app.resume import sanitize_resume_text  # noqa: E402
+from app.resume_store import ResumeSnapshot  # noqa: E402
 from app.settings import ResumeSettings, missing_llm_env_names  # noqa: E402
 
 DEFAULT_DATASET = API_DIRECTORY / "evaluation" / "synthetic_tasks.json"
 
 
 class DeterministicSearchBackend:
-    """활성 RAGStore만 검색하는 대체 검색기. 임베딩 품질을 평가하지 않는다."""
+    """활성 snapshot만 검색하는 결정적 대역. 임베딩 품질을 평가하지 않는다."""
 
-    def __init__(self, store):
-        self.store = store
+    def __init__(self):
+        self.snapshot: ResumeSnapshot | None = None
 
-    def sync(self):
-        pass
+    def sync(self, snapshot: ResumeSnapshot):
+        self.snapshot = snapshot
+
+    def invalidate(self):
+        self.snapshot = None
+
+    def close(self):
+        self.invalidate()
 
     def search(self, query, limit=5):
         # 영어 회사 식별자를 사용해 언어별 토큰화 차이가 fixture를 바꾸지 않게 한다.
         company = next((term for term in query.split() if term.startswith("SYNTHETIC_")), query)
         company = company.rstrip("의은는에서,.?역할과")
-        return self.store.search(company, limit)
+        if self.snapshot is None:
+            return []
+        return [(document, 1.0) for document in self.snapshot.documents
+                if company in document.content][:limit]
 
 
 class DeterministicReplyLlm:
-    """SimpleAgent의 실제 실행 경로에 고정 응답만 제공한다. AI 품질 측정용이 아니다."""
+    """앱의 실제 실행 경로에 native LangChain 고정 응답만 제공한다. 품질 측정용이 아니다."""
 
     model = "deterministic-fixture"
-    provider = "fixture"
-    last_call_stats = None
 
     def __init__(self):
         self.answer = ""
         self.call_count = 0
 
-    async def astream_invoke(self, messages, **kwargs):
+    def stream(self, messages, **kwargs):
         self.call_count += 1
-        yield self.answer
+        yield AIMessageChunk(content=self.answer, response_metadata={"finish_reason": "stop"})
 
 
 def write_synthetic_pdf(resume_path: Path, page_texts: list[str]) -> None:
@@ -191,7 +200,15 @@ def run_regression(mode: str, max_cases: int, max_requests: int, include_judge: 
             resume_path, dataset["candidate_name"], dataset["resume_updated_at"]
         )
         rag = DolmenRagService(settings, temporary_path / "rag")
-        llm = DeterministicReplyLlm() if mode == "deterministic" else HelloAgentsLLM(timeout=20)
+        llm_config = (
+            LLMConfig(api_key="synthetic-unused", model="deterministic-fixture",
+                      base_url="https://provider.example.test/v1")
+            if mode == "deterministic" else read_llm_config()
+        )
+        llm = (
+            DeterministicReplyLlm() if mode == "deterministic"
+            else create_chat_model(llm_config)
+        )
         try:
             with ExitStack() as stack:
                 stack.enter_context(patch.dict(os.environ, {"DOLMEN_DEBUG_ENABLED": "true"}))
@@ -200,7 +217,7 @@ def run_regression(mode: str, max_cases: int, max_requests: int, include_judge: 
                         patch.object(
                             rag,
                             "_create_search_backend",
-                            return_value=DeterministicSearchBackend(rag.store),
+                            return_value=DeterministicSearchBackend(),
                         )
                     )
                 agent_service = DolmenAgentService(llm)
@@ -212,7 +229,7 @@ def run_regression(mode: str, max_cases: int, max_requests: int, include_judge: 
                     patch("app.routes.evaluations.dolmen_rag_service", return_value=rag)
                 )
                 stack.enter_context(
-                    patch("app.routes.evaluations.get_dolmen_llm", return_value=llm)
+                    patch("app.routes.evaluations.read_llm_config", return_value=llm_config)
                 )
                 client = stack.enter_context(TestClient(create_app()))
                 for case in dataset["cases"][:max_cases]:
@@ -276,12 +293,10 @@ def run_regression(mode: str, max_cases: int, max_requests: int, include_judge: 
                         and fixture_calls != case["expected"]["fixture_model_calls"]
                     ):
                         failures.append("fixture_model_calls")
-                    # 공개 SimpleAgent history API로 보관된 턴 수만 읽는다. 내용은 출력하지 않는다.
-                    session_agent = agent_service._agents_by_session_id.get(session_id)
-                    retained_turns = (
-                        sum(message.role == "user" for message in session_agent.get_history())
-                        if session_agent
-                        else 0
+                    # 성공 턴의 개수만 수집한다. 대화 내용은 실행 지표에 넣지 않는다.
+                    retained_history = agent_service._history_by_session_id.get(session_id, [])
+                    retained_turns = sum(
+                        message.type == "human" for message in retained_history
                     )
                     if retained_turns > case["expected"].get("max_retained_history_turns", 2):
                         failures.append("retained_history_turns")
@@ -341,10 +356,8 @@ def run_regression(mode: str, max_cases: int, max_requests: int, include_judge: 
                     observations.append(observation)
         finally:
             if mode == "provider":
-                llm.close()
-            if rag.search_backend and callable(getattr(rag.search_backend, "close", None)):
-                rag.search_backend.close()
-            rag.store.close() if callable(getattr(rag.store, "close", None)) else None
+                llm.root_client.close()
+            rag.close()
     return {
         "dataset_id": dataset["dataset_id"],
         "mode": mode,

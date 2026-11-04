@@ -18,6 +18,7 @@ from app.evaluation import (
     judge_answer_once,
     summarize_execution_metrics,
 )
+from app.llm import LLMConfig
 from app.rag import ResumeReplyContext, RetrievedGround
 from app.resume import ResumePage, sanitize_resume_text
 from app.routes import evaluations
@@ -35,11 +36,8 @@ class EvaluationTests(unittest.TestCase):
             "SYNTHETIC_ALPHA Kotlin PostgreSQL",
         )
         self.answer = "가상지원자님은 SYNTHETIC_ALPHA에서 Kotlin을 사용했습니다. (1쪽)"
-        self.llm = SimpleNamespace(
-            provider="openai",
-            model="synthetic-model",
-            api_key="PRIVATE_KEY",
-            base_url="https://private.invalid/v1",
+        self.llm = LLMConfig(
+            api_key="PRIVATE_KEY", model="synthetic-model", base_url="https://private.invalid/v1"
         )
         self.verdict = {
             "scores": {"groundedness": 4, "relevance": 5, "completeness": 3},
@@ -326,7 +324,7 @@ class EvaluationRouteTests(unittest.TestCase):
         ):
             with patch("app.routes.evaluations.dolmen_rag_service") as factory:
                 factory.return_value.retrieve_reply_context.return_value = self.context
-                with patch("app.routes.evaluations.get_dolmen_llm") as llm_factory:
+                with patch("app.routes.evaluations.read_llm_config") as llm_factory:
                     response = self.client.post("/api/evaluations/judge", json=body)
             self.assertEqual(response.json()["reason"], "context_mismatch")
             llm_factory.assert_not_called()
@@ -350,7 +348,7 @@ class EvaluationRouteTests(unittest.TestCase):
             patch(
                 "app.routes.evaluations.build_resume_context", return_value=selected_context
             ) as context_builder,
-            patch("app.routes.evaluations.get_dolmen_llm") as llm_factory,
+            patch("app.routes.evaluations.read_llm_config") as llm_factory,
             patch(
                 "app.routes.evaluations.judge_answer_once", return_value={"status": "completed"}
             ) as judge,
@@ -391,7 +389,7 @@ class EvaluationRouteTests(unittest.TestCase):
         with (
             patch.dict("os.environ", {"DOLMEN_CONTEXT_INPUT_TOKEN_LIMIT": "4900"}),
             patch("app.routes.evaluations.dolmen_rag_service") as factory,
-            patch("app.routes.evaluations.get_dolmen_llm"),
+            patch("app.routes.evaluations.read_llm_config"),
             patch(
                 "app.routes.evaluations.judge_answer_once", return_value={"status": "completed"}
             ) as judge,
@@ -433,7 +431,7 @@ class EvaluationRouteTests(unittest.TestCase):
                 "app.routes.evaluations.build_resume_context",
                 return_value=SimpleNamespace(status="budget_exceeded"),
             ),
-            patch("app.routes.evaluations.get_dolmen_llm") as llm_factory,
+            patch("app.routes.evaluations.read_llm_config") as llm_factory,
         ):
             factory.return_value.retrieve_reply_context.return_value = self.context
             response = self.client.post("/api/evaluations/judge", json=self.body)

@@ -11,6 +11,7 @@ from openai import APITimeoutError, AsyncOpenAI
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, ValidationError
 
 from app.context import estimate_input_tokens
+from app.llm import LLMConfig
 from app.rag import RetrievedGround
 from app.resume import (
     ADDRESS_PATTERN,
@@ -200,14 +201,10 @@ def judge_answer_once(
     question: str,
     answer: str,
     grounds: list[RetrievedGround],
-    llm,
+    llm_config: LLMConfig,
     resume_pages: list[ResumePage] | None = None,
 ) -> dict:
-    """기존 configured LLM과 동일한 접속 설정으로 한 번 호출한다. SDK 재시도도 끈다.
-
-    hello-agents 공개 invoke는 SDK의 retry 설정을 노출하지 않으므로 OpenAI 호환 클라이언트만
-    같은 공개 설정으로 재사용한다. 다른 provider에는 조용히 전환하거나 fallback하지 않는다.
-    """
+    """대화 모델과 공유하는 접속 설정으로 한 번 호출한다. SDK 재시도도 끈다."""
     if is_private_resume_question(question):
         return judge_result("skipped", "private_question")
     if not grounds:
@@ -254,7 +251,7 @@ def judge_answer_once(
     input_byte_limit = min(read_context_settings().input_token_limit, MAX_JUDGE_INPUT_BYTES)
     if estimate_input_tokens(judge_messages) > input_byte_limit:
         return judge_result("skipped", "input_budget_exceeded")
-    if getattr(llm, "provider", None) != "openai":
+    if llm_config.provider != "openai":
         return judge_result("failed", "unsupported_provider")
     model_id = read_debug_model_id()
 
@@ -262,13 +259,13 @@ def judge_answer_once(
         # SDK timeout 외에 전체 비동기 요청 deadline도 둬 느린 수신이 시간을 늘리지 못하게 한다.
         async with asyncio.timeout(JUDGE_TIMEOUT_SECONDS):
             async with AsyncOpenAI(
-                api_key=llm.api_key,
-                base_url=llm.base_url,
+                api_key=llm_config.api_key,
+                base_url=llm_config.base_url,
                 timeout=JUDGE_TIMEOUT_SECONDS,
                 max_retries=0,
             ) as judge_client:
                 response = await judge_client.chat.completions.create(
-                    model=llm.model,
+                    model=llm_config.model,
                     max_tokens=700,
                     messages=judge_messages,
                 )

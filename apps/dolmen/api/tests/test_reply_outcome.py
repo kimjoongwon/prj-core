@@ -1,4 +1,4 @@
-"""실제 SDK RunResult 종료 경계와 요청별 실측 usage의 안전한 전달 검증."""
+"""native LangChain chunk 종료 사유와 요청별 usage의 안전한 전달 검증."""
 
 import json
 import unittest
@@ -6,8 +6,9 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+import httpx
 from fastapi.testclient import TestClient
-from hello_agents.core.llm_response import LLMToolResponse
+from langchain_core.messages import AIMessageChunk
 
 from app.agent import (
     BuiltReplyDiagnostics,
@@ -15,6 +16,7 @@ from app.agent import (
     DolmenOutputLimitError,
     build_reply_diagnostics,
 )
+from app.llm import LLMConfig, create_chat_model
 from app.main import create_app
 from app.rag import ResumeReplyContext, RetrievedGround
 from app.resume import ResumePage
@@ -33,24 +35,33 @@ class PerRequestFixtureLlm:
     def last_call_stats(self):
         raise AssertionError("공유 LLM stats를 읽으면 안 됩니다.")
 
-    async def astream_invoke_with_tools(self, messages, tools, **kwargs):
+    def stream(self, messages, **kwargs):
         self.calls.append(kwargs)
-        response = self.responses.pop(0)
-        if isinstance(response, Exception):
-            raise response
-        if response.content:
-            yield response.content
-        yield response
+        response_chunk = self.responses.pop(0)
+        if isinstance(response_chunk, Exception):
+            raise response_chunk
+        if response_chunk.content:
+            yield AIMessageChunk(content=response_chunk.content)
+        yield response_chunk.model_copy(update={"content": ""})
 
 
 def response(text="가상지원자님은 Python을 사용했습니다. (1쪽)", reason="stop", usage=None):
-    return LLMToolResponse(
-        text,
-        [],
-        "synthetic-fixture",
-        usage=usage or {},
-        finish_reason=reason,
-        reasoning_content="PRIVATE_HIDDEN_REASONING",
+    usage = usage or {}
+    metadata = {"finish_reason": reason}
+    native_usage = None
+    if set(usage) == {"prompt_tokens", "completion_tokens", "total_tokens"}:
+        native_usage = {
+            "input_tokens": usage["prompt_tokens"],
+            "output_tokens": usage["completion_tokens"],
+            "total_tokens": usage["total_tokens"],
+        }
+    elif usage:
+        metadata["token_usage"] = usage
+    return AIMessageChunk(
+        content=text,
+        response_metadata=metadata,
+        usage_metadata=native_usage,
+        additional_kwargs={"reasoning_content": "PRIVATE_HIDDEN_REASONING"},
     )
 
 
@@ -115,8 +126,7 @@ class ReplyOutcomeTests(unittest.TestCase):
                 service = DolmenAgentService(llm)
                 self.assertEqual(parse_events(self.post(service))[-1], {"type": "done"})
                 original_history = [
-                    message.content
-                    for message in service._agents_by_session_id["session"].get_history()
+                    message.content for message in service._history_by_session_id["session"]
                 ]
                 http_response = self.post(service)
                 events = parse_events(http_response)
@@ -142,10 +152,7 @@ class ReplyOutcomeTests(unittest.TestCase):
                     len([event for event in events if event["type"] == "chunk"]), int(bool(text))
                 )
                 self.assertEqual(
-                    [
-                        message.content
-                        for message in service._agents_by_session_id["session"].get_history()
-                    ],
+                    [message.content for message in service._history_by_session_id["session"]],
                     original_history,
                 )
                 self.assertEqual(service._active_sessions, set())
@@ -164,7 +171,7 @@ class ReplyOutcomeTests(unittest.TestCase):
         failed = next(event for event in events if event.get("event") == "reply_failed")
         self.assertEqual(failed["details"]["reason"], "incomplete_reply")
         self.assertEqual(events[-1]["type"], "error")
-        self.assertEqual(service._agents_by_session_id["session"].get_history(), [])
+        self.assertEqual(service._history_by_session_id["session"], [])
 
     def test_completed_usage_is_request_local_and_missing_values_are_not_zero_filled(self):
         llm = PerRequestFixtureLlm(
@@ -247,35 +254,247 @@ class ReplyOutcomeTests(unittest.TestCase):
         self.assertNotIn("PRIVATE_PROVIDER_ERROR", http_response.text)
         sleep.assert_called_once_with(4)
 
-    def test_stale_last_run_is_not_reported_or_used_as_current_outcome(self):
-        fake_agent = Mock()
-        fake_agent.get_history.return_value = []
-        fake_agent.last_run = SimpleNamespace(
-            status="output_limit", stop_reason="length", usage={"total_tokens": 99999}
+    def test_shared_model_diagnostics_are_not_read_or_used_for_current_outcome(self):
+        class IsolatedLlm(PerRequestFixtureLlm):
+            @property
+            def last_run(self):
+                raise AssertionError("공유 모델 결과를 읽으면 안 됩니다.")
+
+        events = parse_events(self.post(DolmenAgentService(IsolatedLlm([response()]))))
+        metrics = next(event for event in events if event.get("event") == "reply_metrics")
+        self.assertEqual(
+            metrics["details"], {"attempt": 1, "run_status": "completed", "stop_reason": "stop"}
         )
-        fake_agent.stream_run.return_value = ["가상지원자님 (1쪽)"]
-        with patch("app.agent.SimpleAgent", return_value=fake_agent):
-            events = parse_events(self.post(DolmenAgentService(Mock())))
-        self.assertNotIn("reply_metrics", [event.get("event") for event in events])
         self.assertEqual(events[-1], {"type": "done"})
 
-    def test_noncompleted_fresh_run_status_cannot_be_done(self):
-        for status in ("max_iterations", "failed", "cancelled", "running", "budget_exhausted"):
-            with self.subTest(status=status):
-                fake_agent = Mock()
-                fake_agent.get_history.return_value = []
-                fake_agent.last_run = None
-
-                def stream(prompt, status=status, fake_agent=fake_agent, **kwargs):
-                    fake_agent.last_run = SimpleNamespace(status=status, stop_reason=None, usage={})
-                    yield "미완료 합성 답변"
-
-                fake_agent.stream_run.side_effect = stream
-                with patch("app.agent.SimpleAgent", return_value=fake_agent):
-                    events = parse_events(self.post(DolmenAgentService(Mock())))
+    def test_missing_unknown_and_tool_call_finish_cannot_be_done(self):
+        for finish_reason in (None, "unrecognized", "tool_calls"):
+            with self.subTest(finish_reason=finish_reason):
+                service = DolmenAgentService(PerRequestFixtureLlm([response(reason=finish_reason)]))
+                events = parse_events(self.post(service))
                 failed = next(event for event in events if event.get("event") == "reply_failed")
                 self.assertEqual(failed["details"]["reason"], "incomplete_reply")
                 self.assertEqual(events[-1]["type"], "error")
+                self.assertEqual(service._history_by_session_id["session"], [])
+
+    def test_native_usage_only_trailing_chunk_preserves_finish_and_input_output_mapping(self):
+        model = Mock()
+        model.stream.return_value = iter(
+            [
+                AIMessageChunk(content="가상지원자님 (1쪽)"),
+                AIMessageChunk(content="", response_metadata={"finish_reason": "stop"}),
+                AIMessageChunk(
+                    content="",
+                    usage_metadata={"input_tokens": 7, "output_tokens": 3, "total_tokens": 10},
+                ),
+            ]
+        )
+        events = parse_events(self.post(DolmenAgentService(model)))
+        metrics = next(event for event in events if event.get("event") == "reply_metrics")
+        self.assertEqual(
+            metrics["details"],
+            {
+                "attempt": 1,
+                "run_status": "completed",
+                "stop_reason": "stop",
+                "prompt_tokens": 7,
+                "completion_tokens": 3,
+                "total_tokens": 10,
+            },
+        )
+        self.assertEqual(events[-1], {"type": "done"})
+
+    def test_observed_output_limit_is_not_overwritten_by_later_stop_chunk(self):
+        model = Mock()
+        model.stream.return_value = iter(
+            [
+                AIMessageChunk(content="부분 답변", response_metadata={"finish_reason": "length"}),
+                AIMessageChunk(content="", response_metadata={"finish_reason": "stop"}),
+            ]
+        )
+        events = parse_events(self.post(DolmenAgentService(model)))
+        failed = next(event for event in events if event.get("event") == "reply_failed")
+        self.assertEqual(failed["details"]["reason"], "output_limit")
+        self.assertEqual(events[-1]["type"], "error")
+
+    def test_repeated_native_usage_snapshots_keep_latest_values_without_sum(self):
+        model = Mock()
+        model.stream.return_value = iter(
+            [
+                AIMessageChunk(
+                    content="가상지원자님 ",
+                    usage_metadata={"input_tokens": 1371, "output_tokens": 2, "total_tokens": 1373},
+                ),
+                AIMessageChunk(
+                    content="Python 경험. (1쪽)",
+                    usage_metadata={"input_tokens": 1371, "output_tokens": 8, "total_tokens": 1379},
+                ),
+                AIMessageChunk(
+                    content="",
+                    response_metadata={"finish_reason": "stop"},
+                    usage_metadata={"input_tokens": 1371, "output_tokens": 8, "total_tokens": 1379},
+                ),
+                AIMessageChunk(
+                    content="",
+                    usage_metadata={
+                        "input_tokens": 1371,
+                        "output_tokens": 10,
+                        "total_tokens": 1381,
+                    },
+                ),
+                AIMessageChunk(content=""),
+            ]
+        )
+        events = parse_events(self.post(DolmenAgentService(model)))
+        metrics = next(event for event in events if event.get("event") == "reply_metrics")
+        self.assertEqual(
+            metrics["details"],
+            {
+                "attempt": 1,
+                "run_status": "completed",
+                "stop_reason": "stop",
+                "prompt_tokens": 1371,
+                "completion_tokens": 10,
+                "total_tokens": 1381,
+            },
+        )
+        self.assertEqual(events[-1], {"type": "done"})
+
+    def test_native_sdk_transport_repeated_usage_is_counted_once_in_wire_metrics(self):
+        stream_events = []
+        for text, output_tokens, finish_reason in (
+            ("가상지원자님 ", 2, None),
+            ("Python 경험. (1쪽)", 8, None),
+            ("", 8, "stop"),
+        ):
+            stream_events.append(
+                {
+                    "id": "synthetic",
+                    "object": "chat.completion.chunk",
+                    "created": 0,
+                    "model": "synthetic-model",
+                    "choices": [
+                        {"index": 0, "delta": {"content": text}, "finish_reason": finish_reason}
+                    ],
+                    "usage": {
+                        "prompt_tokens": 1371,
+                        "completion_tokens": output_tokens,
+                        "total_tokens": 1371 + output_tokens,
+                    },
+                }
+            )
+        stream_events.append(
+            {
+                "id": "synthetic",
+                "object": "chat.completion.chunk",
+                "created": 0,
+                "model": "synthetic-model",
+                "choices": [],
+                "usage": {"prompt_tokens": 1371, "completion_tokens": 10, "total_tokens": 1381},
+            }
+        )
+        sse_payload = (
+            "".join(f"data: {json.dumps(event)}\n\n" for event in stream_events)
+            + "data: [DONE]\n\n"
+        )
+        observed_requests = []
+
+        def synthetic_transport(client, request, **kwargs):
+            observed_requests.append(request)
+            return httpx.Response(
+                200,
+                headers={"content-type": "text/event-stream"},
+                content=sse_payload,
+                request=request,
+            )
+
+        model = create_chat_model(
+            LLMConfig("synthetic-key", "synthetic-model", "https://synthetic.invalid/v1")
+        )
+        try:
+            with patch.object(httpx.Client, "send", autospec=True, side_effect=synthetic_transport):
+                events = parse_events(self.post(DolmenAgentService(model)))
+        finally:
+            model.root_client.close()
+        self.assertEqual(len(observed_requests), 1)
+        metrics = next(event for event in events if event.get("event") == "reply_metrics")
+        self.assertEqual(
+            metrics["details"],
+            {
+                "attempt": 1,
+                "run_status": "completed",
+                "stop_reason": "stop",
+                "prompt_tokens": 1371,
+                "completion_tokens": 10,
+                "total_tokens": 1381,
+            },
+        )
+        self.assertEqual(events[-1], {"type": "done"})
+
+    def test_latest_partial_usage_snapshot_does_not_keep_previous_missing_token_fields(self):
+        model = Mock()
+        model.stream.return_value = iter(
+            [
+                AIMessageChunk(
+                    content="가상지원자님 (1쪽)",
+                    usage_metadata={"input_tokens": 100, "output_tokens": 8, "total_tokens": 108},
+                ),
+                AIMessageChunk(
+                    content="",
+                    response_metadata={
+                        "finish_reason": "stop",
+                        "token_usage": {"completion_tokens": 10},
+                    },
+                ),
+                AIMessageChunk(content="", response_metadata={"token_usage": {"total_tokens": -1}}),
+            ]
+        )
+        events = parse_events(self.post(DolmenAgentService(model)))
+        metrics = next(event for event in events if event.get("event") == "reply_metrics")
+        self.assertEqual(
+            metrics["details"],
+            {
+                "attempt": 1,
+                "run_status": "completed",
+                "stop_reason": "stop",
+                "completion_tokens": 10,
+            },
+        )
+
+    def test_tool_call_payload_is_rejected_even_if_provider_reports_stop(self):
+        model = Mock()
+        model.stream.return_value = iter(
+            [
+                AIMessageChunk(
+                    content="부분 답변",
+                    tool_call_chunks=[
+                        {"name": "unexpected_tool", "args": "{}", "id": "synthetic", "index": 0}
+                    ],
+                    response_metadata={"finish_reason": "stop"},
+                )
+            ]
+        )
+        service = DolmenAgentService(model)
+        events = parse_events(self.post(service))
+        failed = next(event for event in events if event.get("event") == "reply_failed")
+        self.assertEqual(failed["details"]["reason"], "incomplete_reply")
+        self.assertEqual(service._history_by_session_id["session"], [])
+
+    def test_post_text_provider_failure_is_not_retried(self):
+        def interrupted_stream(*args, **kwargs):
+            yield AIMessageChunk(content="부분 답변")
+            error = RuntimeError("PRIVATE_PROVIDER_ERROR")
+            error.code = "1305"
+            raise error
+
+        model = Mock()
+        model.stream.side_effect = interrupted_stream
+        with patch("app.routes.chat.time.sleep") as sleep:
+            events = parse_events(self.post(DolmenAgentService(model)))
+        sleep.assert_not_called()
+        model.stream.assert_called_once()
+        self.assertEqual(events[-1]["type"], "error")
+        self.assertEqual(len([event for event in events if event["type"] == "chunk"]), 1)
 
     def test_optional_metrics_failure_does_not_change_success_or_output_limit(self):
         for finish_reason, expected_terminal in (("stop", "done"), ("length", "error")):

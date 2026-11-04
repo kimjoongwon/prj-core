@@ -54,7 +54,8 @@ def estimate_input_tokens(messages: list[dict[str, str]]) -> int:
 def _history_turns(history_messages) -> list[list[dict[str, str]]]:
     turns: list[list[dict[str, str]]] = []
     for message in history_messages:
-        role = getattr(message, "role", "")
+        role = getattr(message, "type", getattr(message, "role", ""))
+        role = {"human": "user", "ai": "assistant"}.get(role, role)
         content = getattr(message, "content", "")
         if not isinstance(content, str):
             continue
