@@ -28,10 +28,16 @@ export const transparencyFeatures = {
         "개발이 완료된 기능은 staging 환경에 즉시 배포됩니다. 고객이 브라우저에서 직접 사용해보고 피드백을 주실 수 있습니다.",
     },
     {
-      icon: "figma",
-      name: "Figma 디자인 링크 공유",
+      icon: "project",
+      name: "GitHub Projects WBS 칸반",
       detail:
-        "디자인 작업 진행 상황을 Figma에서 실시간으로 확인하실 수 있습니다. 코멘트로 피드백을 남기시면 바로 반영됩니다.",
+        "전체 작업을 WBS로 분해해 칸반에서 관리합니다. 무엇이 진행 중이고 무엇이 늦어지는지 항상 확인하실 수 있습니다.",
+    },
+    {
+      icon: "spec",
+      name: "OpenSpec 기능 명세 공개",
+      detail:
+        "기능마다 명세를 문서로 고정하고 변경 이력을 남깁니다. 무엇을 만들기로 했는지 항상 합의된 상태로 관리됩니다.",
     },
     {
       icon: "report",

@@ -70,7 +70,9 @@ export const infrastructureStep: StepData = {
       id: "home-server",
       name: "집 컴퓨터 (K8s)",
       vendor: "자체 관리",
-      tagline: "자체 Kubernetes 클러스터 — 풀 스택 CI/CD 실운영",
+      tagline: "개인 본체 서버로 구축한 Kubernetes 클러스터 — 풀 스택 CI/CD 실운영",
+      warning:
+        "관측 스택(Grafana·Loki·Tempo·Prometheus)은 컴퓨팅 파워가 더 필요해 서버 PC의 요구 사양이 높아집니다 — 운영 비용 증가가 아닌 하드웨어 사양 문제입니다. 서버 본체 PC는 제공되지 않습니다 — 고객이 준비한 PC로 구축합니다.",
       pros: [
         "실제 구축·운영 중인 풀 스택: Jenkins·ArgoCD·Grafana·Harbor·OpenBao·Loki·Tempo",
         "local → stg → prod 3단계 환경 분리 운영 경험 보유",
@@ -79,14 +81,17 @@ export const infrastructureStep: StepData = {
         "K8s 운영 노하우 축적 — 이후 클라우드(EKS) 이전 쉬움",
       ],
       cons: [
+        "서버 본체 PC는 포함되지 않음 — 고객이 준비한 PC 사용",
+        "관측 스택은 컴퓨팅 파워 추가 — 더 높은 PC 사양 필요 (운영비 증가 아님)",
         "전기비 + 인터넷 회선 비용",
         "인터넷 회선 속도·안정성 의존",
         "장애 시 직접 대응 (하드웨어 교체 포함)",
         "초기 셋업에 시간 소요",
       ],
-      costRange: "전기료+회선 월 ~3만원 + 초기 하드웨어",
+      costRange: "전기료+회선 월 ~3만원 + 서버 본체 PC (고객 준비)",
       bestFor: "풀 스택 CI/CD + K8s 경험 + 비용 최적화",
       monthlyCost: 30000,
+      isRecommended: true,
     },
   ],
   comparison: [
@@ -151,13 +156,6 @@ export const homeServerStack = {
     {
       name: "스토리지",
       tools: [{ name: "OpenEBS", role: "영구 볼륨 (hostpath PV)" }],
-    },
-    {
-      name: "AI 도구",
-      tools: [
-        { name: "PR-Agent", role: "AI 코드 리뷰 (PR 웹훅 → 자동 리뷰)" },
-        { name: "buzz-gateway", role: "CI/CD 알림 (Nostr 메신저 연동)" },
-      ],
     },
   ],
 };

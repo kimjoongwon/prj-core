@@ -40,6 +40,17 @@ export function ChoiceCard({ selected, onSelect, option }: ChoiceCardProps) {
           {option.tagline}
         </Typography.Paragraph>
 
+        {option.warning && (
+          <div className="w-full rounded-lg border border-danger bg-danger/5 p-2.5">
+            <HStack gap="dense" alignItems="start">
+              <span aria-hidden="true" className="text-sm leading-none">⚠️</span>
+              <Typography.Paragraph size="xs" className="font-semibold text-danger">
+                {option.warning}
+              </Typography.Paragraph>
+            </HStack>
+          </div>
+        )}
+
         <VStack gap="dense" alignItems="start">
           {option.pros.map((pro) => (
             <HStack key={pro} gap="dense" alignItems="start">
