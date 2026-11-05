@@ -6,9 +6,10 @@ export interface SelfIntroductionSection {
 
 export type MobileCareerColumnKey =
 	| "period"
-	| "companyAndProject"
-	| "technologies"
-	| "responsibilities";
+	| "project"
+	| "appArchitecture"
+	| "responsibilities"
+	| "deliveryAndOperation";
 
 export interface MobileCareerColumn {
 	key: MobileCareerColumnKey;
@@ -17,9 +18,10 @@ export interface MobileCareerColumn {
 
 export interface MobileCareerEntry {
 	period: string;
-	companyAndProject: string;
-	technologies: string;
+	project: string;
+	appArchitecture: string;
 	responsibilities: string;
+	deliveryAndOperation: string;
 }
 
 export type MobileCommonCapabilityColumnKey =
@@ -74,7 +76,7 @@ export const selfIntroduction: SelfIntroduction = {
 	name: "김중원",
 	role: "웹·모바일 풀스택 개발자",
 	downloadFileName: "김중원-자기소개서.docx",
-	documentVersion: "20261103-ai-experience",
+	documentVersion: "20261103-mobile-matrix",
 	profileLinks: [
 		{ label: "AI 경력 Q&A", href: "https://onjitda.com/dolmen" },
 		{ label: "GitHub", href: "https://github.com/kimjoongwon" },
@@ -89,13 +91,13 @@ export const selfIntroduction: SelfIntroduction = {
 		{
 			title: "웹과 모바일의 연결을 경험했습니다",
 			paragraphs: [
-				"SK mySUNI와 Connect mySUNI에서는 학습·회원·관리자 웹 서비스를 개발하는 동시에 두 모바일 앱의 iOS·Android 개발과 운영을 전담했습니다. Ionic·Capacitor 기반 앱을 React Native로 전환하고, WebView와 네이티브 사이의 통신 및 앱 생명주기를 설계했습니다. 앱 심사와 스토어·엔터프라이즈 배포, 인증서와 릴리스 관리까지 맡으며 사용자에게 기능이 전달되는 전체 과정을 경험했습니다.",
+				"SK mySUNI와 Connect mySUNI에서는 학습·회원·관리자 웹 서비스를 개발하는 동시에 두 모바일 앱의 iOS·Android 개발과 운영을 전담했습니다. Ionic·Capacitor 기반 앱을 React Native로 전환하고, WebView와 네이티브 사이의 통신 및 앱 생명주기를 설계했습니다. mySUNI 앱은 엔터프라이즈 배포로 운영했고, 인증서와 릴리스 관리까지 맡으며 사용자에게 기능이 전달되는 전체 과정을 경험했습니다.",
 			],
 		},
 		{
 			title: "대규모 전환에는 기준과 검증을 함께 둡니다",
 			paragraphs: [
-				"SK가스 프로젝트에서는 프론트엔드 PL로 참여해 FO·BO·MO 서비스의 레거시 화면과 업무 로직을 분석하고, 공통 UI와 컴포넌트 기준을 정리하며 프론트엔드 구조 전환을 수행했습니다. AI를 화면 분석과 반복 작업에 활용하고, Playwright 기반 통합 검증 환경을 구축했습니다. 전환 작업에서는 처리량과 함께 기존 업무 흐름이 유지되는지를 확인할 수 있는 기준을 중요하게 생각합니다.",
+				"SK가스 프로젝트에서는 프론트엔드 PL로 참여해 FO·BO·MO 서비스의 레거시 화면과 업무 로직을 분석하고, 공통 UI와 컴포넌트 기준을 정리하며 프론트엔드 구조 전환을 수행했습니다. 모바일 앱은 React Native가 아닌 iOS·Android 네이티브와 WebView 구조로 개발·운영했고, Firebase App Distribution, Analytics, Remote Config와 FCM을 활용했습니다. AI를 화면 분석과 반복 작업에 활용하고, Playwright 기반 통합 검증 환경을 구축했습니다. 전환 작업에서는 처리량과 함께 기존 업무 흐름이 유지되는지를 확인할 수 있는 기준을 중요하게 생각합니다.",
 			],
 		},
 		{
@@ -125,85 +127,67 @@ export const selfIntroduction: SelfIntroduction = {
 		},
 	],
 	mobileCareer: {
-		title: "React Native 및 모바일 개발 경력",
+		title: "모바일 앱 개발 및 운영 경력",
 		description:
-			"React Native 개발부터 iOS·Android 앱 배포와 운영까지 담당한 경력입니다.",
+			"프로젝트별 앱 구조와 개발 업무, 배포·운영 방식을 정리한 경력입니다.",
 		columns: [
 			{ key: "period", label: "기간" },
-			{ key: "companyAndProject", label: "회사·프로젝트" },
-			{ key: "technologies", label: "기술" },
+			{ key: "project", label: "회사·프로젝트" },
+			{ key: "appArchitecture", label: "앱 구조" },
 			{ key: "responsibilities", label: "주요 업무" },
+			{ key: "deliveryAndOperation", label: "배포·운영" },
 		],
 		entries: [
 			{
 				period: "2019.06–2020.12",
-				companyAndProject: "스마트링크커뮤니케이션 · FIRSTEP",
-				technologies: "React Native",
+				project: "스마트링크커뮤니케이션 · FIRSTEP",
+				appArchitecture: "React Native",
 				responsibilities:
 					"RN 개발 환경 구성, 회원가입·회원탈퇴, 커뮤니티 게시판·게시글 CRUD, 화면 상태 및 데이터 관리 구조 구현.",
+				deliveryAndOperation: "iOS·Android CodePush 설정·운영 및 앱 개발·운영.",
 			},
 			{
 				period: "2019.06–2020.12",
-				companyAndProject: "스마트링크커뮤니케이션 · 회사가요",
-				technologies: "React Native",
+				project: "스마트링크커뮤니케이션 · 회사가요",
+				appArchitecture: "React Native",
 				responsibilities:
 					"사용자 스케줄 관리 앱 단독 개발, 일·월 단위 일정 관리, 스케줄 API 연동 및 서비스 구조 설계.",
+				deliveryAndOperation: "iOS·Android CodePush 설정·운영 및 앱 개발·운영.",
 			},
 			{
 				period: "2021.01–2021.12",
-				companyAndProject: "마이허브앤헬스케어 · MyHub",
-				technologies: "React Native",
+				project: "마이허브앤헬스케어\nMyHub",
+				appArchitecture: "React Native",
 				responsibilities:
 					"건강기능식품 성분 관리 모바일 앱 개발, 성분 정보 조회 및 API 연동, 관리자·백엔드와 연결되는 서비스 전반 단독 개발·운영.",
+				deliveryAndOperation: "iOS·Android CodePush 설정·운영 및 앱 개발·운영.",
 			},
 			{
 				period: "2022.10–2026.05",
-				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
-				technologies: "React Native",
+				project: "SK mySUNI · mySUNI",
+				appArchitecture: "React Native · WebView",
 				responsibilities:
-					"대내·대외 앱 2개의 iOS·Android 개발·운영 전담, Ionic·Capacitor 기반 앱의 RN 마이그레이션.",
+					"대내 앱 iOS·Android 개발·운영, Ionic·Capacitor 기반 앱의 RN 마이그레이션, Web ↔ Native 브리지와 앱 생명주기 설계·개발.",
+				deliveryAndOperation:
+					"엔터프라이즈 배포 운영, iOS·Android CodePush 도입·운영 및 JavaScript 업데이트 배포 체계 구축, 앱 버전·릴리스 관리와 장애 대응.",
 			},
 			{
 				period: "2022.10–2026.05",
-				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
-				technologies: "React Native · WebView",
+				project: "SK mySUNI · Connect\u00A0mySUNI",
+				appArchitecture: "React Native · WebView",
 				responsibilities:
-					"Web ↔ Native 브리지 및 앱 생명주기 설계·개발, 서비스별 인증·정책을 반영한 앱 전환, 웹·모바일 공통 모듈 개발.",
-			},
-			{
-				period: "2022.10–2026.05",
-				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
-				technologies: "iOS · Android 배포",
-				responsibilities:
-					"iOS 인증서·Provisioning Profile 및 Android 배포 환경 관리, App Store·Google Play 심사·배포, 엔터프라이즈 배포·운영.",
-			},
-			{
-				period: "2022.10–2026.05",
-				companyAndProject: "SK mySUNI · mySUNI 및\u00A0Connect\u00A0mySUNI",
-				technologies: "CodePush",
-				responsibilities:
-					"iOS·Android 양 플랫폼의 CodePush 도입·운영 및 JavaScript 업데이트 배포 체계 구축, 앱 버전·릴리스 관리 및 모바일 장애 대응.",
+					"대외 앱 iOS·Android 개발·운영, 서비스별 인증·정책을 반영한 앱 전환, 웹·모바일 공통 모듈 개발.",
+				deliveryAndOperation:
+					"iOS·Android CodePush 도입·운영 및 JavaScript 업데이트 배포 체계 구축, 앱 버전·릴리스 관리와 장애 대응.",
 			},
 			{
 				period: "2026.05–현재",
-				companyAndProject: "SK가스 · WEGO+",
-				technologies: "Swift · Kotlin · WebView",
+				project: "SK가스 · WEGO+",
+				appArchitecture: "iOS·Android 네이티브 · WebView",
 				responsibilities:
-					"iOS·Android WebView 앱 개발, 웹·네이티브 브리지, 로그인·세션·자동 로그인, 파일·사진·위치·Tmap 등 단말 기능 연동.",
-			},
-			{
-				period: "2026.05–현재",
-				companyAndProject: "SK가스 · WEGO+",
-				technologies: "Firebase · FCM",
-				responsibilities:
-					"FCM 푸시 연동, 등록·갱신 정보의 웹 전달, 알림 권한·수신 동의 처리, 알림 클릭 후 화면 이동 및 백엔드 연동 규격 정리.",
-			},
-			{
-				period: "2026.05–현재",
-				companyAndProject: "SK가스 · WEGO+",
-				technologies: "빌드·배포·운영",
-				responsibilities:
-					"iOS 서명·프로비저닝 구성, fastlane 배포 구성, DEV·PROD 환경 분리, Remote Config 기반 업데이트·점검 정책 및 WebView 장애 복구 기능 구현.",
+					"Swift·Kotlin 기반 WebView 앱 개발, 웹·네이티브 브리지, 로그인·세션·자동 로그인, 파일·사진·위치·Tmap 등 단말 기능 연동, FCM 푸시 연동.",
+				deliveryAndOperation:
+					"Firebase App Distribution을 통한 앱 배포, Analytics와 Remote Config 활용, iOS 서명·프로비저닝 및 fastlane 배포 구성, DEV·PROD 환경 분리와 WebView 장애 복구 기능 구현.",
 			},
 		],
 		commonCapabilities: {
@@ -220,9 +204,16 @@ export const selfIntroduction: SelfIntroduction = {
 					responsibilities: "중국어·일본어 다국어 지원 적용.",
 				},
 				{
+					area: "CodePush 운영",
+					projects:
+						"FIRSTEP · 회사가요 · My\u2060Hub\nmySUNI · Connect\u00A0mySUNI",
+					responsibilities:
+						"iOS·Android CodePush 설정·운영 및 JavaScript 업데이트 배포 체계 구축.",
+				},
+				{
 					area: "푸시 알림",
 					projects:
-						"MyHub · ELPG · WEGO · WEGO+ · 두산 밥캣 · mySUNI · Connect mySUNI",
+						"My\u2060Hub · ELPG · WEGO · WEGO+ · 두산 밥캣 · mySUNI · Connect\u00A0mySUNI",
 					responsibilities: "Firebase Cloud Messaging(FCM) 설정 및 푸시 연동.",
 				},
 			],
