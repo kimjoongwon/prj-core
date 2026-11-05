@@ -19,6 +19,7 @@ export const storageStep: StepData = {
       costRange: "월 0원 (10GB까지)",
       bestFor: "모든 프로젝트 기본값",
       monthlyCost: 0,
+      isRecommended: true,
     },
   ],
   comparison: [
@@ -75,6 +76,7 @@ export const databaseStep: StepData = {
       costRange: "월 0원 (자체) ~ $15 (관리형)",
       bestFor: "모든 프로젝트 표준",
       monthlyCost: 0,
+      isRecommended: true,
     },
   ],
   comparison: [

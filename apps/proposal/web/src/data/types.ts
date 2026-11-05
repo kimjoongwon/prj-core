@@ -10,6 +10,8 @@ export interface TechOption {
   monthlyCost: number;
   /** 추천 기본 스택에 포함된 선택지 — 카드에 "추천" 배지 표시 */
   isRecommended?: boolean;
+  /** 선택 시 주의 필요 — 카드에 경고 박스 표시 */
+  warning?: string;
 }
 
 export interface ComparisonRow {

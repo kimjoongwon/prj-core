@@ -17,6 +17,7 @@ import { aiServiceStep, aiStack } from "../data/ai-service";
 import { transparencyFeatures } from "../data/transparency";
 import { recommendedStack } from "../data/recommended-stack";
 import { founderIntroduction } from "../data/introduction";
+import { pricingRationale } from "../data/pricing-rationale";
 import type { SelectionState } from "../data/types";
 import { TOTAL_STEPS } from "../data/types";
 
@@ -35,9 +36,9 @@ const STEP_META = [
 const INITIAL: SelectionState = {
   frontend: "react-native",
   backend: "nestjs",
-  infrastructure: null,
+  infrastructure: "home-server",
   aiService: false,
-  designTool: null,
+  designTool: "storybook",
 };
 
 export default function Page() {
@@ -69,7 +70,7 @@ export default function Page() {
   const infra = infrastructureStep.options.find((o) => o.id === selection.infrastructure);
 
   const renderComparisonTable = (
-    headers: string[],
+    columns: { id: string; name: string }[],
     rows: { label: string; values: Record<string, string> }[]
   ) => (
     <Card className="w-full overflow-hidden p-0">
@@ -80,9 +81,9 @@ export default function Page() {
               <th className="px-4 py-2 text-left">
                 <Typography.Paragraph size="xs" color="muted" className="font-semibold">비교</Typography.Paragraph>
               </th>
-              {headers.map((h) => (
-                <th key={h} className="px-4 py-2 text-left">
-                  <Typography.Paragraph size="xs" className="font-semibold">{h}</Typography.Paragraph>
+              {columns.map((col) => (
+                <th key={col.id} className="px-4 py-2 text-left">
+                  <Typography.Paragraph size="xs" className="font-semibold">{col.name}</Typography.Paragraph>
                 </th>
               ))}
             </tr>
@@ -93,14 +94,11 @@ export default function Page() {
                 <td className="px-4 py-2">
                   <Typography.Paragraph size="xs" color="muted" className="font-medium">{row.label}</Typography.Paragraph>
                 </td>
-                {headers.map((h) => {
-                  const key = h.toLowerCase().replace(/\s+/g, "-");
-                  return (
-                    <td key={h} className="px-4 py-2">
-                      <Typography.Paragraph size="xs">{row.values[key] ?? row.values[h] ?? "—"}</Typography.Paragraph>
-                    </td>
-                  );
-                })}
+                {columns.map((col) => (
+                  <td key={col.id} className="px-4 py-2">
+                    <Typography.Paragraph size="xs">{row.values[col.id] ?? row.values[col.name] ?? "—"}</Typography.Paragraph>
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
@@ -150,7 +148,7 @@ export default function Page() {
               />
             ))}
           </div>
-          {renderComparisonTable(stepData.options.map((o) => o.name), stepData.comparison)}
+          {renderComparisonTable(stepData.options, stepData.comparison)}
           {renderRecommendations(stepData.recommendations)}
           {step === 3 && <AssetAutomationCard />}
           {step === 3 && (
@@ -184,6 +182,14 @@ export default function Page() {
                 <Typography.Paragraph size="sm" color="muted">
                   Vercel 제외 모든 인프라 선택지에 아래 스택이 기본 포함됩니다.
                 </Typography.Paragraph>
+                <div className="w-full rounded-lg border border-danger bg-danger/5 p-2.5">
+                  <HStack gap="dense" alignItems="start">
+                    <span aria-hidden="true" className="text-sm leading-none">⚠️</span>
+                    <Typography.Paragraph size="xs" className="font-semibold text-danger">
+                      관측 스택(Grafana·Loki·Tempo·Prometheus)은 컴퓨팅 파워가 더 필요해 서버 PC의 요구 사양이 높아집니다 — 운영 비용 증가가 아닌 하드웨어 사양 문제입니다. 서버 본체 PC는 제공되지 않습니다 — 고객이 준비한 PC로 구축합니다.
+                    </Typography.Paragraph>
+                  </HStack>
+                </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   {homeServerStack.categories.map((cat) => (
                     <div key={cat.name} className="rounded-lg bg-surface-secondary p-4">
@@ -220,7 +226,7 @@ export default function Page() {
               <ChoiceCard key={opt.id} selected onSelect={() => {}} option={opt} />
             ))}
           </div>
-          {renderComparisonTable(stepData.options.map((o) => o.name), stepData.comparison)}
+          {renderComparisonTable(stepData.options, stepData.comparison)}
         </>
       );
     }
@@ -365,6 +371,46 @@ export default function Page() {
                 </div>
               </VStack>
             </Card>
+            <Card className="w-full border-2 border-border bg-surface p-5">
+              <VStack gap="section" alignItems="start" fullWidth>
+                <HStack gap="inline" alignItems="center">
+                  <span aria-hidden="true" className="text-xl leading-none">💰</span>
+                  <Typography.Heading level={4}>{pricingRationale.headline}</Typography.Heading>
+                </HStack>
+                <Typography.Paragraph size="sm" color="muted">
+                  {pricingRationale.lead}
+                </Typography.Paragraph>
+                <div className="w-full rounded-lg bg-surface-secondary p-4">
+                  <VStack gap="dense" alignItems="start">
+                    <Typography.Paragraph size="xs" color="muted" className="font-semibold">
+                      {pricingRationale.wageBasis}
+                    </Typography.Paragraph>
+                    {pricingRationale.wageRows.map((row) => (
+                      <HStack key={row.label} gap="inline" alignItems="center" justifyContent="between" fullWidth>
+                        <Typography.Paragraph size="sm">{row.label}</Typography.Paragraph>
+                        <Typography.Paragraph size="sm" className="text-right font-bold">{row.value}</Typography.Paragraph>
+                      </HStack>
+                    ))}
+                  </VStack>
+                </div>
+                <VStack gap="dense" alignItems="start">
+                  {pricingRationale.cheapQuoteConsequences.map((consequence) => (
+                    <HStack key={consequence} gap="dense" alignItems="start">
+                      <span aria-hidden="true" className="mt-0.5 shrink-0 text-sm leading-none">⚠️</span>
+                      <Typography.Paragraph size="sm" color="muted">{consequence}</Typography.Paragraph>
+                    </HStack>
+                  ))}
+                </VStack>
+                <div className="w-full rounded-lg bg-accent-soft p-3">
+                  <VStack gap="dense" alignItems="start">
+                    <Typography.Paragraph size="sm" className="font-bold text-accent">
+                      {pricingRationale.myApproachTitle}
+                    </Typography.Paragraph>
+                    <Typography.Paragraph size="sm">{pricingRationale.myApproach}</Typography.Paragraph>
+                  </VStack>
+                </div>
+              </VStack>
+            </Card>
             <Card className="w-full border-2 border-accent bg-accent-soft p-5">
               <VStack gap="section" alignItems="start" fullWidth>
                 <HStack gap="inline" alignItems="center">
@@ -380,6 +426,21 @@ export default function Page() {
                           <Chip size="sm" variant="soft">{tech.role}</Chip>
                         </HStack>
                         <Typography.Paragraph size="xs" color="muted">{tech.reason}</Typography.Paragraph>
+                        {tech.stages && (
+                          <VStack gap="flush" alignItems="start">
+                            {tech.stages.map((stage) => (
+                              <Typography.Paragraph key={stage} size="xs" className="pl-1">
+                                · {stage}
+                              </Typography.Paragraph>
+                            ))}
+                          </VStack>
+                        )}
+                        {tech.note && (
+                          <HStack gap="dense" alignItems="start">
+                            <span aria-hidden="true" className="mt-0.5 shrink-0 text-xs leading-none">⚠️</span>
+                            <Typography.Paragraph size="xs" className="font-semibold text-danger">{tech.note}</Typography.Paragraph>
+                          </HStack>
+                        )}
                       </VStack>
                     </div>
                   ))}
