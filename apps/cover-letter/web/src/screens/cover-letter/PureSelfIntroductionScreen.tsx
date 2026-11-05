@@ -83,7 +83,7 @@ export function PureSelfIntroductionScreen({
 							<tbody>
 								{selfIntroduction.mobileCareer.entries.map((entry) => (
 									<tr
-										key={`${entry.period}-${entry.companyAndProject}-${entry.technologies}`}
+										key={`${entry.period}-${entry.project}-${entry.appArchitecture}`}
 									>
 										{selfIntroduction.mobileCareer.columns.map((column) => (
 											<td key={column.key}>{entry[column.key]}</td>

@@ -65,7 +65,7 @@ function createMobileCareerTable(
 	columns: readonly MobileCareerColumn[],
 	entries: readonly MobileCareerEntry[],
 ) {
-	const columnWidths = [14, 26, 17, 43];
+	const columnWidths = [12, 20, 18, 25, 25];
 	return (
 		<Table width={{ size: 100, type: "pct" }}>
 			<TableRow tableHeader cantSplit>
@@ -79,12 +79,12 @@ function createMobileCareerTable(
 			</TableRow>
 			{entries.map((entry) => (
 				<TableRow
-					key={`${entry.period}-${entry.companyAndProject}-${entry.technologies}`}
+				key={`${entry.period}-${entry.project}-${entry.appArchitecture}`}
 					cantSplit
 				>
 					{columns.map((column, columnIndex) =>
 						createTableCell(entry[column.key], {
-							key: `${entry.period}-${entry.companyAndProject}-${column.key}`,
+							key: `${entry.period}-${entry.project}-${column.key}`,
 							width: columnWidths[columnIndex],
 						}),
 					)}

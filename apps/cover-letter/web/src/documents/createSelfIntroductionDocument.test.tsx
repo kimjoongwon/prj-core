@@ -102,9 +102,34 @@ describe("createSelfIntroductionDocument", () => {
 		}
 		for (const entry of selfIntroduction.mobileCareer.entries) {
 			assert.ok(documentXml.includes(entry.period));
-			assert.ok(documentXml.includes(entry.companyAndProject));
-			assert.ok(documentXml.includes(entry.technologies));
+			assert.ok(documentXml.includes(entry.project));
+			assert.ok(documentXml.includes(entry.appArchitecture));
 			assert.ok(documentXml.includes(entry.responsibilities));
+			assert.ok(documentXml.includes(entry.deliveryAndOperation));
+		}
+		const mySuniEntry = selfIntroduction.mobileCareer.entries.find(
+			(entry) => entry.project === "SK mySUNI · mySUNI",
+		);
+		assert.ok(mySuniEntry);
+		assert.match(mySuniEntry.responsibilities, /Ionic·Capacitor.*RN 마이그레이션/);
+		assert.match(mySuniEntry.deliveryAndOperation, /엔터프라이즈 배포/);
+		assert.match(mySuniEntry.deliveryAndOperation, /CodePush/);
+		const skGasEntry = selfIntroduction.mobileCareer.entries.find(
+			(entry) => entry.project === "SK가스 · WEGO+",
+		);
+		assert.ok(skGasEntry);
+		assert.match(skGasEntry.appArchitecture, /iOS·Android 네이티브.*WebView/);
+		assert.doesNotMatch(skGasEntry.appArchitecture, /React Native/);
+		assert.match(
+			skGasEntry.deliveryAndOperation,
+			/Firebase App Distribution.*Analytics.*Remote Config/,
+		);
+		assert.doesNotMatch(skGasEntry.deliveryAndOperation, /CodePush/);
+		for (const entry of selfIntroduction.mobileCareer.entries.filter(
+			(entry) => entry.project !== "SK가스 · WEGO+",
+		)) {
+			assert.match(entry.appArchitecture, /React Native/);
+			assert.match(entry.deliveryAndOperation, /CodePush/);
 		}
 		assert.ok(
 			documentXml.includes(
