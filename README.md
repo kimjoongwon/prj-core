@@ -353,6 +353,8 @@ pnpm start:mobile          # Expo 모바일 앱
 
 ## 💻 개발 가이드
 
+[OpenSpec 문서·CLI 사용 안내](./openspec/README.md)에서 변경 명세 작성과 검증 흐름을 확인할 수 있습니다.
+
 ### 주요 명령어
 
 ```bash

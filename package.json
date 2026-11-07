@@ -53,6 +53,8 @@
 		"agents:contracts:check": "node scripts/check-agent-contracts.mjs",
 		"agents:contracts:test": "node --test scripts/check-agent-contracts.test.mjs",
 		"agents:flow:test": "node scripts/test-subagent-log-hook.mjs",
+		"openspec": "OPENSPEC_TELEMETRY=0 OPENSPEC_NO_COMPLETIONS=1 openspec",
+		"openspec:check": "pnpm openspec validate --all --strict --no-interactive",
 		"rancher:build": "bash scripts/rancher-build.sh",
 		"rancher:core-api": "pnpm rancher:build -- core-api",
 		"rancher:admin-web": "pnpm rancher:build -- admin-web",
@@ -116,6 +118,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",
+		"@fission-ai/openspec": "1.16.1",
 		"@types/node": "catalog:",
 		"tsx": "catalog:",
 		"turbo": "2.11.10",
