@@ -227,6 +227,9 @@ importers:
       '@biomejs/biome':
         specifier: 'catalog:'
         version: 2.6.2
+      '@fission-ai/openspec':
+        specifier: 1.16.1
+        version: 1.16.1(@types/node@24.19.2)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.2
@@ -4454,6 +4457,11 @@ packages:
     resolution: {integrity: sha512-EbxYllZ7/ozONVZd425cm4XnolfW+AmSFT5aP7Jdno6oc3WrYQcHz2CO20z/2rwWwYgztmV2PXvYH+BQ8YFjqg==}
     hasBin: true
 
+  '@fission-ai/openspec@1.16.1':
+    resolution: {integrity: sha512-Qu2kdUP3oiXK6WzOA1OcEYiTlG3GmLJE37whoGjTEy4vbzuW4o3OwAwYwxSQpJnKHJ/XGySvo+icRiulBCxyzw==}
+    engines: {node: '>=22.12.0'}
+    hasBin: true
+
   '@flatten-js/interval-tree@1.1.4':
     resolution: {integrity: sha512-o4emRDDvGdkwX18BSVSXH8q27qAL7Z2WDHSN75C8xyRSE4A8UOkig0mWSGoT5M5KaTHZxoLmalFwOTQmbRusUg==}
 
@@ -8595,6 +8603,10 @@ packages:
 
   brace-expansion@2.1.7:
     resolution: {integrity: sha512-uZbew1NqdmPDTMJ8ah1y+b+9QEJrfkXFk3RcTQw3X0jW/xRUvFKsg1CfQdSYGdTbXZWExtU3J3ccxtnfw1Fi0g==}
+
+  brace-expansion@5.0.12:
+    resolution: {integrity: sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ==}
+    engines: {node: 20 || >=22}
 
   brace-expansion@5.0.9:
     resolution: {integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==}
@@ -16805,6 +16817,23 @@ snapshots:
       chalk: 4.1.2
       js-yaml: 4.3.2
 
+  '@fission-ai/openspec@1.16.1(@types/node@24.19.2)':
+    dependencies:
+      '@inquirer/core': 12.0.5(@types/node@24.19.2)
+      '@inquirer/prompts': 8.7.3(@types/node@24.19.2)
+      brace-expansion: 5.0.12
+      chalk: 5.6.2
+      commander: 14.0.3
+      cross-spawn: 7.0.6
+      diff: 9.0.0
+      ora: 9.4.1
+      picomatch: 4.0.7
+      tinyglobby: 0.2.17
+      yaml: 2.9.1
+      zod: 4.6.7
+    transitivePeerDependencies:
+      - '@types/node'
+
   '@flatten-js/interval-tree@1.1.4': {}
 
   '@formatjs/ecma402-abstract@2.3.6':
@@ -21657,6 +21686,10 @@ snapshots:
   brace-expansion@2.1.7:
     dependencies:
       balanced-match: 1.0.2
+
+  brace-expansion@5.0.12:
+    dependencies:
+      balanced-match: 4.0.4
 
   brace-expansion@5.0.9:
     dependencies:
